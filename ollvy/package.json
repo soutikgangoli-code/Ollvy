@@ -1,0 +1,21 @@
+{
+  "name": "ollvy",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ollvy - The Compliance OS for Indian Businesses",
+  "scripts": {
+    "mobile": "pnpm --filter @ollvy/mobile",
+    "professional": "pnpm --filter @ollvy/professional",
+    "admin": "pnpm --filter @ollvy/admin",
+    "landing": "pnpm --filter @ollvy/landing",
+    "shared": "pnpm --filter @ollvy/shared",
+    "supabase": "pnpm --filter @ollvy/supabase"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

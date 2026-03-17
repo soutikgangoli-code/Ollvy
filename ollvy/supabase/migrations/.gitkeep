@@ -1,0 +1,5 @@
+# Placeholder to keep migrations directory in git
+# Migration files will be added in Phase 1:
+# - 001_initial_schema.sql
+# - 002_rls_policies.sql
+# - 003_seed.sql

@@ -1,0 +1,268 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import { Card } from '@/components/ui/card'
+import { IndianRupee, FileText, ClipboardList, BarChart2, Check, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+/**
+ * §6 - Trust Layer
+ *
+ * Carousel showing 1 card on mobile, 2 cards on desktop
+ */
+
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false)
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    setMatches(media.matches)
+
+    const listener = (e: MediaQueryListEvent) => setMatches(e.matches)
+    media.addEventListener('change', listener)
+    return () => media.removeEventListener('change', listener)
+  }, [query])
+
+  return matches
+}
+
+const trustCards = [
+  {
+    icon: IndianRupee,
+    title: 'The price you see is what you pay.',
+    description:
+      'Ollvy fee and government fee are broken out separately on every service card. You see both before you click anything. No quote-first. No invoice-after. No "it depends on the complexity."',
+    visual: (
+      <div className="bg-muted/50 rounded-lg p-3 space-y-2">
+        <div className="flex justify-between text-xs">
+          <span className="text-muted-foreground">Ollvy fee</span>
+          <span className="font-mono text-foreground">₹9,999</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className="text-muted-foreground">Govt fee (MCA)</span>
+          <span className="font-mono text-muted-foreground">₹15,000</span>
+        </div>
+        <div className="flex justify-between text-xs border-t border-border pt-2">
+          <span className="font-semibold text-foreground">Total</span>
+          <span className="font-mono font-bold text-foreground text-sm">₹24,999</span>
+        </div>
+        <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1.5 border-t border-border/50">
+          <span>1,240+ companies incorporated</span>
+          <span className="text-[hsl(var(--ollvy-green))]">98% success rate</span>
+        </div>
+      </div>
+    ),
+    visualCaption: 'Pvt Ltd Incorporation - both fees shown upfront',
+  },
+  {
+    icon: FileText,
+    title: 'A proper invoice. Every time.',
+    description:
+      "Every payment auto-generates a GST-compliant tax invoice with the right CGST/SGST or IGST split for your state. It's in your account permanently - not in an email you'll lose.",
+    visual: (
+      <div className="bg-muted/50 rounded-lg p-3 space-y-1.5">
+        <div className="flex justify-between text-xs">
+          <span className="text-muted-foreground">Invoice</span>
+          <span className="font-mono text-foreground">OLV-INV-2025-4821</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className="text-muted-foreground">GSTIN</span>
+          <span className="font-mono text-muted-foreground">29AADCO4821M1ZK</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className="text-muted-foreground">CGST (9%)</span>
+          <span className="font-mono text-muted-foreground">₹900</span>
+        </div>
+        <div className="flex justify-between text-xs">
+          <span className="text-muted-foreground">SGST (9%)</span>
+          <span className="font-mono text-muted-foreground">₹900</span>
+        </div>
+        <div className="flex justify-between text-xs border-t border-border pt-2">
+          <span className="font-semibold text-foreground">Total</span>
+          <span className="font-mono font-bold text-foreground text-sm">₹11,799</span>
+        </div>
+        <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1.5 border-t border-border/50">
+          <span>100% ITC-eligible invoices</span>
+          <span className="text-[hsl(var(--ollvy-green))]">Instant download</span>
+        </div>
+      </div>
+    ),
+    visualCaption: 'Stored in your account permanently',
+  },
+  {
+    icon: ClipboardList,
+    title: "You see the scope before you pay. Including what's excluded.",
+    description:
+      "Before checkout, you get an Engagement Letter: what the service covers, and what it doesn't. This is generated automatically and stored in your account. If there's ever a dispute about what was agreed, there's a document.",
+    visual: (
+      <div className="space-y-2">
+        <p className="text-xs font-medium text-foreground">
+          GST Monthly Filing retainer - scope preview:
+        </p>
+        <div className="flex gap-2 text-xs text-muted-foreground items-start">
+          <Check className="h-4 w-4 text-[hsl(var(--ollvy-green))] mt-0.5 shrink-0" />
+          <span>GSTR-1, GSTR-3B, late fee computation, monthly report</span>
+        </div>
+        <div className="flex gap-2 text-xs text-muted-foreground items-start">
+          <Minus className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground/60" />
+          <span>Audit response, demand notices, amendment returns</span>
+        </div>
+        <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-2 border-t border-border/50 mt-2">
+          <span>No scope disputes in 2,100+ orders</span>
+          <span className="text-[hsl(var(--ollvy-green))]">Clear terms ✓</span>
+        </div>
+      </div>
+    ),
+    visualCaption: null,
+  },
+  {
+    icon: BarChart2,
+    title: 'Every month, a report. Not just a payment request.',
+    description:
+      'After every billing cycle on a retainer, a Proof-of-Work Report is generated: what was filed, when it was filed, the acknowledgement numbers, any notices received. You know exactly what happened that month.',
+    visual: (
+      <div className="bg-muted/50 rounded-lg p-3 space-y-2">
+        <div className="flex justify-between text-xs items-center">
+          <span className="text-foreground font-medium">GSTR-3B</span>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground">Filed 18 Mar</span>
+            <span className="font-mono text-[hsl(var(--ollvy-green))]">ARN: AA1234 ✓</span>
+          </div>
+        </div>
+        <div className="flex justify-between text-xs items-center">
+          <span className="text-foreground font-medium">GSTR-1</span>
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground">Filed 10 Mar</span>
+            <span className="font-mono text-[hsl(var(--ollvy-green))]">ARN: BB5678 ✓</span>
+          </div>
+        </div>
+        <div className="flex justify-between text-xs items-center border-t border-border pt-2">
+          <span className="text-foreground font-medium">Late fees</span>
+          <span className="font-mono text-foreground">₹0</span>
+        </div>
+        <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-1.5 border-t border-border/50">
+          <span>Zero late fees in 99.2% cases</span>
+          <span className="text-[hsl(var(--ollvy-green))]">Filed 3 days early</span>
+        </div>
+      </div>
+    ),
+    visualCaption: 'March 2025 Compliance Report',
+  },
+]
+
+export function TrustLayer() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const isDesktop = useMediaQuery('(min-width: 768px)')
+
+  const cardsToShow = isDesktop ? 2 : 1
+  const step = cardsToShow
+
+  // Auto-advance every 5 seconds
+  useEffect(() => {
+    if (isPaused) return
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + step) % trustCards.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [isPaused, step])
+
+  const goNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + step) % trustCards.length)
+  }, [step])
+
+  const goPrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - step + trustCards.length) % trustCards.length)
+  }, [step])
+
+  // Get visible cards based on screen size
+  const visibleCards = isDesktop
+    ? [trustCards[currentIndex], trustCards[(currentIndex + 1) % trustCards.length]]
+    : [trustCards[currentIndex]]
+
+  return (
+    <section className="bg-card py-16 overflow-hidden">
+      <div className="container">
+        {/* Section Heading */}
+        <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
+          WHY OLLVY
+        </h2>
+
+        {/* Carousel Container */}
+        <div
+          className="relative mt-8"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Cards Grid - 2 at a time, equal height, compact layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {visibleCards.map((card, idx) => {
+              const Icon = card.icon
+              return (
+                <Card
+                  key={`${currentIndex}-${idx}`}
+                  className="border border-border bg-background p-4 md:p-5 flex flex-col h-auto md:h-[380px]"
+                >
+                  <Icon className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
+
+                  <h3 className="text-lg font-semibold mt-3 text-foreground leading-snug">
+                    {card.title}
+                  </h3>
+
+                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed flex-grow">
+                    {card.description}
+                  </p>
+
+                  {/* Visual Element */}
+                  <div className="mt-4 pt-4 border-t border-border">
+                    {card.visual}
+                    {card.visualCaption && (
+                      <p className="text-xs text-muted-foreground italic mt-2">
+                        {card.visualCaption}
+                      </p>
+                    )}
+                  </div>
+                </Card>
+              )
+            })}
+          </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={goPrev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:-translate-x-12 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
+            aria-label="Previous cards"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            onClick={goNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:translate-x-12 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
+            aria-label="Next cards"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+
+          {/* Dots Indicator - 4 dots on mobile (1 per card), 2 dots on desktop (1 per pair) */}
+          <div className="flex justify-center gap-2 mt-6">
+            {(isDesktop ? [0, 2] : [0, 1, 2, 3]).map((dotIndex) => (
+              <button
+                key={dotIndex}
+                onClick={() => setCurrentIndex(dotIndex)}
+                className={cn(
+                  'h-2 rounded-full transition-all duration-300',
+                  currentIndex === dotIndex
+                    ? 'bg-foreground w-8'
+                    : 'bg-muted-foreground/30 w-2 hover:bg-muted-foreground/50'
+                )}
+                aria-label={`Go to slide ${dotIndex + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
