@@ -13,12 +13,11 @@ const penaltyTabs = [
   { href: '/tools/penalty-calculator/mca-annual-filing', label: 'MCA Filing' },
   { href: '/tools/penalty-calculator/director-kyc', label: 'Director KYC' },
   { href: '/tools/penalty-calculator/tds-late-filing', label: 'TDS Filing' },
-  // Calculators 6-10 to be added after 1-5 are live and tested:
-  // { href: '/tools/penalty-calculator/pf-esic-penalty', label: 'PF / ESIC' },
-  // { href: '/tools/penalty-calculator/professional-tax-penalty', label: 'Professional Tax' },
-  // { href: '/tools/penalty-calculator/gst-demand-notice', label: 'GST Demand' },
-  // { href: '/tools/penalty-calculator/startup-dpiit-compliance', label: 'Startup / DPIIT' },
-  // { href: '/tools/penalty-calculator/shops-establishment-penalty', label: 'Shops & Est.' },
+  { href: '/tools/penalty-calculator/pf-esic-penalty', label: 'PF / ESIC' },
+  { href: '/tools/penalty-calculator/professional-tax-penalty', label: 'Professional Tax' },
+  { href: '/tools/penalty-calculator/gst-demand-notice', label: 'GST Demand' },
+  { href: '/tools/penalty-calculator/startup-dpiit-compliance', label: 'Startup / DPIIT' },
+  { href: '/tools/penalty-calculator/shops-establishment-penalty', label: 'Shops & Est.' },
 ]
 
 export default function PenaltyCalculatorLayout({
