@@ -4,9 +4,7 @@ import { Suspense, useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { Badge } from '@/components/ui/badge'
 import {
   Select,
   SelectContent,
@@ -20,7 +18,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Calculator, SlidersHorizontal } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import {
   TurnoverSlider,
   DaysLateSlider,
@@ -297,20 +295,15 @@ function GSTLatePenaltyCalculator() {
         }}
       />
 
-      <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
+      <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
         {/* Input Section */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <Calculator className="h-5 w-5 text-emerald-600" />
-            GST Late Filing Penalty Calculator
-          </h2>
-
+        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6 space-y-8">
           <div className="space-y-6">
             {/* Return Type */}
-            <div className="space-y-1.5">
-              <Label>Return Type</Label>
-              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)}>
-                <SelectTrigger>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Return Type</label>
+              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)} modal={false}>
+                <SelectTrigger className="h-11 bg-background">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -323,11 +316,11 @@ function GSTLatePenaltyCalculator() {
 
             {/* Is Nil Return */}
             {returnType !== 'GSTR-9' && (
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between py-3 border-b border-border/50">
                 <div>
-                  <Label>Is Nil Return?</Label>
+                  <label className="text-sm font-medium text-foreground">Nil Return?</label>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Nil returns have lower penalty rates
+                    Lower penalty rates apply
                   </p>
                 </div>
                 <Switch checked={isNilReturn} onCheckedChange={setIsNilReturn} />
@@ -335,41 +328,42 @@ function GSTLatePenaltyCalculator() {
             )}
 
             {/* Annual Turnover */}
-            <div className="space-y-1">
+            <div className="space-y-2">
               <TurnoverSlider
                 value={turnover}
                 onChange={setTurnover}
                 label="Annual Turnover"
               />
               {isQRMPEligible && (
-                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
-                  Eligible for QRMP scheme
-                </Badge>
+                <span className="inline-flex items-center px-2 py-1 text-[10px] font-mono tracking-tight bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
+                  QRMP Eligible
+                </span>
               )}
             </div>
 
             {/* Days Late */}
-            <div>
+            <div className="space-y-2">
               <DaysLateSlider
                 value={daysLate}
                 onChange={setDaysLate}
                 label="Days Late"
                 maxDays={365}
               />
-              <p className="text-xs text-muted-foreground mt-2">
-                Due date: {getDueDate(returnType, filingFrequency)}
+              <p className="text-xs text-muted-foreground">
+                Due: {getDueDate(returnType, filingFrequency)}
               </p>
             </div>
+          </div>
 
-            {/* Advanced Filters */}
-            <Accordion type="single" collapsible>
-              <AccordionItem value="advanced" className="border-none">
-                <AccordionTrigger className="text-sm font-medium hover:no-underline py-2">
-                  <span className="flex items-center gap-2">
-                    <SlidersHorizontal className="h-4 w-4" />
-                    Advanced filters
-                  </span>
-                </AccordionTrigger>
+          {/* Advanced Filters */}
+          <Accordion type="single" collapsible>
+            <AccordionItem value="advanced" className="border-t border-border/50 border-b-0">
+              <AccordionTrigger className="text-sm text-muted-foreground hover:text-foreground hover:no-underline py-4">
+                <span className="flex items-center gap-2">
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                  Advanced options
+                </span>
+              </AccordionTrigger>
                 <AccordionContent className="space-y-6 pt-4">
                   {/* Outstanding Tax */}
                   <RupeeInput
@@ -381,10 +375,10 @@ function GSTLatePenaltyCalculator() {
 
                   {/* Filing Frequency (only for GSTR-3B) */}
                   {returnType === 'GSTR-3B' && (
-                    <div className="space-y-1.5">
-                      <Label>Filing Frequency</Label>
-                      <Select value={filingFrequency} onValueChange={(v) => setFilingFrequency(v as FilingFrequency)}>
-                        <SelectTrigger>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground">Filing Frequency</label>
+                      <Select value={filingFrequency} onValueChange={(v) => setFilingFrequency(v as FilingFrequency)} modal={false}>
+                        <SelectTrigger className="bg-background">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
@@ -396,9 +390,9 @@ function GSTLatePenaltyCalculator() {
                   )}
 
                   {/* State */}
-                  <div className="space-y-1.5">
-                    <Label>State of Registration</Label>
-                    <Select value={state} onValueChange={setState}>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground">State of Registration</label>
+                    <Select value={state} onValueChange={setState} modal={false}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -410,10 +404,9 @@ function GSTLatePenaltyCalculator() {
                     </Select>
                   </div>
                 </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </Card>
+            </AccordionItem>
+          </Accordion>
+        </div>
 
         {/* Results Section */}
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -596,7 +589,7 @@ function GSTLatePenaltyCalculator() {
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <Link href="/tools/penalty-calculator/itr-late-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">ITR Late Filing Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate Section 234F, 234A, and 234B penalties
@@ -604,7 +597,7 @@ function GSTLatePenaltyCalculator() {
             </Card>
           </Link>
           <Link href="/tools/penalty-calculator/tds-late-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">TDS Late Filing Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate Section 234E and 271H penalties

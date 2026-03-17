@@ -302,19 +302,14 @@ function ShopsEstablishmentPenaltyCalculator() {
         }}
       />
 
-      <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
+      <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
         {/* Input Section */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <Calculator className="h-5 w-5 text-emerald-600" />
-            Shops & Establishment Penalty Calculator
-          </h2>
-
+        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6 space-y-8">
           <div className="space-y-6">
             {/* State Selector - First Input */}
             <div className="space-y-1.5">
               <Label>State</Label>
-              <Select value={state} onValueChange={setState}>
+              <Select value={state} onValueChange={setState} modal={false}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select state" />
                 </SelectTrigger>
@@ -361,14 +356,14 @@ function ShopsEstablishmentPenaltyCalculator() {
             <EmployeeCountSlider
               value={employeeCount}
               onChange={setEmployeeCount}
-              max={10000}
+              maxCount={10000}
             />
 
             {/* Months of Default */}
             <MonthsLateSlider
               value={monthsLate}
               onChange={setMonthsLate}
-              max={60}
+              maxMonths={60}
               label="Months of Default"
             />
 
@@ -394,7 +389,7 @@ function ShopsEstablishmentPenaltyCalculator() {
               </AccordionItem>
             </Accordion>
           </div>
-        </Card>
+        </div>
 
         {/* Results Section */}
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -527,7 +522,7 @@ function ShopsEstablishmentPenaltyCalculator() {
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <Link href="/tools/penalty-calculator/pf-esic-penalty" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">PF/ESIC Late Payment Penalty</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate EPF Section 14B damages and ESIC interest
@@ -535,7 +530,7 @@ function ShopsEstablishmentPenaltyCalculator() {
             </Card>
           </Link>
           <Link href="/tools/penalty-calculator/professional-tax-penalty" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">Professional Tax Penalty</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 State-wise PT penalty calculator
@@ -543,7 +538,7 @@ function ShopsEstablishmentPenaltyCalculator() {
             </Card>
           </Link>
           <Link href="/tools/penalty-calculator/gst-late-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">GST Late Filing Penalty</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate GSTR-1, GSTR-3B, GSTR-9 late fees
@@ -551,7 +546,7 @@ function ShopsEstablishmentPenaltyCalculator() {
             </Card>
           </Link>
           <Link href="/tools/penalty-calculator/mca-annual-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">MCA Annual Filing Penalty</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 ROC filing penalties for companies and LLPs
@@ -591,14 +586,3 @@ export default function ShopsEstablishmentPenaltyPage() {
   )
 }
 
-export const metadata = {
-  title: 'Shops & Establishment Act Penalty Calculator 2025 | Ollvy',
-  description:
-    'Calculate penalty for non-registration or late renewal under Shops and Establishment Act. State-wise rates for MH, KA, DL, TN, GJ, WB and more.',
-  openGraph: {
-    title: 'Shops & Establishment Act Penalty Calculator 2025 | Ollvy',
-    description: 'Penalty for non-registration or late renewal. State-wise rates for MH, KA, DL, TN and more.',
-    url: 'https://ollvy.com/tools/penalty-calculator/shops-establishment-penalty',
-    type: 'website',
-  },
-}

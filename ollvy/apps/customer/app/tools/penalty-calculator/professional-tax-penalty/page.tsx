@@ -344,7 +344,7 @@ function ProfessionalTaxCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <Card className="p-6">
+        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             Professional Tax Penalty Calculator
@@ -354,7 +354,7 @@ function ProfessionalTaxCalculator() {
             {/* State Selector - FIRST INPUT */}
             <div className="space-y-1.5">
               <Label>State of Registration</Label>
-              <Select value={state} onValueChange={setState}>
+              <Select value={state} onValueChange={setState} modal={false}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -438,7 +438,7 @@ function ProfessionalTaxCalculator() {
               </>
             )}
           </div>
-        </Card>
+        </div>
 
         {/* Results Section */}
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -623,7 +623,7 @@ function ProfessionalTaxCalculator() {
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <Link href="/tools/penalty-calculator/pf-esic-penalty" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">PF/ESIC Penalty Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate EPF and ESIC late payment penalties
@@ -631,7 +631,7 @@ function ProfessionalTaxCalculator() {
             </Card>
           </Link>
           <Link href="/tools/penalty-calculator/tds-late-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">TDS Late Filing Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate Section 234E and 271H penalties

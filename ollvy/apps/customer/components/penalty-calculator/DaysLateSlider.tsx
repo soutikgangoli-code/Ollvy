@@ -1,34 +1,29 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
 interface DaysLateSliderProps {
   value: number
   onChange: (value: number) => void
-  maxDays?: number // default 365, MCA uses 1095
+  maxDays?: number
   label?: string
   className?: string
 }
 
-// Format days as human readable
 function formatDays(days: number): string {
+  if (days === 1) return '1 day'
+  if (days < 30) return `${days} days`
   if (days < 365) {
-    return `${days} days late`
-  }
-  if (days < 730) {
     const months = Math.floor(days / 30)
-    return `${days} days (${months} months) late`
+    return `${days}d (${months}mo)`
   }
   const years = Math.floor(days / 365)
   const remainingMonths = Math.floor((days % 365) / 30)
-  if (remainingMonths === 0) {
-    return `${days} days (${years} years) late`
-  }
-  return `${days} days (${years} years ${remainingMonths} months) late`
+  if (remainingMonths === 0) return `${days}d (${years}y)`
+  return `${days}d (${years}y ${remainingMonths}mo)`
 }
 
 export function DaysLateSlider({
@@ -41,16 +36,13 @@ export function DaysLateSlider({
   const [inputValue, setInputValue] = useState('')
   const [isEditing, setIsEditing] = useState(false)
 
-  // Generate marks based on maxDays
   const marks = useMemo(() => {
     const baseTicks = [7, 30, 60, 90, 180, 270, 365]
     const extendedTicks = [548, 730, 1095]
-
     let allTicks = baseTicks.filter(t => t <= maxDays)
     if (maxDays > 365) {
       allTicks = [...allTicks, ...extendedTicks.filter(t => t <= maxDays)]
     }
-
     return allTicks.map(t => ({
       value: t,
       position: (t / maxDays) * 100,
@@ -88,11 +80,11 @@ export function DaysLateSlider({
   }, [])
 
   return (
-    <div className={cn('space-y-3', className)}>
-      <div className="flex items-center justify-between">
-        <Label className="text-sm font-medium">{label}</Label>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-foreground">
+    <div className={cn('space-y-4', className)}>
+      <div className="flex items-baseline justify-between gap-4">
+        <label className="text-sm font-medium text-foreground">{label}</label>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-mono text-foreground">
             {formatDays(value)}
           </span>
           <Input
@@ -100,12 +92,12 @@ export function DaysLateSlider({
             min={1}
             max={maxDays}
             value={isEditing ? inputValue : ''}
-            placeholder={isEditing ? '' : value.toString()}
+            placeholder={value.toString()}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
-            className="w-20 h-8 text-sm text-right"
+            className="w-16 h-8 text-xs font-mono text-right bg-muted/50 border-border/50"
           />
         </div>
       </div>
@@ -119,16 +111,15 @@ export function DaysLateSlider({
         className="w-full"
       />
 
-      {/* Tick marks */}
-      <div className="relative h-4">
+      <div className="relative h-4 -mt-1">
         {marks.map((mark) => (
-          <div
+          <span
             key={mark.value}
-            className="absolute transform -translate-x-1/2 text-[10px] text-muted-foreground"
+            className="absolute transform -translate-x-1/2 text-[9px] font-mono text-muted-foreground/70"
             style={{ left: `${mark.position}%` }}
           >
             {mark.label}
-          </div>
+          </span>
         ))}
       </div>
     </div>

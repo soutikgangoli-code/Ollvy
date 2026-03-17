@@ -1,0 +1,367 @@
+[  586180ms] [ERROR] ./app/tools/penalty-calculator/mca-annual-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/mca-annual-filing/page.tsx:199:1]
+ 199 |   }, [formsSelected, penalties, daysLate, entityType])
+ 200 | 
+ 201 |   return (
+ 202 |     <>
+     :      ^
+ 203 |       {/* JSON-LD Schema - FAQPage */}
+ 204 |       <script
+ 205 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/mca-annual-filing/page.tsx:201:1]
+ 201 |   return (
+ 202 |     <>
+ 203 |       {/* JSON-LD Schema - FAQPage */}
+ 204 |       <script
+     :       ^
+ 205 |         type="application/ld+json"
+ 206 |         dangerouslySetInnerHTML={{
+ 207 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/mca-annual-filing/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586180ms] [ERROR] ./app/tools/penalty-calculator/pf-esic-penalty/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/pf-esic-penalty/page.tsx:222:1]
+ 222 |   }, [result, monthsLate])
+ 223 | 
+ 224 |   return (
+ 225 |     <>
+     :      ^
+ 226 |       {/* JSON-LD Schema - FAQPage */}
+ 227 |       <script
+ 228 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/pf-esic-penalty/page.tsx:224:1]
+ 224 |   return (
+ 225 |     <>
+ 226 |       {/* JSON-LD Schema - FAQPage */}
+ 227 |       <script
+     :       ^
+ 228 |         type="application/ld+json"
+ 229 |         dangerouslySetInnerHTML={{
+ 230 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/pf-esic-penalty/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586287ms] [ERROR] ./app/tools/penalty-calculator/director-kyc/page.tsx
+Error: 
+  x Expression expected
+    ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/director-kyc/page.tsx:88:1]
+ 88 |   ], [totalPenalty, numberOfDirectors])
+ 89 | 
+ 90 |   return (
+ 91 |     <>
+    :      ^
+ 92 |       {/* JSON-LD Schema */}
+ 93 |       <script
+ 94 |         type="application/ld+json"
+    `----
+
+  x Expected ',', got '< (jsx tag start)'
+    ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/director-kyc/page.tsx:90:1]
+ 90 |   return (
+ 91 |     <>
+ 92 |       {/* JSON-LD Schema */}
+ 93 |       <script
+    :       ^
+ 94 |         type="application/ld+json"
+ 95 |         dangerouslySetInnerHTML={{
+ 96 |           __html: JSON.stringify({
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/director-kyc/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586295ms] [ERROR] ./app/tools/penalty-calculator/mca-annual-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/mca-annual-filing/page.tsx:199:1]
+ 199 |   }, [formsSelected, penalties, daysLate, entityType])
+ 200 | 
+ 201 |   return (
+ 202 |     <>
+     :      ^
+ 203 |       {/* JSON-LD Schema - FAQPage */}
+ 204 |       <script
+ 205 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/mca-annual-filing/page.tsx:201:1]
+ 201 |   return (
+ 202 |     <>
+ 203 |       {/* JSON-LD Schema - FAQPage */}
+ 204 |       <script
+     :       ^
+ 205 |         type="application/ld+json"
+ 206 |         dangerouslySetInnerHTML={{
+ 207 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/mca-annual-filing/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586296ms] [ERROR] ./app/tools/penalty-calculator/pf-esic-penalty/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/pf-esic-penalty/page.tsx:222:1]
+ 222 |   }, [result, monthsLate])
+ 223 | 
+ 224 |   return (
+ 225 |     <>
+     :      ^
+ 226 |       {/* JSON-LD Schema - FAQPage */}
+ 227 |       <script
+ 228 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/pf-esic-penalty/page.tsx:224:1]
+ 224 |   return (
+ 225 |     <>
+ 226 |       {/* JSON-LD Schema - FAQPage */}
+ 227 |       <script
+     :       ^
+ 228 |         type="application/ld+json"
+ 229 |         dangerouslySetInnerHTML={{
+ 230 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/pf-esic-penalty/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586420ms] [ERROR] ./app/tools/penalty-calculator/mca-annual-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/mca-annual-filing/page.tsx:199:1]
+ 199 |   }, [formsSelected, penalties, daysLate, entityType])
+ 200 | 
+ 201 |   return (
+ 202 |     <>
+     :      ^
+ 203 |       {/* JSON-LD Schema - FAQPage */}
+ 204 |       <script
+ 205 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/mca-annual-filing/page.tsx:201:1]
+ 201 |   return (
+ 202 |     <>
+ 203 |       {/* JSON-LD Schema - FAQPage */}
+ 204 |       <script
+     :       ^
+ 205 |         type="application/ld+json"
+ 206 |         dangerouslySetInnerHTML={{
+ 207 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/mca-annual-filing/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586420ms] [ERROR] ./app/tools/penalty-calculator/pf-esic-penalty/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/pf-esic-penalty/page.tsx:222:1]
+ 222 |   }, [result, monthsLate])
+ 223 | 
+ 224 |   return (
+ 225 |     <>
+     :      ^
+ 226 |       {/* JSON-LD Schema - FAQPage */}
+ 227 |       <script
+ 228 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/pf-esic-penalty/page.tsx:224:1]
+ 224 |   return (
+ 225 |     <>
+ 226 |       {/* JSON-LD Schema - FAQPage */}
+ 227 |       <script
+     :       ^
+ 228 |         type="application/ld+json"
+ 229 |         dangerouslySetInnerHTML={{
+ 230 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/pf-esic-penalty/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586510ms] [ERROR] ./app/tools/penalty-calculator/director-kyc/page.tsx
+Error: 
+  x Expression expected
+    ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/director-kyc/page.tsx:88:1]
+ 88 |   ], [totalPenalty, numberOfDirectors])
+ 89 | 
+ 90 |   return (
+ 91 |     <>
+    :      ^
+ 92 |       {/* JSON-LD Schema */}
+ 93 |       <script
+ 94 |         type="application/ld+json"
+    `----
+
+  x Expected ',', got '< (jsx tag start)'
+    ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/director-kyc/page.tsx:90:1]
+ 90 |   return (
+ 91 |     <>
+ 92 |       {/* JSON-LD Schema */}
+ 93 |       <script
+    :       ^
+ 94 |         type="application/ld+json"
+ 95 |         dangerouslySetInnerHTML={{
+ 96 |           __html: JSON.stringify({
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/director-kyc/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  586510ms] [ERROR] ./app/tools/penalty-calculator/tds-late-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/tds-late-filing/page.tsx:210:1]
+ 210 |   }, [result, daysLateReturn])
+ 211 | 
+ 212 |   return (
+ 213 |     <>
+     :      ^
+ 214 |       {/* JSON-LD Schema */}
+ 215 |       <script
+ 216 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/tds-late-filing/page.tsx:212:1]
+ 212 |   return (
+ 213 |     <>
+ 214 |       {/* JSON-LD Schema */}
+ 215 |       <script
+     :       ^
+ 216 |         type="application/ld+json"
+ 217 |         dangerouslySetInnerHTML={{
+ 218 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/tds-late-filing/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  619269ms] [ERROR] ./app/tools/penalty-calculator/professional-tax-penalty/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/professional-tax-penalty/page.tsx:287:1]
+ 287 |   }, [result, state, monthsLate])
+ 288 | 
+ 289 |   return (
+ 290 |     <>
+     :      ^
+ 291 |       {/* JSON-LD Schema - FAQPage */}
+ 292 |       <script
+ 293 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/professional-tax-penalty/page.tsx:289:1]
+ 289 |   return (
+ 290 |     <>
+ 291 |       {/* JSON-LD Schema - FAQPage */}
+ 292 |       <script
+     :       ^
+ 293 |         type="application/ld+json"
+ 294 |         dangerouslySetInnerHTML={{
+ 295 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/professional-tax-penalty/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  619442ms] [ERROR] ./app/tools/penalty-calculator/tds-late-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/tds-late-filing/page.tsx:210:1]
+ 210 |   }, [result, daysLateReturn])
+ 211 | 
+ 212 |   return (
+ 213 |     <>
+     :      ^
+ 214 |       {/* JSON-LD Schema */}
+ 215 |       <script
+ 216 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/tds-late-filing/page.tsx:212:1]
+ 212 |   return (
+ 213 |     <>
+ 214 |       {/* JSON-LD Schema */}
+ 215 |       <script
+     :       ^
+ 216 |         type="application/ld+json"
+ 217 |         dangerouslySetInnerHTML={{
+ 218 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/tds-late-filing/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  737496ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-3B&nil=false&turnover=10000000&days=30&liability=0&frequency=monthly&state=Delhi:0
+[  750045ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/tds-late-filing?form=26Q&quarter=Q1&tds_amount=50000&deposit_status=ON_TIME&days_return=30&days_deposit=30:0
+[  770045ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/tds-late-filing?form=26Q&quarter=Q1&tds_amount=50000&deposit_status=ON_TIME&days_return=30&days_deposit=30:0
+[  796718ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  796754ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  799776ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/:0
+[  805763ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/services:0
+[  808603ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  808621ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  814355ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/private-limited-company:0
+[  824946ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-3B&nil=false&turnover=10000000&days=30&liability=0&frequency=monthly&state=Delhi:0
+[  852945ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-3B&nil=false&turnover=5000000000&days=365&liability=0&frequency=monthly&state=Delhi:0
+[  861182ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-1&nil=false&turnover=12029515&days=365&liability=0&frequency=monthly&state=Delhi:0
+[  868042ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-1&nil=false&turnover=12029515&days=331&liability=0&frequency=monthly&state=Delhi:0
+[  883658ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-demand-notice?type=tax_not_paid&fraud=false&amount=100000&stage=scn&days=30:0
+[  893542ms] [WARNING] No default component was found for a parallel route rendered on this page. Falling back to nearest NotFound boundary.
+Learn more: https://nextjs.org/docs/app/building-your-application/routing/parallel-routes#defaultjs
+
+ @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/shared/lib/utils/warn-once.js:15
+[  896532ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  896550ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  899553ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/:0
+[  913839ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/private-limited-company:0
+[  921452ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-3B&nil=false&turnover=10000000&days=30&liability=0&frequency=monthly&state=Delhi:0
+[  948867ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-3B&nil=false&turnover=10000000&days=30&liability=0&frequency=monthly&state=Delhi:0
+[  954649ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/private-limited-company:0

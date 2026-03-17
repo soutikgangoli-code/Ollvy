@@ -89,7 +89,7 @@ export function RupeeInput({
         </Label>
       )}
       <div className="relative">
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground font-mono text-sm">
           ₹
         </span>
         <Input
@@ -101,7 +101,7 @@ export function RupeeInput({
           onBlur={handleBlur}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          className="pl-7"
+          className="pl-7 font-mono"
         />
       </div>
       {helpText && (

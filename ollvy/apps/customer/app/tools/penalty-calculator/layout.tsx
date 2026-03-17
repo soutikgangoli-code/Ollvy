@@ -1,23 +1,28 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import Head from 'next/head'
+import { usePathname, useRouter } from 'next/navigation'
+import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
-// Only show live calculators - add more as they're built
-// Per spec Section 2.2: "Show only live tabs. Do not show disabled/greyed-out tabs for unbuilt calculators."
-const penaltyTabs = [
-  { href: '/tools/penalty-calculator/gst-late-filing', label: 'GST Filing' },
-  { href: '/tools/penalty-calculator/itr-late-filing', label: 'ITR Filing' },
-  { href: '/tools/penalty-calculator/mca-annual-filing', label: 'MCA Filing' },
-  { href: '/tools/penalty-calculator/director-kyc', label: 'Director KYC' },
-  { href: '/tools/penalty-calculator/tds-late-filing', label: 'TDS Filing' },
-  { href: '/tools/penalty-calculator/pf-esic-penalty', label: 'PF / ESIC' },
-  { href: '/tools/penalty-calculator/professional-tax-penalty', label: 'Professional Tax' },
-  { href: '/tools/penalty-calculator/gst-demand-notice', label: 'GST Demand' },
-  { href: '/tools/penalty-calculator/startup-dpiit-compliance', label: 'Startup / DPIIT' },
-  { href: '/tools/penalty-calculator/shops-establishment-penalty', label: 'Shops & Est.' },
+// Sorted by monthly search volume (India)
+const penaltyCalculators = [
+  { href: '/tools/penalty-calculator/gst-late-filing', label: 'GST Late Filing', shortForm: 'GSTR-3B' },
+  { href: '/tools/penalty-calculator/itr-late-filing', label: 'ITR Late Filing', shortForm: 'ITR' },
+  { href: '/tools/penalty-calculator/tds-late-filing', label: 'TDS Late Filing', shortForm: 'TDS' },
+  { href: '/tools/penalty-calculator/mca-annual-filing', label: 'MCA Annual Filing', shortForm: 'AOC-4' },
+  { href: '/tools/penalty-calculator/pf-esic-penalty', label: 'PF / ESIC Penalty', shortForm: 'EPF' },
+  { href: '/tools/penalty-calculator/director-kyc', label: 'Director KYC', shortForm: 'DIR-3' },
+  { href: '/tools/penalty-calculator/gst-demand-notice', label: 'GST Demand Notice', shortForm: 'DRC-01' },
+  { href: '/tools/penalty-calculator/professional-tax-penalty', label: 'Professional Tax', shortForm: 'PT' },
+  { href: '/tools/penalty-calculator/shops-establishment-penalty', label: 'Shops & Establishment', shortForm: 'S&E' },
+  { href: '/tools/penalty-calculator/startup-dpiit-compliance', label: 'Startup / DPIIT', shortForm: 'FC-GPR' },
 ]
 
 export default function PenaltyCalculatorLayout({
@@ -26,14 +31,19 @@ export default function PenaltyCalculatorLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const router = useRouter()
 
-  // Don't show tabs on the index page
+  // Don't show selector on the index page
   if (pathname === '/tools/penalty-calculator') {
     return <>{children}</>
   }
 
-  // Find current tab for breadcrumb
-  const currentTab = penaltyTabs.find(tab => pathname === tab.href)
+  // Find current calculator
+  const currentCalc = penaltyCalculators.find(calc => pathname === calc.href)
+
+  const handleChange = (value: string) => {
+    router.push(value)
+  }
 
   return (
     <>
@@ -48,45 +58,50 @@ export default function PenaltyCalculatorLayout({
               { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
               { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
               { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
-              currentTab && { '@type': 'ListItem', position: 4, name: currentTab.label, item: `https://ollvy.com${currentTab.href}` },
+              currentCalc && { '@type': 'ListItem', position: 4, name: currentCalc.label, item: `https://ollvy.com${currentCalc.href}` },
             ].filter(Boolean),
           }),
         }}
       />
 
-      <div className="py-24">
-        <div className="container max-w-6xl">
+      <div className="py-16 md:py-24">
+        <div className="container max-w-5xl">
           {/* Header */}
-          <div className="text-center mb-8">
-            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
-              PENALTY CALCULATOR
+          <div className="mb-10">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
+              Penalty Calculator
             </p>
-            <h1 className="text-3xl md:text-4xl font-semibold text-foreground">
-              What&apos;s the Penalty for Missing a Deadline?
-            </h1>
-            <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
-              Real calculations based on Indian compliance law. Configure your business profile to see exact penalties.
-            </p>
-          </div>
 
-          {/* Tabs - horizontal scroll on mobile */}
-          <div className="overflow-x-auto pb-4 mb-8 border-b border-border">
-            <div className="flex gap-2 min-w-max justify-center">
-              {penaltyTabs.map((tab) => (
-                <Link
-                  key={tab.href}
-                  href={tab.href}
-                  className={cn(
-                    'px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap',
-                    pathname === tab.href
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
-                  )}
-                >
-                  {tab.label}
-                </Link>
-              ))}
+            {/* Calculator Selector */}
+            <div className="flex items-center gap-3">
+              <Select value={pathname} onValueChange={handleChange} modal={false}>
+                <SelectTrigger className="w-[320px] h-12 bg-background border-border/50 font-medium text-base">
+                  <SelectValue>
+                    {currentCalc?.label || 'Select calculator'}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="max-h-[400px] min-w-[320px]">
+                  {penaltyCalculators.map((calc) => (
+                    <SelectItem
+                      key={calc.href}
+                      value={calc.href}
+                      className="py-3 cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between gap-4 w-full">
+                        <span>{calc.label}</span>
+                        <span className="font-mono text-[10px] text-muted-foreground">
+                          {calc.shortForm}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
+
+            <p className="text-sm text-muted-foreground mt-4 max-w-xl">
+              Calculate exact penalties based on Indian compliance law
+            </p>
           </div>
 
           {/* Content */}

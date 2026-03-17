@@ -21,21 +21,31 @@ export function WarningBanner({
   return (
     <div
       className={cn(
-        'flex gap-3 p-4 rounded-lg border',
+        'flex gap-3 p-3 rounded-lg border',
         isYellow
-          ? 'bg-amber-50 border-amber-200 text-amber-900'
-          : 'bg-red-50 border-red-200 text-red-900',
+          ? 'bg-amber-500/5 border-amber-500/10'
+          : 'bg-red-500/5 border-red-500/10',
         className
       )}
     >
       {isYellow ? (
-        <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+        <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
       ) : (
-        <AlertCircle className="h-5 w-5 text-red-600 shrink-0 mt-0.5" />
+        <AlertCircle className="h-4 w-4 text-red-500 shrink-0 mt-0.5" />
       )}
-      <div>
-        <p className="font-semibold text-sm">{title}</p>
-        <p className="text-sm mt-1 opacity-90">{body}</p>
+      <div className="min-w-0">
+        <p className={cn(
+          'text-sm font-medium mb-0.5',
+          isYellow ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'
+        )}>
+          {title}
+        </p>
+        <p className={cn(
+          'text-xs leading-relaxed',
+          isYellow ? 'text-amber-700/80 dark:text-amber-300/80' : 'text-red-700/80 dark:text-red-300/80'
+        )}>
+          {body}
+        </p>
       </div>
     </div>
   )

@@ -325,19 +325,14 @@ function ITRLatePenaltyCalculator() {
         }}
       />
 
-      <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
+      <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
         {/* Input Section */}
-        <Card className="p-6">
-          <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <Calculator className="h-5 w-5 text-emerald-600" />
-            ITR Late Filing Penalty Calculator
-          </h2>
-
+        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6 space-y-8">
           <div className="space-y-6">
             {/* Entity Type */}
             <div className="space-y-1.5">
               <Label>Entity Type</Label>
-              <Select value={entityType} onValueChange={(v) => setEntityType(v as EntityType)}>
+              <Select value={entityType} onValueChange={(v) => setEntityType(v as EntityType)} modal={false}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -357,7 +352,7 @@ function ITRLatePenaltyCalculator() {
             {/* Financial Year */}
             <div className="space-y-1.5">
               <Label>Financial Year</Label>
-              <Select value={financialYear} onValueChange={(v) => setFinancialYear(v as FinancialYear)}>
+              <Select value={financialYear} onValueChange={(v) => setFinancialYear(v as FinancialYear)} modal={false}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -453,7 +448,7 @@ function ITRLatePenaltyCalculator() {
               </AccordionItem>
             </Accordion>
           </div>
-        </Card>
+        </div>
 
         {/* Results Section */}
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -685,7 +680,7 @@ function ITRLatePenaltyCalculator() {
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <Link href="/tools/penalty-calculator/tds-late-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">TDS Late Filing Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate Section 234E and 271H penalties
@@ -693,7 +688,7 @@ function ITRLatePenaltyCalculator() {
             </Card>
           </Link>
           <Link href="/tools/penalty-calculator/mca-annual-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">MCA Annual Filing Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate AOC-4 and MGT-7 late filing penalties

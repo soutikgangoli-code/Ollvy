@@ -168,7 +168,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 w-full transition-all duration-200 bg-background/80 backdrop-blur-xl',
+        'fixed top-0 left-0 z-50 w-[100vw] transition-all duration-200 bg-background/80 backdrop-blur-xl',
         scrolled ? 'h-[52px] border-b border-border' : 'h-16'
       )}
     >

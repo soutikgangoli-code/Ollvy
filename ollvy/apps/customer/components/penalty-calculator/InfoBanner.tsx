@@ -17,14 +17,20 @@ export function InfoBanner({
   return (
     <div
       className={cn(
-        'flex gap-3 p-4 rounded-lg border bg-blue-50 border-blue-200 text-blue-900',
+        'flex gap-3 p-3 rounded-lg bg-muted/50 border border-border/50',
         className
       )}
     >
-      <Info className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-      <div>
-        {title && <p className="font-semibold text-sm">{title}</p>}
-        <p className={cn('text-sm', title && 'mt-1')}>{body}</p>
+      <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+      <div className="min-w-0">
+        {title && (
+          <p className="text-sm font-medium text-foreground mb-0.5">
+            {title}
+          </p>
+        )}
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          {body}
+        </p>
       </div>
     </div>
   )

@@ -1,0 +1,391 @@
+[  346509ms] [ERROR] ./app/tools/penalty-calculator/itr-late-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:269:1]
+ 269 |   }, [result, totalIncome, outstandingTax])
+ 270 | 
+ 271 |   return (
+ 272 |     <>
+     :      ^
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+ 275 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:271:1]
+ 271 |   return (
+ 272 |     <>
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+     :       ^
+ 275 |         type="application/ld+json"
+ 276 |         dangerouslySetInnerHTML={{
+ 277 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/itr-late-filing/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  346597ms] [ERROR] ./app/tools/penalty-calculator/itr-late-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:269:1]
+ 269 |   }, [result, totalIncome, outstandingTax])
+ 270 | 
+ 271 |   return (
+ 272 |     <>
+     :      ^
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+ 275 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:271:1]
+ 271 |   return (
+ 272 |     <>
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+     :       ^
+ 275 |         type="application/ld+json"
+ 276 |         dangerouslySetInnerHTML={{
+ 277 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/itr-late-filing/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  346693ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tools/penalty-calculator/itr-late-filing?entity=individual&fy=FY2024-25&audit=false&income=1000000&tax=0&days=30&advance_paid=true&advance_amount=0&tds=0&_rsc=17eq0:0
+[  346740ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tools/penalty-calculator/itr-late-filing?entity=individual&fy=FY2024-25&audit=false&income=1000000&tax=0&days=30&advance_paid=true&advance_amount=0&tds=0:0
+[  346885ms] ModuleBuildError: Module build failed (from ../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:269:1]
+ 269 |   }, [result, totalIncome, outstandingTax])
+ 270 | 
+ 271 |   return (
+ 272 |     <>
+     :      ^
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+ 275 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:271:1]
+ 271 |   return (
+ 272 |     <>
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+     :       ^
+ 275 |         type="application/ld+json"
+ 276 |         dangerouslySetInnerHTML={{
+ 277 |           __html: JSON.stringify({
+     `----
+
+
+Caused by:
+    Syntax Error
+    at processResult (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/webpack/bundle5.js:28:400590)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/webpack/bundle5.js:28:402302)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:8645)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:5019)
+    at r.callback (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:4039)
+[  346885ms] [ERROR] ./app/tools/penalty-calculator/itr-late-filing/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:269:1]
+ 269 |   }, [result, totalIncome, outstandingTax])
+ 270 | 
+ 271 |   return (
+ 272 |     <>
+     :      ^
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+ 275 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/itr-late-filing/page.tsx:271:1]
+ 271 |   return (
+ 272 |     <>
+ 273 |       {/* JSON-LD Schema */}
+ 274 |       <script
+     :       ^
+ 275 |         type="application/ld+json"
+ 276 |         dangerouslySetInnerHTML={{
+ 277 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error @ webpack-internal:///../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[  356795ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/54d3ce50bad5d871.webpack.hot-update.json:0
+[  356796ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[  432711ms] [ERROR] ./app/tools/penalty-calculator/shops-establishment-penalty/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:246:1]
+ 246 |   const showRepeatWarning = monthsLate > 12
+ 247 | 
+ 248 |   return (
+ 249 |     <>
+     :      ^
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+ 252 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:248:1]
+ 248 |   return (
+ 249 |     <>
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+     :       ^
+ 252 |         type="application/ld+json"
+ 253 |         dangerouslySetInnerHTML={{
+ 254 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/shops-establishment-penalty/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  432788ms] [ERROR] ./app/tools/penalty-calculator/shops-establishment-penalty/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:246:1]
+ 246 |   const showRepeatWarning = monthsLate > 12
+ 247 | 
+ 248 |   return (
+ 249 |     <>
+     :      ^
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+ 252 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:248:1]
+ 248 |   return (
+ 249 |     <>
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+     :       ^
+ 252 |         type="application/ld+json"
+ 253 |         dangerouslySetInnerHTML={{
+ 254 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/shops-establishment-penalty/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  432863ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tools/penalty-calculator/itr-late-filing?entity=individual&fy=FY2024-25&audit=false&income=1000000&tax=0&days=30&advance_paid=true&advance_amount=0&tds=0&_rsc=17eq0:0
+[  432911ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tools/penalty-calculator/itr-late-filing?entity=individual&fy=FY2024-25&audit=false&income=1000000&tax=0&days=30&advance_paid=true&advance_amount=0&tds=0:0
+[  432990ms] ModuleBuildError: Module build failed (from ../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:246:1]
+ 246 |   const showRepeatWarning = monthsLate > 12
+ 247 | 
+ 248 |   return (
+ 249 |     <>
+     :      ^
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+ 252 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:248:1]
+ 248 |   return (
+ 249 |     <>
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+     :       ^
+ 252 |         type="application/ld+json"
+ 253 |         dangerouslySetInnerHTML={{
+ 254 |           __html: JSON.stringify({
+     `----
+
+
+Caused by:
+    Syntax Error
+    at processResult (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/webpack/bundle5.js:28:400590)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/webpack/bundle5.js:28:402302)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:8645)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:5019)
+    at r.callback (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:4039)
+[  432990ms] [ERROR] ./app/tools/penalty-calculator/shops-establishment-penalty/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:246:1]
+ 246 |   const showRepeatWarning = monthsLate > 12
+ 247 | 
+ 248 |   return (
+ 249 |     <>
+     :      ^
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+ 252 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/shops-establishment-penalty/page.tsx:248:1]
+ 248 |   return (
+ 249 |     <>
+ 250 |       {/* JSON-LD Schema - FAQPage */}
+ 251 |       <script
+     :       ^
+ 252 |         type="application/ld+json"
+ 253 |         dangerouslySetInnerHTML={{
+ 254 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error @ webpack-internal:///../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[  447491ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/54d3ce50bad5d871.webpack.hot-update.json:0
+[  447491ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[  468614ms] [ERROR] ./app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:237:1]
+ 237 |   const hasCalculablePenalty = complianceTypes.includes('fc_gpr') || complianceTypes.includes('fc_trs') || complianceTypes.includes('esop')
+ 238 | 
+ 239 |   return (
+ 240 |     <>
+     :      ^
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+ 243 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:239:1]
+ 239 |   return (
+ 240 |     <>
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+     :       ^
+ 243 |         type="application/ld+json"
+ 244 |         dangerouslySetInnerHTML={{
+ 245 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  468711ms] [ERROR] ./app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:237:1]
+ 237 |   const hasCalculablePenalty = complianceTypes.includes('fc_gpr') || complianceTypes.includes('fc_trs') || complianceTypes.includes('esop')
+ 238 | 
+ 239 |   return (
+ 240 |     <>
+     :      ^
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+ 243 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:239:1]
+ 239 |   return (
+ 240 |     <>
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+     :       ^
+ 243 |         type="application/ld+json"
+ 244 |         dangerouslySetInnerHTML={{
+ 245 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[  468802ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tools/penalty-calculator/itr-late-filing?entity=individual&fy=FY2024-25&audit=false&income=1000000&tax=0&days=30&advance_paid=true&advance_amount=0&tds=0&_rsc=17eq0:0
+[  468853ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/tools/penalty-calculator/itr-late-filing?entity=individual&fy=FY2024-25&audit=false&income=1000000&tax=0&days=30&advance_paid=true&advance_amount=0&tds=0:0
+[  468931ms] ModuleBuildError: Module build failed (from ../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/build/webpack/loaders/next-swc-loader.js):
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:237:1]
+ 237 |   const hasCalculablePenalty = complianceTypes.includes('fc_gpr') || complianceTypes.includes('fc_trs') || complianceTypes.includes('esop')
+ 238 | 
+ 239 |   return (
+ 240 |     <>
+     :      ^
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+ 243 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:239:1]
+ 239 |   return (
+ 240 |     <>
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+     :       ^
+ 243 |         type="application/ld+json"
+ 244 |         dangerouslySetInnerHTML={{
+ 245 |           __html: JSON.stringify({
+     `----
+
+
+Caused by:
+    Syntax Error
+    at processResult (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/webpack/bundle5.js:28:400590)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/webpack/bundle5.js:28:402302)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:8645)
+    at <unknown> (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:5019)
+    at r.callback (file:///Users/apple/Downloads/Ollvy-main.123/ollvy/node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/loader-runner/LoaderRunner.js:1:4039)
+[  468932ms] [ERROR] ./app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:237:1]
+ 237 |   const hasCalculablePenalty = complianceTypes.includes('fc_gpr') || complianceTypes.includes('fc_trs') || complianceTypes.includes('esop')
+ 238 | 
+ 239 |   return (
+ 240 |     <>
+     :      ^
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+ 243 |         type="application/ld+json"
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/app/tools/penalty-calculator/startup-dpiit-compliance/page.tsx:239:1]
+ 239 |   return (
+ 240 |     <>
+ 241 |       {/* JSON-LD Schema - FAQPage */}
+ 242 |       <script
+     :       ^
+ 243 |         type="application/ld+json"
+ 244 |         dangerouslySetInnerHTML={{
+ 245 |           __html: JSON.stringify({
+     `----
+
+Caused by:
+    Syntax Error @ webpack-internal:///../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[  488094ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/_next/static/webpack/54d3ce50bad5d871.webpack.hot-update.json:0
+[  488094ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:347

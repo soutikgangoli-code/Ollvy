@@ -268,7 +268,7 @@ function TDSLatePenaltyCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <Card className="p-6">
+        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             TDS Late Filing Penalty Calculator
@@ -278,7 +278,7 @@ function TDSLatePenaltyCalculator() {
             {/* Return Type */}
             <div className="space-y-1.5">
               <Label>Return Type</Label>
-              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)}>
+              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)} modal={false}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -295,7 +295,7 @@ function TDSLatePenaltyCalculator() {
             {/* Quarter */}
             <div className="space-y-1.5">
               <Label>Quarter</Label>
-              <Select value={quarter} onValueChange={(v) => setQuarter(v as Quarter)}>
+              <Select value={quarter} onValueChange={(v) => setQuarter(v as Quarter)} modal={false}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -380,7 +380,7 @@ function TDSLatePenaltyCalculator() {
               </AccordionItem>
             </Accordion>
           </div>
-        </Card>
+        </div>
 
         {/* Results Section */}
         <div className="lg:sticky lg:top-24 lg:self-start">
@@ -586,7 +586,7 @@ function TDSLatePenaltyCalculator() {
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <Link href="/tools/penalty-calculator/itr-late-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">ITR Late Filing Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate Section 234F, 234A, and 234B penalties
@@ -594,7 +594,7 @@ function TDSLatePenaltyCalculator() {
             </Card>
           </Link>
           <Link href="/tools/penalty-calculator/gst-late-filing" className="block">
-            <Card className="p-4 hover:border-emerald-500 transition-colors">
+            <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">GST Late Filing Calculator</h3>
               <p className="text-sm text-muted-foreground mt-1">
                 Calculate GSTR-1, GSTR-3B, and GSTR-9 penalties

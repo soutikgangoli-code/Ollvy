@@ -3,21 +3,18 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
 interface EmployeeCountSliderProps {
   value: number
   onChange: (value: number) => void
   label?: string
-  maxCount?: number // default 10000
+  maxCount?: number
   className?: string
 }
 
-// Marks for the slider
 const MARKS = [1, 5, 10, 20, 50, 100, 250, 500, 1000, 5000, 10000]
 
-// Convert linear slider position (0-100) to actual value using logarithmic scale
 function sliderToValue(sliderPos: number, maxValue: number): number {
   if (sliderPos === 0) return 1
   const minLog = Math.log(1)
@@ -26,7 +23,6 @@ function sliderToValue(sliderPos: number, maxValue: number): number {
   return Math.max(1, Math.round(Math.exp(minLog + scale * sliderPos)))
 }
 
-// Convert actual value to linear slider position (0-100)
 function valueToSlider(value: number, maxValue: number): number {
   if (value <= 1) return 0
   const minLog = Math.log(1)
@@ -46,7 +42,6 @@ export function EmployeeCountSlider({
   const [inputValue, setInputValue] = useState('')
   const [isEditing, setIsEditing] = useState(false)
 
-  // Sync slider when external value changes
   useEffect(() => {
     if (!isEditing) {
       setSliderValue(valueToSlider(value, maxCount))
@@ -85,7 +80,6 @@ export function EmployeeCountSlider({
     }
   }, [])
 
-  // Generate tick marks for display
   const ticks = useMemo(() => {
     return MARKS.filter(m => m <= maxCount).map(m => ({
       value: m,
@@ -95,24 +89,24 @@ export function EmployeeCountSlider({
   }, [maxCount])
 
   return (
-    <div className={cn('space-y-3', className)}>
-      <div className="flex items-center justify-between">
-        <Label className="text-sm font-medium">{label}</Label>
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold text-foreground">
-            {value.toLocaleString('en-IN')} employees
+    <div className={cn('space-y-4', className)}>
+      <div className="flex items-baseline justify-between gap-4">
+        <label className="text-sm font-medium text-foreground">{label}</label>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-mono text-foreground">
+            {value.toLocaleString('en-IN')}
           </span>
           <Input
             type="number"
             min={1}
             max={maxCount}
             value={isEditing ? inputValue : ''}
-            placeholder={isEditing ? '' : value.toString()}
+            placeholder={value.toString()}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
-            className="w-24 h-8 text-sm text-right"
+            className="w-20 h-8 text-xs font-mono text-right bg-muted/50 border-border/50"
           />
         </div>
       </div>
@@ -126,16 +120,15 @@ export function EmployeeCountSlider({
         className="w-full"
       />
 
-      {/* Tick marks */}
-      <div className="relative h-4">
-        {ticks.map((tick, i) => (
-          <div
+      <div className="relative h-4 -mt-1">
+        {ticks.filter((_, i) => i % 2 === 0).map((tick) => (
+          <span
             key={tick.value}
-            className="absolute transform -translate-x-1/2 text-[10px] text-muted-foreground"
+            className="absolute transform -translate-x-1/2 text-[9px] font-mono text-muted-foreground/70"
             style={{ left: `${tick.position}%` }}
           >
-            {i % 2 === 0 && tick.label}
-          </div>
+            {tick.label}
+          </span>
         ))}
       </div>
     </div>

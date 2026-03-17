@@ -3,28 +3,23 @@
 import { useState, useCallback, useMemo } from 'react'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
 interface MonthsLateSliderProps {
   value: number
   onChange: (value: number) => void
   label?: string
-  maxMonths?: number // default 60 (5 years)
+  maxMonths?: number
   className?: string
 }
 
-// Format months as human readable
 function formatMonths(months: number): string {
-  if (months < 12) {
-    return `${months} month${months === 1 ? '' : 's'} late`
-  }
+  if (months === 1) return '1 month'
+  if (months < 12) return `${months} months`
   const years = Math.floor(months / 12)
   const remainingMonths = months % 12
-  if (remainingMonths === 0) {
-    return `${years} year${years === 1 ? '' : 's'} late`
-  }
-  return `${years} year${years === 1 ? '' : 's'} ${remainingMonths} month${remainingMonths === 1 ? '' : 's'} late`
+  if (remainingMonths === 0) return `${years}y`
+  return `${years}y ${remainingMonths}mo`
 }
 
 export function MonthsLateSlider({
@@ -37,7 +32,6 @@ export function MonthsLateSlider({
   const [inputValue, setInputValue] = useState('')
   const [isEditing, setIsEditing] = useState(false)
 
-  // Marks: 1, 3, 6, 12, 24, 36, 48, 60
   const marks = useMemo(() => {
     const ticks = [1, 3, 6, 12, 24, 36, 48, 60].filter(t => t <= maxMonths)
     return ticks.map(t => ({
@@ -77,11 +71,11 @@ export function MonthsLateSlider({
   }, [])
 
   return (
-    <div className={cn('space-y-3', className)}>
-      <div className="flex items-center justify-between">
-        <Label className="text-sm font-medium">{label}</Label>
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-foreground">
+    <div className={cn('space-y-4', className)}>
+      <div className="flex items-baseline justify-between gap-4">
+        <label className="text-sm font-medium text-foreground">{label}</label>
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-mono text-foreground">
             {formatMonths(value)}
           </span>
           <Input
@@ -89,12 +83,12 @@ export function MonthsLateSlider({
             min={1}
             max={maxMonths}
             value={isEditing ? inputValue : ''}
-            placeholder={isEditing ? '' : value.toString()}
+            placeholder={value.toString()}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
-            className="w-16 h-8 text-sm text-right"
+            className="w-14 h-8 text-xs font-mono text-right bg-muted/50 border-border/50"
           />
         </div>
       </div>
@@ -108,16 +102,15 @@ export function MonthsLateSlider({
         className="w-full"
       />
 
-      {/* Tick marks */}
-      <div className="relative h-4">
+      <div className="relative h-4 -mt-1">
         {marks.map((mark) => (
-          <div
+          <span
             key={mark.value}
-            className="absolute transform -translate-x-1/2 text-[10px] text-muted-foreground"
+            className="absolute transform -translate-x-1/2 text-[9px] font-mono text-muted-foreground/70"
             style={{ left: `${mark.position}%` }}
           >
             {mark.label}
-          </div>
+          </span>
         ))}
       </div>
     </div>

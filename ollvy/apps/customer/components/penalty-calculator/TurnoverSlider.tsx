@@ -3,59 +3,43 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Slider } from '@/components/ui/slider'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
 interface TurnoverSliderProps {
-  value: number // in rupees
+  value: number
   onChange: (value: number) => void
   label?: string
-  maxCrore?: number // default 500
+  maxCrore?: number
   className?: string
 }
 
-// Breakpoints for logarithmic scale (in rupees)
 const BREAKPOINTS = [
-  100000,       // ₹1L
-  500000,       // ₹5L
-  1000000,      // ₹10L
-  5000000,      // ₹50L
-  10000000,     // ₹1Cr
-  50000000,     // ₹5Cr
-  100000000,    // ₹10Cr
-  500000000,    // ₹50Cr
-  1000000000,   // ₹100Cr
-  5000000000,   // ₹500Cr
+  100000, 500000, 1000000, 5000000, 10000000,
+  50000000, 100000000, 500000000, 1000000000, 5000000000,
 ]
 
-// Format value as human-readable Indian numbers
 function formatIndianCurrency(value: number): string {
   if (value === 0) return '₹0'
-  if (value >= 10000000) { // 1 Crore+
+  if (value >= 10000000) {
     const crores = value / 10000000
-    if (crores >= 100) {
-      return `₹${Math.round(crores)} Crore`
-    }
-    return crores % 1 === 0 ? `₹${crores} Crore` : `₹${crores.toFixed(1)} Crore`
+    if (crores >= 100) return `₹${Math.round(crores)} Cr`
+    return crores % 1 === 0 ? `₹${crores} Cr` : `₹${crores.toFixed(1)} Cr`
   }
-  if (value >= 100000) { // 1 Lakh+
+  if (value >= 100000) {
     const lakhs = value / 100000
-    return lakhs % 1 === 0 ? `₹${lakhs} Lakh` : `₹${lakhs.toFixed(1)} Lakh`
+    return lakhs % 1 === 0 ? `₹${lakhs} L` : `₹${lakhs.toFixed(1)} L`
   }
   return `₹${value.toLocaleString('en-IN')}`
 }
 
-// Convert linear slider position (0-100) to actual value using logarithmic scale
 function sliderToValue(sliderPos: number, maxValue: number): number {
   if (sliderPos === 0) return 0
-  // Use logarithmic interpolation
   const minLog = Math.log(1)
   const maxLog = Math.log(maxValue)
   const scale = (maxLog - minLog) / 100
   return Math.round(Math.exp(minLog + scale * sliderPos))
 }
 
-// Convert actual value to linear slider position (0-100)
 function valueToSlider(value: number, maxValue: number): number {
   if (value <= 0) return 0
   const minLog = Math.log(1)
@@ -64,19 +48,16 @@ function valueToSlider(value: number, maxValue: number): number {
   return Math.round((Math.log(value) - minLog) / scale)
 }
 
-// Parse Indian format input (e.g., "1,50,000" or "1.5 Cr")
 function parseIndianInput(input: string): number {
   const cleaned = input.replace(/[₹,\s]/g, '').toLowerCase()
-
-  if (cleaned.includes('cr') || cleaned.includes('crore')) {
+  if (cleaned.includes('cr')) {
     const num = parseFloat(cleaned.replace(/cr(ore)?/i, ''))
     return isNaN(num) ? 0 : Math.round(num * 10000000)
   }
-  if (cleaned.includes('l') || cleaned.includes('lakh')) {
+  if (cleaned.includes('l')) {
     const num = parseFloat(cleaned.replace(/l(akh)?/i, ''))
     return isNaN(num) ? 0 : Math.round(num * 100000)
   }
-
   const num = parseFloat(cleaned)
   return isNaN(num) ? 0 : Math.round(num)
 }
@@ -88,12 +69,11 @@ export function TurnoverSlider({
   maxCrore = 500,
   className,
 }: TurnoverSliderProps) {
-  const maxValue = maxCrore * 10000000 // Convert crores to rupees
+  const maxValue = maxCrore * 10000000
   const [sliderValue, setSliderValue] = useState(() => valueToSlider(value, maxValue))
   const [inputValue, setInputValue] = useState('')
   const [isEditing, setIsEditing] = useState(false)
 
-  // Sync slider when external value changes
   useEffect(() => {
     if (!isEditing) {
       setSliderValue(valueToSlider(value, maxValue))
@@ -130,7 +110,6 @@ export function TurnoverSlider({
     }
   }, [])
 
-  // Generate tick marks for display
   const ticks = useMemo(() => {
     return BREAKPOINTS.filter(bp => bp <= maxValue).map(bp => ({
       value: bp,
@@ -140,22 +119,22 @@ export function TurnoverSlider({
   }, [maxValue])
 
   return (
-    <div className={cn('space-y-3', className)}>
-      <div className="flex items-center justify-between">
-        <Label className="text-sm font-medium">{label}</Label>
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold text-emerald-700">
+    <div className={cn('space-y-4', className)}>
+      <div className="flex items-baseline justify-between gap-4">
+        <label className="text-sm font-medium text-foreground">{label}</label>
+        <div className="flex items-center gap-3">
+          <span className="text-xl font-mono font-semibold text-foreground tracking-tight">
             {formatIndianCurrency(value)}
           </span>
           <Input
             type="text"
             value={isEditing ? inputValue : ''}
-            placeholder={isEditing ? '' : formatIndianCurrency(value)}
+            placeholder={formatIndianCurrency(value)}
             onFocus={handleInputFocus}
             onBlur={handleInputBlur}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
-            className="w-32 h-8 text-sm text-right"
+            className="w-24 h-8 text-xs font-mono text-right bg-muted/50 border-border/50"
           />
         </div>
       </div>
@@ -169,16 +148,15 @@ export function TurnoverSlider({
         className="w-full"
       />
 
-      {/* Tick marks */}
-      <div className="relative h-4">
-        {ticks.map((tick, i) => (
-          <div
+      <div className="relative h-4 -mt-1">
+        {ticks.filter((_, i) => i % 2 === 0).map((tick) => (
+          <span
             key={tick.value}
-            className="absolute transform -translate-x-1/2 text-[10px] text-muted-foreground"
+            className="absolute transform -translate-x-1/2 text-[9px] font-mono text-muted-foreground/70"
             style={{ left: `${tick.position}%` }}
           >
-            {i % 2 === 0 && tick.label}
-          </div>
+            {tick.label}
+          </span>
         ))}
       </div>
     </div>
