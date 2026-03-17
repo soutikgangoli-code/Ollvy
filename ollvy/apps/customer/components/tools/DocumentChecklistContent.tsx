@@ -72,7 +72,7 @@ function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose:
         {/* Badges */}
         <div className="flex items-center gap-2">
           {doc.required && (
-            <span className="text-xs px-2 py-1 rounded-full bg-ollvy-red/10 text-ollvy-red font-medium">
+            <span className="text-xs px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-500 font-medium">
               Required
             </span>
           )}
@@ -237,7 +237,7 @@ export function DocumentChecklistContent({
                           <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="text-sm font-medium text-foreground">{item.name}</h3>
                             {item.required && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-ollvy-red/10 text-ollvy-red font-medium">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-500 font-medium">
                                 Required
                               </span>
                             )}
@@ -264,7 +264,7 @@ export function DocumentChecklistContent({
           {/* Legend */}
           <div className="flex items-center gap-4 text-xs text-muted-foreground pt-4 border-t border-border">
             <div className="flex items-center gap-1.5">
-              <span className="inline-block w-2 h-2 rounded-full bg-ollvy-red/60"></span>
+              <span className="inline-block w-2 h-2 rounded-full bg-emerald-500/60"></span>
               Required
             </div>
             <div className="flex items-center gap-1.5">

@@ -3699,19 +3699,19 @@ export function DocumentChecklist({
         <div className="max-w-[640px] mx-auto">
           <Tabs value={activeTab} onValueChange={handleTabChange}>
             <div className="overflow-x-auto pb-1">
-              <TabsList className="h-10 p-1 gap-1 w-full flex-wrap justify-center">
-                <TabsTrigger value="pvt_ltd" className="text-sm h-8 px-3">Pvt Ltd</TabsTrigger>
-                <TabsTrigger value="llp" className="text-sm h-8 px-3">LLP</TabsTrigger>
-                <TabsTrigger value="sole_proprietor" className="text-sm h-8 px-3">Sole Prop</TabsTrigger>
-                <TabsTrigger value="partnership" className="text-sm h-8 px-3">Partnership</TabsTrigger>
-                <TabsTrigger value="individual_itr" className="text-sm h-8 px-3">Personal ITR</TabsTrigger>
-                <TabsTrigger value="trademark" className="text-sm h-8 px-3">Trademark</TabsTrigger>
-                <TabsTrigger value="business_itr" className="text-sm h-8 px-3">Biz ITR</TabsTrigger>
+              <TabsList className="h-auto p-1 gap-1 w-full flex-wrap justify-center bg-transparent">
+                <TabsTrigger value="pvt_ltd" className="font-mono text-xs h-7 px-2.5 text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground rounded-sm transition-all duration-150">Pvt Ltd</TabsTrigger>
+                <TabsTrigger value="llp" className="font-mono text-xs h-7 px-2.5 text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground rounded-sm transition-all duration-150">LLP</TabsTrigger>
+                <TabsTrigger value="sole_proprietor" className="font-mono text-xs h-7 px-2.5 text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground rounded-sm transition-all duration-150">Sole Prop</TabsTrigger>
+                <TabsTrigger value="partnership" className="font-mono text-xs h-7 px-2.5 text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground rounded-sm transition-all duration-150">Partnership</TabsTrigger>
+                <TabsTrigger value="individual_itr" className="font-mono text-xs h-7 px-2.5 text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground rounded-sm transition-all duration-150">Personal ITR</TabsTrigger>
+                <TabsTrigger value="trademark" className="font-mono text-xs h-7 px-2.5 text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground rounded-sm transition-all duration-150">Trademark</TabsTrigger>
+                <TabsTrigger value="business_itr" className="font-mono text-xs h-7 px-2.5 text-muted-foreground data-[state=active]:bg-muted data-[state=active]:text-foreground rounded-sm transition-all duration-150">Biz ITR</TabsTrigger>
               </TabsList>
             </div>
 
             {Object.keys(DOCUMENT_DATA).map((tabKey) => (
-              <TabsContent key={tabKey} value={tabKey}>
+              <TabsContent key={tabKey} value={tabKey} className="animate-in fade-in-0 duration-150">
                 <Card className="border border-border bg-card p-6 mt-4">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Key Documents</span>
