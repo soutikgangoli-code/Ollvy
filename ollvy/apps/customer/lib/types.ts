@@ -41,6 +41,7 @@ export interface ServicePackage {
   display_order: number
   is_active: boolean
   is_bundle?: boolean
+  variants?: ServiceVariant[]
   addons?: ServiceAddon[]
   scope_included: string[]
   scope_excluded: string[]
@@ -105,11 +106,15 @@ export interface Order {
   razorpay_payment_id?: string
   feedback_given: boolean
   feedback_skipped: boolean
+  engagement_agreed_at?: string
+  variant_id?: string
   completed_at?: string
   created_at: string
   updated_at: string
   // Joined data
   service_package?: ServicePackage
+  order_addons?: OrderAddon[]
+  order_documents?: OrderDocument[]
   professional?: Professional
   stage_history?: OrderStageHistory[]
 }
@@ -185,6 +190,43 @@ export interface RetainerSubscription {
   created_at: string
   service_package?: ServicePackage
   professional?: Professional
+}
+
+// Service variant types
+export interface ServiceVariant {
+  id: string
+  label: string
+  sublabel: string
+  priceAdjustment?: number
+  govtFeeAdjustment?: number
+}
+
+// Order document types
+export interface OrderDocument {
+  id: string
+  order_id: string
+  document_key: string
+  document_label: string
+  stage_key?: string
+  is_required: boolean
+  uploaded_at?: string
+  file_url?: string
+  file_name?: string
+  verified_at?: string
+  verified_by?: string
+  rejection_reason?: string
+  created_at: string
+}
+
+// Order addon types
+export interface OrderAddon {
+  id: string
+  order_id: string
+  addon_id: string
+  addon_name: string
+  price_paisa_snapshot: number
+  govt_fee_paisa_snapshot: number
+  created_at: string
 }
 
 // User types

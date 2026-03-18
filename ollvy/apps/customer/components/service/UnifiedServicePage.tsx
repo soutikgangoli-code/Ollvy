@@ -582,29 +582,30 @@ export function UnifiedServicePage({
 
                   {/* What is [Service Type]? - Trigger */}
                   {service.serviceExplainer && service.serviceExplainer.steps.length > 0 && (
-                    <>
-                      <button
-                        onClick={() => setExplainerOpen(!explainerOpen)}
-                        className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground mt-6 transition-colors"
-                      >
-                        <HelpCircle size={16} />
-                        What is {service.shortName}?
-                        <ChevronDown
-                          size={14}
-                          className={cn(
-                            'transition-transform duration-200',
-                            explainerOpen && 'rotate-180'
-                          )}
-                        />
-                      </button>
+                    <div className="mt-8">
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => setExplainerOpen(!explainerOpen)}
+                          className="flex items-center gap-2 text-sm font-mono text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          What is {service.name}?
+                          <ChevronDown
+                            size={14}
+                            className={cn(
+                              'transition-transform duration-200',
+                              explainerOpen && 'rotate-180'
+                            )}
+                          />
+                        </button>
+                      </div>
 
                       {explainerOpen && (
                         <ExplainerStepper
-                          serviceName={service.shortName}
+                          serviceName={service.name}
                           steps={service.serviceExplainer.steps}
                         />
                       )}
-                    </>
+                    </div>
                   )}
                 </section>
 

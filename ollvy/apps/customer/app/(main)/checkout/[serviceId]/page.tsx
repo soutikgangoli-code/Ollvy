@@ -27,6 +27,7 @@ import {
   OrderSummaryPanel,
   TrustSignalsCard,
   PaymentMethodLogos,
+  PaymentSuccessModal,
 } from '@/components/checkout'
 
 interface Variant {
@@ -76,6 +77,13 @@ export default function CheckoutPage() {
 
   // Payment state
   const [isProcessing, setIsProcessing] = useState(false)
+
+  // Success modal state
+  const [successModal, setSuccessModal] = useState<{
+    isOpen: boolean
+    orderId: string
+    orderNumber: string
+  } | null>(null)
 
   useEffect(() => {
     if (!user) {
@@ -315,9 +323,13 @@ export default function CheckoutPage() {
         description: service.name,
         order_id: data.razorpay_order_id,
         handler: async (response: any) => {
-          // Payment successful - clear attribution and redirect to success page
+          // Payment successful - clear attribution and show success modal
           clearAllAttributionData()
-          router.push(`/orders/${data.order_id}/success`)
+          setSuccessModal({
+            isOpen: true,
+            orderId: data.order_id,
+            orderNumber: data.order_number,
+          })
         },
         prefill: {
           contact: user.phone,
@@ -497,6 +509,20 @@ export default function CheckoutPage() {
 
       {/* Razorpay Script */}
       <script src="https://checkout.razorpay.com/v1/checkout.js" async />
+
+      {/* Success Modal */}
+      {successModal && (
+        <PaymentSuccessModal
+          isOpen={successModal.isOpen}
+          orderNumber={successModal.orderNumber}
+          serviceName={service.name}
+          orderId={successModal.orderId}
+          onClose={() => {
+            setSuccessModal(null)
+            router.push(`/orders/${successModal.orderId}`)
+          }}
+        />
+      )}
     </div>
   )
 }
