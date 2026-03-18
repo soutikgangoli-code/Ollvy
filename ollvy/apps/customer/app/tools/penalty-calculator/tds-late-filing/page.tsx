@@ -278,7 +278,7 @@ function TDSLatePenaltyCalculator() {
             {/* Return Type */}
             <div className="space-y-1.5">
               <Label>Return Type</Label>
-              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)} modal={false}>
+              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -295,7 +295,7 @@ function TDSLatePenaltyCalculator() {
             {/* Quarter */}
             <div className="space-y-1.5">
               <Label>Quarter</Label>
-              <Select value={quarter} onValueChange={(v) => setQuarter(v as Quarter)} modal={false}>
+              <Select value={quarter} onValueChange={(v) => setQuarter(v as Quarter)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

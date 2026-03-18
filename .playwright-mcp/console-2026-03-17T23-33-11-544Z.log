@@ -367,3 +367,121 @@ Learn more: https://nextjs.org/docs/app/building-your-application/routing/parall
 [  954649ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/private-limited-company:0
 [  994345ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/partnership:0
 [ 1019928ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/llp:0
+[ 1124170ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/penalty-calculator/gst-late-filing?return=GSTR-3B&nil=false&turnover=10000000&days=30&liability=0&frequency=monthly&state=Delhi:0
+[ 1127325ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1127343ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1129847ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/:0
+[ 1148768ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/:0
+[ 1194356ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/:0
+[ 1234420ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/private-limited-company:0
+[ 1250509ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/partnership:0
+[ 1314828ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/private-limited-company:0
+[ 1348722ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/llp:0
+[ 1370188ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/llp:0
+[ 1377168ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/llp:0
+[ 1391083ms] [ERROR] ./components/tools/DocumentChecklistContent.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/tools/DocumentChecklistContent.tsx:219:1]
+ 219 |   }
+ 220 | 
+ 221 |   return (
+ 222 |     <>
+     :      ^
+ 223 |       {/* Page Header */}
+ 224 |       <div className="mb-8">
+ 225 |         <h1 className="text-2xl font-semibold text-foreground">{pageTitle}</h1>
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/tools/DocumentChecklistContent.tsx:221:1]
+ 221 |   return (
+ 222 |     <>
+ 223 |       {/* Page Header */}
+ 224 |       <div className="mb-8">
+     :       ^
+ 225 |         <h1 className="text-2xl font-semibold text-foreground">{pageTitle}</h1>
+ 226 |         {pageSubtitle && (
+ 227 |           <p className="text-muted-foreground mt-2">{pageSubtitle}</p>
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/tools/DocumentChecklistContent.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[ 1391251ms] [ERROR] ./components/tools/DocumentChecklistContent.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/tools/DocumentChecklistContent.tsx:219:1]
+ 219 |   }
+ 220 | 
+ 221 |   return (
+ 222 |     <>
+     :      ^
+ 223 |       {/* Page Header */}
+ 224 |       <div className="mb-8">
+ 225 |         <h1 className="text-2xl font-semibold text-foreground">{pageTitle}</h1>
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/tools/DocumentChecklistContent.tsx:221:1]
+ 221 |   return (
+ 222 |     <>
+ 223 |       {/* Page Header */}
+ 224 |       <div className="mb-8">
+     :       ^
+ 225 |         <h1 className="text-2xl font-semibold text-foreground">{pageTitle}</h1>
+ 226 |         {pageSubtitle && (
+ 227 |           <p className="text-muted-foreground mt-2">{pageSubtitle}</p>
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/tools/DocumentChecklistContent.tsx
+./app/tools/documents/llp/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[ 1394093ms] [WARNING] The resource http://localhost:3000/_next/static/css/app/layout.css?v=1773791124646 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ http://localhost:3000/tools/documents/llp:0
+[ 1399436ms] [ERROR] ./components/tools/DocumentChecklistContent.tsx
+Error: 
+  x Expression expected
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/tools/DocumentChecklistContent.tsx:219:1]
+ 219 |   }
+ 220 | 
+ 221 |   return (
+ 222 |     <>
+     :      ^
+ 223 |       {/* Page Header */}
+ 224 |       <div className="mb-8">
+ 225 |         <h1 className="text-2xl font-semibold text-foreground">{pageTitle}</h1>
+     `----
+
+  x Expected ',', got '< (jsx tag start)'
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/tools/DocumentChecklistContent.tsx:221:1]
+ 221 |   return (
+ 222 |     <>
+ 223 |       {/* Page Header */}
+ 224 |       <div className="mb-8">
+     :       ^
+ 225 |         <h1 className="text-2xl font-semibold text-foreground">{pageTitle}</h1>
+ 226 |         {pageSubtitle && (
+ 227 |           <p className="text-muted-foreground mt-2">{pageSubtitle}</p>
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/tools/DocumentChecklistContent.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[ 1400147ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:112
+[ 2517417ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 2517442ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 2521275ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109

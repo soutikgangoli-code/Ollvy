@@ -329,7 +329,7 @@ function GSTDemandNoticeCalculator() {
             {/* Type of Default */}
             <div className="space-y-1.5">
               <Label>Type of Default</Label>
-              <Select value={defaultType} onValueChange={(v) => setDefaultType(v as DefaultType)} modal={false}>
+              <Select value={defaultType} onValueChange={(v) => setDefaultType(v as DefaultType)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -363,7 +363,7 @@ function GSTDemandNoticeCalculator() {
             {/* Notice Stage */}
             <div className="space-y-1.5">
               <Label>Stage of Notice</Label>
-              <Select value={noticeStage} onValueChange={(v) => setNoticeStage(v as NoticeStage)} modal={false}>
+              <Select value={noticeStage} onValueChange={(v) => setNoticeStage(v as NoticeStage)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -407,14 +407,14 @@ function GSTDemandNoticeCalculator() {
                     key={index}
                     className={`p-4 rounded-lg border ${
                       index === 0
-                        ? 'bg-emerald-50 border-emerald-200'
-                        : 'bg-muted/50 border-border'
+                        ? 'bg-zinc-900 border-emerald-500/30'
+                        : 'bg-zinc-950 border-border/50'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="font-medium text-foreground flex items-center gap-2">
-                          {index === 0 && <CheckCircle2 className="h-4 w-4 text-emerald-600" />}
+                          {index === 0 && <CheckCircle2 className="h-4 w-4 text-emerald-400" />}
                           {scenario.label}
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">

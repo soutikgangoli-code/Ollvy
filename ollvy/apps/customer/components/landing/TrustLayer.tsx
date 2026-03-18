@@ -187,7 +187,7 @@ export function TrustLayer() {
       <div className="container">
         {/* Section Heading */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
-          WHY OLLVY
+          Why Ollvy
         </h2>
 
         {/* Carousel Container */}

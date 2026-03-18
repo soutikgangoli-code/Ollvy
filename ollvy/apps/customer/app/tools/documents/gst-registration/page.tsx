@@ -12,6 +12,8 @@ export default function GSTDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={gstDocuments}
+      pageTitle="GST Registration"
+      pageSubtitle="Complete list of documents required to get your GSTIN in India"
       ctaTitle="Ready to get your GST number?"
       ctaDescription="Get started with Ollvy. We handle the entire GST registration process - from document verification to ARN tracking to GSTIN delivery."
       ctaButtonText="Start GST Registration"

@@ -12,6 +12,8 @@ export default function LLPDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={llpDocuments}
+      pageTitle="LLP Registration"
+      pageSubtitle="Complete list of documents required to register a Limited Liability Partnership in India"
       ctaTitle="Ready to register your LLP?"
       ctaDescription="Get started with Ollvy. We handle DSC, DPIN, name approval, LLP Agreement drafting, and all MCA filings."
       ctaButtonText="Start LLP Registration"

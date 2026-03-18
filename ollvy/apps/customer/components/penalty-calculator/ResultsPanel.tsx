@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import Link from 'next/link'
-import { Download, ChevronRight } from 'lucide-react'
+import { Download, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { StatutoryRef } from './StatutoryRef'
 import { cn } from '@/lib/utils'
@@ -173,10 +173,10 @@ export function ResultsPanel({
       {/* Actions */}
       <div className="px-6 py-4 border-t border-border/30 space-y-2">
         {showCta && total > 0 && (
-          <Button className="w-full" size="sm" asChild>
+          <Button className="w-full h-12" asChild>
             <Link href={`${ctaHref}?utm_source=tools&utm_medium=penalty_calc`}>
               {ctaText}
-              <ChevronRight className="h-3.5 w-3.5 ml-1" />
+              <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
           </Button>
         )}

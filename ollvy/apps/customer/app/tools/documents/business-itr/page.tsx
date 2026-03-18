@@ -12,6 +12,8 @@ export default function BusinessITRDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={businessITRDocuments}
+      pageTitle="Business ITR Filing"
+      pageSubtitle="Complete list of documents required for Company, LLP, or Partnership tax return filing"
       ctaTitle="Need help with Business ITR?"
       ctaDescription="Ollvy handles complete business ITR filing — from audit coordination to return filing. CA assigned within 24 hours."
       ctaButtonText="File Business ITR"

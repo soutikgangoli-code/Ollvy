@@ -52,7 +52,7 @@ export function ProPricing({ annualPrice = 9990, monthlyPrice = 999 }: ProPricin
       <div className="container">
         {/* Section Label */}
         <p className="text-xs uppercase tracking-widest text-muted-foreground text-center mb-3">
-          OLLVY PRO
+          Ollvy Pro
         </p>
 
         {/* Section Heading */}

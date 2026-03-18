@@ -12,6 +12,8 @@ export default function TrademarkDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={trademarkDocuments}
+      pageTitle="Trademark Registration"
+      pageSubtitle="Complete list of documents required to register your brand or logo in India"
       ctaTitle="Ready to protect your brand?"
       ctaDescription="Ollvy handles complete trademark registration — from search to filing to monitoring. Protect your brand with experienced IP attorneys."
       ctaButtonText="Register Trademark"

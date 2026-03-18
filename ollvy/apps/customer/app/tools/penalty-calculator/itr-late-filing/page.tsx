@@ -332,7 +332,7 @@ function ITRLatePenaltyCalculator() {
             {/* Entity Type */}
             <div className="space-y-1.5">
               <Label>Entity Type</Label>
-              <Select value={entityType} onValueChange={(v) => setEntityType(v as EntityType)} modal={false}>
+              <Select value={entityType} onValueChange={(v) => setEntityType(v as EntityType)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -352,7 +352,7 @@ function ITRLatePenaltyCalculator() {
             {/* Financial Year */}
             <div className="space-y-1.5">
               <Label>Financial Year</Label>
-              <Select value={financialYear} onValueChange={(v) => setFinancialYear(v as FinancialYear)} modal={false}>
+              <Select value={financialYear} onValueChange={(v) => setFinancialYear(v as FinancialYear)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

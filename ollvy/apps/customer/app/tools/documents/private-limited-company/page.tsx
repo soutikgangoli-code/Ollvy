@@ -12,6 +12,8 @@ export default function PrivateLimitedDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={pvtLtdDocuments}
+      pageTitle="Private Limited Company Registration"
+      pageSubtitle="Complete list of documents required to incorporate a Pvt Ltd company in India"
       ctaTitle="Ready to incorporate your company?"
       ctaDescription="Get started with Ollvy. We handle DSC, DIN, name approval, and all MCA filings. Most companies are incorporated within 7-10 days."
       ctaButtonText="Start Company Registration"

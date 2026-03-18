@@ -309,7 +309,7 @@ function ShopsEstablishmentPenaltyCalculator() {
             {/* State Selector - First Input */}
             <div className="space-y-1.5">
               <Label>State</Label>
-              <Select value={state} onValueChange={setState} modal={false}>
+              <Select value={state} onValueChange={setState}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select state" />
                 </SelectTrigger>

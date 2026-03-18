@@ -302,7 +302,7 @@ function GSTLatePenaltyCalculator() {
             {/* Return Type */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">Return Type</label>
-              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)} modal={false}>
+              <Select value={returnType} onValueChange={(v) => setReturnType(v as ReturnType)}>
                 <SelectTrigger className="h-11 bg-background">
                   <SelectValue />
                 </SelectTrigger>
@@ -377,7 +377,7 @@ function GSTLatePenaltyCalculator() {
                   {returnType === 'GSTR-3B' && (
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-foreground">Filing Frequency</label>
-                      <Select value={filingFrequency} onValueChange={(v) => setFilingFrequency(v as FilingFrequency)} modal={false}>
+                      <Select value={filingFrequency} onValueChange={(v) => setFilingFrequency(v as FilingFrequency)}>
                         <SelectTrigger className="bg-background">
                           <SelectValue />
                         </SelectTrigger>
@@ -392,7 +392,7 @@ function GSTLatePenaltyCalculator() {
                   {/* State */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-foreground">State of Registration</label>
-                    <Select value={state} onValueChange={setState} modal={false}>
+                    <Select value={state} onValueChange={setState}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>

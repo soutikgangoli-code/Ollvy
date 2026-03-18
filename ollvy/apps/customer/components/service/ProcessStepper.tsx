@@ -23,7 +23,13 @@ const STEP_ICONS = {
   stamp: CheckCircle,
 }
 
-export function ProcessStepper({ steps }: { steps: DBProcessStep[] }) {
+interface ProcessStepperProps {
+  steps: DBProcessStep[]
+  serviceId?: string
+  priceVariesByState?: boolean
+}
+
+export function ProcessStepper({ steps, serviceId, priceVariesByState }: ProcessStepperProps) {
   const [active, setActive] = useState(0)
 
   const step = steps[active]
@@ -137,7 +143,9 @@ export function ProcessStepper({ steps }: { steps: DBProcessStep[] }) {
           </Button>
         ) : (
           <Button size="sm" asChild>
-            <a href="#book">Book this service →</a>
+            <a href={serviceId ? (priceVariesByState ? `/quote/request/${serviceId}` : `/checkout/${serviceId}`) : '/services'}>
+              Book this service →
+            </a>
           </Button>
         )}
       </div>

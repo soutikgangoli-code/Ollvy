@@ -67,17 +67,26 @@ export default function PenaltyCalculatorLayout({
       <div className="py-16 md:py-24">
         <div className="container max-w-5xl">
           {/* Header */}
-          <div className="mb-10">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-4">
+          <div className="mb-16 text-center">
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
               Penalty Calculator
             </p>
 
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6 tracking-tight">
+              {currentCalc?.label || 'Select Calculator'}
+            </h1>
+
+            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Calculate exact penalties based on Indian compliance law
+            </p>
+
             {/* Calculator Selector */}
-            <div className="flex items-center gap-3">
-              <Select value={pathname} onValueChange={handleChange} modal={false}>
-                <SelectTrigger className="w-[320px] h-12 bg-background border-border/50 font-medium text-base">
+            <div className="flex justify-center">
+              <Select value={pathname} onValueChange={handleChange}>
+                <SelectTrigger className="w-[320px] h-11 bg-zinc-950 border-border/50 text-sm">
                   <SelectValue>
-                    {currentCalc?.label || 'Select calculator'}
+                    <span className="text-muted-foreground">Switch calculator:</span>{' '}
+                    <span className="text-foreground">{currentCalc?.label}</span>
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent className="max-h-[400px] min-w-[320px]">
@@ -98,10 +107,6 @@ export default function PenaltyCalculatorLayout({
                 </SelectContent>
               </Select>
             </div>
-
-            <p className="text-sm text-muted-foreground mt-4 max-w-xl">
-              Calculate exact penalties based on Indian compliance law
-            </p>
           </div>
 
           {/* Content */}

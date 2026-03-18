@@ -354,7 +354,7 @@ function ProfessionalTaxCalculator() {
             {/* State Selector - FIRST INPUT */}
             <div className="space-y-1.5">
               <Label>State of Registration</Label>
-              <Select value={state} onValueChange={setState} modal={false}>
+              <Select value={state} onValueChange={setState}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

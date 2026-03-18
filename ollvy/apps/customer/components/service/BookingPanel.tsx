@@ -124,7 +124,7 @@ export function BookingPanel({ service, serviceId, priceVariesByState }: Booking
       {/* CTA button */}
       <Button className="w-full mt-5" size="lg" asChild>
         <a href={ctaUrl}>
-          {ctaLabel} — ₹{totalFee.toLocaleString('en-IN')}
+          {ctaLabel}
         </a>
       </Button>
 

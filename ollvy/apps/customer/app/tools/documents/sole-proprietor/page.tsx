@@ -12,6 +12,8 @@ export default function SoleProprietorDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={gstDocuments}
+      pageTitle="Sole Proprietorship Registration"
+      pageSubtitle="Complete list of documents required to register a Sole Proprietorship in India"
       ctaTitle="Ready to register your business?"
       ctaDescription="Get started with Ollvy. We handle GST registration, Shop Act license, and all compliance for sole proprietors."
       ctaButtonText="Start GST Registration"

@@ -304,11 +304,8 @@ export function UnifiedServicePage({
           <div className="flex items-center justify-between h-16">
             {/* Left: Logo + Service name */}
             <div className="flex items-center gap-4">
-              <Link href="/" className="flex items-center gap-1.5">
-                <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-                  <span className="text-primary-foreground font-bold text-sm">O</span>
-                </div>
-                <span className="text-xl font-bold text-foreground tracking-tight">llvy</span>
+              <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
+                Ollvy
               </Link>
               <span className="text-muted-foreground">|</span>
               <span className="font-semibold text-foreground">
@@ -320,7 +317,7 @@ export function UnifiedServicePage({
             </div>
 
             {/* Center: Section tabs (hidden on mobile) */}
-            <nav className="hidden md:flex items-center gap-1" role="tablist">
+            <nav className="hidden md:flex items-center gap-6" role="tablist">
               {SECTIONS.map((section) => (
                 <button
                   key={section.id}
@@ -328,10 +325,10 @@ export function UnifiedServicePage({
                   aria-selected={activeSection === section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={cn(
-                    'px-3 py-1.5 text-xs font-medium rounded-full transition-colors',
+                    'text-xs font-medium transition-colors border-b-2 py-1',
                     activeSection === section.id
-                      ? 'bg-foreground text-background'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      ? 'text-foreground border-foreground'
+                      : 'text-muted-foreground border-transparent hover:text-foreground'
                   )}
                 >
                   {section.label}
@@ -480,8 +477,7 @@ export function UnifiedServicePage({
                       : `/checkout/${service.id}?utm_source=service_page&utm_medium=hero`
                   }
                 >
-                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'} — ₹
-                  {totalFee.toLocaleString('en-IN')}
+                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'} — ₹{totalFee.toLocaleString('en-IN')}
                 </a>
               </Button>
 
@@ -558,7 +554,7 @@ export function UnifiedServicePage({
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8">
                     How {service.shortName} works on Ollvy
                   </h2>
-                  <ProcessStepper steps={service.processSteps} />
+                  <ProcessStepper steps={service.processSteps} serviceId={service.id} priceVariesByState={service.priceVariesByState} />
                 </section>
 
                 {/* Section: What's Included */}
@@ -1042,8 +1038,7 @@ export function UnifiedServicePage({
                       : `/checkout/${service.id}?utm_source=service_page&utm_medium=final_cta`
                   }
                 >
-                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'} — ₹
-                  {totalFee.toLocaleString('en-IN')}
+                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'} — ₹{totalFee.toLocaleString('en-IN')}
                 </a>
               </Button>
             </div>

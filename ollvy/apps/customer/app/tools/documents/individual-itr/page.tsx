@@ -12,6 +12,8 @@ export default function IndividualITRDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={individualITRDocuments}
+      pageTitle="Personal ITR Filing"
+      pageSubtitle="Complete list of documents required to file your Individual Income Tax Return"
       ctaTitle="Ready to file your ITR?"
       ctaDescription="Just share your documents with us. Ollvy's CAs review everything, maximize your deductions, and file your return correctly."
       ctaButtonText="File My ITR"

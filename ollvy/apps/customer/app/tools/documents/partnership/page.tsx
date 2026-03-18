@@ -12,6 +12,8 @@ export default function PartnershipDocumentsPage() {
   return (
     <DocumentChecklistContent
       categories={partnershipDocuments}
+      pageTitle="Partnership Firm Registration"
+      pageSubtitle="Complete list of documents required to register a Partnership Firm in India"
       ctaTitle="Ready to create your partnership?"
       ctaDescription="Get started with Ollvy. We draft your partnership deed, handle stamp paper, and complete firm registration if needed."
       ctaButtonText="Start Partnership Registration"

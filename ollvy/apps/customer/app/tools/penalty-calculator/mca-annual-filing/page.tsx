@@ -266,7 +266,7 @@ function MCAFilingCalculator() {
             {/* Entity Type */}
             <div className="space-y-1.5">
               <Label>Entity Type</Label>
-              <Select value={entityType} onValueChange={(v) => setEntityType(v as EntityType)} modal={false}>
+              <Select value={entityType} onValueChange={(v) => setEntityType(v as EntityType)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -324,7 +324,7 @@ function MCAFilingCalculator() {
                   {/* Years in Default */}
                   <div className="space-y-1.5">
                     <Label>Number of Years in Default</Label>
-                    <Select value={yearsInDefault.toString()} onValueChange={(v) => setYearsInDefault(parseInt(v))} modal={false}>
+                    <Select value={yearsInDefault.toString()} onValueChange={(v) => setYearsInDefault(parseInt(v))}>
                       <SelectTrigger className="max-w-[200px]">
                         <SelectValue />
                       </SelectTrigger>
@@ -354,7 +354,7 @@ function MCAFilingCalculator() {
                   {entityType === 'pvt_ltd' && (
                     <div className="space-y-1.5">
                       <Label>Paid-up Share Capital</Label>
-                      <Select value={paidUpCapital} onValueChange={setPaidUpCapital} modal={false}>
+                      <Select value={paidUpCapital} onValueChange={setPaidUpCapital}>
                         <SelectTrigger className="max-w-[200px]">
                           <SelectValue />
                         </SelectTrigger>
