@@ -68,19 +68,19 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
   }
 
   return (
-    <div className="border-t border-white/[0.06] p-4 bg-[#0D0D0D]">
+    <div className="border-t border-border p-4 bg-card">
       {/* Selected file preview */}
       {selectedFile && (
-        <div className="mb-3 flex items-center gap-2 bg-white/5 rounded-lg px-3 py-2">
-          <Paperclip className="h-4 w-4 text-white/40" />
-          <span className="text-sm text-white/70 truncate flex-1">
+        <div className="mb-3 flex items-center gap-2 bg-muted rounded-lg px-3 py-2">
+          <Paperclip className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm text-foreground/80 truncate flex-1">
             {selectedFile.name}
           </span>
           <button
             onClick={clearFile}
-            className="p-1 hover:bg-white/10 rounded transition-colors"
+            className="p-1 hover:bg-muted-foreground/10 rounded transition-colors"
           >
-            <X className="h-4 w-4 text-white/40" />
+            <X className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
       )}
@@ -104,7 +104,7 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
                 'p-2 rounded-lg transition-colors',
                 disabled || isSending
                   ? 'opacity-40 cursor-not-allowed'
-                  : 'hover:bg-white/5 text-white/50 hover:text-white'
+                  : 'hover:bg-muted text-muted-foreground hover:text-foreground'
               )}
             >
               <Paperclip className="h-5 w-5" />
@@ -122,9 +122,9 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
           placeholder="Type a message..."
           disabled={disabled || isSending}
           className={cn(
-            'flex-1 h-11 px-4 bg-white/5 border border-white/10 rounded-xl',
-            'text-white placeholder:text-white/30',
-            'focus:outline-none focus:border-white/20 transition-colors',
+            'flex-1 h-11 px-4 bg-muted border border-border rounded-xl',
+            'text-foreground placeholder:text-muted-foreground',
+            'focus:outline-none focus:border-ring transition-colors',
             (disabled || isSending) && 'opacity-40 cursor-not-allowed'
           )}
         />

@@ -267,7 +267,7 @@ function ProfessionalTaxCalculator() {
           { label: result.penaltyDescription, amount: result.penalty },
         ],
         statuteShort: `${state} PT Act`,
-        statuteFull: `${state} Professional Tax Act — Penalty for delayed payment`,
+        statuteFull: `${state} Professional Tax Act - Penalty for delayed payment`,
       },
     ]
 
@@ -279,7 +279,7 @@ function ProfessionalTaxCalculator() {
           { label: `2% per month × ${monthsLate} months`, amount: result.interest },
         ],
         statuteShort: `${state} PT Act`,
-        statuteFull: `${state} Professional Tax Act — Interest on delayed payment`,
+        statuteFull: `${state} Professional Tax Act - Interest on delayed payment`,
       })
     }
 
@@ -344,7 +344,7 @@ function ProfessionalTaxCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
+        <div className="rounded-xl border border-border bg-card p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             Professional Tax Penalty Calculator
@@ -488,7 +488,7 @@ function ProfessionalTaxCalculator() {
             employment, profession, or trade. It is collected by employers from employee
             salaries and remitted to the state government. Under Article 276 of the Indian
             Constitution, the maximum Professional Tax that can be levied is capped at
-            ₹2,500 per person per year. Not all states levy PT — it is primarily collected
+            ₹2,500 per person per year. Not all states levy PT - it is primarily collected
             in Maharashtra, Karnataka, West Bengal, Andhra Pradesh, Telangana, Tamil Nadu,
             Gujarat, and a few other states.
           </p>
@@ -518,7 +518,7 @@ function ProfessionalTaxCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Professional Tax slab rates for employees — state-wise
+            Professional Tax slab rates for employees - state-wise
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             PT slabs vary by state. Here&apos;s a simplified overview of monthly PT for

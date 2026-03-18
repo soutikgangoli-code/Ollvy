@@ -36,8 +36,8 @@ export function ForProfessionals() {
               What professionals on Ollvy earn
             </p>
             <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-              A CA in Delhi handling 8–12 GST retainer clients through Ollvy earns approximately
-              ₹24,000–₹36,000/month from the platform — on top of their existing practice. This is
+              A CA in Delhi handling 8-12 GST retainer clients through Ollvy earns approximately
+              ₹24,000-₹36,000/month from the platform - on top of their existing practice. This is
               based on current platform activity, not a guarantee.
             </p>
           </Card>
@@ -48,7 +48,7 @@ export function ForProfessionals() {
               <Link href="/join">Apply to join →</Link>
             </Button>
             <p className="text-xs text-muted-foreground mt-3">
-              Verification takes 2–3 working days. ICAI/ICSI/Bar Council registration number
+              Verification takes 2-3 working days. ICAI/ICSI/Bar Council registration number
               required.
             </p>
           </div>

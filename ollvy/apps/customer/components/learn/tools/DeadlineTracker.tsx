@@ -107,7 +107,7 @@ export function DeadlineTracker({ config, ctaService }: {
                 isPastDue ? 'text-red-500' : isUrgent ? 'text-[hsl(var(--ollvy-amber))]' : 'text-muted-foreground'
               }`}>
                 {isPastDue
-                  ? `${Math.abs(daysRemaining)} days overdue — penalty accruing at ₹${deadlineInfo.lateFeePerDay}/day`
+                  ? `${Math.abs(daysRemaining)} days overdue - penalty accruing at ₹${deadlineInfo.lateFeePerDay}/day`
                   : daysRemaining === 0
                   ? 'Due today!'
                   : `${daysRemaining} days remaining`
@@ -139,8 +139,8 @@ export function DeadlineTracker({ config, ctaService }: {
           <Button className="w-full" asChild>
             <a href={`/services/${ctaService.slug}?utm_source=learn_tool&utm_medium=deadline_tracker`}>
               {isPastDue
-                ? 'File now — stop the penalty'
-                : `Book ${ctaService.shortName} — ₹${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`
+                ? 'File now - stop the penalty'
+                : `Book ${ctaService.shortName} - ₹${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`
               }
             </a>
           </Button>

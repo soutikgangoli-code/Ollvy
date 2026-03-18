@@ -50,11 +50,11 @@ interface DocumentChecklistContentProps {
 // Document Detail Panel - shown on the right side
 function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose: () => void }) {
   return (
-    <div className="h-full flex flex-col rounded-xl border border-border/50 bg-zinc-950 overflow-hidden">
+    <div className="h-full flex flex-col rounded-xl border border-border bg-card overflow-hidden">
       {/* Header */}
-      <div className="flex items-start justify-between gap-3 p-5 border-b border-border/50">
+      <div className="flex items-start justify-between gap-3 p-5 border-b border-border">
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-lg bg-zinc-900 border border-border/50 flex items-center justify-center shrink-0 text-muted-foreground">
+          <div className="w-12 h-12 rounded-lg bg-muted border border-border flex items-center justify-center shrink-0 text-muted-foreground">
             {doc.icon}
           </div>
           <div>
@@ -64,7 +64,7 @@ function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose:
         </div>
         <button
           onClick={onClose}
-          className="p-1.5 rounded-lg hover:bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors"
+          className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
         >
           <X size={16} />
         </button>
@@ -75,17 +75,17 @@ function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose:
         {/* Badges */}
         <div className="flex items-center gap-2">
           {doc.required && (
-            <span className="text-[10px] font-mono px-2 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <span className="text-[10px] font-mono px-2 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
               REQUIRED
             </span>
           )}
           {doc.ollvyProvides && (
-            <span className="text-[10px] font-mono px-2 py-1 bg-zinc-800 text-zinc-300 border border-zinc-700">
+            <span className="text-[10px] font-mono px-2 py-1 bg-muted text-muted-foreground border border-border">
               OLLVY HANDLES
             </span>
           )}
           {!doc.required && !doc.ollvyProvides && (
-            <span className="text-[10px] font-mono px-2 py-1 bg-zinc-900 text-zinc-500 border border-zinc-800">
+            <span className="text-[10px] font-mono px-2 py-1 bg-muted text-muted-foreground border border-border">
               OPTIONAL
             </span>
           )}
@@ -93,13 +93,13 @@ function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose:
 
         {/* Sample Image */}
         {doc.sampleImage && (
-          <div className="rounded-lg border border-border/50 overflow-hidden bg-zinc-900">
+          <div className="rounded-lg border border-border overflow-hidden bg-muted">
             <img
               src={doc.sampleImage}
               alt={`Sample ${doc.name}`}
               className="w-full h-auto max-h-40 object-contain"
             />
-            <p className="font-mono text-[10px] text-center text-muted-foreground py-2 border-t border-border/50">
+            <p className="font-mono text-[10px] text-center text-muted-foreground py-2 border-t border-border">
               Sample document for reference
             </p>
           </div>
@@ -127,12 +127,12 @@ function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose:
 
         {/* Usual Issues */}
         {doc.usualIssues && (
-          <div className="p-4 rounded-lg bg-amber-500/5 border border-amber-500/20">
+          <div className="p-4 rounded-lg bg-amber-500/10 dark:bg-amber-500/5 border border-amber-500/30 dark:border-amber-500/20">
             <div className="flex items-start gap-3">
-              <AlertCircle size={14} className="shrink-0 mt-0.5 text-amber-500" />
+              <AlertCircle size={14} className="shrink-0 mt-0.5 text-amber-600 dark:text-amber-500" />
               <div>
-                <h4 className="font-mono text-[10px] text-amber-400 uppercase tracking-wider mb-1">Common Issues</h4>
-                <p className="text-xs text-amber-200/80 leading-relaxed">{doc.usualIssues}</p>
+                <h4 className="font-mono text-[10px] text-amber-700 dark:text-amber-400 uppercase tracking-wider mb-1">Common Issues</h4>
+                <p className="text-xs text-amber-800/90 dark:text-amber-200/80 leading-relaxed">{doc.usualIssues}</p>
               </div>
             </div>
           </div>
@@ -234,7 +234,7 @@ export function DocumentChecklistContent({
         </div>
         <div className="h-10 w-px bg-border/50" />
         <div>
-          <p className="font-mono text-3xl font-semibold text-zinc-400 tabular-nums">{totalOllvyProvides}</p>
+          <p className="font-mono text-3xl font-semibold text-muted-foreground tabular-nums">{totalOllvyProvides}</p>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mt-1">Ollvy Handles</p>
         </div>
         </div>
@@ -280,8 +280,8 @@ export function DocumentChecklistContent({
                       className={cn(
                         'p-4 cursor-pointer transition-all rounded-xl border',
                         isSelected
-                          ? 'border-zinc-600 bg-zinc-900'
-                          : 'border-border/50 bg-zinc-950 hover:border-zinc-700 hover:bg-zinc-900/50'
+                          ? 'border-border bg-muted'
+                          : 'border-border/50 bg-card hover:border-border hover:bg-muted/50'
                       )}
                       onClick={() => setSelectedDoc({ ...item, categoryName: category.category })}
                     >
@@ -289,8 +289,8 @@ export function DocumentChecklistContent({
                         <div className={cn(
                           "w-10 h-10 rounded-lg flex items-center justify-center shrink-0 border",
                           isSelected
-                            ? "bg-zinc-800 border-zinc-600 text-foreground"
-                            : "bg-zinc-900 border-border/50 text-muted-foreground"
+                            ? "bg-background border-border text-foreground"
+                            : "bg-muted border-border/50 text-muted-foreground"
                         )}>
                           {item.icon}
                         </div>
@@ -298,12 +298,12 @@ export function DocumentChecklistContent({
                           <div className="flex items-center gap-2 flex-wrap">
                             <h3 className="text-sm font-medium text-foreground">{item.name}</h3>
                             {item.required && (
-                              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                                 REQ
                               </span>
                             )}
                             {item.ollvyProvides && (
-                              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-zinc-800 text-zinc-400 border border-zinc-700">
+                              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-muted text-muted-foreground border border-border">
                                 OLLVY
                               </span>
                             )}
@@ -323,13 +323,13 @@ export function DocumentChecklistContent({
           ))}
 
           {/* Legend */}
-          <div className="flex items-center gap-6 text-xs pt-4 border-t border-border/50">
+          <div className="flex items-center gap-6 text-xs pt-4 border-t border-border">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">REQ</span>
+              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">REQ</span>
               <span className="text-muted-foreground">Required document</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-zinc-800 text-zinc-400 border border-zinc-700">OLLVY</span>
+              <span className="font-mono text-[9px] px-1.5 py-0.5 bg-muted text-muted-foreground border border-border">OLLVY</span>
               <span className="text-muted-foreground">We handle this</span>
             </div>
           </div>
@@ -343,9 +343,9 @@ export function DocumentChecklistContent({
               onClose={() => setSelectedDoc(null)}
             />
           ) : (
-            <div className="rounded-xl border border-dashed border-border/50 bg-zinc-950 p-10 text-center">
+            <div className="rounded-xl border border-dashed border-border bg-card p-10 text-center">
               <div className="flex justify-center mb-5">
-                <div className="w-16 h-16 rounded-xl bg-zinc-900 border border-border/50 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-xl bg-muted border border-border flex items-center justify-center">
                   <FileText className="h-7 w-7 text-muted-foreground" />
                 </div>
               </div>
@@ -359,7 +359,7 @@ export function DocumentChecklistContent({
       </div>
 
       {/* CTA Section */}
-      <div className="mt-16 rounded-xl border border-border/50 bg-zinc-950 p-10 text-center">
+      <div className="mt-16 rounded-xl border border-border bg-card p-10 text-center">
         <h3 className="text-xl font-semibold text-foreground">{ctaTitle}</h3>
         <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto leading-relaxed">
           {ctaDescription}

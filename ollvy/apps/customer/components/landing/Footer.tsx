@@ -32,12 +32,9 @@ function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) 
 
 function OllvyWordmark() {
   return (
-    <div className="flex items-center gap-1.5">
-      <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-        <span className="text-primary-foreground font-bold text-sm">O</span>
-      </div>
-      <span className="text-xl font-bold text-foreground tracking-tight">llvy</span>
-    </div>
+    <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
+      Ollvy
+    </Link>
   )
 }
 

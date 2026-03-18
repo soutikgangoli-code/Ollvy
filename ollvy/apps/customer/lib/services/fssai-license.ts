@@ -11,7 +11,7 @@ export const fssaiLicense: ServiceConfig = {
   govtFee: 2000,
   govtFeeLabel: 'FSSAI license fee',
   govtFeeNote:
-    'This fee is paid to the Food Safety and Standards Authority of India. Varies by license type — ₹2,000 is the standard for State License (₹12L–₹20Cr turnover). Central License is ₹7,500/year.',
+    'This fee is paid to the Food Safety and Standards Authority of India. Varies by license type - ₹2,000 is the standard for State License (₹12L-₹20Cr turnover). Central License is ₹7,500/year.',
 
   slaDays: 10,
   isRetainer: false,
@@ -38,30 +38,30 @@ export const fssaiLicense: ServiceConfig = {
     {
       step: 2,
       title: 'Upload documents through the app',
-      timeline: 'Day 0–1',
-      body: 'Business registration proof, food safety management plan, layout plan of premises, list of equipment, water test report. Document requirements vary by license type — we send you the exact list, not the generic one.',
+      timeline: 'Day 0-1',
+      body: 'Business registration proof, food safety management plan, layout plan of premises, list of equipment, water test report. Document requirements vary by license type - we send you the exact list, not the generic one.',
       visual: 'upload',
       milestone: 'Documents verified',
     },
     {
       step: 3,
       title: 'Application filed on FSSAI portal',
-      timeline: 'Day 2–4',
+      timeline: 'Day 2-4',
       body: 'Your compliance expert files Form A (Registration) or Form B (State/Central License) on the FSSAI portal. Application Reference Number generated and shared immediately.',
       visual: 'form',
-      milestone: 'Application submitted — ARN generated',
+      milestone: 'Application submitted - ARN generated',
     },
     {
       step: 4,
       title: 'Inspection coordinated (if required)',
-      timeline: 'Day 5–8',
+      timeline: 'Day 5-8',
       body: 'State and Central Licenses may require premises inspection by FSSAI officials. Your compliance expert coordinates the inspection date and prepares you with a checklist. Registration (basic) does not require inspection.',
       visual: 'calendar',
     },
     {
       step: 5,
       title: 'FSSAI license issued',
-      timeline: 'Day 8–10',
+      timeline: 'Day 8-10',
       body: 'License certificate with 14-digit FSSAI number issued. You can now legally print this on all food packaging. License uploaded to your account. Renewal reminder added to compliance calendar.',
       visual: 'stamp',
       milestone: 'FSSAI license active',
@@ -72,15 +72,15 @@ export const fssaiLicense: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Correct license type determined upfront',
-      body: 'There are 3 types: Registration (up to ₹12L turnover), State License (₹12L–₹20Cr), Central License (₹20Cr+ or interstate). Filing the wrong type means rejection and refiling. We determine the right one before you pay.',
-      comparisonWithout: 'Guess the license type — risk rejection and delay',
+      body: 'There are 3 types: Registration (up to ₹12L turnover), State License (₹12L-₹20Cr), Central License (₹20Cr+ or interstate). Filing the wrong type means rejection and refiling. We determine the right one before you pay.',
+      comparisonWithout: 'Guess the license type - risk rejection and delay',
       comparisonWithOllvy: 'License type verified based on turnover and geography',
     },
     {
       title: 'Application filed on FSSAI portal',
       body: 'The FSSAI portal has 20+ fields per application type. We handle the entire submission. You answer 5 questions in the app.',
       comparisonWithout: '2+ hours on FSSAI portal, frequent session timeouts',
-      comparisonWithOllvy: '5 questions in app — we file the rest',
+      comparisonWithOllvy: '5 questions in app - we file the rest',
     },
     {
       title: 'Inspection preparation checklist',
@@ -96,10 +96,10 @@ export const fssaiLicense: ServiceConfig = {
     },
     {
       title: 'Renewal reminder in your calendar',
-      body: 'FSSAI licenses are valid for 1–5 years depending on fee paid. We add renewal reminders to your compliance calendar. Operating with an expired license is the same as operating without one — full penalty applies.',
+      body: 'FSSAI licenses are valid for 1-5 years depending on fee paid. We add renewal reminders to your compliance calendar. Operating with an expired license is the same as operating without one - full penalty applies.',
       mockVisualType: 'calendar',
       mockVisualData: {
-        row1: 'FSSAI License Renewal — Due Mar 2026',
+        row1: 'FSSAI License Renewal - Due Mar 2026',
         note: 'Added automatically after license issued',
       },
     },
@@ -119,7 +119,7 @@ export const fssaiLicense: ServiceConfig = {
     {
       icon: 'alert',
       title: 'Operating without license',
-      body: 'Manufacturing or selling packaged food without FSSAI license: ₹10,000 penalty + ₹100/day. For serious violations: goods seized and destroyed. E-commerce platforms require FSSAI number for food listings — no number, no listing.',
+      body: 'Manufacturing or selling packaged food without FSSAI license: ₹10,000 penalty + ₹100/day. For serious violations: goods seized and destroyed. E-commerce platforms require FSSAI number for food listings - no number, no listing.',
     },
   ],
 
@@ -156,17 +156,17 @@ export const fssaiLicense: ServiceConfig = {
     {
       category: 'General',
       q: 'Do I need FSSAI even for a small home bakery?',
-      a: 'Yes. Any food business — including home-based bakeries, cloud kitchens, or tiffin services — needs FSSAI. Below ₹12L turnover: Registration is sufficient. Above: State License required. Exemptions exist only for farmers selling raw produce directly.',
+      a: 'Yes. Any food business - including home-based bakeries, cloud kitchens, or tiffin services - needs FSSAI. Below ₹12L turnover: Registration is sufficient. Above: State License required. Exemptions exist only for farmers selling raw produce directly.',
     },
     {
       category: 'General',
       q: 'What is the difference between Registration, State, and Central License?',
-      a: 'Registration: up to ₹12L turnover, no inspection, valid 1–5 years. State License: ₹12L–₹20Cr turnover, may require inspection, valid 1–5 years. Central License: ₹20Cr+ or multi-state operations, inspection required.',
+      a: 'Registration: up to ₹12L turnover, no inspection, valid 1-5 years. State License: ₹12L-₹20Cr turnover, may require inspection, valid 1-5 years. Central License: ₹20Cr+ or multi-state operations, inspection required.',
     },
     {
       category: 'Process',
       q: 'How long is the license valid?',
-      a: '1 to 5 years — you choose at the time of application. Fees scale accordingly. We recommend 5 years to avoid annual renewal hassle. Renewal must be filed 30 days before expiry.',
+      a: '1 to 5 years - you choose at the time of application. Fees scale accordingly. We recommend 5 years to avoid annual renewal hassle. Renewal must be filed 30 days before expiry.',
     },
     {
       category: 'Process',
@@ -176,7 +176,7 @@ export const fssaiLicense: ServiceConfig = {
     {
       category: 'Documents',
       q: 'What documents are required?',
-      a: 'Business registration proof, ID/address proof, food safety management plan, layout plan of premises, list of food items to be handled. For manufacturing: equipment list, water test report. Varies by license type — we send the exact list.',
+      a: 'Business registration proof, ID/address proof, food safety management plan, layout plan of premises, list of food items to be handled. For manufacturing: equipment list, water test report. Varies by license type - we send the exact list.',
     },
     {
       category: 'After Completion',
@@ -189,7 +189,7 @@ export const fssaiLicense: ServiceConfig = {
     {
       name: 'FSSAI',
       url: 'https://foscos.fssai.gov.in',
-      description: 'Food Safety and Standards Authority of India — license portal',
+      description: 'Food Safety and Standards Authority of India - license portal',
     },
     {
       name: 'FSS Act, 2006',

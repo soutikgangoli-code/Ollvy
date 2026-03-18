@@ -2,15 +2,15 @@ import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/[0.06] bg-black/40">
+    <footer className="border-t border-border bg-card/40">
       <div className="container py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
           {/* Company */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="text-xl font-bold text-white inline-block mb-4">
+            <Link href="/" className="text-xl font-bold text-foreground inline-block mb-4">
               ollvy
             </Link>
-            <p className="text-sm text-white/40 leading-relaxed max-w-[280px]">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-[280px]">
               Professional services marketplace for businesses.
               Connect with CAs, Lawyers, and other experts.
             </p>
@@ -18,7 +18,7 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="font-medium text-white mb-4">Services</h3>
+            <h3 className="font-medium text-foreground mb-4">Services</h3>
             <ul className="space-y-3">
               {[
                 { href: '/?type=CA', label: 'CA Services' },
@@ -29,7 +29,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-white/40 hover:text-white/70 transition-colors"
+                    className="text-sm text-muted-foreground hover:text-foreground/80 transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -40,7 +40,7 @@ export function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="font-medium text-white mb-4">Support</h3>
+            <h3 className="font-medium text-foreground mb-4">Support</h3>
             <ul className="space-y-3">
               {[
                 { href: '/help', label: 'Help Center' },
@@ -50,7 +50,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-white/40 hover:text-white/70 transition-colors"
+                    className="text-sm text-muted-foreground hover:text-foreground/80 transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -61,7 +61,7 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-medium text-white mb-4">Legal</h3>
+            <h3 className="font-medium text-foreground mb-4">Legal</h3>
             <ul className="space-y-3">
               {[
                 { href: '/privacy', label: 'Privacy Policy' },
@@ -71,7 +71,7 @@ export function Footer() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-white/40 hover:text-white/70 transition-colors"
+                    className="text-sm text-muted-foreground hover:text-foreground/80 transition-colors"
                   >
                     {item.label}
                   </Link>
@@ -81,8 +81,8 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/[0.06] text-center">
-          <p className="text-sm text-white/30">
+        <div className="mt-16 pt-8 border-t border-border text-center">
+          <p className="text-sm text-muted-foreground/70">
             {new Date().getFullYear()} Ollvy. All rights reserved.
           </p>
         </div>

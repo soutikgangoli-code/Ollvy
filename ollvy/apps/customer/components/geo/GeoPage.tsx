@@ -54,7 +54,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
           <div className="flex items-center gap-2 mt-4">
             <CheckCircle size={13} className="text-[hsl(var(--ollvy-green))]" />
             <span className="text-sm text-[hsl(var(--ollvy-green))]">
-              Done by {getGuaranteedDate(slaDays)}, guaranteed
+              Guaranteed by {getGuaranteedDate(slaDays)}
             </span>
           </div>
         </div>
@@ -103,7 +103,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
 
               <Button className="w-full mt-6" asChild>
                 <Link href={`/services/${service.slug}?utm_source=geo_page&utm_medium=service_card&utm_content=${city.slug}`}>
-                  Book Now — ₹{totalFee.toLocaleString('en-IN')}
+                  Book Now - ₹{totalFee.toLocaleString('en-IN')}
                 </Link>
               </Button>
             </Card>
@@ -112,7 +112,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
             {geoContent?.jurisdictionNote && (
               <div>
                 <h2 className="text-lg font-semibold text-foreground mb-3">
-                  {service.shortName} in {city.name} — local details
+                  {service.shortName} in {city.name} - local details
                 </h2>
                 <p className="text-sm text-muted-foreground leading-relaxed">
                   {geoContent.jurisdictionNote}
@@ -196,7 +196,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
             <p className="text-xs text-muted-foreground">
               For full service details, process steps, and complete FAQ:{' '}
               <Link href={`/services/${service.slug}`} className="underline hover:text-foreground">
-                {service.name} — main service page →
+                {service.name} - main service page →
               </Link>
             </p>
           </div>
@@ -220,7 +220,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
                 <div className="mt-4 pt-4 border-t border-border space-y-2">
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CheckCircle size={14} className="text-[hsl(var(--ollvy-green))]" />
-                    Done by {getGuaranteedDate(slaDays)}
+                    Guaranteed by {getGuaranteedDate(slaDays)}
                   </div>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <CheckCircle size={14} className="text-[hsl(var(--ollvy-green))]" />
@@ -259,7 +259,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
       <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
         <Button className="w-full" size="lg" asChild>
           <Link href={`/services/${service.slug}?utm_source=geo_page&utm_medium=mobile_sticky&utm_content=${city.slug}`}>
-            Book Now — ₹{totalFee.toLocaleString('en-IN')}
+            Book Now - ₹{totalFee.toLocaleString('en-IN')}
           </Link>
         </Button>
       </div>

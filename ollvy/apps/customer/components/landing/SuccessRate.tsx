@@ -48,7 +48,7 @@ export function SuccessRate() {
                   ollvy
                 </span>
                 <div className="mt-2 space-y-0.5">
-                  <p className="text-xs text-muted-foreground">Years: 2023–2025</p>
+                  <p className="text-xs text-muted-foreground">Years: 2023-2025</p>
                   <p className="text-xs text-muted-foreground">
                     Orders: {ORDERS_COMPLETED.toLocaleString('en-IN')}+
                   </p>
@@ -92,7 +92,7 @@ export function SuccessRate() {
             {/* Source footnote */}
             <p className="text-xs text-muted-foreground italic text-center mt-4 max-w-xl mx-auto">
               "Industry average sourced from CAG Report on GST compliance rates, 2023. Ollvy rate
-              based on {ORDERS_COMPLETED.toLocaleString('en-IN')} orders, 2023–2025."
+              based on {ORDERS_COMPLETED.toLocaleString('en-IN')} orders, 2023-2025."
             </p>
           </>
         ) : (
@@ -103,7 +103,7 @@ export function SuccessRate() {
             </p>
             <p className="text-sm text-muted-foreground mt-2">
               {ORDERS_COMPLETED.toLocaleString('en-IN')}+ services completed across India. Not a
-              claim — a count from the database, loaded in real time.
+              claim - a count from the database, loaded in real time.
             </p>
           </Card>
         )}

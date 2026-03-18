@@ -83,7 +83,7 @@ export default function PenaltyCalculatorLayout({
             {/* Calculator Selector */}
             <div className="flex justify-center">
               <Select value={pathname} onValueChange={handleChange}>
-                <SelectTrigger className="w-[320px] h-11 bg-zinc-950 border-border/50 text-sm">
+                <SelectTrigger className="w-[320px] h-11 bg-card border-border text-sm">
                   <SelectValue>
                     <span className="text-muted-foreground">Switch calculator:</span>{' '}
                     <span className="text-foreground">{currentCalc?.label}</span>

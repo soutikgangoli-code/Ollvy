@@ -22,7 +22,7 @@ export const gstMonthlyFiling: ServiceConfig = {
   govtFee: undefined,
   retainerCycleLabel: 'per month',
 
-  slaDays: 0, // retainer — uses nextDueDate instead
+  slaDays: 0, // retainer - uses nextDueDate instead
   isRetainer: true,
   nextDueDate: getNextGstrDueDate,
   serviceType: 'Monthly retainer',
@@ -56,7 +56,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     {
       step: 3,
       title: 'GSTR-1 filed by the 11th',
-      timeline: '9th–11th',
+      timeline: '9th-11th',
       body: "Your CA files GSTR-1 (outward supplies) before the 11th. You receive the acknowledgement in the app. If there are any discrepancies between your invoices and the data, they flag it before filing.",
       visual: 'form',
       milestone: 'GSTR-1 filed and acknowledged',
@@ -64,7 +64,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     {
       step: 4,
       title: 'GSTR-3B filed by the 20th',
-      timeline: '18th–20th',
+      timeline: '18th-20th',
       body: "Your CA prepares GSTR-3B based on GSTR-1 and your purchase data. They calculate your net tax liability, verify ITC claims against GSTR-2B, and file. Challan is generated, you pay, done.",
       visual: 'form',
       milestone: 'GSTR-3B filed and acknowledged',
@@ -72,7 +72,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     {
       step: 5,
       title: 'Monthly compliance report delivered',
-      timeline: '21st–25th',
+      timeline: '21st-25th',
       body: "After filing, you receive a monthly compliance report: what was filed, when, acknowledgement numbers, ITC claimed, tax paid, and any notices received. This is your proof-of-work.",
       visual: 'checklist',
       isCompletion: true,
@@ -82,7 +82,7 @@ export const gstMonthlyFiling: ServiceConfig = {
 
   whatsIncluded: [
     {
-      title: 'GSTR-1 — outward supply return',
+      title: 'GSTR-1 - outward supply return',
       body: "All B2B invoices, B2C sales above ₹2.5L, and export invoices are captured in GSTR-1. Your CA prepares this from your sales data and files by the 11th.",
       mockVisualType: 'status',
       mockVisualData: {
@@ -92,8 +92,8 @@ export const gstMonthlyFiling: ServiceConfig = {
       },
     },
     {
-      title: 'GSTR-3B — net tax payment',
-      body: "GSTR-3B is where you pay your net GST liability. Your CA calculates output tax, deducts eligible ITC, and files. The challan is generated — you pay through your bank.",
+      title: 'GSTR-3B - net tax payment',
+      body: "GSTR-3B is where you pay your net GST liability. Your CA calculates output tax, deducts eligible ITC, and files. The challan is generated - you pay through your bank.",
     },
     {
       title: 'ITC reconciliation with GSTR-2B',
@@ -123,7 +123,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     {
       icon: 'mismatch',
       title: 'GSTR-1 and GSTR-3B mismatch',
-      body: "If your GSTR-1 figures don't match GSTR-3B, GSTN flags it automatically under Section 61. You get a notice. Responding requires a CA — which is not included in most retainers. With Ollvy, it's the same CA who filed, so they can respond.",
+      body: "If your GSTR-1 figures don't match GSTR-3B, GSTN flags it automatically under Section 61. You get a notice. Responding requires a CA - which is not included in most retainers. With Ollvy, it's the same CA who filed, so they can respond.",
     },
     {
       icon: 'alert',
@@ -143,7 +143,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     },
     {
       label: 'High transaction volume',
-      detail: "500+ invoices/month. We can handle it — pricing is based on turnover, not invoice count.",
+      detail: "500+ invoices/month. We can handle it - pricing is based on turnover, not invoice count.",
     },
     {
       label: 'Previous CA went quiet',

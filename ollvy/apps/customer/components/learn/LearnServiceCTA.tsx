@@ -36,7 +36,7 @@ export function LearnServiceCTA({ primary, secondary }: {
             <div className="flex items-center gap-1.5 mt-2">
               <CheckCircle size={12} className="text-[hsl(var(--ollvy-green))]" />
               <span className="text-xs text-muted-foreground">
-                Done by {guaranteedDate}, guaranteed
+                Guaranteed by {guaranteedDate}
               </span>
             </div>
           </div>
@@ -71,7 +71,7 @@ export function LearnServiceCTA({ primary, secondary }: {
         </div>
       )}
 
-      {/* Self-serve nudge — builds trust, people who want to DIY bookmark us */}
+      {/* Self-serve nudge - builds trust, people who want to DIY bookmark us */}
       <p className="text-xs text-muted-foreground mt-4 text-center">
         Want to do it yourself?{' '}
         {primary.slug === 'gst-registration' && (

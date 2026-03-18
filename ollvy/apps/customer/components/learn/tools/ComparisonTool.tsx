@@ -99,7 +99,7 @@ export function ComparisonTool({ config }: {
           {recommendation && result.type === 'eligible' && (
             <Button className="w-full" asChild>
               <Link href={`/services/${recommendation.slug}?utm_source=learn_tool&utm_medium=comparison_result`}>
-                Book {recommendation.name} — {recommendation.price}
+                Book {recommendation.name} - {recommendation.price}
               </Link>
             </Button>
           )}

@@ -8,13 +8,13 @@ import { cn } from '@/lib/utils';
 import { SERVICE_CONFIGS } from '@/lib/services';
 import { getGuaranteedDate } from '@/lib/dates';
 
-// The startup compliance stack — ordered by dependency
+// The startup compliance stack - ordered by dependency
 // locked: can only be booked after prerequisites
 const STARTUP_STACK = [
   {
     stage: 1,
     label: 'Start here',
-    tagline: 'Days 0–15',
+    tagline: 'Days 0-15',
     services: [
       {
         slug: 'pvt-ltd-incorporation',
@@ -38,7 +38,7 @@ const STARTUP_STACK = [
   {
     stage: 2,
     label: 'First 60 days',
-    tagline: 'Days 15–60',
+    tagline: 'Days 15-60',
     services: [
       {
         slug: 'gst-registration',
@@ -52,7 +52,7 @@ const STARTUP_STACK = [
       },
       {
         slug: 'director-kyc',
-        note: 'Annual — due Sep 30. Set it up now so it\'s not forgotten.',
+        note: 'Annual - due Sep 30. Set it up now so it\'s not forgotten.',
         prerequisite: 'pvt-ltd-incorporation',
         prereqNote: 'Requires active DIN from incorporation',
       },
@@ -139,7 +139,7 @@ export function StartupPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
             <Button size="lg" asChild>
               <Link href="/services/pvt-ltd-incorporation?utm_source=startup_page&utm_medium=hero">
-                Incorporate now — ₹24,999
+                Incorporate now - ₹24,999
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
@@ -173,7 +173,7 @@ export function StartupPage() {
             {[
               { stage: 1, label: 'Pre-incorporation', sub: 'Haven\'t registered yet' },
               { stage: 2, label: 'Just incorporated', sub: 'CIN in hand, < 3 months' },
-              { stage: 3, label: '3–12 months', sub: 'Operating, team growing' },
+              { stage: 3, label: '3-12 months', sub: 'Operating, team growing' },
               { stage: 4, label: 'Series A ready', sub: 'Preparing for diligence' },
             ].map(item => (
               <button
@@ -222,7 +222,7 @@ export function StartupPage() {
         <div className="max-w-[1100px] mx-auto px-6 py-16">
           <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">Most founders miss this</p>
           <h2 className="text-2xl font-bold text-foreground mb-2">
-            DPIIT recognition — what it actually gives you
+            DPIIT recognition - what it actually gives you
           </h2>
           <p className="text-sm text-muted-foreground mb-10 max-w-[560px]">
             Not "you may be eligible for tax benefits." Specific numbers, specific sections.
@@ -245,7 +245,7 @@ export function StartupPage() {
               {
                 title: 'Patent fee reduction',
                 section: 'CGPDTM Circular',
-                body: 'Patent application fees reduced 80% — from ₹16,000 to ₹3,200 for standard applications. Trademark examination fee also reduced.',
+                body: 'Patent application fees reduced 80% - from ₹16,000 to ₹3,200 for standard applications. Trademark examination fee also reduced.',
                 caveat: null,
               },
               {
@@ -275,7 +275,7 @@ export function StartupPage() {
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Button asChild>
               <Link href="/services/startup-india-dpiit?utm_source=startup_page&utm_medium=dpiit_section">
-                Apply for DPIIT Recognition — ₹4,999
+                Apply for DPIIT Recognition - ₹4,999
               </Link>
             </Button>
             <Button variant="outline" asChild>
@@ -295,14 +295,14 @@ export function StartupPage() {
           </h2>
           <p className="text-sm text-muted-foreground mb-8 max-w-[520px] leading-relaxed">
             When a VC asks for documents, you have 72 hours. The founders who survive diligence
-            are the ones who kept records from day 1 — not those scrambling to file 3 years of
+            are the ones who kept records from day 1 - not those scrambling to file 3 years of
             MCA returns in a week.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             {[
               { label: 'All MCA filings', detail: 'On time, every year. Acknowledgements stored permanently.' },
-              { label: 'GST returns', detail: 'GSTR-1, GSTR-3B, GSTR-9 — all in one place.' },
+              { label: 'GST returns', detail: 'GSTR-1, GSTR-3B, GSTR-9 - all in one place.' },
               { label: 'Director KYC', detail: 'Never missed. DINs always active.' },
               { label: 'Business ITR', detail: 'Filed and acknowledged, available for download.' },
               { label: 'GST-compliant invoices', detail: 'Every service purchase. CGST/SGST split. 3-year retention.' },
@@ -333,7 +333,7 @@ export function StartupPage() {
               },
               {
                 name: 'Aditi S.', city: 'Delhi', type: 'D2C founder',
-                quote: 'DPIIT recognition took 5 days. Nobody told me about the angel tax exemption until Ollvy\'s CS did — during the scope call, before I\'d even booked. That alone was worth ten times the fee.',
+                quote: 'DPIIT recognition took 5 days. Nobody told me about the angel tax exemption until Ollvy\'s CS did - during the scope call, before I\'d even booked. That alone was worth ten times the fee.',
               },
               {
                 name: 'Rohan P.', city: 'Hyderabad', type: 'B2B SaaS founder',
@@ -364,7 +364,7 @@ export function StartupPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" asChild>
               <Link href="/services/pvt-ltd-incorporation?utm_source=startup_page&utm_medium=footer_cta">
-                Incorporate now — ₹24,999
+                Incorporate now - ₹24,999
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>

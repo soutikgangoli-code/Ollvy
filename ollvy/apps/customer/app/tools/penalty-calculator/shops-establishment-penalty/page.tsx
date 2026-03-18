@@ -146,7 +146,7 @@ function calculateShopsEstablishmentPenalty(
       penaltyMax: monthsLate > 12 ? 10000 : 5000,
       isExactPenalty: false,
       stateName: allStates.find((s) => s.value === state)?.label || state,
-      notes: 'Penalty typically ₹200–₹5,000 for first offence, up to ₹10,000 for repeat. Check your state-specific act for exact rates.',
+      notes: 'Penalty typically ₹200-₹5,000 for first offence, up to ₹10,000 for repeat. Check your state-specific act for exact rates.',
     }
   }
 }
@@ -304,7 +304,7 @@ function ShopsEstablishmentPenaltyCalculator() {
 
       <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6 space-y-8">
+        <div className="rounded-xl border border-border bg-card p-6 space-y-8">
           <div className="space-y-6">
             {/* State Selector - First Input */}
             <div className="space-y-1.5">
@@ -446,7 +446,7 @@ function ShopsEstablishmentPenaltyCalculator() {
             Operating a commercial establishment without registration under the Shops and
             Establishment Act is an offence that can attract penalties ranging from ₹200 to
             ₹10,000 depending on the state. First-time offenders typically face lower
-            penalties (₹500–₹5,000), while repeat offenders can be penalized more heavily.
+            penalties (₹500-₹5,000), while repeat offenders can be penalized more heavily.
             Beyond monetary penalties, non-registration can result in closure notices from
             the labour inspector, inability to obtain other business licenses, issues with
             GST registration, and difficulties in opening bank accounts.{' '}

@@ -61,7 +61,7 @@ export default function DocumentsLayout({
           {/* Document Type Selector */}
           <div className="flex justify-center">
             <Select value={pathname} onValueChange={handleChange}>
-              <SelectTrigger className="w-[360px] h-11 bg-zinc-950 border-border/50 text-sm">
+              <SelectTrigger className="w-[360px] h-11 bg-card border-border text-sm">
                 <SelectValue>
                   <span className="text-muted-foreground">Switch type:</span>{' '}
                   <span className="text-foreground">{currentType?.label}</span>

@@ -28,9 +28,10 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { getClient } from '@/lib/supabase'
 import type { ServicePackage } from '@/lib/types'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 const navLinks = [
-  { href: '/#services', label: 'Services', sectionId: 'services' },
+  { href: '/services', label: 'Services', sectionId: null },
 ]
 
 const toolsItems = [
@@ -161,6 +162,9 @@ export function Navbar() {
       const element = document.getElementById(id)
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' })
+      } else {
+        // Element not on current page, navigate to homepage with hash
+        router.push(href)
       }
     }
   }
@@ -233,8 +237,9 @@ export function Navbar() {
           </DropdownMenu>
         </nav>
 
-        {/* Desktop Search Button */}
-        <div className="hidden md:block">
+        {/* Theme Toggle + Desktop Search Button */}
+        <div className="hidden md:flex items-center gap-2">
+          <ThemeToggle />
           <Button
             size="sm"
             variant="outline"
@@ -306,6 +311,10 @@ export function Navbar() {
             </nav>
 
             <SheetFooter className="mt-auto pb-8 flex flex-col gap-3">
+              <div className="flex items-center justify-between py-2 border-b border-border">
+                <span className="text-sm text-muted-foreground">Theme</span>
+                <ThemeToggle />
+              </div>
               <Button
                 className="w-full gap-2"
                 onClick={() => {

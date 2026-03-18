@@ -3,8 +3,8 @@ import { LearnPageConfig } from '../pages';
 
 export const gstFilingPenalty: LearnPageConfig = {
   slug: 'gst-filing-penalty',
-  title: 'GST Filing Penalties in India — Exact Amounts, Not Estimates',
-  seoTitle: 'GST Late Filing Penalty India (2025) — GSTR-1, GSTR-3B, GSTR-9 Exact Amounts',
+  title: 'GST Filing Penalties in India - Exact Amounts, Not Estimates',
+  seoTitle: 'GST Late Filing Penalty India (2025) - GSTR-1, GSTR-3B, GSTR-9 Exact Amounts',
   seoDescription: 'GST late filing penalties: ₹100/day late fee plus 18% annual interest from day 21. Calculate your exact penalty for GSTR-1, GSTR-3B, and GSTR-9. Includes penalty calculator.',
   canonicalUrl: 'https://ollvy.com/learn/gst-filing-penalty',
   lastReviewed: 'March 2025',
@@ -21,7 +21,7 @@ export const gstFilingPenalty: LearnPageConfig = {
 
   sections: [
     {
-      heading: 'GSTR-3B late filing — specific penalty amounts',
+      heading: 'GSTR-3B late filing - specific penalty amounts',
       body: `GSTR-3B is the monthly summary return. Due date: 20th of every month.
 
 **Late fee** (Section 47, CGST Act):
@@ -32,7 +32,7 @@ export const gstFilingPenalty: LearnPageConfig = {
 
 **Interest on outstanding tax** (Section 50, CGST Act):
 - 18% per annum on unpaid tax
-- Starts from the day after the due date — not from when you discover the shortfall
+- Starts from the day after the due date - not from when you discover the shortfall
 - Calculated daily: (Tax due × 18%) ÷ 365 × days late
 
 *Example*: GSTR-3B was due April 20. You file on May 10 with ₹1 lakh tax outstanding.
@@ -51,7 +51,7 @@ The interest accrues silently. Most founders discover the liability when a CA au
 **For nil returns**: ₹20/day
 **Maximum**: ₹5,000 per return
 
-**Cascading consequence — not just your problem**:
+**Cascading consequence - not just your problem**:
 Your GSTR-1 feeds your buyer's ITC claim. If you file GSTR-1 late, your buyer's input tax credit (ITC) is blocked until you file. They may get a notice. They may call you.
 
 This is why many B2B buyers ask their suppliers: "Are you GST compliant? Do you file on time?" Late GSTR-1 filing damages business relationships beyond the fine itself.`,
@@ -78,11 +78,11 @@ If you file 100 days late: ₹20,000 penalty (capped).`,
 
 **Step 2**: Pay the late fee along with the return. The portal calculates it automatically when you file. You'll see the exact amount before submission.
 
-**Step 3**: Check for interest liability. If there was outstanding tax when the return was due, interest has been accruing. A CA can calculate the exact amount — it shows up on your GSTR-3B as a liability.
+**Step 3**: Check for interest liability. If there was outstanding tax when the return was due, interest has been accruing. A CA can calculate the exact amount - it shows up on your GSTR-3B as a liability.
 
-**Step 4**: Check for amnesty. DPIIT and GSTN periodically announce GST amnesty schemes that waive or reduce late fees for businesses that file within a specified window. The most recent was in 2023. Watch for notifications — Ollvy's compliance calendar flags these when announced.
+**Step 4**: Check for amnesty. DPIIT and GSTN periodically announce GST amnesty schemes that waive or reduce late fees for businesses that file within a specified window. The most recent was in 2023. Watch for notifications - Ollvy's compliance calendar flags these when announced.
 
-**Step 5**: Evaluate your ongoing risk. A single late filing indicates a process problem. Two or three suggests you need a retainer arrangement where a CA handles filing — removing the human error entirely.`,
+**Step 5**: Evaluate your ongoing risk. A single late filing indicates a process problem. Two or three suggests you need a retainer arrangement where a CA handles filing - removing the human error entirely.`,
     },
   ],
 };

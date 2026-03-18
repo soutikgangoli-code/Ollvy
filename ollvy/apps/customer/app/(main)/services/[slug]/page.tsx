@@ -4,12 +4,12 @@ import { getServiceBySlugFromDB, getAllServiceSlugs, getServiceReviews, getRelat
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
 
 /**
- * Service Detail Page — Server Component
+ * Service Detail Page - Server Component
  *
  * ALL content is now fetched from the database (no static configs).
  * This makes every service detail page editable from the admin dashboard.
  *
- * ISR — revalidate: 3600 (rebuilds hourly)
+ * ISR - revalidate: 3600 (rebuilds hourly)
  */
 
 export const revalidate = 3600

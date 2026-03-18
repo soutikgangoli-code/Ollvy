@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Calendar, Activity, Zap, Check } from 'lucide-react'
 
 /**
- * §11 — Ollvy Pro Pricing (Condensed Homepage Version)
+ * §11 - Ollvy Pro Pricing (Condensed Homepage Version)
  *
  * Per spec architecture decision:
  * - Homepage shows condensed 3-card version
@@ -36,7 +36,7 @@ const proFeatures = [
   {
     icon: Zap,
     title: 'Priority assignment + 5% discount',
-    body: "Pro orders go to the front of the queue. Plus 5% off every service — pays for itself after 2 bookings.",
+    body: "Pro orders go to the front of the queue. Plus 5% off every service - pays for itself after 2 bookings.",
   },
 ]
 
@@ -57,12 +57,12 @@ export function ProPricing({ annualPrice = 9990, monthlyPrice = 999 }: ProPricin
 
         {/* Section Heading */}
         <h2 className="text-3xl md:text-4xl font-semibold text-foreground text-center">
-          ₹{formatPrice(monthlyEquivalent)}/month. Know everything that's due before it's late.
+          <span className="font-mono">₹{formatPrice(monthlyEquivalent)}</span>/month. Know everything that's due before it's late.
         </h2>
 
         {/* Price Badge */}
         <div className="flex justify-center mt-6">
-          <Badge className="bg-ollvy-gold/10 text-yellow-400 border border-yellow-400/20 px-4 py-1.5">
+          <Badge className="bg-ollvy-gold/10 text-yellow-400 border border-yellow-400/20 px-4 py-1.5 font-mono">
             ₹{formatPrice(annualPrice)}/year · Save ₹{formatPrice(annualSavings)} vs monthly
           </Badge>
         </div>
@@ -85,7 +85,7 @@ export function ProPricing({ annualPrice = 9990, monthlyPrice = 999 }: ProPricin
         <div className="text-center mt-10">
           <Button size="lg" asChild>
             <Link href="/upgrade?utm_source=homepage&utm_medium=landing&utm_content=pro_pricing">
-              Start Ollvy Pro — ₹{formatPrice(annualPrice)}/year
+              Start Ollvy Pro - ₹{formatPrice(annualPrice)}/year
             </Link>
           </Button>
           <p className="text-sm text-muted-foreground mt-2">

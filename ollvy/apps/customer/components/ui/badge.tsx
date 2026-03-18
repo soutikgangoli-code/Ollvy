@@ -9,23 +9,23 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-white/20 bg-white/10 text-white",
+          "border-border bg-muted text-foreground",
         secondary:
-          "border-white/10 bg-white/5 text-white/70",
+          "border-border/50 bg-muted/50 text-muted-foreground",
         destructive:
-          "border-white/20 bg-white/10 text-white",
+          "border-destructive/30 bg-destructive/10 text-destructive",
         outline:
-          "border-white/20 text-white/70",
+          "border-border text-muted-foreground",
         success:
-          "border-white/20 bg-white/10 text-white",
+          "border-green-500/30 bg-green-500/10 text-green-700 dark:text-green-400",
         warning:
-          "border-white/20 bg-white/10 text-white",
+          "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400",
         pending:
-          "border-white/15 bg-white/5 text-white/60",
+          "border-border/50 bg-muted/30 text-muted-foreground",
         active:
-          "border-white/25 bg-white/15 text-white",
+          "border-primary/30 bg-primary/10 text-primary",
         completed:
-          "border-white/20 bg-white/10 text-white/80",
+          "border-green-500/30 bg-green-500/10 text-green-700 dark:text-green-400",
       },
     },
     defaultVariants: {

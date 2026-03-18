@@ -1,6 +1,6 @@
 /**
- * Penalty Table — Client-side constant
- * Per §23 Connection Point 5: "Penalty Table — seeded, client-side constant — not in DB"
+ * Penalty Table - Client-side constant
+ * Per §23 Connection Point 5: "Penalty Table - seeded, client-side constant - not in DB"
  *
  * Same data used in app UI (master doc Section 24)
  */

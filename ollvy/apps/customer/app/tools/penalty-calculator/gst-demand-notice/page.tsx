@@ -80,7 +80,7 @@ function calculateGSTDemandPenalty(
   let scenarios: ScenarioResult[] = []
 
   if (isFraud) {
-    // Section 74 — Fraud
+    // Section 74 - Fraud
     scenarios = [
       {
         label: 'Pay Within 30 Days of SCN',
@@ -108,7 +108,7 @@ function calculateGSTDemandPenalty(
       },
     ]
   } else {
-    // Section 73 — Non-Fraud
+    // Section 73 - Non-Fraud
     const minPenalty = 10000
     const penalty10Percent = Math.max(Math.round(demandAmount * 0.10), minPenalty)
 
@@ -246,7 +246,7 @@ function GSTDemandNoticeCalculator() {
           { label: `Rate: ${result.scenarios[0].penaltyRate}`, amount: result.currentPenalty },
         ],
         statuteShort: `Sec ${result.section}`,
-        statuteFull: `Section ${result.section} of CGST Act 2017 — ${isFraud ? 'Fraud/Willful misstatement' : 'Non-fraud cases'}`,
+        statuteFull: `Section ${result.section} of CGST Act 2017 - ${isFraud ? 'Fraud/Willful misstatement' : 'Non-fraud cases'}`,
       },
       {
         label: `Interest (Section 50)`,
@@ -255,7 +255,7 @@ function GSTDemandNoticeCalculator() {
           { label: `${result.interestRate * 100}% p.a. for ${daysSinceNotice} days`, amount: result.currentInterest },
         ],
         statuteShort: 'Sec 50',
-        statuteFull: `Section 50 of CGST Act 2017 — Interest on delayed payment at ${result.interestRate * 100}% p.a.`,
+        statuteFull: `Section 50 of CGST Act 2017 - Interest on delayed payment at ${result.interestRate * 100}% p.a.`,
       },
     ]
   }, [result, daysSinceNotice, isFraud])
@@ -319,7 +319,7 @@ function GSTDemandNoticeCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
+        <div className="rounded-xl border border-border bg-card p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             GST Demand Notice (Section 73/74) Calculator
@@ -399,7 +399,7 @@ function GSTDemandNoticeCalculator() {
             {/* Three Scenarios Comparison */}
             <div className="pt-4 border-t border-border">
               <h3 className="font-semibold text-foreground mb-4">
-                Payment Scenarios — Section {result.section}
+                Payment Scenarios - Section {result.section}
               </h3>
               <div className="grid gap-4">
                 {result.scenarios.map((scenario, index) => (
@@ -407,8 +407,8 @@ function GSTDemandNoticeCalculator() {
                     key={index}
                     className={`p-4 rounded-lg border ${
                       index === 0
-                        ? 'bg-zinc-900 border-emerald-500/30'
-                        : 'bg-zinc-950 border-border/50'
+                        ? 'bg-muted border-emerald-500/30'
+                        : 'bg-card border-border'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-4">
@@ -468,7 +468,7 @@ function GSTDemandNoticeCalculator() {
             {isFraud && (
               <WarningBanner
                 variant="red"
-                title="Section 74 — Prosecution Risk"
+                title="Section 74 - Prosecution Risk"
                 body="Section 74 cases can result in prosecution under Section 132 of CGST Act. Tax evasion above ₹5 Crore is a cognizable and non-bailable offence. Imprisonment can extend to 5 years."
               />
             )}
@@ -507,15 +507,15 @@ function GSTDemandNoticeCalculator() {
             A GST demand notice is issued by the tax authorities when they determine that
             tax has not been paid, has been short-paid, wrong ITC has been availed, or
             excess refund has been claimed. Section 73 of the CGST Act applies to cases
-            where the default is not due to fraud — the penalty is 10% of the tax demand.
+            where the default is not due to fraud - the penalty is 10% of the tax demand.
             Section 74 applies to cases involving fraud, willful misstatement, or suppression
-            of facts — penalties range from 15% to 100% depending on when payment is made.
+            of facts - penalties range from 15% to 100% depending on when payment is made.
           </p>
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Section 73 vs Section 74 — key differences
+            Section 73 vs Section 74 - key differences
           </h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm text-muted-foreground">
@@ -582,7 +582,7 @@ function GSTDemandNoticeCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Interest calculation on GST demand — Section 50
+            Interest calculation on GST demand - Section 50
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Interest on GST demand is calculated under Section 50 of the CGST Act. For

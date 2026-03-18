@@ -63,7 +63,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   // State
   session: null,
   user: null,
-  isLoading: true,
+  isLoading: false,
   isNewUser: false,
   lastOtpError: null,
   retryAfter: null,

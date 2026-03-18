@@ -34,10 +34,10 @@ type DepositStatus = 'ON_TIME' | 'DEDUCTED_LATE' | 'NOT_DEDUCTED'
 
 // Quarter due dates
 const QUARTER_DUE_DATES: Record<Quarter, { period: string; dueDate: string }> = {
-  Q1: { period: 'April 1 – June 30', dueDate: '31 July' },
-  Q2: { period: 'July 1 – September 30', dueDate: '31 October' },
-  Q3: { period: 'October 1 – December 31', dueDate: '31 January (next year)' },
-  Q4: { period: 'January 1 – March 31', dueDate: '31 May' },
+  Q1: { period: 'April 1 - June 30', dueDate: '31 July' },
+  Q2: { period: 'July 1 - September 30', dueDate: '31 October' },
+  Q3: { period: 'October 1 - December 31', dueDate: '31 January (next year)' },
+  Q4: { period: 'January 1 - March 31', dueDate: '31 May' },
 }
 
 // Return type descriptions
@@ -65,10 +65,10 @@ function calculateTDSPenalty(
   daysLateDeposit: number,
   depositStatus: DepositStatus
 ): CalculationResult {
-  // Section 234E — ₹200/day, capped at TDS amount
+  // Section 234E - ₹200/day, capped at TDS amount
   const lateFee234E = Math.min(200 * daysLateReturn, tdsAmount)
 
-  // Section 201(1A) — Interest on late/non-deposit
+  // Section 201(1A) - Interest on late/non-deposit
   let interest201 = 0
   let interestRate = '0%'
   let monthsLate = 0
@@ -83,7 +83,7 @@ function calculateTDSPenalty(
     interestRate = '1%'
   }
 
-  // Section 271H — advisory range only, NOT added to total
+  // Section 271H - advisory range only, NOT added to total
   const show271HWarning = daysLateReturn > 0
   const show271HCritical = daysLateReturn > 365
 
@@ -103,7 +103,7 @@ function calculateTDSPenalty(
 const faqs = [
   {
     question: 'What is the penalty for late TDS return filing?',
-    answer: 'Section 234E imposes ₹200 per day of delay. The total fee cannot exceed the TDS amount in the return. For ₹10,000 TDS and 100 days late: fee = ₹10,000 (not ₹20,000 — capped).',
+    answer: 'Section 234E imposes ₹200 per day of delay. The total fee cannot exceed the TDS amount in the return. For ₹10,000 TDS and 100 days late: fee = ₹10,000 (not ₹20,000 - capped).',
   },
   {
     question: 'What is Section 271H and how is it different from 234E?',
@@ -119,11 +119,11 @@ const faqs = [
   },
   {
     question: 'What is Section 40(a)(ia) disallowance?',
-    answer: 'If TDS is not deducted or not deposited by March 31, 30% of the underlying expense may be disallowed for income tax, increasing taxable income. This is not a penalty — it is a tax consequence.',
+    answer: 'If TDS is not deducted or not deposited by March 31, 30% of the underlying expense may be disallowed for income tax, increasing taxable income. This is not a penalty - it is a tax consequence.',
   },
   {
     question: 'What are the TDS return due dates?',
-    answer: 'Q1 (Apr–Jun): 31 July. Q2 (Jul–Sep): 31 October. Q3 (Oct–Dec): 31 January. Q4 (Jan–Mar): 31 May.',
+    answer: 'Q1 (Apr-Jun): 31 July. Q2 (Jul-Sep): 31 October. Q3 (Oct-Dec): 31 January. Q4 (Jan-Mar): 31 May.',
   },
   {
     question: 'Can TDS penalty be waived?',
@@ -190,7 +190,7 @@ function TDSLatePenaltyCalculator() {
             : []),
         ],
         statuteShort: 'Sec 234E',
-        statuteFull: 'Section 234E of Income Tax Act 1961 — Late fee for failure to furnish TDS statement',
+        statuteFull: 'Section 234E of Income Tax Act 1961 - Late fee for failure to furnish TDS statement',
       },
     ]
 
@@ -202,7 +202,7 @@ function TDSLatePenaltyCalculator() {
           { label: `${result.interestRate} per month × ${result.monthsLate} month${result.monthsLate > 1 ? 's' : ''}`, amount: result.interest201 },
         ],
         statuteShort: 'Sec 201(1A)',
-        statuteFull: 'Section 201(1A) of Income Tax Act 1961 — Interest on failure to deduct or pay TDS',
+        statuteFull: 'Section 201(1A) of Income Tax Act 1961 - Interest on failure to deduct or pay TDS',
       })
     }
 
@@ -268,7 +268,7 @@ function TDSLatePenaltyCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
+        <div className="rounded-xl border border-border bg-card p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             TDS Late Filing Penalty Calculator
@@ -388,7 +388,7 @@ function TDSLatePenaltyCalculator() {
             total={result.total}
             breakdown={breakdown}
             dueDate={QUARTER_DUE_DATES[quarter].dueDate}
-            statute="Section 234E, 271H, 201(1A) — Income Tax Act 1961"
+            statute="Section 234E, 271H, 201(1A) - Income Tax Act 1961"
             ctaText="File TDS Return"
             ctaHref="/services/tds-filing"
             showCta={result.total > 0}
@@ -397,7 +397,7 @@ function TDSLatePenaltyCalculator() {
             {result.show271HWarning && !result.show271HCritical && (
               <InfoBanner
                 title="Section 271H Advisory"
-                body="₹10,000 – ₹1,00,000 additional penalty may be levied at AO's discretion. Can be waived if TDS is paid, 234E fee is paid, and return is filed within 1 year of due date."
+                body="₹10,000 - ₹1,00,000 additional penalty may be levied at AO's discretion. Can be waived if TDS is paid, 234E fee is paid, and return is filed within 1 year of due date."
               />
             )}
 
@@ -406,7 +406,7 @@ function TDSLatePenaltyCalculator() {
               <WarningBanner
                 variant="red"
                 title="Section 271H Waiver Window Closed"
-                body="Section 271H penalty waiver window has closed (1 year exceeded). Penalty of ₹10,000–₹1,00,000 is now likely."
+                body="Section 271H penalty waiver window has closed (1 year exceeded). Penalty of ₹10,000-₹1,00,000 is now likely."
               />
             )}
 
@@ -440,21 +440,21 @@ function TDSLatePenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Section 234E late fee — ₹200 per day, capped at TDS amount
+            Section 234E late fee - ₹200 per day, capped at TDS amount
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            Section 234E is a mandatory late fee with no discretion involved — the fee accrues
+            Section 234E is a mandatory late fee with no discretion involved - the fee accrues
             automatically when a TDS return is filed after the due date. The due dates for TDS
-            returns are: Q1 (Apr–Jun) by 31 July, Q2 (Jul–Sep) by 31 October, Q3 (Oct–Dec) by
-            31 January, and Q4 (Jan–Mar) by 31 May. The ₹200/day calculation starts from the
+            returns are: Q1 (Apr-Jun) by 31 July, Q2 (Jul-Sep) by 31 October, Q3 (Oct-Dec) by
+            31 January, and Q4 (Jan-Mar) by 31 May. The ₹200/day calculation starts from the
             day after the due date. Unlike Section 271H (which is discretionary), Section 234E
-            cannot be waived under any circumstances — it must be paid along with the return.
+            cannot be waived under any circumstances - it must be paid along with the return.
           </p>
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Section 271H penalty — when can it be waived?
+            Section 271H penalty - when can it be waived?
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Section 271H provides for an additional penalty of ₹10,000 to ₹1,00,000 at the
@@ -470,7 +470,7 @@ function TDSLatePenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            TDS interest for late deposit — 1% vs 1.5%
+            TDS interest for late deposit - 1% vs 1.5%
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Section 201(1A) charges interest on TDS that is not deposited on time. The rate
@@ -478,14 +478,14 @@ function TDSLatePenaltyCalculator() {
             the due date, interest at 1.5% per month (or part of a month) is charged from the
             date of deduction to the date of deposit. If TDS was not deducted at all, interest
             at 1% per month is charged from the date when TDS should have been deducted to the
-            date of actual deduction. Note that partial months are rounded up — even one day
+            date of actual deduction. Note that partial months are rounded up - even one day
             into a new month counts as a full month for interest calculation.
           </p>
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            What is 26Q and 24Q — when do you need each?
+            What is 26Q and 24Q - when do you need each?
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             TDS returns are filed in different forms depending on the nature of the payment:
@@ -513,7 +513,7 @@ function TDSLatePenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            TDS compliance calendar — quarterly due dates for FY 2024-25
+            TDS compliance calendar - quarterly due dates for FY 2024-25
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             Here are the key TDS compliance dates for FY 2024-25:
@@ -531,25 +531,25 @@ function TDSLatePenaltyCalculator() {
               <tbody>
                 <tr className="border-b">
                   <td className="py-2 pr-4">Q1</td>
-                  <td className="py-2 pr-4">Apr 1 – Jun 30, 2024</td>
+                  <td className="py-2 pr-4">Apr 1 - Jun 30, 2024</td>
                   <td className="py-2 pr-4">7th of next month</td>
                   <td className="py-2">31 July 2024</td>
                 </tr>
                 <tr className="border-b">
                   <td className="py-2 pr-4">Q2</td>
-                  <td className="py-2 pr-4">Jul 1 – Sep 30, 2024</td>
+                  <td className="py-2 pr-4">Jul 1 - Sep 30, 2024</td>
                   <td className="py-2 pr-4">7th of next month</td>
                   <td className="py-2">31 October 2024</td>
                 </tr>
                 <tr className="border-b">
                   <td className="py-2 pr-4">Q3</td>
-                  <td className="py-2 pr-4">Oct 1 – Dec 31, 2024</td>
+                  <td className="py-2 pr-4">Oct 1 - Dec 31, 2024</td>
                   <td className="py-2 pr-4">7th of next month</td>
                   <td className="py-2">31 January 2025</td>
                 </tr>
                 <tr>
                   <td className="py-2 pr-4">Q4</td>
-                  <td className="py-2 pr-4">Jan 1 – Mar 31, 2025</td>
+                  <td className="py-2 pr-4">Jan 1 - Mar 31, 2025</td>
                   <td className="py-2 pr-4">30 April 2025</td>
                   <td className="py-2">31 May 2025</td>
                 </tr>
@@ -560,7 +560,7 @@ function TDSLatePenaltyCalculator() {
             Note: TDS deducted in March can be deposited by 30 April (not 7 April). This gives
             additional time for year-end salary TDS adjustments. Need help with TDS compliance?{' '}
             <Link href="/services/tds-filing" className="text-emerald-600 hover:underline">
-              Ollvy can file your TDS returns — starting ₹999 per quarter
+              Ollvy can file your TDS returns - starting ₹999 per quarter
             </Link>.
           </p>
         </section>

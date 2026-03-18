@@ -21,7 +21,7 @@ const faqs = [
   },
   {
     question: 'What is the penalty for not filing DIR-3 KYC?',
-    answer: 'The penalty is a flat ₹5,000 per director — regardless of how many days overdue. Whether filed 1 day late or 3 years late, the fee is ₹5,000.',
+    answer: 'The penalty is a flat ₹5,000 per director - regardless of how many days overdue. Whether filed 1 day late or 3 years late, the fee is ₹5,000.',
   },
   {
     question: 'What happens to the DIN if KYC is not filed?',
@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     question: 'How do I reactivate a deactivated DIN?',
-    answer: 'File DIR-3 KYC with the ₹5,000 late fee on the MCA portal. MCA reactivates the DIN within 24–48 business hours.',
+    answer: 'File DIR-3 KYC with the ₹5,000 late fee on the MCA portal. MCA reactivates the DIN within 24-48 business hours.',
   },
   {
     question: 'What is DIR-3 KYC-Web?',
@@ -41,7 +41,7 @@ const faqs = [
   },
   {
     question: 'If a company has 3 directors and none has filed KYC, what is the total penalty?',
-    answer: '₹15,000 — ₹5,000 per director × 3. Each director files and pays separately.',
+    answer: '₹15,000 - ₹5,000 per director × 3. Each director files and pays separately.',
   },
   {
     question: 'Can a company function if director DINs are deactivated?',
@@ -83,7 +83,7 @@ function DirectorKYCCalculator() {
         { label: `₹5,000 × ${numberOfDirectors} director${numberOfDirectors > 1 ? 's' : ''}`, amount: totalPenalty },
       ],
       statuteShort: 'Rule 12A',
-      statuteFull: 'Rule 12A of Companies (Appointment and Qualification of Directors) Rules — DIR-3 KYC late fee',
+      statuteFull: 'Rule 12A of Companies (Appointment and Qualification of Directors) Rules - DIR-3 KYC late fee',
     },
   ], [totalPenalty, numberOfDirectors])
 
@@ -144,7 +144,7 @@ function DirectorKYCCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
+        <div className="rounded-xl border border-border bg-card p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             Director KYC (DIR-3 KYC) Penalty Calculator
@@ -187,8 +187,8 @@ function DirectorKYCCalculator() {
               </h3>
               <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
                 <li>DIR-3 KYC must be filed annually by September 30 for every DIN holder allotted a DIN on or before March 31 of the financial year.</li>
-                <li>A deactivated DIN blocks all MCA filings — the company cannot file any form (AOC-4, MGT-7, share allotments, charge creation) until every director&apos;s DIN is reactivated.</li>
-                <li>Reactivation: File DIR-3 KYC with late fee of ₹5,000. MCA processes within 24–48 business hours.</li>
+                <li>A deactivated DIN blocks all MCA filings - the company cannot file any form (AOC-4, MGT-7, share allotments, charge creation) until every director&apos;s DIN is reactivated.</li>
+                <li>Reactivation: File DIR-3 KYC with late fee of ₹5,000. MCA processes within 24-48 business hours.</li>
                 <li>From FY 2019-20: Directors with mobile and email linked to MCA must also file DIR-3 KYC-Web annually. Same ₹5,000 late fee applies.</li>
               </ul>
             </div>
@@ -265,13 +265,13 @@ function DirectorKYCCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            DIN deactivation — how to reactivate your DIN
+            DIN deactivation - how to reactivate your DIN
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             To reactivate a deactivated DIN, the director must file DIR-3 KYC with the late fee
             of ₹5,000 through the MCA portal. The form requires the director&apos;s personal details,
             mobile number, email address, and digital signature. Once filed and the fee is paid,
-            MCA typically processes the reactivation within 24–48 business hours. During this
+            MCA typically processes the reactivation within 24-48 business hours. During this
             processing time, the DIN remains deactivated. It&apos;s important to file as early as
             possible to avoid delays in company compliance filings.
           </p>
@@ -279,7 +279,7 @@ function DirectorKYCCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            DIR-3 KYC vs DIR-3 KYC-Web — what is the difference?
+            DIR-3 KYC vs DIR-3 KYC-Web - what is the difference?
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             There are two forms for director KYC compliance:
@@ -304,7 +304,7 @@ function DirectorKYCCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            How to file DIR-3 KYC on MCA portal — step by step
+            How to file DIR-3 KYC on MCA portal - step by step
           </h2>
           <ol className="list-decimal list-inside text-muted-foreground space-y-2">
             <li>Login to the MCA portal at mca.gov.in</li>
@@ -322,7 +322,7 @@ function DirectorKYCCalculator() {
           <p className="text-muted-foreground leading-relaxed mt-4">
             Need help filing?{' '}
             <Link href="/services/director-kyc" className="text-emerald-600 hover:underline">
-              Ollvy can file DIR-3 KYC for you — ₹499 per director
+              Ollvy can file DIR-3 KYC for you - ₹499 per director
             </Link>.
           </p>
         </section>

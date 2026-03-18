@@ -1,6 +1,6 @@
 import { addBusinessDays, format, isWeekend } from 'date-fns'
 
-// Indian public holidays FY 2025-26 — update annually
+// Indian public holidays FY 2025-26 - update annually
 const HOLIDAYS: string[] = [
   '2025-08-15',
   '2025-10-02',

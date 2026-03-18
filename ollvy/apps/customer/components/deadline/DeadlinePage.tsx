@@ -37,9 +37,9 @@ function getUrgencyStyle(daysLeft: number, isPastDeadline: boolean) {
 
 function getUrgencyText(deadline: DeadlineConfig, daysLeft: number, isPastDeadline: boolean) {
   if (isPastDeadline) return deadline.postDeadlineMessage
-  if (daysLeft === 0) return 'Due today — file now'
+  if (daysLeft === 0) return 'Due today - file now'
   if (daysLeft <= 7) return `${daysLeft} days left · Urgency is real`
-  if (daysLeft <= 30) return `${daysLeft} days left · File now — CAs are filling up fast this season`
+  if (daysLeft <= 30) return `${daysLeft} days left · File now - CAs are filling up fast this season`
   return `${daysLeft} days left · ${deadline.urgencyLine}`
 }
 
@@ -161,9 +161,9 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                 {guaranteedDate && (
                   <Badge
                     className="bg-ollvy-green/10 text-ollvy-green border border-ollvy-green/20"
-                    aria-label={`Guaranteed completed by ${guaranteedDate}`}
+                    aria-label={`Guaranteed by ${guaranteedDate}`}
                   >
-                    Done by {guaranteedDate}
+                    Guaranteed by {guaranteedDate}
                   </Badge>
                 )}
               </div>
@@ -198,7 +198,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
 
               <Button className="w-full mt-6" asChild>
                 <Link href={`/services/${deadline.serviceSlug}?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_card`}>
-                  Book This Service — ₹{deadline.ollvyFee.toLocaleString('en-IN')}
+                  Book This Service - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
                 </Link>
               </Button>
             </Card>
@@ -249,7 +249,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                 </p>
                 <Button className="mt-4" size="lg" asChild>
                   <Link href={`/services/${deadline.serviceSlug}?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_penalty_cta`}>
-                    Book {deadline.serviceName} — ₹{deadline.ollvyFee.toLocaleString('en-IN')}
+                    Book {deadline.serviceName} - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
                   </Link>
                 </Button>
               </div>
@@ -275,7 +275,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                 {
                   icon: Calendar,
                   title: 'Compliance calendar',
-                  body: `Get reminded about ${deadline.serviceName} and every other deadline — 30 days, 7 days, 1 day before. Never miss a filing again.`,
+                  body: `Get reminded about ${deadline.serviceName} and every other deadline - 30 days, 7 days, 1 day before. Never miss a filing again.`,
                 },
                 {
                   icon: Activity,
@@ -285,7 +285,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                 {
                   icon: Zap,
                   title: 'Priority + 5% discount',
-                  body: 'Pro orders go to the front of the queue. Plus 5% off every service — pays for itself after 2 bookings.',
+                  body: 'Pro orders go to the front of the queue. Plus 5% off every service - pays for itself after 2 bookings.',
                 },
               ].map((feature, i) => {
                 const Icon = feature.icon
@@ -302,7 +302,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
             <div className="text-center mt-10">
               <Button size="lg" asChild>
                 <Link href={`/upgrade?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_pro`}>
-                  Start Ollvy Pro — ₹9,990/year
+                  Start Ollvy Pro - ₹9,990/year
                 </Link>
               </Button>
               <p className="text-sm text-muted-foreground mt-2">
@@ -396,7 +396,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
             </p>
             <Button size="lg" className="mt-8" asChild>
               <Link href={`/services/${deadline.serviceSlug}?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_final_cta`}>
-                Start Filing — ₹{deadline.ollvyFee.toLocaleString('en-IN')}
+                Start Filing - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
               </Link>
             </Button>
             <p className={`text-sm mt-3 ${getUrgencyStyle(daysLeft, isPastDeadline)}`}>

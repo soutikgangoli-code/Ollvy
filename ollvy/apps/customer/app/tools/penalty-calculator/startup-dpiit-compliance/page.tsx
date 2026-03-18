@@ -195,7 +195,7 @@ function StartupDPIITComplianceCalculator() {
           },
         ],
         statuteShort: 'FEMA Sec 15',
-        statuteFull: 'Section 15, FEMA 1999 — Compounding of contraventions',
+        statuteFull: 'Section 15, FEMA 1999 - Compounding of contraventions',
       })
     }
 
@@ -210,7 +210,7 @@ function StartupDPIITComplianceCalculator() {
           },
         ],
         statuteShort: 'FEMA Sec 15',
-        statuteFull: 'Section 15, FEMA 1999 — Compounding of contraventions',
+        statuteFull: 'Section 15, FEMA 1999 - Compounding of contraventions',
       })
     }
 
@@ -225,7 +225,7 @@ function StartupDPIITComplianceCalculator() {
           },
         ],
         statuteShort: 'FEMA Sec 15',
-        statuteFull: 'Section 15, FEMA 1999 — Compounding of contraventions',
+        statuteFull: 'Section 15, FEMA 1999 - Compounding of contraventions',
       })
     }
 
@@ -295,7 +295,7 @@ function StartupDPIITComplianceCalculator() {
 
       <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6 space-y-8">
+        <div className="rounded-xl border border-border bg-card p-6 space-y-8">
           <div className="space-y-6">
             {/* Compliance Type - Multi-select */}
             <div className="space-y-3">
@@ -389,7 +389,7 @@ function StartupDPIITComplianceCalculator() {
           <ResultsPanel
             total={result.totalMax}
             breakdown={breakdown}
-            statute={result.showRange ? `Estimated range: ₹${result.totalMin.toLocaleString('en-IN')} - ₹${result.totalMax.toLocaleString('en-IN')}` : 'FEMA Section 15 — Compounding'}
+            statute={result.showRange ? `Estimated range: ₹${result.totalMin.toLocaleString('en-IN')} - ₹${result.totalMax.toLocaleString('en-IN')}` : 'FEMA Section 15 - Compounding'}
             ctaText="Get FEMA Compliance Help"
             ctaHref="/services/startup-compliance"
             showCta={hasCalculablePenalty && result.totalMax > 0}
@@ -425,8 +425,8 @@ function StartupDPIITComplianceCalculator() {
           <p className="text-muted-foreground leading-relaxed">
             FC-GPR (Foreign Currency - Gross Provisional Return) is a regulatory filing
             required by the Reserve Bank of India (RBI) under FEMA regulations. When an Indian
-            company receives foreign investment — whether from foreign VCs, angel investors, or
-            strategic investors — it must report this transaction to RBI within 30 days of
+            company receives foreign investment - whether from foreign VCs, angel investors, or
+            strategic investors - it must report this transaction to RBI within 30 days of
             receiving the funds and allotting shares. The FC-GPR filing serves multiple
             purposes: it enables RBI to track foreign investment flows into India, ensures
             compliance with sectoral caps and pricing guidelines, and creates a documented

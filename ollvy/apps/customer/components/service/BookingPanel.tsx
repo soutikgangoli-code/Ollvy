@@ -35,7 +35,7 @@ export function BookingPanel({ service, serviceId, priceVariesByState }: Booking
             size={14}
             className="text-[hsl(var(--ollvy-green))] shrink-0"
           />
-          <p className="text-sm font-semibold text-foreground">
+          <p className="text-sm font-semibold text-foreground font-mono">
             {service.isRetainer
               ? `Current cycle due: ${guaranteedDate}`
               : `Guaranteed by ${guaranteedDate}`}
@@ -43,9 +43,9 @@ export function BookingPanel({ service, serviceId, priceVariesByState }: Booking
         </div>
       )}
 
-      {/* Total amount — prominent */}
+      {/* Total amount - prominent */}
       <div className="mb-1">
-        <p className="text-xs uppercase tracking-widest text-muted-foreground">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
           Total to pay now
         </p>
         <p className="font-mono text-4xl font-bold text-foreground mt-1">
@@ -76,7 +76,7 @@ export function BookingPanel({ service, serviceId, priceVariesByState }: Booking
           </span>
         </div>
 
-        {/* Govt fee — only if applicable */}
+        {/* Govt fee - only if applicable */}
         {service.govtFee && service.govtFee > 0 && (
           <div className="flex justify-between items-start">
             <div className="flex items-start gap-2">

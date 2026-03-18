@@ -43,7 +43,7 @@ export const directorKyc: ServiceConfig = {
     {
       step: 3,
       title: 'Acknowledgement delivered',
-      timeline: 'Day 1–2',
+      timeline: 'Day 1-2',
       body: "MCA processes DIR-3 KYC within 24 hours for most cases. The acknowledgement is uploaded to your Ollvy account. If your DIN was deactivated, it's reactivated. Your compliance calendar is updated with next year's Sep 30 deadline.",
       visual: 'stamp',
       isCompletion: true,
@@ -64,14 +64,14 @@ export const directorKyc: ServiceConfig = {
     },
     {
       title: 'OTP verification handled live',
-      body: "DIR-3 KYC requires OTP verification on your registered mobile and email. Your CS coordinates this with you in real-time — they file, you receive OTP, you share, they submit. Takes 10 minutes.",
+      body: "DIR-3 KYC requires OTP verification on your registered mobile and email. Your CS coordinates this with you in real-time - they file, you receive OTP, you share, they submit. Takes 10 minutes.",
     },
     {
       title: 'Next year reminder added automatically',
       body: "The moment we file, next year's Sep 30 deadline is added to your compliance calendar. You'll get reminders at 30d, 7d, and 1d before. You won't forget again.",
       mockVisualType: 'calendar',
       mockVisualData: {
-        row1: 'DIR-3 KYC — Due Sep 30, 2026',
+        row1: 'DIR-3 KYC - Due Sep 30, 2026',
         row2: 'Reminder: Aug 31, 2026',
         row3: 'Status: Scheduled',
       },
@@ -81,13 +81,13 @@ export const directorKyc: ServiceConfig = {
   serviceRisks: [
     {
       icon: 'clock',
-      title: '₹5,000/day penalty — starts immediately',
+      title: '₹5,000/day penalty - starts immediately',
       body: "The MCA penalty clock starts Oct 1. By Dec 31, that's ₹91,000 per director. Multiple directors multiply this. The DIN is also deactivated, blocking all company filings.",
     },
     {
       icon: 'building',
       title: 'All MCA filings blocked',
-      body: "A deactivated DIN blocks all company filings — annual returns, director changes, share transfers. Everything stops until the KYC is filed.",
+      body: "A deactivated DIN blocks all company filings - annual returns, director changes, share transfers. Everything stops until the KYC is filed.",
     },
   ],
 
@@ -139,7 +139,7 @@ export const directorKyc: ServiceConfig = {
     {
       category: 'Process',
       q: 'If my DIN is deactivated, can I still file?',
-      a: "Yes. File the DIR-3 KYC, pay the penalty (calculated by MCA), and your DIN is reactivated within 24–48 hours. We handle the entire process.",
+      a: "Yes. File the DIR-3 KYC, pay the penalty (calculated by MCA), and your DIN is reactivated within 24-48 hours. We handle the entire process.",
     },
     {
       category: 'Documents',

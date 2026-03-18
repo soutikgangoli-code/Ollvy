@@ -32,10 +32,10 @@ export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
                 className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors',
                   isCompleted
-                    ? 'bg-white/20 text-white'
+                    ? 'bg-foreground/20 text-foreground'
                     : isCurrent
-                    ? 'bg-white text-black'
-                    : 'bg-white/5 text-white/30'
+                    ? 'bg-foreground text-background'
+                    : 'bg-muted text-muted-foreground'
                 )}
               >
                 {isCompleted ? (
@@ -50,7 +50,7 @@ export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
                 <div
                   className={cn(
                     'w-px flex-1 mt-2 min-h-[24px]',
-                    isCompleted ? 'bg-white/20' : 'bg-white/[0.06]'
+                    isCompleted ? 'bg-foreground/20' : 'bg-border'
                   )}
                 />
               )}
@@ -62,16 +62,16 @@ export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
                 className={cn(
                   'font-medium',
                   isCompleted
-                    ? 'text-white/80'
+                    ? 'text-foreground/80'
                     : isCurrent
-                    ? 'text-white'
-                    : 'text-white/40'
+                    ? 'text-foreground'
+                    : 'text-muted-foreground'
                 )}
               >
                 {stage.stage_name}
               </h4>
 
-              <p className="text-sm text-white/40 mt-1">
+              <p className="text-sm text-muted-foreground mt-1">
                 {isCompleted && history?.completed_at
                   ? `Completed on ${new Date(history.completed_at).toLocaleDateString('en-IN', {
                       day: 'numeric',
@@ -86,7 +86,7 @@ export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
               </p>
 
               {history?.sla_breached && (
-                <p className="text-xs text-white/50 mt-1 bg-white/5 inline-block px-2 py-0.5 rounded">
+                <p className="text-xs text-muted-foreground mt-1 bg-muted inline-block px-2 py-0.5 rounded">
                   SLA breached
                 </p>
               )}

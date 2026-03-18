@@ -1,6 +1,6 @@
 /**
  * Service Data Fetching Layer
- * Per §23 — Backend Bridge: Landing Site ↔ Supabase
+ * Per §23 - Backend Bridge: Landing Site ↔ Supabase
  *
  * Connection Point 1 (Service Grid) and Connection Point 2 (Service Detail Page)
  *
@@ -159,7 +159,7 @@ export interface DBServiceConfig {
 
 /**
  * Fetch all active services for homepage (§5 Service Grid)
- * Per §23 Connection Point 1: ISR — revalidate: 3600
+ * Per §23 Connection Point 1: ISR - revalidate: 3600
  */
 export async function getActiveServices(): Promise<ServiceCardData[]> {
   if (!supabaseServer) {
@@ -212,7 +212,7 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
 
 /**
  * Fetch single service by slug for Service Detail Page (§18)
- * ALL content is fetched from the database — no static configs needed.
+ * ALL content is fetched from the database - no static configs needed.
  */
 export async function getServiceBySlugFromDB(slug: string): Promise<{
   service: DBServiceConfig | null

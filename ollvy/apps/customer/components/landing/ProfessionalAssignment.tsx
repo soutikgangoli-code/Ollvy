@@ -8,7 +8,7 @@ const verifications = [
   'Bar Council enrollment number confirmed for all lawyers',
   'ICSI certificate number confirmed for Company Secretaries',
   'ID proof and practice certificate reviewed before first order',
-  '5-strike SLA enforcement — automatic suspension on the 5th breach',
+  '5-strike SLA enforcement - automatic suspension on the 5th breach',
   'All disputes mediated by Ollvy. The professional is not your problem.',
 ]
 
@@ -37,7 +37,7 @@ export function ProfessionalAssignment() {
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
               Every order gets matched to a verified CA, lawyer, or company secretary
               automatically. Matched by city, service type, and current workload. You don't get
-              to pick — and that's the point.
+              to pick - and that's the point.
             </p>
 
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
@@ -48,7 +48,7 @@ export function ProfessionalAssignment() {
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
               This matters because: when the professional is directly accountable to you, they
               also have leverage over you. Every Indian founder has experienced a CA who goes
-              quiet before a deadline. On Ollvy, Ollvy is accountable — not the individual.
+              quiet before a deadline. On Ollvy, Ollvy is accountable - not the individual.
             </p>
 
             {/* Pull quote */}

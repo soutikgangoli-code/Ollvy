@@ -39,7 +39,7 @@ export const DEADLINES: DeadlineConfig[] = [
     eventLabel: 'Financial Year 2025-26',
     dueDate: '2025-10-31',
     postDeadlineMessage:
-      'The Oct 31 deadline has passed. File now to reduce penalty accrual — late filing interest is 1% per month.',
+      'The Oct 31 deadline has passed. File now to reduce penalty accrual - late filing interest is 1% per month.',
     heroTagline: 'Financial Year 2025-26',
     purposeLabel: 'TAX FILING',
     eligibilityLabel: 'All Pvt Ltd, LLP, and Partnership firms',
@@ -48,7 +48,7 @@ export const DEADLINES: DeadlineConfig[] = [
     ollvyFee: 11999,
     govtFee: 0,
     slaDays: 10,
-    seoTitle: 'Business ITR Filing 2025 — File Before Oct 31 | Ollvy',
+    seoTitle: 'Business ITR Filing 2025 - File Before Oct 31 | Ollvy',
     seoDescription:
       'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31, 2025. Fixed price ₹11,999. Verified CA assigned within 24 hours.',
     canonicalUrl: 'https://ollvy.com/itr-2025',
@@ -65,7 +65,7 @@ export const DEADLINES: DeadlineConfig[] = [
       },
       {
         title: 'Defective return notice',
-        body: 'Late filers are more likely to receive defective return notices under Section 139(9) — requires a response within 15 days or the return is treated as not filed.',
+        body: 'Late filers are more likely to receive defective return notices under Section 139(9) - requires a response within 15 days or the return is treated as not filed.',
       },
     ],
     testimonials: [
@@ -79,7 +79,7 @@ export const DEADLINES: DeadlineConfig[] = [
       },
       {
         quote:
-          "First year filing ITR for our LLP. I had no idea what documents were needed. Ollvy's checklist inside the app told me exactly what to upload — P&L, balance sheet, bank statements. The CA handled the rest. Filed 10 days before deadline.",
+          "First year filing ITR for our LLP. I had no idea what documents were needed. Ollvy's checklist inside the app told me exactly what to upload - P&L, balance sheet, bank statements. The CA handled the rest. Filed 10 days before deadline.",
         name: 'Meera R.',
         role: 'Partner',
         business: 'LLP, Consulting',
@@ -94,7 +94,7 @@ export const DEADLINES: DeadlineConfig[] = [
     eventLabel: 'FY 2024-25 Annual Return',
     dueDate: '2025-12-31',
     postDeadlineMessage:
-      'The Dec 31 deadline has passed. File GSTR-9 immediately — ₹200/day penalty is accruing.',
+      'The Dec 31 deadline has passed. File GSTR-9 immediately - ₹200/day penalty is accruing.',
     heroTagline: 'FY 2024-25 Annual Return',
     purposeLabel: 'GST ANNUAL FILING',
     eligibilityLabel: 'All GST-registered businesses above ₹2Cr turnover',
@@ -103,7 +103,7 @@ export const DEADLINES: DeadlineConfig[] = [
     ollvyFee: 4999,
     govtFee: 0,
     slaDays: 7,
-    seoTitle: 'GSTR-9 Annual Return 2025 — File Before Dec 31 | Ollvy',
+    seoTitle: 'GSTR-9 Annual Return 2025 - File Before Dec 31 | Ollvy',
     seoDescription:
       'File your GSTR-9 annual return for FY 2024-25 before December 31. Fixed price ₹4,999. CA assigned same day.',
     canonicalUrl: 'https://ollvy.com/gst-annual-2025',
@@ -111,7 +111,7 @@ export const DEADLINES: DeadlineConfig[] = [
     documentHeading: 'What your CA will ask for to file GSTR-9',
     risks: [
       {
-        title: '₹200/day late fee — no ceiling',
+        title: '₹200/day late fee - no ceiling',
         body: "GSTR-9 late fee is ₹200/day (₹100 CGST + ₹100 SGST) with no maximum cap. At 90 days late, that's ₹18,000. At 180 days, ₹36,000.",
       },
       {
@@ -145,7 +145,7 @@ export const DEADLINES: DeadlineConfig[] = [
     eventLabel: 'Annual Filing · Due Sep 30',
     dueDate: '2025-09-30',
     postDeadlineMessage:
-      'The Sep 30 deadline has passed. Your DIN may already be deactivated. File DIR-3 KYC immediately — ₹5,000/day penalty is accruing.',
+      'The Sep 30 deadline has passed. Your DIN may already be deactivated. File DIR-3 KYC immediately - ₹5,000/day penalty is accruing.',
     heroTagline: 'Sep 30, 2025 · Every year',
     purposeLabel: 'MCA COMPLIANCE',
     eligibilityLabel: 'All directors of Indian companies',
@@ -154,7 +154,7 @@ export const DEADLINES: DeadlineConfig[] = [
     ollvyFee: 1499,
     govtFee: 0,
     slaDays: 2,
-    seoTitle: 'Director KYC 2025 — DIR-3 KYC Filing Before Sep 30 | Ollvy',
+    seoTitle: 'Director KYC 2025 - DIR-3 KYC Filing Before Sep 30 | Ollvy',
     seoDescription:
       'File DIR-3 KYC before Sep 30, 2025. Avoid DIN deactivation and ₹5,000/day penalty. Fixed price ₹1,499 per director.',
     canonicalUrl: 'https://ollvy.com/director-kyc-2025',
@@ -162,12 +162,12 @@ export const DEADLINES: DeadlineConfig[] = [
     documentHeading: "Two documents. That's it. This one is simple.",
     risks: [
       {
-        title: '₹5,000/day penalty — starts immediately',
+        title: '₹5,000/day penalty - starts immediately',
         body: 'The MCA penalty clock starts Oct 1. By Dec 31, that\'s ₹91,000 per director. Multiple directors multiply this. The DIN is also deactivated, blocking all company filings.',
       },
       {
         title: 'All MCA filings blocked',
-        body: 'A deactivated DIN blocks all company filings — annual returns, director changes, share transfers. Everything stops until the KYC is filed.',
+        body: 'A deactivated DIN blocks all company filings - annual returns, director changes, share transfers. Everything stops until the KYC is filed.',
       },
     ],
     testimonials: [

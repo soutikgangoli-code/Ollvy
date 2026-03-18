@@ -2,18 +2,18 @@
 // City-specific content for geo pages
 
 export interface GeoContent {
-  citySpecificNotes: string[];           // 2–3 sentences specific to this city
-  additionalFaqs: Array<{q: string, a: string}>;  // 2–3 city-specific FAQs
+  citySpecificNotes: string[];           // 2-3 sentences specific to this city
+  additionalFaqs: Array<{q: string, a: string}>;  // 2-3 city-specific FAQs
   jurisdictionNote: string;              // one paragraph about local jurisdiction
 }
 
 export const GEO_CONTENT: Record<string, GeoContent> = {
 
   'gst-registration__delhi': {
-    jurisdictionNote: `Delhi falls under CGST jurisdiction. Depending on your business address, you may be assigned to Delhi North, Delhi West, Delhi South, or Delhi Central CGST Commissionerate. All applications are filed electronically through the GSTN portal — the commissionerate only matters if you receive an officer query, in which case your CA handles the response directly with that commissionerate's officers.`,
+    jurisdictionNote: `Delhi falls under CGST jurisdiction. Depending on your business address, you may be assigned to Delhi North, Delhi West, Delhi South, or Delhi Central CGST Commissionerate. All applications are filed electronically through the GSTN portal - the commissionerate only matters if you receive an officer query, in which case your CA handles the response directly with that commissionerate's officers.`,
     citySpecificNotes: [
-      `Delhi has no separate state GST — it uses the Central GST framework directly. Unlike states like Maharashtra or Karnataka where SGST and CGST are separate administrations, Delhi's GST is administered entirely by CGST officers.`,
-      `The GSTN Seva Kendra for Delhi is at SCOPE Complex, Core 8, 7 Institutional Area, Lodhi Road, New Delhi — 110 003. Walk-in queries are handled there, though almost all issues can be resolved online or through your CA.`,
+      `Delhi has no separate state GST - it uses the Central GST framework directly. Unlike states like Maharashtra or Karnataka where SGST and CGST are separate administrations, Delhi's GST is administered entirely by CGST officers.`,
+      `The GSTN Seva Kendra for Delhi is at SCOPE Complex, Core 8, 7 Institutional Area, Lodhi Road, New Delhi - 110 003. Walk-in queries are handled there, though almost all issues can be resolved online or through your CA.`,
     ],
     additionalFaqs: [
       {
@@ -22,16 +22,16 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
       },
       {
         q: 'Which CGST commissionerate covers South Delhi?',
-        a: `South Delhi falls under the Delhi South CGST Commissionerate. Your GSTIN will have "07" as the state code (Delhi's GST state code). The commissionerate is relevant only for officer queries — your CA handles any interactions with them.`,
+        a: `South Delhi falls under the Delhi South CGST Commissionerate. Your GSTIN will have "07" as the state code (Delhi's GST state code). The commissionerate is relevant only for officer queries - your CA handles any interactions with them.`,
       },
     ],
   },
 
   'pvt-ltd-incorporation__bangalore': {
-    jurisdictionNote: `Bangalore falls under the jurisdiction of the Registrar of Companies, Karnataka (RoC Karnataka), located at Kendriya Sadana, 2nd Floor, Sultan Bazar, Bangalore — 560 020. All SPICe+ filings go to this RoC. Name availability is checked against the MCA21 national database — not just Karnataka companies — so conflicting names across India can block your reservation.`,
+    jurisdictionNote: `Bangalore falls under the jurisdiction of the Registrar of Companies, Karnataka (RoC Karnataka), located at Kendriya Sadana, 2nd Floor, Sultan Bazar, Bangalore - 560 020. All SPICe+ filings go to this RoC. Name availability is checked against the MCA21 national database - not just Karnataka companies - so conflicting names across India can block your reservation.`,
     citySpecificNotes: [
       `Karnataka has Professional Tax (PT). Once your company is registered, you need to register for PT within 30 days if you have any salaried employees or if the directors draw remuneration. PT for directors is ₹2,500/year. Ollvy handles PT registration separately (₹1,999).`,
-      `BBMP trade licence is required for commercial premises in Bruhat Bengaluru Mahanagara Palike jurisdiction. If your registered address is a co-working space, the co-working operator typically holds the BBMP trade licence — you don't need a separate one unless you have independent premises.`,
+      `BBMP trade licence is required for commercial premises in Bruhat Bengaluru Mahanagara Palike jurisdiction. If your registered address is a co-working space, the co-working operator typically holds the BBMP trade licence - you don't need a separate one unless you have independent premises.`,
     ],
     additionalFaqs: [
       {
@@ -40,16 +40,16 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
       },
       {
         q: 'Does Karnataka have any state-specific requirements for company registration?',
-        a: `The incorporation process is federal — SPICe+ is filed with the central MCA, not with Karnataka specifically. The state-specific obligations that come after incorporation are: Karnataka PT registration (if you have salaried employees), BBMP trade licence (for commercial premises), and Karnataka Shops and Commercial Establishments Act registration (for premises with employees). Ollvy handles all post-incorporation registrations.`,
+        a: `The incorporation process is federal - SPICe+ is filed with the central MCA, not with Karnataka specifically. The state-specific obligations that come after incorporation are: Karnataka PT registration (if you have salaried employees), BBMP trade licence (for commercial premises), and Karnataka Shops and Commercial Establishments Act registration (for premises with employees). Ollvy handles all post-incorporation registrations.`,
       },
     ],
   },
 
   'gst-registration__mumbai': {
-    jurisdictionNote: `Mumbai falls under CGST jurisdiction. The city is divided across multiple CGST commissionerates — Mumbai South, Mumbai Central, Mumbai East, and Thane (for businesses in Thane and extended Mumbai). Your commissionerate is determined by your business address pin code. All GST applications are electronic, so this doesn't affect the filing process — it only matters if there's an officer query.`,
+    jurisdictionNote: `Mumbai falls under CGST jurisdiction. The city is divided across multiple CGST commissionerates - Mumbai South, Mumbai Central, Mumbai East, and Thane (for businesses in Thane and extended Mumbai). Your commissionerate is determined by your business address pin code. All GST applications are electronic, so this doesn't affect the filing process - it only matters if there's an officer query.`,
     citySpecificNotes: [
-      `Maharashtra levies SGST separately from CGST. For a Mumbai business, your GSTIN will show "27" as the state code (Maharashtra). CGST and SGST are administered separately — CGST by central officers, SGST by Maharashtra state tax officers.`,
-      `BMC (Brihanmumbai Municipal Corporation) trade licence is required for commercial addresses in Mumbai. If you're using a co-working space, the operator holds the trade licence. For your own commercial premises, this needs to be obtained separately — Ollvy handles this as an add-on.`,
+      `Maharashtra levies SGST separately from CGST. For a Mumbai business, your GSTIN will show "27" as the state code (Maharashtra). CGST and SGST are administered separately - CGST by central officers, SGST by Maharashtra state tax officers.`,
+      `BMC (Brihanmumbai Municipal Corporation) trade licence is required for commercial addresses in Mumbai. If you're using a co-working space, the operator holds the trade licence. For your own commercial premises, this needs to be obtained separately - Ollvy handles this as an add-on.`,
     ],
     additionalFaqs: [
       {
@@ -74,7 +74,7 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
   },
 
   'pvt-ltd-incorporation__delhi': {
-    jurisdictionNote: `Delhi companies are registered with the Registrar of Companies, Delhi & Haryana, located at Yadav Bhavan, CGO Complex, Lodhi Road, New Delhi — 110 003. All SPICe+ filings are processed through this office. The RoC Delhi office handles both Delhi and Haryana registrations.`,
+    jurisdictionNote: `Delhi companies are registered with the Registrar of Companies, Delhi & Haryana, located at Yadav Bhavan, CGO Complex, Lodhi Road, New Delhi - 110 003. All SPICe+ filings are processed through this office. The RoC Delhi office handles both Delhi and Haryana registrations.`,
     citySpecificNotes: [
       `Delhi does not have Professional Tax (PT). Unlike Karnataka, Maharashtra, or Telangana, there's no PT registration required after incorporation. This reduces one compliance step for Delhi-based companies.`,
       `The Delhi Shops and Establishments Act applies to all commercial establishments. Registration is required within 30 days of commencing business. Ollvy handles this as a separate service.`,
@@ -86,13 +86,13 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
       },
       {
         q: 'How long does Pvt Ltd incorporation take in Delhi?',
-        a: `Standard timeline is 10–15 working days. This includes DSC issuance (1–2 days), name approval (1–2 days), SPICe+ filing and approval (5–7 days), and PAN/TAN issuance (2–3 days). If all documents are in order and there are no name objections, the process is usually completed within 12 days.`,
+        a: `Standard timeline is 10-15 working days. This includes DSC issuance (1-2 days), name approval (1-2 days), SPICe+ filing and approval (5-7 days), and PAN/TAN issuance (2-3 days). If all documents are in order and there are no name objections, the process is usually completed within 12 days.`,
       },
     ],
   },
 
   'pvt-ltd-incorporation__mumbai': {
-    jurisdictionNote: `Mumbai companies are registered with the Registrar of Companies, Maharashtra, located at Everest Building, 100 Marine Lines, Mumbai — 400 002. This is one of the busiest RoC offices in India. SPICe+ applications are processed centrally through MCA21, so the physical location doesn't affect processing time.`,
+    jurisdictionNote: `Mumbai companies are registered with the Registrar of Companies, Maharashtra, located at Everest Building, 100 Marine Lines, Mumbai - 400 002. This is one of the busiest RoC offices in India. SPICe+ applications are processed centrally through MCA21, so the physical location doesn't affect processing time.`,
     citySpecificNotes: [
       `Maharashtra has Professional Tax. Directors drawing remuneration and all salaried employees must be registered under PT within 30 days of incorporation. Ollvy handles PT registration as a separate service (₹1,999).`,
       `BMC Gumasta License (trade licence) is required for business premises in Mumbai. This is separate from company incorporation and needs to be obtained after the company is registered.`,
@@ -100,7 +100,7 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
     additionalFaqs: [
       {
         q: 'What is the typical timeline for company incorporation in Mumbai?',
-        a: `12–15 working days is standard for Mumbai incorporations. The process is federal (MCA21) so it doesn't depend on the Mumbai RoC specifically. DSC takes 1–2 days, name approval 1–2 days, SPICe+ approval 5–7 days, and PAN/TAN 2–3 days.`,
+        a: `12-15 working days is standard for Mumbai incorporations. The process is federal (MCA21) so it doesn't depend on the Mumbai RoC specifically. DSC takes 1-2 days, name approval 1-2 days, SPICe+ approval 5-7 days, and PAN/TAN 2-3 days.`,
       },
     ],
   },
@@ -134,21 +134,21 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
   },
 
   'trademark-registration__delhi': {
-    jurisdictionNote: `Trademark applications for Delhi-based businesses are filed with the Trade Marks Registry, IP Bhawan, Sector-5, Dwarka, New Delhi — 110 075. All applications are filed online through the IP India portal. The registry covers Delhi, Haryana, Chandigarh, and several other northern states.`,
+    jurisdictionNote: `Trademark applications for Delhi-based businesses are filed with the Trade Marks Registry, IP Bhawan, Sector-5, Dwarka, New Delhi - 110 075. All applications are filed online through the IP India portal. The registry covers Delhi, Haryana, Chandigarh, and several other northern states.`,
     citySpecificNotes: [
-      `Delhi has a high volume of trademark filings. Examination timelines are typically 1–2 months for the initial examination report. Registration takes 6–12 months if there are no objections.`,
+      `Delhi has a high volume of trademark filings. Examination timelines are typically 1-2 months for the initial examination report. Registration takes 6-12 months if there are no objections.`,
       `The IP India portal (ipindia.gov.in) handles all online filings. Physical hearings, if required, are conducted at the Dwarka office.`,
     ],
     additionalFaqs: [
       {
         q: 'How long does trademark registration take in Delhi?',
-        a: `Timeline is 6–12 months. Initial examination report comes in 1–2 months. If there are no objections, the trademark is published in the journal for 4 months. After the publication period, registration certificate is issued. If there are objections, a hearing may be required, which adds 2–4 months.`,
+        a: `Timeline is 6-12 months. Initial examination report comes in 1-2 months. If there are no objections, the trademark is published in the journal for 4 months. After the publication period, registration certificate is issued. If there are objections, a hearing may be required, which adds 2-4 months.`,
       },
     ],
   },
 
   'director-kyc__delhi': {
-    jurisdictionNote: `Director KYC (DIR-3 KYC) is a federal filing through the MCA21 portal. There is no Delhi-specific process — all directors of companies registered anywhere in India file through the same portal. The filing must be done annually by September 30.`,
+    jurisdictionNote: `Director KYC (DIR-3 KYC) is a federal filing through the MCA21 portal. There is no Delhi-specific process - all directors of companies registered anywhere in India file through the same portal. The filing must be done annually by September 30.`,
     citySpecificNotes: [
       `Director KYC uses OTP verification linked to your mobile number and email registered with MCA. Ensure these are up to date before filing.`,
       `If you're a director in multiple companies, you only need to file DIR-3 KYC once per financial year. The filing is linked to your DIN, not to individual companies.`,

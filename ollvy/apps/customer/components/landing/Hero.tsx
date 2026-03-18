@@ -155,7 +155,7 @@ export function Hero() {
             {/* Main Headline */}
             <h1 className="font-mono text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-normal text-foreground leading-[1.1] tracking-tight uppercase">
               Your business<br />
-              compliance, <span className="text-muted-foreground">handled.</span>
+              <span className="whitespace-nowrap">compliance, <span className="text-muted-foreground">handled.</span></span>
             </h1>
 
             {/* Subheadline */}

@@ -155,7 +155,7 @@ export function PenaltyTool({ config, ctaService }: {
             <div className="mt-4 pt-4 border-t border-[hsl(var(--ollvy-amber))]/20">
               <Button size="sm" className="w-full" asChild>
                 <a href={`/services/${ctaService.slug}?utm_source=learn_tool&utm_medium=penalty_calculator`}>
-                  Avoid future penalties — ₹{ctaService.ollvyFee.toLocaleString('en-IN')}/mo
+                  Avoid future penalties - ₹{ctaService.ollvyFee.toLocaleString('en-IN')}/mo
                 </a>
               </Button>
             </div>

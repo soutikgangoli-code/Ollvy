@@ -60,6 +60,19 @@ const SECTIONS = [
 
 type SectionId = typeof SECTIONS[number]['id']
 
+// Helper to wrap numbers and currency in font-mono spans
+function formatWithMonoNumbers(text: string): React.ReactNode {
+  // Match numbers (with optional commas, decimals) and currency symbols
+  const parts = text.split(/(₹[\d,]+(?:\.\d+)?|\d+(?:,\d+)*(?:\.\d+)?%?)/g)
+  return parts.map((part, i) => {
+    // Check if this part is a number or currency
+    if (/^₹?[\d,]+(?:\.\d+)?%?$/.test(part)) {
+      return <span key={i} className="font-mono">{part}</span>
+    }
+    return part
+  })
+}
+
 // Mini mock visual components for What's Included section
 function MockVisual({
   type,
@@ -138,12 +151,12 @@ function MockVisual({
           {Object.entries(data)
             .filter(([k]) => k.startsWith('row'))
             .map(([k, v]) => {
-              const [name, ...rest] = v.split(' — ')
+              const [name, ...rest] = v.split(' - ')
               return (
                 <div key={k} className="flex justify-between items-center">
                   <span className="text-foreground">{name}</span>
                   <span className="text-[hsl(var(--ollvy-amber))] text-[10px]">
-                    {rest.join(' — ')}
+                    {rest.join(' - ')}
                   </span>
                 </div>
               )
@@ -311,7 +324,7 @@ export function UnifiedServicePage({
               <span className="font-semibold text-foreground">
                 {service.shortName}
               </span>
-              <span className="hidden sm:inline text-sm text-muted-foreground">
+              <span className="hidden sm:inline text-sm text-muted-foreground font-mono">
                 ₹{totalFee.toLocaleString('en-IN')}
               </span>
             </div>
@@ -357,38 +370,11 @@ export function UnifiedServicePage({
           {/* === HERO SECTION === */}
           <section
             ref={heroRef}
-            className="relative min-h-[80vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-14"
+            className="relative min-h-[70vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-12"
           >
-            {/* Background effects */}
-            <div className="absolute inset-0 bg-gradient-to-b from-background via-background to-card" />
-            <div
-              className={cn(
-                'absolute inset-0',
-                service.penaltyColor === 'red'
-                  ? 'bg-[radial-gradient(ellipse_at_50%_20%,hsl(0_72%_45%_/_0.07),transparent_60%)]'
-                  : 'bg-[radial-gradient(ellipse_at_50%_20%,hsl(142_71%_35%_/_0.07),transparent_60%)]'
-              )}
-            />
-
-            <div className="relative z-10 text-center max-w-[720px] px-6">
-              {/* Breadcrumb */}
-              <p className="text-xs text-muted-foreground mb-6">
-                <Link href="/" className="hover:text-foreground transition-colors">
-                  Ollvy
-                </Link>
-                <span className="mx-1.5">→</span>
-                <Link
-                  href={`/services?category=${encodeURIComponent(service.category)}`}
-                  className="hover:text-foreground transition-colors capitalize"
-                >
-                  {service.category}
-                </Link>
-                <span className="mx-1.5">→</span>
-                <span className="text-foreground">{service.shortName}</span>
-              </p>
-
-              {/* Service name */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground font-display leading-tight">
+            <div className="relative z-10 text-center max-w-[800px] px-6">
+              {/* Service name - large and bold */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1] font-mono">
                 {service.name}
                 {geoContext && (
                   <span className="text-muted-foreground"> in {geoContext.city}</span>
@@ -396,113 +382,86 @@ export function UnifiedServicePage({
               </h1>
 
               {/* Tagline */}
-              <p className="text-lg md:text-xl text-muted-foreground mt-4 max-w-[560px] mx-auto">
+              <p className="text-base text-muted-foreground mt-4 max-w-[480px] mx-auto">
                 {service.tagline}
               </p>
 
-              {/* Guaranteed date + rating */}
-              <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
+              {/* CTA row */}
+              <div className="mt-6 flex flex-col items-center gap-2">
+                <Button size="lg" className="h-12 px-10" asChild>
+                  <a
+                    href={
+                      service.priceVariesByState
+                        ? `/quote/request/${service.id}?utm_source=service_page&utm_medium=hero`
+                        : `/checkout/${service.id}?utm_source=service_page&utm_medium=hero`
+                    }
+                  >
+                    {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
+                  </a>
+                </Button>
+
+                {/* Guarantee badge */}
                 {guaranteedDate && (
-                  <Badge className="bg-[hsl(var(--ollvy-green))]/10 border border-[hsl(var(--ollvy-green))]/20 text-[hsl(var(--ollvy-green-fg))] px-4 py-2">
-                    <CheckCircle size={14} className="mr-1.5" />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    <CheckCircle size={12} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
                     {service.isRetainer
                       ? `Current cycle due: ${guaranteedDate}`
-                      : `Done by ${guaranteedDate}, guaranteed`}
-                  </Badge>
+                      : `Guaranteed by ${guaranteedDate}`}
+                  </p>
                 )}
+              </div>
+
+              {/* Metadata pills */}
+              <div className="flex flex-wrap justify-center gap-2 mt-6">
+                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono">
+                  <span className="text-xs text-muted-foreground">For </span>
+                  <span className="text-xs font-medium text-foreground">{service.mandatoryFor}</span>
+                </div>
+                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono">
+                  <span className="text-xs text-muted-foreground">Type </span>
+                  <span className="text-xs font-medium text-foreground">{service.serviceType}</span>
+                </div>
+                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono">
+                  <span className="text-xs text-muted-foreground">Turnaround </span>
+                  <span className="text-xs font-medium text-foreground">
+                    {service.isRetainer ? 'Ongoing' : `${service.slaDays} days`}
+                  </span>
+                </div>
                 {showRating && service.avgRating && (
-                  <div className="flex items-center gap-1.5">
-                    <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-semibold text-foreground">
+                  <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 flex items-center gap-1 font-mono">
+                    <Star size={10} className="fill-yellow-400 text-yellow-400" />
+                    <span className="text-xs font-medium text-foreground">
                       {service.avgRating.toFixed(1)}
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      ({service.totalRatings} reviews)
+                    <span className="text-xs text-muted-foreground">
+                      ({service.totalRatings})
                     </span>
                   </div>
                 )}
               </div>
 
-              {/* Metadata row */}
-              <div className="flex flex-wrap justify-center gap-8 mt-8">
-                <div className="text-center">
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                    For
-                  </p>
-                  <p className="font-semibold text-foreground text-sm mt-1">
-                    {service.mandatoryFor}
-                  </p>
-                </div>
-                <div className="w-px bg-border" />
-                <div className="text-center">
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                    Type
-                  </p>
-                  <p className="font-semibold text-foreground text-sm mt-1">
-                    {service.serviceType}
-                  </p>
-                </div>
-                <div className="w-px bg-border" />
-                <div className="text-center">
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                    Turnaround
-                  </p>
-                  <p className="font-semibold text-foreground text-sm mt-1">
-                    {service.isRetainer
-                      ? 'Ongoing'
-                      : `${service.slaDays} working days`}
-                  </p>
-                </div>
-                {service.penaltyForMissing && (
-                  <>
-                    <div className="w-px bg-border" />
-                    <div className="text-center">
-                      <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                        Penalty
-                      </p>
-                      <p className="font-semibold text-[hsl(var(--ollvy-amber))] text-sm mt-1">
-                        {service.penaltyForMissing}
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* CTA button */}
-              <Button size="lg" className="mt-8 min-w-[280px]" asChild>
-                <a
-                  href={
-                    service.priceVariesByState
-                      ? `/quote/request/${service.id}?utm_source=service_page&utm_medium=hero`
-                      : `/checkout/${service.id}?utm_source=service_page&utm_medium=hero`
-                  }
-                >
-                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'} — ₹{totalFee.toLocaleString('en-IN')}
-                </a>
-              </Button>
-
-              {/* Trust signals row */}
-              <div className="flex flex-wrap items-center justify-center gap-6 mt-10 pt-8 border-t border-border/50">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Shield size={16} className="text-[hsl(var(--ollvy-green))]" />
-                  <span>Verified CAs only</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock size={16} className="text-[hsl(var(--ollvy-green))]" />
-                  <span>SLA guaranteed</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Users size={16} className="text-[hsl(var(--ollvy-green))]" />
-                  <span>10,000+ filings</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Award size={16} className="text-[hsl(var(--ollvy-green))]" />
-                  <span>Fixed pricing</span>
-                </div>
+              {/* Trust signals - subtle */}
+              <div className="flex flex-wrap items-center justify-center gap-5 mt-8 pt-6 border-t border-border/30">
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
+                  <Shield size={12} />
+                  Verified CAs
+                </span>
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
+                  <Clock size={12} />
+                  SLA guaranteed
+                </span>
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
+                  <Users size={12} />
+                  10,000+ filings
+                </span>
+                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
+                  <Award size={12} />
+                  Fixed pricing
+                </span>
               </div>
             </div>
 
-            {/* Section navigation tabs — flush to bottom of hero */}
+            {/* Section navigation tabs - flush to bottom of hero */}
             <nav
               className="absolute bottom-0 left-0 right-0 border-t border-border bg-background/80 backdrop-blur-sm"
               role="tablist"
@@ -546,9 +505,12 @@ export function UnifiedServicePage({
                 <section
                   id="process"
                   ref={(el) => { sectionRefs.current.process = el }}
-                  className="py-16 border-b border-border scroll-mt-28"
+                  className={cn(
+                    "pb-16 border-b border-border scroll-mt-28",
+                    service.showCompletionStats ? "pt-16" : "pt-0"
+                  )}
                 >
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                     THE PROCESS
                   </p>
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8">
@@ -563,11 +525,11 @@ export function UnifiedServicePage({
                   ref={(el) => { sectionRefs.current.included = el }}
                   className="py-16 border-b border-border scroll-mt-28"
                 >
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                     WHAT YOU GET
                   </p>
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
-                    Everything included for ₹{service.ollvyFee.toLocaleString('en-IN')}
+                    Everything included for <span className="font-mono">₹{service.ollvyFee.toLocaleString('en-IN')}</span>
                   </h2>
                   <p className="text-sm text-muted-foreground mb-10">
                     What your CA handles on your behalf. Nothing hidden.
@@ -584,7 +546,7 @@ export function UnifiedServicePage({
                             : 'grid-cols-1'
                         )}
                       >
-                        {/* Visual — alternating left/right */}
+                        {/* Visual - alternating left/right */}
                         {item.mockVisualType && (
                           <div
                             className={cn(
@@ -609,29 +571,29 @@ export function UnifiedServicePage({
                             </div>
                             <div>
                               <h3 className="text-base font-semibold text-foreground">
-                                {item.title}
+                                {formatWithMonoNumbers(item.title)}
                               </h3>
                               <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                                {item.body}
+                                {formatWithMonoNumbers(item.body)}
                               </p>
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
                                 <div className="mt-5 grid grid-cols-2 gap-3">
                                   <div className="bg-muted/40 rounded-lg p-3 border border-border">
-                                    <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1.5">
+                                    <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1.5 font-mono">
                                       Without Ollvy
                                     </p>
                                     <p className="text-sm font-medium text-foreground">
-                                      {item.comparisonWithout}
+                                      {item.comparisonWithout && formatWithMonoNumbers(item.comparisonWithout)}
                                     </p>
                                   </div>
                                   <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-3 border border-[hsl(var(--ollvy-green))]/20">
-                                    <p className="text-xs text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1.5">
+                                    <p className="text-xs text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1.5 font-mono">
                                       With Ollvy
                                     </p>
                                     <p className="text-sm font-medium text-foreground">
-                                      {item.comparisonWithOllvy}
+                                      {item.comparisonWithOllvy && formatWithMonoNumbers(item.comparisonWithOllvy)}
                                     </p>
                                   </div>
                                 </div>
@@ -662,13 +624,13 @@ export function UnifiedServicePage({
                   </h2>
                   <p className="text-sm text-muted-foreground mb-8 max-w-[520px] leading-relaxed">
                     Most CAs submit what you give them and hope for the best. Ollvy
-                    reviews your documents before filing — not after a notice arrives.
+                    reviews your documents before filing - not after a notice arrives.
                   </p>
 
                   {/* Others vs Ollvy comparison */}
                   <div className="grid grid-cols-2 gap-4 mb-10 max-w-[560px]">
                     <Card className="border border-border bg-muted/30 p-5">
-                      <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                         Others
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
@@ -677,7 +639,7 @@ export function UnifiedServicePage({
                       </p>
                     </Card>
                     <Card className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-5">
-                      <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-3">
+                      <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-3 font-mono">
                         Ollvy
                       </p>
                       <p className="text-sm text-foreground leading-relaxed">
@@ -703,7 +665,7 @@ export function UnifiedServicePage({
                           step: 'we flag',
                           label: 'the risks',
                           description:
-                            'Issues identified — expiry dates, mismatches, format errors',
+                            'Issues identified - expiry dates, mismatches, format errors',
                         },
                         {
                           step: 'we fix',
@@ -713,7 +675,7 @@ export function UnifiedServicePage({
                         {
                           step: 'we file',
                           label: 'correctly',
-                          description: 'Clean submission — lower chance of officer query',
+                          description: 'Clean submission - lower chance of officer query',
                         },
                       ].map((item, i) => (
                         <div key={i} className="text-center">
@@ -760,7 +722,7 @@ export function UnifiedServicePage({
                 {/* Section: Unlocks (what this service unlocks) */}
                 {service.unlocks && service.unlocks.length > 0 && (
                   <section className="py-16 border-b border-border">
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                       NEXT STEPS
                     </p>
                     <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
@@ -823,7 +785,7 @@ export function UnifiedServicePage({
                   ref={(el) => { sectionRefs.current.reviews = el }}
                   className="py-16 border-b border-border scroll-mt-28"
                 >
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                     CUSTOMER REVIEWS
                   </p>
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
@@ -889,7 +851,7 @@ export function UnifiedServicePage({
                             </p>
                           )}
                           <p className="text-xs text-muted-foreground mt-3">
-                            — Verified customer
+                            - Verified customer
                           </p>
                         </Card>
                       ))}
@@ -919,7 +881,7 @@ export function UnifiedServicePage({
                           timeframe."
                         </p>
                         <p className="text-xs text-muted-foreground mt-3">
-                          — Verified customer
+                          - Verified customer
                         </p>
                       </Card>
 
@@ -945,7 +907,7 @@ export function UnifiedServicePage({
                           dashboard made tracking easy."
                         </p>
                         <p className="text-xs text-muted-foreground mt-3">
-                          — Verified customer
+                          - Verified customer
                         </p>
                       </Card>
                     </div>
@@ -958,7 +920,7 @@ export function UnifiedServicePage({
                   ref={(el) => { sectionRefs.current.documents = el }}
                   className="py-16 border-b border-border scroll-mt-28"
                 >
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                     DOCUMENTS REQUIRED
                   </p>
                   <DocumentChecklist
@@ -974,7 +936,7 @@ export function UnifiedServicePage({
                   ref={(el) => { sectionRefs.current.faqs = el }}
                   className="py-16 border-b border-border scroll-mt-28"
                 >
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                     COMMON QUESTIONS
                   </p>
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8">
@@ -1008,7 +970,7 @@ export function UnifiedServicePage({
                 <HowWeReviewed service={service} />
               </div>
 
-              {/* Right: Sticky booking panel — aside stretches to match left column height for proper sticky behavior */}
+              {/* Right: Sticky booking panel - aside stretches to match left column height for proper sticky behavior */}
               <aside className="hidden lg:block relative">
                 <div className="sticky top-28">
                   <BookingPanel
@@ -1038,7 +1000,7 @@ export function UnifiedServicePage({
                       : `/checkout/${service.id}?utm_source=service_page&utm_medium=final_cta`
                   }
                 >
-                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'} — ₹{totalFee.toLocaleString('en-IN')}
+                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
                 </a>
               </Button>
             </div>
@@ -1046,7 +1008,7 @@ export function UnifiedServicePage({
         </main>
       </div>
 
-      {/* Mobile booking bar — fixed bottom */}
+      {/* Mobile booking bar - fixed bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 flex items-center justify-between lg:hidden">
         <div>
           <p className="text-xs text-muted-foreground">Total</p>

@@ -11,7 +11,7 @@ const obligations = [
   {
     name: 'GSTR-3B',
     status: 'due_soon',
-    label: 'Due in 7 days — Apr 20',
+    label: 'Due in 7 days - Apr 20',
     badgeText: 'Due Soon',
     leftBorderColor: 'border-l-ollvy-amber',
   },
@@ -71,7 +71,7 @@ export function ComplianceCalendarPreview() {
               </p>
               <p>
                 Ollvy Pro tracks all of them for your specific business. You get a reminder 30 days
-                out, 7 days out, and the day before. Not a generic calendar — your obligations.
+                out, 7 days out, and the day before. Not a generic calendar - your obligations.
               </p>
             </div>
 

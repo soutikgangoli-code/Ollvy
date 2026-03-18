@@ -38,7 +38,7 @@ export const trademarkRegistration: ServiceConfig = {
     {
       step: 2,
       title: 'Trademark search report delivered',
-      timeline: 'Day 1–2',
+      timeline: 'Day 1-2',
       body: "Your attorney searches the Trademark Registry for identical and similar marks in your classes. You receive a search report showing potential conflicts. If your mark is clear, we proceed. If not, we suggest modifications.",
       visual: 'form',
       milestone: 'Search report delivered',
@@ -46,7 +46,7 @@ export const trademarkRegistration: ServiceConfig = {
     {
       step: 3,
       title: 'Application filed with Trademark Registry',
-      timeline: 'Day 3–7',
+      timeline: 'Day 3-7',
       body: "Your attorney drafts the application, selects the appropriate class(es), prepares the trademark specification, and files with the Trademark Registry. You receive the application number and filing receipt.",
       visual: 'form',
       milestone: 'Application filed, receipt received',
@@ -54,7 +54,7 @@ export const trademarkRegistration: ServiceConfig = {
     {
       step: 4,
       title: 'Examination and publication (handled)',
-      timeline: '6–12 months (govt processing)',
+      timeline: '6-12 months (govt processing)',
       body: "The Trademark Registry examines your application. If they raise objections, your attorney responds. Once cleared, the mark is published in the Trademark Journal for 4 months. If no opposition, registration is granted.",
       visual: 'calendar',
       milestone: 'Under examination',
@@ -62,7 +62,7 @@ export const trademarkRegistration: ServiceConfig = {
     {
       step: 5,
       title: 'Registration certificate issued',
-      timeline: '12–18 months total',
+      timeline: '12-18 months total',
       body: "The Trademark Registry issues the registration certificate. Your mark is protected for 10 years, renewable indefinitely. Certificate uploaded to your Ollvy account.",
       visual: 'stamp',
       isCompletion: true,
@@ -78,9 +78,9 @@ export const trademarkRegistration: ServiceConfig = {
       comparisonWithOllvy: 'Search first, modify if needed, then file',
       mockVisualType: 'status',
       mockVisualData: {
-        row1: 'TECHBRIDGE — Class 42',
+        row1: 'TECHBRIDGE - Class 42',
         row2: 'No identical marks found ✓',
-        row3: '2 similar marks reviewed — no conflict',
+        row3: '2 similar marks reviewed - no conflict',
       },
     },
     {
@@ -89,16 +89,16 @@ export const trademarkRegistration: ServiceConfig = {
     },
     {
       title: 'Examination objection response included',
-      body: "If the Trademark Examiner raises objections (common for descriptive marks), your attorney responds. This is included — not a separate charge. Most objections are resolved in one response.",
+      body: "If the Trademark Examiner raises objections (common for descriptive marks), your attorney responds. This is included - not a separate charge. Most objections are resolved in one response.",
       comparisonWithout: 'Objection raised, you pay extra to respond',
       comparisonWithOllvy: 'Objection response included in service',
     },
     {
       title: 'Renewal reminder 10 years out',
-      body: "Your trademark expires in 10 years. We add the renewal date to your compliance calendar. You'll get reminders 6 months before expiry. Most people forget — you won't.",
+      body: "Your trademark expires in 10 years. We add the renewal date to your compliance calendar. You'll get reminders 6 months before expiry. Most people forget - you won't.",
       mockVisualType: 'calendar',
       mockVisualData: {
-        row1: 'Trademark Renewal — Mar 2035',
+        row1: 'Trademark Renewal - Mar 2035',
         row2: 'Reminder: Sep 2034',
         row3: 'Status: Scheduled',
       },
@@ -113,13 +113,13 @@ export const trademarkRegistration: ServiceConfig = {
     },
     {
       icon: 'clock',
-      title: 'Govt processing takes 12–18 months',
-      body: "Trademark registration in India takes 12–18 months end-to-end. The filing happens in 7 days, but examination and publication are government-side. We track status and update you, but we can't speed up the Registry.",
+      title: 'Govt processing takes 12-18 months',
+      body: "Trademark registration in India takes 12-18 months end-to-end. The filing happens in 7 days, but examination and publication are government-side. We track status and update you, but we can't speed up the Registry.",
     },
     {
       icon: 'alert',
       title: 'Opposition during publication',
-      body: "After examination, your mark is published for 4 months. Anyone can oppose. If opposed, it becomes a legal proceeding. Opposition response is a separate service (it's rare — happens in <5% of cases).",
+      body: "After examination, your mark is published for 4 months. Anyone can oppose. If opposed, it becomes a legal proceeding. Opposition response is a separate service (it's rare - happens in <5% of cases).",
     },
   ],
 
@@ -166,7 +166,7 @@ export const trademarkRegistration: ServiceConfig = {
     {
       category: 'Process',
       q: 'Why does registration take so long?',
-      a: "The 7-day timeline is for filing the application. Examination by the Registry takes 6–12 months. Then 4 months of publication. Then certificate issuance. Total: 12–18 months. This is government processing time.",
+      a: "The 7-day timeline is for filing the application. Examination by the Registry takes 6-12 months. Then 4 months of publication. Then certificate issuance. Total: 12-18 months. This is government processing time.",
     },
     {
       category: 'Process',
@@ -208,7 +208,7 @@ export const trademarkRegistration: ServiceConfig = {
     },
     {
       name: 'Copyright Registration',
-      explanation: 'Protect creative works — code, designs, content.',
+      explanation: 'Protect creative works - code, designs, content.',
       price: '₹5,999',
       type: 'beneficial',
       slug: 'copyright-registration',

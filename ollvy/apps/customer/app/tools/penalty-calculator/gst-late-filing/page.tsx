@@ -68,7 +68,7 @@ function calculateGSTPenalty(
 
   if (returnType === 'GSTR-9') {
     dailyRate = 200 // ₹100 CGST + ₹100 SGST
-    maxCap = Math.floor(turnover * 0.0025) // 0.25% of turnover — NOT 0.5%
+    maxCap = Math.floor(turnover * 0.0025) // 0.25% of turnover - NOT 0.5%
   } else {
     // GSTR-1 or GSTR-3B
     dailyRate = isNilReturn ? 20 : 50 // nil: ₹10+₹10, regular: ₹25+₹25
@@ -129,7 +129,7 @@ function formatTurnover(value: number): string {
 const faqs = [
   {
     question: 'What is the GST late filing penalty for GSTR-3B?',
-    answer: 'For a regular (non-nil) GSTR-3B, the late fee is ₹50 per day — ₹25 CGST and ₹25 SGST. The maximum is capped at ₹5,000 total (₹2,500 each). For a nil return, the fee is ₹20 per day (₹10 CGST + ₹10 SGST), also capped at ₹5,000.',
+    answer: 'For a regular (non-nil) GSTR-3B, the late fee is ₹50 per day - ₹25 CGST and ₹25 SGST. The maximum is capped at ₹5,000 total (₹2,500 each). For a nil return, the fee is ₹20 per day (₹10 CGST + ₹10 SGST), also capped at ₹5,000.',
   },
   {
     question: 'What is the late fee for GSTR-1?',
@@ -145,7 +145,7 @@ const faqs = [
   },
   {
     question: 'Can GST late fees be waived?',
-    answer: 'The government has periodically announced amnesty schemes (such as the 2023 scheme). Routine waiver is not available — the late fee must be paid before the return can be filed.',
+    answer: 'The government has periodically announced amnesty schemes (such as the 2023 scheme). Routine waiver is not available - the late fee must be paid before the return can be filed.',
   },
   {
     question: 'What is the QRMP scheme?',
@@ -153,7 +153,7 @@ const faqs = [
   },
   {
     question: 'What happens if I never file a GST return?',
-    answer: 'Continued non-filing attracts the maximum late fee (₹5,000 per return). GST registration can also be cancelled under Section 29 for sustained non-filing — typically 6 consecutive months for monthly filers.',
+    answer: 'Continued non-filing attracts the maximum late fee (₹5,000 per return). GST registration can also be cancelled under Section 29 for sustained non-filing - typically 6 consecutive months for monthly filers.',
   },
   {
     question: 'How is GST interest on unpaid tax calculated?',
@@ -221,7 +221,7 @@ function GSTLatePenaltyCalculator() {
           { label: 'SGST', amount: result.lateFeeSGST },
         ],
         statuteShort: 'Sec 47',
-        statuteFull: 'Section 47 of Central Goods and Services Tax Act, 2017 — Late fee for failure to furnish return',
+        statuteFull: 'Section 47 of Central Goods and Services Tax Act, 2017 - Late fee for failure to furnish return',
       },
     ]
 
@@ -231,7 +231,7 @@ function GSTLatePenaltyCalculator() {
         amount: result.interest,
         subItems: [],
         statuteShort: 'Sec 50',
-        statuteFull: 'Section 50 of CGST Act, 2017 — Interest on delayed payment of tax at 18% per annum',
+        statuteFull: 'Section 50 of CGST Act, 2017 - Interest on delayed payment of tax at 18% per annum',
       })
     }
 
@@ -297,7 +297,7 @@ function GSTLatePenaltyCalculator() {
 
       <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6 space-y-8">
+        <div className="rounded-xl border border-border bg-card p-6 space-y-8">
           <div className="space-y-6">
             {/* Return Type */}
             <div className="space-y-2">
@@ -440,7 +440,7 @@ function GSTLatePenaltyCalculator() {
             {result.capHit && returnType !== 'GSTR-9' && (
               <InfoBanner
                 title="Maximum cap reached"
-                body="Your late fee has reached the maximum cap of ₹5,000. Filing today or in 30 days results in the same late fee — but interest on unpaid tax under Section 50 continues to accrue daily."
+                body="Your late fee has reached the maximum cap of ₹5,000. Filing today or in 30 days results in the same late fee - but interest on unpaid tax under Section 50 continues to accrue daily."
               />
             )}
 
@@ -483,7 +483,7 @@ function GSTLatePenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            GST late fee for GSTR-1 and GSTR-3B — how is it calculated?
+            GST late fee for GSTR-1 and GSTR-3B - how is it calculated?
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             The calculation of GST late fees for GSTR-1 and GSTR-3B is straightforward. For every
@@ -503,7 +503,7 @@ function GSTLatePenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            GSTR-9 annual return penalty — 2024-25 rates
+            GSTR-9 annual return penalty - 2024-25 rates
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             The GSTR-9 annual return carries a higher per-day late fee but also has a turnover-based

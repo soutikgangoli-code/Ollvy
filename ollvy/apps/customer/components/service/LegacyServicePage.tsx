@@ -354,7 +354,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
 
             {/* CTA button */}
             <Button size="lg" className="mt-8 min-w-[280px]" onClick={handleGetStarted}>
-              {ctaLabel} — {formatPaisa(totalPaisa)}
+              {ctaLabel} - {formatPaisa(totalPaisa)}
             </Button>
           </div>
         </section>
@@ -528,7 +528,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
                 </h2>
                 <p className="text-sm text-muted-foreground mb-8 max-w-[520px] leading-relaxed">
                   Most CAs submit what you give them and hope for the best. Ollvy
-                  reviews your documents before filing — not after a notice arrives.
+                  reviews your documents before filing - not after a notice arrives.
                 </p>
 
                 {/* 4-step flow */}
@@ -547,7 +547,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
                         step: 'we flag',
                         label: 'the risks',
                         description:
-                          'Issues identified — expiry dates, mismatches, format errors',
+                          'Issues identified - expiry dates, mismatches, format errors',
                       },
                       {
                         step: 'we fix',
@@ -557,7 +557,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
                       {
                         step: 'we file',
                         label: 'correctly',
-                        description: 'Clean submission — lower chance of officer query',
+                        description: 'Clean submission - lower chance of officer query',
                       },
                     ].map((item, i) => (
                       <div key={i} className="text-center">
@@ -586,7 +586,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
             <div className="hidden lg:block">
               <div className="sticky top-24">
                 <Card className="border border-border bg-card p-6 w-full">
-                  {/* Total amount — prominent */}
+                  {/* Total amount - prominent */}
                   <div className="mb-1">
                     <p className="text-xs uppercase tracking-widest text-muted-foreground">
                       Total to pay now
@@ -716,7 +716,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
               Fixed price. Verified CA. Done within {service.sla_working_days} working days.
             </p>
             <Button size="lg" className="mt-8" onClick={handleGetStarted}>
-              {ctaLabel} — {formatPaisa(totalPaisa)}
+              {ctaLabel} - {formatPaisa(totalPaisa)}
             </Button>
           </div>
         </section>
@@ -724,7 +724,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
 
       <Footer />
 
-      {/* Mobile booking bar — fixed bottom */}
+      {/* Mobile booking bar - fixed bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 flex items-center justify-between lg:hidden">
         <div>
           <p className="text-xs text-muted-foreground">Total</p>

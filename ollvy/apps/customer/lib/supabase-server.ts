@@ -2,8 +2,8 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
-// Service role client for ISR/SSG fetching — bypasses RLS
-// Per §23: "Server-side client for ISR/SSG fetching — has unrestricted reads"
+// Service role client for ISR/SSG fetching - bypasses RLS
+// Per §23: "Server-side client for ISR/SSG fetching - has unrestricted reads"
 // Returns null if service role key is not configured (build-time fallback to static data)
 function createServiceRoleClient(): SupabaseClient | null {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL

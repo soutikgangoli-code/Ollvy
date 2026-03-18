@@ -149,7 +149,7 @@ function ServiceCard({
             ) : guaranteedDate ? (
               <span className="inline-flex items-center gap-1 text-xs text-ollvy-green">
                 <Check className="h-3 w-3" />
-                Done by {guaranteedDate}
+                Guaranteed by {guaranteedDate}
               </span>
             ) : (
               <span className="text-xs text-muted-foreground">{slaDays} working days</span>

@@ -18,7 +18,7 @@ export const mcaAnnualFiling: ServiceConfig = {
   serviceType: 'Annual',
   mandatoryFor: 'All Pvt Ltd and OPC companies',
   legalBasis: 'Companies Act 2013, Section 92 & 137',
-  penaltyForMissing: '₹100/day per form — no ceiling',
+  penaltyForMissing: '₹100/day per form - no ceiling',
   penaltyColor: 'red',
 
   seoTitle: 'MCA Annual Filing Online | AOC-4 & MGT-7 | ₹7,599 | Ollvy',
@@ -38,7 +38,7 @@ export const mcaAnnualFiling: ServiceConfig = {
     {
       step: 2,
       title: 'Upload financial statements and documents',
-      timeline: 'Day 0–2',
+      timeline: 'Day 0-2',
       body: 'Audited balance sheet, P&L statement, notes to accounts, director report, auditor report. For AOC-4. Shareholder list, director changes, share transfer details for MGT-7.',
       visual: 'upload',
       milestone: 'Documents reviewed by CS',
@@ -46,16 +46,16 @@ export const mcaAnnualFiling: ServiceConfig = {
     {
       step: 3,
       title: 'Forms drafted and reviewed',
-      timeline: 'Day 2–4',
+      timeline: 'Day 2-4',
       body: 'Your CS drafts AOC-4 (financial statements) and MGT-7 (annual return) based on your uploaded documents. Both forms are reviewed for accuracy before filing. You approve the drafts in the app.',
       visual: 'form',
       milestone: 'Draft forms sent for approval',
     },
     {
       step: 4,
-      title: 'Filed on MCA21 — SRN generated',
-      timeline: 'Day 5–7',
-      body: 'Your CS files both forms on MCA21. Service Request Number (SRN) generated for each form. SRNs shared immediately. Forms are processed by ROC within 24–48 hours.',
+      title: 'Filed on MCA21 - SRN generated',
+      timeline: 'Day 5-7',
+      body: 'Your CS files both forms on MCA21. Service Request Number (SRN) generated for each form. SRNs shared immediately. Forms are processed by ROC within 24-48 hours.',
       visual: 'stamp',
       milestone: 'AOC-4 and MGT-7 filed',
       isCompletion: true,
@@ -64,9 +64,9 @@ export const mcaAnnualFiling: ServiceConfig = {
 
   whatsIncluded: [
     {
-      title: 'Both forms filed — AOC-4 and MGT-7',
+      title: 'Both forms filed - AOC-4 and MGT-7',
       body: 'AOC-4 contains your audited financial statements. MGT-7 is the annual return with shareholder and director details. Both are mandatory. Both are included in ₹6,999.',
-      comparisonWithout: 'Book AOC-4 and MGT-7 separately — higher total cost',
+      comparisonWithout: 'Book AOC-4 and MGT-7 separately - higher total cost',
       comparisonWithOllvy: 'Both forms, one price, one CS',
     },
     {
@@ -168,7 +168,7 @@ export const mcaAnnualFiling: ServiceConfig = {
     {
       category: 'After Completion',
       q: 'What happens after filing?',
-      a: 'ROC processes the forms within 24–48 hours. Once approved, your company\'s public record on MCA21 is updated. You can download the filed forms anytime. Annual compliance cycle resets.',
+      a: 'ROC processes the forms within 24-48 hours. Once approved, your company\'s public record on MCA21 is updated. You can download the filed forms anytime. Annual compliance cycle resets.',
     },
   ],
 
@@ -176,7 +176,7 @@ export const mcaAnnualFiling: ServiceConfig = {
     {
       name: 'MCA21 Portal',
       url: 'https://www.mca.gov.in',
-      description: 'Ministry of Corporate Affairs — company filings portal',
+      description: 'Ministry of Corporate Affairs - company filings portal',
     },
     {
       name: 'Companies Act 2013, Section 92 & 137',

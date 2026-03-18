@@ -10,10 +10,10 @@ import { Footer } from '@/components/landing/Footer'
 import { getActiveServices } from '@/lib/data/services'
 
 /**
- * Homepage — Discovery layer
+ * Homepage - Discovery layer
  *
- * Per spec §23 — Backend Bridge:
- * ISR — revalidate: 3600 (rebuilds hourly)
+ * Per spec §23 - Backend Bridge:
+ * ISR - revalidate: 3600 (rebuilds hourly)
  *
  * Per spec architecture decision (§18):
  * - Homepage is for discovery: "What is Ollvy? What services exist? Can I trust this?"
@@ -24,7 +24,7 @@ import { getActiveServices } from '@/lib/data/services'
  * - §12A DocumentChecklist → /tools/documents/*
  */
 
-// Per §23: ISR — revalidate: 3600 (rebuilds hourly)
+// Per §23: ISR - revalidate: 3600 (rebuilds hourly)
 export const revalidate = 3600
 
 export default async function LandingPage() {
@@ -36,29 +36,29 @@ export default async function LandingPage() {
 
       {/* Main content with padding for fixed navbar */}
       <main className="pt-16">
-        {/* §2 — Hero */}
+        {/* §2 - Hero */}
         <Hero />
 
-        {/* §4 — How It Works */}
+        {/* §4 - How It Works */}
         <HowItWorks />
 
-        {/* §5 — Service Grid (per §23: data from Supabase) */}
+        {/* §5 - Service Grid (per §23: data from Supabase) */}
         <ServiceGrid services={services} />
 
-        {/* §6 — Trust Layer (4 cards + authority logos) */}
+        {/* §6 - Trust Layer (4 cards + authority logos) */}
         <TrustLayer />
 
-        {/* §13 — Reviews */}
+        {/* §13 - Reviews */}
         <Reviews />
 
-        {/* §14B — Refer Founder (feature flagged) */}
+        {/* §14B - Refer Founder (feature flagged) */}
         <ReferFounder />
 
-        {/* §15 — Final CTA */}
+        {/* §15 - Final CTA */}
         <FinalCTA />
       </main>
 
-      {/* §16 — Footer */}
+      {/* §16 - Footer */}
       <Footer />
     </div>
   )

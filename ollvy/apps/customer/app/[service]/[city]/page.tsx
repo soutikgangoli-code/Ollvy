@@ -5,13 +5,13 @@ import { getServiceBySlugFromDB, getStatePricing, getServiceReviews, getRelatedS
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
 
 /**
- * Geo Page — Service + City specific landing page
+ * Geo Page - Service + City specific landing page
  *
  * Per §23 Connection Point 8: Geo Pages Pricing
  * - Fetches state-specific pricing from service_state_pricing table
  * - Falls back to base pricing if no state override exists
  *
- * ISR — revalidate: 3600 (rebuilds hourly)
+ * ISR - revalidate: 3600 (rebuilds hourly)
  */
 
 export const revalidate = 3600

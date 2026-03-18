@@ -41,19 +41,19 @@ export function SearchBar({
 
   return (
     <div className="relative">
-      <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-white/30" />
+      <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
       <Input
         type="text"
         placeholder={placeholder}
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
-        className="pl-11 pr-11 h-12 bg-white/[0.03] border-white/[0.08] text-white placeholder:text-white/30"
+        className="pl-11 pr-11 h-12 bg-muted/50 border-border text-foreground placeholder:text-muted-foreground"
       />
       {localValue && (
         <Button
           variant="ghost"
           size="icon-sm"
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70"
+          className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           onClick={handleClear}
         >
           <X className="h-4 w-4" />

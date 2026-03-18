@@ -148,7 +148,7 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
             <Skeleton className="h-20 w-56 rounded-2xl" />
           </div>
         </div>
-        <div className="border-t border-white/[0.06] p-4">
+        <div className="border-t border-border p-4">
           <Skeleton className="h-11 rounded-xl" />
         </div>
       </div>
@@ -160,15 +160,15 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
       {/* Messages container */}
       <div
         ref={containerRef}
-        className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-white/10"
+        className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
-              <MessageSquare className="h-8 w-8 text-white/20" />
+            <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+              <MessageSquare className="h-8 w-8 text-muted-foreground/50" />
             </div>
-            <h3 className="font-medium text-white mb-1">No messages yet</h3>
-            <p className="text-sm text-white/40 max-w-xs">
+            <h3 className="font-medium text-foreground mb-1">No messages yet</h3>
+            <p className="text-sm text-muted-foreground max-w-xs">
               Start a conversation with your assigned professional.
             </p>
           </div>

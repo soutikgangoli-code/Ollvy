@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import { LEARN_PAGES, LearnCategory } from '@/lib/learn/pages';
 
 export const metadata: Metadata = {
-  title: 'Business Compliance Guides — GST, Incorporation, Startup India | Ollvy',
+  title: 'Business Compliance Guides - GST, Incorporation, Startup India | Ollvy',
   description: 'Free guides to Indian business compliance. GST registration, Pvt Ltd vs LLP, DPIIT recognition, FSSAI licensing, and more. With interactive tools and calculators.',
   alternates: { canonical: 'https://ollvy.com/learn' },
   openGraph: {

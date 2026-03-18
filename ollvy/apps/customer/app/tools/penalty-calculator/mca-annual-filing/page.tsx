@@ -193,7 +193,7 @@ function MCAFilingCalculator() {
         ],
         statuteShort: entityType === 'llp' ? 'LLP Act' : 'Sec 92/137',
         statuteFull: entityType === 'llp'
-          ? 'Limited Liability Partnership Act, 2008 — Annual compliance penalties'
+          ? 'Limited Liability Partnership Act, 2008 - Annual compliance penalties'
           : 'Section 92 (Annual Return) and Section 137 (Financial Statements), Companies Act 2013',
       }))
   }, [formsSelected, penalties, daysLate, entityType])
@@ -256,7 +256,7 @@ function MCAFilingCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
+        <div className="rounded-xl border border-border bg-card p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             MCA Annual Filing Penalty Calculator
@@ -360,8 +360,8 @@ function MCAFilingCalculator() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="under_10l">Under ₹10 Lakh</SelectItem>
-                          <SelectItem value="10l_50l">₹10 Lakh – ₹50 Lakh</SelectItem>
-                          <SelectItem value="50l_1cr">₹50 Lakh – ₹1 Crore</SelectItem>
+                          <SelectItem value="10l_50l">₹10 Lakh - ₹50 Lakh</SelectItem>
+                          <SelectItem value="50l_1cr">₹50 Lakh - ₹1 Crore</SelectItem>
                           <SelectItem value="above_1cr">Above ₹1 Crore</SelectItem>
                         </SelectContent>
                       </Select>
@@ -425,7 +425,7 @@ function MCAFilingCalculator() {
               <WarningBanner
                 variant="red"
                 title="DIRECTOR DISQUALIFICATION"
-                body={`Section 164(2) of Companies Act 2013 disqualifies every director for 5 years. This applies across all companies the ${numberOfDirectors} director${numberOfDirectors > 1 ? 's' : ''} direct${numberOfDirectors === 1 ? 's' : ''} — not just this one.`}
+                body={`Section 164(2) of Companies Act 2013 disqualifies every director for 5 years. This applies across all companies the ${numberOfDirectors} director${numberOfDirectors > 1 ? 's' : ''} direct${numberOfDirectors === 1 ? 's' : ''} - not just this one.`}
               />
             )}
           </ResultsPanel>
@@ -451,7 +451,7 @@ function MCAFilingCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            MCA late filing fee — ₹100 per day explained
+            MCA late filing fee - ₹100 per day explained
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             The ₹100 per day additional fee applies from the first day after the due date.
@@ -466,7 +466,7 @@ function MCAFilingCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Director disqualification under Section 164(2) — when does it apply?
+            Director disqualification under Section 164(2) - when does it apply?
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Section 164(2) of the Companies Act 2013 disqualifies a director if the company
@@ -474,7 +474,7 @@ function MCAFilingCalculator() {
             of three financial years. Once disqualified, the director cannot be appointed as
             a director in any company for a period of five years. This disqualification
             applies automatically and affects all companies where the person serves as
-            director — not just the defaulting company. The disqualification can only be
+            director - not just the defaulting company. The disqualification can only be
             removed by filing all pending returns and applying for restoration of DIN.
           </p>
         </section>
@@ -497,12 +497,12 @@ function MCAFilingCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            LLP annual compliance — Form 8 and Form 11 deadlines
+            LLP annual compliance - Form 8 and Form 11 deadlines
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             LLPs have two annual compliance forms: Form 8 (Statement of Account and Solvency)
             due by October 30, and Form 11 (Annual Return) due by May 30. Unlike companies,
-            LLPs do not have a base filing fee — only the additional fee of ₹100 per day
+            LLPs do not have a base filing fee - only the additional fee of ₹100 per day
             applies for late filing. Both forms have a maximum penalty cap of ₹5,00,000 each.
             LLPs should ensure timely filing to avoid penalties and maintain good standing
             with the Ministry of Corporate Affairs.

@@ -76,7 +76,7 @@ export function SocialProof() {
           BY THE NUMBERS
         </p>
 
-        {/* Part A — Platform Stats */}
+        {/* Part A - Platform Stats */}
         {(loading || showStats) && (
           <div className="grid grid-cols-3 gap-8 text-center max-w-[720px] mx-auto">
             <StatBlock
@@ -100,10 +100,10 @@ export function SocialProof() {
           </div>
         )}
 
-        {/* Part B — Fallback (always shown since we don't have completion stats endpoint yet) */}
+        {/* Part B - Fallback (always shown since we don't have completion stats endpoint yet) */}
         <Card className="border border-border bg-card p-6 text-center mt-12 max-w-[560px] mx-auto">
           <p className="font-semibold text-foreground">
-            Every GST retainer filing delivered before the due date — or we refund that month.
+            Every GST retainer filing delivered before the due date - or we refund that month.
           </p>
           <p className="text-sm text-muted-foreground mt-2">
             We don't have enough orders yet to show a rolling chart. This is what we can say
@@ -111,7 +111,7 @@ export function SocialProof() {
           </p>
         </Card>
 
-        {/* Part C — Trust Badge Row */}
+        {/* Part C - Trust Badge Row */}
         <div className="mt-12 flex flex-wrap justify-center gap-3">
           {[
             'GST-Compliant Invoices',

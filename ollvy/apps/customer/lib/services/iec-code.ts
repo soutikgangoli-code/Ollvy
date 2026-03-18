@@ -38,24 +38,24 @@ export const iecCode: ServiceConfig = {
     {
       step: 2,
       title: 'Upload documents through the app',
-      timeline: 'Day 0–1',
-      body: 'PAN card of business, incorporation certificate, cancelled cheque or bank statement showing account number and IFSC. Documents are verified before filing — mismatches caught early.',
+      timeline: 'Day 0-1',
+      body: 'PAN card of business, incorporation certificate, cancelled cheque or bank statement showing account number and IFSC. Documents are verified before filing - mismatches caught early.',
       visual: 'upload',
       milestone: 'Documents verified',
     },
     {
       step: 3,
       title: 'Application filed on DGFT portal',
-      timeline: 'Day 1–2',
+      timeline: 'Day 1-2',
       body: 'Your compliance expert files the IEC application on the DGFT portal. The form requires Aadhaar OTP verification for the authorized signatory. We guide you through this step.',
       visual: 'form',
       milestone: 'Application submitted to DGFT',
     },
     {
       step: 4,
-      title: 'IEC issued — you can trade internationally',
-      timeline: 'Day 3–5',
-      body: 'DGFT issues your 10-digit IEC. It is valid for life — no renewal required. The certificate is uploaded to your Ollvy account. You can now clear customs for imports and exports.',
+      title: 'IEC issued - you can trade internationally',
+      timeline: 'Day 3-5',
+      body: 'DGFT issues your 10-digit IEC. It is valid for life - no renewal required. The certificate is uploaded to your Ollvy account. You can now clear customs for imports and exports.',
       visual: 'stamp',
       milestone: 'IEC certificate issued',
       isCompletion: true,
@@ -64,10 +64,10 @@ export const iecCode: ServiceConfig = {
 
   whatsIncluded: [
     {
-      title: 'Filed on DGFT portal — not an outdated form',
-      body: 'IEC is now issued exclusively online through DGFT. The portal requires careful data entry — PAN, Aadhaar, bank details must match exactly. We handle the submission, you do the OTP.',
-      comparisonWithout: 'Navigate DGFT portal — 2+ hours, frequent errors',
-      comparisonWithOllvy: 'We file — you verify OTP — IEC in 5 days',
+      title: 'Filed on DGFT portal - not an outdated form',
+      body: 'IEC is now issued exclusively online through DGFT. The portal requires careful data entry - PAN, Aadhaar, bank details must match exactly. We handle the submission, you do the OTP.',
+      comparisonWithout: 'Navigate DGFT portal - 2+ hours, frequent errors',
+      comparisonWithOllvy: 'We file - you verify OTP - IEC in 5 days',
     },
     {
       title: 'Bank account verification guidance',
@@ -76,7 +76,7 @@ export const iecCode: ServiceConfig = {
       comparisonWithOllvy: 'Bank account verified before submission',
     },
     {
-      title: 'Lifetime validity — no renewal',
+      title: 'Lifetime validity - no renewal',
       body: 'IEC is valid for life. Unlike GST or FSSAI, there is no annual renewal. However, you must update your IEC profile if business details change (address, bank account, directors). We can handle updates for ₹999.',
     },
     {
@@ -96,7 +96,7 @@ export const iecCode: ServiceConfig = {
     {
       icon: 'document',
       title: 'Bank account in personal name',
-      body: 'IEC requires a current account in the business entity\'s name. A proprietor\'s savings account won\'t work if it says "Savings A/C" — it needs to be a current account or have the firm\'s name. We verify this before filing.',
+      body: 'IEC requires a current account in the business entity\'s name. A proprietor\'s savings account won\'t work if it says "Savings A/C" - it needs to be a current account or have the firm\'s name. We verify this before filing.',
     },
     {
       icon: 'mismatch',
@@ -113,7 +113,7 @@ export const iecCode: ServiceConfig = {
   profilePersonas: [
     {
       label: 'First international shipment',
-      detail: 'New exporter or importer. IEC takes 5 days — plan accordingly.',
+      detail: 'New exporter or importer. IEC takes 5 days - plan accordingly.',
     },
     {
       label: 'E-commerce cross-border seller',
@@ -153,7 +153,7 @@ export const iecCode: ServiceConfig = {
     {
       category: 'Process',
       q: 'How long is IEC valid?',
-      a: 'Lifetime. IEC does not expire. However, you must update your profile if business details change — address, bank account, authorized signatory. We can handle updates for ₹999.',
+      a: 'Lifetime. IEC does not expire. However, you must update your profile if business details change - address, bank account, authorized signatory. We can handle updates for ₹999.',
     },
     {
       category: 'Process',
@@ -176,7 +176,7 @@ export const iecCode: ServiceConfig = {
     {
       name: 'DGFT',
       url: 'https://dgft.gov.in',
-      description: 'Directorate General of Foreign Trade — IEC registration portal',
+      description: 'Directorate General of Foreign Trade - IEC registration portal',
     },
     {
       name: 'Foreign Trade Policy 2023',

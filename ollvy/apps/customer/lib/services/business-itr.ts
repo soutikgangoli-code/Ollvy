@@ -26,24 +26,24 @@ export const businessItr: ServiceConfig = {
   processSteps: [
     {
       step: 1,
-      title: 'Upload your financials — P&L, Balance Sheet, bank statements',
-      timeline: 'Day 0–1',
-      body: "A CA is assigned within 4 hours. They send you a personalised document checklist based on your entity type. You upload everything through the app — not WhatsApp, not email. Audited accounts if applicable, trial balance, bank statements for all accounts, and any other income documentation.",
+      title: 'Upload your financials - P&L, Balance Sheet, bank statements',
+      timeline: 'Day 0-1',
+      body: "A CA is assigned within 4 hours. They send you a personalised document checklist based on your entity type. You upload everything through the app - not WhatsApp, not email. Audited accounts if applicable, trial balance, bank statements for all accounts, and any other income documentation.",
       visual: 'upload',
       milestone: 'Documents received and assigned to CA',
     },
     {
       step: 2,
       title: 'CA reviews your books and prepares computation',
-      timeline: 'Day 1–4',
-      body: "Your CA reviews the P&L and Balance Sheet, verifies depreciation schedules, checks director remuneration treatment, and prepares the income computation. If there are discrepancies or questions, they message you through the app. You don't chase them — they chase you.",
+      timeline: 'Day 1-4',
+      body: "Your CA reviews the P&L and Balance Sheet, verifies depreciation schedules, checks director remuneration treatment, and prepares the income computation. If there are discrepancies or questions, they message you through the app. You don't chase them - they chase you.",
       visual: 'form',
       milestone: 'Draft computation shared for your review',
     },
     {
       step: 3,
       title: 'You review, approve, and CA files',
-      timeline: 'Day 4–7',
+      timeline: 'Day 4-7',
       body: "The draft ITR is shared in the app. You review the income figures, deductions, and tax computation. If everything looks correct, you approve. Your CA files to the Income Tax portal within 24 hours of approval. You don't need to log in anywhere.",
       visual: 'checklist',
       milestone: 'ITR submitted to Income Tax portal',
@@ -51,7 +51,7 @@ export const businessItr: ServiceConfig = {
     {
       step: 4,
       title: 'Acknowledgement delivered',
-      timeline: 'Day 7–10',
+      timeline: 'Day 7-10',
       body: "The ITR-V acknowledgement is generated immediately on filing. We share it in the app the same day. Your compliance calendar is updated with next year's due date. All filed documents are stored permanently in your account.",
       visual: 'stamp',
       isCompletion: true,
@@ -61,8 +61,8 @@ export const businessItr: ServiceConfig = {
 
   whatsIncluded: [
     {
-      title: 'Depreciation review — not just data entry',
-      body: "Your CA reviews your asset schedule and depreciation calculations. If you've been using incorrect rates or missing depreciation on eligible assets, they catch it. This affects your tax liability — getting it right matters.",
+      title: 'Depreciation review - not just data entry',
+      body: "Your CA reviews your asset schedule and depreciation calculations. If you've been using incorrect rates or missing depreciation on eligible assets, they catch it. This affects your tax liability - getting it right matters.",
       comparisonWithout: 'You calculate depreciation, CA just enters it',
       comparisonWithOllvy: 'CA reviews asset schedule and corrects rates',
     },
@@ -72,7 +72,7 @@ export const businessItr: ServiceConfig = {
     },
     {
       title: 'Draft review before filing',
-      body: "You see the complete ITR before it's filed. Income figures, deductions, tax computation — everything. You approve it in the app. We don't file until you've reviewed it. Most CAs file and send you the acknowledgement after the fact.",
+      body: "You see the complete ITR before it's filed. Income figures, deductions, tax computation - everything. You approve it in the app. We don't file until you've reviewed it. Most CAs file and send you the acknowledgement after the fact.",
       comparisonWithout: 'ITR filed, acknowledgement sent, no review',
       comparisonWithOllvy: 'Draft shared, you approve, then we file',
     },
@@ -103,7 +103,7 @@ export const businessItr: ServiceConfig = {
     {
       icon: 'alert',
       title: 'Defective return notice',
-      body: 'Late filers are more likely to receive defective return notices under Section 139(9) — requires a response within 15 days or the return is treated as not filed.',
+      body: 'Late filers are more likely to receive defective return notices under Section 139(9) - requires a response within 15 days or the return is treated as not filed.',
     },
   ],
 
@@ -155,12 +155,12 @@ export const businessItr: ServiceConfig = {
     {
       category: 'Process',
       q: 'Do I need to be audited?',
-      a: "Audit is required if turnover exceeds ₹1Cr (₹10Cr if cash transactions are under 5%). The audit must be completed before ITR is filed. If you need an audit, book it separately — we can do that too.",
+      a: "Audit is required if turnover exceeds ₹1Cr (₹10Cr if cash transactions are under 5%). The audit must be completed before ITR is filed. If you need an audit, book it separately - we can do that too.",
     },
     {
       category: 'After Completion',
       q: "What happens after filing?",
-      a: "You receive the ITR-V acknowledgement immediately. Within 30 days, you may receive an intimation under Section 143(1) — this is normal processing. If there's a demand or refund, we explain it and help you respond.",
+      a: "You receive the ITR-V acknowledgement immediately. Within 30 days, you may receive an intimation under Section 143(1) - this is normal processing. If there's a demand or refund, we explain it and help you respond.",
     },
   ],
 

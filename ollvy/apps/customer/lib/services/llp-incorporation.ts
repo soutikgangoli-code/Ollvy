@@ -11,7 +11,7 @@ export const llpIncorporation: ServiceConfig = {
   govtFee: 5000,
   govtFeeLabel: 'MCA filing fees',
   govtFeeNote:
-    'This fee is paid directly to the Ministry of Corporate Affairs. Varies slightly by capital contribution — ₹5,000 is the standard for up to ₹1L contribution.',
+    'This fee is paid directly to the Ministry of Corporate Affairs. Varies slightly by capital contribution - ₹5,000 is the standard for up to ₹1L contribution.',
 
   slaDays: 12,
   isRetainer: false,
@@ -29,7 +29,7 @@ export const llpIncorporation: ServiceConfig = {
   processSteps: [
     {
       step: 1,
-      title: 'Answer questions — we build your checklist',
+      title: 'Answer questions - we build your checklist',
       timeline: 'Day 0',
       body: 'Business type, number of partners, proposed LLP name (3 options), registered state, capital contribution split. A company secretary is assigned within 4 hours. They review your answers and send you the specific document list.',
       visual: 'checklist',
@@ -38,15 +38,15 @@ export const llpIncorporation: ServiceConfig = {
     {
       step: 2,
       title: 'Upload documents through the app',
-      timeline: 'Day 0–1',
-      body: 'PAN and Aadhaar for all partners, registered address proof, capital contribution details. Your CS verifies each document before filing — mismatches caught here, not after MCA raises a query.',
+      timeline: 'Day 0-1',
+      body: 'PAN and Aadhaar for all partners, registered address proof, capital contribution details. Your CS verifies each document before filing - mismatches caught here, not after MCA raises a query.',
       visual: 'upload',
       milestone: 'Documents verified by CS',
     },
     {
       step: 3,
       title: 'DPIN and DSC arranged',
-      timeline: 'Day 1–3',
+      timeline: 'Day 1-3',
       body: 'Designated Partner Identification Number is required for all partners. We file DPIN applications and arrange DSC tokens. Video verification completed through guided flow in the app.',
       visual: 'form',
       milestone: 'DPIN applications filed',
@@ -54,15 +54,15 @@ export const llpIncorporation: ServiceConfig = {
     {
       step: 4,
       title: 'Name reservation and FiLLiP filed',
-      timeline: 'Day 4–9',
-      body: 'FiLLiP is the integrated LLP incorporation form. Your CS drafts the LLP Agreement, specifies profit-sharing ratios, and files with MCA. Name reservation happens as part of FiLLiP — not separately.',
+      timeline: 'Day 4-9',
+      body: 'FiLLiP is the integrated LLP incorporation form. Your CS drafts the LLP Agreement, specifies profit-sharing ratios, and files with MCA. Name reservation happens as part of FiLLiP - not separately.',
       visual: 'form',
       milestone: 'FiLLiP submitted to MCA',
     },
     {
       step: 5,
-      title: 'LLPIN issued — your partnership exists',
-      timeline: 'Day 10–12',
+      title: 'LLPIN issued - your partnership exists',
+      timeline: 'Day 10-12',
       body: 'MCA issues the Certificate of Incorporation with your LLP Identification Number. PAN is generated automatically. All documents uploaded to your account permanently. Compliance calendar populated with annual filing due dates.',
       visual: 'stamp',
       milestone: 'Certificate of Incorporation issued',
@@ -72,31 +72,31 @@ export const llpIncorporation: ServiceConfig = {
 
   whatsIncluded: [
     {
-      title: 'LLP Agreement drafted — not templated',
-      body: 'The LLP Agreement defines profit-sharing, decision-making authority, and exit clauses. Your CS drafts this based on your actual partnership arrangement — not a boilerplate document.',
+      title: 'LLP Agreement drafted - not templated',
+      body: 'The LLP Agreement defines profit-sharing, decision-making authority, and exit clauses. Your CS drafts this based on your actual partnership arrangement - not a boilerplate document.',
       comparisonWithout: 'Generic 50-50 template that needs amendment later',
       comparisonWithOllvy: 'Custom agreement reflecting your actual split and roles',
     },
     {
       title: 'DPIN for all designated partners',
       body: 'Every designated partner needs a DPIN. We file all applications simultaneously and track approvals. No separate charges per partner.',
-      comparisonWithout: 'File DPIN separately — add 3–5 days to timeline',
-      comparisonWithOllvy: 'DPIN included as part of FiLLiP — no extra time',
+      comparisonWithout: 'File DPIN separately - add 3-5 days to timeline',
+      comparisonWithOllvy: 'DPIN included as part of FiLLiP - no extra time',
     },
     {
-      title: 'DSC arranged — video verification guided',
+      title: 'DSC arranged - video verification guided',
       body: 'Digital Signature Certificates required for all partners. We arrange tokens and guide each partner through the video verification process. Takes 15 minutes per partner.',
-      comparisonWithout: 'Navigate DSC portal yourself — 3+ hours',
-      comparisonWithOllvy: 'Guided flow in app — 15 minutes',
+      comparisonWithout: 'Navigate DSC portal yourself - 3+ hours',
+      comparisonWithOllvy: 'Guided flow in app - 15 minutes',
     },
     {
       title: 'Compliance calendar auto-populated',
       body: 'Once LLPIN is issued, your calendar is updated with LLP annual return (Form 11) and Statement of Accounts (Form 8) due dates. Both are mandatory every year.',
       mockVisualType: 'calendar',
       mockVisualData: {
-        row1: 'LLP Form 11 (Annual Return) — Due May 30',
-        row2: 'LLP Form 8 (Statement of Accounts) — Due Oct 30',
-        row3: 'Partner KYC — Due Sep 30 every year',
+        row1: 'LLP Form 11 (Annual Return) - Due May 30',
+        row2: 'LLP Form 8 (Statement of Accounts) - Due Oct 30',
+        row3: 'Partner KYC - Due Sep 30 every year',
         note: 'Added to your calendar automatically',
       },
     },
@@ -123,7 +123,7 @@ export const llpIncorporation: ServiceConfig = {
   profilePersonas: [
     {
       label: 'Professional services firm',
-      detail: 'Architects, lawyers, CAs, consultants — LLP is the default structure for you.',
+      detail: 'Architects, lawyers, CAs, consultants - LLP is the default structure for you.',
     },
     {
       label: 'Two equal partners',
@@ -153,11 +153,11 @@ export const llpIncorporation: ServiceConfig = {
     {
       category: 'General',
       q: 'What is an LLP?',
-      a: 'A Limited Liability Partnership combines the flexibility of a partnership with the liability protection of a company. Partners have limited liability — personal assets are protected from business debts.',
+      a: 'A Limited Liability Partnership combines the flexibility of a partnership with the liability protection of a company. Partners have limited liability - personal assets are protected from business debts.',
     },
     {
       category: 'General',
-      q: 'LLP vs Pvt Ltd — which should I choose?',
+      q: 'LLP vs Pvt Ltd - which should I choose?',
       a: "LLP if you're a professional services firm, don't plan to raise equity investment, and prefer profit-sharing over salary+dividend. Pvt Ltd if you plan to raise investment, want clearer hierarchy, or need the Pvt Ltd credibility for enterprise clients.",
     },
     {
@@ -184,9 +184,9 @@ export const llpIncorporation: ServiceConfig = {
 
   reviewSources: [
     {
-      name: 'MCA — LLP Portal',
+      name: 'MCA - LLP Portal',
       url: 'https://llp.mca.gov.in',
-      description: 'Ministry of Corporate Affairs — LLP registration and filings',
+      description: 'Ministry of Corporate Affairs - LLP registration and filings',
     },
     {
       name: 'LLP Act, 2008',

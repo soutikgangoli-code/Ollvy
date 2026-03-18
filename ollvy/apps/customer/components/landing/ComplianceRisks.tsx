@@ -7,17 +7,17 @@ const risks = [
   {
     icon: Clock,
     title: 'Late filing',
-    body: "GSTR-3B was due on the 20th. Your CA filed on the 22nd. That's ₹100 in late fees plus 18% annual interest on whatever tax was due — and it starts accruing from day 21, not from when you find out.",
+    body: "GSTR-3B was due on the 20th. Your CA filed on the 22nd. That's ₹100 in late fees plus 18% annual interest on whatever tax was due - and it starts accruing from day 21, not from when you find out.",
   },
   {
     icon: GitBranch,
     title: "GSTR-1 and GSTR-3B don't match",
-    body: "If the outward supply figures in your GSTR-1 don't match what you declared in GSTR-3B, the GSTN system flags it automatically under Section 61. You get a notice. You then need a CA to respond to it — which is not included in most retainers.",
+    body: "If the outward supply figures in your GSTR-1 don't match what you declared in GSTR-3B, the GSTN system flags it automatically under Section 61. You get a notice. You then need a CA to respond to it - which is not included in most retainers.",
   },
   {
     icon: AlertTriangle,
     title: "Claiming ITC for a vendor who hasn't filed",
-    body: "You paid the vendor. You have the invoice. You claimed the ITC. But if that vendor hasn't filed their GSTR-1, your ITC claim gets blocked and you get a notice — even though you did nothing wrong. You're liable for someone else's non-compliance.",
+    body: "You paid the vendor. You have the invoice. You claimed the ITC. But if that vendor hasn't filed their GSTR-1, your ITC claim gets blocked and you get a notice - even though you did nothing wrong. You're liable for someone else's non-compliance.",
   },
   {
     icon: Building2,
@@ -68,7 +68,7 @@ export function ComplianceRisks() {
         {/* Bottom CTA */}
         <div className="text-center mt-10">
           <p className="text-sm text-muted-foreground">
-            Ollvy's compliance calendar tracks all these deadlines automatically — for your
+            Ollvy's compliance calendar tracks all these deadlines automatically - for your
             specific business type and registrations.
           </p>
           <button

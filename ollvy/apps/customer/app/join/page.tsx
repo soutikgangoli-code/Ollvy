@@ -21,34 +21,34 @@ const verifications = [
   'Bar Council enrollment number confirmed for all lawyers',
   'ICSI certificate number confirmed for Company Secretaries',
   'ID proof and practice certificate reviewed before first order',
-  '5-strike SLA enforcement — automatic suspension on the 5th breach',
+  '5-strike SLA enforcement - automatic suspension on the 5th breach',
   'All disputes mediated by Ollvy. The professional is not your problem.',
 ]
 
 const earnings = [
   {
     service: 'GST Monthly Filing',
-    perOrder: '₹1,800–₹2,200',
-    frequency: '8–12 clients/month',
-    monthly: '₹14,400–₹26,400',
+    perOrder: '₹1,800-₹2,200',
+    frequency: '8-12 clients/month',
+    monthly: '₹14,400-₹26,400',
   },
   {
     service: 'Business ITR',
-    perOrder: '₹7,000–₹9,000',
-    frequency: '3–5 orders/month (seasonal)',
-    monthly: '₹21,000–₹45,000',
+    perOrder: '₹7,000-₹9,000',
+    frequency: '3-5 orders/month (seasonal)',
+    monthly: '₹21,000-₹45,000',
   },
   {
     service: 'Pvt Ltd Incorporation',
-    perOrder: '₹6,000–₹7,500',
-    frequency: '2–4 orders/month',
-    monthly: '₹12,000–₹30,000',
+    perOrder: '₹6,000-₹7,500',
+    frequency: '2-4 orders/month',
+    monthly: '₹12,000-₹30,000',
   },
   {
     service: 'GST Registration',
-    perOrder: '₹5,500–₹6,500',
-    frequency: '3–6 orders/month',
-    monthly: '₹16,500–₹39,000',
+    perOrder: '₹5,500-₹6,500',
+    frequency: '3-6 orders/month',
+    monthly: '₹16,500-₹39,000',
   },
 ]
 
@@ -110,7 +110,7 @@ export default function JoinPage() {
               </Button>
 
               <p className="text-xs text-muted-foreground mt-3">
-                Verification takes 2–3 working days. ICAI/ICSI/Bar Council registration number
+                Verification takes 2-3 working days. ICAI/ICSI/Bar Council registration number
                 required.
               </p>
             </div>
@@ -149,7 +149,7 @@ export default function JoinPage() {
                 What professionals on Ollvy earn
               </h2>
               <p className="text-base text-muted-foreground text-center mt-4">
-                Based on current platform activity. Not a guarantee — actual earnings depend on your
+                Based on current platform activity. Not a guarantee - actual earnings depend on your
                 capacity and service mix.
               </p>
 
@@ -176,9 +176,9 @@ export default function JoinPage() {
 
               <Card className="border border-border bg-card p-6 mt-6 text-center">
                 <p className="text-sm text-muted-foreground">
-                  A CA in Delhi handling 8–12 GST retainer clients through Ollvy earns approximately{' '}
-                  <strong className="text-foreground">₹24,000–₹36,000/month</strong> from the
-                  platform — on top of their existing practice.
+                  A CA in Delhi handling 8-12 GST retainer clients through Ollvy earns approximately{' '}
+                  <strong className="text-foreground">₹24,000-₹36,000/month</strong> from the
+                  platform - on top of their existing practice.
                 </p>
               </Card>
             </div>
@@ -218,7 +218,7 @@ export default function JoinPage() {
               <h2 className="text-3xl font-semibold text-foreground">Ready to join?</h2>
               <p className="text-base text-muted-foreground mt-4">
                 Fill out the application form. We verify your credentials and get back to you within
-                2–3 working days.
+                2-3 working days.
               </p>
 
               <Button size="lg" className="mt-8">

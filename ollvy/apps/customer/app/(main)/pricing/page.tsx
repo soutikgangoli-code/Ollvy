@@ -4,12 +4,12 @@ import { RetainerModel } from '@/components/landing/RetainerModel'
 import { getProPlanPricing } from '@/lib/data/services'
 
 export const metadata: Metadata = {
-  title: 'Pricing — Ollvy Pro & Monthly Retainers | Ollvy',
+  title: 'Pricing - Ollvy Pro & Monthly Retainers | Ollvy',
   description:
     'Ollvy Pro subscription for compliance tracking and reminders. Monthly retainer packages for GST filing, payroll, and TDS compliance. Fixed pricing, no surprises.',
 }
 
-// ISR — revalidate hourly
+// ISR - revalidate hourly
 export const revalidate = 3600
 
 export default async function PricingPage() {

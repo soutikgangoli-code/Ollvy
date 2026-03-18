@@ -180,7 +180,7 @@ export function IncorporationUnlocks() {
                 incorporation.
               </p>
               <Button className="mt-4" asChild>
-                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Start with Incorporation — ₹24,999</Link>
+                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Start with Incorporation - ₹24,999</Link>
               </Button>
             </div>
           </TabsContent>
@@ -197,7 +197,7 @@ export function IncorporationUnlocks() {
                 LLP registration.
               </p>
               <Button className="mt-4" asChild>
-                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Start with LLP Incorporation — ₹13,999</Link>
+                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Start with LLP Incorporation - ₹13,999</Link>
               </Button>
             </div>
           </TabsContent>
@@ -213,7 +213,7 @@ export function IncorporationUnlocks() {
                 Ollvy tracks all GST deadlines automatically once you're registered.
               </p>
               <Button className="mt-4" asChild>
-                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Get GST Registration — ₹8,999</Link>
+                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Get GST Registration - ₹8,999</Link>
               </Button>
             </div>
           </TabsContent>

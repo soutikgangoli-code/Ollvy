@@ -21,7 +21,7 @@ export function LearnPage({ page, ctaService, secondaryService }: {
 
       <div className="max-w-[760px] mx-auto px-6 py-12">
 
-        {/* Tool — always at top, before first section */}
+        {/* Tool - always at top, before first section */}
         {page.tool && (
           <div className="mb-12">
             {page.tool.type === 'eligibility' && (

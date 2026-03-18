@@ -49,8 +49,8 @@ export function FilterChips({
         className={cn(
           'inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
           isSelected('all')
-            ? 'bg-white text-black'
-            : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80'
+            ? 'bg-foreground text-background'
+            : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
         )}
       >
         All
@@ -62,8 +62,8 @@ export function FilterChips({
           className={cn(
             'inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
             isSelected(filter.id)
-              ? 'bg-white text-black'
-              : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80'
+              ? 'bg-foreground text-background'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
           )}
         >
           {filter.label}

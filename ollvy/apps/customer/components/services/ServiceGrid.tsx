@@ -35,11 +35,11 @@ export function ServiceGrid({ services, isLoading }: ServiceGridProps) {
     return (
       <Card className="py-16">
         <CardContent className="text-center">
-          <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-            <Search className="h-8 w-8 text-white/30" />
+          <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-6">
+            <Search className="h-8 w-8 text-muted-foreground" />
           </div>
-          <h3 className="font-medium text-white mb-2">No services found</h3>
-          <p className="text-sm text-white/40">
+          <h3 className="font-medium text-foreground mb-2">No services found</h3>
+          <p className="text-sm text-muted-foreground">
             Try adjusting your search or filters to find what you're looking for.
           </p>
         </CardContent>

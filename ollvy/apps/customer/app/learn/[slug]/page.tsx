@@ -62,7 +62,7 @@ export default async function LearnPageRoute({ params }: Props) {
       name: 'Ollvy Technologies Private Limited',
       url: 'https://ollvy.com',
     },
-    // FAQ schema — Google shows these as rich results
+    // FAQ schema - Google shows these as rich results
     mainEntity: page.sections
       .filter(s => s.componentSlot === 'faq-list')
       .flatMap(s => (s.componentProps?.faqs as Array<{q:string,a:string}> ?? []))

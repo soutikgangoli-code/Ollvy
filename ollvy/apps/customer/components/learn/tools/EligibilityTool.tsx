@@ -96,7 +96,7 @@ export function EligibilityTool({ config, ctaService }: {
           {result.type === 'eligible' && (
             <Button className="w-full" asChild>
               <a href={`/services/${ctaService.slug}?utm_source=learn_tool&utm_medium=eligibility_result`}>
-                {result.ctaLabel ?? `Book ${ctaService.shortName} — ₹${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`}
+                {result.ctaLabel ?? `Book ${ctaService.shortName} - ₹${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`}
               </a>
             </Button>
           )}
@@ -114,7 +114,7 @@ export function EligibilityTool({ config, ctaService }: {
 }
 
 // Evaluation logic is defined per tool in the LearnPageConfig
-// These are pure functions — no side effects
+// These are pure functions - no side effects
 function evaluateAnswers(
   questions: EligibilityQuestion[],
   answers: Record<number, string>

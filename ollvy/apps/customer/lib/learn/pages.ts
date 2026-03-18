@@ -3,16 +3,16 @@
 
 export interface LearnPageConfig {
   slug: string;
-  title: string;                       // H1 — plain language, specific
-  seoTitle: string;                    // <title> tag — includes year + location signal
-  seoDescription: string;              // meta description — answer-first
+  title: string;                       // H1 - plain language, specific
+  seoTitle: string;                    // <title> tag - includes year + location signal
+  seoDescription: string;              // meta description - answer-first
   canonicalUrl: string;
-  lastReviewed: string;                // "March 2025" — shown on page, updated manually
+  lastReviewed: string;                // "March 2025" - shown on page, updated manually
   category: LearnCategory;
   relatedServiceSlugs: string[];       // which service pages to link to
   relatedLearnSlugs: string[];         // which other /learn pages to link to
 
-  // Tool config — one tool per page, shown at top
+  // Tool config - one tool per page, shown at top
   tool?: LearnToolConfig;
 
   // Page sections
@@ -36,7 +36,7 @@ export interface LearnToolConfig {
   type: 'eligibility' | 'penalty' | 'comparison' | 'deadline';
   title: string;                       // shown above tool
   questions?: EligibilityQuestion[];   // for eligibility tool
-  penaltyType?: string;                // for penalty tool — maps to PENALTY_TABLE
+  penaltyType?: string;                // for penalty tool - maps to PENALTY_TABLE
   compareA?: string;                   // for comparison tool
   compareB?: string;
   deadlineType?: string;               // for deadline tracker
@@ -58,7 +58,7 @@ export interface EligibilityResult {
 
 export interface LearnSection {
   heading: string;
-  body: string;                        // markdown — rendered as prose
+  body: string;                        // markdown - rendered as prose
   table?: TableRow[];                  // optional data table
   list?: string[];                     // optional bullet list (plain text)
   note?: string;                       // italicised note at bottom of section

@@ -1,7 +1,7 @@
 /**
  * Service Configuration Library
  *
- * Per spec §18 — Service Detail Pages
+ * Per spec §18 - Service Detail Pages
  * Each service has a comprehensive config that powers the service detail page.
  */
 
@@ -18,7 +18,7 @@ export type ServiceCategory =
 export interface ProcessStep {
   step: number
   title: string
-  timeline: string // "Day 1–2"
+  timeline: string // "Day 1-2"
   body: string
   milestone?: string // "ARN generated and shared with you"
   isCompletion?: boolean // true on final step
@@ -69,21 +69,21 @@ export interface ServiceConfig {
   // Core identity
   slug: string
   name: string // "Private Limited Incorporation"
-  shortName: string // "Pvt Ltd" — used in sticky bar, chips
+  shortName: string // "Pvt Ltd" - used in sticky bar, chips
   category: ServiceCategory
   tagline: string // "One registration. Every door opens."
 
-  // Pricing — ALL collected upfront. Separate line items for transparency.
+  // Pricing - ALL collected upfront. Separate line items for transparency.
   ollvyFee: number // 9999
-  govtFee?: number // 15000 — if applicable
+  govtFee?: number // 15000 - if applicable
   govtFeeLabel?: string // "MCA stamp duty (approx)"
   govtFeeNote?: string // "This fee goes directly to the government..."
 
   // SLA
-  slaDays: number // 15 — working days
+  slaDays: number // 15 - working days
   isRetainer: boolean
-  retainerCycleLabel?: string // "per month" — shown on price
-  nextDueDate?: () => string // for retainers — dynamic due date
+  retainerCycleLabel?: string // "per month" - shown on price
+  nextDueDate?: () => string // for retainers - dynamic due date
 
   // Service metadata (shown in hero metadata row)
   mandatoryFor: string // "All Pvt Ltd companies"
@@ -97,10 +97,10 @@ export interface ServiceConfig {
   seoDescription: string
   canonicalUrl: string
 
-  // Content — all defined per service
+  // Content - all defined per service
   processSteps: ProcessStep[]
   whatsIncluded: WhatsIncludedItem[]
-  serviceRisks: ServiceRisk[] // 2–3 items
+  serviceRisks: ServiceRisk[] // 2-3 items
   profilePersonas: ProfilePersona[] // "We handle messy situations too"
   faqs: ServiceFaq[]
   reviewKeywordChips: string[]

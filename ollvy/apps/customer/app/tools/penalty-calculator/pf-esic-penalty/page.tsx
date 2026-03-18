@@ -75,14 +75,14 @@ function calculatePFESICPenalty(
   const totalPFArrears = monthlyPF * monthsLate
   const totalESICArrears = monthlyESIC * monthsLate
 
-  // PF Damages — Section 14B
+  // PF Damages - Section 14B
   // Formula: monthlyPF × damageRate × (months / 12)
   const pfDamageRate = getPFDamageRate(monthsLate)
   const pfDamages = defaultType !== 'esic_only'
     ? Math.round(monthlyPF * pfDamageRate * (monthsLate / 12))
     : 0
 
-  // ESIC Interest — Section 85B, 12% p.a.
+  // ESIC Interest - Section 85B, 12% p.a.
   const esicInterest = defaultType !== 'pf_only' && employeeCount >= 10
     ? Math.round(totalESICArrears * 0.12 * (monthsLate / 12))
     : 0
@@ -108,7 +108,7 @@ const faqs = [
   },
   {
     question: 'How are EPF Section 14B damages calculated?',
-    answer: 'Section 14B damages are calculated as: Monthly PF Contribution × Damage Rate × (Months of Default / 12). The damage rate applicable to the total period applies to the entire arrear — it is not stepped.',
+    answer: 'Section 14B damages are calculated as: Monthly PF Contribution × Damage Rate × (Months of Default / 12). The damage rate applicable to the total period applies to the entire arrear - it is not stepped.',
   },
   {
     question: 'What is the ESIC late payment penalty?',
@@ -201,7 +201,7 @@ function PFESICPenaltyCalculator() {
           { label: `Rate: ${result.pfDamageRateLabel} for ${monthsLate} month${monthsLate > 1 ? 's' : ''}`, amount: result.pfDamages },
         ],
         statuteShort: 'Sec 14B',
-        statuteFull: 'Section 14B of Employees\' Provident Funds and Miscellaneous Provisions Act, 1952 — Damages for non-payment of contribution',
+        statuteFull: 'Section 14B of Employees\' Provident Funds and Miscellaneous Provisions Act, 1952 - Damages for non-payment of contribution',
       })
     }
 
@@ -214,7 +214,7 @@ function PFESICPenaltyCalculator() {
           { label: `12% p.a. for ${monthsLate} month${monthsLate > 1 ? 's' : ''}`, amount: result.esicInterest },
         ],
         statuteShort: 'Sec 85B',
-        statuteFull: 'Section 85B of Employees\' State Insurance Act, 1948 — Interest on amounts due',
+        statuteFull: 'Section 85B of Employees\' State Insurance Act, 1948 - Interest on amounts due',
       })
     }
 
@@ -280,7 +280,7 @@ function PFESICPenaltyCalculator() {
 
       <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6">
+        <div className="rounded-xl border border-border bg-card p-6">
           <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
             <Calculator className="h-5 w-5 text-emerald-600" />
             PF / ESIC Late Payment Penalty Calculator
@@ -432,7 +432,7 @@ function PFESICPenaltyCalculator() {
               <WarningBanner
                 variant="red"
                 title="Maximum Damage Rate Applied"
-                body="At 6+ months default, PF damages are levied at 25% per annum — the maximum rate. EPFO can also attach employer property and initiate prosecution under Section 14."
+                body="At 6+ months default, PF damages are levied at 25% per annum - the maximum rate. EPFO can also attach employer property and initiate prosecution under Section 14."
               />
             )}
 
@@ -470,13 +470,13 @@ function PFESICPenaltyCalculator() {
             For defaults less than 2 months, the rate is 5% p.a. For 2-4 months, it&apos;s 10% p.a.
             For 4-6 months, it&apos;s 15% p.a. And for defaults of 6 months or more, the maximum
             rate of 25% p.a. applies. Importantly, the rate applicable to the total period
-            applies to the entire arrear — it is not calculated on a stepped basis.
+            applies to the entire arrear - it is not calculated on a stepped basis.
           </p>
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            EPF Section 14B damages — rate table explained
+            EPF Section 14B damages - rate table explained
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
             Section 14B of the EPF Act empowers the Central Provident Fund Commissioner to
@@ -519,7 +519,7 @@ function PFESICPenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            ESIC late payment interest — Section 85B
+            ESIC late payment interest - Section 85B
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Under Section 85B of the Employees&apos; State Insurance Act, 1948, employers who
@@ -556,11 +556,11 @@ function PFESICPenaltyCalculator() {
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-2">
             <li>
-              <strong>PF (Employer):</strong> 12% of basic salary — split as 3.67% to EPF
+              <strong>PF (Employer):</strong> 12% of basic salary - split as 3.67% to EPF
               and 8.33% to Employee Pension Scheme (EPS)
             </li>
             <li>
-              <strong>PF (Employee):</strong> 12% of basic salary — entirely to EPF
+              <strong>PF (Employee):</strong> 12% of basic salary - entirely to EPF
             </li>
             <li>
               <strong>ESIC (Employer):</strong> 3.25% of gross salary

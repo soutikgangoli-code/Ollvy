@@ -49,7 +49,7 @@ export function captureUTMFromURL(searchParams: URLSearchParams): UTMParams | nu
 export function storeUTMParams(params: UTMParams): void {
   if (typeof window === 'undefined') return
 
-  // Only store first touch — don't overwrite if already set
+  // Only store first touch - don't overwrite if already set
   const existing = sessionStorage.getItem(UTM_STORAGE_KEY)
   if (existing) return
 
@@ -146,7 +146,7 @@ export function captureReferralCode(searchParams: URLSearchParams): string | nul
 export function storeReferralCode(code: string): void {
   if (typeof window === 'undefined') return
 
-  // Only store first referral — don't overwrite
+  // Only store first referral - don't overwrite
   const existing = sessionStorage.getItem(REFERRAL_STORAGE_KEY)
   if (existing) return
 

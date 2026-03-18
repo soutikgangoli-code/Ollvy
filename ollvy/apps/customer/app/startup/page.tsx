@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { StartupPage } from '@/components/startup/StartupPage';
 
 export const metadata: Metadata = {
-  title: 'Startup Compliance Stack — Incorporation to Series A | Ollvy',
+  title: 'Startup Compliance Stack - Incorporation to Series A | Ollvy',
   description: 'Everything a startup needs: Pvt Ltd incorporation, Startup India DPIIT recognition, GST, MSME, monthly filings, ITR. Fixed prices. CAs assigned same day.',
   alternates: { canonical: 'https://ollvy.com/startup' },
   openGraph: {

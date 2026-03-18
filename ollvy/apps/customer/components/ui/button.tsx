@@ -5,20 +5,20 @@ import { Slot } from "@radix-ui/react-slot"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-white/20 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 items-center justify-center gap-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring/20 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {
         default:
           "bg-[#3A6B40] text-white hover:bg-[#4A7D50] active:scale-[0.98]",
         secondary:
-          "bg-white/10 text-white hover:bg-white/15 active:scale-[0.98]",
+          "bg-foreground/10 text-foreground hover:bg-foreground/15 active:scale-[0.98]",
         outline:
-          "border border-white/20 bg-transparent text-white hover:bg-white/5 hover:border-white/30 active:scale-[0.98]",
+          "border border-border bg-transparent text-foreground hover:bg-muted hover:border-foreground/30 active:scale-[0.98]",
         ghost:
-          "text-white/70 hover:text-white hover:bg-white/5",
+          "text-muted-foreground hover:text-foreground hover:bg-muted",
         link:
-          "text-white/70 underline-offset-4 hover:text-white hover:underline",
+          "text-muted-foreground underline-offset-4 hover:text-foreground hover:underline",
         destructive:
           "bg-red-500/20 text-red-400 hover:bg-red-500/30 active:scale-[0.98]",
         success:

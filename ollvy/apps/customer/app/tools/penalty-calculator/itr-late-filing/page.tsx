@@ -94,7 +94,7 @@ function calculateITRPenalty(
   daysLate: number,
   advanceTaxPaid: number
 ): CalculationResult {
-  // Section 234F — FLAT fee, not per day
+  // Section 234F - FLAT fee, not per day
   let lateFee = 0
   const BASIC_EXEMPTION = 250000 // ₹2.5L for individuals under 60
 
@@ -102,11 +102,11 @@ function calculateITRPenalty(
     lateFee = totalIncome <= 500000 ? 1000 : 5000
   }
 
-  // Section 234A — 1% per month on unpaid tax (round UP partial months)
+  // Section 234A - 1% per month on unpaid tax (round UP partial months)
   const monthsLate = Math.ceil(daysLate / 30)
   const interest234A = Math.round(outstandingTax * 0.01 * monthsLate)
 
-  // Section 234B — Advance tax shortfall (if advance tax < 90% of assessed tax)
+  // Section 234B - Advance tax shortfall (if advance tax < 90% of assessed tax)
   const assessedTax = outstandingTax + advanceTaxPaid
   let interest234B = 0
   if (advanceTaxPaid < assessedTax * 0.9 && assessedTax > 0) {
@@ -132,7 +132,7 @@ const faqs = [
   },
   {
     question: 'Is the Section 234F fee per day or a flat fee?',
-    answer: 'It is a flat one-time fee — not per day. Whether you file 1 day late or 6 months late, the fee is the same. This is a common misconception.',
+    answer: 'It is a flat one-time fee - not per day. Whether you file 1 day late or 6 months late, the fee is the same. This is a common misconception.',
   },
   {
     question: 'What is Section 234A interest?',
@@ -152,7 +152,7 @@ const faqs = [
   },
   {
     question: 'Can I claim a refund if I file ITR late?',
-    answer: 'Yes, you can claim a refund in a belated return. However, interest on refund under Section 244A runs only from April 1 of the assessment year or date of tax payment — not from the original due date.',
+    answer: 'Yes, you can claim a refund in a belated return. However, interest on refund under Section 244A runs only from April 1 of the assessment year or date of tax payment - not from the original due date.',
   },
   {
     question: 'What is the Section 271B penalty for not getting accounts audited?',
@@ -237,7 +237,7 @@ function ITRLatePenaltyCalculator() {
           { label: totalIncome <= 500000 ? 'Income ≤ ₹5 Lakh' : 'Income > ₹5 Lakh', amount: result.lateFee },
         ],
         statuteShort: 'Sec 234F',
-        statuteFull: 'Section 234F of Income Tax Act 1961 — Fee for late filing of return',
+        statuteFull: 'Section 234F of Income Tax Act 1961 - Fee for late filing of return',
       })
     }
 
@@ -249,7 +249,7 @@ function ITRLatePenaltyCalculator() {
           { label: `1% per month × ${result.monthsLate} month${result.monthsLate > 1 ? 's' : ''} on ₹${outstandingTax.toLocaleString('en-IN')}`, amount: result.interest234A },
         ],
         statuteShort: 'Sec 234A',
-        statuteFull: 'Section 234A of Income Tax Act 1961 — Interest for default in furnishing return of income',
+        statuteFull: 'Section 234A of Income Tax Act 1961 - Interest for default in furnishing return of income',
       })
     }
 
@@ -261,7 +261,7 @@ function ITRLatePenaltyCalculator() {
           { label: `Advance tax < 90% of liability`, amount: result.interest234B },
         ],
         statuteShort: 'Sec 234B',
-        statuteFull: 'Section 234B of Income Tax Act 1961 — Interest for default in payment of advance tax',
+        statuteFull: 'Section 234B of Income Tax Act 1961 - Interest for default in payment of advance tax',
       })
     }
 
@@ -327,7 +327,7 @@ function ITRLatePenaltyCalculator() {
 
       <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
         {/* Input Section */}
-        <div className="rounded-xl border border-border/50 bg-zinc-950 p-6 space-y-8">
+        <div className="rounded-xl border border-border bg-card p-6 space-y-8">
           <div className="space-y-6">
             {/* Entity Type */}
             <div className="space-y-1.5">
@@ -463,7 +463,7 @@ function ITRLatePenaltyCalculator() {
           >
             {/* Section 234C Advisory - InfoBanner only */}
             <InfoBanner
-              title="Section 234C — Quarterly Advance Tax Interest"
+              title="Section 234C - Quarterly Advance Tax Interest"
               body="If advance tax instalments were not paid on time during the year (due 15 June, 15 September, 15 December, 15 March), Section 234C interest applies at 1% per month on the quarterly shortfall. This is separate from the Section 234B interest shown above. Consult your CA to calculate exact 234C liability for your instalments."
             />
 
@@ -517,10 +517,10 @@ function ITRLatePenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Section 234F late filing fee — ₹1,000 vs ₹5,000
+            Section 234F late filing fee - ₹1,000 vs ₹5,000
           </h2>
           <p className="text-muted-foreground leading-relaxed">
-            Section 234F imposes a flat late filing fee — not a per-day penalty. This is a
+            Section 234F imposes a flat late filing fee - not a per-day penalty. This is a
             common misconception. Whether you file your return 1 day late or 6 months late,
             the fee is the same. The fee amount depends solely on your total income:
           </p>
@@ -531,19 +531,19 @@ function ITRLatePenaltyCalculator() {
           </ul>
           <p className="text-muted-foreground leading-relaxed mt-4">
             Note that prior to FY 2020-21, there was also a ₹10,000 fee for returns filed after
-            31 December. This distinction has been removed — the fee is now ₹5,000 regardless
+            31 December. This distinction has been removed - the fee is now ₹5,000 regardless
             of when you file (as long as it&apos;s within the belated return window).
           </p>
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Section 234A interest — how is it calculated?
+            Section 234A interest - how is it calculated?
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Section 234A charges interest at 1% per month (or part of a month) on unpaid tax
             from the original due date until the date of filing. The key word is &quot;unpaid tax&quot;
-            — if all your tax liability was covered by TDS and advance tax, Section 234A
+            - if all your tax liability was covered by TDS and advance tax, Section 234A
             interest will be zero. The calculation formula is:
           </p>
           <p className="text-muted-foreground leading-relaxed mt-4 font-mono bg-muted p-4 rounded">
@@ -552,7 +552,7 @@ function ITRLatePenaltyCalculator() {
           <p className="text-muted-foreground leading-relaxed mt-4">
             For example, if you have ₹20,000 outstanding tax and file 3.5 months late, the
             interest would be: ₹20,000 × 1% × 4 months = ₹800. Note that 3.5 months is rounded
-            up to 4 months — partial months count as full months for interest calculation.
+            up to 4 months - partial months count as full months for interest calculation.
           </p>
         </section>
 
@@ -569,7 +569,7 @@ function ITRLatePenaltyCalculator() {
             <li><strong>Section 234F:</strong> ₹5,000 late filing fee (as company income is typically above ₹5 Lakh)</li>
             <li><strong>Section 234A:</strong> 1% per month interest on unpaid tax</li>
             <li><strong>Section 234B:</strong> 1% per month on advance tax shortfall</li>
-            <li><strong>Section 271B:</strong> Penalty for not getting audit done — 0.5% of turnover or ₹1,50,000 (whichever is lower)</li>
+            <li><strong>Section 271B:</strong> Penalty for not getting audit done - 0.5% of turnover or ₹1,50,000 (whichever is lower)</li>
             <li><strong>Director liability:</strong> Directors may face personal consequences for company non-compliance</li>
           </ul>
         </section>
@@ -594,10 +594,10 @@ function ITRLatePenaltyCalculator() {
           </ol>
           <p className="text-muted-foreground leading-relaxed mt-4">
             Note that in a belated return, you cannot carry forward certain losses (business
-            losses, speculation losses) to future years — this benefit is only available if
+            losses, speculation losses) to future years - this benefit is only available if
             you file on time. Need help filing?{' '}
             <Link href="/services/itr-filing" className="text-emerald-600 hover:underline">
-              Ollvy can file your ITR — starting ₹999
+              Ollvy can file your ITR - starting ₹999
             </Link>.
           </p>
         </section>
@@ -651,7 +651,7 @@ function ITRLatePenaltyCalculator() {
                 </tr>
                 <tr>
                   <td className="py-2 pr-4">Belated Return (all categories)</td>
-                  <td className="py-2 pr-4">—</td>
+                  <td className="py-2 pr-4">-</td>
                   <td className="py-2">31 December 2025</td>
                 </tr>
               </tbody>

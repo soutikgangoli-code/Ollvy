@@ -10,8 +10,8 @@ const SOURCES: [string, string][] = [
   ['Ministry of Corporate Affairs', 'https://www.mca.gov.in'],
   ['GST Council / GSTN Portal', 'https://www.gst.gov.in'],
   ['Income Tax India', 'https://www.incometax.gov.in'],
-  ['EPFO — Employees Provident Fund Organisation', 'https://www.epfindia.gov.in'],
-  ['ESIC — Employees State Insurance Corporation', 'https://www.esic.in'],
+  ['EPFO - Employees Provident Fund Organisation', 'https://www.epfindia.gov.in'],
+  ['ESIC - Employees State Insurance Corporation', 'https://www.esic.in'],
 ]
 
 export function AccuracyStatement() {

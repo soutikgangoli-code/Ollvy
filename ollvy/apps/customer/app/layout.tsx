@@ -3,6 +3,7 @@ import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -21,7 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Ollvy — The Compliance OS for Indian Businesses',
+  title: 'Ollvy - The Compliance OS for Indian Businesses',
   description: 'GST filings, ITR, Payroll, Incorporation. 32 services, fixed prices, verified professionals. Your business compliance, completely handled.',
 }
 
@@ -31,12 +32,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
-        <UTMProvider>
-          {children}
-        </UTMProvider>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <UTMProvider>
+            {children}
+          </UTMProvider>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )
