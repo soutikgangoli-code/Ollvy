@@ -22,6 +22,7 @@ interface ServiceCardProps {
   category: string
   isPopular?: boolean
   isRetainer?: boolean
+  isBundle?: boolean
 }
 
 interface ServiceGridProps {
@@ -194,6 +195,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
     category: s.category,
     isRetainer: s.isRetainer,
     isPopular: s.totalRatings >= 50,
+    isBundle: s.isBundle,
   })) ?? []
 
   // Use DB data if available, otherwise fallback to hardcoded - show all services
@@ -219,9 +221,9 @@ export function ServiceGrid({ services }: ServiceGridProps) {
   return (
     <section id="services" className="bg-background pt-12 pb-24">
       <div className="container">
-        {/* Section Heading */}
+        {/* Section Heading - per SEO mandate Section 3.5 */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
-          SERVICES WE OFFER
+          What do you need done?
         </h2>
 
         {/* Carousel Navigation */}

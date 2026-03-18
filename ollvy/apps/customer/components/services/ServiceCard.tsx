@@ -62,13 +62,22 @@ export function ServiceCard({ service }: ServiceCardProps) {
 
   // Format govt fee if present
   const govtFee = service.price_govt_fees_paisa ? service.price_govt_fees_paisa / 100 : 0
-  const ollvyFee = service.price_base_paisa / 100
-  const totalPrice = ollvyFee + govtFee
+  const baseOllvyFee = service.price_base_paisa / 100
+
+  // For bundles, calculate total including default-selected addons (exclude govt fee - shown on detail page)
+  const defaultAddonTotal = service.is_bundle && service.addons
+    ? service.addons
+        .filter(addon => addon.defaultSelected)
+        .reduce((sum, addon) => sum + addon.pricePaisa, 0) / 100
+    : 0
+
+  const bundleTotal = baseOllvyFee + defaultAddonTotal  // No govt fee in bundle preview
+  const nonBundleTotal = baseOllvyFee + govtFee
 
   return (
     <Link href={`/services/${service.slug}`} className="group">
       <Card className="h-full hover:border-foreground/20 hover:bg-foreground/[0.03] transition-all duration-300 overflow-hidden flex flex-col min-h-[320px]">
-        {/* Image or Icon Header */}
+        {/* Image or Icon/Bundle Header */}
         {service.image_url ? (
           <div className="relative h-24 w-full bg-muted flex-shrink-0">
             <Image
@@ -78,6 +87,12 @@ export function ServiceCard({ service }: ServiceCardProps) {
               className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+          </div>
+        ) : service.is_bundle ? (
+          <div className="h-16 w-full bg-muted/50 flex items-center justify-center border-b border-border flex-shrink-0">
+            <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              bundled
+            </span>
           </div>
         ) : (
           <div className="h-16 w-full bg-muted/50 flex items-center justify-center border-b border-border flex-shrink-0">
@@ -102,32 +117,45 @@ export function ServiceCard({ service }: ServiceCardProps) {
         <CardContent className="pt-0 flex-1 flex flex-col">
           {/* Price breakdown */}
           <div className="space-y-1 flex-1">
-            <div className="flex justify-between items-baseline">
-              <span className="text-xs text-muted-foreground">Ollvy fee</span>
-              <span className="font-mono text-sm font-semibold text-foreground">
-                {service.price_varies_by_state ? 'Quote' : `₹${ollvyFee.toLocaleString('en-IN')}`}
-                {!service.price_varies_by_state && billingLabel && (
-                  <span className="text-muted-foreground font-normal">{billingLabel}</span>
-                )}
-              </span>
-            </div>
-            {govtFee > 0 && (
+            {service.is_bundle ? (
+              // Bundle: show single combined price including default addons
               <div className="flex justify-between items-baseline">
-                <span className="text-xs text-muted-foreground">Govt fee</span>
-                <span className="font-mono text-sm text-muted-foreground">
-                  ₹{govtFee.toLocaleString('en-IN')}
+                <span className="text-xs font-medium text-foreground">Starting at</span>
+                <span className="font-mono text-base font-bold text-foreground">
+                  {service.price_varies_by_state ? 'Get Quote' : `₹${bundleTotal.toLocaleString('en-IN')}`}
                 </span>
               </div>
-            )}
-            <div className="flex justify-between items-baseline border-t border-border pt-1 mt-1">
-              <span className="text-xs font-medium text-foreground">Total</span>
-              <span className="font-mono text-base font-bold text-foreground">
-                {service.price_varies_by_state ? 'Get Quote' : `₹${totalPrice.toLocaleString('en-IN')}`}
-                {!service.price_varies_by_state && billingLabel && (
-                  <span className="text-muted-foreground font-normal">{billingLabel}</span>
+            ) : (
+              // Non-bundle: show fee breakdown
+              <>
+                <div className="flex justify-between items-baseline">
+                  <span className="text-xs text-muted-foreground">Ollvy fee</span>
+                  <span className="font-mono text-sm font-semibold text-foreground">
+                    {service.price_varies_by_state ? 'Quote' : `₹${baseOllvyFee.toLocaleString('en-IN')}`}
+                    {!service.price_varies_by_state && billingLabel && (
+                      <span className="text-muted-foreground font-normal">{billingLabel}</span>
+                    )}
+                  </span>
+                </div>
+                {govtFee > 0 && (
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-xs text-muted-foreground">Govt fee</span>
+                    <span className="font-mono text-sm text-muted-foreground">
+                      ₹{govtFee.toLocaleString('en-IN')}
+                    </span>
+                  </div>
                 )}
-              </span>
-            </div>
+                <div className="flex justify-between items-baseline border-t border-border pt-1 mt-1">
+                  <span className="text-xs font-medium text-foreground">Total</span>
+                  <span className="font-mono text-base font-bold text-foreground">
+                    {service.price_varies_by_state ? 'Get Quote' : `₹${nonBundleTotal.toLocaleString('en-IN')}`}
+                    {!service.price_varies_by_state && billingLabel && (
+                      <span className="text-muted-foreground font-normal">{billingLabel}</span>
+                    )}
+                  </span>
+                </div>
+              </>
+            )}
           </div>
 
           {/* SLA / Deadline */}

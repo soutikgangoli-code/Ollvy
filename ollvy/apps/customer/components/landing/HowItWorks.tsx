@@ -22,9 +22,9 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="bg-background py-24">
       <div className="container">
-        {/* Section Heading */}
+        {/* Section Heading - per SEO mandate Section 3.5 */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
-          HOW IT WORKS
+          How Ollvy works
         </h2>
 
         {/* Steps Grid */}
@@ -45,7 +45,7 @@ export function HowItWorks() {
 
         {/* Bottom Text */}
         <div className="border-t border-border mt-16 pt-10 text-center">
-          <p className="text-sm text-muted-foreground whitespace-nowrap">
+          <p className="text-sm text-muted-foreground">
             From GST registration to company incorporation to monthly filings - one place, one app, one team.
           </p>
         </div>

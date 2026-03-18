@@ -10,11 +10,11 @@ import { cn } from '@/lib/utils'
 function FloatingCards() {
   const [activeIndex, setActiveIndex] = useState(0)
 
-  // Cycle through cards every 2.5 seconds
+  // Cycle through cards every 10 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % 3)
-    }, 2500)
+    }, 10000)
     return () => clearInterval(interval)
   }, [])
 
@@ -150,9 +150,9 @@ export function Hero() {
           {/* Left Column */}
           <div className="max-w-[580px]">
             {/* Main Headline */}
-            <h1 className="font-mono text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-normal text-foreground leading-[1.1] tracking-tight uppercase">
+            <h1 className="font-mono text-[2rem] md:text-[3.5rem] lg:text-[4rem] font-normal text-foreground leading-[1.1] tracking-tight uppercase">
               Your business<br />
-              <span className="whitespace-nowrap">compliance,<span className="text-muted-foreground ml-2">handled.</span></span>
+              compliance,<span className="text-muted-foreground ml-2">handled.</span>
             </h1>
 
             {/* Subheadline */}

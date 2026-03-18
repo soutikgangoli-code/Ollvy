@@ -14,6 +14,7 @@ export interface ServiceCardData {
   isRetainer: boolean
   avgRating: number | null
   totalRatings: number
+  isBundle?: boolean
 }
 
 export interface ServicePricingData {

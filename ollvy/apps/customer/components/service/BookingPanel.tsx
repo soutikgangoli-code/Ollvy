@@ -1,30 +1,116 @@
 'use client'
 
+import { useState, useMemo } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Phone, MessageCircle } from 'lucide-react'
+import { CheckCircle, Phone, MessageCircle, Square, CheckSquare } from 'lucide-react'
 import { getGuaranteedDate } from '@/lib/dates'
 import { DBServiceConfig } from '@/lib/data/services'
+import { cn } from '@/lib/utils'
 
 interface BookingPanelProps {
   service: DBServiceConfig
   serviceId?: string // DB ID for checkout
   priceVariesByState?: boolean
+  // Optional controlled variant state (for syncing with parent)
+  selectedVariant?: string
+  onVariantChange?: (variantId: string) => void
+  // Optional controlled addons state (for syncing with parent)
+  selectedAddons?: string[]
+  onAddonsChange?: (addonIds: string[]) => void
 }
 
-export function BookingPanel({ service, serviceId, priceVariesByState }: BookingPanelProps) {
+export function BookingPanel({
+  service,
+  serviceId,
+  priceVariesByState,
+  selectedVariant: controlledVariant,
+  onVariantChange,
+  selectedAddons: controlledAddons,
+  onAddonsChange,
+}: BookingPanelProps) {
+  // Internal state for uncontrolled mode
+  const [internalVariant, setInternalVariant] = useState<string>(
+    service.defaultVariantId ?? service.variants?.[0]?.id ?? ''
+  )
+
+  // Initialize addon selection based on defaultSelected
+  const defaultAddonIds = useMemo(() => {
+    return service.addons
+      ?.filter(addon => addon.defaultSelected || addon.required)
+      .map(addon => addon.id) ?? []
+  }, [service.addons])
+
+  const [internalAddons, setInternalAddons] = useState<string[]>(defaultAddonIds)
+
+  // Use controlled variant if provided, otherwise use internal state
+  const selectedVariant = controlledVariant ?? internalVariant
+  const setSelectedVariant = (variantId: string) => {
+    if (onVariantChange) {
+      onVariantChange(variantId)
+    } else {
+      setInternalVariant(variantId)
+    }
+  }
+
+  // Use controlled addons if provided, otherwise use internal state
+  const selectedAddonIds = controlledAddons ?? internalAddons
+  const toggleAddon = (addonId: string) => {
+    const addon = service.addons?.find(a => a.id === addonId)
+    if (addon?.required) return // Can't toggle required addons
+
+    const newAddons = selectedAddonIds.includes(addonId)
+      ? selectedAddonIds.filter(id => id !== addonId)
+      : [...selectedAddonIds, addonId]
+
+    if (onAddonsChange) {
+      onAddonsChange(newAddons)
+    } else {
+      setInternalAddons(newAddons)
+    }
+  }
+
   const guaranteedDate = service.isRetainer
     ? service.nextDueDateValue
     : getGuaranteedDate(service.slaDays)
 
-  const totalFee = service.ollvyFee + (service.govtFee ?? 0)
+  // Calculate price with variant adjustment
+  const selectedVariantData = service.variants?.find(v => v.id === selectedVariant)
+  const priceAdjustment = selectedVariantData?.priceAdjustment ?? 0
+  const govtFeeAdjustment = selectedVariantData?.govtFeeAdjustment ?? 0
+
+  // Combine Ollvy fee + govt fee into single "service fee"
+  const baseServiceFee = service.ollvyFee + (service.govtFee ?? 0) + (priceAdjustment / 100) + (govtFeeAdjustment / 100)
+
+  // Calculate addon totals (combine Ollvy fees + govt fees into single price)
+  const addonTotals = useMemo(() => {
+    if (!service.addons) return 0
+    const selectedAddons = service.addons.filter(addon => selectedAddonIds.includes(addon.id))
+    return selectedAddons.reduce((sum, addon) => sum + addon.pricePaisa + (addon.govtFeePaisa ?? 0), 0) / 100
+  }, [service.addons, selectedAddonIds])
+
+  const totalFee = baseServiceFee + addonTotals
 
   // Use DB ID for checkout if available, otherwise fall back to slug
   const checkoutId = serviceId ?? service.slug
   const ctaLabel = priceVariesByState ? 'Get Quote' : 'Book Now'
-  const ctaUrl = priceVariesByState
-    ? `/quote/request/${checkoutId}?utm_source=service_page&utm_medium=booking_panel&utm_content=${service.slug}`
-    : `/checkout/${checkoutId}?utm_source=service_page&utm_medium=booking_panel&utm_content=${service.slug}`
+
+  // Build checkout URL with optional variant and addon params
+  const baseCheckoutUrl = priceVariesByState
+    ? `/quote/request/${checkoutId}`
+    : `/checkout/${checkoutId}`
+  const urlParams = new URLSearchParams({
+    utm_source: 'service_page',
+    utm_medium: 'booking_panel',
+    utm_content: service.slug,
+  })
+  if (service.variants && selectedVariant) {
+    urlParams.set('variant', selectedVariant)
+  }
+  if (service.addons && selectedAddonIds.length > 0) {
+    urlParams.set('addons', selectedAddonIds.join(','))
+  }
+  const ctaUrl = `${baseCheckoutUrl}?${urlParams.toString()}`
 
   return (
     <Card className="border border-border bg-card p-6 w-full">
@@ -43,6 +129,90 @@ export function BookingPanel({ service, serviceId, priceVariesByState }: Booking
         </div>
       )}
 
+      {/* Variant selector - for services with pricing options */}
+      {service.variants && service.variants.length > 0 && (
+        <div className="border border-amber-500/20 bg-amber-500/5 rounded-xl p-4 mb-5">
+          <p className="font-mono uppercase tracking-wider text-xs text-amber-600 dark:text-amber-400 mb-3">
+            YOUR EXPECTED ANNUAL TURNOVER
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {service.variants.map((variant) => (
+              <button
+                key={variant.id}
+                type="button"
+                onClick={() => setSelectedVariant(variant.id)}
+                className={cn(
+                  'border rounded-xl p-3 text-left transition-all',
+                  selectedVariant === variant.id
+                    ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5'
+                    : 'border-border hover:border-border/80'
+                )}
+              >
+                <p className="text-xs font-medium text-foreground">{variant.label}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{variant.sublabel}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Addon services - selectable checkboxes */}
+      {service.addons && service.addons.length > 0 && (
+        <div className="border border-border rounded-xl p-4 mb-5">
+          <p className="font-mono uppercase tracking-wider text-xs text-muted-foreground mb-3">
+            INCLUDED SERVICES
+          </p>
+          <div className="space-y-2">
+            {service.addons.map((addon) => {
+              const isSelected = selectedAddonIds.includes(addon.id)
+              const isRequired = addon.required
+              // Combine addon price + govt fee into single displayed price
+              const addonTotalPrice = (addon.pricePaisa + (addon.govtFeePaisa ?? 0)) / 100
+
+              return (
+                <button
+                  key={addon.id}
+                  type="button"
+                  onClick={() => toggleAddon(addon.id)}
+                  disabled={isRequired}
+                  className={cn(
+                    'w-full border rounded-lg p-3 text-left transition-all flex items-start gap-3',
+                    isSelected
+                      ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5'
+                      : 'border-border hover:border-border/80 bg-muted/30',
+                    isRequired && 'cursor-not-allowed opacity-70'
+                  )}
+                >
+                  <div className="mt-0.5 shrink-0">
+                    {isSelected ? (
+                      <CheckSquare className="w-4 h-4 text-[hsl(var(--ollvy-green))]" />
+                    ) : (
+                      <Square className="w-4 h-4 text-muted-foreground" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-medium text-foreground">{addon.name}</p>
+                      <span className="font-mono text-xs text-foreground shrink-0">
+                        ₹{addonTotalPrice.toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                      {addon.description}
+                    </p>
+                    {isRequired && (
+                      <span className="inline-block mt-1 text-[10px] text-amber-600 dark:text-amber-400 font-medium">
+                        Required
+                      </span>
+                    )}
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Total amount - prominent */}
       <div className="mb-1">
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
@@ -55,7 +225,7 @@ export function BookingPanel({ service, serviceId, priceVariesByState }: Booking
 
       {/* Fee breakdown */}
       <div className="mt-5 space-y-3">
-        {/* Ollvy fee */}
+        {/* Base service fee */}
         <div className="flex justify-between items-start">
           <div className="flex items-start gap-2">
             <div className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center mt-0.5 shrink-0">
@@ -65,50 +235,42 @@ export function BookingPanel({ service, serviceId, priceVariesByState }: Booking
               />
             </div>
             <div>
-              <p className="text-sm font-medium text-foreground">Ollvy fee</p>
+              <p className="text-sm font-medium text-foreground">
+                {selectedVariantData?.sublabel ?? service.shortName ?? service.name}
+              </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Includes CA, tracking, and support
+                Service fee
               </p>
             </div>
           </div>
           <span className="font-mono text-sm font-semibold text-foreground">
-            ₹{service.ollvyFee.toLocaleString('en-IN')}
+            ₹{baseServiceFee.toLocaleString('en-IN')}
           </span>
         </div>
 
-        {/* Govt fee - only if applicable */}
-        {service.govtFee && service.govtFee > 0 && (
-          <div className="flex justify-between items-start">
-            <div className="flex items-start gap-2">
-              <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center mt-0.5 shrink-0">
-                <svg
-                  width="11"
-                  height="11"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  className="text-muted-foreground"
-                >
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                  <polyline points="9 22 9 12 15 12 15 22" />
-                </svg>
+        {/* Selected addon fees */}
+        {service.addons?.filter(addon => selectedAddonIds.includes(addon.id)).map(addon => {
+          const addonTotalPrice = (addon.pricePaisa + (addon.govtFeePaisa ?? 0)) / 100
+          return (
+            <div key={addon.id} className="flex justify-between items-start">
+              <div className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center mt-0.5 shrink-0">
+                  <CheckCircle
+                    size={11}
+                    className="text-[hsl(var(--ollvy-green))]"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-foreground">{addon.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">Service fee</p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium text-foreground">
-                  {service.govtFeeLabel ?? 'Government fee'}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {service.govtFeeNote ??
-                    'Paid to the government. Not retained by Ollvy.'}
-                </p>
-              </div>
+              <span className="font-mono text-sm text-foreground">
+                ₹{addonTotalPrice.toLocaleString('en-IN')}
+              </span>
             </div>
-            <span className="font-mono text-sm text-muted-foreground">
-              ₹{service.govtFee.toLocaleString('en-IN')}
-            </span>
-          </div>
-        )}
+          )
+        })}
 
         {/* Total line */}
         <div className="flex justify-between items-center pt-3 border-t border-border">

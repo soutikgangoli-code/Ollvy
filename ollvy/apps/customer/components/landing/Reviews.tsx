@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -117,6 +117,38 @@ const KEYWORD_CHIPS = [
   'would use again',
 ]
 
+// Function to wrap only numbers in mono font
+function formatQuoteWithMono(text: string): React.ReactNode {
+  // Pattern matches only numbers (with surrounding spaces):
+  // - Currency amounts (₹47,000, Rs 20,000)
+  // - Numbers with units (8 working days, 80 lakhs, 6 weeks, etc.)
+  // - Standalone numbers
+  // - Percentages
+  const pattern = /(\s?(?:₹[\d,]+(?:\.\d+)?|Rs\s*[\d,]+(?:-[\d,]+)?|\d+(?:,\d+)*(?:\.\d+)?\s*(?:lakhs?|crores?|working days?|days?|weeks?|months?|years?|employees?|locations?)?|\d+%)\s?)/g
+
+  const parts = text.split(pattern)
+  const matches = text.match(pattern) || []
+
+  const result: React.ReactNode[] = []
+  let matchIndex = 0
+
+  parts.forEach((part, index) => {
+    if (part) {
+      result.push(part)
+    }
+    if (matchIndex < matches.length && index < parts.length - 1) {
+      result.push(
+        <span key={`mono-${index}`} className="font-mono">
+          {matches[matchIndex]}
+        </span>
+      )
+      matchIndex++
+    }
+  })
+
+  return result
+}
+
 function StarRow({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5" role="img" aria-label={`${rating.toFixed(1)} out of 5 stars`}>
@@ -196,9 +228,9 @@ export function Reviews() {
   return (
     <section className="bg-background py-24">
       <div className="container">
-        {/* Section Heading */}
+        {/* Section Heading - per SEO mandate Section 3.5 */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
-          REVIEWS
+          What our clients say
         </h2>
 
         {/* Aggregate Rating (conditional on >= 10 reviews) */}
@@ -272,7 +304,7 @@ export function Reviews() {
                   <div className="text-4xl leading-none text-muted-foreground/20 font-serif">
                     &ldquo;
                   </div>
-                  <p className="text-sm text-foreground leading-relaxed mt-3 flex-grow">{t.quote}</p>
+                  <p className="text-sm text-foreground leading-relaxed mt-3 flex-grow">{formatQuoteWithMono(t.quote)}</p>
                   <div className="border-t border-border pt-4 mt-auto">
                     <p className="text-sm font-semibold text-foreground">{t.name}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">

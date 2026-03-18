@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Card } from '@/components/ui/card'
 import { IndianRupee, FileText, ClipboardList, BarChart2, Check, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -139,18 +139,6 @@ export function TrustLayer() {
   // Max index is trustCards.length - 2 (so we always show 2 cards)
   const maxIndex = trustCards.length - 2
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-
-  // Auto-advance every 5 seconds
-  useEffect(() => {
-    if (isPaused) return
-
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0))
-    }, 5000)
-
-    return () => clearInterval(interval)
-  }, [isPaused, maxIndex])
 
   const goNext = useCallback(() => {
     setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0))
@@ -167,8 +155,8 @@ export function TrustLayer() {
   ]
 
   return (
-    <section className="bg-card py-16 overflow-hidden">
-      <div className="container">
+    <section className="relative bg-card py-16 overflow-hidden">
+      <div className="container relative">
         {/* Section Heading */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
           Why Ollvy
@@ -177,16 +165,17 @@ export function TrustLayer() {
         {/* Carousel Container */}
         <div
           className="relative mt-8"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Two Cards Display */}
+          {/* Cards Display - 1 on mobile, 2 on desktop */}
           <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
               {visibleCards.map((card, idx) => (
                 <Card
                   key={`${currentIndex}-${idx}`}
-                  className="border border-border bg-background p-6 md:p-8"
+                  className={cn(
+                    "border border-border bg-background p-6 md:p-8 flex flex-col h-full",
+                    idx === 1 && "hidden md:block"
+                  )}
                 >
                   <h3 className="text-xl font-semibold text-foreground leading-snug">
                     {card.title}
@@ -197,30 +186,28 @@ export function TrustLayer() {
                   </p>
 
                   {/* Visual Element */}
-                  <div className="mt-6 pt-6 border-t border-border">
-                    {card.visual}
-                    {card.visualCaption && (
-                      <p className="text-sm text-muted-foreground italic mt-3">
-                        {card.visualCaption}
-                      </p>
-                    )}
+                  <div className="mt-6 pt-6 border-t border-border flex-1 flex flex-col">
+                    <div className="flex-1">{card.visual}</div>
+                    <p className="text-sm text-muted-foreground italic mt-3 min-h-[1.25rem]">
+                      {card.visualCaption || '\u00A0'}
+                    </p>
                   </div>
                 </Card>
               ))}
             </div>
           </div>
 
-          {/* Navigation Arrows */}
+          {/* Navigation Arrows - hidden on mobile */}
           <button
             onClick={goPrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:-translate-x-12 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:-translate-x-12 w-10 h-10 rounded-full bg-background border border-border items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
             aria-label="Previous card"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={goNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:translate-x-12 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:translate-x-12 w-10 h-10 rounded-full bg-background border border-border items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
             aria-label="Next card"
           >
             <ChevronRight className="h-4 w-4" />

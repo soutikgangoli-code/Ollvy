@@ -22,6 +22,7 @@ export interface ServiceCardData {
   isRetainer: boolean
   avgRating: number | null
   totalRatings: number
+  isBundle?: boolean
 }
 
 // Pricing overlay for static config (legacy)
@@ -102,6 +103,39 @@ export interface DBUnlockItem {
   slug: string
 }
 
+// Service explainer step from DB
+export interface DBServiceExplainerStep {
+  step: number
+  title: string      // "What it is", "Why it exists", etc.
+  body: string       // Detailed explanation
+  visual?: 'info' | 'scale' | 'sparkles' | 'shield' | 'alert'  // Icon type
+}
+
+// Service explainer from DB
+export interface DBServiceExplainer {
+  steps: DBServiceExplainerStep[]
+}
+
+// Service variant for pricing options (e.g., FSSAI Basic vs State)
+export interface DBServiceVariant {
+  id: string              // 'fssai-basic' | 'fssai-state'
+  label: string           // 'Under ₹12L/year' | '₹12L - ₹20Cr/year'
+  sublabel: string        // 'FSSAI Basic Registration' | 'FSSAI State License'
+  priceAdjustment: number // Price adjustment in paisa (negative for cheaper, 0 for base)
+  govtFeeAdjustment: number // Govt fee adjustment in paisa
+}
+
+// Service addon for bundle customization (selectable sub-services)
+export interface DBServiceAddon {
+  id: string              // 'gst-registration' | 'shop-establishment' | 'trade-license'
+  name: string            // 'GST Registration'
+  description: string     // Short description of the addon
+  pricePaisa: number      // Ollvy fee in paisa
+  govtFeePaisa: number    // Government fee in paisa (0 if none)
+  required: boolean       // If true, cannot be deselected
+  defaultSelected: boolean // Initial selection state
+}
+
 // Complete service config from database (no static config needed)
 export interface DBServiceConfig {
   // Core identity
@@ -155,6 +189,23 @@ export interface DBServiceConfig {
   // Feature flags
   showCompletionStats: boolean
   showApprovalRate: boolean
+
+  // Service variants (optional, for services with pricing options)
+  variants?: DBServiceVariant[]
+  defaultVariantId?: string
+
+  // Service-specific comparison (optional, for Why Ollvy section)
+  comparisonWithout?: string[]
+  comparisonWith?: string[]
+
+  // Service addons (optional, for bundle customization)
+  addons?: DBServiceAddon[]
+
+  // Bundle flag
+  isBundle?: boolean
+
+  // Service explainer (optional, for "What is [Service]?" section)
+  serviceExplainer?: DBServiceExplainer
 }
 
 /**
@@ -181,6 +232,7 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
       urgency_score,
       avg_rating,
       rating_count,
+      is_bundle,
       service_filter_categories (
         name
       )
@@ -207,6 +259,7 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
     // Use DB rating if >= 10 reviews, otherwise null (per §23 spec)
     avgRating: (pkg.rating_count ?? 0) >= 10 ? pkg.avg_rating : null,
     totalRatings: pkg.rating_count ?? 0,
+    isBundle: pkg.is_bundle ?? false,
   }))
 }
 
@@ -265,7 +318,14 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
       review_keyword_chips,
       related_slugs,
       show_completion_stats,
-      show_approval_rate
+      show_approval_rate,
+      variants,
+      default_variant_id,
+      comparison_without,
+      comparison_with,
+      addons,
+      is_bundle,
+      service_explainer
     `)
     .eq('slug', slug)
     .single()
@@ -341,6 +401,23 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     // Feature flags
     showCompletionStats: pkg.show_completion_stats ?? false,
     showApprovalRate: pkg.show_approval_rate ?? false,
+
+    // Service variants (optional)
+    variants: pkg.variants ?? undefined,
+    defaultVariantId: pkg.default_variant_id ?? undefined,
+
+    // Service-specific comparison (optional)
+    comparisonWithout: pkg.comparison_without ?? undefined,
+    comparisonWith: pkg.comparison_with ?? undefined,
+
+    // Service addons (optional)
+    addons: pkg.addons ?? undefined,
+
+    // Bundle flag
+    isBundle: pkg.is_bundle ?? false,
+
+    // Service explainer (optional)
+    serviceExplainer: pkg.service_explainer ?? undefined,
   }
 
   // Also return legacy pricing structure for backwards compatibility

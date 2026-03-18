@@ -270,56 +270,75 @@ export function Navbar() {
 
         {/* Mobile Sheet */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetContent side="right" className="w-full max-w-[300px]">
-            <SheetHeader>
+          <SheetContent side="right" className="w-full max-w-[320px] p-0 flex flex-col">
+            <SheetHeader className="p-6 pb-4">
               <SheetTitle className="text-left font-mono text-xl font-bold tracking-tight">
                 Ollvy
               </SheetTitle>
             </SheetHeader>
 
-            <nav className="flex flex-col gap-1 mt-6">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => {
-                    setMobileMenuOpen(false)
-                    if (link.href.startsWith('/#')) {
-                      setTimeout(() => scrollToSection(link.href), 100)
-                    }
-                  }}
-                  className="text-base font-medium py-3 border-b border-border text-foreground hover:text-foreground/80 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <nav className="flex-1 px-4">
+              {/* Main Nav */}
+              <div className="space-y-1">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      if (link.href.startsWith('/#')) {
+                        setTimeout(() => scrollToSection(link.href), 100)
+                      }
+                    }}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm uppercase tracking-wide text-foreground hover:bg-muted transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
 
-              {/* Mobile Tools Links */}
-              <Link
-                href="/tools/documents/private-limited-company"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 text-base font-medium py-3 border-b border-border text-foreground hover:text-foreground/80 transition-colors"
-              >
-                <FileText className="h-4 w-4 text-muted-foreground" />
-                Document Checklist
-              </Link>
-              <Link
-                href="/tools/penalty-calculator/gst-late-filing"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 text-base font-medium py-3 border-b border-border text-foreground hover:text-foreground/80 transition-colors"
-              >
-                <Calculator className="h-4 w-4 text-muted-foreground" />
-                Penalty Calculator
-              </Link>
+              {/* Tools Section */}
+              <div className="mt-6">
+                <p className="px-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-2">Tools</p>
+                <div className="space-y-1">
+                  <Link
+                    href="/tools/documents/private-limited-company"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
+                  >
+                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
+                      <FileText className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-sm text-foreground">Document Checklist</p>
+                      <p className="font-mono text-[10px] text-muted-foreground">What you need to register</p>
+                    </div>
+                  </Link>
+                  <Link
+                    href="/tools/penalty-calculator/gst-late-filing"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
+                  >
+                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
+                      <Calculator className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-sm text-foreground">Penalty Calculator</p>
+                      <p className="font-mono text-[10px] text-muted-foreground">Calculate compliance penalties</p>
+                    </div>
+                  </Link>
+                </div>
+              </div>
             </nav>
 
-            <SheetFooter className="mt-auto pb-8 flex flex-col gap-3">
-              <div className="flex items-center justify-between py-2 border-b border-border">
-                <span className="text-sm text-muted-foreground">Theme</span>
+            <SheetFooter className="p-4 border-t border-border mt-auto flex flex-col gap-3">
+              <div className="flex items-center justify-between px-2 py-1">
+                <span className="font-mono text-xs uppercase tracking-wide text-muted-foreground">Theme</span>
                 <ThemeToggle />
               </div>
               <Button
-                className="w-full gap-2"
+                variant="outline"
+                className="w-full gap-2 rounded-full font-mono text-sm"
                 onClick={() => {
                   setMobileMenuOpen(false)
                   setSearchOpen(true)
@@ -328,11 +347,13 @@ export function Navbar() {
                 <Search className="h-4 w-4" />
                 Search Services
               </Button>
-              <Button variant="ghost" className="w-full text-sm" asChild>
-                <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
-                  Already have an account? Sign in
-                </Link>
-              </Button>
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-center font-mono text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
+              >
+                Already have an account? <span className="text-foreground font-medium">Sign in</span>
+              </Link>
             </SheetFooter>
           </SheetContent>
         </Sheet>

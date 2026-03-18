@@ -6,6 +6,7 @@ import Script from 'next/script'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { BookingPanel } from './BookingPanel'
 import { ProcessStepper } from './ProcessStepper'
+import { ExplainerStepper } from './ExplainerStepper'
 import { ServiceRisks } from './ServiceRisks'
 import { ProfilePersonas } from './ProfilePersonas'
 import { RelatedServices } from './RelatedServices'
@@ -32,6 +33,9 @@ import {
   Clock,
   Users,
   Award,
+  X,
+  HelpCircle,
+  ChevronDown,
 } from 'lucide-react'
 
 interface GeoContext {
@@ -204,6 +208,14 @@ export function UnifiedServicePage({
   const [activeSection, setActiveSection] = useState<SectionId>('process')
   const heroRef = useRef<HTMLDivElement>(null)
 
+  // Variant selection state (shared with BookingPanel via callback)
+  const [selectedVariant, setSelectedVariant] = useState<string>(
+    service.defaultVariantId ?? service.variants?.[0]?.id ?? ''
+  )
+
+  // Explainer stepper open state
+  const [explainerOpen, setExplainerOpen] = useState(false)
+
   // Refs for smooth underline indicator
   const heroNavRef = useRef<HTMLDivElement>(null)
   const stickyNavRef = useRef<HTMLElement>(null)
@@ -233,7 +245,20 @@ export function UnifiedServicePage({
     service.avgRating !== undefined &&
     service.totalRatings >= 10
 
-  const totalFee = service.ollvyFee + (service.govtFee ?? 0)
+  // Calculate price with variant adjustment
+  const selectedVariantData = service.variants?.find(v => v.id === selectedVariant)
+  const priceAdjustment = selectedVariantData?.priceAdjustment ?? 0
+  const govtFeeAdjustment = selectedVariantData?.govtFeeAdjustment ?? 0
+  const adjustedOllvyFee = service.ollvyFee + (priceAdjustment / 100)
+  const adjustedGovtFee = (service.govtFee ?? 0) + (govtFeeAdjustment / 100)
+
+  // Calculate default addon total (for display in "Everything included")
+  const defaultAddonTotal = service.addons
+    ?.filter(addon => addon.defaultSelected)
+    .reduce((sum, addon) => sum + addon.pricePaisa, 0) ?? 0
+  const displayTotalOllvyFee = adjustedOllvyFee + (defaultAddonTotal / 100)
+
+  const totalFee = adjustedOllvyFee + adjustedGovtFee
 
   // Scroll to section
   const scrollToSection = useCallback((sectionId: SectionId) => {
@@ -435,6 +460,16 @@ export function UnifiedServicePage({
 
               {/* CTA row */}
               <div className="mt-6 flex flex-col items-center gap-2">
+                {/* Guarantee badge */}
+                {guaranteedDate && (
+                  <p className="text-[15px] font-mono text-foreground mb-1">
+                    <CheckCircle size={15} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
+                    {service.isRetainer
+                      ? `Current cycle due: ${guaranteedDate}`
+                      : `Guaranteed by ${guaranteedDate}`}
+                  </p>
+                )}
+
                 <Button size="lg" className="h-12 px-10" asChild>
                   <a
                     href={
@@ -446,16 +481,6 @@ export function UnifiedServicePage({
                     {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
                   </a>
                 </Button>
-
-                {/* Guarantee badge */}
-                {guaranteedDate && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    <CheckCircle size={12} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
-                    {service.isRetainer
-                      ? `Current cycle due: ${guaranteedDate}`
-                      : `Guaranteed by ${guaranteedDate}`}
-                  </p>
-                )}
               </div>
 
               {/* Metadata pills */}
@@ -487,25 +512,6 @@ export function UnifiedServicePage({
                 )}
               </div>
 
-              {/* Trust signals - subtle */}
-              <div className="flex flex-wrap items-center justify-center gap-5 mt-8 pt-6 border-t border-border/30">
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
-                  <Shield size={12} />
-                  Verified CAs
-                </span>
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
-                  <Clock size={12} />
-                  SLA guaranteed
-                </span>
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
-                  <Users size={12} />
-                  10,000+ filings
-                </span>
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5 font-mono">
-                  <Award size={12} />
-                  Fixed pricing
-                </span>
-              </div>
             </div>
 
             {/* Section navigation tabs - flush to bottom of hero */}
@@ -573,6 +579,33 @@ export function UnifiedServicePage({
                     How {service.shortName} works on Ollvy
                   </h2>
                   <ProcessStepper steps={service.processSteps} serviceId={service.id} priceVariesByState={service.priceVariesByState} />
+
+                  {/* What is [Service Type]? - Trigger */}
+                  {service.serviceExplainer && service.serviceExplainer.steps.length > 0 && (
+                    <>
+                      <button
+                        onClick={() => setExplainerOpen(!explainerOpen)}
+                        className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground mt-6 transition-colors"
+                      >
+                        <HelpCircle size={16} />
+                        What is {service.shortName}?
+                        <ChevronDown
+                          size={14}
+                          className={cn(
+                            'transition-transform duration-200',
+                            explainerOpen && 'rotate-180'
+                          )}
+                        />
+                      </button>
+
+                      {explainerOpen && (
+                        <ExplainerStepper
+                          serviceName={service.shortName}
+                          steps={service.serviceExplainer.steps}
+                        />
+                      )}
+                    </>
+                  )}
                 </section>
 
                 {/* Section: What's Included */}
@@ -585,7 +618,7 @@ export function UnifiedServicePage({
                     WHAT YOU GET
                   </p>
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
-                    Everything included for <span className="font-mono">₹{service.ollvyFee.toLocaleString('en-IN')}</span>
+                    Everything included for <span className="font-mono">₹{displayTotalOllvyFee.toLocaleString('en-IN')}</span>
                   </h2>
                   <p className="text-sm text-muted-foreground mb-10">
                     What your CA handles on your behalf. Nothing hidden.
@@ -684,26 +717,59 @@ export function UnifiedServicePage({
                   </p>
 
                   {/* Others vs Ollvy comparison */}
-                  <div className="grid grid-cols-2 gap-4 mb-10 max-w-[560px]">
-                    <Card className="border border-border bg-muted/30 p-5">
-                      <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
-                        Others
-                      </p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Take your documents as-is. Submit the application. If there's a
-                        query or rejection, it's your problem.
-                      </p>
-                    </Card>
-                    <Card className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-5">
-                      <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-3 font-mono">
-                        Ollvy
-                      </p>
-                      <p className="text-sm text-foreground leading-relaxed">
-                        Review every document before filing. Catch mismatches, expired
-                        items, and format issues. Then file.
-                      </p>
-                    </Card>
-                  </div>
+                  {service.comparisonWithout && service.comparisonWith ? (
+                    // Service-specific comparison with bullet points
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 max-w-[720px]">
+                      <Card className="border border-red-500/30 bg-red-500/5 p-5">
+                        <p className="text-xs uppercase tracking-widest text-red-600 dark:text-red-400 mb-4 font-mono">
+                          Without Ollvy
+                        </p>
+                        <ul className="space-y-3">
+                          {service.comparisonWithout.map((item, i) => (
+                            <li key={i} className="flex items-start gap-2.5 text-sm text-muted-foreground leading-relaxed">
+                              <X className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </Card>
+                      <Card className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-5">
+                        <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-4 font-mono">
+                          With Ollvy
+                        </p>
+                        <ul className="space-y-3">
+                          {service.comparisonWith.map((item, i) => (
+                            <li key={i} className="flex items-start gap-2.5 text-sm text-foreground leading-relaxed">
+                              <Check className="w-4 h-4 text-[hsl(var(--ollvy-green))] shrink-0 mt-0.5" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </Card>
+                    </div>
+                  ) : (
+                    // Generic comparison for services without specific data
+                    <div className="grid grid-cols-2 gap-4 mb-10 max-w-[560px]">
+                      <Card className="border border-border bg-muted/30 p-5">
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                          Others
+                        </p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          Take your documents as-is. Submit the application. If there's a
+                          query or rejection, it's your problem.
+                        </p>
+                      </Card>
+                      <Card className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-5">
+                        <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-3 font-mono">
+                          Ollvy
+                        </p>
+                        <p className="text-sm text-foreground leading-relaxed">
+                          Review every document before filing. Catch mismatches, expired
+                          items, and format issues. Then file.
+                        </p>
+                      </Card>
+                    </div>
+                  )}
 
                   {/* 4-step flow */}
                   <Card className="border border-border bg-card p-8">
@@ -1033,6 +1099,8 @@ export function UnifiedServicePage({
                     service={service}
                     serviceId={service.id}
                     priceVariesByState={service.priceVariesByState}
+                    selectedVariant={selectedVariant}
+                    onVariantChange={setSelectedVariant}
                   />
                 </div>
               </aside>
@@ -1074,11 +1142,19 @@ export function UnifiedServicePage({
         </div>
         <Button size="lg" className="flex-1 ml-4" asChild>
           <a
-            href={
-              service.priceVariesByState
-                ? `/quote/request/${service.id}?utm_source=service_page&utm_medium=mobile_bar`
-                : `/checkout/${service.id}?utm_source=service_page&utm_medium=mobile_bar`
-            }
+            href={(() => {
+              const baseUrl = service.priceVariesByState
+                ? `/quote/request/${service.id}`
+                : `/checkout/${service.id}`
+              const params = new URLSearchParams({
+                utm_source: 'service_page',
+                utm_medium: 'mobile_bar',
+              })
+              if (service.variants && selectedVariant) {
+                params.set('variant', selectedVariant)
+              }
+              return `${baseUrl}?${params.toString()}`
+            })()}
           >
             {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
           </a>

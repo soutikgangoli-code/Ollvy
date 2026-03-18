@@ -6,6 +6,16 @@ export interface WorkflowStage {
   wait_for_govt: boolean
 }
 
+export interface ServiceAddon {
+  id: string
+  name: string
+  description: string
+  pricePaisa: number
+  govtFeePaisa: number
+  required: boolean
+  defaultSelected: boolean
+}
+
 export interface ServicePackage {
   id: string
   slug: string
@@ -30,6 +40,8 @@ export interface ServicePackage {
   rating_count: number
   display_order: number
   is_active: boolean
+  is_bundle?: boolean
+  addons?: ServiceAddon[]
   scope_included: string[]
   scope_excluded: string[]
   image_url?: string
