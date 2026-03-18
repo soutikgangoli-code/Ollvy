@@ -30,8 +30,8 @@ DELETE FROM service_packages WHERE name NOT IN (
   'Professional Tax Registration',
 
   -- #12-16: IP Protection (both hyphen and em-dash variants)
-  'Trademark - Word Mark', 'Trademark — Word Mark',
-  'Trademark - Logo', 'Trademark — Logo',
+  'Trademark - Word Mark', 'Trademark - Word Mark',
+  'Trademark - Logo', 'Trademark - Logo',
   'Copyright Registration',
   'Patent Filing (Provisional)',
   'Design Registration',
@@ -49,15 +49,15 @@ DELETE FROM service_packages WHERE name NOT IN (
   'Trade License',
 
   -- #27-30: Monthly Recurring (GST + TDS) - both naming variants
-  'GST Monthly Filing - Up to Rs 50L', 'GST Monthly Filing — Up to ₹50L/year',
-  'GST Monthly Filing - Rs 50L to 5Cr', 'GST Monthly Filing — ₹50L-5Cr/year',
-  'GST Monthly Filing - Rs 5Cr+', 'GST Monthly Filing — ₹5Cr+/year',
+  'GST Monthly Filing - Up to Rs 50L', 'GST Monthly Filing - Up to ₹50L/year',
+  'GST Monthly Filing - Rs 50L to 5Cr', 'GST Monthly Filing - ₹50L-5Cr/year',
+  'GST Monthly Filing - Rs 5Cr+', 'GST Monthly Filing - ₹5Cr+/year',
   'TDS Monthly Compliance',
 
   -- #31-34: Monthly Recurring (Payroll + PF/ESIC) - both naming variants
-  'Payroll Management - Up to 10 Employees', 'Payroll Management — Up to 10 Employees',
-  'Payroll Management - 11 to 25 Employees', 'Payroll Management — 11-25 Employees',
-  'Payroll Management - 26 to 50 Employees', 'Payroll Management — 26-50 Employees',
+  'Payroll Management - Up to 10 Employees', 'Payroll Management - Up to 10 Employees',
+  'Payroll Management - 11 to 25 Employees', 'Payroll Management - 11-25 Employees',
+  'Payroll Management - 26 to 50 Employees', 'Payroll Management - 26-50 Employees',
   'PF/ESIC Monthly Filing',
 
   -- #35-42: Annual/Periodic Filing

@@ -7,19 +7,19 @@
 -- 14. OPC Incorporation - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Answer 5 questions — we build your checklist", "timeline": "Day 0", "body": "Business activity, proposed name (3 options), nominee details, address state. A CS is assigned within 4 hours.", "visual": "checklist", "milestone": "CS assigned, checklist sent"},
-    {"step": 2, "title": "Upload documents through the app", "timeline": "Day 0–2", "body": "PAN, Aadhaar for director and nominee, address proof, passport photo. Your CS verifies each before filing.", "visual": "upload", "milestone": "Documents verified by CS"},
-    {"step": 3, "title": "DSC and DIN obtained", "timeline": "Day 2–4", "body": "Digital Signature Certificate and Director Identification Number for you. Video verification guided.", "visual": "form", "milestone": "DSC and DIN ready"},
-    {"step": 4, "title": "Name approved via RUN", "timeline": "Day 4–7", "body": "Your CS files RUN with MCA. OPC name approval takes 2–3 working days.", "visual": "form", "milestone": "Company name approved"},
-    {"step": 5, "title": "SPICe+ filed with nominee form", "timeline": "Day 7–10", "body": "MOA, AOA, INC-3 (nominee consent), PAN, TAN filed together.", "visual": "form", "milestone": "SPICe+ submitted"},
-    {"step": 6, "title": "Certificate of Incorporation issued", "timeline": "Day 10–12", "body": "MCA issues CoI with CIN. PAN/TAN generated. All uploaded to your account.", "visual": "stamp", "isCompletion": true, "milestone": "OPC incorporated"}
+    {"step": 1, "title": "Answer 5 questions - we build your checklist", "timeline": "Day 0", "body": "Business activity, proposed name (3 options), nominee details, address state. A CS is assigned within 4 hours.", "visual": "checklist", "milestone": "CS assigned, checklist sent"},
+    {"step": 2, "title": "Upload documents through the app", "timeline": "Day 0-2", "body": "PAN, Aadhaar for director and nominee, address proof, passport photo. Your CS verifies each before filing.", "visual": "upload", "milestone": "Documents verified by CS"},
+    {"step": 3, "title": "DSC and DIN obtained", "timeline": "Day 2-4", "body": "Digital Signature Certificate and Director Identification Number for you. Video verification guided.", "visual": "form", "milestone": "DSC and DIN ready"},
+    {"step": 4, "title": "Name approved via RUN", "timeline": "Day 4-7", "body": "Your CS files RUN with MCA. OPC name approval takes 2-3 working days.", "visual": "form", "milestone": "Company name approved"},
+    {"step": 5, "title": "SPICe+ filed with nominee form", "timeline": "Day 7-10", "body": "MOA, AOA, INC-3 (nominee consent), PAN, TAN filed together.", "visual": "form", "milestone": "SPICe+ submitted"},
+    {"step": 6, "title": "Certificate of Incorporation issued", "timeline": "Day 10-12", "body": "MCA issues CoI with CIN. PAN/TAN generated. All uploaded to your account.", "visual": "stamp", "isCompletion": true, "milestone": "OPC incorporated"}
   ]'::jsonb,
   whats_included = '[
-    {"title": "Single director, single shareholder structure", "body": "You own 100% with limited liability. No co-founders needed. Perfect for solopreneurs.", "comparisonWithout": "Sole proprietorship — unlimited personal liability", "comparisonWithOllvy": "OPC — limited liability, company structure"},
+    {"title": "Single director, single shareholder structure", "body": "You own 100% with limited liability. No co-founders needed. Perfect for solopreneurs.", "comparisonWithout": "Sole proprietorship - unlimited personal liability", "comparisonWithOllvy": "OPC - limited liability, company structure"},
     {"title": "Nominee member form handled", "body": "OPC requires INC-3 nominee consent. We draft, get signature, and file. Nominee takes over if something happens.", "mockVisualType": "status", "mockVisualData": {"label": "Nominee Status", "row1": "Nominee: Required for OPC ✓", "row2": "Form INC-3: Drafted ✓", "row3": "Consent: Filed with SPICe+"}},
-    {"title": "DSC with video verification guidance", "body": "Digital Signature mandatory. We arrange token and guide you through 15-minute video verification.", "comparisonWithout": "Navigate DSC portal alone — 3+ hours", "comparisonWithOllvy": "Guided in app — 15 minutes"},
-    {"title": "PAN and TAN — automatic with incorporation", "body": "Both issued within 24 hours of CoI. No separate applications needed.", "mockVisualType": "receipt", "mockVisualData": {"label": "Incorporation Package", "row1": "CIN: Issued with CoI", "row2": "PAN: Auto-generated", "row3": "TAN: Auto-generated"}},
-    {"title": "Compliance calendar auto-populated", "body": "First board meeting, ADT-1, DIR-3 KYC — all deadlines added to your calendar.", "mockVisualType": "calendar", "mockVisualData": {"row1": "First Board Meeting — within 30 days", "row2": "Auditor Appointment — within 30 days", "row3": "DIR-3 KYC — Sep 30 annually"}}
+    {"title": "DSC with video verification guidance", "body": "Digital Signature mandatory. We arrange token and guide you through 15-minute video verification.", "comparisonWithout": "Navigate DSC portal alone - 3+ hours", "comparisonWithOllvy": "Guided in app - 15 minutes"},
+    {"title": "PAN and TAN - automatic with incorporation", "body": "Both issued within 24 hours of CoI. No separate applications needed.", "mockVisualType": "receipt", "mockVisualData": {"label": "Incorporation Package", "row1": "CIN: Issued with CoI", "row2": "PAN: Auto-generated", "row3": "TAN: Auto-generated"}},
+    {"title": "Compliance calendar auto-populated", "body": "First board meeting, ADT-1, DIR-3 KYC - all deadlines added to your calendar.", "mockVisualType": "calendar", "mockVisualData": {"row1": "First Board Meeting - within 30 days", "row2": "Auditor Appointment - within 30 days", "row3": "DIR-3 KYC - Sep 30 annually"}}
   ]'::jsonb,
   service_risks = '[
     {"icon": "document", "title": "Nominee consent mandatory", "body": "OPC requires a nominee who takes over if something happens to you. INC-3 form must be filed with incorporation. We draft and handle this."},
@@ -34,14 +34,14 @@ UPDATE service_packages SET
   ]'::jsonb,
   faqs = '[
     {"category": "General", "q": "What is an OPC?", "a": "One Person Company has single member and director with limited liability. Introduced in Companies Act, 2013."},
-    {"category": "General", "q": "OPC vs Sole Proprietorship — which is better?", "a": "OPC offers limited liability and company status. Sole proprietorship has unlimited liability but simpler compliance."},
+    {"category": "General", "q": "OPC vs Sole Proprietorship - which is better?", "a": "OPC offers limited liability and company status. Sole proprietorship has unlimited liability but simpler compliance."},
     {"category": "Process", "q": "Can OPC have employees?", "a": "Yes. OPC can hire unlimited employees. The single-member restriction is for shareholders, not staff."},
     {"category": "Process", "q": "Who can be a nominee?", "a": "Any Indian citizen with valid PAN and Aadhaar. Cannot be existing director in the same OPC."},
     {"category": "Documents", "q": "What documents are needed?", "a": "PAN, Aadhaar, photo for director. Same for nominee. Address proof for registered office."},
     {"category": "After Completion", "q": "What happens after incorporation?", "a": "Open current account, appoint auditor within 30 days, first board meeting within 30 days, DIR-3 KYC annually."}
   ]'::jsonb,
   review_sources = '[
-    {"name": "MCA21 Portal", "url": "https://www.mca.gov.in", "description": "Ministry of Corporate Affairs — OPC registration"},
+    {"name": "MCA21 Portal", "url": "https://www.mca.gov.in", "description": "Ministry of Corporate Affairs - OPC registration"},
     {"name": "Companies Act, 2013", "url": "https://www.mca.gov.in/Ministry/pdf/CompaniesAct2013.pdf", "description": "Section 3(1)(c): OPC provisions"}
   ]'::jsonb,
   unlocks = '[
@@ -55,18 +55,18 @@ WHERE slug = 'opc-incorporation';
 -- 15. Partnership Registration - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Partner details collected", "timeline": "Day 0–1", "body": "Names, capital contribution, profit sharing ratio, roles. Your CS calls to clarify terms.", "visual": "checklist", "milestone": "Details received"},
-    {"step": 2, "title": "Deed drafted — custom, not template", "timeline": "Day 1–3", "body": "Partnership deed with profit ratio, roles, dispute resolution, exit clauses. Based on your actual arrangement.", "visual": "form", "milestone": "Draft deed shared"},
-    {"step": 3, "title": "You review and approve", "timeline": "Day 3–4", "body": "Review deed in app. Request changes. Your CS incorporates feedback.", "visual": "checklist", "milestone": "Deed approved"},
-    {"step": 4, "title": "Stamp paper arranged", "timeline": "Day 4–5", "body": "We arrange appropriate value stamp paper for your state. Partners sign.", "visual": "form", "milestone": "Deed executed"},
-    {"step": 5, "title": "Registered with Registrar of Firms", "timeline": "Day 5–7", "body": "Filed with state Registrar. Registration certificate issued.", "visual": "stamp", "isCompletion": true, "milestone": "Firm registered"}
+    {"step": 1, "title": "Partner details collected", "timeline": "Day 0-1", "body": "Names, capital contribution, profit sharing ratio, roles. Your CS calls to clarify terms.", "visual": "checklist", "milestone": "Details received"},
+    {"step": 2, "title": "Deed drafted - custom, not template", "timeline": "Day 1-3", "body": "Partnership deed with profit ratio, roles, dispute resolution, exit clauses. Based on your actual arrangement.", "visual": "form", "milestone": "Draft deed shared"},
+    {"step": 3, "title": "You review and approve", "timeline": "Day 3-4", "body": "Review deed in app. Request changes. Your CS incorporates feedback.", "visual": "checklist", "milestone": "Deed approved"},
+    {"step": 4, "title": "Stamp paper arranged", "timeline": "Day 4-5", "body": "We arrange appropriate value stamp paper for your state. Partners sign.", "visual": "form", "milestone": "Deed executed"},
+    {"step": 5, "title": "Registered with Registrar of Firms", "timeline": "Day 5-7", "body": "Filed with state Registrar. Registration certificate issued.", "visual": "stamp", "isCompletion": true, "milestone": "Firm registered"}
   ]'::jsonb,
   whats_included = '[
-    {"title": "Custom partnership deed — not template", "body": "Drafted based on your specific terms — profit ratio, roles, exit clauses, dispute resolution. Not a one-size-fits-all.", "comparisonWithout": "Generic 50-50 template that causes disputes later", "comparisonWithOllvy": "Custom deed reflecting your actual agreement"},
+    {"title": "Custom partnership deed - not template", "body": "Drafted based on your specific terms - profit ratio, roles, exit clauses, dispute resolution. Not a one-size-fits-all.", "comparisonWithout": "Generic 50-50 template that causes disputes later", "comparisonWithOllvy": "Custom deed reflecting your actual agreement"},
     {"title": "Stamp paper arranged", "body": "Partnership deed must be on appropriate value stamp paper. Value varies by state. We handle procurement.", "mockVisualType": "receipt", "mockVisualData": {"label": "Stamp Duty", "row1": "State: Maharashtra", "row2": "Deed Value: ₹5,00,000", "row3": "Stamp: ₹500 (0.1%)"}},
-    {"title": "Profit sharing explicitly defined", "body": "Vague profit clauses cause disputes. We draft explicit percentages with scenarios for losses.", "comparisonWithout": "Verbal agreement — disputes inevitable", "comparisonWithOllvy": "Written, signed, legally binding"},
+    {"title": "Profit sharing explicitly defined", "body": "Vague profit clauses cause disputes. We draft explicit percentages with scenarios for losses.", "comparisonWithout": "Verbal agreement - disputes inevitable", "comparisonWithOllvy": "Written, signed, legally binding"},
     {"title": "Registrar filing handled", "body": "Filed with Registrar of Firms in your state. Registration certificate issued.", "mockVisualType": "status", "mockVisualData": {"row1": "Application: Filed ✓", "row2": "Processing: 2-3 days", "row3": "Certificate: Issued"}},
-    {"title": "Compliance guidance included", "body": "Partnership ITR (ITR-5), GST if applicable, TDS obligations — we explain what comes next."}
+    {"title": "Compliance guidance included", "body": "Partnership ITR (ITR-5), GST if applicable, TDS obligations - we explain what comes next."}
   ]'::jsonb,
   service_risks = '[
     {"icon": "document", "title": "Partners have unlimited liability", "body": "Unlike LLP or Pvt Ltd, partners are personally liable for firm debts. Consider LLP if you want limited liability."},
@@ -81,7 +81,7 @@ UPDATE service_packages SET
   ]'::jsonb,
   faqs = '[
     {"category": "General", "q": "Do partners have unlimited liability?", "a": "Yes. Partners are personally liable for firm debts. For limited liability, consider LLP instead."},
-    {"category": "General", "q": "Partnership vs LLP — which should I choose?", "a": "Partnership if simpler compliance is priority. LLP if you want limited liability."},
+    {"category": "General", "q": "Partnership vs LLP - which should I choose?", "a": "Partnership if simpler compliance is priority. LLP if you want limited liability."},
     {"category": "Process", "q": "Is registration mandatory?", "a": "No. But unregistered firms cannot sue third parties. Registration recommended."},
     {"category": "Process", "q": "How many partners are required?", "a": "Minimum 2, maximum 50 (for banking, max 10)."},
     {"category": "Documents", "q": "What documents are needed?", "a": "PAN, Aadhaar, address proof for all partners. Registered office address proof."},
@@ -105,11 +105,11 @@ UPDATE service_packages SET
     {"step": 1, "title": "Share Aadhaar and business PAN", "timeline": "Day 0", "body": "Owner Aadhaar for OTP verification, business PAN. That''s all we need.", "visual": "upload", "milestone": "Details received"},
     {"step": 2, "title": "Verify eligibility", "timeline": "Day 0", "body": "We check if your investment and turnover qualify for micro/small/medium category.", "visual": "checklist", "milestone": "Eligibility confirmed"},
     {"step": 3, "title": "Application filed on Udyam portal", "timeline": "Day 1", "body": "Application submitted on official portal. OTP verification completed.", "visual": "form", "milestone": "Application submitted"},
-    {"step": 4, "title": "Udyam certificate issued", "timeline": "Day 1–2", "body": "Certificate with Unique Registration Number (URN) generated instantly.", "visual": "stamp", "isCompletion": true, "milestone": "MSME registered"}
+    {"step": 4, "title": "Udyam certificate issued", "timeline": "Day 1-2", "body": "Certificate with Unique Registration Number (URN) generated instantly.", "visual": "stamp", "isCompletion": true, "milestone": "MSME registered"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Udyam certificate with URN", "body": "Official certificate with Udyam Registration Number. Permanent, no renewal needed.", "mockVisualType": "status", "mockVisualData": {"label": "Udyam Certificate", "row1": "URN: UDYAM-MH-01-0012345 ✓", "row2": "Category: Small Enterprise", "row3": "Valid: Lifetime"}},
-    {"title": "Automatic GST linking", "body": "Your GSTIN is linked to Udyam registration automatically during filing.", "comparisonWithout": "Manual linking — additional steps", "comparisonWithOllvy": "Auto-linked during registration"},
+    {"title": "Automatic GST linking", "body": "Your GSTIN is linked to Udyam registration automatically during filing.", "comparisonWithout": "Manual linking - additional steps", "comparisonWithOllvy": "Auto-linked during registration"},
     {"title": "Access to government schemes", "body": "Priority sector lending, subsidy schemes, tender reservations, lower interest rates.", "mockVisualType": "checklist", "mockVisualData": {"row1": "Priority lending: Eligible ✓", "row2": "CGTMSE guarantee: Eligible ✓", "row3": "Govt tenders: 25% reserved"}},
     {"title": "Category classification explained", "body": "Micro/Small/Medium based on investment and turnover. We explain which you qualify for."},
     {"title": "Same-day certificate", "body": "Unlike most registrations, Udyam certificate is issued instantly after filing."}
@@ -148,15 +148,15 @@ WHERE slug = 'msme-registration';
 -- 21. GST Cancellation - ENHANCE (was minimal)
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "ITC and liability review", "timeline": "Day 0–2", "body": "Your CA checks ITC balance, pending liabilities, and determines reversal amount.", "visual": "checklist", "milestone": "Liability assessed"},
-    {"step": 2, "title": "Pending returns filed", "timeline": "Day 2–5", "body": "All pending GSTR-1 and GSTR-3B filed before cancellation can proceed.", "visual": "form", "milestone": "Returns up to date"},
-    {"step": 3, "title": "Final return GSTR-10 prepared", "timeline": "Day 5–8", "body": "Stock statement prepared. ITC on closing stock reversed. Final return drafted.", "visual": "form", "milestone": "GSTR-10 ready"},
-    {"step": 4, "title": "REG-16 cancellation filed", "timeline": "Day 8–12", "body": "Voluntary cancellation application filed on GST portal.", "visual": "form", "milestone": "Application submitted"},
-    {"step": 5, "title": "Cancellation order received", "timeline": "Day 12–15", "body": "GST officer processes. Cancellation order issued. GSTIN deactivated.", "visual": "stamp", "isCompletion": true, "milestone": "GST cancelled"}
+    {"step": 1, "title": "ITC and liability review", "timeline": "Day 0-2", "body": "Your CA checks ITC balance, pending liabilities, and determines reversal amount.", "visual": "checklist", "milestone": "Liability assessed"},
+    {"step": 2, "title": "Pending returns filed", "timeline": "Day 2-5", "body": "All pending GSTR-1 and GSTR-3B filed before cancellation can proceed.", "visual": "form", "milestone": "Returns up to date"},
+    {"step": 3, "title": "Final return GSTR-10 prepared", "timeline": "Day 5-8", "body": "Stock statement prepared. ITC on closing stock reversed. Final return drafted.", "visual": "form", "milestone": "GSTR-10 ready"},
+    {"step": 4, "title": "REG-16 cancellation filed", "timeline": "Day 8-12", "body": "Voluntary cancellation application filed on GST portal.", "visual": "form", "milestone": "Application submitted"},
+    {"step": 5, "title": "Cancellation order received", "timeline": "Day 12-15", "body": "GST officer processes. Cancellation order issued. GSTIN deactivated.", "visual": "stamp", "isCompletion": true, "milestone": "GST cancelled"}
   ]'::jsonb,
   whats_included = '[
-    {"title": "Complete liability assessment", "body": "Before cancellation, we check what you owe — pending tax, ITC reversal, interest. No surprises.", "mockVisualType": "receipt", "mockVisualData": {"label": "Pre-Cancellation Summary", "row1": "Pending GSTR-3B: ₹0", "row2": "ITC Reversal: ₹12,450", "row3": "Interest: ₹0"}},
-    {"title": "Pending returns filed first", "body": "Cancellation blocked if returns pending. We file all outstanding GSTR-1 and GSTR-3B.", "comparisonWithout": "Apply without filing — rejected", "comparisonWithOllvy": "Returns cleared, then cancel"},
+    {"title": "Complete liability assessment", "body": "Before cancellation, we check what you owe - pending tax, ITC reversal, interest. No surprises.", "mockVisualType": "receipt", "mockVisualData": {"label": "Pre-Cancellation Summary", "row1": "Pending GSTR-3B: ₹0", "row2": "ITC Reversal: ₹12,450", "row3": "Interest: ₹0"}},
+    {"title": "Pending returns filed first", "body": "Cancellation blocked if returns pending. We file all outstanding GSTR-1 and GSTR-3B.", "comparisonWithout": "Apply without filing - rejected", "comparisonWithOllvy": "Returns cleared, then cancel"},
     {"title": "GSTR-10 final return", "body": "Stock statement and ITC reversal calculated. Proper closure of GST account.", "mockVisualType": "status", "mockVisualData": {"row1": "Closing Stock: Declared ✓", "row2": "ITC Reversal: Calculated ✓", "row3": "GSTR-10: Filed ✓"}},
     {"title": "REG-16 application handled", "body": "Voluntary cancellation form with reason and effective date. We handle the portal."},
     {"title": "Confirmation and documentation", "body": "Cancellation order uploaded to your account. Records preserved for future reference."}
@@ -193,15 +193,15 @@ WHERE slug = 'gst-cancellation';
 -- 22. GST Revocation - ENHANCE (was minimal)
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Review cancellation order", "timeline": "Day 0–1", "body": "Understand why GST was cancelled — non-filing, fraud, officer action.", "visual": "checklist", "milestone": "Cause identified"},
+    {"step": 1, "title": "Review cancellation order", "timeline": "Day 0-1", "body": "Understand why GST was cancelled - non-filing, fraud, officer action.", "visual": "checklist", "milestone": "Cause identified"},
     {"step": 2, "title": "Check revocation eligibility", "timeline": "Day 1", "body": "Revocation must be filed within 30 days of cancellation. We verify timeline.", "visual": "checklist", "milestone": "Eligibility confirmed"},
-    {"step": 3, "title": "File all pending returns", "timeline": "Day 1–5", "body": "All GSTR-1, GSTR-3B from cancellation date to now. With interest and late fees.", "visual": "form", "milestone": "Returns filed"},
-    {"step": 4, "title": "REG-21 revocation filed", "timeline": "Day 5–8", "body": "Application for revocation with reason and compliance proof.", "visual": "form", "milestone": "Application submitted"},
-    {"step": 5, "title": "GSTIN restored", "timeline": "Day 8–10", "body": "Officer approves. GSTIN reactivated. Business continues.", "visual": "stamp", "isCompletion": true, "milestone": "GST restored"}
+    {"step": 3, "title": "File all pending returns", "timeline": "Day 1-5", "body": "All GSTR-1, GSTR-3B from cancellation date to now. With interest and late fees.", "visual": "form", "milestone": "Returns filed"},
+    {"step": 4, "title": "REG-21 revocation filed", "timeline": "Day 5-8", "body": "Application for revocation with reason and compliance proof.", "visual": "form", "milestone": "Application submitted"},
+    {"step": 5, "title": "GSTIN restored", "timeline": "Day 8-10", "body": "Officer approves. GSTIN reactivated. Business continues.", "visual": "stamp", "isCompletion": true, "milestone": "GST restored"}
   ]'::jsonb,
   whats_included = '[
-    {"title": "Cancellation cause analysis", "body": "We review the cancellation order and identify exact reason — missed returns, fraud allegation, etc.", "mockVisualType": "status", "mockVisualData": {"label": "Cancellation Analysis", "row1": "Reason: Non-filing of returns", "row2": "Missed: GSTR-3B Jun, Jul, Aug", "row3": "Cancellation Date: 15 Sep 2025"}},
-    {"title": "All pending returns filed", "body": "Revocation requires all returns up to date. We file every missed GSTR-1 and GSTR-3B.", "comparisonWithout": "Apply without returns — rejected", "comparisonWithOllvy": "Returns filed, then revoke"},
+    {"title": "Cancellation cause analysis", "body": "We review the cancellation order and identify exact reason - missed returns, fraud allegation, etc.", "mockVisualType": "status", "mockVisualData": {"label": "Cancellation Analysis", "row1": "Reason: Non-filing of returns", "row2": "Missed: GSTR-3B Jun, Jul, Aug", "row3": "Cancellation Date: 15 Sep 2025"}},
+    {"title": "All pending returns filed", "body": "Revocation requires all returns up to date. We file every missed GSTR-1 and GSTR-3B.", "comparisonWithout": "Apply without returns - rejected", "comparisonWithOllvy": "Returns filed, then revoke"},
     {"title": "Interest and late fee calculated", "body": "Missed returns attract interest and fees. We calculate total liability before you commit.", "mockVisualType": "receipt", "mockVisualData": {"label": "Revocation Cost", "row1": "Pending Tax: ₹45,000", "row2": "Interest (18%): ₹2,700", "row3": "Late Fee: ₹3,000"}},
     {"title": "REG-21 application", "body": "Revocation application with reason for missing returns and commitment to compliance."},
     {"title": "Faster than fresh registration", "body": "Revocation takes 10 days. Fresh registration takes 7+ days plus you lose GSTIN history."}
@@ -238,16 +238,16 @@ WHERE slug = 'gst-revocation';
 -- 23. Company Strike-Off - ENHANCE (was minimal)
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Compliance status review", "timeline": "Day 0–5", "body": "Check all pending returns — MCA, GST, IT. List what needs filing before strike-off.", "visual": "checklist", "milestone": "Compliance gaps identified"},
-    {"step": 2, "title": "File pending compliances", "timeline": "Day 5–20", "body": "All AOC-4, MGT-7, DIR-3 KYC filed. GST cancelled. ITR filed.", "visual": "form", "milestone": "All returns filed"},
-    {"step": 3, "title": "Board and shareholder resolutions", "timeline": "Day 20–30", "body": "Pass resolutions for strike-off. No objection from creditors.", "visual": "form", "milestone": "Resolutions passed"},
-    {"step": 4, "title": "Bank account closure", "timeline": "Day 30–40", "body": "Close current account. Transfer remaining funds.", "visual": "checklist", "milestone": "Bank closed"},
-    {"step": 5, "title": "STK-2 filed", "timeline": "Day 40–50", "body": "Strike-off application with affidavit and indemnity bond.", "visual": "form", "milestone": "STK-2 submitted"},
-    {"step": 6, "title": "Strike-off order received", "timeline": "Day 50–90", "body": "ROC processes. Name removed from register.", "visual": "stamp", "isCompletion": true, "milestone": "Company struck off"}
+    {"step": 1, "title": "Compliance status review", "timeline": "Day 0-5", "body": "Check all pending returns - MCA, GST, IT. List what needs filing before strike-off.", "visual": "checklist", "milestone": "Compliance gaps identified"},
+    {"step": 2, "title": "File pending compliances", "timeline": "Day 5-20", "body": "All AOC-4, MGT-7, DIR-3 KYC filed. GST cancelled. ITR filed.", "visual": "form", "milestone": "All returns filed"},
+    {"step": 3, "title": "Board and shareholder resolutions", "timeline": "Day 20-30", "body": "Pass resolutions for strike-off. No objection from creditors.", "visual": "form", "milestone": "Resolutions passed"},
+    {"step": 4, "title": "Bank account closure", "timeline": "Day 30-40", "body": "Close current account. Transfer remaining funds.", "visual": "checklist", "milestone": "Bank closed"},
+    {"step": 5, "title": "STK-2 filed", "timeline": "Day 40-50", "body": "Strike-off application with affidavit and indemnity bond.", "visual": "form", "milestone": "STK-2 submitted"},
+    {"step": 6, "title": "Strike-off order received", "timeline": "Day 50-90", "body": "ROC processes. Name removed from register.", "visual": "stamp", "isCompletion": true, "milestone": "Company struck off"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Complete compliance cleanup", "body": "All pending MCA returns filed first. Strike-off impossible without clean compliance.", "mockVisualType": "status", "mockVisualData": {"label": "Pre-Strike-Off Compliance", "row1": "AOC-4 FY 2023-24: Filed ✓", "row2": "MGT-7 FY 2023-24: Filed ✓", "row3": "DIR-3 KYC: Current ✓"}},
-    {"title": "GST cancellation included", "body": "GST must be cancelled before strike-off. We handle REG-16 and GSTR-10.", "comparisonWithout": "Apply for strike-off — rejected for active GST", "comparisonWithOllvy": "GST cancelled first, then strike-off"},
+    {"title": "GST cancellation included", "body": "GST must be cancelled before strike-off. We handle REG-16 and GSTR-10.", "comparisonWithout": "Apply for strike-off - rejected for active GST", "comparisonWithOllvy": "GST cancelled first, then strike-off"},
     {"title": "Resolutions drafted", "body": "Board resolution and shareholder resolution for voluntary strike-off. Proper minutes maintained."},
     {"title": "STK-2 with affidavit", "body": "Application with directors'' affidavit and indemnity bond. No objections from creditors/employees.", "mockVisualType": "form", "mockVisualData": {"label": "STK-2 Checklist", "row1": "Form STK-2: Drafted ✓", "row2": "Affidavit: Notarized ✓", "row3": "Indemnity Bond: Signed ✓"}},
     {"title": "ROC processing tracked", "body": "We track status and respond to any queries from ROC during processing."}
@@ -265,7 +265,7 @@ UPDATE service_packages SET
   ]'::jsonb,
   faqs = '[
     {"category": "General", "q": "What is strike-off?", "a": "Removal of company name from ROC register. Company ceases to exist."},
-    {"category": "General", "q": "Strike-off vs winding up — difference?", "a": "Strike-off is simpler for dormant companies. Winding up for companies with liabilities."},
+    {"category": "General", "q": "Strike-off vs winding up - difference?", "a": "Strike-off is simpler for dormant companies. Winding up for companies with liabilities."},
     {"category": "Process", "q": "How long does strike-off take?", "a": "90 days minimum. Compliance filing + ROC processing."},
     {"category": "Process", "q": "What if there are pending liabilities?", "a": "Clear all liabilities first. Directors personally liable if not."},
     {"category": "Documents", "q": "What is affidavit for?", "a": "Directors declare no pending liabilities, no ongoing litigation."},
@@ -284,15 +284,15 @@ WHERE slug = 'company-closure';
 -- 26. Accounting & Bookkeeping - ENHANCE (was minimal)
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Share bank statements and invoices", "timeline": "Day 1–3", "body": "Upload bank statement, sales invoices, purchase bills. We organize everything.", "visual": "upload", "milestone": "Data received"},
-    {"step": 2, "title": "Transactions categorized", "timeline": "Day 3–5", "body": "Every transaction mapped — sales, purchases, expenses, capital.", "visual": "form", "milestone": "Categorization done"},
-    {"step": 3, "title": "Entries passed in books", "timeline": "Day 5–8", "body": "All entries recorded. Double-entry bookkeeping maintained.", "visual": "form", "milestone": "Books updated"},
-    {"step": 4, "title": "Bank reconciliation completed", "timeline": "Day 8–9", "body": "Books matched with bank statement. Discrepancies identified.", "visual": "checklist", "milestone": "Bank reconciled"},
+    {"step": 1, "title": "Share bank statements and invoices", "timeline": "Day 1-3", "body": "Upload bank statement, sales invoices, purchase bills. We organize everything.", "visual": "upload", "milestone": "Data received"},
+    {"step": 2, "title": "Transactions categorized", "timeline": "Day 3-5", "body": "Every transaction mapped - sales, purchases, expenses, capital.", "visual": "form", "milestone": "Categorization done"},
+    {"step": 3, "title": "Entries passed in books", "timeline": "Day 5-8", "body": "All entries recorded. Double-entry bookkeeping maintained.", "visual": "form", "milestone": "Books updated"},
+    {"step": 4, "title": "Bank reconciliation completed", "timeline": "Day 8-9", "body": "Books matched with bank statement. Discrepancies identified.", "visual": "checklist", "milestone": "Bank reconciled"},
     {"step": 5, "title": "Monthly financials delivered", "timeline": "Day 10", "body": "P&L, Balance Sheet, Trial Balance shared. Ready for review.", "visual": "stamp", "isCompletion": true, "milestone": "Financials delivered"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Complete transaction recording", "body": "Every sale, purchase, expense, receipt recorded. Nothing missed.", "mockVisualType": "receipt", "mockVisualData": {"label": "March 2025 Summary", "row1": "Transactions: 156", "row2": "Sales: ₹12,45,000", "row3": "Expenses: ₹8,34,000"}},
-    {"title": "Bank reconciliation every month", "body": "Your books match your bank statement. Discrepancies flagged immediately.", "comparisonWithout": "Books and bank don''t match — audit nightmare", "comparisonWithOllvy": "Reconciled monthly — audit-ready always"},
+    {"title": "Bank reconciliation every month", "body": "Your books match your bank statement. Discrepancies flagged immediately.", "comparisonWithout": "Books and bank don''t match - audit nightmare", "comparisonWithOllvy": "Reconciled monthly - audit-ready always"},
     {"title": "Monthly P&L and Balance Sheet", "body": "Know where you stand financially every month. Not just at year-end.", "mockVisualType": "status", "mockVisualData": {"label": "Monthly Financials", "row1": "P&L: Ready ✓", "row2": "Balance Sheet: Ready ✓", "row3": "Trial Balance: Ready ✓"}},
     {"title": "GST-ready books", "body": "Transactions mapped with GST treatment. ITC and output tax clear."},
     {"title": "Year-end audit preparation", "body": "When audit time comes, your books are ready. No last-minute scramble."}
@@ -330,16 +330,16 @@ WHERE slug = 'accounting-bookkeeping';
 -- 27. Statutory Audit - ENHANCE (was minimal)
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Engagement and planning", "timeline": "Day 0–3", "body": "Engagement letter signed. Audit scope and materiality defined.", "visual": "checklist", "milestone": "Engagement started"},
-    {"step": 2, "title": "Documents collected", "timeline": "Day 3–7", "body": "All financials, bank statements, invoices, contracts gathered.", "visual": "upload", "milestone": "Documents received"},
-    {"step": 3, "title": "Fieldwork — vouching and verification", "timeline": "Day 7–20", "body": "Auditor verifies transactions, checks documentation, tests controls.", "visual": "form", "milestone": "Fieldwork complete"},
-    {"step": 4, "title": "Management discussion", "timeline": "Day 20–25", "body": "Findings discussed. Adjustments made if needed.", "visual": "checklist", "milestone": "Issues resolved"},
-    {"step": 5, "title": "Audit report signed", "timeline": "Day 25–30", "body": "Auditor issues opinion — clean, qualified, or adverse. Report signed.", "visual": "stamp", "isCompletion": true, "milestone": "Audit completed"}
+    {"step": 1, "title": "Engagement and planning", "timeline": "Day 0-3", "body": "Engagement letter signed. Audit scope and materiality defined.", "visual": "checklist", "milestone": "Engagement started"},
+    {"step": 2, "title": "Documents collected", "timeline": "Day 3-7", "body": "All financials, bank statements, invoices, contracts gathered.", "visual": "upload", "milestone": "Documents received"},
+    {"step": 3, "title": "Fieldwork - vouching and verification", "timeline": "Day 7-20", "body": "Auditor verifies transactions, checks documentation, tests controls.", "visual": "form", "milestone": "Fieldwork complete"},
+    {"step": 4, "title": "Management discussion", "timeline": "Day 20-25", "body": "Findings discussed. Adjustments made if needed.", "visual": "checklist", "milestone": "Issues resolved"},
+    {"step": 5, "title": "Audit report signed", "timeline": "Day 25-30", "body": "Auditor issues opinion - clean, qualified, or adverse. Report signed.", "visual": "stamp", "isCompletion": true, "milestone": "Audit completed"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Independent audit opinion", "body": "Auditor expresses opinion on whether financials show true and fair view.", "mockVisualType": "status", "mockVisualData": {"label": "Audit Opinion", "row1": "Opinion: Unqualified ✓", "row2": "Financials: True and fair", "row3": "Emphasis: None"}},
-    {"title": "SA-compliant procedures", "body": "Audit conducted per Standards on Auditing issued by ICAI. Full compliance.", "comparisonWithout": "Informal review — no assurance", "comparisonWithOllvy": "Full statutory audit — legal assurance"},
-    {"title": "Risk-based approach", "body": "We focus on high-risk areas — revenue recognition, related parties, estimates."},
+    {"title": "SA-compliant procedures", "body": "Audit conducted per Standards on Auditing issued by ICAI. Full compliance.", "comparisonWithout": "Informal review - no assurance", "comparisonWithOllvy": "Full statutory audit - legal assurance"},
+    {"title": "Risk-based approach", "body": "We focus on high-risk areas - revenue recognition, related parties, estimates."},
     {"title": "CARO reporting if applicable", "body": "Companies (Auditor''s Report) Order compliance where required.", "mockVisualType": "checklist", "mockVisualData": {"row1": "Fixed assets: Verified ✓", "row2": "Inventories: Physical count ✓", "row3": "Related party: Disclosed ✓"}},
     {"title": "Management letter", "body": "Separate letter with internal control observations and recommendations."}
   ]'::jsonb,
@@ -378,15 +378,15 @@ WHERE slug = 'statutory-audit';
 -- 28. DIN Reactivation - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Check deactivation reason", "timeline": "Day 0–1", "body": "Verify DIN status and understand why it was deactivated — missed KYC, incorrect details.", "visual": "checklist", "milestone": "Reason identified"},
-    {"step": 2, "title": "Gather required documents", "timeline": "Day 1–2", "body": "PAN, Aadhaar, address proof, passport photo for KYC filing.", "visual": "upload", "milestone": "Documents received"},
-    {"step": 3, "title": "File pending DIR-3 KYC", "timeline": "Day 2–5", "body": "All missed KYC years filed with applicable penalty.", "visual": "form", "milestone": "KYC filed"},
-    {"step": 4, "title": "Pay penalty", "timeline": "Day 5–7", "body": "₹5,000 per missed KYC year. Challan generated and paid.", "visual": "receipt", "milestone": "Penalty paid"},
-    {"step": 5, "title": "DIN reactivated", "timeline": "Day 7–10", "body": "MCA processes and reactivates DIN. Status changes to Active.", "visual": "stamp", "isCompletion": true, "milestone": "DIN active"}
+    {"step": 1, "title": "Check deactivation reason", "timeline": "Day 0-1", "body": "Verify DIN status and understand why it was deactivated - missed KYC, incorrect details.", "visual": "checklist", "milestone": "Reason identified"},
+    {"step": 2, "title": "Gather required documents", "timeline": "Day 1-2", "body": "PAN, Aadhaar, address proof, passport photo for KYC filing.", "visual": "upload", "milestone": "Documents received"},
+    {"step": 3, "title": "File pending DIR-3 KYC", "timeline": "Day 2-5", "body": "All missed KYC years filed with applicable penalty.", "visual": "form", "milestone": "KYC filed"},
+    {"step": 4, "title": "Pay penalty", "timeline": "Day 5-7", "body": "₹5,000 per missed KYC year. Challan generated and paid.", "visual": "receipt", "milestone": "Penalty paid"},
+    {"step": 5, "title": "DIN reactivated", "timeline": "Day 7-10", "body": "MCA processes and reactivates DIN. Status changes to Active.", "visual": "stamp", "isCompletion": true, "milestone": "DIN active"}
   ]'::jsonb,
   whats_included = '[
     {"title": "DIN status verification", "body": "Check current status, deactivation date, and missing years.", "mockVisualType": "status", "mockVisualData": {"label": "DIN Status Check", "row1": "DIN: 08765432", "row2": "Status: Deactivated", "row3": "Reason: DIR-3 KYC not filed"}},
-    {"title": "All pending KYC filed", "body": "If you missed multiple years, we file all. Each year has ₹5,000 penalty.", "comparisonWithout": "File one year — still deactivated", "comparisonWithOllvy": "All years filed — DIN reactivated"},
+    {"title": "All pending KYC filed", "body": "If you missed multiple years, we file all. Each year has ₹5,000 penalty.", "comparisonWithout": "File one year - still deactivated", "comparisonWithOllvy": "All years filed - DIN reactivated"},
     {"title": "Penalty calculation upfront", "body": "You know total cost before we start. No surprises.", "mockVisualType": "receipt", "mockVisualData": {"label": "Penalty Summary", "row1": "Missed Years: 2", "row2": "Penalty: ₹5,000 x 2 = ₹10,000", "row3": "Total: ₹13,499"}},
     {"title": "OTP verification handled", "body": "DIR-3 KYC requires Aadhaar OTP. We coordinate in real-time."},
     {"title": "Reactivation confirmation", "body": "MCA updates status. You can verify on MCA21 portal."}
@@ -406,7 +406,7 @@ UPDATE service_packages SET
     {"category": "General", "q": "Why was my DIN deactivated?", "a": "Usually for missing DIR-3 KYC filing by Sep 30."},
     {"category": "General", "q": "What is DIR-3 KYC?", "a": "Annual verification every director must file with MCA. Confirms identity."},
     {"category": "Process", "q": "How much is the penalty?", "a": "₹5,000 per missed year of KYC."},
-    {"category": "Process", "q": "How long to reactivate?", "a": "7–10 working days after filing."},
+    {"category": "Process", "q": "How long to reactivate?", "a": "7-10 working days after filing."},
     {"category": "Documents", "q": "What documents are needed?", "a": "PAN, Aadhaar with active mobile, address proof, passport photo."},
     {"category": "After Completion", "q": "How to prevent future deactivation?", "a": "File DIR-3 KYC every year by Sep 30. We send reminders."}
   ]'::jsonb,
@@ -423,15 +423,15 @@ WHERE slug = 'din-reactivation';
 -- 31. ESI Registration - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Employee and establishment details", "timeline": "Day 0–1", "body": "List of employees with Aadhaar, addresses, salary details. Establishment address.", "visual": "upload", "milestone": "Details received"},
-    {"step": 2, "title": "Employer registration on ESIC portal", "timeline": "Day 1–3", "body": "Employer code application filed on esic.in.", "visual": "form", "milestone": "Application submitted"},
-    {"step": 3, "title": "DSC attached", "timeline": "Day 3–4", "body": "Authorized signatory DSC linked to ESIC account.", "visual": "form", "milestone": "DSC linked"},
-    {"step": 4, "title": "Employee enrollment", "timeline": "Day 4–6", "body": "All eligible employees enrolled. Insurance numbers generated.", "visual": "form", "milestone": "Employees enrolled"},
-    {"step": 5, "title": "ESIC code issued", "timeline": "Day 6–7", "body": "Employer code received. Ready for monthly contributions.", "visual": "stamp", "isCompletion": true, "milestone": "ESIC registered"}
+    {"step": 1, "title": "Employee and establishment details", "timeline": "Day 0-1", "body": "List of employees with Aadhaar, addresses, salary details. Establishment address.", "visual": "upload", "milestone": "Details received"},
+    {"step": 2, "title": "Employer registration on ESIC portal", "timeline": "Day 1-3", "body": "Employer code application filed on esic.in.", "visual": "form", "milestone": "Application submitted"},
+    {"step": 3, "title": "DSC attached", "timeline": "Day 3-4", "body": "Authorized signatory DSC linked to ESIC account.", "visual": "form", "milestone": "DSC linked"},
+    {"step": 4, "title": "Employee enrollment", "timeline": "Day 4-6", "body": "All eligible employees enrolled. Insurance numbers generated.", "visual": "form", "milestone": "Employees enrolled"},
+    {"step": 5, "title": "ESIC code issued", "timeline": "Day 6-7", "body": "Employer code received. Ready for monthly contributions.", "visual": "stamp", "isCompletion": true, "milestone": "ESIC registered"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Employer registration", "body": "ESIC employer code for your establishment. Valid permanently.", "mockVisualType": "status", "mockVisualData": {"label": "ESIC Registration", "row1": "Employer Code: 41001234567890 ✓", "row2": "Establishment: Registered", "row3": "Status: Active"}},
-    {"title": "Employee enrollment", "body": "All eligible employees (earning up to ₹21,000/month) enrolled in ESI.", "comparisonWithout": "Employees enrolled haphazardly — some missed", "comparisonWithOllvy": "All eligible employees enrolled systematically"},
+    {"title": "Employee enrollment", "body": "All eligible employees (earning up to ₹21,000/month) enrolled in ESI.", "comparisonWithout": "Employees enrolled haphazardly - some missed", "comparisonWithOllvy": "All eligible employees enrolled systematically"},
     {"title": "Insurance numbers for all", "body": "Each employee gets unique IP number for claiming benefits.", "mockVisualType": "checklist", "mockVisualData": {"row1": "Employee 1: IP assigned ✓", "row2": "Employee 2: IP assigned ✓", "row3": "Employee 3: IP assigned ✓"}},
     {"title": "Monthly contribution setup", "body": "Contribution rates explained. Employee 0.75%, employer 3.25%."},
     {"title": "Compliance calendar", "body": "Monthly ESI contribution by 15th. Added to your calendar."}
@@ -448,7 +448,7 @@ UPDATE service_packages SET
     {"label": "Multiple locations", "detail": "Each location needs separate registration. We handle all."}
   ]'::jsonb,
   faqs = '[
-    {"category": "General", "q": "What is ESI?", "a": "Employee State Insurance — health coverage for employees earning up to ₹21,000/month."},
+    {"category": "General", "q": "What is ESI?", "a": "Employee State Insurance - health coverage for employees earning up to ₹21,000/month."},
     {"category": "General", "q": "When is ESI mandatory?", "a": "From day one if you have 10+ employees (20 in some states)."},
     {"category": "Process", "q": "What is contribution rate?", "a": "Employee: 0.75% of wages. Employer: 3.25% of wages."},
     {"category": "Process", "q": "What benefits do employees get?", "a": "Medical care, sickness benefit, maternity benefit, disability benefit."},
@@ -469,15 +469,15 @@ WHERE slug = 'esi-registration';
 -- 32. PF Registration - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Employee and establishment details", "timeline": "Day 0–2", "body": "Employee list with Aadhaar, bank details, date of joining. Establishment details.", "visual": "upload", "milestone": "Details received"},
-    {"step": 2, "title": "DSC for authorized signatory", "timeline": "Day 2–4", "body": "If no DSC exists, we arrange and link to EPFO portal.", "visual": "form", "milestone": "DSC ready"},
-    {"step": 3, "title": "Establishment registration on EPFO", "timeline": "Day 4–6", "body": "Application filed on unifiedportal-emp.epfindia.gov.in.", "visual": "form", "milestone": "Application submitted"},
-    {"step": 4, "title": "Employee UAN activation", "timeline": "Day 6–8", "body": "Universal Account Numbers generated and activated for all employees.", "visual": "form", "milestone": "UANs active"},
-    {"step": 5, "title": "Establishment code issued", "timeline": "Day 8–10", "body": "EPFO establishment code received. Ready for monthly contributions.", "visual": "stamp", "isCompletion": true, "milestone": "PF registered"}
+    {"step": 1, "title": "Employee and establishment details", "timeline": "Day 0-2", "body": "Employee list with Aadhaar, bank details, date of joining. Establishment details.", "visual": "upload", "milestone": "Details received"},
+    {"step": 2, "title": "DSC for authorized signatory", "timeline": "Day 2-4", "body": "If no DSC exists, we arrange and link to EPFO portal.", "visual": "form", "milestone": "DSC ready"},
+    {"step": 3, "title": "Establishment registration on EPFO", "timeline": "Day 4-6", "body": "Application filed on unifiedportal-emp.epfindia.gov.in.", "visual": "form", "milestone": "Application submitted"},
+    {"step": 4, "title": "Employee UAN activation", "timeline": "Day 6-8", "body": "Universal Account Numbers generated and activated for all employees.", "visual": "form", "milestone": "UANs active"},
+    {"step": 5, "title": "Establishment code issued", "timeline": "Day 8-10", "body": "EPFO establishment code received. Ready for monthly contributions.", "visual": "stamp", "isCompletion": true, "milestone": "PF registered"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Establishment registration", "body": "EPFO establishment code for your organization. Valid permanently.", "mockVisualType": "status", "mockVisualData": {"label": "EPFO Registration", "row1": "Establishment Code: MHBAN0012345 ✓", "row2": "DSC: Linked ✓", "row3": "Status: Active"}},
-    {"title": "UAN for all employees", "body": "Universal Account Number for each employee. Portable across jobs.", "comparisonWithout": "Manual PF accounts — hard to track", "comparisonWithOllvy": "UAN system — lifelong tracking"},
+    {"title": "UAN for all employees", "body": "Universal Account Number for each employee. Portable across jobs.", "comparisonWithout": "Manual PF accounts - hard to track", "comparisonWithOllvy": "UAN system - lifelong tracking"},
     {"title": "Aadhaar and bank linking", "body": "Each UAN linked to Aadhaar and bank account for seamless withdrawals.", "mockVisualType": "checklist", "mockVisualData": {"row1": "UAN-Aadhaar: Linked ✓", "row2": "UAN-Bank: Linked ✓", "row3": "UAN-Mobile: Linked ✓"}},
     {"title": "Contribution structure explained", "body": "Employee 12%, employer 12% (3.67% PF + 8.33% pension). We explain breakup."},
     {"title": "Monthly compliance setup", "body": "ECR filing by 15th every month. Added to your calendar."}
@@ -494,10 +494,10 @@ UPDATE service_packages SET
     {"label": "Regularizing existing workforce", "detail": "Had 20+ employees but weren''t registered. Need to comply."}
   ]'::jsonb,
   faqs = '[
-    {"category": "General", "q": "What is PF?", "a": "Provident Fund — retirement savings where employee and employer contribute."},
+    {"category": "General", "q": "What is PF?", "a": "Provident Fund - retirement savings where employee and employer contribute."},
     {"category": "General", "q": "When is PF mandatory?", "a": "When you have 20+ employees. Some states have lower thresholds."},
     {"category": "Process", "q": "What is contribution rate?", "a": "Employee 12% of basic. Employer 12% (3.67% PF + 8.33% EPS)."},
-    {"category": "Process", "q": "What is UAN?", "a": "Universal Account Number — unique ID for employee''s PF across all jobs."},
+    {"category": "Process", "q": "What is UAN?", "a": "Universal Account Number - unique ID for employee''s PF across all jobs."},
     {"category": "Documents", "q": "What documents are needed?", "a": "Employee Aadhaar, PAN, bank details, joining date. Establishment documents."},
     {"category": "After Completion", "q": "What are monthly obligations?", "a": "File ECR and pay contribution by 15th. Annual return by April 30."}
   ]'::jsonb,
@@ -515,7 +515,7 @@ WHERE slug = 'pf-registration';
 -- 17. Shop & Establishment - ENHANCE
 UPDATE service_packages SET
   whats_included = '[
-    {"title": "State-specific compliance", "body": "Each state has different rules. We handle your state''s requirements.", "comparisonWithout": "Apply with wrong form — rejected", "comparisonWithOllvy": "Correct state form, correct process"},
+    {"title": "State-specific compliance", "body": "Each state has different rules. We handle your state''s requirements.", "comparisonWithout": "Apply with wrong form - rejected", "comparisonWithOllvy": "Correct state form, correct process"},
     {"title": "Renewal tracking added", "body": "Most states require annual renewal. We add to your calendar.", "mockVisualType": "calendar", "mockVisualData": {"row1": "Registration: Mar 2025 ✓", "row2": "Renewal Due: Mar 2026", "row3": "Reminder: Feb 2026"}},
     {"title": "Working hours documented", "body": "Shop Act requires declaring working hours. We ensure compliance."},
     {"title": "Employee count registered", "body": "Employee strength recorded. Required for labour compliance."},
@@ -524,7 +524,7 @@ UPDATE service_packages SET
   service_risks = '[
     {"icon": "clock", "title": "Renewal required annually", "body": "Most states require annual renewal. Late renewal attracts penalty."},
     {"icon": "alert", "title": "Must display certificate", "body": "License certificate must be displayed at premises. Inspectors check."},
-    {"icon": "document", "title": "Update required for changes", "body": "Address change, name change — must update registration."}
+    {"icon": "document", "title": "Update required for changes", "body": "Address change, name change - must update registration."}
   ]'::jsonb,
   profile_personas = '[
     {"label": "Opening new office", "detail": "Setting up commercial premises. Shop Act needed before operations."},
@@ -574,8 +574,8 @@ UPDATE service_packages SET
   faqs = '[
     {"category": "General", "q": "Which states have PT?", "a": "Maharashtra, Karnataka, West Bengal, Gujarat, Andhra Pradesh, Telangana, and others."},
     {"category": "General", "q": "What is maximum PT amount?", "a": "₹2,500 per year (Constitutional limit under Article 276)."},
-    {"category": "Process", "q": "PTEC vs PTRC — difference?", "a": "PTEC for employers. PTRC for professionals/self-employed."},
-    {"category": "Process", "q": "How much to deduct from employees?", "a": "Slab-based. Example: Maharashtra — up to ₹7,500 salary: Nil. Above: ₹175-200/month."},
+    {"category": "Process", "q": "PTEC vs PTRC - difference?", "a": "PTEC for employers. PTRC for professionals/self-employed."},
+    {"category": "Process", "q": "How much to deduct from employees?", "a": "Slab-based. Example: Maharashtra - up to ₹7,500 salary: Nil. Above: ₹175-200/month."},
     {"category": "Documents", "q": "What documents are needed?", "a": "PAN, address proof, employee list, entity registration certificate."},
     {"category": "After Completion", "q": "What are monthly obligations?", "a": "Deduct from salary, deposit to state, file return."}
   ]'::jsonb,
@@ -593,16 +593,16 @@ WHERE slug = 'professional-tax';
 -- 24. LLP Closure - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Compliance review", "timeline": "Day 0–5", "body": "Check pending Form 11, Form 8, ITR. List what needs filing.", "visual": "checklist", "milestone": "Gaps identified"},
-    {"step": 2, "title": "File pending returns", "timeline": "Day 5–15", "body": "All Form 11 (annual return) and Form 8 (accounts) filed.", "visual": "form", "milestone": "Returns filed"},
-    {"step": 3, "title": "Partner consent obtained", "timeline": "Day 15–20", "body": "All partners must consent to closure. Unanimous agreement required.", "visual": "form", "milestone": "Consent received"},
-    {"step": 4, "title": "GST and other closures", "timeline": "Day 20–30", "body": "GST cancelled. Other registrations closed.", "visual": "checklist", "milestone": "Other compliances closed"},
-    {"step": 5, "title": "Form 24 filed", "timeline": "Day 30–40", "body": "Strike-off application with indemnity bond.", "visual": "form", "milestone": "Form 24 submitted"},
-    {"step": 6, "title": "Strike-off order received", "timeline": "Day 40–60", "body": "ROC processes and removes LLP from register.", "visual": "stamp", "isCompletion": true, "milestone": "LLP struck off"}
+    {"step": 1, "title": "Compliance review", "timeline": "Day 0-5", "body": "Check pending Form 11, Form 8, ITR. List what needs filing.", "visual": "checklist", "milestone": "Gaps identified"},
+    {"step": 2, "title": "File pending returns", "timeline": "Day 5-15", "body": "All Form 11 (annual return) and Form 8 (accounts) filed.", "visual": "form", "milestone": "Returns filed"},
+    {"step": 3, "title": "Partner consent obtained", "timeline": "Day 15-20", "body": "All partners must consent to closure. Unanimous agreement required.", "visual": "form", "milestone": "Consent received"},
+    {"step": 4, "title": "GST and other closures", "timeline": "Day 20-30", "body": "GST cancelled. Other registrations closed.", "visual": "checklist", "milestone": "Other compliances closed"},
+    {"step": 5, "title": "Form 24 filed", "timeline": "Day 30-40", "body": "Strike-off application with indemnity bond.", "visual": "form", "milestone": "Form 24 submitted"},
+    {"step": 6, "title": "Strike-off order received", "timeline": "Day 40-60", "body": "ROC processes and removes LLP from register.", "visual": "stamp", "isCompletion": true, "milestone": "LLP struck off"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Complete compliance cleanup", "body": "All Form 11 and Form 8 filed before strike-off.", "mockVisualType": "status", "mockVisualData": {"label": "Pre-Closure Compliance", "row1": "Form 11 FY 23-24: Filed ✓", "row2": "Form 8 FY 23-24: Filed ✓", "row3": "Partner KYC: Current ✓"}},
-    {"title": "Partner consent coordination", "body": "All partners must agree. We draft consent form and coordinate signatures.", "comparisonWithout": "One partner disagrees — stuck", "comparisonWithOllvy": "Consent documented properly"},
+    {"title": "Partner consent coordination", "body": "All partners must agree. We draft consent form and coordinate signatures.", "comparisonWithout": "One partner disagrees - stuck", "comparisonWithOllvy": "Consent documented properly"},
     {"title": "GST cancellation included", "body": "GST must be cancelled before LLP closure. We handle.", "mockVisualType": "checklist", "mockVisualData": {"row1": "GST REG-16: Filed ✓", "row2": "GSTR-10: Filed ✓", "row3": "GST: Cancelled ✓"}},
     {"title": "Form 24 with affidavit", "body": "Strike-off application with partner affidavits."},
     {"title": "ROC tracking", "body": "We track processing and respond to any queries."}
@@ -639,15 +639,15 @@ WHERE slug = 'llp-closure';
 -- 25. ROC Changes - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Change identified and documented", "timeline": "Day 0–1", "body": "What changed — director, address, shares, name. We confirm requirements.", "visual": "checklist", "milestone": "Change confirmed"},
-    {"step": 2, "title": "Board resolution drafted", "timeline": "Day 1–2", "body": "Resolution for the specific change. Some need shareholder approval too.", "visual": "form", "milestone": "Resolution ready"},
-    {"step": 3, "title": "Documents collected", "timeline": "Day 2–3", "body": "ID proofs, address proofs, consent forms — depending on change type.", "visual": "upload", "milestone": "Documents received"},
-    {"step": 4, "title": "Form filed on MCA", "timeline": "Day 3–5", "body": "DIR-12 for directors, INC-22 for address, SH-4 for shares, etc.", "visual": "form", "milestone": "Form submitted"},
-    {"step": 5, "title": "Approval received", "timeline": "Day 5–7", "body": "ROC processes. Updated records reflected on MCA.", "visual": "stamp", "isCompletion": true, "milestone": "Change recorded"}
+    {"step": 1, "title": "Change identified and documented", "timeline": "Day 0-1", "body": "What changed - director, address, shares, name. We confirm requirements.", "visual": "checklist", "milestone": "Change confirmed"},
+    {"step": 2, "title": "Board resolution drafted", "timeline": "Day 1-2", "body": "Resolution for the specific change. Some need shareholder approval too.", "visual": "form", "milestone": "Resolution ready"},
+    {"step": 3, "title": "Documents collected", "timeline": "Day 2-3", "body": "ID proofs, address proofs, consent forms - depending on change type.", "visual": "upload", "milestone": "Documents received"},
+    {"step": 4, "title": "Form filed on MCA", "timeline": "Day 3-5", "body": "DIR-12 for directors, INC-22 for address, SH-4 for shares, etc.", "visual": "form", "milestone": "Form submitted"},
+    {"step": 5, "title": "Approval received", "timeline": "Day 5-7", "body": "ROC processes. Updated records reflected on MCA.", "visual": "stamp", "isCompletion": true, "milestone": "Change recorded"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Any ROC form handled", "body": "DIR-12 (director), INC-22 (address), SH-4 (transfer), MGT-14 (resolution).", "mockVisualType": "status", "mockVisualData": {"label": "ROC Forms We Handle", "row1": "DIR-12: Director changes", "row2": "INC-22: Address change", "row3": "SH-4: Share transfer"}},
-    {"title": "Resolution drafting", "body": "Board resolution, shareholder resolution as required for the change.", "comparisonWithout": "Wrong resolution format — rejected", "comparisonWithOllvy": "Properly drafted resolutions"},
+    {"title": "Resolution drafting", "body": "Board resolution, shareholder resolution as required for the change.", "comparisonWithout": "Wrong resolution format - rejected", "comparisonWithOllvy": "Properly drafted resolutions"},
     {"title": "Deadline tracking", "body": "Most changes must be filed within 30 days. We ensure compliance.", "mockVisualType": "calendar", "mockVisualData": {"row1": "Event Date: 15 Mar", "row2": "Filing Deadline: 14 Apr", "row3": "Our Filing: Day 3-5"}},
     {"title": "MCA21 filing handled", "body": "We navigate the portal. DSC attached. SRN generated."},
     {"title": "Updated documents shared", "body": "Post-filing, updated master data shared for your records."}
@@ -664,7 +664,7 @@ UPDATE service_packages SET
     {"label": "Share transfer", "detail": "Shares being transferred. SH-4 and related forms."}
   ]'::jsonb,
   faqs = '[
-    {"category": "General", "q": "What forms are covered?", "a": "Any ROC form — DIR-12, INC-22, SH-4, MGT-14, INC-28, and more."},
+    {"category": "General", "q": "What forms are covered?", "a": "Any ROC form - DIR-12, INC-22, SH-4, MGT-14, INC-28, and more."},
     {"category": "General", "q": "What is the deadline?", "a": "Most changes: 30 days from event date. Late fee applies after."},
     {"category": "Process", "q": "What is late fee?", "a": "₹100-300/day depending on form. Can accumulate quickly."},
     {"category": "Process", "q": "Do I need a meeting?", "a": "Board meeting for most changes. Shareholder meeting for major changes."},
@@ -684,18 +684,18 @@ WHERE slug = 'roc-changes';
 -- 29. Company Name Change - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Name availability check", "timeline": "Day 0–2", "body": "Search MCA and trademark databases for conflicts.", "visual": "checklist", "milestone": "Name available"},
-    {"step": 2, "title": "Board resolution", "timeline": "Day 2–4", "body": "Board approves proposed new name and EGM notice.", "visual": "form", "milestone": "Board approved"},
-    {"step": 3, "title": "Shareholder approval (SR)", "timeline": "Day 4–10", "body": "Special Resolution passed in EGM with 75% majority.", "visual": "form", "milestone": "SR passed"},
-    {"step": 4, "title": "MGT-14 and INC-24 filed", "timeline": "Day 10–15", "body": "Resolutions and name change application filed with ROC.", "visual": "form", "milestone": "Forms submitted"},
-    {"step": 5, "title": "New CoI issued", "timeline": "Day 15–20", "body": "ROC processes and issues new Certificate of Incorporation.", "visual": "stamp", "isCompletion": true, "milestone": "Name changed"}
+    {"step": 1, "title": "Name availability check", "timeline": "Day 0-2", "body": "Search MCA and trademark databases for conflicts.", "visual": "checklist", "milestone": "Name available"},
+    {"step": 2, "title": "Board resolution", "timeline": "Day 2-4", "body": "Board approves proposed new name and EGM notice.", "visual": "form", "milestone": "Board approved"},
+    {"step": 3, "title": "Shareholder approval (SR)", "timeline": "Day 4-10", "body": "Special Resolution passed in EGM with 75% majority.", "visual": "form", "milestone": "SR passed"},
+    {"step": 4, "title": "MGT-14 and INC-24 filed", "timeline": "Day 10-15", "body": "Resolutions and name change application filed with ROC.", "visual": "form", "milestone": "Forms submitted"},
+    {"step": 5, "title": "New CoI issued", "timeline": "Day 15-20", "body": "ROC processes and issues new Certificate of Incorporation.", "visual": "stamp", "isCompletion": true, "milestone": "Name changed"}
   ]'::jsonb,
   whats_included = '[
-    {"title": "Name search — MCA and trademark", "body": "Before you commit, we search both databases for conflicts.", "mockVisualType": "status", "mockVisualData": {"label": "Name Search Results", "row1": "MCA Registry: No match ✓", "row2": "Trademark: No conflict ✓", "row3": "Proceed: Yes"}},
-    {"title": "Special Resolution drafted", "body": "SR for name change with proper format and disclosures.", "comparisonWithout": "Wrong resolution format — rejected", "comparisonWithOllvy": "Properly drafted SR"},
+    {"title": "Name search - MCA and trademark", "body": "Before you commit, we search both databases for conflicts.", "mockVisualType": "status", "mockVisualData": {"label": "Name Search Results", "row1": "MCA Registry: No match ✓", "row2": "Trademark: No conflict ✓", "row3": "Proceed: Yes"}},
+    {"title": "Special Resolution drafted", "body": "SR for name change with proper format and disclosures.", "comparisonWithout": "Wrong resolution format - rejected", "comparisonWithOllvy": "Properly drafted SR"},
     {"title": "MOA amendment handled", "body": "Memorandum updated with new company name."},
     {"title": "New CoI with updated name", "body": "Fresh Certificate of Incorporation issued.", "mockVisualType": "receipt", "mockVisualData": {"label": "New Certificate", "row1": "Old: ABC Private Limited", "row2": "New: XYZ Private Limited", "row3": "CIN: Same"}},
-    {"title": "Update guidance provided", "body": "GST, bank, contracts — what else needs updating."}
+    {"title": "Update guidance provided", "body": "GST, bank, contracts - what else needs updating."}
   ]'::jsonb,
   service_risks = '[
     {"icon": "document", "title": "Name must be available", "body": "MCA checks against registered names and trademarks. We pre-check."},
@@ -729,15 +729,15 @@ WHERE slug = 'company-name-change';
 -- 30. Copyright Registration - ENHANCE
 UPDATE service_packages SET
   workflow_stages = '[
-    {"step": 1, "title": "Work details collected", "timeline": "Day 0–2", "body": "Nature of work, creation date, author details, ownership chain.", "visual": "checklist", "milestone": "Details received"},
-    {"step": 2, "title": "Application prepared", "timeline": "Day 2–5", "body": "Form XIV drafted with work description and supporting documents.", "visual": "form", "milestone": "Application ready"},
-    {"step": 3, "title": "Filed with Copyright Office", "timeline": "Day 5–10", "body": "Application submitted to Copyright Office, Delhi.", "visual": "form", "milestone": "Application filed"},
-    {"step": 4, "title": "Examination period", "timeline": "Day 10–25", "body": "Copyright Office examines. If objection, we respond.", "visual": "calendar", "milestone": "Under examination"},
-    {"step": 5, "title": "Registration certificate issued", "timeline": "Day 25–30", "body": "Certificate with registration number issued.", "visual": "stamp", "isCompletion": true, "milestone": "Copyright registered"}
+    {"step": 1, "title": "Work details collected", "timeline": "Day 0-2", "body": "Nature of work, creation date, author details, ownership chain.", "visual": "checklist", "milestone": "Details received"},
+    {"step": 2, "title": "Application prepared", "timeline": "Day 2-5", "body": "Form XIV drafted with work description and supporting documents.", "visual": "form", "milestone": "Application ready"},
+    {"step": 3, "title": "Filed with Copyright Office", "timeline": "Day 5-10", "body": "Application submitted to Copyright Office, Delhi.", "visual": "form", "milestone": "Application filed"},
+    {"step": 4, "title": "Examination period", "timeline": "Day 10-25", "body": "Copyright Office examines. If objection, we respond.", "visual": "calendar", "milestone": "Under examination"},
+    {"step": 5, "title": "Registration certificate issued", "timeline": "Day 25-30", "body": "Certificate with registration number issued.", "visual": "stamp", "isCompletion": true, "milestone": "Copyright registered"}
   ]'::jsonb,
   whats_included = '[
     {"title": "Form XIV application", "body": "Application with complete work description and ownership details.", "mockVisualType": "status", "mockVisualData": {"label": "Copyright Application", "row1": "Work Type: Software", "row2": "Author: Original ✓", "row3": "Status: Filed"}},
-    {"title": "Work description drafted", "body": "Clear description of the creative work for registration.", "comparisonWithout": "Vague description — may face objection", "comparisonWithOllvy": "Precise description accepted smoothly"},
+    {"title": "Work description drafted", "body": "Clear description of the creative work for registration.", "comparisonWithout": "Vague description - may face objection", "comparisonWithOllvy": "Precise description accepted smoothly"},
     {"title": "Ownership chain documented", "body": "If commissioned work or employment work, ownership chain clarified."},
     {"title": "Objection response included", "body": "If examiner raises query, we respond within scope."},
     {"title": "Certificate delivered", "body": "Official registration certificate uploaded to your account.", "mockVisualType": "receipt", "mockVisualData": {"label": "Copyright Certificate", "row1": "Reg. No: L-12345/2025", "row2": "Work: Software Application", "row3": "Valid: Lifetime + 60 years"}}
@@ -745,7 +745,7 @@ UPDATE service_packages SET
   service_risks = '[
     {"icon": "document", "title": "Work must be original", "body": "Copyright only for original works. Copied elements rejected."},
     {"icon": "clock", "title": "Processing takes 30+ days", "body": "Copyright Office processing time. Cannot be expedited."},
-    {"icon": "alert", "title": "Employer may own if employment work", "body": "Work created during employment — employer may own. Clarify upfront."}
+    {"icon": "alert", "title": "Employer may own if employment work", "body": "Work created during employment - employer may own. Clarify upfront."}
   ]'::jsonb,
   profile_personas = '[
     {"label": "Software developer", "detail": "Protecting code, application, or algorithm."},

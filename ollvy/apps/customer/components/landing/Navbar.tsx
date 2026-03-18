@@ -177,13 +177,15 @@ export function Navbar() {
       )}
     >
       <div className="container h-full flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
-          Ollvy
-        </Link>
+        {/* Left side: Logo + Nav */}
+        <div className="flex items-center gap-16">
+          {/* Logo */}
+          <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
+            Ollvy
+          </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => {
             const isActive = link.sectionId && activeSection === link.sectionId
             return (
@@ -236,6 +238,7 @@ export function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
+        </div>
 
         {/* Theme Toggle + Desktop Search Button */}
         <div className="hidden md:flex items-center gap-2">

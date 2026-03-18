@@ -216,14 +216,14 @@ INSERT INTO service_packages (
   '[{"stage_key": "document_collection", "stage_name": "Document Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "processing", "stage_name": "Portal Filing", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "delivery", "stage_name": "Registration Delivery", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 12. Trademark — Word Mark
+-- 12. Trademark - Word Mark
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, order_type, billing_cycle,
   price_base_paisa, price_govt_fees_paisa, price_gst_rate, price_varies_by_state,
   sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'Trademark — Word Mark',
+  'Trademark - Word Mark',
   'trademark-word',
   'Register your brand name as a trademark',
   (SELECT id FROM service_filter_categories WHERE slug = 'legal'),
@@ -233,14 +233,14 @@ INSERT INTO service_packages (
   '[{"stage_key": "document_collection", "stage_name": "Document Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "search", "stage_name": "TM Search Report", "sla_working_days": 3, "wait_for_govt": false}, {"stage_key": "processing", "stage_name": "IP India Filing", "sla_working_days": 5, "wait_for_govt": false}, {"stage_key": "govt_approval", "stage_name": "Examination", "sla_working_days": 10, "wait_for_govt": true}, {"stage_key": "delivery", "stage_name": "Certificate Delivery", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 13. Trademark — Logo
+-- 13. Trademark - Logo
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, order_type, billing_cycle,
   price_base_paisa, price_govt_fees_paisa, price_gst_rate, price_varies_by_state,
   sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'Trademark — Logo',
+  'Trademark - Logo',
   'trademark-logo',
   'Register your logo as a trademark',
   (SELECT id FROM service_filter_categories WHERE slug = 'legal'),
@@ -471,14 +471,14 @@ INSERT INTO service_packages (
   '[{"stage_key": "document_collection", "stage_name": "Document Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "processing", "stage_name": "Municipal Filing", "sla_working_days": 4, "wait_for_govt": false}, {"stage_key": "govt_approval", "stage_name": "Municipal Approval", "sla_working_days": 3, "wait_for_govt": true}, {"stage_key": "delivery", "stage_name": "License Delivery", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 27. GST Monthly Filing — Up to ₹50L/year (ACTIVE)
+-- 27. GST Monthly Filing - Up to ₹50L/year (ACTIVE)
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, tier_group_id, tier_label,
   order_type, billing_cycle, price_base_paisa, price_govt_fees_paisa, price_gst_rate,
   price_varies_by_state, sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'GST Monthly Filing — Up to ₹50L/year',
+  'GST Monthly Filing - Up to ₹50L/year',
   'gst-monthly-50l',
   'Monthly GST return filing for businesses up to ₹50L turnover',
   (SELECT id FROM service_filter_categories WHERE slug = 'monthly-compliance'),
@@ -489,32 +489,32 @@ INSERT INTO service_packages (
   '[{"stage_key": "data_collection", "stage_name": "Data Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "filing", "stage_name": "GST Filing", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "delivery", "stage_name": "Confirmation", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 28. GST Monthly Filing — ₹50L-5Cr/year
+-- 28. GST Monthly Filing - ₹50L-5Cr/year
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, tier_group_id, tier_label,
   order_type, billing_cycle, price_base_paisa, price_govt_fees_paisa, price_gst_rate,
   price_varies_by_state, sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'GST Monthly Filing — ₹50L-5Cr/year',
+  'GST Monthly Filing - ₹50L-5Cr/year',
   'gst-monthly-5cr',
   'Monthly GST return filing for businesses ₹50L-5Cr turnover',
   (SELECT id FROM service_filter_categories WHERE slug = 'monthly-compliance'),
-  '11111111-1111-1111-1111-111111111111', '₹50L – 5Cr/year',
+  '11111111-1111-1111-1111-111111111111', '₹50L - 5Cr/year',
   'recurring', 'monthly',
   499900, 0, 18, false,
   5, ARRAY['taking_payments', 'filing_taxes'], 50, false,
   '[{"stage_key": "data_collection", "stage_name": "Data Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "filing", "stage_name": "GST Filing", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "delivery", "stage_name": "Confirmation", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 29. GST Monthly Filing — ₹5Cr+/year
+-- 29. GST Monthly Filing - ₹5Cr+/year
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, tier_group_id, tier_label,
   order_type, billing_cycle, price_base_paisa, price_govt_fees_paisa, price_gst_rate,
   price_varies_by_state, sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'GST Monthly Filing — ₹5Cr+/year',
+  'GST Monthly Filing - ₹5Cr+/year',
   'gst-monthly-5cr-plus',
   'Monthly GST return filing for businesses above ₹5Cr turnover',
   (SELECT id FROM service_filter_categories WHERE slug = 'monthly-compliance'),
@@ -542,14 +542,14 @@ INSERT INTO service_packages (
   '[{"stage_key": "data_collection", "stage_name": "Data Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "filing", "stage_name": "TDS Filing", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "delivery", "stage_name": "Confirmation", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 31. Payroll Mgmt — up to 10 employees
+-- 31. Payroll Mgmt - up to 10 employees
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, tier_group_id, tier_label,
   order_type, billing_cycle, price_base_paisa, price_govt_fees_paisa, price_gst_rate,
   price_varies_by_state, sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'Payroll Management — Up to 10 Employees',
+  'Payroll Management - Up to 10 Employees',
   'payroll-10',
   'Complete payroll processing for up to 10 employees',
   (SELECT id FROM service_filter_categories WHERE slug = 'payroll'),
@@ -560,36 +560,36 @@ INSERT INTO service_packages (
   '[{"stage_key": "data_collection", "stage_name": "Data Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "processing", "stage_name": "Payroll Processing", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "delivery", "stage_name": "Payslips Delivery", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 32. Payroll Mgmt — 11-25 employees
+-- 32. Payroll Mgmt - 11-25 employees
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, tier_group_id, tier_label,
   order_type, billing_cycle, price_base_paisa, price_govt_fees_paisa, price_gst_rate,
   price_varies_by_state, sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'Payroll Management — 11-25 Employees',
+  'Payroll Management - 11-25 Employees',
   'payroll-25',
   'Complete payroll processing for 11-25 employees',
   (SELECT id FROM service_filter_categories WHERE slug = 'payroll'),
-  '22222222-2222-2222-2222-222222222222', '11–25 employees',
+  '22222222-2222-2222-2222-222222222222', '11-25 employees',
   'recurring', 'monthly',
   999900, 0, 18, false,
   5, ARRAY['need_to_hire'], 50, false,
   '[{"stage_key": "data_collection", "stage_name": "Data Collection", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "processing", "stage_name": "Payroll Processing", "sla_working_days": 2, "wait_for_govt": false}, {"stage_key": "delivery", "stage_name": "Payslips Delivery", "sla_working_days": 1, "wait_for_govt": false}]'::jsonb
 );
 
--- 33. Payroll Mgmt — 26-50 employees
+-- 33. Payroll Mgmt - 26-50 employees
 INSERT INTO service_packages (
   name, slug, short_description, filter_category_id, tier_group_id, tier_label,
   order_type, billing_cycle, price_base_paisa, price_govt_fees_paisa, price_gst_rate,
   price_varies_by_state, sla_working_days, situation_tags, urgency_score, is_active,
   workflow_stages
 ) VALUES (
-  'Payroll Management — 26-50 Employees',
+  'Payroll Management - 26-50 Employees',
   'payroll-50',
   'Complete payroll processing for 26-50 employees',
   (SELECT id FROM service_filter_categories WHERE slug = 'payroll'),
-  '22222222-2222-2222-2222-222222222222', '26–50 employees',
+  '22222222-2222-2222-2222-222222222222', '26-50 employees',
   'recurring', 'monthly',
   1399900, 0, 18, false,
   5, ARRAY['need_to_hire'], 50, false,
@@ -775,67 +775,67 @@ INSERT INTO compliance_obligation_rules (
   (SELECT id FROM service_packages WHERE slug = 'gst-monthly-50l'), true
 );
 
--- GST-03: GSTR-1 (Quarterly — QRMP)
+-- GST-03: GSTR-1 (Quarterly - QRMP)
 INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'GST-03', 'GSTR-1 (Quarterly — QRMP)',
+  'GST-03', 'GSTR-1 (Quarterly - QRMP)',
   NULL, NULL, 'gst_filing', 'quarterly',
   '13th of month after quarter-end (Apr/Jul/Oct/Jan)', ARRAY[30, 7, 1],
   (SELECT id FROM service_packages WHERE slug = 'gst-monthly-50l'), true
 );
 
--- GST-04: GSTR-9 — Annual Return
+-- GST-04: GSTR-9 - Annual Return
 INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'GST-04', 'GSTR-9 — Annual Return',
+  'GST-04', 'GSTR-9 - Annual Return',
   NULL, NULL, 'gst_filing', 'annual',
   '31 December each year', ARRAY[60, 30, 7],
   (SELECT id FROM service_packages WHERE slug = 'gst-annual-return'), true
 );
 
--- GST-05: GSTR-9C — Reconciliation
+-- GST-05: GSTR-9C - Reconciliation
 INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'GST-05', 'GSTR-9C — Reconciliation',
+  'GST-05', 'GSTR-9C - Reconciliation',
   NULL, NULL, 'gst_filing', 'annual',
   '31 December each year', ARRAY[60, 30, 7],
   (SELECT id FROM service_packages WHERE slug = 'gst-annual-return'), true
 );
 
--- ITR-01: ITR Filing — Proprietorship/Individual
+-- ITR-01: ITR Filing - Proprietorship/Individual
 INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'ITR-01', 'ITR Filing — Proprietorship/Individual',
+  'ITR-01', 'ITR Filing - Proprietorship/Individual',
   ARRAY['sole_proprietorship']::business_type[], NULL, 'itr_filing', 'annual',
   '31 July (non-audit); 31 October (audit)', ARRAY[60, 30, 7],
   (SELECT id FROM service_packages WHERE slug = 'business-itr'), true
 );
 
--- ITR-02: ITR Filing — Partnership / LLP
+-- ITR-02: ITR Filing - Partnership / LLP
 INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'ITR-02', 'ITR Filing — Partnership / LLP',
+  'ITR-02', 'ITR Filing - Partnership / LLP',
   ARRAY['partnership', 'llp']::business_type[], NULL, 'itr_filing', 'annual',
   '31 July (non-audit); 31 October (audit)', ARRAY[60, 30, 7],
   (SELECT id FROM service_packages WHERE slug = 'business-itr'), true
 );
 
--- ITR-03: ITR Filing — Private Limited Co.
+-- ITR-03: ITR Filing - Private Limited Co.
 INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'ITR-03', 'ITR Filing — Private Limited Co.',
+  'ITR-03', 'ITR Filing - Private Limited Co.',
   ARRAY['pvt_ltd', 'opc']::business_type[], NULL, 'itr_filing', 'annual',
   '31 October each year', ARRAY[60, 30, 7],
   (SELECT id FROM service_packages WHERE slug = 'business-itr'), true
@@ -901,7 +901,7 @@ INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'MCA-03', 'DIR-3 KYC — Director KYC',
+  'MCA-03', 'DIR-3 KYC - Director KYC',
   ARRAY['pvt_ltd', 'opc']::business_type[], NULL, 'mca_filing', 'annual',
   '30 September each year', ARRAY[30, 7, 1],
   (SELECT id FROM service_packages WHERE slug = 'dir3-kyc'), true
@@ -912,7 +912,7 @@ INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'MCA-04', 'Form INC-20A — Commencement of Business',
+  'MCA-04', 'Form INC-20A - Commencement of Business',
   ARRAY['pvt_ltd']::business_type[], NULL, 'mca_filing', 'one_time',
   'Within 180 days of incorporation', ARRAY[30, 7, 1],
   (SELECT id FROM service_packages WHERE slug = 'pvt-ltd-registration'), true
@@ -923,7 +923,7 @@ INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'MCA-05', 'DPT-3 — Return of Deposits',
+  'MCA-05', 'DPT-3 - Return of Deposits',
   ARRAY['pvt_ltd', 'opc']::business_type[], NULL, 'mca_filing', 'annual',
   '30 June each year', ARRAY[30, 7, 1],
   (SELECT id FROM service_packages WHERE slug = 'roc-compliance'), true
@@ -934,9 +934,9 @@ INSERT INTO compliance_obligation_rules (
   code, label, business_types, states, obligation_type, recurrence,
   due_date_formula, advance_reminder_days, linked_service_package_id, is_active
 ) VALUES (
-  'MCA-06', 'MSME Form I — Half-Yearly Return',
+  'MCA-06', 'MSME Form I - Half-Yearly Return',
   ARRAY['pvt_ltd', 'opc']::business_type[], NULL, 'mca_filing', 'half_yearly',
-  '31 October (Apr–Sep period); 30 April (Oct–Mar period)', ARRAY[30, 7, 1],
+  '31 October (Apr-Sep period); 30 April (Oct-Mar period)', ARRAY[30, 7, 1],
   (SELECT id FROM service_packages WHERE slug = 'roc-compliance'), true
 );
 

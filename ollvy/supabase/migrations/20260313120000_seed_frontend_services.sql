@@ -18,7 +18,7 @@ INSERT INTO service_packages (
 ) VALUES (
   'pvt-ltd-incorporation',
   'Private Limited Incorporation',
-  'Name reservation, DSC, DIN, MOA/AOA, and Certificate of Incorporation. You get the CIN. Govt stamp duty is ₹15,000 on top — shown upfront, not at checkout.',
+  'Name reservation, DSC, DIN, MOA/AOA, and Certificate of Incorporation. You get the CIN. Govt stamp duty is ₹15,000 on top - shown upfront, not at checkout.',
   (SELECT id FROM service_filter_categories WHERE slug = 'registration' LIMIT 1),
   999900, -- ₹9,999
   1500000, -- ₹15,000

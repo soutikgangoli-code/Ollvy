@@ -997,3 +997,93 @@ Incoming: %s%s useEffect [true] [true, 2]
 [ 3780800ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
 [ 3872760ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
 [ 3872782ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 4336318ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 4370117ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 4384936ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 4384973ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 4431271ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 4442962ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 4442983ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 4878667ms] [WARNING] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/@radix-ui+react-dialog@1.1.15_@types+react-dom@18.3.7_@types+react@18.2.79__@types+reac_69d33ac9bd169b1e9c3d21c403e24021/node_modules/@radix-ui/react-dialog/dist/index.mjs:467
+[ 4878668ms] [WARNING] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/@radix-ui+react-dialog@1.1.15_@types+react-dom@18.3.7_@types+react@18.2.79__@types+reac_69d33ac9bd169b1e9c3d21c403e24021/node_modules/@radix-ui/react-dialog/dist/index.mjs:467
+[ 4939275ms] [ERROR] ./components/landing/Navbar.tsx
+Error: 
+  x Unexpected token `header`. Expected jsx identifier
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/landing/Navbar.tsx:170:1]
+ 170 |   }
+ 171 | 
+ 172 |   return (
+ 173 |     <header
+     :      ^^^^^^
+ 174 |       className={cn(
+ 175 |         'fixed top-0 left-0 z-50 w-[100vw] transition-all duration-200 bg-background/80 backdrop-blur-xl',
+ 176 |         scrolled ? 'h-[52px] border-b border-border' : 'h-16'
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/landing/Navbar.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[ 4939684ms] [ERROR] ./components/landing/Navbar.tsx
+Error: 
+  x Unexpected token `header`. Expected jsx identifier
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/landing/Navbar.tsx:170:1]
+ 170 |   }
+ 171 | 
+ 172 |   return (
+ 173 |     <header
+     :      ^^^^^^
+ 174 |       className={cn(
+ 175 |         'fixed top-0 left-0 z-50 w-[100vw] transition-all duration-200 bg-background/80 backdrop-blur-xl',
+ 176 |         scrolled ? 'h-[52px] border-b border-border' : 'h-16'
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/landing/Navbar.tsx
+./components/layout/MainLayout.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[ 4939684ms] [ERROR] ./components/landing/Navbar.tsx
+Error: 
+  x Unexpected token `header`. Expected jsx identifier
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/landing/Navbar.tsx:170:1]
+ 170 |   }
+ 171 | 
+ 172 |   return (
+ 173 |     <header
+     :      ^^^^^^
+ 174 |       className={cn(
+ 175 |         'fixed top-0 left-0 z-50 w-[100vw] transition-all duration-200 bg-background/80 backdrop-blur-xl',
+ 176 |         scrolled ? 'h-[52px] border-b border-border' : 'h-16'
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/landing/Navbar.tsx
+./app/page.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[ 5001094ms] [ERROR] ./components/landing/Navbar.tsx
+Error: 
+  x Unexpected token `header`. Expected jsx identifier
+     ,-[/Users/apple/Downloads/Ollvy-main.123/ollvy/apps/customer/components/landing/Navbar.tsx:170:1]
+ 170 |   }
+ 171 | 
+ 172 |   return (
+ 173 |     <header
+     :      ^^^^^^
+ 174 |       className={cn(
+ 175 |         'fixed top-0 left-0 z-50 w-[100vw] transition-all duration-200 bg-background/80 backdrop-blur-xl',
+ 176 |         scrolled ? 'h-[52px] border-b border-border' : 'h-16'
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./components/landing/Navbar.tsx
+./components/layout/MainLayout.tsx @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/app-index.js:32
+[ 5002683ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 5002709ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0

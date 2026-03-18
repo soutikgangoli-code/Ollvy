@@ -45,9 +45,8 @@ export function HowItWorks() {
 
         {/* Bottom Text */}
         <div className="border-t border-border mt-16 pt-10 text-center">
-          <p className="text-sm text-muted-foreground max-w-[480px] mx-auto">
-            From GST registration to company incorporation to monthly filings - one place, one
-            app, one team.
+          <p className="text-sm text-muted-foreground whitespace-nowrap">
+            From GST registration to company incorporation to monthly filings - one place, one app, one team.
           </p>
         </div>
       </div>

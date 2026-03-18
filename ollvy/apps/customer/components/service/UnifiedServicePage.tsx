@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState, useCallback } from 'react'
+import { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react'
 import Link from 'next/link'
 import Script from 'next/script'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
@@ -204,6 +204,12 @@ export function UnifiedServicePage({
   const [activeSection, setActiveSection] = useState<SectionId>('process')
   const heroRef = useRef<HTMLDivElement>(null)
 
+  // Refs for smooth underline indicator
+  const heroNavRef = useRef<HTMLDivElement>(null)
+  const stickyNavRef = useRef<HTMLElement>(null)
+  const [heroIndicator, setHeroIndicator] = useState({ left: 0, width: 0 })
+  const [stickyIndicator, setStickyIndicator] = useState({ left: 0, width: 0 })
+
   // Section refs for scroll tracking
   const sectionRefs = useRef<Record<SectionId, HTMLElement | null>>({
     process: null,
@@ -257,6 +263,38 @@ export function UnifiedServicePage({
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Update indicator position when active section changes
+  useEffect(() => {
+    const updateIndicators = () => {
+      // Hero nav indicator
+      if (heroNavRef.current) {
+        const activeButton = heroNavRef.current.querySelector(`[data-section="${activeSection}"]`) as HTMLElement
+        if (activeButton) {
+          setHeroIndicator({
+            left: activeButton.offsetLeft,
+            width: activeButton.offsetWidth,
+          })
+        }
+      }
+
+      // Sticky nav indicator
+      if (stickyNavRef.current) {
+        const activeButton = stickyNavRef.current.querySelector(`[data-section="${activeSection}"]`) as HTMLElement
+        if (activeButton) {
+          setStickyIndicator({
+            left: activeButton.offsetLeft,
+            width: activeButton.offsetWidth,
+          })
+        }
+      }
+    }
+
+    updateIndicators()
+    // Also update on resize
+    window.addEventListener('resize', updateIndicators)
+    return () => window.removeEventListener('resize', updateIndicators)
+  }, [activeSection])
 
   // Sticky bar: show when hero scrolls out of view
   useEffect(() => {
@@ -330,23 +368,32 @@ export function UnifiedServicePage({
             </div>
 
             {/* Center: Section tabs (hidden on mobile) */}
-            <nav className="hidden md:flex items-center gap-6" role="tablist">
+            <nav ref={stickyNavRef} className="hidden md:flex items-center gap-6 relative" role="tablist">
               {SECTIONS.map((section) => (
                 <button
                   key={section.id}
+                  data-section={section.id}
                   role="tab"
                   aria-selected={activeSection === section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={cn(
-                    'text-xs font-medium transition-colors border-b-2 py-1',
+                    'text-xs font-medium transition-colors py-1',
                     activeSection === section.id
-                      ? 'text-foreground border-foreground'
-                      : 'text-muted-foreground border-transparent hover:text-foreground'
+                      ? 'text-foreground'
+                      : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
                   {section.label}
                 </button>
               ))}
+              {/* Sliding underline indicator */}
+              <div
+                className="absolute bottom-0 h-0.5 bg-foreground transition-all duration-300 ease-out"
+                style={{
+                  left: stickyIndicator.left,
+                  width: stickyIndicator.width,
+                }}
+              />
             </nav>
 
             {/* Right: CTA */}
@@ -467,23 +514,32 @@ export function UnifiedServicePage({
               role="tablist"
             >
               <div className="max-w-[1200px] mx-auto px-6 overflow-x-auto scrollbar-none">
-                <div className="flex gap-0 -mb-px">
+                <div ref={heroNavRef} className="flex gap-0 -mb-px relative">
                   {SECTIONS.map((section) => (
                     <button
                       key={section.id}
+                      data-section={section.id}
                       role="tab"
                       aria-selected={activeSection === section.id}
                       onClick={() => scrollToSection(section.id)}
                       className={cn(
-                        'shrink-0 px-5 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
+                        'shrink-0 px-5 py-3 text-sm font-medium transition-colors whitespace-nowrap',
                         activeSection === section.id
-                          ? 'border-foreground text-foreground'
-                          : 'border-transparent text-muted-foreground hover:text-foreground hover:border-foreground/30'
+                          ? 'text-foreground'
+                          : 'text-muted-foreground hover:text-foreground'
                       )}
                     >
                       {section.label}
                     </button>
                   ))}
+                  {/* Sliding underline indicator */}
+                  <div
+                    className="absolute bottom-0 h-0.5 bg-foreground transition-all duration-300 ease-out"
+                    style={{
+                      left: heroIndicator.left,
+                      width: heroIndicator.width,
+                    }}
+                  />
                 </div>
               </div>
             </nav>

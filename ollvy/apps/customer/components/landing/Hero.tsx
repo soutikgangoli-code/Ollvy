@@ -187,7 +187,7 @@ export function Hero() {
                 'Cancel anytime',
               ].map((item) => (
                 <div key={item} className="flex items-center gap-2 text-[13px] text-muted-foreground">
-                  <div className="w-1 h-1 rounded-full bg-emerald-500" />
+                  <div className="w-1 h-1 rounded-full bg-[hsl(var(--ollvy-green))]" />
                   {item}
                 </div>
               ))}
