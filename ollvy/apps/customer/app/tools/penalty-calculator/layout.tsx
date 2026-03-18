@@ -68,20 +68,16 @@ export default function PenaltyCalculatorLayout({
         <div className="container max-w-5xl">
           {/* Header */}
           <div className="mb-16 text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
               Penalty Calculator
             </p>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6 tracking-tight">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-4 tracking-tight">
               {currentCalc?.label || 'Select Calculator'}
             </h1>
 
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Calculate exact penalties based on Indian compliance law
-            </p>
-
             {/* Calculator Selector */}
-            <div className="flex justify-center">
+            <div className="flex justify-center mb-6">
               <Select value={pathname} onValueChange={handleChange}>
                 <SelectTrigger className="w-[320px] h-11 bg-card border-border text-sm">
                   <SelectValue>
@@ -107,6 +103,10 @@ export default function PenaltyCalculatorLayout({
                 </SelectContent>
               </Select>
             </div>
+
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Calculate exact penalties based on Indian compliance law
+            </p>
           </div>
 
           {/* Content */}

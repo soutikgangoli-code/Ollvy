@@ -145,9 +145,6 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[85vh] flex items-center bg-background pt-24 pb-16 overflow-hidden">
-      {/* Subtle gradient orb */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-emerald-500/[0.02] rounded-full blur-[100px] pointer-events-none" />
-
       <div className="container relative">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-20 items-center">
           {/* Left Column */}
@@ -155,11 +152,11 @@ export function Hero() {
             {/* Main Headline */}
             <h1 className="font-mono text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] font-normal text-foreground leading-[1.1] tracking-tight uppercase">
               Your business<br />
-              <span className="whitespace-nowrap">compliance, <span className="text-muted-foreground">handled.</span></span>
+              <span className="whitespace-nowrap">compliance,<span className="text-muted-foreground ml-2">handled.</span></span>
             </h1>
 
             {/* Subheadline */}
-            <p className="text-[15px] text-muted-foreground mt-10 max-w-[460px] leading-[1.7]">
+            <p className="text-[15px] text-muted-foreground mt-10 max-w-[620px] leading-[1.7]">
               A CA files your GST. A lawyer handles your trademark. A CS manages your MCA filings.
               Track everything in one place. Pay fixed prices. No surprises.
             </p>

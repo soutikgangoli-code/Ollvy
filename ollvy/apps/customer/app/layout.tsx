@@ -36,7 +36,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >

@@ -391,7 +391,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
             <h2 className="text-3xl md:text-4xl font-semibold text-foreground">
               File {deadline.serviceName} now
             </h2>
-            <p className="text-base text-muted-foreground mt-4 max-w-[400px] mx-auto">
+            <p className="text-base text-muted-foreground mt-4 whitespace-nowrap">
               Fixed price. Verified CA. Done within {deadline.slaDays} working days.
             </p>
             <Button size="lg" className="mt-8" asChild>

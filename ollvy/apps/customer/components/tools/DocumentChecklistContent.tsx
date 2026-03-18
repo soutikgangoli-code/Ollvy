@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, ReactNode } from 'react'
+import { useState, useRef, ReactNode } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
@@ -168,6 +168,8 @@ export function DocumentChecklistContent({
   pageTitle = 'Documents Required',
   pageSubtitle,
 }: DocumentChecklistContentProps) {
+  const detailPanelRef = useRef<HTMLDivElement>(null)
+
   // Auto-select first document on initial load
   const [selectedDoc, setSelectedDoc] = useState<SelectedDocument | null>(() => {
     if (categories.length > 0 && categories[0].items.length > 0) {
@@ -176,6 +178,16 @@ export function DocumentChecklistContent({
     }
     return null
   })
+
+  const handleSelectDocument = (item: DocumentItem, categoryName: string) => {
+    setSelectedDoc({ ...item, categoryName })
+    // Scroll to detail panel on mobile/tablet, or scroll to top of panel on desktop
+    if (detailPanelRef.current) {
+      const yOffset = -100 // Account for sticky header
+      const y = detailPanelRef.current.getBoundingClientRect().top + window.scrollY + yOffset
+      window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+  }
 
   const totalRequired = categories.reduce(
     (acc, cat) => acc + cat.items.filter((item) => item.required).length,
@@ -283,7 +295,7 @@ export function DocumentChecklistContent({
                           ? 'border-border bg-muted'
                           : 'border-border/50 bg-card hover:border-border hover:bg-muted/50'
                       )}
-                      onClick={() => setSelectedDoc({ ...item, categoryName: category.category })}
+                      onClick={() => handleSelectDocument(item, category.category)}
                     >
                       <div className="flex items-center gap-4">
                         <div className={cn(
@@ -336,7 +348,7 @@ export function DocumentChecklistContent({
         </div>
 
         {/* Right Side - Document Details */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <div ref={detailPanelRef} className="lg:sticky lg:top-24 lg:self-start">
           {selectedDoc ? (
             <DocumentDetailPanel
               doc={selectedDoc}

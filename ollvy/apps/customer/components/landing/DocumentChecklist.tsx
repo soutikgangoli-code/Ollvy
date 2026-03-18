@@ -3605,13 +3605,15 @@ export function DocumentChecklist({
               </div>
               <DocumentPreviewList documents={getPreviewDocuments(serviceDocuments)} />
 
-              <button
-                className="w-full mt-4 pt-4 border-t border-border text-sm text-primary hover:text-primary/80 font-medium flex items-center justify-center gap-1.5 transition-colors"
-                onClick={() => setDialogOpen(true)}
-              >
-                View complete checklist
-                <ChevronDown size={16} />
-              </button>
+              <div className="mt-4 pt-4 border-t border-border flex justify-center">
+                <button
+                  className="px-4 py-2 rounded-lg bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium inline-flex items-center gap-1.5 transition-colors hover:bg-[hsl(142_71%_40%)]"
+                  onClick={() => setDialogOpen(true)}
+                >
+                  View complete checklist
+                  <ChevronDown size={14} />
+                </button>
+              </div>
             </Card>
           </div>
 
@@ -3719,13 +3721,15 @@ export function DocumentChecklist({
                   </div>
                   <DocumentPreviewList documents={getPreviewDocuments(DOCUMENT_DATA[tabKey])} />
 
-                  <button
-                    className="w-full mt-4 pt-4 border-t border-border text-sm text-primary hover:text-primary/80 font-medium flex items-center justify-center gap-1.5 transition-colors"
-                    onClick={() => setDialogOpen(true)}
-                  >
-                    View complete checklist
-                    <ChevronDown size={16} />
-                  </button>
+                  <div className="mt-4 pt-4 border-t border-border flex justify-center">
+                    <button
+                      className="px-4 py-2 rounded-lg bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium inline-flex items-center gap-1.5 transition-colors hover:bg-[hsl(142_71%_40%)]"
+                      onClick={() => setDialogOpen(true)}
+                    >
+                      View complete checklist
+                      <ChevronDown size={14} />
+                    </button>
+                  </div>
                 </Card>
               </TabsContent>
             ))}

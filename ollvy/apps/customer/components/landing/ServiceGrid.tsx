@@ -217,11 +217,11 @@ export function ServiceGrid({ services }: ServiceGridProps) {
   }
 
   return (
-    <section id="services" className="bg-background py-24">
+    <section id="services" className="bg-background pt-12 pb-24">
       <div className="container">
         {/* Section Heading */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
-          SERVICES
+          SERVICES WE OFFER
         </h2>
 
         {/* Carousel Navigation */}

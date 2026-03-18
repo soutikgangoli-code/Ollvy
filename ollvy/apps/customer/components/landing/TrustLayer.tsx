@@ -8,23 +8,8 @@ import { cn } from '@/lib/utils'
 /**
  * §6 - Trust Layer
  *
- * Carousel showing 1 card on mobile, 2 cards on desktop
+ * Carousel showing 1 card at a time
  */
-
-function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(false)
-
-  useEffect(() => {
-    const media = window.matchMedia(query)
-    setMatches(media.matches)
-
-    const listener = (e: MediaQueryListEvent) => setMatches(e.matches)
-    media.addEventListener('change', listener)
-    return () => media.removeEventListener('change', listener)
-  }, [query])
-
-  return matches
-}
 
 const trustCards = [
   {
@@ -151,36 +136,35 @@ const trustCards = [
 ]
 
 export function TrustLayer() {
+  // Max index is trustCards.length - 2 (so we always show 2 cards)
+  const maxIndex = trustCards.length - 2
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
-  const isDesktop = useMediaQuery('(min-width: 768px)')
-
-  const cardsToShow = isDesktop ? 2 : 1
-  const step = cardsToShow
 
   // Auto-advance every 5 seconds
   useEffect(() => {
     if (isPaused) return
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + step) % trustCards.length)
+      setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0))
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [isPaused, step])
+  }, [isPaused, maxIndex])
 
   const goNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + step) % trustCards.length)
-  }, [step])
+    setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0))
+  }, [maxIndex])
 
   const goPrev = useCallback(() => {
-    setCurrentIndex((prev) => (prev - step + trustCards.length) % trustCards.length)
-  }, [step])
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : maxIndex))
+  }, [maxIndex])
 
-  // Get visible cards based on screen size
-  const visibleCards = isDesktop
-    ? [trustCards[currentIndex], trustCards[(currentIndex + 1) % trustCards.length]]
-    : [trustCards[currentIndex]]
+  // Get two visible cards (current and current+1)
+  const visibleCards = [
+    trustCards[currentIndex],
+    trustCards[currentIndex + 1],
+  ]
 
   return (
     <section className="bg-card py-16 overflow-hidden">
@@ -196,58 +180,55 @@ export function TrustLayer() {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Cards Grid - 2 at a time, equal height, compact layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {visibleCards.map((card, idx) => {
-              const Icon = card.icon
-              return (
+          {/* Two Cards Display */}
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {visibleCards.map((card, idx) => (
                 <Card
                   key={`${currentIndex}-${idx}`}
-                  className="border border-border bg-background p-4 md:p-5 flex flex-col h-auto md:h-[380px]"
+                  className="border border-border bg-background p-6 md:p-8"
                 >
-                  <Icon className="h-5 w-5 text-muted-foreground" strokeWidth={1.5} />
-
-                  <h3 className="text-lg font-semibold mt-3 text-foreground leading-snug">
+                  <h3 className="text-xl font-semibold text-foreground leading-snug">
                     {card.title}
                   </h3>
 
-                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed flex-grow">
+                  <p className="text-base text-muted-foreground mt-3 leading-relaxed">
                     {card.description}
                   </p>
 
                   {/* Visual Element */}
-                  <div className="mt-4 pt-4 border-t border-border">
+                  <div className="mt-6 pt-6 border-t border-border">
                     {card.visual}
                     {card.visualCaption && (
-                      <p className="text-xs text-muted-foreground italic mt-2">
+                      <p className="text-sm text-muted-foreground italic mt-3">
                         {card.visualCaption}
                       </p>
                     )}
                   </div>
                 </Card>
-              )
-            })}
+              ))}
+            </div>
           </div>
 
           {/* Navigation Arrows */}
           <button
             onClick={goPrev}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 lg:-translate-x-12 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
-            aria-label="Previous cards"
+            aria-label="Previous card"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <button
             onClick={goNext}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 lg:translate-x-12 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground/50 transition-colors shadow-md"
-            aria-label="Next cards"
+            aria-label="Next card"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
 
-          {/* Dots Indicator - 4 dots on mobile (1 per card), 2 dots on desktop (1 per pair) */}
+          {/* Dots Indicator - 1 per position (3 positions for 4 cards showing 2 at a time) */}
           <div className="flex justify-center gap-2 mt-6">
-            {(isDesktop ? [0, 2] : [0, 1, 2, 3]).map((dotIndex) => (
+            {Array.from({ length: maxIndex + 1 }).map((_, dotIndex) => (
               <button
                 key={dotIndex}
                 onClick={() => setCurrentIndex(dotIndex)}
@@ -257,7 +238,7 @@ export function TrustLayer() {
                     ? 'bg-foreground w-8'
                     : 'bg-muted-foreground/30 w-2 hover:bg-muted-foreground/50'
                 )}
-                aria-label={`Go to slide ${dotIndex + 1}`}
+                aria-label={`Go to position ${dotIndex + 1}`}
               />
             ))}
           </div>

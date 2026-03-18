@@ -47,8 +47,7 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <OllvyWordmark />
             <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-              GST filings. ITR. Payroll. Incorporation. 32 services, fixed prices, verified
-              professionals. No hidden fees. No WhatsApp CAs.
+              You run your business. We handle the rest.
             </p>
             <div className="flex gap-3 mt-4">
               <a

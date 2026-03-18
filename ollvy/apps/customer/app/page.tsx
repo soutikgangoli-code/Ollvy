@@ -39,11 +39,11 @@ export default async function LandingPage() {
         {/* §2 - Hero */}
         <Hero />
 
-        {/* §4 - How It Works */}
-        <HowItWorks />
-
         {/* §5 - Service Grid (per §23: data from Supabase) */}
         <ServiceGrid services={services} />
+
+        {/* §4 - How It Works */}
+        <HowItWorks />
 
         {/* §6 - Trust Layer (4 cards + authority logos) */}
         <TrustLayer />

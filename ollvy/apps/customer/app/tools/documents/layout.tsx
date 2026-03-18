@@ -46,20 +46,16 @@ export default function DocumentsLayout({
       <div className="container max-w-5xl">
         {/* Header */}
         <div className="mb-16 text-center">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+          <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
             Document Checklist
           </p>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground mb-6 tracking-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-4 tracking-tight">
             {currentType?.label || 'Select Document Type'}
           </h1>
 
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Complete list of documents required with detailed explanations
-          </p>
-
           {/* Document Type Selector */}
-          <div className="flex justify-center">
+          <div className="flex justify-center mb-6">
             <Select value={pathname} onValueChange={handleChange}>
               <SelectTrigger className="w-[360px] h-11 bg-card border-border text-sm">
                 <SelectValue>
@@ -85,6 +81,10 @@ export default function DocumentsLayout({
               </SelectContent>
             </Select>
           </div>
+
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Complete list of documents required with detailed explanations
+          </p>
         </div>
 
         {/* Content */}

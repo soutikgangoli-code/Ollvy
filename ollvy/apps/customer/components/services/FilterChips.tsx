@@ -47,10 +47,10 @@ export function FilterChips({
       <button
         onClick={() => handleClick('all')}
         className={cn(
-          'inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
+          'inline-flex items-center rounded-lg border px-4 py-2 text-sm font-medium transition-all duration-200',
           isSelected('all')
-            ? 'bg-foreground text-background'
-            : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
+            ? 'bg-foreground text-background border-foreground'
+            : 'bg-transparent text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground'
         )}
       >
         All
@@ -60,10 +60,10 @@ export function FilterChips({
           key={filter.id}
           onClick={() => handleClick(filter.id)}
           className={cn(
-            'inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
+            'inline-flex items-center rounded-lg border px-4 py-2 text-sm font-medium transition-all duration-200',
             isSelected(filter.id)
-              ? 'bg-foreground text-background'
-              : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground'
+              ? 'bg-foreground text-background border-foreground'
+              : 'bg-transparent text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground'
           )}
         >
           {filter.label}

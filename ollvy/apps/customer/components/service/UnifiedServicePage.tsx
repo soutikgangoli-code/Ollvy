@@ -412,23 +412,23 @@ export function UnifiedServicePage({
               </div>
 
               {/* Metadata pills */}
-              <div className="flex flex-wrap justify-center gap-2 mt-6">
-                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono">
+              <div className="flex flex-nowrap justify-center gap-2 mt-6">
+                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
                   <span className="text-xs text-muted-foreground">For </span>
                   <span className="text-xs font-medium text-foreground">{service.mandatoryFor}</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono">
+                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
                   <span className="text-xs text-muted-foreground">Type </span>
                   <span className="text-xs font-medium text-foreground">{service.serviceType}</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono">
+                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
                   <span className="text-xs text-muted-foreground">Turnaround </span>
                   <span className="text-xs font-medium text-foreground">
                     {service.isRetainer ? 'Ongoing' : `${service.slaDays} days`}
                   </span>
                 </div>
                 {showRating && service.avgRating && (
-                  <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 flex items-center gap-1 font-mono">
+                  <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 flex items-center gap-1 font-mono whitespace-nowrap">
                     <Star size={10} className="fill-yellow-400 text-yellow-400" />
                     <span className="text-xs font-medium text-foreground">
                       {service.avgRating.toFixed(1)}
@@ -989,7 +989,7 @@ export function UnifiedServicePage({
               <h2 className="text-3xl md:text-4xl font-semibold text-foreground">
                 Get {service.shortName} done now
               </h2>
-              <p className="text-base text-muted-foreground mt-4 max-w-[400px] mx-auto">
+              <p className="text-base text-muted-foreground mt-4 whitespace-nowrap">
                 Fixed price. Verified CA. Done within {service.slaDays} working days.
               </p>
               <Button size="lg" className="mt-8" asChild>
