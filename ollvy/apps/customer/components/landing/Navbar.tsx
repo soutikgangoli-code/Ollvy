@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, Loader2 } from 'lucide-react'
+import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, Loader2, User, LogOut, ShoppingBag, Repeat } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -88,7 +88,12 @@ export function Navbar() {
   const [services, setServices] = useState<ServicePackage[]>([])
   const [isLoadingServices, setIsLoadingServices] = useState(false)
   const activeSection = useActiveSection(navLinks.map((l) => l.sectionId))
-  const { openAuthModal } = useAuthStore()
+  const { user, openAuthModal, logout } = useAuthStore()
+
+  const handleLogout = async () => {
+    await logout()
+    window.location.href = '/'
+  }
 
   // Fetch active services from Supabase
   const fetchServices = useCallback(async () => {
@@ -242,7 +247,7 @@ export function Navbar() {
         </nav>
         </div>
 
-        {/* Theme Toggle + Desktop Search Button */}
+        {/* Theme Toggle + Desktop Search Button + Profile */}
         <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
           <Button
@@ -257,6 +262,57 @@ export function Navbar() {
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
+
+          {user ? (
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground rounded-full">
+                  <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
+                    <User className="h-4 w-4" />
+                  </div>
+                  <span className="max-w-[100px] truncate text-sm">
+                    {user.business_name || user.phone}
+                  </span>
+                  <ChevronDown className="h-3 w-3 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/profile" className="flex items-center gap-3">
+                    <User className="h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/orders" className="flex items-center gap-3">
+                    <ShoppingBag className="h-4 w-4" />
+                    My Orders
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/retainers" className="flex items-center gap-3">
+                    <Repeat className="h-4 w-4" />
+                    Retainers
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={handleLogout}
+                  className="cursor-pointer text-muted-foreground"
+                >
+                  <LogOut className="h-4 w-4 mr-3" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button
+              size="sm"
+              className="rounded-full"
+              onClick={() => openAuthModal()}
+            >
+              Sign in
+            </Button>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -349,16 +405,59 @@ export function Navbar() {
                 <Search className="h-4 w-4" />
                 Search Services
               </Button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  openAuthModal()
-                }}
-                className="text-center font-mono text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
-              >
-                Already have an account? <span className="text-foreground font-medium">Sign in</span>
-              </button>
+              {user ? (
+                <div className="space-y-1 pt-2">
+                  <Link
+                    href="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
+                      <User className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-sm text-foreground">Profile</p>
+                      <p className="font-mono text-[10px] text-muted-foreground truncate max-w-[180px]">
+                        {user.business_name || user.phone}
+                      </p>
+                    </div>
+                  </Link>
+                  <Link
+                    href="/orders"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
+                  >
+                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
+                      <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <p className="font-mono text-sm text-foreground">My Orders</p>
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false)
+                      handleLogout()
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors text-left"
+                  >
+                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
+                      <LogOut className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <p className="font-mono text-sm text-muted-foreground">Sign out</p>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false)
+                    openAuthModal()
+                  }}
+                  className="text-center font-mono text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
+                >
+                  Already have an account? <span className="text-foreground font-medium">Sign in</span>
+                </button>
+              )}
             </SheetFooter>
           </SheetContent>
         </Sheet>

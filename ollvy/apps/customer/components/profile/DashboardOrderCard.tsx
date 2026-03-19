@@ -52,7 +52,7 @@ export function DashboardOrderCard({
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="min-w-0 flex-1">
             <h3 className="font-medium text-foreground truncate">{serviceName}</h3>
-            <p className="text-sm text-muted-foreground">{orderNumber}</p>
+            <p className="text-sm text-muted-foreground font-mono">{orderNumber}</p>
           </div>
           <span className={cn('text-xs font-medium', statusColors[status])}>
             {statusLabels[status] || status}

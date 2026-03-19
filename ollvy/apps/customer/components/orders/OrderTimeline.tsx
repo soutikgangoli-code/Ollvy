@@ -1,31 +1,46 @@
 import { Check, Clock, Circle } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { OrderStageHistory, WorkflowStage } from '@/lib/types'
+import type { OrderStageHistory, WorkflowDisplayStage } from '@/lib/types'
 
 interface OrderTimelineProps {
-  stages: WorkflowStage[]
+  stages: WorkflowDisplayStage[]
   stageHistory: OrderStageHistory[]
 }
 
 export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
-  const completedStages = new Map(
-    stageHistory.map((h) => [h.stage_key, h])
+  // Map stage history by step number (using index + 1)
+  const completedByStep = new Map(
+    stageHistory.map((h, idx) => [idx + 1, h])
   )
 
+  // Also try to match by stage_key to step mapping
+  const stageKeyToStep = new Map(
+    stages.map((s, idx) => [s.title.toLowerCase().replace(/\s+/g, '_'), idx + 1])
+  )
+
+  const completedStages = new Map<number, OrderStageHistory>()
+  stageHistory.forEach((h) => {
+    const stepFromKey = stageKeyToStep.get(h.stage_key)
+    if (stepFromKey) {
+      completedStages.set(stepFromKey, h)
+    }
+  })
+
+  // Find current stage - first stage without completion
   const currentStageIndex = stages.findIndex(
-    (stage) => !completedStages.has(stage.stage_key)
+    (stage) => !completedStages.has(stage.step)
   )
 
   return (
     <div className="space-y-4">
       {stages.map((stage, index) => {
-        const history = completedStages.get(stage.stage_key)
+        const history = completedStages.get(stage.step)
         const isCompleted = !!history?.completed_at
         const isCurrent = index === currentStageIndex
         const isUpcoming = index > currentStageIndex && currentStageIndex !== -1
 
         return (
-          <div key={stage.stage_key} className="flex gap-4">
+          <div key={stage.step} className="flex gap-4">
             {/* Icon */}
             <div className="flex flex-col items-center">
               <div
@@ -68,7 +83,7 @@ export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
                     : 'text-muted-foreground'
                 )}
               >
-                {stage.stage_name}
+                {stage.title}
               </h4>
 
               <p className="text-sm text-muted-foreground mt-1">
@@ -82,7 +97,7 @@ export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
                       day: 'numeric',
                       month: 'short',
                     })}`
-                  : `${stage.sla_working_days} working days`}
+                  : stage.timeline}
               </p>
 
               {history?.sla_breached && (

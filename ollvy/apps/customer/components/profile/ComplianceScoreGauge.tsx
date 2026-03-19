@@ -91,13 +91,13 @@ export function ComplianceScoreGauge({
               {upcomingDeadlines > 0 && (
                 <p className="text-sm text-muted-foreground flex items-center gap-1.5">
                   <CheckCircle className="h-3.5 w-3.5 text-muted-foreground" />
-                  {upcomingDeadlines} deadline{upcomingDeadlines > 1 ? 's' : ''} this month
+                  <span className="font-mono">{upcomingDeadlines}</span> deadline{upcomingDeadlines > 1 ? 's' : ''} this month
                 </p>
               )}
               {overdueCount > 0 && (
                 <p className="text-sm text-destructive flex items-center gap-1.5">
                   <AlertTriangle className="h-3.5 w-3.5" />
-                  {overdueCount} overdue
+                  <span className="font-mono">{overdueCount}</span> overdue
                 </p>
               )}
             </div>

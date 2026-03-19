@@ -64,7 +64,7 @@ export default function OrderChatPage() {
     return (
       <div className="h-[calc(100vh-80px)] flex flex-col">
         {/* Header skeleton */}
-        <div className="flex-shrink-0 border-b border-white/[0.06] px-4 py-3">
+        <div className="flex-shrink-0 border-b border-border px-4 py-3">
           <div className="flex items-center gap-4">
             <Skeleton className="h-9 w-9 rounded-lg" />
             <div className="flex-1">
@@ -83,7 +83,7 @@ export default function OrderChatPage() {
           </div>
         </div>
         {/* Input skeleton */}
-        <div className="border-t border-white/[0.06] p-4">
+        <div className="border-t border-border p-4">
           <Skeleton className="h-11 rounded-xl" />
         </div>
       </div>
@@ -94,10 +94,10 @@ export default function OrderChatPage() {
     return (
       <div className="h-[calc(100vh-80px)] flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-xl font-semibold text-white mb-2">
+          <h2 className="text-xl font-semibold text-foreground mb-2">
             {error || 'Chat not available'}
           </h2>
-          <p className="text-white/40 mb-6">
+          <p className="text-muted-foreground mb-6">
             This order doesn't have an active chat.
           </p>
           <Link href={`/orders/${orderId}`}>
@@ -114,26 +114,26 @@ export default function OrderChatPage() {
   return (
     <div className="h-[calc(100vh-80px)] flex flex-col">
       {/* Chat Header */}
-      <div className="flex-shrink-0 border-b border-white/[0.06] px-4 py-3 bg-[#0D0D0D]">
+      <div className="flex-shrink-0 border-b border-border px-4 py-3 bg-card">
         <div className="flex items-center gap-4">
           <Link href={`/orders/${orderId}`}>
-            <Button variant="ghost" size="icon-sm" className="text-white/50 hover:text-white">
+            <Button variant="ghost" size="icon-sm" className="text-muted-foreground hover:text-foreground">
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
 
           {order.professional ? (
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-medium flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-foreground font-medium flex-shrink-0">
                 {order.professional.full_name.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h2 className="font-medium text-white truncate">
+                  <h2 className="font-medium text-foreground truncate">
                     {order.professional.full_name.split(' ')[0]}, Ollvy Compliance Team
                   </h2>
                 </div>
-                <p className="text-sm text-white/40 truncate">
+                <p className="text-sm text-muted-foreground truncate">
                   {order.service_package?.name}
                 </p>
               </div>
@@ -141,14 +141,14 @@ export default function OrderChatPage() {
             </div>
           ) : (
             <div className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                <User className="h-5 w-5 text-white/40" />
+              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                <User className="h-5 w-5 text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="font-medium text-white truncate">
+                <h2 className="font-medium text-foreground truncate">
                   Ollvy Compliance Team
                 </h2>
-                <p className="text-sm text-white/40 truncate">
+                <p className="text-sm text-muted-foreground truncate">
                   {order.service_package?.name}
                 </p>
               </div>

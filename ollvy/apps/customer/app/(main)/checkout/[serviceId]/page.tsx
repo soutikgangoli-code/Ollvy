@@ -260,10 +260,20 @@ export default function CheckoutPage() {
   }
 
   const handleCheckout = async () => {
-    if (!service || !user || !priceBreakdown || !session) return
+    if (!service || !user || !priceBreakdown) return
 
     setIsProcessing(true)
     try {
+      // Get fresh session token before checkout (handles expired tokens)
+      const supabase = getClient()
+      const { data: { session: freshSession } } = await supabase.auth.getSession()
+
+      if (!freshSession?.access_token) {
+        openAuthModal()
+        setIsProcessing(false)
+        return
+      }
+
       const attribution = getFullAttributionData()
 
       const response = await fetch(
@@ -272,7 +282,7 @@ export default function CheckoutPage() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${session.access_token}`,
+            Authorization: `Bearer ${freshSession.access_token}`,
           },
           body: JSON.stringify({
             service_package_id: service.id,

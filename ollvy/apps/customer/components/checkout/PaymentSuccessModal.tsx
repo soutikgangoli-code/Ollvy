@@ -1,13 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   Dialog,
   DialogContent,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, ArrowRight, Sparkles } from 'lucide-react'
+import { Check, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface PaymentSuccessModalProps {
@@ -15,7 +14,26 @@ interface PaymentSuccessModalProps {
   orderNumber: string
   serviceName: string
   orderId: string
+  amountPaisa: number
+  slaDays: number
   onClose: () => void
+}
+
+function formatPrice(paisa: number): string {
+  return '\u20B9' + Math.ceil(paisa / 100).toLocaleString('en-IN')
+}
+
+function getGuaranteedDate(days: number): string {
+  const date = new Date()
+  let addedDays = 0
+  while (addedDays < days) {
+    date.setDate(date.getDate() + 1)
+    const dayOfWeek = date.getDay()
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+      addedDays++
+    }
+  }
+  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 export function PaymentSuccessModal({
@@ -23,134 +41,98 @@ export function PaymentSuccessModal({
   orderNumber,
   serviceName,
   orderId,
+  amountPaisa,
+  slaDays,
   onClose,
 }: PaymentSuccessModalProps) {
-  const router = useRouter()
-  const [showConfetti, setShowConfetti] = useState(true)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
-      setShowConfetti(true)
-      const timer = setTimeout(() => setShowConfetti(false), 2500)
+      const timer = setTimeout(() => setMounted(true), 100)
       return () => clearTimeout(timer)
+    } else {
+      setMounted(false)
     }
   }, [isOpen])
 
   const handleViewOrder = () => {
     onClose()
-    router.push(`/orders/${orderId}`)
   }
+
+  const guaranteedDate = getGuaranteedDate(slaDays)
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleViewOrder()}>
-      <DialogContent className="sm:max-w-md border-border bg-card p-0 overflow-hidden">
-        {/* Confetti Animation */}
-        {showConfetti && (
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {[...Array(15)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute animate-confetti-modal"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 0.3}s`,
-                  animationDuration: `${1.5 + Math.random() * 1}s`,
-                }}
-              >
-                <Sparkles
-                  className="h-4 w-4"
-                  style={{
-                    color: ['#22c55e', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6'][
-                      Math.floor(Math.random() * 5)
-                    ],
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="p-8 text-center">
-          {/* Success Animation */}
-          <div className="relative inline-block mb-6">
-            <div className="w-20 h-20 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center animate-scale-in-modal mx-auto">
-              <CheckCircle className="h-10 w-10 text-[hsl(var(--ollvy-green))]" />
-            </div>
-            <div className="absolute -top-1 -right-1 w-6 h-6 bg-[hsl(var(--ollvy-green))] rounded-full flex items-center justify-center animate-bounce-in-modal">
-              <Sparkles className="h-3 w-3 text-white" />
-            </div>
+      <DialogContent className="sm:max-w-[400px] border-border bg-card p-0 overflow-hidden gap-0">
+        {/* Header with success indicator */}
+        <div className="px-6 pt-8 pb-6 text-center">
+          {/* Success checkmark */}
+          <div
+            className={cn(
+              'w-14 h-14 rounded-full bg-[hsl(var(--ollvy-green))] flex items-center justify-center mx-auto mb-4 transition-all duration-500',
+              mounted ? 'scale-100 opacity-100' : 'scale-50 opacity-0'
+            )}
+          >
+            <Check className="h-7 w-7 text-white stroke-[3]" />
           </div>
 
-          {/* Success Text */}
-          <h2 className="text-xl font-semibold text-foreground mb-2">
-            Payment Successful!
-          </h2>
-          <p className="text-muted-foreground mb-1">
-            {serviceName}
-          </p>
-          <p className="text-sm text-muted-foreground mb-6">
-            Order #{orderNumber}
+          {/* Status label */}
+          <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green))] font-mono mb-3">
+            PAYMENT SUCCESSFUL
           </p>
 
-          {/* What's Next */}
-          <div className="bg-muted/50 rounded-xl p-4 mb-6 text-left">
-            <p className="text-sm font-medium text-foreground mb-2">What happens next:</p>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center text-xs text-[hsl(var(--ollvy-green))] font-medium">1</span>
-                Professional assigned within 24 hours
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs text-muted-foreground font-medium">2</span>
-                Upload required documents
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-xs text-muted-foreground font-medium">3</span>
-                Track progress in real-time
-              </li>
-            </ul>
-          </div>
+          {/* Amount paid */}
+          <p className="font-mono text-3xl font-bold text-foreground">
+            {formatPrice(amountPaisa)}
+          </p>
+        </div>
 
-          {/* CTA */}
-          <Button onClick={handleViewOrder} className="w-full gap-2" size="lg">
-            View Order Details
+        {/* Order details */}
+        <div className="px-6 pb-6">
+          <div className="border border-border rounded-xl divide-y divide-border">
+            {/* Service */}
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                SERVICE
+              </span>
+              <span className="text-sm font-medium text-foreground">
+                {serviceName}
+              </span>
+            </div>
+
+            {/* Order ID */}
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                ORDER ID
+              </span>
+              <span className="text-sm font-mono text-foreground">
+                {orderNumber}
+              </span>
+            </div>
+
+            {/* Guaranteed by */}
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                GUARANTEED BY
+              </span>
+              <span className="text-sm font-mono font-medium text-[hsl(var(--ollvy-green))]">
+                {guaranteedDate}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="px-6 pb-6">
+          <Button
+            onClick={handleViewOrder}
+            className="w-full h-11 text-sm font-medium gap-2"
+          >
+            View Order
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
-
-        {/* Animation Styles */}
-        <style jsx global>{`
-          @keyframes confetti-modal {
-            0% {
-              transform: translateY(-20px) rotate(0deg);
-              opacity: 1;
-            }
-            100% {
-              transform: translateY(300px) rotate(720deg);
-              opacity: 0;
-            }
-          }
-          .animate-confetti-modal {
-            animation: confetti-modal linear forwards;
-          }
-          @keyframes scale-in-modal {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-          }
-          .animate-scale-in-modal {
-            animation: scale-in-modal 0.5s ease-out forwards;
-          }
-          @keyframes bounce-in-modal {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-          }
-          .animate-bounce-in-modal {
-            animation: bounce-in-modal 0.5s ease-out 0.3s forwards;
-            transform: scale(0);
-          }
-        `}</style>
       </DialogContent>
     </Dialog>
   )

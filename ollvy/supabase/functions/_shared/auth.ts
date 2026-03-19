@@ -28,15 +28,18 @@ export async function verifyUser(req: Request): Promise<AuthResult> {
   const authHeader = req.headers.get('Authorization');
 
   if (!authHeader) {
+    console.error('Auth: Missing Authorization header');
     return { success: false, error: 'Missing Authorization header', status: 401 };
   }
 
   const token = authHeader.replace('Bearer ', '');
+  console.log('Auth: Token received, length:', token.length);
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL');
   const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
 
   if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('Auth: Missing env vars - URL:', !!supabaseUrl, 'ANON_KEY:', !!supabaseAnonKey);
     return { success: false, error: 'Server configuration error', status: 500 };
   }
 
@@ -53,8 +56,11 @@ export async function verifyUser(req: Request): Promise<AuthResult> {
   const { data: { user }, error } = await supabase.auth.getUser(token);
 
   if (error || !user) {
-    return { success: false, error: 'Invalid or expired token', status: 401 };
+    console.error('Auth: getUser failed -', error?.message || 'no user');
+    return { success: false, error: `Invalid or expired token: ${error?.message || 'unknown'}`, status: 401 };
   }
+
+  console.log('Auth: User verified, auth_user_id:', user.id);
 
   // Get the user's row from users table
   const supabaseAdmin = getSupabaseAdmin();

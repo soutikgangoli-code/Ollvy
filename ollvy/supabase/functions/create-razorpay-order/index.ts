@@ -1,5 +1,6 @@
 // create-razorpay-order
 // Full implementation per §3 Pricing Rules and §22
+// Last updated: 2026-03-19 - Fixed NOT NULL constraints
 //
 // Spec:
 // - Accepts servicePackageId OR quoteRequestId
@@ -22,6 +23,18 @@ interface CreateOrderBody {
   quote_request_id?: string;
   promo_code?: string;
   use_referral_credit?: boolean;
+  // Variant and addon selection
+  variant_id?: string;
+  addon_ids?: string[];
+  engagement_agreed?: boolean;
+  // UTM attribution
+  utm_source?: string;
+  utm_medium?: string;
+  utm_campaign?: string;
+  utm_content?: string;
+  utm_term?: string;
+  referral_code?: string;
+  landing_page?: string;
 }
 
 interface ServicePackage {
@@ -33,6 +46,8 @@ interface ServicePackage {
   order_type: string;
   sla_working_days: number;
   workflow_stages: any[];
+  addons?: any[];
+  variants?: any[];
 }
 
 interface User {
@@ -108,7 +123,15 @@ serve(async (req) => {
 
     // Parse request body
     const body: CreateOrderBody = await req.json();
-    const { service_package_id, quote_request_id, promo_code, use_referral_credit } = body;
+    const {
+      service_package_id,
+      quote_request_id,
+      promo_code,
+      use_referral_credit,
+      variant_id,
+      addon_ids,
+      engagement_agreed,
+    } = body;
 
     // Validate: must have either service_package_id or quote_request_id
     if (!service_package_id && !quote_request_id) {
@@ -250,6 +273,26 @@ serve(async (req) => {
       servicePackage = pkg;
       basePricePaisa = pkg.price_base_paisa;
       govtFeesPaisa = pkg.price_govt_fees_paisa || 0;
+
+      // Apply variant price adjustments if a variant is selected
+      if (variant_id && pkg.variants && Array.isArray(pkg.variants)) {
+        const selectedVariant = pkg.variants.find((v: any) => v.id === variant_id);
+        if (selectedVariant) {
+          basePricePaisa += selectedVariant.priceAdjustment || 0;
+          govtFeesPaisa += selectedVariant.govtFeeAdjustment || 0;
+        }
+      }
+
+      // Add addon prices to the base price (addons are part of the service bundle)
+      if (addon_ids && addon_ids.length > 0 && pkg.addons && Array.isArray(pkg.addons)) {
+        for (const addonId of addon_ids) {
+          const addon = pkg.addons.find((a: any) => a.id === addonId);
+          if (addon) {
+            basePricePaisa += addon.pricePaisa || 0;
+            govtFeesPaisa += addon.govtFeePaisa || 0;
+          }
+        }
+      }
     }
 
     // Apply Pro discount (5% off base price for one-time orders only)
@@ -262,7 +305,9 @@ serve(async (req) => {
     const adjustedBasePaisa = basePricePaisa - proDiscountPaisa;
 
     // Calculate GST (on base price after Pro discount)
-    const gst = calculateGST(adjustedBasePaisa, user.state || '', servicePackage.price_gst_rate);
+    // Default to same-state GST when user has no state set
+    const ollvyGstState = Deno.env.get('OLLVY_GST_STATE') || 'DL';
+    const gst = calculateGST(adjustedBasePaisa, user.state || ollvyGstState, servicePackage.price_gst_rate);
 
     // Promo discount (applied after Pro discount)
     let promoDiscountPaisa = 0;
@@ -387,7 +432,7 @@ serve(async (req) => {
         service_package_id: servicePackage.id,
         order_type: servicePackage.order_type,
         status: 'pending_assignment',
-        city: user.city,
+        city: user.city || null,
         price_base_paisa_snapshot: basePricePaisa,
         price_govt_fees_paisa_snapshot: govtFeesPaisa,
         price_gst_paisa_snapshot: gst.total,
@@ -398,6 +443,9 @@ serve(async (req) => {
         price_source: priceSource,
         razorpay_order_id: razorpayOrder.id,
         referral_credit_used_paisa: referralCreditUsed,
+        // variant_id and engagement_agreed_at require migration 20260320000000
+        variant_id: variant_id || null,
+        engagement_agreed_at: engagement_agreed ? new Date().toISOString() : null,
       })
       .select()
       .single();
@@ -405,7 +453,7 @@ serve(async (req) => {
     if (orderError) {
       console.error('Failed to create order:', orderError);
       return new Response(
-        JSON.stringify({ ok: false, error: 'Failed to create order' }),
+        JSON.stringify({ ok: false, error: `Failed to create order: ${orderError.message}` }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 500,
@@ -423,6 +471,34 @@ serve(async (req) => {
         .eq('id', userId);
     }
 
+    // Insert order_addons if any addons were selected
+    if (addon_ids && addon_ids.length > 0 && servicePackage.addons) {
+      const addonsToInsert = addon_ids
+        .map((addonId: string) => {
+          const addon = (servicePackage.addons as any[])?.find((a: any) => a.id === addonId);
+          if (!addon) return null;
+          return {
+            order_id: order.id,
+            addon_id: addonId,
+            addon_name: addon.name,
+            price_paisa_snapshot: addon.pricePaisa || 0,
+            govt_fee_paisa_snapshot: addon.govtFeePaisa || 0,
+          };
+        })
+        .filter(Boolean);
+
+      if (addonsToInsert.length > 0) {
+        const { error: addonsError } = await supabase
+          .from('order_addons')
+          .insert(addonsToInsert);
+
+        if (addonsError) {
+          console.error('Failed to insert order addons:', addonsError);
+          // Don't fail the order - just log the error
+        }
+      }
+    }
+
     // Update quote status if quote flow
     if (quoteId) {
       await supabase
@@ -436,6 +512,7 @@ serve(async (req) => {
       JSON.stringify({
         ok: true,
         order_id: order.id,
+        order_number: order.order_number, // Include order_number for success modal
         razorpay_order_id: razorpayOrder.id,
         amount: razorpayAmountPaise,
         currency: 'INR',
@@ -461,7 +538,7 @@ serve(async (req) => {
   } catch (error) {
     console.error('Create order error:', error);
     return new Response(
-      JSON.stringify({ ok: false, error: error.message }),
+      JSON.stringify({ ok: false, error: `Server error: ${error.message}` }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,

@@ -90,7 +90,7 @@ export function RetainerStatusCard({
           {filingsDueThisMonth > 0 && status === 'active' && (
             <p className="flex items-center gap-2 text-foreground">
               <Calendar className="h-4 w-4 text-amber-500" />
-              {filingsDueThisMonth} filing{filingsDueThisMonth > 1 ? 's' : ''} due this month
+              <span className="font-mono">{filingsDueThisMonth}</span> filing{filingsDueThisMonth > 1 ? 's' : ''} due this month
             </p>
           )}
           <p className="flex items-center gap-2">

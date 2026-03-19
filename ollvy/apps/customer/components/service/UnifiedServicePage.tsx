@@ -77,6 +77,55 @@ function formatWithMonoNumbers(text: string): React.ReactNode {
   })
 }
 
+// Helper to generate contextually appropriate "How it works" heading
+function getProcessHeading(serviceName: string, shortName: string): string {
+  const nameLower = serviceName.toLowerCase()
+  const shortLower = shortName.toLowerCase()
+
+  // Company/entity formation
+  if (
+    nameLower.includes('company') ||
+    nameLower.includes('incorporation') ||
+    shortLower === 'private limited' ||
+    shortLower === 'llp' ||
+    shortLower === 'opc' ||
+    shortLower === 'one person company' ||
+    shortLower === 'partnership'
+  ) {
+    return `How Ollvy incorporates a ${shortName}`
+  }
+
+  // Registration services
+  if (nameLower.includes('registration')) {
+    // e.g., "GST Registration" -> "How Ollvy registers your GST"
+    const subject = shortName.replace(/\s*registration\s*/i, '').trim()
+    return `How Ollvy registers your ${subject}`
+  }
+
+  // Filing/Return services
+  if (nameLower.includes('return') || nameLower.includes('filing')) {
+    return `How Ollvy files your ${shortName}`
+  }
+
+  // ITR services
+  if (nameLower.includes('itr') || nameLower.includes('income tax')) {
+    return `How Ollvy files your ${shortName}`
+  }
+
+  // KYC services
+  if (nameLower.includes('kyc')) {
+    return `How Ollvy completes your ${shortName}`
+  }
+
+  // Compliance services
+  if (nameLower.includes('compliance') || nameLower.includes('annual')) {
+    return `How Ollvy handles your ${shortName}`
+  }
+
+  // Default fallback
+  return `How Ollvy handles your ${serviceName}`
+}
+
 // Mini mock visual components for What's Included section
 function MockVisual({
   type,
@@ -426,8 +475,8 @@ export function UnifiedServicePage({
               <a
                 href={
                   service.priceVariesByState
-                    ? `/quote/request/${service.id}`
-                    : `/checkout/${service.id}`
+                    ? `/quote/request/${service.id || service.slug}`
+                    : `/checkout/${service.id || service.slug}`
                 }
               >
                 {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
@@ -442,7 +491,7 @@ export function UnifiedServicePage({
           {/* === HERO SECTION === */}
           <section
             ref={heroRef}
-            className="relative min-h-[70vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-12"
+            className="relative min-h-[65vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-10"
           >
             <div className="relative z-10 text-center max-w-[800px] px-6">
               {/* Service name - large and bold */}
@@ -454,7 +503,7 @@ export function UnifiedServicePage({
               </h1>
 
               {/* Tagline */}
-              <p className="text-base text-muted-foreground mt-4 max-w-[480px] mx-auto">
+              <p className="text-base text-muted-foreground mt-4 md:whitespace-nowrap">
                 {service.tagline}
               </p>
 
@@ -474,8 +523,8 @@ export function UnifiedServicePage({
                   <a
                     href={
                       service.priceVariesByState
-                        ? `/quote/request/${service.id}?utm_source=service_page&utm_medium=hero`
-                        : `/checkout/${service.id}?utm_source=service_page&utm_medium=hero`
+                        ? `/quote/request/${service.id || service.slug}?utm_source=service_page&utm_medium=hero`
+                        : `/checkout/${service.id || service.slug}?utm_source=service_page&utm_medium=hero`
                     }
                   >
                     {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
@@ -484,23 +533,23 @@ export function UnifiedServicePage({
               </div>
 
               {/* Metadata pills */}
-              <div className="flex flex-nowrap justify-center gap-2 mt-6">
-                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
+              <div className="flex flex-wrap md:flex-nowrap justify-center gap-2 md:gap-3 mt-5 md:mt-8 px-2">
+                <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
                   <span className="text-xs text-muted-foreground">For </span>
                   <span className="text-xs font-medium text-foreground">{service.mandatoryFor}</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
+                <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
                   <span className="text-xs text-muted-foreground">Type </span>
                   <span className="text-xs font-medium text-foreground">{service.serviceType}</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
+                <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
                   <span className="text-xs text-muted-foreground">Turnaround </span>
                   <span className="text-xs font-medium text-foreground">
                     {service.isRetainer ? 'Ongoing' : `${service.slaDays} days`}
                   </span>
                 </div>
                 {showRating && service.avgRating && (
-                  <div className="px-3 py-1.5 rounded-full bg-muted/50 border border-border/50 flex items-center gap-1 font-mono whitespace-nowrap">
+                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 flex items-center gap-1 md:gap-1.5 font-mono whitespace-nowrap">
                     <Star size={10} className="fill-yellow-400 text-yellow-400" />
                     <span className="text-xs font-medium text-foreground">
                       {service.avgRating.toFixed(1)}
@@ -519,8 +568,8 @@ export function UnifiedServicePage({
               className="absolute bottom-0 left-0 right-0 border-t border-border bg-background/80 backdrop-blur-sm"
               role="tablist"
             >
-              <div className="max-w-[1200px] mx-auto px-6 overflow-x-auto scrollbar-none">
-                <div ref={heroNavRef} className="flex gap-0 -mb-px relative">
+              <div className="max-w-[1200px] mx-auto px-4 md:px-6 overflow-x-auto scrollbar-hide">
+                <div ref={heroNavRef} className="flex gap-0 -mb-px relative min-w-max md:min-w-0 md:justify-center">
                   {SECTIONS.map((section) => (
                     <button
                       key={section.id}
@@ -529,7 +578,7 @@ export function UnifiedServicePage({
                       aria-selected={activeSection === section.id}
                       onClick={() => scrollToSection(section.id)}
                       className={cn(
-                        'shrink-0 px-5 py-3 text-sm font-medium transition-colors whitespace-nowrap',
+                        'shrink-0 px-3 md:px-5 py-3 text-xs md:text-sm font-medium transition-colors whitespace-nowrap',
                         activeSection === section.id
                           ? 'text-foreground'
                           : 'text-muted-foreground hover:text-foreground'
@@ -576,9 +625,9 @@ export function UnifiedServicePage({
                     THE PROCESS
                   </p>
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8">
-                    How {service.shortName} works on Ollvy
+                    {getProcessHeading(service.name, service.shortName)}
                   </h2>
-                  <ProcessStepper steps={service.processSteps} serviceId={service.id} priceVariesByState={service.priceVariesByState} />
+                  <ProcessStepper steps={service.processSteps} serviceId={service.id || service.slug} priceVariesByState={service.priceVariesByState} />
 
                   {/* What is [Service Type]? - Trigger */}
                   {service.serviceExplainer && service.serviceExplainer.steps.length > 0 && (
@@ -1093,12 +1142,12 @@ export function UnifiedServicePage({
                 <HowWeReviewed service={service} />
               </div>
 
-              {/* Right: Sticky booking panel - aside stretches to match left column height for proper sticky behavior */}
-              <aside className="hidden lg:block relative">
-                <div className="sticky top-28">
+              {/* Right: Booking panel - flows with page (no sticky so it scrolls with content) */}
+              <aside className="hidden lg:block self-start">
+                <div>
                   <BookingPanel
                     service={service}
-                    serviceId={service.id}
+                    serviceId={service.id || service.slug}
                     priceVariesByState={service.priceVariesByState}
                     selectedVariant={selectedVariant}
                     onVariantChange={setSelectedVariant}
@@ -1121,8 +1170,8 @@ export function UnifiedServicePage({
                 <a
                   href={
                     service.priceVariesByState
-                      ? `/quote/request/${service.id}?utm_source=service_page&utm_medium=final_cta`
-                      : `/checkout/${service.id}?utm_source=service_page&utm_medium=final_cta`
+                      ? `/quote/request/${service.id || service.slug}?utm_source=service_page&utm_medium=final_cta`
+                      : `/checkout/${service.id || service.slug}?utm_source=service_page&utm_medium=final_cta`
                   }
                 >
                   {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
@@ -1145,8 +1194,8 @@ export function UnifiedServicePage({
           <a
             href={(() => {
               const baseUrl = service.priceVariesByState
-                ? `/quote/request/${service.id}`
-                : `/checkout/${service.id}`
+                ? `/quote/request/${service.id || service.slug}`
+                : `/checkout/${service.id || service.slug}`
               const params = new URLSearchParams({
                 utm_source: 'service_page',
                 utm_medium: 'mobile_bar',

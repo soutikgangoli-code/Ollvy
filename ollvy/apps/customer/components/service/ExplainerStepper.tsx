@@ -56,7 +56,7 @@ export function ExplainerStepper({ serviceName, steps }: ExplainerStepperProps) 
       <div className="border-b border-border">
         <div
           ref={navRef}
-          className="flex items-center gap-6 px-6 relative overflow-x-auto scrollbar-none"
+          className="flex items-center gap-6 px-6 relative overflow-x-auto scrollbar-hide"
         >
           {steps.map((s, i) => (
             <button

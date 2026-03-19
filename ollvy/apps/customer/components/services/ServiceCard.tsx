@@ -64,14 +64,8 @@ export function ServiceCard({ service }: ServiceCardProps) {
   const govtFee = service.price_govt_fees_paisa ? service.price_govt_fees_paisa / 100 : 0
   const baseOllvyFee = service.price_base_paisa / 100
 
-  // For bundles, calculate total including default-selected addons (exclude govt fee - shown on detail page)
-  const defaultAddonTotal = service.is_bundle && service.addons
-    ? service.addons
-        .filter(addon => addon.defaultSelected)
-        .reduce((sum, addon) => sum + addon.pricePaisa, 0) / 100
-    : 0
-
-  const bundleTotal = baseOllvyFee + defaultAddonTotal  // No govt fee in bundle preview
+  // For bundles, show just the base price as "Starting at" (minimum price)
+  // User can add more services on the detail page
   const nonBundleTotal = baseOllvyFee + govtFee
 
   return (
@@ -115,14 +109,38 @@ export function ServiceCard({ service }: ServiceCardProps) {
         </CardHeader>
 
         <CardContent className="pt-0 flex-1 flex flex-col">
+          {/* Bundle: show included services */}
+          {service.is_bundle && service.addons && service.addons.length > 0 && (
+            <div className="mb-3 pb-3 border-b border-border">
+              <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono mb-2">
+                INCLUDES
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {service.addons.slice(0, 4).map((addon) => (
+                  <span
+                    key={addon.id}
+                    className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
+                  >
+                    {addon.name}
+                  </span>
+                ))}
+                {service.addons.length > 4 && (
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                    +{service.addons.length - 4} more
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Price breakdown */}
           <div className="space-y-1 flex-1">
             {service.is_bundle ? (
-              // Bundle: show single combined price including default addons
+              // Bundle: show base price as "Starting at" (minimum price)
               <div className="flex justify-between items-baseline">
                 <span className="text-xs font-medium text-foreground">Starting at</span>
                 <span className="font-mono text-base font-bold text-foreground">
-                  {service.price_varies_by_state ? 'Get Quote' : `₹${bundleTotal.toLocaleString('en-IN')}`}
+                  {service.price_varies_by_state ? 'Get Quote' : `₹${baseOllvyFee.toLocaleString('en-IN')}`}
                 </span>
               </div>
             ) : (

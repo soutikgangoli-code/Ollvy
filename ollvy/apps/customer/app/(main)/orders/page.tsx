@@ -83,11 +83,11 @@ export default function OrdersPage() {
   if (!hasAnyOrders) {
     return (
       <div className="container py-20 text-center max-w-md mx-auto">
-        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-6">
-          <Package className="h-8 w-8 text-white/30" />
+        <div className="w-16 h-16 rounded-2xl bg-muted flex items-center justify-center mx-auto mb-6">
+          <Package className="h-8 w-8 text-muted-foreground" />
         </div>
-        <h1 className="text-2xl font-semibold text-white mb-3">No orders yet</h1>
-        <p className="text-white/40 mb-8">
+        <h1 className="text-2xl font-semibold text-foreground mb-3">No orders yet</h1>
+        <p className="text-muted-foreground mb-8">
           Start by browsing our services and placing your first order.
         </p>
         <Link href="/services">
@@ -102,14 +102,14 @@ export default function OrdersPage() {
 
   return (
     <div className="container py-12 max-w-3xl">
-      <h1 className="text-3xl font-semibold text-white mb-8">My Orders</h1>
+      <h1 className="text-3xl font-semibold text-foreground mb-8">My Orders</h1>
 
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="mb-8">
           <TabsTrigger value="active" className="gap-2">
             Active
             {activeOrders.length > 0 && (
-              <span className="bg-white/10 px-2 py-0.5 rounded-full text-xs">
+              <span className="bg-muted px-2 py-0.5 rounded-full text-xs font-mono">
                 {activeOrders.length}
               </span>
             )}
@@ -121,7 +121,7 @@ export default function OrdersPage() {
           {activeOrders.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
-                <p className="text-white/40 mb-4">
+                <p className="text-muted-foreground mb-4">
                   No active orders at the moment.
                 </p>
                 <Link href="/services">
@@ -142,7 +142,7 @@ export default function OrdersPage() {
           {completedOrders.length === 0 ? (
             <Card>
               <CardContent className="py-12 text-center">
-                <p className="text-white/40">
+                <p className="text-muted-foreground">
                   No completed orders yet.
                 </p>
               </CardContent>

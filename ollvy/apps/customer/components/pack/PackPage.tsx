@@ -64,7 +64,7 @@ export function PackPage({ pack }: { pack: CloudKitchenPack }) {
     return () => observer.disconnect()
   }, [])
 
-  const checkoutHref = `/checkout/pack/${pack.slug}?services=${selectedServiceIds.join(',')}&fssai=${fssaiVariant}`
+  const checkoutHref = `/checkout/${pack.slug}?services=${selectedServiceIds.join(',')}&fssai=${fssaiVariant}`
 
   return (
     <div className="min-h-screen bg-background pb-24 lg:pb-0">

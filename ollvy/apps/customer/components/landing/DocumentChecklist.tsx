@@ -3703,8 +3703,8 @@ export function DocumentChecklist({
     const displayName = serviceName || serviceSlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 
     return (
-      <section className="bg-card py-24">
-        <div className="container">
+      <section className={showSectionHeader ? "bg-card py-24" : ""}>
+        <div className={showSectionHeader ? "container" : ""}>
           {showSectionHeader && (
             <div className="text-center mb-12">
               <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
@@ -3725,7 +3725,7 @@ export function DocumentChecklist({
           )}
 
           {/* Direct Card (no tabs) */}
-          <div className="max-w-[640px] mx-auto">
+          <div className={showSectionHeader ? "max-w-[640px] mx-auto" : ""}>
             <Card className="border border-border bg-card p-6">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Required Documents</span>

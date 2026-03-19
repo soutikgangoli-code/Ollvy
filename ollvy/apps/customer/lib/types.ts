@@ -1,9 +1,22 @@
 // Service types
+
+// WorkflowStage for order tracking (used in OrderTimeline)
 export interface WorkflowStage {
   stage_key: string
   stage_name: string
   sla_working_days: number
-  wait_for_govt: boolean
+  wait_for_govt?: boolean
+}
+
+// WorkflowDisplayStage for checkout timeline display (from service_packages.workflow_stages)
+export interface WorkflowDisplayStage {
+  step: number
+  title: string
+  timeline: string
+  body: string
+  visual?: string
+  milestone?: string
+  isCompletion?: boolean
 }
 
 export interface ServiceAddon {
@@ -34,7 +47,7 @@ export interface ServicePackage {
   price_varies_by_state: boolean
   sla_working_days: number
   situation_tags: string[]
-  workflow_stages: WorkflowStage[]
+  workflow_stages: WorkflowDisplayStage[]
   urgency_score: number
   avg_rating?: number
   rating_count: number

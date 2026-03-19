@@ -86,7 +86,7 @@ function ProfileContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isSetup = searchParams.get('setup') === 'true'
-  const { user, refreshSession } = useAuthStore()
+  const { user, isHydrated, refreshSession } = useAuthStore()
 
   const [isSaving, setIsSaving] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -104,7 +104,15 @@ function ProfileContent() {
   const [documentGroups, setDocumentGroups] = useState<DocumentGroup[]>([])
   const [isLoadingDashboard, setIsLoadingDashboard] = useState(true)
 
+  // Compliance data
+  const [complianceScore, setComplianceScore] = useState(0)
+  const [upcomingDeadlines, setUpcomingDeadlines] = useState(0)
+  const [overdueCount, setOverdueCount] = useState(0)
+
   useEffect(() => {
+    // Wait for auth to hydrate before checking user
+    if (!isHydrated) return
+
     if (!user) {
       router.push('/login?returnUrl=/profile')
       return
@@ -118,7 +126,7 @@ function ProfileContent() {
 
     // Fetch dashboard data
     fetchDashboardData()
-  }, [user, router])
+  }, [user, isHydrated, router])
 
   const fetchDashboardData = async () => {
     if (!user) return
@@ -127,7 +135,7 @@ function ProfileContent() {
     try {
       const supabase = getClient()
 
-      // Fetch active orders
+      // Fetch active orders with document counts
       const { data: ordersData } = await supabase
         .from('orders')
         .select(`
@@ -136,12 +144,47 @@ function ProfileContent() {
           status,
           total_paisa_snapshot,
           created_at,
-          service_package:service_packages(name, slug, sla_working_days)
+          service_package:service_packages(name, slug, sla_working_days, workflow_stages)
         `)
         .eq('user_id', user.id)
         .in('status', ['pending_assignment', 'in_progress', 'waitlisted'])
         .order('created_at', { ascending: false })
         .limit(5)
+
+      // Fetch document counts for active orders
+      const orderIds = (ordersData || []).map(o => o.id)
+      let docCounts: Record<string, { total: number; uploaded: number }> = {}
+
+      if (orderIds.length > 0) {
+        const { data: docsData } = await supabase
+          .from('order_documents')
+          .select('order_id, uploaded_at, is_required')
+          .in('order_id', orderIds)
+          .eq('is_required', true)
+
+        // Count documents per order
+        ;(docsData || []).forEach(doc => {
+          if (!docCounts[doc.order_id]) {
+            docCounts[doc.order_id] = { total: 0, uploaded: 0 }
+          }
+          docCounts[doc.order_id].total++
+          if (doc.uploaded_at) docCounts[doc.order_id].uploaded++
+        })
+      }
+
+      // Fetch stage history for progress calculation
+      let stageHistories: Record<string, number> = {}
+      if (orderIds.length > 0) {
+        const { data: historyData } = await supabase
+          .from('order_stage_history')
+          .select('order_id, completed_at')
+          .in('order_id', orderIds)
+
+        ;(historyData || []).forEach(h => {
+          if (!stageHistories[h.order_id]) stageHistories[h.order_id] = 0
+          if (h.completed_at) stageHistories[h.order_id]++
+        })
+      }
 
       // Fetch completed orders
       const { data: completedData } = await supabase
@@ -172,19 +215,38 @@ function ProfileContent() {
         .eq('user_id', user.id)
         .neq('status', 'cancelled')
 
-      // Process orders with progress estimation
+      // Process orders with actual progress calculation
       const processedOrders = (ordersData || []).map(order => {
-        // Estimate progress based on status
-        let progress = 0
-        if (order.status === 'pending_assignment') progress = 10
-        else if (order.status === 'in_progress') progress = 50
-        else if (order.status === 'completed') progress = 100
+        const workflowStages = (order.service_package as any)?.workflow_stages || []
+        const totalStages = workflowStages.length || 1
+        const completedStages = stageHistories[order.id] || 0
+
+        // Calculate progress based on stage completion + base status progress
+        let baseProgress = 0
+        if (order.status === 'pending_assignment') baseProgress = 5
+        else if (order.status === 'in_progress') baseProgress = 10
+
+        const stageProgress = totalStages > 0
+          ? Math.round((completedStages / totalStages) * 85)
+          : 0
+
+        const progress = Math.min(95, baseProgress + stageProgress)
+
+        // Get current stage name
+        const currentStageIndex = Math.min(completedStages, workflowStages.length - 1)
+        const currentStage = workflowStages[currentStageIndex]?.stage_name ||
+          (order.status === 'pending_assignment' ? 'Assigning Professional' : 'Processing')
+
+        // Calculate pending documents
+        const orderDocs = docCounts[order.id] || { total: 0, uploaded: 0 }
+        const documentsPending = orderDocs.total - orderDocs.uploaded
 
         return {
           ...order,
           service_package: order.service_package as any,
           progress,
-          current_stage: order.status === 'pending_assignment' ? 'Assigning Professional' : 'Processing',
+          current_stage: currentStage,
+          documents_pending: documentsPending > 0 ? documentsPending : undefined,
         }
       })
 
@@ -199,12 +261,83 @@ function ProfileContent() {
         service_package: r.service_package as any,
       })))
 
-      // Build document groups from completed orders
-      // In a real app, you'd fetch actual deliverable documents
+      // Build document groups from completed orders (deliverables)
+      const completedOrderIds = (completedData || []).map(o => o.id)
       const docGroups: DocumentGroup[] = []
-      // This would be populated from actual document data
+
+      if (completedOrderIds.length > 0) {
+        const { data: deliverables } = await supabase
+          .from('order_documents')
+          .select('id, order_id, document_label, file_url, file_name, uploaded_at, verified_at')
+          .in('order_id', completedOrderIds)
+          .not('file_url', 'is', null)
+          .not('verified_at', 'is', null) // Only verified documents
+          .order('uploaded_at', { ascending: false })
+
+        // Group by order
+        type DocType = NonNullable<typeof deliverables>[0]
+        const groupedDocs: Record<string, DocType[]> = {}
+        ;(deliverables || []).forEach(doc => {
+          if (!groupedDocs[doc.order_id]) groupedDocs[doc.order_id] = []
+          groupedDocs[doc.order_id].push(doc)
+        })
+
+        // Build groups
+        ;(completedData || []).forEach(order => {
+          const docs = groupedDocs[order.id]
+          if (docs && docs.length > 0) {
+            docGroups.push({
+              orderId: order.id,
+              orderNumber: order.order_number,
+              serviceName: (order.service_package as any)?.name || 'Service',
+              documents: docs.map(d => ({
+                id: d.id,
+                name: d.document_label || d.file_name || 'Document',
+                type: 'deliverable',
+                url: d.file_url!,
+                uploadedAt: d.uploaded_at || '',
+              })),
+            })
+          }
+        })
+      }
 
       setDocumentGroups(docGroups)
+
+      // Fetch compliance obligations for score calculation
+      const today = new Date().toISOString().split('T')[0]
+      const thirtyDaysFromNow = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+
+      const { data: complianceData } = await supabase
+        .from('compliance_obligations')
+        .select('id, status, due_date')
+        .eq('user_id', user.id)
+
+      if (complianceData && complianceData.length > 0) {
+        // Count overdue
+        const overdue = complianceData.filter(c =>
+          c.status !== 'completed' && c.status !== 'waived' && c.due_date < today
+        ).length
+
+        // Count upcoming (due within 30 days, not overdue)
+        const upcoming = complianceData.filter(c =>
+          c.status !== 'completed' && c.status !== 'waived' &&
+          c.due_date >= today && c.due_date <= thirtyDaysFromNow
+        ).length
+
+        // Calculate score: 100 - (overdue * 15) - (upcoming * 2)
+        // Each overdue item reduces score by 15, each upcoming by 2
+        const calculatedScore = Math.max(0, Math.min(100, 100 - (overdue * 15) - (upcoming * 2)))
+
+        setComplianceScore(calculatedScore)
+        setUpcomingDeadlines(upcoming)
+        setOverdueCount(overdue)
+      } else {
+        // No obligations - perfect score
+        setComplianceScore(100)
+        setUpcomingDeadlines(0)
+        setOverdueCount(0)
+      }
     } catch (err) {
       console.error('Failed to fetch dashboard data:', err)
     } finally {
@@ -497,7 +630,7 @@ function ProfileContent() {
                           <p className="font-medium text-foreground text-sm">
                             {order.service_package?.name}
                           </p>
-                          <p className="text-xs text-muted-foreground">{order.order_number}</p>
+                          <p className="text-xs text-muted-foreground font-mono">{order.order_number}</p>
                         </div>
                         <Check className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
                       </Link>
@@ -525,9 +658,9 @@ function ProfileContent() {
 
           {/* Compliance Score */}
           <ComplianceScoreGauge
-            score={user.compliance_health_score || 0}
-            upcomingDeadlines={0}
-            overdueCount={0}
+            score={complianceScore}
+            upcomingDeadlines={upcomingDeadlines}
+            overdueCount={overdueCount}
           />
 
           {/* Referral */}

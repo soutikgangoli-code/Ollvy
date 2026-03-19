@@ -320,25 +320,6 @@ export function BookingPanel({
         </div>
       </div>
 
-      {/* Trust micro-signals */}
-      <div className="mt-4 space-y-1.5">
-        {[
-          'GST-compliant invoice included',
-          'Engagement letter before you pay',
-          'Cancel within 2 hours for full refund',
-        ].map((line) => (
-          <p
-            key={line}
-            className="text-xs text-muted-foreground flex items-center gap-1.5"
-          >
-            <CheckCircle
-              size={10}
-              className="text-[hsl(var(--ollvy-green))] shrink-0"
-            />
-            {line}
-          </p>
-        ))}
-      </div>
     </Card>
   )
 }

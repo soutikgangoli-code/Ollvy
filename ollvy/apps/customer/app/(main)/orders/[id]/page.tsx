@@ -57,7 +57,7 @@ export default function OrderDetailPage() {
   const params = useParams()
   const router = useRouter()
   const orderId = params.id as string
-  const { user } = useAuthStore()
+  const { user, isHydrated } = useAuthStore()
 
   const [order, setOrder] = useState<Order | null>(null)
   const [stageHistory, setStageHistory] = useState<OrderStageHistory[]>([])
@@ -73,10 +73,11 @@ export default function OrderDetailPage() {
   } | null>(null)
 
   useEffect(() => {
-    if (orderId) {
+    // Wait for auth hydration before fetching
+    if (orderId && isHydrated) {
       fetchOrder()
     }
-  }, [orderId])
+  }, [orderId, isHydrated])
 
   const fetchOrder = async () => {
     setIsLoading(true)
@@ -85,17 +86,38 @@ export default function OrderDetailPage() {
     try {
       const supabase = getClient()
 
-      const { data: orderData, error: orderError } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          service_package:service_packages(*),
-          professional:professionals(id, full_name, phone, email, professional_type, avatar_url, bio)
-        `)
-        .eq('id', orderId)
-        .single()
+      // Get current session first
+      const { data: { session: currentSession } } = await supabase.auth.getSession()
 
-      if (orderError) throw orderError
+      if (!currentSession) {
+        setError('Please log in to view this order')
+        setIsLoading(false)
+        return
+      }
+
+      // Explicitly set the session to ensure auth headers are included
+      // This is important for RLS to work correctly
+      await supabase.auth.setSession({
+        access_token: currentSession.access_token,
+        refresh_token: currentSession.refresh_token,
+      })
+
+      console.log('Fetching order with user auth_id:', currentSession.user.id)
+
+      // Use RPC function for reliable order fetching (bypasses RLS chain issues)
+      const { data: orderData, error: orderError } = await supabase
+        .rpc('get_user_order', { p_order_id: orderId })
+
+      if (orderError) {
+        console.error('Order fetch error:', orderError.code, orderError.message, orderError.details)
+        throw orderError
+      }
+
+      // RPC returns null if order doesn't exist or user doesn't own it
+      if (!orderData) {
+        console.error('Order not found or access denied for order:', orderId)
+        throw new Error('Order not found')
+      }
 
       setOrder(orderData)
 
@@ -183,7 +205,7 @@ export default function OrderDetailPage() {
     }
   }
 
-  if (isLoading) {
+  if (isLoading || !isHydrated) {
     return (
       <div className="container py-12 max-w-5xl">
         <Skeleton className="h-9 w-32 mb-8" />
@@ -271,7 +293,7 @@ export default function OrderDetailPage() {
                   <TrendingUp className="h-5 w-5 text-[hsl(var(--ollvy-green))]" />
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-foreground">{stats.stageProgress}%</p>
+                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.stageProgress}%</p>
                   <p className="text-xs text-muted-foreground">Progress</p>
                 </div>
               </div>
@@ -287,7 +309,7 @@ export default function OrderDetailPage() {
                   <FileText className="h-5 w-5 text-blue-500" />
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-foreground">{stats.uploadedDocs}/{stats.totalDocs}</p>
+                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.uploadedDocs}/{stats.totalDocs}</p>
                   <p className="text-xs text-muted-foreground">Documents</p>
                 </div>
               </div>
@@ -303,7 +325,7 @@ export default function OrderDetailPage() {
                   <Clock className="h-5 w-5 text-amber-500" />
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-foreground">{stats.daysRemaining}</p>
+                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.daysRemaining}</p>
                   <p className="text-xs text-muted-foreground">Days Left (Est.)</p>
                 </div>
               </div>
@@ -318,7 +340,7 @@ export default function OrderDetailPage() {
                   <Target className="h-5 w-5 text-purple-500" />
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-foreground">{stats.slaDays}</p>
+                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.slaDays}</p>
                   <p className="text-xs text-muted-foreground">Day SLA</p>
                 </div>
               </div>
@@ -638,34 +660,34 @@ export default function OrderDetailPage() {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Professional Fee</span>
-                  <span className="text-foreground">{formatPaisa(order.price_base_paisa_snapshot)}</span>
+                  <span className="text-foreground font-mono">{formatPaisa(order.price_base_paisa_snapshot)}</span>
                 </div>
                 {order.price_govt_fees_paisa_snapshot > 0 && (
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Government Fees</span>
-                    <span className="text-foreground">{formatPaisa(order.price_govt_fees_paisa_snapshot)}</span>
+                    <span className="text-foreground font-mono">{formatPaisa(order.price_govt_fees_paisa_snapshot)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">GST</span>
-                  <span className="text-foreground">{formatPaisa(order.price_gst_paisa_snapshot)}</span>
+                  <span className="text-foreground font-mono">{formatPaisa(order.price_gst_paisa_snapshot)}</span>
                 </div>
                 {order.pro_discount_paisa_snapshot > 0 && (
                   <div className="flex justify-between text-[hsl(var(--ollvy-green))]">
                     <span>Pro Discount</span>
-                    <span>-{formatPaisa(order.pro_discount_paisa_snapshot)}</span>
+                    <span className="font-mono">-{formatPaisa(order.pro_discount_paisa_snapshot)}</span>
                   </div>
                 )}
                 {order.promo_discount_paisa_snapshot > 0 && (
                   <div className="flex justify-between text-[hsl(var(--ollvy-green))]">
                     <span>Promo Discount</span>
-                    <span>-{formatPaisa(order.promo_discount_paisa_snapshot)}</span>
+                    <span className="font-mono">-{formatPaisa(order.promo_discount_paisa_snapshot)}</span>
                   </div>
                 )}
                 <div className="border-t border-border pt-3 mt-3">
                   <div className="flex justify-between font-semibold">
                     <span className="text-foreground">Total Paid</span>
-                    <span className="text-foreground text-lg">
+                    <span className="text-foreground text-lg font-mono">
                       {formatPaisa(order.total_paisa_snapshot)}
                     </span>
                   </div>

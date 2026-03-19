@@ -174,7 +174,7 @@ export default function PaymentSuccessPage() {
           Payment Successful!
         </h1>
         <p className="text-muted-foreground">
-          Order #{order.order_number}
+          Order <span className="font-mono">#{order.order_number}</span>
         </p>
       </div>
 

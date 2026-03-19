@@ -1,0 +1,4 @@
+# Disable automatic JWT verification at gateway level
+# We handle JWT verification ourselves using supabase.auth.getUser()
+[functions.create-razorpay-order]
+verify_jwt = false
