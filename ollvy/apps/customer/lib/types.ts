@@ -253,6 +253,7 @@ export interface OrderWorkDocument {
   order_id: string
   professional_id?: string
   direction: WorkDocumentDirection
+  document_key?: string
   document_label: string
   description?: string
   stage_key?: string
