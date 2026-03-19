@@ -28,7 +28,8 @@ import { DocumentPreview } from '@/components/documents'
 import { getClient } from '@/lib/supabase'
 import { formatPaisa, formatDate, cn } from '@/lib/utils'
 import { useAuthStore } from '@/lib/stores/auth-store'
-import type { Order, OrderStageHistory } from '@/lib/types'
+import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
+import { WorkDocumentsSection } from '@/components/orders/WorkDocumentsSection'
 import {
   ArrowLeft,
   MessageSquare,
@@ -49,6 +50,9 @@ import {
   Circle,
   Upload,
   Send,
+  User,
+  Star,
+  FolderOpen,
 } from 'lucide-react'
 
 interface OrderDocument {
@@ -80,6 +84,7 @@ export default function OrderDetailPage() {
   const [order, setOrder] = useState<Order | null>(null)
   const [stageHistory, setStageHistory] = useState<OrderStageHistory[]>([])
   const [documents, setDocuments] = useState<OrderDocument[]>([])
+  const [workDocuments, setWorkDocuments] = useState<OrderWorkDocument[]>([])
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -141,6 +146,15 @@ export default function OrderDetailPage() {
         .rpc('initialize_order_documents', { p_order_id: orderId })
 
       setDocuments(docsData || [])
+
+      // Fetch work documents (deliverables and requests)
+      const { data: workDocsData } = await supabase
+        .from('order_work_documents')
+        .select('*')
+        .eq('order_id', orderId)
+        .order('created_at', { ascending: false })
+
+      setWorkDocuments(workDocsData || [])
 
       // Fetch questionnaire responses with labels
       const servicePackage = orderData.service_package as { id: string }
@@ -346,6 +360,15 @@ export default function OrderDetailPage() {
 
   const pendingDocsCount = stats.totalDocs - stats.uploadedDocs
 
+  // Calculate pending work documents from professional
+  const pendingWorkDocs = workDocuments.filter(d => d.direction === 'from_customer' && d.status === 'pending')
+  const newDeliverables = workDocuments.filter(d => d.direction === 'to_customer')
+
+  // Get work documents grouped by stage
+  const getWorkDocsForStage = (stageKey: string) => {
+    return workDocuments.filter(d => d.stage_key === stageKey)
+  }
+
   return (
     <div className="container py-12 max-w-5xl">
       {/* Back Button */}
@@ -355,6 +378,67 @@ export default function OrderDetailPage() {
           Back to Orders
         </Button>
       </Link>
+
+      {/* Notification Banner - Pending Work Documents */}
+      {pendingWorkDocs.length > 0 && (
+        <div className="mb-6 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+              <FileText className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-foreground">
+                Your CA has requested {pendingWorkDocs.length} document{pendingWorkDocs.length !== 1 ? 's' : ''}
+              </p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {pendingWorkDocs.map(d => d.document_label).join(', ')}
+              </p>
+            </div>
+            <Button
+              size="sm"
+              className="flex-shrink-0 gap-1"
+              onClick={() => {
+                const workDocsSection = document.getElementById('work-documents-section')
+                workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              <Upload className="h-4 w-4" />
+              Upload Now
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Notification Banner - New Deliverables */}
+      {newDeliverables.length > 0 && pendingWorkDocs.length === 0 && (
+        <div className="mb-6 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+              <Download className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-foreground">
+                Your CA has shared {newDeliverables.length} document{newDeliverables.length !== 1 ? 's' : ''}
+              </p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                {newDeliverables.map(d => d.document_label).join(', ')}
+              </p>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              className="flex-shrink-0 gap-1"
+              onClick={() => {
+                const workDocsSection = document.getElementById('work-documents-section')
+                workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              <Download className="h-4 w-4" />
+              View Documents
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Header */}
       <div className="mb-8">
@@ -517,21 +601,23 @@ export default function OrderDetailPage() {
                             {isQuestionsStage && stage.isCompleted ? 'Answered the questionnaire' : stage.title}
                           </h4>
 
-                          {/* Show "View answers" and "Edit answers" badges for completed questions stage */}
+                          {/* Show "View answers" badge when responses loaded */}
                           {isQuestionsStage && stage.isCompleted && questionnaireResponses.length > 0 && (
-                            <>
-                              <button
-                                onClick={() => setShowAnswersModal(true)}
-                                className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground hover:bg-muted/80 transition-colors cursor-pointer"
-                              >
-                                {questionnaireResponses.length} answers
+                            <button
+                              onClick={() => setShowAnswersModal(true)}
+                              className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground hover:bg-muted/80 transition-colors cursor-pointer"
+                            >
+                              {questionnaireResponses.length} answers
+                            </button>
+                          )}
+
+                          {/* Always show "Edit answers" for completed questions stage */}
+                          {isQuestionsStage && stage.isCompleted && (
+                            <Link href={`/orders/${order.id}/questionnaire`}>
+                              <button className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground hover:bg-muted/80 transition-colors cursor-pointer">
+                                Edit answers
                               </button>
-                              <Link href={`/orders/${order.id}/questionnaire`}>
-                                <button className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground hover:bg-muted/80 transition-colors cursor-pointer">
-                                  Edit answers
-                                </button>
-                              </Link>
-                            </>
+                            </Link>
                           )}
 
                           {/* Show pending docs count for documents stage */}
@@ -589,6 +675,54 @@ export default function OrderDetailPage() {
                               </button>
                             </Link>
                           )}
+
+                          {/* Work documents button for stages beyond initial docs (index > 1) */}
+                          {!isQuestionsStage && !isDocumentsStage && (stage.isCurrent || stage.isCompleted) && (() => {
+                            const stageKey = stage.title.toLowerCase().replace(/\s+/g, '_')
+                            const stageWorkDocs = workDocuments.filter(d => d.stage_key === stageKey)
+                            const stagePendingDocs = stageWorkDocs.filter(d => d.direction === 'from_customer' && d.status === 'pending')
+                            const stageDeliverables = stageWorkDocs.filter(d => d.direction === 'to_customer')
+
+                            if (stageWorkDocs.length === 0 && !stage.isCurrent) return null
+
+                            return (
+                              <>
+                                {stagePendingDocs.length > 0 && (
+                                  <button
+                                    onClick={() => {
+                                      const workDocsSection = document.getElementById('work-documents-section')
+                                      workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+                                    }}
+                                    className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-500/30 transition-colors cursor-pointer"
+                                  >
+                                    {stagePendingDocs.length} to upload
+                                  </button>
+                                )}
+                                {stageDeliverables.length > 0 && (
+                                  <button
+                                    onClick={() => {
+                                      const workDocsSection = document.getElementById('work-documents-section')
+                                      workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+                                    }}
+                                    className="text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/30 transition-colors cursor-pointer"
+                                  >
+                                    {stageDeliverables.length} to download
+                                  </button>
+                                )}
+                                {stageWorkDocs.length > 0 && stagePendingDocs.length === 0 && stageDeliverables.length === 0 && (
+                                  <button
+                                    onClick={() => {
+                                      const workDocsSection = document.getElementById('work-documents-section')
+                                      workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+                                    }}
+                                    className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground hover:bg-muted/80 transition-colors cursor-pointer"
+                                  >
+                                    View documents
+                                  </button>
+                                )}
+                              </>
+                            )
+                          })()}
                         </div>
                         <p className="text-sm text-muted-foreground mt-1">
                           {stage.isCompleted ? (
@@ -613,6 +747,61 @@ export default function OrderDetailPage() {
 
         {/* Sidebar */}
         <div className="space-y-4">
+          {/* Assigned Professional */}
+          {order.professional_id && (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  Assigned Professional
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                    <span className="text-lg font-semibold text-foreground">
+                      {(order.professional as { name?: string })?.name?.charAt(0) || 'P'}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-foreground truncate">
+                      {(order.professional as { name?: string })?.name || 'Professional'}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {(order.professional as { profession_type?: string })?.profession_type?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'CA'}
+                    </p>
+                    {(order.professional as { experience_years?: number })?.experience_years && (
+                      <p className="text-xs text-muted-foreground">
+                        {(order.professional as { experience_years?: number }).experience_years}+ years experience
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Work Documents Button */}
+                {workDocuments.length > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full mt-4 gap-2"
+                    onClick={() => {
+                      const workDocsSection = document.getElementById('work-documents-section')
+                      workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+                    }}
+                  >
+                    <FolderOpen className="h-4 w-4" />
+                    View Work Documents
+                    {workDocuments.filter(d => d.direction === 'from_customer' && d.status === 'pending').length > 0 && (
+                      <span className="ml-1 px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 text-xs font-mono">
+                        {workDocuments.filter(d => d.direction === 'from_customer' && d.status === 'pending').length}
+                      </span>
+                    )}
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
           {/* Order Summary - Collapsible */}
           <Card>
             <Collapsible open={summaryOpen} onOpenChange={setSummaryOpen}>
@@ -633,6 +822,38 @@ export default function OrderDetailPage() {
                   </CardTitle>
                 </CardHeader>
               </CollapsibleTrigger>
+
+              {/* Quick Action: Work Documents (below Order Summary header) */}
+              {order.professional_id && workDocuments.length > 0 && (
+                <div className="px-6 pb-3 border-b border-border">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      const workDocsSection = document.getElementById('work-documents-section')
+                      workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+                    }}
+                    className="w-full flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <FolderOpen className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm font-medium text-foreground">Work Documents</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {workDocuments.filter(d => d.direction === 'to_customer').length > 0 && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400">
+                          {workDocuments.filter(d => d.direction === 'to_customer').length} download
+                        </span>
+                      )}
+                      {workDocuments.filter(d => d.direction === 'from_customer' && d.status === 'pending').length > 0 && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400">
+                          {workDocuments.filter(d => d.direction === 'from_customer' && d.status === 'pending').length} upload
+                        </span>
+                      )}
+                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </button>
+                </div>
+              )}
               <CollapsibleContent>
                 <CardContent className="space-y-6 pt-0">
                   {/* Price Breakdown */}
@@ -689,6 +910,66 @@ export default function OrderDetailPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Submitted Work Documents */}
+                  {workDocuments.filter(d => d.direction === 'from_customer' && d.file_url).length > 0 && (
+                    <div className="space-y-2 pt-4 border-t border-border">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Submitted Documents
+                      </p>
+                      <div className="space-y-2">
+                        {workDocuments
+                          .filter(d => d.direction === 'from_customer' && d.file_url)
+                          .map(doc => (
+                            <div
+                              key={doc.id}
+                              className="flex items-center gap-3 p-2 rounded-lg bg-muted/30"
+                            >
+                              <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-medium text-foreground truncate">
+                                  {doc.document_label}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {doc.status === 'verified' ? 'Verified' : doc.status === 'uploaded' ? 'Under Review' : doc.status}
+                                </p>
+                              </div>
+                              {doc.status === 'verified' && (
+                                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                              )}
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Received Deliverables */}
+                  {workDocuments.filter(d => d.direction === 'to_customer').length > 0 && (
+                    <div className="space-y-2 pt-4 border-t border-border">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Received Deliverables
+                      </p>
+                      <div className="space-y-2">
+                        {workDocuments
+                          .filter(d => d.direction === 'to_customer')
+                          .map(doc => (
+                            <a
+                              key={doc.id}
+                              href={doc.file_url || '#'}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors"
+                            >
+                              <FileText className="h-4 w-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                              <span className="text-sm font-medium text-foreground truncate flex-1">
+                                {doc.document_label}
+                              </span>
+                              <Download className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                            </a>
+                          ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Trust Signals */}
                   <div className="space-y-2 pt-4 border-t border-border">
@@ -749,6 +1030,16 @@ export default function OrderDetailPage() {
                 )}
             </CardContent>
           </Card>
+
+          {/* Work Documents Section */}
+          <div id="work-documents-section">
+            <WorkDocumentsSection
+              orderId={orderId}
+              workDocuments={workDocuments}
+              onDocumentsUpdated={fetchOrder}
+              hasProfessional={!!order.professional_id}
+            />
+          </div>
 
           {/* Chat with CA */}
           <Card className="flex flex-col">

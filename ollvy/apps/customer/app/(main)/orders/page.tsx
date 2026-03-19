@@ -10,7 +10,7 @@ import { OrderCard } from '@/components/orders/OrderCard'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import type { Order } from '@/lib/types'
-import { Package, ArrowRight } from 'lucide-react'
+import { Package, ArrowRight, ArrowLeft } from 'lucide-react'
 
 export default function OrdersPage() {
   const { user, isHydrated, isLoading: authLoading } = useAuthStore()
@@ -116,6 +116,14 @@ export default function OrdersPage() {
 
   return (
     <div className="container py-12 max-w-3xl">
+      {/* Back to Profile */}
+      <Link href="/profile">
+        <Button variant="ghost" className="mb-8 gap-2 text-muted-foreground hover:text-foreground -ml-4">
+          <ArrowLeft className="h-4 w-4" />
+          Go to Profile
+        </Button>
+      </Link>
+
       <h1 className="text-3xl font-semibold text-foreground mb-8">My Orders</h1>
 
       <Tabs defaultValue="active" className="w-full">

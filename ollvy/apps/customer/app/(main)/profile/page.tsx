@@ -654,6 +654,8 @@ function ProfileContent() {
             phone={user.phone}
             state={user.state}
             city={user.city}
+            address={user.address}
+            gstin={user.gstin}
             isProUser={user.subscription_tier === 'pro'}
             avatarInitial={
               user.business_name?.charAt(0) || user.phone?.charAt(0) || 'U'
@@ -666,6 +668,8 @@ function ProfileContent() {
                   business_name: data.businessName,
                   state: data.state,
                   city: data.city,
+                  address: data.address,
+                  gstin: data.gstin,
                 })
                 .eq('id', user.id)
 

@@ -11,6 +11,7 @@ export interface User {
   gstin?: string
   state?: string
   city?: string
+  address?: string
   subscription_tier: string
   compliance_health_score: number
   profile_completeness_score: number

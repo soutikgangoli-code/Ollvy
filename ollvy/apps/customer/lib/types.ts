@@ -244,6 +244,31 @@ export interface OrderAddon {
   created_at: string
 }
 
+// Work document types (documents exchanged during work process)
+export type WorkDocumentDirection = 'to_customer' | 'from_customer'
+export type WorkDocumentStatus = 'pending' | 'uploaded' | 'verified' | 'rejected'
+
+export interface OrderWorkDocument {
+  id: string
+  order_id: string
+  professional_id?: string
+  direction: WorkDocumentDirection
+  document_label: string
+  description?: string
+  stage_key?: string
+  status: WorkDocumentStatus
+  file_url?: string
+  file_name?: string
+  due_date?: string
+  uploaded_at?: string
+  uploaded_by_type?: 'professional' | 'customer'
+  verified_at?: string
+  verified_by?: string
+  rejection_reason?: string
+  created_at: string
+  updated_at: string
+}
+
 // User types
 export interface User {
   id: string
@@ -254,6 +279,7 @@ export interface User {
   gstin?: string
   state?: string
   city?: string
+  address?: string
   subscription_tier: 'free' | 'pro'
   compliance_health_score: number
   profile_completeness_score: number

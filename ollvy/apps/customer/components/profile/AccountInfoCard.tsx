@@ -5,7 +5,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Phone, Building2, MapPin, Crown, Pencil, Check, X, Loader2 } from 'lucide-react'
+import { Phone, Building2, MapPin, Crown, Pencil, Check, X, Loader2, FileText } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -21,9 +22,11 @@ interface AccountInfoCardProps {
   phone: string
   state?: string
   city?: string
+  address?: string
+  gstin?: string
   isProUser: boolean
   avatarInitial: string
-  onSave?: (data: { businessName: string; state: string; city: string }) => Promise<void>
+  onSave?: (data: { businessName: string; state: string; city: string; address: string; gstin: string }) => Promise<void>
 }
 
 export function AccountInfoCard({
@@ -31,6 +34,8 @@ export function AccountInfoCard({
   phone,
   state,
   city,
+  address,
+  gstin,
   isProUser,
   avatarInitial,
   onSave,
@@ -42,11 +47,15 @@ export function AccountInfoCard({
   const [editBusinessName, setEditBusinessName] = useState(businessName || '')
   const [editState, setEditState] = useState(state || '')
   const [editCity, setEditCity] = useState(city || '')
+  const [editAddress, setEditAddress] = useState(address || '')
+  const [editGstin, setEditGstin] = useState(gstin || '')
 
   const handleStartEdit = () => {
     setEditBusinessName(businessName || '')
     setEditState(state || '')
     setEditCity(city || '')
+    setEditAddress(address || '')
+    setEditGstin(gstin || '')
     setIsEditing(true)
   }
 
@@ -63,6 +72,8 @@ export function AccountInfoCard({
         businessName: editBusinessName,
         state: editState,
         city: editCity,
+        address: editAddress,
+        gstin: editGstin.toUpperCase(),
       })
       setIsEditing(false)
     } catch (error) {
@@ -121,6 +132,27 @@ export function AccountInfoCard({
                 onChange={(e) => setEditCity(e.target.value)}
                 placeholder="Enter city"
                 className="h-9"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Business Address</label>
+              <Textarea
+                value={editAddress}
+                onChange={(e) => setEditAddress(e.target.value)}
+                placeholder="Enter full business address"
+                className="min-h-[60px] text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">GSTIN (Optional)</label>
+              <Input
+                value={editGstin}
+                onChange={(e) => setEditGstin(e.target.value.toUpperCase())}
+                placeholder="22AAAAA0000A1Z5"
+                className="h-9 font-mono"
+                maxLength={15}
               />
             </div>
           </div>
@@ -189,14 +221,26 @@ export function AccountInfoCard({
         <div className="space-y-2 text-sm text-muted-foreground mb-4">
           {(state || city) && (
             <p className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
+              <MapPin className="h-4 w-4 flex-shrink-0" />
               {[city, state].filter(Boolean).join(', ')}
             </p>
           )}
           {!state && !city && (
             <p className="flex items-center gap-2 text-muted-foreground/60">
-              <MapPin className="h-4 w-4" />
+              <MapPin className="h-4 w-4 flex-shrink-0" />
               Location not set
+            </p>
+          )}
+          {address && (
+            <p className="flex items-start gap-2">
+              <Building2 className="h-4 w-4 flex-shrink-0 mt-0.5" />
+              <span className="line-clamp-2">{address}</span>
+            </p>
+          )}
+          {gstin && (
+            <p className="flex items-center gap-2">
+              <FileText className="h-4 w-4 flex-shrink-0" />
+              <span className="font-mono">{gstin}</span>
             </p>
           )}
         </div>

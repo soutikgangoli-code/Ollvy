@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import type { WorkflowDisplayStage } from '@/lib/types'
 
 interface FilingTimelineProps {
@@ -162,24 +162,32 @@ export function FilingTimeline({ className, steps, serviceName }: FilingTimeline
   const layout = getLayoutForStepCount(workflowSteps.length)
   const containerRef = useRef<HTMLDivElement>(null)
   const [cardHeights, setCardHeights] = useState<number[]>([])
+  const hasMeasured = useRef(false)
 
-  const displaySteps = workflowSteps.map((step, index) => ({
+  // Memoize displaySteps to prevent infinite re-renders
+  const displaySteps = useMemo(() => workflowSteps.map((step, index) => ({
     number: step.step || index + 1,
     title: step.title,
     timeline: step.timeline,
     isCompletion: step.isCompletion || false,
-  }))
+  })), [workflowSteps])
 
-  // Measure card heights after render
+  // Measure card heights after render - only once per mount
   useEffect(() => {
-    if (containerRef.current) {
-      const cards = containerRef.current.querySelectorAll('[data-card]')
-      const heights = Array.from(cards).map(card => card.getBoundingClientRect().height)
-      if (heights.length > 0 && heights.some((h, i) => h !== cardHeights[i])) {
-        setCardHeights(heights)
-      }
+    if (containerRef.current && !hasMeasured.current) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        if (containerRef.current) {
+          const cards = containerRef.current.querySelectorAll('[data-card]')
+          const heights = Array.from(cards).map(card => card.getBoundingClientRect().height)
+          if (heights.length > 0) {
+            setCardHeights(heights)
+            hasMeasured.current = true
+          }
+        }
+      })
     }
-  }, [displaySteps])
+  }, [displaySteps.length])
 
   // Calculate initial positions - ensure cards never overlap with marker circles
   const initialPositions: CardPosition[] = layout.markers.map((marker, index) => {
