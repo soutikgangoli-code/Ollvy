@@ -653,7 +653,7 @@ function ScopeOfWorkCard({
                     <X className="w-3 h-3 text-muted-foreground" />
                   </span>
                 )}
-                <span className="text-sm text-muted-foreground">{item}</span>
+                <span className="text-sm text-foreground">{item}</span>
               </div>
             ))}
           </div>

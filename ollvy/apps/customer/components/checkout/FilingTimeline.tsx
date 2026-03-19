@@ -96,7 +96,7 @@ const LAYOUT_6: LayoutConfig = {
     { x: 285, y: 230, boxPosition: 'below' },
     { x: 500, y: 50, boxPosition: 'below' },
     { x: 715, y: 230, boxPosition: 'below' },
-    { x: 845, y: 100, boxPosition: 'above' },
+    { x: 830, y: 140, boxPosition: 'above' },
   ],
 }
 
@@ -238,7 +238,7 @@ export function FilingTimeline({ className, steps, serviceName }: FilingTimeline
           <path
             d={layout.roadPath}
             fill="none"
-            className="stroke-background"
+            className="stroke-muted-foreground/50 dark:stroke-white/70"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
