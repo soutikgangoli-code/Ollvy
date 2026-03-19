@@ -121,6 +121,8 @@ export interface Order {
   feedback_skipped: boolean
   engagement_agreed_at?: string
   variant_id?: string
+  questionnaire_completed_at?: string
+  questionnaire_step?: number
   completed_at?: string
   created_at: string
   updated_at: string

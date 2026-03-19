@@ -561,7 +561,8 @@ export default function CheckoutPage() {
           onClose={() => {
             const orderId = successModal.orderId
             setSuccessModal(null)
-            router.push(`/orders/${orderId}`)
+            // Redirect to questionnaire flow (will redirect to documents if no questionnaire)
+            router.push(`/orders/${orderId}/questionnaire`)
           }}
         />
       )}

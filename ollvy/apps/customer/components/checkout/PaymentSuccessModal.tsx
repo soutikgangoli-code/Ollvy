@@ -129,7 +129,7 @@ export function PaymentSuccessModal({
             onClick={handleViewOrder}
             className="w-full h-11 text-sm font-medium gap-2"
           >
-            View Order
+            Start Setup
             <ArrowRight className="h-4 w-4" />
           </Button>
         </div>

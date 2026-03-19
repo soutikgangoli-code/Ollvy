@@ -1,4 +1,5 @@
 export { DocumentUploadCard } from './DocumentUploadCard'
 export { DocumentChecklist } from './DocumentChecklist'
+export { DocumentUploadWizard } from './DocumentUploadWizard'
 export { UploadDropzone } from './UploadDropzone'
 export { DocumentPreview } from './DocumentPreview'

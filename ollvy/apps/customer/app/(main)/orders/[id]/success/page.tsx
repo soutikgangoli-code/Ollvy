@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Sparkles,
   MessageCircle,
+  ClipboardList,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -26,7 +27,9 @@ interface OrderData {
   order_number: string
   status: string
   total_paisa_snapshot: number
+  questionnaire_completed_at: string | null
   service_package: {
+    id: string
     name: string
     slug: string
     sla_working_days: number
@@ -37,6 +40,7 @@ interface OrderData {
   }
   documents_count?: number
   documents_uploaded?: number
+  has_questionnaire?: boolean
 }
 
 export default function PaymentSuccessPage() {
@@ -74,7 +78,9 @@ export default function PaymentSuccessPage() {
           order_number,
           status,
           total_paisa_snapshot,
+          questionnaire_completed_at,
           service_package:service_packages(
+            id,
             name,
             slug,
             sla_working_days,
@@ -86,20 +92,30 @@ export default function PaymentSuccessPage() {
 
       if (orderError) throw orderError
 
+      const servicePackage = (orderData.service_package as unknown) as { id: string; name: string; slug: string; sla_working_days: number; workflow_stages: unknown[] }
+
       // Fetch document counts
-      const { data: docsData, error: docsError } = await supabase
+      const { data: docsData } = await supabase
         .from('order_documents')
         .select('id, uploaded_at')
         .eq('order_id', orderId)
+
+      // Check if service has questionnaire questions
+      const { count: questionCount } = await supabase
+        .from('service_questionnaires')
+        .select('id', { count: 'exact', head: true })
+        .eq('service_package_id', servicePackage.id)
+        .eq('is_active', true)
 
       const documentsCount = docsData?.length || 0
       const documentsUploaded = docsData?.filter(d => d.uploaded_at)?.length || 0
 
       setOrder({
         ...orderData,
-        service_package: orderData.service_package as any,
+        service_package: servicePackage as any,
         documents_count: documentsCount,
         documents_uploaded: documentsUploaded,
+        has_questionnaire: (questionCount || 0) > 0,
       })
     } catch (err) {
       console.error('Failed to fetch order:', err)
@@ -132,6 +148,13 @@ export default function PaymentSuccessPage() {
   }
 
   const hasDocuments = (order.documents_count ?? 0) > 0
+  const hasQuestionnaire = order.has_questionnaire && !order.questionnaire_completed_at
+  const questionnaireCompleted = order.questionnaire_completed_at !== null
+
+  // Determine next step URL
+  const nextStepUrl = hasQuestionnaire
+    ? `/orders/${order.id}/questionnaire`
+    : `/orders/${order.id}/documents`
 
   return (
     <div className="container py-12 max-w-2xl">
@@ -196,8 +219,37 @@ export default function PaymentSuccessPage() {
         </CardContent>
       </Card>
 
-      {/* Next Step - Document Upload */}
-      {hasDocuments && (
+      {/* Next Step - Questionnaire or Document Upload */}
+      {hasQuestionnaire ? (
+        <Card className="mb-6 border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-xl bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center flex-shrink-0">
+                <ClipboardList className="h-6 w-6 text-[hsl(var(--ollvy-green))]" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-foreground mb-1">
+                  Next Step: Complete Setup
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Answer a few questions to help us prepare your {order.service_package?.name}.
+                </p>
+                <div className="flex gap-3">
+                  <Link href={`/orders/${order.id}/questionnaire`}>
+                    <Button className="gap-2">
+                      <ClipboardList className="h-4 w-4" />
+                      Start Setup
+                    </Button>
+                  </Link>
+                  <Link href={`/orders/${order.id}`}>
+                    <Button variant="outline">Do Later</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : hasDocuments ? (
         <Card className="mb-6 border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5">
           <CardContent className="p-6">
             <div className="flex items-start gap-4">
@@ -226,7 +278,7 @@ export default function PaymentSuccessPage() {
             </div>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       {/* What Happens Next */}
       <div className="mb-8">

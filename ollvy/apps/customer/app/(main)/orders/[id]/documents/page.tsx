@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
-import { DocumentChecklist, DocumentPreview } from '@/components/documents'
-import { ArrowLeft, MessageCircle, HelpCircle } from 'lucide-react'
+import { DocumentUploadWizard, DocumentPreview } from '@/components/documents'
+import { ArrowLeft } from 'lucide-react'
 
 interface Document {
   id: string
@@ -29,7 +29,9 @@ interface Document {
 interface OrderData {
   id: string
   order_number: string
+  questionnaire_completed_at: string | null
   service_package: {
+    id: string
     name: string
     slug: string
   }
@@ -39,7 +41,7 @@ export default function DocumentsUploadPage() {
   const params = useParams()
   const router = useRouter()
   const orderId = params.id as string
-  const { user } = useAuthStore()
+  const { user, isHydrated } = useAuthStore()
 
   const [order, setOrder] = useState<OrderData | null>(null)
   const [documents, setDocuments] = useState<Document[]>([])
@@ -53,12 +55,14 @@ export default function DocumentsUploadPage() {
   } | null>(null)
 
   useEffect(() => {
+    if (!isHydrated) return
+
     if (!user) {
       router.push('/login')
       return
     }
     fetchOrderAndDocuments()
-  }, [orderId, user])
+  }, [orderId, user, isHydrated])
 
   const fetchOrderAndDocuments = async () => {
     if (!orderId) return
@@ -66,94 +70,73 @@ export default function DocumentsUploadPage() {
     try {
       const supabase = getClient()
 
-      // Fetch order
-      const { data: orderData, error: orderError } = await supabase
-        .from('orders')
-        .select(`
-          id,
-          order_number,
-          service_package_id,
-          service_package:service_packages(
-            name,
-            slug
-          )
-        `)
-        .eq('id', orderId)
-        .single()
+      // Get current session first
+      const { data: { session: currentSession } } = await supabase.auth.getSession()
 
-      if (orderError) throw orderError
+      if (!currentSession) {
+        console.error('No session found')
+        setIsLoading(false)
+        return
+      }
 
-      setOrder({
-        ...orderData,
-        service_package: orderData.service_package as any,
+      // Explicitly set the session to ensure auth headers are included
+      await supabase.auth.setSession({
+        access_token: currentSession.access_token,
+        refresh_token: currentSession.refresh_token,
       })
 
-      // Fetch documents
-      const { data: docsData, error: docsError } = await supabase
-        .from('order_documents')
-        .select('*')
-        .eq('order_id', orderId)
-        .order('created_at', { ascending: true })
+      // Use RPC function for reliable order fetching (bypasses RLS chain issues)
+      const { data: orderData, error: orderError } = await supabase
+        .rpc('get_user_order', { p_order_id: orderId })
 
-      if (docsError) throw docsError
-
-      // If no documents exist yet, fetch templates and create them
-      if (!docsData || docsData.length === 0) {
-        // Try to get documents from service templates
-        const { data: templatesData } = await supabase
-          .from('service_document_templates')
-          .select('*')
-          .eq('service_package_id', orderData.service_package_id)
-          .order('display_order', { ascending: true })
-
-        if (templatesData && templatesData.length > 0) {
-          // Insert documents from templates
-          const docsToInsert = templatesData.map(t => ({
-            order_id: orderId,
-            document_key: t.document_key,
-            document_label: t.document_label,
-            stage_key: t.stage_key,
-            is_required: t.is_required,
-          }))
-
-          const { data: insertedDocs } = await supabase
-            .from('order_documents')
-            .insert(docsToInsert)
-            .select()
-
-          // Merge template tips with inserted docs
-          const mergedDocs = (insertedDocs || []).map(d => {
-            const template = templatesData.find(t => t.document_key === d.document_key)
-            return {
-              ...d,
-              description: template?.description,
-              tips: template?.tips,
-              template_url: template?.template_url,
-            }
-          })
-
-          setDocuments(mergedDocs)
-        }
-      } else {
-        // Fetch template details for tips/descriptions
-        const { data: templatesData } = await supabase
-          .from('service_document_templates')
-          .select('document_key, description, tips, template_url')
-          .eq('service_package_id', orderData.service_package_id)
-
-        // Merge template data with document data
-        const mergedDocs = docsData.map(d => {
-          const template = templatesData?.find(t => t.document_key === d.document_key)
-          return {
-            ...d,
-            description: template?.description,
-            tips: template?.tips,
-            template_url: template?.template_url,
-          }
-        })
-
-        setDocuments(mergedDocs)
+      if (orderError) {
+        console.error('Order fetch error:', orderError)
+        throw orderError
       }
+
+      // RPC returns null if order doesn't exist or user doesn't own it
+      if (!orderData) {
+        console.error('Order not found or access denied')
+        setIsLoading(false)
+        return
+      }
+
+      const servicePackage = orderData.service_package as { id: string; name: string; slug: string }
+
+      // Check if questionnaire needs to be completed first
+      if (!orderData.questionnaire_completed_at) {
+        // Check if service has questionnaire questions
+        const { count: questionCount } = await supabase
+          .from('service_questionnaires')
+          .select('id', { count: 'exact', head: true })
+          .eq('service_package_id', servicePackage.id)
+          .eq('is_active', true)
+
+        if (questionCount && questionCount > 0) {
+          // Redirect to questionnaire
+          router.push(`/orders/${orderId}/questionnaire`)
+          return
+        }
+      }
+
+      setOrder({
+        id: orderData.id,
+        order_number: orderData.order_number,
+        questionnaire_completed_at: orderData.questionnaire_completed_at,
+        service_package: servicePackage,
+      })
+
+      // Use RPC to initialize and fetch documents (creates from templates if needed)
+      const { data: docsData, error: docsError } = await supabase
+        .rpc('initialize_order_documents', { p_order_id: orderId })
+
+      if (docsError) {
+        console.error('Documents fetch error:', docsError)
+        throw docsError
+      }
+
+      // RPC returns array of documents with template info merged
+      setDocuments(docsData || [])
     } catch (err) {
       console.error('Failed to fetch order:', err)
     } finally {
@@ -179,27 +162,23 @@ export default function DocumentsUploadPage() {
       .from('order-documents')
       .getPublicUrl(filePath)
 
-    // Update document record
-    const { error: updateError } = await supabase
-      .from('order_documents')
-      .update({
-        file_url: urlData.publicUrl,
-        file_name: file.name,
-        uploaded_at: new Date().toISOString(),
-        rejection_reason: null, // Clear any previous rejection
+    // Update document record using RPC
+    const { data: updateResult, error: updateError } = await supabase
+      .rpc('update_order_document', {
+        p_order_id: orderId,
+        p_document_key: documentKey,
+        p_file_url: urlData.publicUrl,
+        p_file_name: file.name,
       })
-      .eq('order_id', orderId)
-      .eq('document_key', documentKey)
 
     if (updateError) throw updateError
 
+    if (updateResult && !updateResult.success) {
+      throw new Error(updateResult.error || 'Failed to update document')
+    }
+
     // Refresh documents
     await fetchOrderAndDocuments()
-  }
-
-  const handleReplace = async (documentKey: string, file: File) => {
-    // Same as upload since we use upsert
-    await handleUpload(documentKey, file)
   }
 
   const handlePreview = (documentKey: string, fileUrl: string) => {
@@ -211,7 +190,7 @@ export default function DocumentsUploadPage() {
     })
   }
 
-  if (isLoading) {
+  if (!isHydrated || isLoading) {
     return (
       <div className="container py-12 max-w-3xl">
         <Skeleton className="h-8 w-48 mb-2" />
@@ -256,38 +235,13 @@ export default function DocumentsUploadPage() {
         </p>
       </div>
 
-      {/* Document Checklist */}
-      <DocumentChecklist
+      {/* Document Upload Wizard */}
+      <DocumentUploadWizard
         documents={documents}
         onUpload={handleUpload}
-        onReplace={handleReplace}
+        onComplete={() => router.push(`/orders/${order.id}`)}
         onPreview={handlePreview}
       />
-
-      {/* Help Section */}
-      <div className="mt-8 p-5 bg-muted/30 rounded-xl">
-        <div className="flex items-start gap-4">
-          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-            <HelpCircle className="h-5 w-5 text-muted-foreground" />
-          </div>
-          <div>
-            <h3 className="font-medium text-foreground mb-1">Need help with documents?</h3>
-            <p className="text-sm text-muted-foreground mb-3">
-              Our team is available to help you with document requirements and clarifications.
-            </p>
-            <a
-              href={`https://wa.me/919876543210?text=Hi, I need help with documents for order ${order.order_number}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button variant="outline" size="sm" className="gap-2">
-                <MessageCircle className="h-4 w-4" />
-                WhatsApp Us
-              </Button>
-            </a>
-          </div>
-        </div>
-      </div>
 
       {/* Preview Modal */}
       {previewDoc && (
