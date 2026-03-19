@@ -45,7 +45,7 @@ export default function QuoteDetailPage() {
   const params = useParams()
   const router = useRouter()
   const quoteId = params.id as string
-  const { user } = useAuthStore()
+  const { user, isHydrated, openAuthModal, isAuthModalOpen } = useAuthStore()
 
   const [quote, setQuote] = useState<QuoteRequest | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -54,12 +54,18 @@ export default function QuoteDetailPage() {
   const [timeLeft, setTimeLeft] = useState<string | null>(null)
 
   useEffect(() => {
+    // Wait for auth to hydrate before checking user
+    if (!isHydrated) return
+
     if (!user) {
-      router.push(`/login?returnUrl=/quote/${quoteId}`)
+      // Open auth modal instead of redirecting
+      if (!isAuthModalOpen) {
+        openAuthModal()
+      }
       return
     }
     fetchQuote()
-  }, [quoteId, user])
+  }, [quoteId, user, isHydrated, openAuthModal, isAuthModalOpen])
 
   useEffect(() => {
     if (!quote?.quote_expires_at) return

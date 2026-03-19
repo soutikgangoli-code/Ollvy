@@ -29,6 +29,7 @@ import { cn } from '@/lib/utils'
 import { getClient } from '@/lib/supabase'
 import type { ServicePackage } from '@/lib/types'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { useAuthStore } from '@/lib/stores/auth-store'
 
 const navLinks = [
   { href: '/services', label: 'Services', sectionId: null },
@@ -87,6 +88,7 @@ export function Navbar() {
   const [services, setServices] = useState<ServicePackage[]>([])
   const [isLoadingServices, setIsLoadingServices] = useState(false)
   const activeSection = useActiveSection(navLinks.map((l) => l.sectionId))
+  const { openAuthModal } = useAuthStore()
 
   // Fetch active services from Supabase
   const fetchServices = useCallback(async () => {
@@ -347,13 +349,16 @@ export function Navbar() {
                 <Search className="h-4 w-4" />
                 Search Services
               </Button>
-              <Link
-                href="/login"
-                onClick={() => setMobileMenuOpen(false)}
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false)
+                  openAuthModal()
+                }}
                 className="text-center font-mono text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
               >
                 Already have an account? <span className="text-foreground font-medium">Sign in</span>
-              </Link>
+              </button>
             </SheetFooter>
           </SheetContent>
         </Sheet>

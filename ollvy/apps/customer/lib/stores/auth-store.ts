@@ -42,10 +42,15 @@ interface AuthState {
   session: Session | null
   user: User | null
   isLoading: boolean
+  isHydrated: boolean // True after first session check completes
   isNewUser: boolean
   lastOtpError: string | null
   retryAfter: number | null
   remainingAttempts: number | null
+  // Modal state
+  isAuthModalOpen: boolean
+  authModalStep: 'phone' | 'otp'
+  authModalPhone: string | null
 }
 
 interface AuthActions {
@@ -57,6 +62,11 @@ interface AuthActions {
   setUser: (user: User | null) => void
   setIsNewUser: (isNew: boolean) => void
   clearOtpError: () => void
+  // Modal actions
+  openAuthModal: () => void
+  closeAuthModal: () => void
+  setAuthModalStep: (step: 'phone' | 'otp') => void
+  setAuthModalPhone: (phone: string | null) => void
 }
 
 export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
@@ -64,10 +74,15 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   session: null,
   user: null,
   isLoading: false,
+  isHydrated: false,
   isNewUser: false,
   lastOtpError: null,
   retryAfter: null,
   remainingAttempts: null,
+  // Modal state
+  isAuthModalOpen: false,
+  authModalStep: 'phone',
+  authModalPhone: null,
 
   // Actions
   sendOtp: async (phone: string) => {
@@ -190,18 +205,20 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
           user: userData || null,
           isNewUser: userData ? !userData.business_type : true,
           isLoading: false,
+          isHydrated: true,
         })
       } else {
         set({
           session: null,
           user: null,
           isLoading: false,
+          isHydrated: true,
           isNewUser: false,
         })
       }
     } catch (error) {
       console.error('Refresh session error:', error)
-      set({ isLoading: false })
+      set({ isLoading: false, isHydrated: true })
     }
   },
 
@@ -209,4 +226,9 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   setUser: (user) => set({ user }),
   setIsNewUser: (isNew) => set({ isNewUser: isNew }),
   clearOtpError: () => set({ lastOtpError: null, retryAfter: null }),
+  // Modal actions
+  openAuthModal: () => set({ isAuthModalOpen: true, authModalStep: 'phone', authModalPhone: null, lastOtpError: null }),
+  closeAuthModal: () => set({ isAuthModalOpen: false, authModalStep: 'phone', authModalPhone: null, lastOtpError: null }),
+  setAuthModalStep: (step) => set({ authModalStep: step }),
+  setAuthModalPhone: (phone) => set({ authModalPhone: phone }),
 }))

@@ -3,50 +3,38 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { ArrowLeft, Loader2, ArrowRight, Check, X, ChevronDown, CheckCircle, Phone, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
-import { formatPaisa } from '@/lib/utils'
 import { getFullAttributionData, clearAllAttributionData } from '@/lib/utm'
-import type { ServicePackage, ServiceAddon } from '@/lib/types'
-import {
-  ArrowLeft,
-  Check,
-  Tag,
-  Loader2,
-  AlertCircle,
-} from 'lucide-react'
+import type { ServicePackage, ServiceAddon, ServiceVariant } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 import {
-  EngagementLetterCard,
-  VariantSelector,
-  AddonSelector,
-  OrderSummaryPanel,
-  TrustSignalsCard,
-  PaymentMethodLogos,
+  CheckoutStepper,
+  FilingTimeline,
+  AddOnsSection,
   PaymentSuccessModal,
+  WhatsIncludedCard,
+  WhatsNotIncludedCard,
 } from '@/components/checkout'
-
-interface Variant {
-  id: string
-  label: string
-  sublabel: string
-  priceAdjustment?: number
-  govtFeeAdjustment?: number
-}
+import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
 
 interface PriceBreakdown {
-  base: number
+  serviceFee: number
   govtFees: number
+  addonsTotal: number
   gst: number
   gstRate: number
-  proDiscount: number
   promoDiscount: number
-  addonTotal: number
   total: number
+}
+
+function formatPrice(paisa: number): string {
+  return '\u20B9' + Math.ceil(paisa / 100).toLocaleString('en-IN')
 }
 
 export default function CheckoutPage() {
@@ -54,31 +42,35 @@ export default function CheckoutPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const serviceId = params.serviceId as string
-  const { user } = useAuthStore()
+  const { user, session, isHydrated, openAuthModal, isAuthModalOpen } = useAuthStore()
 
   const [service, setService] = useState<ServicePackage | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Variant state (from URL or default)
-  const [selectedVariant, setSelectedVariant] = useState<string>('')
+  // Read variant and addons from URL params (passed from BookingPanel)
+  const variantFromUrl = searchParams.get('variant')
+  const addonsFromUrl = searchParams.get('addons')
 
-  // Addon state (from URL or defaults)
+  // Selected variant (from URL or default)
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null)
+
+  // Add-ons - initialize from URL params or service defaults
   const [selectedAddonIds, setSelectedAddonIds] = useState<string[]>([])
 
-  // Engagement letter agreement
-  const [engagementAgreed, setEngagementAgreed] = useState(false)
-
-  // Promo code state
+  // Promo code
   const [promoCode, setPromoCode] = useState('')
   const [promoLoading, setPromoLoading] = useState(false)
   const [promoError, setPromoError] = useState<string | null>(null)
   const [promoApplied, setPromoApplied] = useState<{ code: string; discount: number } | null>(null)
 
-  // Payment state
+  // Payment
   const [isProcessing, setIsProcessing] = useState(false)
 
-  // Success modal state
+  // Mobile bottom sheet
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+
+  // Success modal
   const [successModal, setSuccessModal] = useState<{
     isOpen: boolean
     orderId: string
@@ -86,68 +78,84 @@ export default function CheckoutPage() {
   } | null>(null)
 
   useEffect(() => {
+    if (!isHydrated) return
     if (!user) {
-      router.push(`/login?returnUrl=/checkout/${serviceId}`)
+      if (!isAuthModalOpen) {
+        openAuthModal()
+      }
       return
     }
     fetchService()
-  }, [serviceId, user])
+  }, [serviceId, user, isHydrated, openAuthModal, isAuthModalOpen])
 
-  // Initialize variant and addons from URL params after service loads
+  // Initialize variant and addons from URL params or service defaults after service loads
   useEffect(() => {
-    if (service) {
-      // Initialize variant from URL or use first variant
-      const urlVariant = searchParams.get('variant')
-      if (service.variants && service.variants.length > 0) {
-        const validVariant = service.variants.find(v => v.id === urlVariant)
-        setSelectedVariant(validVariant ? urlVariant! : service.variants[0].id)
-      }
+    if (!service) return
 
-      // Initialize addons from URL or use defaults
-      const urlAddons = searchParams.get('addons')
-      if (service.addons && service.addons.length > 0) {
-        if (urlAddons) {
-          const addonIds = urlAddons.split(',')
-          // Include required addons plus URL-specified addons
-          const requiredIds = service.addons.filter(a => a.required).map(a => a.id)
-          const validIds = addonIds.filter(id => service.addons!.some(a => a.id === id))
-          setSelectedAddonIds([...new Set([...requiredIds, ...validIds])])
-        } else {
-          // Use default selection
-          setSelectedAddonIds(
-            service.addons
-              .filter(addon => addon.defaultSelected || addon.required)
-              .map(addon => addon.id)
-          )
-        }
+    // Initialize variant from URL or default
+    if (service.variants && service.variants.length > 0) {
+      const urlVariant = variantFromUrl
+      if (urlVariant && service.variants.some(v => v.id === urlVariant)) {
+        setSelectedVariant(urlVariant)
+      } else {
+        // Use first variant as default
+        setSelectedVariant(service.variants[0].id)
       }
     }
-  }, [service, searchParams])
+
+    // Initialize addons from URL params or service defaults
+    if (service.addons && service.addons.length > 0) {
+      if (addonsFromUrl) {
+        // Use addons from URL
+        const urlAddonIds = addonsFromUrl.split(',').filter(id =>
+          service.addons?.some(a => a.id === id)
+        )
+        setSelectedAddonIds(urlAddonIds)
+      } else {
+        // Use default selections from service config (defaultSelected or required)
+        const defaultIds = service.addons
+          .filter(addon => addon.defaultSelected || addon.required)
+          .map(addon => addon.id)
+        setSelectedAddonIds(defaultIds)
+      }
+    }
+  }, [service, variantFromUrl, addonsFromUrl])
 
   const fetchService = async () => {
     if (!serviceId) return
-
     setIsLoading(true)
     setError(null)
 
     try {
       const supabase = getClient()
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(serviceId)
 
-      const { data, error: fetchError } = await supabase
-        .from('service_packages')
-        .select('*')
-        .eq('id', serviceId)
-        .single()
+      let data = null
+      if (isUUID) {
+        const result = await supabase
+          .from('service_packages')
+          .select('*')
+          .eq('id', serviceId)
+          .single()
+        data = result.data
+      }
 
-      if (fetchError) throw fetchError
+      if (!data) {
+        const slugResult = await supabase
+          .from('service_packages')
+          .select('*')
+          .eq('slug', serviceId)
+          .single()
+        data = slugResult.data
+      }
+
+      if (!data) throw new Error('Service not found')
 
       if (data.price_varies_by_state) {
-        router.push(`/quote/request/${serviceId}`)
+        router.push(`/quote/request/${data.id}`)
         return
       }
 
-      // Parse variants from workflow_stages or a variants column if exists
-      // For now, check if the service has variant data in addons or other field
       setService(data)
     } catch (err) {
       console.error('Failed to fetch service:', err)
@@ -157,73 +165,62 @@ export default function CheckoutPage() {
     }
   }
 
-  // Parse variants from service data (they may be stored in a variants column)
-  const variants = useMemo((): Variant[] => {
-    if (!service) return []
-    // Check if service has variants field (may be stored differently)
-    // For FSSAI services, variants are typically turnover-based
-    // This would come from the database - for now return empty if not present
-    return []
-  }, [service])
+  // Get selected variant data for price adjustments
+  const selectedVariantData = useMemo(() => {
+    if (!service?.variants || !selectedVariant) return null
+    return service.variants.find(v => v.id === selectedVariant) || null
+  }, [service?.variants, selectedVariant])
 
-  // Parse addons from service data
-  const addons = useMemo((): ServiceAddon[] => {
-    if (!service?.addons) return []
-    return service.addons
-  }, [service])
-
-  // Get selected addon objects for price calculation
-  const selectedAddons = useMemo(() => {
-    return addons.filter(addon => selectedAddonIds.includes(addon.id))
-  }, [addons, selectedAddonIds])
-
-  const calculatePrice = (): PriceBreakdown | null => {
+  // Calculate price with variant adjustments and actual service addons
+  const priceBreakdown = useMemo((): PriceBreakdown | null => {
     if (!service) return null
 
-    // Base price (may be adjusted by variant)
-    let base = service.price_base_paisa
-    let govtFees = service.price_govt_fees_paisa || 0
+    // Apply variant price adjustments (priceAdjustment is in paisa)
+    const variantPriceAdjustment = selectedVariantData?.priceAdjustment ?? 0
+    const variantGovtFeeAdjustment = selectedVariantData?.govtFeeAdjustment ?? 0
 
-    // Apply variant adjustments if applicable
-    if (selectedVariant && variants.length > 0) {
-      const variant = variants.find(v => v.id === selectedVariant)
-      if (variant) {
-        base += (variant.priceAdjustment ?? 0)
-        govtFees += (variant.govtFeeAdjustment ?? 0)
-      }
-    }
+    const serviceFee = service.price_base_paisa + variantPriceAdjustment
+    const govtFees = (service.price_govt_fees_paisa || 0) + variantGovtFeeAdjustment
+    const gstRate = service.price_gst_rate || 18
 
-    // Calculate addon totals
-    const addonTotal = selectedAddons.reduce((sum, addon) => {
+    // Calculate add-ons total from service's actual addons (not hardcoded)
+    const addonsTotal = selectedAddonIds.reduce((sum, id) => {
+      const addon = service.addons?.find(a => a.id === id)
+      if (!addon) return sum
+      // Addon price includes both pricePaisa and govtFeePaisa
       return sum + addon.pricePaisa + (addon.govtFeePaisa ?? 0)
     }, 0)
 
-    const gstRate = service.price_gst_rate || 18
-    const gst = Math.round((base + addonTotal) * (gstRate / 100))
+    // GST only on service fee + addons, not govt fees
+    const taxableAmount = serviceFee + addonsTotal
+    const gst = Math.round(taxableAmount * (gstRate / 100))
 
-    // Pro discount (5% for pro users)
-    const proDiscount = user?.subscription_tier === 'pro' ? Math.round((base + addonTotal) * 0.05) : 0
-
-    // Promo discount
     const promoDiscount = promoApplied?.discount || 0
-
-    const total = base + govtFees + addonTotal + gst - proDiscount - promoDiscount
+    const total = serviceFee + govtFees + addonsTotal + gst - promoDiscount
 
     return {
-      base,
+      serviceFee,
       govtFees,
+      addonsTotal,
       gst,
       gstRate,
-      proDiscount,
       promoDiscount,
-      addonTotal,
       total: Math.max(0, total),
     }
+  }, [service, selectedAddonIds, promoApplied, selectedVariantData])
+
+  const handleToggleAddon = (id: string) => {
+    // Don't toggle required addons
+    const addon = service?.addons?.find(a => a.id === id)
+    if (addon?.required) return
+
+    setSelectedAddonIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    )
   }
 
   const handleApplyPromo = async () => {
     if (!promoCode.trim()) return
-
     setPromoLoading(true)
     setPromoError(null)
 
@@ -243,18 +240,12 @@ export default function CheckoutPage() {
           }),
         }
       )
-
       const data = await response.json()
-
       if (!response.ok || data.error) {
-        setPromoError(data.error || 'Invalid promo code')
+        setPromoError(data.error || 'Invalid code')
         return
       }
-
-      setPromoApplied({
-        code: promoCode.toUpperCase(),
-        discount: data.discount_paisa || 0,
-      })
+      setPromoApplied({ code: promoCode.toUpperCase(), discount: data.discount_paisa || 0 })
     } catch (err) {
       setPromoError('Failed to apply promo code')
     } finally {
@@ -269,34 +260,27 @@ export default function CheckoutPage() {
   }
 
   const handleCheckout = async () => {
-    if (!service || !user || !engagementAgreed) return
+    if (!service || !user || !priceBreakdown || !session) return
 
     setIsProcessing(true)
-
     try {
-      const priceBreakdown = calculatePrice()
-      if (!priceBreakdown) throw new Error('Price calculation failed')
-
-      // Get attribution data
       const attribution = getFullAttributionData()
 
-      // Create Razorpay order with variant and addon data
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({
             service_package_id: service.id,
             user_id: user.id,
             promo_code: promoApplied?.code,
-            variant_id: selectedVariant || undefined,
             addon_ids: selectedAddonIds.length > 0 ? selectedAddonIds : undefined,
+            variant_id: selectedVariant || undefined,
             engagement_agreed: true,
-            // Attribution data
             utm_source: attribution.utm?.utm_source,
             utm_medium: attribution.utm?.utm_medium,
             utm_campaign: attribution.utm?.utm_campaign,
@@ -309,12 +293,23 @@ export default function CheckoutPage() {
       )
 
       const data = await response.json()
-
       if (!response.ok || data.error) {
         throw new Error(data.error || 'Failed to create order')
       }
 
-      // Open Razorpay checkout
+      // For test mode (no Razorpay credentials), the edge function still creates
+      // a real order and returns order_id/order_number - skip Razorpay modal
+      if (data.razorpay_order_id?.startsWith('order_test_')) {
+        clearAllAttributionData()
+        setSuccessModal({
+          isOpen: true,
+          orderId: data.order_id,
+          orderNumber: data.order_number,
+        })
+        return
+      }
+
+      // Production: Open Razorpay payment modal
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.amount,
@@ -322,8 +317,7 @@ export default function CheckoutPage() {
         name: 'Ollvy',
         description: service.name,
         order_id: data.razorpay_order_id,
-        handler: async (response: any) => {
-          // Payment successful - clear attribution and show success modal
+        handler: async () => {
           clearAllAttributionData()
           setSuccessModal({
             isOpen: true,
@@ -331,13 +325,8 @@ export default function CheckoutPage() {
             orderNumber: data.order_number,
           })
         },
-        prefill: {
-          contact: user.phone,
-        },
-        theme: {
-          color: '#ffffff',
-          backdrop_color: 'rgba(0,0,0,0.9)',
-        },
+        prefill: { contact: user.phone },
+        theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.9)' },
       }
 
       // @ts-ignore
@@ -345,31 +334,59 @@ export default function CheckoutPage() {
       razorpay.open()
     } catch (err: any) {
       console.error('Checkout error:', err)
-      setError(err.message || 'Checkout failed')
+      alert(err.message || 'Checkout failed')
     } finally {
       setIsProcessing(false)
     }
   }
 
-  if (isLoading) {
+  // Get selected addons from service's actual addons (with price for display)
+  // NOTE: These hooks must be called before early returns to follow React rules of hooks
+  const selectedAddons = useMemo(() => {
+    if (!service?.addons) return []
+    return service.addons
+      .filter(a => selectedAddonIds.includes(a.id))
+      .map(a => ({
+        name: a.name,
+        price: a.pricePaisa + (a.govtFeePaisa ?? 0), // Combined price
+      }))
+  }, [service?.addons, selectedAddonIds])
+
+  // Format addons for AddOnsSection component (needs id, name, price, description)
+  const addonsForDisplay = useMemo(() => {
+    if (!service?.addons) return []
+    return service.addons.map(addon => ({
+      id: addon.id,
+      name: addon.name,
+      price: addon.pricePaisa + (addon.govtFeePaisa ?? 0),
+      description: addon.description,
+      required: addon.required,
+    }))
+  }, [service?.addons])
+
+  const canSubmit = priceBreakdown && priceBreakdown.total > 0
+
+  // Loading state - also check isHydrated to prevent flicker during auth hydration
+  if (isLoading || !isHydrated) {
     return (
-      <div className="container py-12 max-w-5xl">
-        <Skeleton className="h-9 w-32 mb-8" />
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
-            <Skeleton className="h-64 rounded-2xl" />
-            <Skeleton className="h-48 rounded-2xl" />
+      <div className="container py-12 max-w-6xl">
+        <Skeleton className="h-8 w-32 mb-8" />
+        <div className="grid lg:grid-cols-[1fr_380px] gap-8">
+          <div className="space-y-6">
+            <Skeleton className="h-24 rounded-lg" />
+            <Skeleton className="h-48 rounded-lg" />
+            <Skeleton className="h-64 rounded-lg" />
           </div>
-          <Skeleton className="h-96 rounded-2xl" />
+          <Skeleton className="h-[500px] rounded-lg" />
         </div>
       </div>
     )
   }
 
+  // Error state
   if (error || !service) {
     return (
       <div className="container py-20 text-center">
-        <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
         <h1 className="text-2xl font-semibold text-foreground mb-4">Service Not Found</h1>
         <p className="text-muted-foreground mb-8">{error || 'The service you\'re looking for doesn\'t exist.'}</p>
         <Link href="/services">
@@ -379,132 +396,144 @@ export default function CheckoutPage() {
     )
   }
 
-  const priceBreakdown = calculatePrice()
-  const canSubmit = engagementAgreed && priceBreakdown && priceBreakdown.total > 0
-
   return (
-    <div className="container py-12 max-w-5xl">
-      {/* Back Button */}
-      <Link href={`/services/${service.slug}`}>
-        <Button variant="ghost" className="mb-8 gap-2 text-muted-foreground hover:text-foreground -ml-4">
-          <ArrowLeft className="h-4 w-4" />
-          Back to Service
-        </Button>
-      </Link>
-
-      <h1 className="text-2xl font-semibold text-foreground mb-2">Checkout</h1>
-      <p className="text-muted-foreground mb-8">{service.name}</p>
-
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Engagement Letter */}
-          <EngagementLetterCard
-            serviceName={service.name}
-            scopeIncluded={service.scope_included || []}
-            scopeExcluded={service.scope_excluded || []}
-            slaDays={service.sla_working_days}
-            isAgreed={engagementAgreed}
-            onAgreementChange={setEngagementAgreed}
-          />
-
-          {/* Variant Selector */}
-          {variants.length > 0 && (
-            <VariantSelector
-              variants={variants}
-              selectedVariant={selectedVariant}
-              onVariantChange={setSelectedVariant}
-              title="Select Your Option"
-              subtitle="Choose based on your business requirements"
-            />
-          )}
-
-          {/* Addon Selector */}
-          {addons.length > 0 && (
-            <AddonSelector
-              addons={addons}
-              selectedAddons={selectedAddonIds}
-              onAddonsChange={setSelectedAddonIds}
-            />
-          )}
-
-          {/* Promo Code */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Tag className="h-5 w-5 text-muted-foreground" />
-                Promo Code
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              {promoApplied ? (
-                <div className="flex items-center justify-between bg-muted/50 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center">
-                      <Check className="h-5 w-5 text-[hsl(var(--ollvy-green))]" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-foreground">{promoApplied.code}</p>
-                      <p className="text-sm text-muted-foreground">
-                        -{formatPaisa(promoApplied.discount)} applied
-                      </p>
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="sm" onClick={handleRemovePromo} className="text-muted-foreground">
-                    Remove
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex gap-3">
-                  <Input
-                    placeholder="Enter promo code"
-                    value={promoCode}
-                    onChange={(e) => {
-                      setPromoCode(e.target.value.toUpperCase())
-                      setPromoError(null)
-                    }}
-                    className="flex-1"
-                  />
-                  <Button
-                    variant="outline"
-                    onClick={handleApplyPromo}
-                    disabled={!promoCode.trim() || promoLoading}
-                  >
-                    {promoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Apply'}
-                  </Button>
-                </div>
-              )}
-              {promoError && (
-                <p className="text-sm text-destructive mt-2">{promoError}</p>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Trust Signals */}
-          <TrustSignalsCard />
-
-          {/* Payment Methods */}
-          <div className="text-center">
-            <p className="text-xs text-muted-foreground mb-2">Accepted Payment Methods</p>
-            <PaymentMethodLogos />
-          </div>
+    <div className="min-h-screen bg-background">
+      <div className="container py-8 max-w-6xl">
+        {/* Header */}
+        <div className="mb-8">
+          <Link
+            href={`/services/${service.slug}`}
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Service
+          </Link>
+          <h1 className="text-2xl font-semibold text-foreground">Checkout</h1>
+          <p className="text-muted-foreground mt-1">{service.name}</p>
         </div>
 
-        {/* Order Summary Sidebar */}
-        <div>
-          {priceBreakdown && (
-            <OrderSummaryPanel
+        {/* Two-column layout */}
+        <div className="grid lg:grid-cols-[1fr_380px] gap-8">
+          {/* Left column - Main flow */}
+          <div className="space-y-8">
+            {/* Step 1: Stepper */}
+            <CheckoutStepper currentStep={1} />
+
+            {/* Step 2: Filing Timeline */}
+            <FilingTimeline
+              steps={service.workflow_stages}
               serviceName={service.name}
-              priceBreakdown={priceBreakdown}
-              selectedAddons={selectedAddons}
-              promoCode={promoApplied?.code}
-              isProUser={user?.subscription_tier === 'pro'}
+            />
+
+            {/* Step 3: Documents Required */}
+            <div className="space-y-4">
+              <div>
+                <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-mono">DOCUMENTS</p>
+                <h3 className="text-lg md:text-xl font-semibold text-foreground">Documents You'll Need</h3>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Keep these ready - your CA will guide you through each one
+                </p>
+              </div>
+              <DocumentChecklist
+                serviceSlug={service.slug}
+                serviceName={service.name}
+                showSectionHeader={false}
+                customHeading=""
+              />
+            </div>
+
+            {/* Step 4: Scope of Work */}
+            <ScopeOfWorkCard
+              serviceName={service.name}
+              scopeIncluded={service.scope_included || [
+                'Name availability check via MCA RUN portal',
+                'Drafting of MoA and AoA',
+                'DSC for up to 2 directors',
+                'SPICe+ form filing with MCA',
+                'Certificate of Incorporation (CIN)',
+                'PAN + TAN application',
+              ]}
+              scopeExcluded={service.scope_excluded || [
+                'GST Registration',
+                'Trademark registration',
+                'Registered office address',
+                'Post-incorporation compliance',
+              ]}
+            />
+
+            {/* Step 5: Add-ons (only show if service has configurable addons) */}
+            {addonsForDisplay.length > 0 && (
+              <AddOnsSection
+                addons={addonsForDisplay}
+                selectedIds={selectedAddonIds}
+                onToggle={handleToggleAddon}
+              />
+            )}
+          </div>
+
+          {/* Right column - Sticky order summary (desktop) */}
+          <div className="hidden lg:block">
+            <div className="sticky top-20">
+              <OrderSummarySidebar
+                serviceName={service.name}
+                serviceDisplayName={selectedVariantData?.sublabel}
+                serviceFee={priceBreakdown?.serviceFee || 0}
+                govtFees={priceBreakdown?.govtFees || 0}
+                addons={selectedAddons}
+                gstRate={priceBreakdown?.gstRate || 18}
+                gstAmount={priceBreakdown?.gst || 0}
+                total={priceBreakdown?.total || 0}
+                promoInput={promoCode}
+                onPromoChange={setPromoCode}
+                onApplyPromo={handleApplyPromo}
+                onRemovePromo={handleRemovePromo}
+                promoLoading={promoLoading}
+                promoError={promoError}
+                promoApplied={promoApplied}
+                isProcessing={isProcessing}
+                canSubmit={canSubmit || false}
+                onSubmit={handleCheckout}
+                slaDays={service.sla_working_days || 15}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile bottom bar */}
+      <div className="lg:hidden">
+        <MobileBottomBarComponent
+          total={priceBreakdown?.total || 0}
+          isProcessing={isProcessing}
+          canSubmit={canSubmit || false}
+          onSubmit={handleCheckout}
+          isSheetOpen={isSheetOpen}
+          setIsSheetOpen={setIsSheetOpen}
+          orderSummary={
+            <OrderSummarySidebar
+              serviceName={service.name}
+              serviceDisplayName={selectedVariantData?.sublabel}
+              serviceFee={priceBreakdown?.serviceFee || 0}
+              govtFees={priceBreakdown?.govtFees || 0}
+              addons={selectedAddons}
+              gstRate={priceBreakdown?.gstRate || 18}
+              gstAmount={priceBreakdown?.gst || 0}
+              total={priceBreakdown?.total || 0}
+              promoInput={promoCode}
+              onPromoChange={setPromoCode}
+              onApplyPromo={handleApplyPromo}
+              onRemovePromo={handleRemovePromo}
+              promoLoading={promoLoading}
+              promoError={promoError}
+              promoApplied={promoApplied}
               isProcessing={isProcessing}
               canSubmit={canSubmit || false}
               onSubmit={handleCheckout}
+              isMobile
+              slaDays={service.sla_working_days || 15}
             />
-          )}
-        </div>
+          }
+        />
       </div>
 
       {/* Razorpay Script */}
@@ -517,12 +546,451 @@ export default function CheckoutPage() {
           orderNumber={successModal.orderNumber}
           serviceName={service.name}
           orderId={successModal.orderId}
+          amountPaisa={priceBreakdown?.total || 0}
+          slaDays={service.sla_working_days || 15}
           onClose={() => {
+            const orderId = successModal.orderId
             setSuccessModal(null)
-            router.push(`/orders/${successModal.orderId}`)
+            router.push(`/orders/${orderId}`)
           }}
         />
       )}
     </div>
+  )
+}
+
+// Scope of Work Card Component - Stepper Carousel
+interface ScopeOfWorkCardProps {
+  serviceName: string
+  scopeIncluded: string[]
+  scopeExcluded: string[]
+}
+
+function ScopeOfWorkCard({
+  serviceName,
+  scopeIncluded,
+  scopeExcluded,
+}: ScopeOfWorkCardProps) {
+  const [currentStep, setCurrentStep] = useState(0)
+  const totalSteps = 2
+
+  const steps = [
+    {
+      title: "What's Included",
+      description: `Everything covered in your ${serviceName} order. Review the deliverables before proceeding.`,
+      items: scopeIncluded,
+    },
+    {
+      title: "What's Not Included",
+      description: "These items are available as add-ons or separate services if needed.",
+      items: scopeExcluded,
+    },
+  ]
+
+  const currentStepData = steps[currentStep]
+
+  return (
+    <div className="space-y-6">
+      {/* Section Header */}
+      <div>
+        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">SCOPE OF WORK</p>
+        <h3 className="text-lg md:text-xl font-semibold text-foreground">What's Included in Your Order</h3>
+        <p className="text-sm text-muted-foreground mt-1">
+          Review the scope before you proceed to payment
+        </p>
+      </div>
+
+      {/* Card */}
+      <div className="border border-border rounded-xl overflow-hidden bg-card">
+        {/* Header with title and slider dots */}
+        <div className="p-5 border-b border-border">
+          <div className="flex items-center justify-between">
+            <h4 className="font-semibold text-foreground text-lg">
+              {currentStepData.title}
+            </h4>
+            {/* Slider dots */}
+            <div className="flex items-center gap-2">
+              {steps.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentStep(index)}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-colors",
+                    index === currentStep
+                      ? "bg-foreground"
+                      : "bg-muted-foreground/30"
+                  )}
+                />
+              ))}
+            </div>
+          </div>
+          <p className="text-muted-foreground text-sm mt-1">
+            {currentStepData.description}
+          </p>
+        </div>
+
+        {/* Content - Items list */}
+        <div className="p-5">
+          <div className="divide-y divide-border">
+            {currentStepData.items.map((item, i) => (
+              <div key={i} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                {currentStep === 0 ? (
+                  <span className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/10 flex items-center justify-center flex-shrink-0">
+                    <Check className="w-3 h-3 text-[hsl(var(--ollvy-green))]" />
+                  </span>
+                ) : (
+                  <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                    <X className="w-3 h-3 text-muted-foreground" />
+                  </span>
+                )}
+                <span className="text-sm text-muted-foreground">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="border-t border-border" />
+        <div className="p-5 flex items-center justify-between">
+          <button
+            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+            disabled={currentStep === 0}
+            className={cn(
+              "flex items-center gap-1 text-sm font-medium transition-colors",
+              currentStep === 0
+                ? "text-muted-foreground/50 cursor-not-allowed"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Previous Step
+          </button>
+
+          <button
+            onClick={() => setCurrentStep(Math.min(totalSteps - 1, currentStep + 1))}
+            disabled={currentStep === totalSteps - 1}
+            className={cn(
+              "flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+              currentStep === totalSteps - 1
+                ? "bg-muted text-muted-foreground cursor-not-allowed"
+                : "bg-[hsl(var(--ollvy-green))] text-white hover:bg-[hsl(var(--ollvy-green))]/90"
+            )}
+          >
+            Next Step
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Order Summary Sidebar Component
+interface OrderSummarySidebarProps {
+  serviceName: string
+  serviceDisplayName?: string // Optional variant label for display
+  serviceFee: number
+  govtFees: number
+  addons: Array<{ name: string; price: number }>
+  gstRate: number
+  gstAmount: number
+  total: number
+  promoInput: string
+  onPromoChange: (value: string) => void
+  onApplyPromo: () => void
+  onRemovePromo: () => void
+  promoLoading: boolean
+  promoError: string | null
+  promoApplied: { code: string; discount: number } | null
+  isProcessing: boolean
+  canSubmit: boolean
+  onSubmit: () => void
+  isMobile?: boolean
+  slaDays?: number
+}
+
+function OrderSummarySidebar({
+  serviceName,
+  serviceDisplayName,
+  serviceFee,
+  govtFees,
+  addons,
+  gstRate,
+  gstAmount,
+  total,
+  promoInput,
+  onPromoChange,
+  onApplyPromo,
+  onRemovePromo,
+  promoLoading,
+  promoError,
+  promoApplied,
+  isProcessing,
+  canSubmit,
+  onSubmit,
+  isMobile = false,
+  slaDays = 15,
+}: OrderSummarySidebarProps) {
+  // Calculate guaranteed date
+  const getGuaranteedDate = (days: number) => {
+    const date = new Date()
+    let addedDays = 0
+    while (addedDays < days) {
+      date.setDate(date.getDate() + 1)
+      const dayOfWeek = date.getDay()
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        addedDays++
+      }
+    }
+    return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+  }
+
+  const guaranteedDate = getGuaranteedDate(slaDays)
+
+  return (
+    <div className={cn('bg-card border border-border rounded-xl p-6', isMobile && 'border-0 p-0')}>
+      {/* Guaranteed date at top */}
+      <div className="flex items-center gap-2 pb-5 border-b border-border mb-5">
+        <CheckCircle className="h-3.5 w-3.5 text-[hsl(var(--ollvy-green))] shrink-0" />
+        <p className="text-sm font-semibold text-foreground font-mono">
+          Guaranteed by {guaranteedDate}
+        </p>
+      </div>
+
+      {/* Total amount - prominent */}
+      <div className="mb-1">
+        <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+          Total to pay now
+        </p>
+        <p className="font-mono text-4xl font-bold text-foreground mt-1">
+          {formatPrice(total)}
+        </p>
+      </div>
+
+      {/* Fee breakdown */}
+      <div className="mt-5 space-y-3">
+        {/* Base service fee (includes govt fees like in services page) */}
+        <div className="flex justify-between items-start">
+          <div className="flex items-start gap-2">
+            <div className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center mt-0.5 shrink-0">
+              <CheckCircle className="h-2.5 w-2.5 text-[hsl(var(--ollvy-green))]" />
+            </div>
+            <div>
+              <p className="text-sm font-medium text-foreground">{serviceDisplayName || serviceName}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Service fee</p>
+            </div>
+          </div>
+          <span className="font-mono text-sm font-semibold text-foreground">
+            {formatPrice(serviceFee + govtFees)}
+          </span>
+        </div>
+
+        {/* Selected addons */}
+        {addons.map((addon, i) => (
+          <div key={i} className="flex justify-between items-start">
+            <div className="flex items-start gap-2">
+              <div className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center mt-0.5 shrink-0">
+                <CheckCircle className="h-2.5 w-2.5 text-[hsl(var(--ollvy-green))]" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-foreground">{addon.name}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Service fee</p>
+              </div>
+            </div>
+            <span className="font-mono text-sm text-foreground">
+              {formatPrice(addon.price)}
+            </span>
+          </div>
+        ))}
+
+        {/* GST */}
+        <div className="flex justify-between items-start">
+          <div className="flex items-start gap-2">
+            <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center mt-0.5 shrink-0">
+              <span className="text-[7px] font-bold text-muted-foreground">GST</span>
+            </div>
+            <p className="text-sm font-medium text-foreground">GST ({gstRate}%)</p>
+          </div>
+          <span className="font-mono text-sm text-foreground">
+            {formatPrice(gstAmount)}
+          </span>
+        </div>
+
+        {/* Total line */}
+        <div className="flex justify-between items-center pt-3 border-t border-border">
+          <span className="text-sm font-semibold text-foreground">Total Amount</span>
+          <span className="font-mono text-lg font-bold text-foreground">
+            {formatPrice(total)}
+          </span>
+        </div>
+      </div>
+
+      {/* Promo code input */}
+      {!promoApplied && (
+        <div className="mt-5 border border-border rounded-xl p-4">
+          <p className="font-mono uppercase tracking-wider text-xs text-muted-foreground mb-3">
+            HAVE A PROMO CODE?
+          </p>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Enter code"
+              value={promoInput}
+              onChange={(e) => onPromoChange(e.target.value.toUpperCase())}
+              className="h-10 text-sm border-border"
+            />
+            <Button
+              variant="outline"
+              onClick={onApplyPromo}
+              disabled={!promoInput.trim() || promoLoading}
+              className="h-10 px-4 border-border"
+            >
+              {promoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Apply'}
+            </Button>
+          </div>
+          {promoError && <p className="text-xs text-destructive mt-2">{promoError}</p>}
+        </div>
+      )}
+
+      {/* Promo applied badge */}
+      {promoApplied && (
+        <div className="mt-5 flex items-center justify-between bg-[hsl(var(--ollvy-green))]/5 border border-[hsl(var(--ollvy-green))]/20 rounded-xl px-4 py-3">
+          <div className="flex items-center gap-2">
+            <CheckCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
+            <span className="text-sm font-medium text-[hsl(var(--ollvy-green-fg))]">
+              {promoApplied.code} - {formatPrice(promoApplied.discount)} off
+            </span>
+          </div>
+          <button onClick={onRemovePromo} className="text-xs text-muted-foreground hover:text-foreground">
+            Remove
+          </button>
+        </div>
+      )}
+
+      {/* Pay button */}
+      <Button
+        onClick={onSubmit}
+        disabled={!canSubmit || isProcessing}
+        size="lg"
+        className="w-full mt-5"
+      >
+        {isProcessing ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Processing...
+          </>
+        ) : (
+          `Pay ${formatPrice(total)}`
+        )}
+      </Button>
+
+      {/* GST invoice note */}
+      <p className="text-xs text-muted-foreground text-center mt-2">
+        GST-compliant invoice generated at checkout
+      </p>
+
+      {/* Have queries */}
+      <div className="mt-5 pt-5 border-t border-border">
+        <p className="text-xs text-muted-foreground mb-3">
+          Questions about documents, process, or price?
+        </p>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
+            <a
+              href={`https://wa.me/919876543210?text=Hi, I have a question about ${encodeURIComponent(serviceName)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              WhatsApp
+            </a>
+          </Button>
+          <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
+            <a href="tel:+919876543210">
+              <Phone className="h-3.5 w-3.5" />
+              Call
+            </a>
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Mobile Bottom Bar Component
+interface MobileBottomBarComponentProps {
+  total: number
+  isProcessing: boolean
+  canSubmit: boolean
+  onSubmit: () => void
+  isSheetOpen: boolean
+  setIsSheetOpen: (open: boolean) => void
+  orderSummary: React.ReactNode
+}
+
+function MobileBottomBarComponent({
+  total,
+  isProcessing,
+  canSubmit,
+  onSubmit,
+  isSheetOpen,
+  setIsSheetOpen,
+  orderSummary,
+}: MobileBottomBarComponentProps) {
+  return (
+    <>
+      {/* Fixed bottom bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 z-40">
+        <div className="flex items-center justify-between gap-4">
+          <button onClick={() => setIsSheetOpen(true)} className="text-left">
+            <p className="text-xs text-muted-foreground">Total</p>
+            <p className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</p>
+          </button>
+          <Button
+            onClick={canSubmit ? onSubmit : () => setIsSheetOpen(true)}
+            disabled={isProcessing}
+            className={cn(
+              'h-11 px-6 text-base font-medium rounded-md',
+              canSubmit ? 'bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white' : 'bg-[hsl(var(--ollvy-green))]/50 text-white'
+            )}
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                Pay Now
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Overlay */}
+      {isSheetOpen && (
+        <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setIsSheetOpen(false)} />
+      )}
+
+      {/* Bottom sheet */}
+      <div
+        className={cn(
+          'fixed bottom-0 left-0 right-0 bg-background rounded-t-2xl z-50 transition-transform duration-300 max-h-[85vh] overflow-y-auto',
+          isSheetOpen ? 'translate-y-0' : 'translate-y-full'
+        )}
+      >
+        <div className="sticky top-0 bg-background border-b border-border p-4 flex items-center justify-between">
+          <h3 className="font-semibold text-foreground">Order Summary</h3>
+          <button onClick={() => setIsSheetOpen(false)} className="p-1 hover:bg-muted rounded">
+            <span className="text-muted-foreground">✕</span>
+          </button>
+        </div>
+        <div className="p-4">{orderSummary}</div>
+      </div>
+
+      {/* Spacer */}
+      <div className="h-20" />
+    </>
   )
 }

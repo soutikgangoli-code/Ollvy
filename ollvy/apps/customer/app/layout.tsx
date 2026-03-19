@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import { AuthModal } from '@/components/auth'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -74,6 +75,7 @@ export default function RootLayout({
           <UTMProvider>
             {children}
           </UTMProvider>
+          <AuthModal />
           <Toaster />
         </ThemeProvider>
       </body>

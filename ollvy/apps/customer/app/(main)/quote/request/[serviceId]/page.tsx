@@ -35,7 +35,7 @@ export default function QuoteRequestPage() {
   const params = useParams()
   const router = useRouter()
   const serviceId = params.serviceId as string
-  const { user } = useAuthStore()
+  const { user, isHydrated, openAuthModal, isAuthModalOpen } = useAuthStore()
 
   const [service, setService] = useState<ServicePackage | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -48,13 +48,19 @@ export default function QuoteRequestPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
+    // Wait for auth to hydrate before checking user
+    if (!isHydrated) return
+
     if (!user) {
-      router.push(`/login?returnUrl=/quote/request/${serviceId}`)
+      // Open auth modal instead of redirecting
+      if (!isAuthModalOpen) {
+        openAuthModal()
+      }
       return
     }
     setBusinessName(user.business_name || '')
     fetchService()
-  }, [serviceId, user])
+  }, [serviceId, user, isHydrated, openAuthModal, isAuthModalOpen])
 
   const fetchService = async () => {
     if (!serviceId) return
