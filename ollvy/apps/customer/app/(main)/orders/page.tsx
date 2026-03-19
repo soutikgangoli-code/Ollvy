@@ -13,16 +13,21 @@ import type { Order } from '@/lib/types'
 import { Package, ArrowRight } from 'lucide-react'
 
 export default function OrdersPage() {
-  const { user } = useAuthStore()
+  const { user, isHydrated, isLoading: authLoading } = useAuthStore()
   const [activeOrders, setActiveOrders] = useState<Order[]>([])
   const [completedOrders, setCompletedOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
+    // Wait for auth to fully hydrate and load
+    if (!isHydrated || authLoading) return
+
     if (user) {
       fetchOrders()
+    } else {
+      setIsLoading(false)
     }
-  }, [user])
+  }, [user, isHydrated, authLoading])
 
   const fetchOrders = async () => {
     if (!user) return
@@ -32,31 +37,40 @@ export default function OrdersPage() {
     try {
       const supabase = getClient()
 
-      const { data: active } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          service_package:service_packages(*),
-          professional:professionals(id, full_name, phone, email, professional_type, avatar_url)
-        `)
-        .eq('user_id', user.id)
-        .in('status', ['pending_assignment', 'waitlisted', 'in_progress'])
-        .order('created_at', { ascending: false })
+      // Ensure we have the current session
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        await supabase.auth.setSession({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        })
+      }
 
-      const { data: completed } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          service_package:service_packages(*),
-          professional:professionals(id, full_name, phone, email, professional_type, avatar_url)
-        `)
-        .eq('user_id', user.id)
-        .in('status', ['completed', 'cancelled', 'disputed'])
-        .order('created_at', { ascending: false })
-        .limit(20)
+      // Use RPC function to bypass RLS chain issues
+      const { data: activeData, error: activeError } = await supabase
+        .rpc('get_user_orders', {
+          p_statuses: ['pending_assignment', 'waitlisted', 'in_progress']
+        })
 
-      setActiveOrders(active || [])
-      setCompletedOrders(completed || [])
+      if (activeError) {
+        console.error('[Orders Page] Error fetching active orders:', activeError)
+      }
+
+      const { data: completedData, error: completedError } = await supabase
+        .rpc('get_user_orders', {
+          p_statuses: ['completed', 'cancelled', 'disputed']
+        })
+
+      if (completedError) {
+        console.error('[Orders Page] Error fetching completed orders:', completedError)
+      }
+
+      // RPC returns JSON array
+      const active = Array.isArray(activeData) ? activeData : []
+      const completed = Array.isArray(completedData) ? completedData.slice(0, 20) : []
+
+      setActiveOrders(active as Order[])
+      setCompletedOrders(completed as Order[])
     } catch (err) {
       console.error('Failed to fetch orders:', err)
     } finally {

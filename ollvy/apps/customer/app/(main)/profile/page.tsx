@@ -86,7 +86,7 @@ function ProfileContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const isSetup = searchParams.get('setup') === 'true'
-  const { user, isHydrated, refreshSession } = useAuthStore()
+  const { user, isHydrated, isLoading: authLoading, refreshSession } = useAuthStore()
 
   const [isSaving, setIsSaving] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -108,10 +108,11 @@ function ProfileContent() {
   const [complianceScore, setComplianceScore] = useState(0)
   const [upcomingDeadlines, setUpcomingDeadlines] = useState(0)
   const [overdueCount, setOverdueCount] = useState(0)
+  const [hasComplianceData, setHasComplianceData] = useState(false)
 
   useEffect(() => {
-    // Wait for auth to hydrate before checking user
-    if (!isHydrated) return
+    // Wait for auth to fully hydrate and load
+    if (!isHydrated || authLoading) return
 
     if (!user) {
       router.push('/login?returnUrl=/profile')
@@ -126,7 +127,7 @@ function ProfileContent() {
 
     // Fetch dashboard data
     fetchDashboardData()
-  }, [user, isHydrated, router])
+  }, [user, isHydrated, authLoading, router])
 
   const fetchDashboardData = async () => {
     if (!user) return
@@ -135,21 +136,28 @@ function ProfileContent() {
     try {
       const supabase = getClient()
 
-      // Fetch active orders with document counts
-      const { data: ordersData } = await supabase
-        .from('orders')
-        .select(`
-          id,
-          order_number,
-          status,
-          total_paisa_snapshot,
-          created_at,
-          service_package:service_packages(name, slug, sla_working_days, workflow_stages)
-        `)
-        .eq('user_id', user.id)
-        .in('status', ['pending_assignment', 'in_progress', 'waitlisted'])
-        .order('created_at', { ascending: false })
-        .limit(5)
+      // Ensure session is set for RLS
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session) {
+        await supabase.auth.setSession({
+          access_token: session.access_token,
+          refresh_token: session.refresh_token,
+        })
+      }
+
+      // Use RPC function to bypass RLS chain issues
+      const { data: ordersRpcData, error: ordersError } = await supabase
+        .rpc('get_user_orders', {
+          p_statuses: ['pending_assignment', 'in_progress', 'waitlisted']
+        })
+
+      if (ordersError) {
+        console.error('[Profile] Error fetching orders:', ordersError)
+      }
+
+      // RPC returns JSON array
+      const ordersData = Array.isArray(ordersRpcData) ? ordersRpcData.slice(0, 5) : []
+      console.log('[Profile] Active orders found:', ordersData?.length || 0)
 
       // Fetch document counts for active orders
       const orderIds = (ordersData || []).map(o => o.id)
@@ -186,21 +194,14 @@ function ProfileContent() {
         })
       }
 
-      // Fetch completed orders
-      const { data: completedData } = await supabase
-        .from('orders')
-        .select(`
-          id,
-          order_number,
-          status,
-          total_paisa_snapshot,
-          created_at,
-          service_package:service_packages(name, slug, sla_working_days)
-        `)
-        .eq('user_id', user.id)
-        .eq('status', 'completed')
-        .order('created_at', { ascending: false })
-        .limit(10)
+      // Fetch completed orders using RPC
+      const { data: completedRpcData } = await supabase
+        .rpc('get_user_orders', {
+          p_statuses: ['completed']
+        })
+
+      // RPC returns JSON array
+      const completedData = Array.isArray(completedRpcData) ? completedRpcData.slice(0, 10) : []
 
       // Fetch retainers
       const { data: retainersData } = await supabase
@@ -261,29 +262,29 @@ function ProfileContent() {
         service_package: r.service_package as any,
       })))
 
-      // Build document groups from completed orders (deliverables)
-      const completedOrderIds = (completedData || []).map(o => o.id)
+      // Build document groups from ALL orders (active + completed)
+      const allOrders = [...(ordersData || []), ...(completedData || [])]
+      const allOrderIds = allOrders.map(o => o.id)
       const docGroups: DocumentGroup[] = []
 
-      if (completedOrderIds.length > 0) {
-        const { data: deliverables } = await supabase
+      if (allOrderIds.length > 0) {
+        const { data: allDocs } = await supabase
           .from('order_documents')
           .select('id, order_id, document_label, file_url, file_name, uploaded_at, verified_at')
-          .in('order_id', completedOrderIds)
-          .not('file_url', 'is', null)
-          .not('verified_at', 'is', null) // Only verified documents
+          .in('order_id', allOrderIds)
+          .not('file_url', 'is', null) // Only documents with uploads
           .order('uploaded_at', { ascending: false })
 
         // Group by order
-        type DocType = NonNullable<typeof deliverables>[0]
+        type DocType = NonNullable<typeof allDocs>[0]
         const groupedDocs: Record<string, DocType[]> = {}
-        ;(deliverables || []).forEach(doc => {
+        ;(allDocs || []).forEach(doc => {
           if (!groupedDocs[doc.order_id]) groupedDocs[doc.order_id] = []
           groupedDocs[doc.order_id].push(doc)
         })
 
-        // Build groups
-        ;(completedData || []).forEach(order => {
+        // Build groups from all orders
+        allOrders.forEach(order => {
           const docs = groupedDocs[order.id]
           if (docs && docs.length > 0) {
             docGroups.push({
@@ -293,7 +294,7 @@ function ProfileContent() {
               documents: docs.map(d => ({
                 id: d.id,
                 name: d.document_label || d.file_name || 'Document',
-                type: 'deliverable',
+                type: d.verified_at ? 'deliverable' : 'input',
                 url: d.file_url!,
                 uploadedAt: d.uploaded_at || '',
               })),
@@ -314,6 +315,8 @@ function ProfileContent() {
         .eq('user_id', user.id)
 
       if (complianceData && complianceData.length > 0) {
+        setHasComplianceData(true)
+
         // Count overdue
         const overdue = complianceData.filter(c =>
           c.status !== 'completed' && c.status !== 'waived' && c.due_date < today
@@ -333,8 +336,9 @@ function ProfileContent() {
         setUpcomingDeadlines(upcoming)
         setOverdueCount(overdue)
       } else {
-        // No obligations - perfect score
-        setComplianceScore(100)
+        // No obligations - hide compliance section
+        setHasComplianceData(false)
+        setComplianceScore(0)
         setUpcomingDeadlines(0)
         setOverdueCount(0)
       }
@@ -654,14 +658,32 @@ function ProfileContent() {
             avatarInitial={
               user.business_name?.charAt(0) || user.phone?.charAt(0) || 'U'
             }
+            onSave={async (data) => {
+              const supabase = getClient()
+              const { error } = await supabase
+                .from('users')
+                .update({
+                  business_name: data.businessName,
+                  state: data.state,
+                  city: data.city,
+                })
+                .eq('id', user.id)
+
+              if (error) throw error
+
+              // Refresh user data in auth store
+              await refreshSession()
+            }}
           />
 
-          {/* Compliance Score */}
-          <ComplianceScoreGauge
-            score={complianceScore}
-            upcomingDeadlines={upcomingDeadlines}
-            overdueCount={overdueCount}
-          />
+          {/* Compliance Score - Only show when there are compliance obligations */}
+          {hasComplianceData && (
+            <ComplianceScoreGauge
+              score={complianceScore}
+              upcomingDeadlines={upcomingDeadlines}
+              overdueCount={overdueCount}
+            />
+          )}
 
           {/* Referral */}
           {user.referral_code && (

@@ -34,6 +34,7 @@ export function QuestionnaireWizard({ orderId }: QuestionnaireWizardProps) {
     prevStep,
     saveStepResponses,
     completeQuestionnaire,
+    enableEditMode,
   } = useQuestionnaireStore()
 
   // Load questionnaire on mount
@@ -137,14 +138,19 @@ export function QuestionnaireWizard({ orderId }: QuestionnaireWizardProps) {
           <CheckCircle className="h-8 w-8 text-[hsl(var(--ollvy-green))]" />
         </div>
         <h2 className="text-xl font-semibold text-foreground mb-2">
-          Setup Complete!
+          Already Submitted
         </h2>
         <p className="text-muted-foreground mb-6">
           You've already completed the setup for this order.
         </p>
-        <Button onClick={() => router.push(`/orders/${orderId}/documents`)}>
-          Continue to Documents
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Button variant="outline" onClick={enableEditMode}>
+            Edit Answers
+          </Button>
+          <Button onClick={() => router.push(`/orders/${orderId}/documents`)}>
+            Continue to Documents
+          </Button>
+        </div>
       </div>
     )
   }

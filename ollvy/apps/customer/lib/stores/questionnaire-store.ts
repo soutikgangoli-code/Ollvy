@@ -27,7 +27,7 @@ interface QuestionnaireState {
 
 interface QuestionnaireActions {
   // Initialize
-  loadQuestionnaire: (orderId: string) => Promise<void>
+  loadQuestionnaire: (orderId: string, forceEdit?: boolean) => Promise<void>
 
   // Navigation
   goToStep: (step: number) => void
@@ -39,6 +39,9 @@ interface QuestionnaireActions {
   updateResponse: (key: string, value: unknown) => void
   saveStepResponses: (stepResponses: QuestionnaireFormValues) => Promise<boolean>
   completeQuestionnaire: () => Promise<boolean>
+
+  // Edit mode
+  enableEditMode: () => Promise<void>
 
   // Reset
   reset: () => void
@@ -63,7 +66,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
   (set, get) => ({
     ...initialState,
 
-    loadQuestionnaire: async (orderId: string) => {
+    loadQuestionnaire: async (orderId: string, forceEdit: boolean = false) => {
       set({ isLoading: true, error: null, orderId })
 
       try {
@@ -99,8 +102,8 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           name: string
         }
 
-        // If questionnaire already completed, set that state
-        if (orderData.questionnaire_completed_at) {
+        // If questionnaire already completed and not forcing edit mode, show completed state
+        if (orderData.questionnaire_completed_at && !forceEdit) {
           set({
             isLoading: false,
             isCompleted: true,
@@ -294,6 +297,15 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         set({ isSaving: false, error: 'Failed to complete questionnaire' })
         return false
       }
+    },
+
+    enableEditMode: async () => {
+      const { orderId } = get()
+      if (!orderId) return
+
+      // Reset completed state and reload with forceEdit=true
+      set({ isCompleted: false })
+      await get().loadQuestionnaire(orderId, true)
     },
 
     reset: () => {
