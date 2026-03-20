@@ -58,6 +58,8 @@ interface OrderData {
   current_stage?: string
   progress?: number
   questionnaire_completed?: boolean
+  work_docs_pending?: number
+  work_docs_rejected?: number
 }
 
 interface RetainerData {
@@ -202,6 +204,24 @@ function ProfileContent() {
         })
       }
 
+      // Fetch work documents for orders
+      let workDocCounts: Record<string, { pending: number; rejected: number }> = {}
+      if (orderIds.length > 0) {
+        const { data: workDocsData } = await supabase
+          .from('order_work_documents')
+          .select('order_id, direction, status')
+          .in('order_id', orderIds)
+          .eq('direction', 'from_customer')
+
+        ;(workDocsData || []).forEach(doc => {
+          if (!workDocCounts[doc.order_id]) {
+            workDocCounts[doc.order_id] = { pending: 0, rejected: 0 }
+          }
+          if (doc.status === 'pending') workDocCounts[doc.order_id].pending++
+          if (doc.status === 'rejected') workDocCounts[doc.order_id].rejected++
+        })
+      }
+
       // Fetch completed orders using RPC
       const { data: completedRpcData } = await supabase
         .rpc('get_user_orders', {
@@ -250,6 +270,9 @@ function ProfileContent() {
         const orderDocs = docCounts[order.id] || { total: 0, uploaded: 0 }
         const documentsPending = orderDocs.total - orderDocs.uploaded
 
+        // Calculate work documents status
+        const orderWorkDocs = workDocCounts[order.id] || { pending: 0, rejected: 0 }
+
         return {
           ...order,
           service_package: order.service_package as any,
@@ -257,6 +280,8 @@ function ProfileContent() {
           current_stage: currentStage,
           documents_pending: documentsPending > 0 ? documentsPending : undefined,
           questionnaire_completed: !!order.questionnaire_completed_at,
+          work_docs_pending: orderWorkDocs.pending > 0 ? orderWorkDocs.pending : undefined,
+          work_docs_rejected: orderWorkDocs.rejected > 0 ? orderWorkDocs.rejected : undefined,
         }
       })
 
@@ -624,6 +649,8 @@ function ProfileContent() {
                     progress={order.progress || 0}
                     documentsNeeded={order.documents_pending}
                     questionnaireCompleted={order.questionnaire_completed}
+                    workDocsPending={order.work_docs_pending}
+                    workDocsRejected={order.work_docs_rejected}
                   />
                 ))}
               </div>

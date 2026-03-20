@@ -17,6 +17,8 @@ interface DashboardOrderCardProps {
   dueDate?: string
   documentsNeeded?: number
   questionnaireCompleted?: boolean
+  workDocsPending?: number
+  workDocsRejected?: number
   isRetainer?: boolean
   nextCycleDate?: string
 }
@@ -31,19 +33,30 @@ export function DashboardOrderCard({
   dueDate,
   documentsNeeded,
   questionnaireCompleted,
+  workDocsPending,
+  workDocsRejected,
   isRetainer,
   nextCycleDate,
 }: DashboardOrderCardProps) {
   // Check for pending work from user
-  const hasDocsPending = documentsNeeded !== undefined && documentsNeeded > 0
   const hasQuestionsPending = questionnaireCompleted === false
+  const hasInitialDocsPending = documentsNeeded !== undefined && documentsNeeded > 0
+  const hasWorkDocsPending = workDocsPending !== undefined && workDocsPending > 0
+  const hasWorkDocsRejected = workDocsRejected !== undefined && workDocsRejected > 0
 
-  // Determine the actual status label based on questionnaire and documents
+  // Determine the actual status label based on current state
   const getStatusLabel = () => {
-    if (hasQuestionsPending && hasDocsPending) {
+    // Priority: Rejected > Pending work docs > Initial docs > Questionnaire
+    if (hasWorkDocsRejected) {
+      return 'Documents Rejected'
+    }
+    if (hasWorkDocsPending) {
+      return 'Work Documents Pending'
+    }
+    if (hasQuestionsPending && hasInitialDocsPending) {
       return 'Questions & Documents Pending'
     }
-    if (hasDocsPending) {
+    if (hasInitialDocsPending) {
       return 'Documents Pending'
     }
     if (hasQuestionsPending) {
@@ -62,11 +75,17 @@ export function DashboardOrderCard({
 
   // Determine display stage
   const getDisplayStage = () => {
-    if (hasQuestionsPending && hasDocsPending) {
+    if (hasWorkDocsRejected) {
+      return `${workDocsRejected} Document${workDocsRejected > 1 ? 's' : ''} Rejected`
+    }
+    if (hasWorkDocsPending) {
+      return `${workDocsPending} Work Doc${workDocsPending > 1 ? 's' : ''} Pending`
+    }
+    if (hasQuestionsPending && hasInitialDocsPending) {
       return 'Questions and Documents Pending'
     }
-    if (hasDocsPending) {
-      return 'Documents Pending'
+    if (hasInitialDocsPending) {
+      return `${documentsNeeded} Document${documentsNeeded! > 1 ? 's' : ''} Pending`
     }
     if (hasQuestionsPending) {
       return 'Questions Pending'
@@ -81,9 +100,14 @@ export function DashboardOrderCard({
     waitlisted: 'text-muted-foreground',
   }
 
-  // Use amber color if there's pending work from user
-  const hasUserPendingWork = hasDocsPending || hasQuestionsPending
-  const statusColor = hasUserPendingWork ? 'text-amber-600 dark:text-amber-400' : statusColors[status]
+  // Determine status color based on urgency
+  const getStatusColor = () => {
+    if (hasWorkDocsRejected) return 'text-red-600 dark:text-red-400'
+    if (hasWorkDocsPending || hasInitialDocsPending || hasQuestionsPending) return 'text-amber-600 dark:text-amber-400'
+    return statusColors[status] || 'text-muted-foreground'
+  }
+
+  const statusColor = getStatusColor()
 
   return (
     <Card className="border-border hover:border-muted-foreground/50 transition-colors">
@@ -110,8 +134,20 @@ export function DashboardOrderCard({
         </div>
 
         {/* Info Row */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground mb-4">
-          {documentsNeeded && documentsNeeded > 0 && (
+        <div className="flex items-center flex-wrap gap-3 text-xs text-muted-foreground mb-4">
+          {hasWorkDocsRejected && (
+            <span className="flex items-center gap-1 text-red-600 dark:text-red-400">
+              <FileUp className="h-3.5 w-3.5" />
+              {workDocsRejected} rejected
+            </span>
+          )}
+          {hasWorkDocsPending && (
+            <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+              <FileUp className="h-3.5 w-3.5" />
+              {workDocsPending} work docs needed
+            </span>
+          )}
+          {hasInitialDocsPending && (
             <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
               <FileUp className="h-3.5 w-3.5" />
               {documentsNeeded} docs needed
