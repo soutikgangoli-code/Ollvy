@@ -188,7 +188,7 @@ export function Hero() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="px-4 py-2 text-xs font-medium text-muted-foreground border border-border rounded"
+                  className="px-4 py-2 text-xs font-mono font-medium uppercase tracking-wide text-[hsl(var(--ollvy-green-fg))] bg-[hsl(var(--ollvy-green))]/10 border border-[hsl(var(--ollvy-green))]/30 rounded"
                 >
                   {item}
                 </div>
