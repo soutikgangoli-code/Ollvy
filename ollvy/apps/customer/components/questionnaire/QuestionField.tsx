@@ -45,7 +45,7 @@ export function QuestionField({ question }: QuestionFieldProps) {
         >
           {question.question_label}
           {question.validation?.required && (
-            <span className="text-destructive ml-1">*</span>
+            <span className="text-muted-foreground ml-1">*</span>
           )}
         </Label>
         {question.help_text && (
