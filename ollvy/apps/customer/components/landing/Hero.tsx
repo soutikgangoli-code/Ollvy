@@ -180,15 +180,15 @@ export function Hero() {
             </div>
 
             {/* Trust indicators */}
-            <div className="flex flex-wrap gap-2 mt-14 pt-8 border-t border-border">
+            <div className="flex flex-wrap gap-3 mt-14 pt-8 border-t border-border">
               {[
-                'Verified CAs',
+                'Real-Time Tracking',
                 '98% On-Time',
-                'No Hidden Fees',
+                'Handles Disputes',
               ].map((item) => (
                 <div
                   key={item}
-                  className="px-3 py-1.5 text-xs font-medium text-foreground bg-muted/50 border border-border rounded-md"
+                  className="px-4 py-2 text-xs font-medium text-muted-foreground border border-border rounded"
                 >
                   {item}
                 </div>
