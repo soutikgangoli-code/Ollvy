@@ -425,7 +425,8 @@ export function UnifiedServicePage({
             : 'translate-y-0 opacity-100'
         )}
       >
-        <div className="max-w-[1200px] mx-auto px-6">
+        {/* Desktop: Full bar with logo, tabs, CTA */}
+        <div className="hidden md:block max-w-[1200px] mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Left: Logo + Service name */}
             <div className="flex items-center gap-4">
@@ -441,8 +442,8 @@ export function UnifiedServicePage({
               </span>
             </div>
 
-            {/* Center: Section tabs (hidden on mobile) */}
-            <nav ref={stickyNavRef} className="hidden md:flex items-center gap-6 relative" role="tablist">
+            {/* Center: Section tabs */}
+            <nav ref={stickyNavRef} className="flex items-center gap-6 relative" role="tablist">
               {SECTIONS.map((section) => (
                 <button
                   key={section.id}
@@ -482,6 +483,29 @@ export function UnifiedServicePage({
                 {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
               </a>
             </Button>
+          </div>
+        </div>
+
+        {/* Mobile: Only section tabs */}
+        <div className="md:hidden overflow-x-auto scrollbar-hide">
+          <div className="flex gap-0 min-w-max px-4">
+            {SECTIONS.map((section) => (
+              <button
+                key={section.id}
+                data-section={section.id}
+                role="tab"
+                aria-selected={activeSection === section.id}
+                onClick={() => scrollToSection(section.id)}
+                className={cn(
+                  'shrink-0 px-3 py-3 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
+                  activeSection === section.id
+                    ? 'text-foreground border-foreground'
+                    : 'text-muted-foreground border-transparent hover:text-foreground'
+                )}
+              >
+                {section.label}
+              </button>
+            ))}
           </div>
         </div>
       </div>
