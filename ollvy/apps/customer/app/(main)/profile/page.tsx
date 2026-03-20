@@ -48,6 +48,7 @@ interface OrderData {
   status: string
   total_paisa_snapshot: number
   created_at: string
+  questionnaire_completed_at?: string | null
   service_package: {
     name: string
     slug: string
@@ -56,6 +57,7 @@ interface OrderData {
   documents_pending?: number
   current_stage?: string
   progress?: number
+  questionnaire_completed?: boolean
 }
 
 interface RetainerData {
@@ -254,6 +256,7 @@ function ProfileContent() {
           progress,
           current_stage: currentStage,
           documents_pending: documentsPending > 0 ? documentsPending : undefined,
+          questionnaire_completed: !!order.questionnaire_completed_at,
         }
       })
 
@@ -620,6 +623,7 @@ function ProfileContent() {
                     currentStage={order.current_stage}
                     progress={order.progress || 0}
                     documentsNeeded={order.documents_pending}
+                    questionnaireCompleted={order.questionnaire_completed}
                   />
                 ))}
               </div>

@@ -16,6 +16,7 @@ interface DashboardOrderCardProps {
   progress: number
   dueDate?: string
   documentsNeeded?: number
+  questionnaireCompleted?: boolean
   isRetainer?: boolean
   nextCycleDate?: string
 }
@@ -29,14 +30,50 @@ export function DashboardOrderCard({
   progress,
   dueDate,
   documentsNeeded,
+  questionnaireCompleted,
   isRetainer,
   nextCycleDate,
 }: DashboardOrderCardProps) {
-  const statusLabels: Record<string, string> = {
-    pending_assignment: 'Pending Assignment',
-    in_progress: 'In Progress',
-    completed: 'Completed',
-    waitlisted: 'Waitlisted',
+  // Determine the actual status label based on questionnaire and documents
+  const getStatusLabel = () => {
+    const hasDocsPending = documentsNeeded && documentsNeeded > 0
+    const hasQuestionsPending = questionnaireCompleted === false
+
+    if (hasQuestionsPending && hasDocsPending) {
+      return 'Questions & Documents Pending'
+    }
+    if (hasDocsPending) {
+      return 'Documents Pending'
+    }
+    if (hasQuestionsPending) {
+      return 'Questions Pending'
+    }
+
+    // Default status labels
+    const labels: Record<string, string> = {
+      pending_assignment: 'Pending Assignment',
+      in_progress: 'In Progress',
+      completed: 'Completed',
+      waitlisted: 'Waitlisted',
+    }
+    return labels[status] || status
+  }
+
+  // Determine display stage
+  const getDisplayStage = () => {
+    const hasDocsPending = documentsNeeded && documentsNeeded > 0
+    const hasQuestionsPending = questionnaireCompleted === false
+
+    if (hasQuestionsPending && hasDocsPending) {
+      return 'Questions and Documents Pending'
+    }
+    if (hasDocsPending) {
+      return 'Documents Pending'
+    }
+    if (hasQuestionsPending) {
+      return 'Questions Pending'
+    }
+    return currentStage || 'Processing'
   }
 
   const statusColors: Record<string, string> = {
@@ -46,6 +83,10 @@ export function DashboardOrderCard({
     waitlisted: 'text-muted-foreground',
   }
 
+  // Use amber color if there's pending work from user
+  const hasUserPendingWork = (documentsNeeded && documentsNeeded > 0) || questionnaireCompleted === false
+  const statusColor = hasUserPendingWork ? 'text-amber-600 dark:text-amber-400' : statusColors[status]
+
   return (
     <Card className="border-border hover:border-muted-foreground/50 transition-colors">
       <CardContent className="p-5">
@@ -54,8 +95,8 @@ export function DashboardOrderCard({
             <h3 className="font-medium text-foreground truncate">{serviceName}</h3>
             <p className="text-sm text-muted-foreground font-mono">{orderNumber}</p>
           </div>
-          <span className={cn('text-xs font-medium', statusColors[status])}>
-            {statusLabels[status] || status}
+          <span className={cn('text-xs font-medium', statusColor)}>
+            {getStatusLabel()}
           </span>
         </div>
 
@@ -63,7 +104,7 @@ export function DashboardOrderCard({
         <div className="mb-4">
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-muted-foreground font-mono text-xs">
-              {currentStage || 'Processing'}
+              {getDisplayStage()}
             </span>
             <span className="font-mono text-xs text-foreground">{progress}%</span>
           </div>
