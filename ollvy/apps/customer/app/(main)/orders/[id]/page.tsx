@@ -255,7 +255,9 @@ export default function OrderDetailPage() {
   // Build timeline stages based on actual progress
   const timelineStages = useMemo(() => {
     const workflowStages = order?.service_package?.workflow_stages || []
-    const questionnaireCompleted = !!order?.questionnaire_completed_at
+    // Questionnaire is only truly complete if there are actual answers saved
+    const hasQuestionnaireAnswers = questionnaireResponses.length > 0
+    const questionnaireCompleted = !!order?.questionnaire_completed_at && hasQuestionnaireAnswers
     const allDocsUploaded = stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0
 
     return workflowStages.map((stage, index) => {
@@ -307,7 +309,7 @@ export default function OrderDetailPage() {
 
       return { ...stage, isCompleted, isCurrent, completedDate, expectedDateRange }
     })
-  }, [order, stats, stageHistory, documents])
+  }, [order, stats, stageHistory, documents, questionnaireResponses])
 
   const completedStagesCount = timelineStages.filter(s => s.isCompleted).length
 
@@ -457,25 +459,36 @@ export default function OrderDetailPage() {
 
           {/* Continue Setup Button - shown until both questionnaire AND documents are complete */}
           {(() => {
-            const questionnaireComplete = !!order.questionnaire_completed_at
+            // Check if questionnaire has actual answers (not just a timestamp)
+            const hasQuestionnaireAnswers = questionnaireResponses.length > 0
+            const questionnaireComplete = !!order.questionnaire_completed_at && hasQuestionnaireAnswers
             const allDocsUploaded = stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0
 
             // Don't show if everything is done
             if (questionnaireComplete && allDocsUploaded) return null
 
-            // Determine where to go
-            const targetPath = !questionnaireComplete
+            // Determine where to go and what context to show
+            const needsQuestionnaire = !questionnaireComplete
+            const needsDocs = !allDocsUploaded
+
+            const targetPath = needsQuestionnaire
               ? `/orders/${order.id}/questionnaire`
               : `/orders/${order.id}/documents`
 
-            const buttonLabel = !questionnaireComplete
-              ? 'Continue Setup'
-              : 'Upload Documents'
+            // Determine the context label
+            let contextLabel = ''
+            if (needsQuestionnaire && needsDocs) {
+              contextLabel = 'Questionnaire'
+            } else if (needsQuestionnaire) {
+              contextLabel = 'Questionnaire'
+            } else if (needsDocs) {
+              contextLabel = 'Documents'
+            }
 
             return (
               <Link href={targetPath}>
                 <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white">
-                  {buttonLabel}
+                  Continue where you left off ({contextLabel})
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -667,8 +680,12 @@ export default function OrderDetailPage() {
                                 : 'text-muted-foreground'
                             )}
                           >
-                            {/* Change title for questions stage when completed */}
-                            {isQuestionsStage && stage.isCompleted ? 'Answered the questionnaire' : stage.title}
+                            {/* Change title for questions stage based on completion and answers */}
+                            {isQuestionsStage && stage.isCompleted
+                              ? 'Answered the questionnaire'
+                              : isQuestionsStage && stage.isCurrent
+                              ? 'Answer the questionnaire'
+                              : stage.title}
                           </h4>
 
                           {/* Show "View answers" badge when responses loaded */}
