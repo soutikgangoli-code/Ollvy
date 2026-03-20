@@ -94,16 +94,16 @@ export function DashboardOrderCard({
   }
 
   const statusColors: Record<string, string> = {
-    pending_assignment: 'text-amber-600 dark:text-amber-400',
-    in_progress: 'text-blue-600 dark:text-blue-400',
+    pending_assignment: 'text-orange-400',
+    in_progress: 'text-blue-500',
     completed: 'text-[hsl(var(--ollvy-green))]',
     waitlisted: 'text-muted-foreground',
   }
 
   // Determine status color based on urgency
   const getStatusColor = () => {
-    if (hasWorkDocsRejected) return 'text-red-600 dark:text-red-400'
-    if (hasWorkDocsPending || hasInitialDocsPending || hasQuestionsPending) return 'text-amber-600 dark:text-amber-400'
+    if (hasWorkDocsRejected) return 'text-red-400'
+    if (hasWorkDocsPending || hasInitialDocsPending || hasQuestionsPending) return 'text-orange-400'
     return statusColors[status] || 'text-muted-foreground'
   }
 
@@ -136,19 +136,19 @@ export function DashboardOrderCard({
         {/* Info Row */}
         <div className="flex items-center flex-wrap gap-3 text-xs text-muted-foreground mb-4">
           {hasWorkDocsRejected && (
-            <span className="flex items-center gap-1 text-red-600 dark:text-red-400">
+            <span className="flex items-center gap-1 text-red-400">
               <FileUp className="h-3.5 w-3.5" />
               {workDocsRejected} rejected
             </span>
           )}
           {hasWorkDocsPending && (
-            <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+            <span className="flex items-center gap-1 text-orange-400">
               <FileUp className="h-3.5 w-3.5" />
               {workDocsPending} work docs needed
             </span>
           )}
           {hasInitialDocsPending && (
-            <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+            <span className="flex items-center gap-1 text-orange-400">
               <FileUp className="h-3.5 w-3.5" />
               {documentsNeeded} docs needed
             </span>
