@@ -559,54 +559,54 @@ export default function OrderDetailPage() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Progress Overview Card */}
-        <Card className="mt-8">
-          <CardContent className="p-6">
-            <h2 className="text-xl font-semibold text-foreground mb-4">
-              {order.service_package?.name || 'Order'}
-            </h2>
-
-            {/* Progress Bar Segments */}
-            <div className="flex gap-1 mb-3">
-              {timelineStages.map((stage, index) => (
-                <div
-                  key={stage.step}
-                  className={cn(
-                    'h-2 flex-1 rounded-full transition-colors',
-                    stage.isCompleted
-                      ? 'bg-emerald-500'
-                      : stage.isCurrent
-                      ? 'bg-emerald-500/50'
-                      : 'bg-muted'
-                  )}
-                />
-              ))}
-            </div>
-
-            {/* Stage Info Row */}
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-muted-foreground">
-                Stage {completedStagesCount + (timelineStages.some(s => s.isCurrent) ? 1 : 0)} of {timelineStages.length}
-              </p>
-              <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
-                {order.status === 'completed' ? 'Completed' : 'In Progress'}
-              </span>
-            </div>
-
-            {/* Expected Completion */}
-            <div className="pt-3 border-t border-border">
-              <p className="text-sm text-muted-foreground">
-                Expected completion: {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8 mt-8">
+      <div className="grid lg:grid-cols-3 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Progress Overview Card */}
+          <Card>
+            <CardContent className="p-6">
+              <h2 className="text-xl font-semibold text-foreground mb-4">
+                {order.service_package?.name || 'Order'}
+              </h2>
+
+              {/* Progress Bar Segments */}
+              <div className="flex gap-1 mb-3">
+                {timelineStages.map((stage, index) => (
+                  <div
+                    key={stage.step}
+                    className={cn(
+                      'h-2 flex-1 rounded-full transition-colors',
+                      stage.isCompleted
+                        ? 'bg-emerald-500'
+                        : stage.isCurrent
+                        ? 'bg-emerald-500/50'
+                        : 'bg-muted'
+                    )}
+                  />
+                ))}
+              </div>
+
+              {/* Stage Info Row */}
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-sm text-muted-foreground">
+                  Stage {completedStagesCount + (timelineStages.some(s => s.isCurrent) ? 1 : 0)} of {timelineStages.length}
+                </p>
+                <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                  {order.status === 'completed' ? 'Completed' : 'In Progress'}
+                </span>
+              </div>
+
+              {/* Expected Completion */}
+              <div className="pt-3 border-t border-border">
+                <p className="text-sm text-muted-foreground">
+                  Expected completion: {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Timeline */}
           <Card>
             <CardHeader>
