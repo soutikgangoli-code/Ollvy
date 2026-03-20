@@ -2,40 +2,44 @@ import { z } from 'zod'
 import type { ServiceQuestion, QuestionValidation } from './types'
 
 // Create a dynamic Zod schema from a question's validation rules
-export function createQuestionSchema(question: ServiceQuestion): z.ZodTypeAny {
+// If forceOptional is true, the field will be optional regardless of validation.required
+// This is used for questions with depends_on that may be hidden
+export function createQuestionSchema(question: ServiceQuestion, forceOptional: boolean = false): z.ZodTypeAny {
   const validation = question.validation || {}
+  // If question has depends_on, make it optional in schema (validated at runtime based on visibility)
+  const effectiveRequired = forceOptional ? false : !!validation.required
 
   switch (question.question_type) {
     case 'text':
-      return createTextSchema(validation)
+      return createTextSchema(validation, effectiveRequired)
 
     case 'textarea':
-      return createTextSchema(validation)
+      return createTextSchema(validation, effectiveRequired)
 
     case 'number':
-      return createNumberSchema(validation)
+      return createNumberSchema(validation, effectiveRequired)
 
     case 'select':
-      return createSelectSchema(validation, question.options)
+      return createSelectSchema(validation, question.options, effectiveRequired)
 
     case 'multiselect':
-      return createMultiselectSchema(validation, question.options)
+      return createMultiselectSchema(validation, question.options, effectiveRequired)
 
     case 'radio':
-      return createSelectSchema(validation, question.options)
+      return createSelectSchema(validation, question.options, effectiveRequired)
 
     case 'date':
-      return createDateSchema(validation)
+      return createDateSchema(validation, effectiveRequired)
 
     case 'file':
-      return createFileSchema(validation)
+      return createFileSchema(validation, effectiveRequired)
 
     default:
       return z.string().optional()
   }
 }
 
-function createTextSchema(validation: QuestionValidation): z.ZodTypeAny {
+function createTextSchema(validation: QuestionValidation, required: boolean): z.ZodTypeAny {
   let schema = z.string()
 
   if (validation.minLength) {
@@ -56,14 +60,14 @@ function createTextSchema(validation: QuestionValidation): z.ZodTypeAny {
     })
   }
 
-  if (validation.required) {
+  if (required) {
     return schema.min(1, { message: 'This field is required' })
   }
 
   return schema.optional().or(z.literal(''))
 }
 
-function createNumberSchema(validation: QuestionValidation): z.ZodTypeAny {
+function createNumberSchema(validation: QuestionValidation, required: boolean): z.ZodTypeAny {
   let schema = z.coerce.number()
 
   if (validation.min !== undefined) {
@@ -78,7 +82,7 @@ function createNumberSchema(validation: QuestionValidation): z.ZodTypeAny {
     })
   }
 
-  if (validation.required) {
+  if (required) {
     return schema
   }
 
@@ -87,20 +91,21 @@ function createNumberSchema(validation: QuestionValidation): z.ZodTypeAny {
 
 function createSelectSchema(
   validation: QuestionValidation,
-  options?: { value: string; label: string }[]
+  options: { value: string; label: string }[] | undefined,
+  required: boolean
 ): z.ZodTypeAny {
   if (options && options.length > 0) {
     const values = options.map((o) => o.value) as [string, ...string[]]
     const schema = z.enum(values)
 
-    if (validation.required) {
+    if (required) {
       return schema
     }
     return schema.optional().or(z.literal(''))
   }
 
   const schema = z.string()
-  if (validation.required) {
+  if (required) {
     return schema.min(1, { message: 'Please select an option' })
   }
   return schema.optional().or(z.literal(''))
@@ -108,7 +113,8 @@ function createSelectSchema(
 
 function createMultiselectSchema(
   validation: QuestionValidation,
-  options?: { value: string; label: string }[]
+  _options: { value: string; label: string }[] | undefined,
+  required: boolean
 ): z.ZodTypeAny {
   let schema = z.array(z.string())
 
@@ -124,27 +130,27 @@ function createMultiselectSchema(
     })
   }
 
-  if (validation.required) {
+  if (required) {
     return schema.min(1, { message: 'Please select at least one option' })
   }
 
   return schema.optional().default([])
 }
 
-function createDateSchema(validation: QuestionValidation): z.ZodTypeAny {
+function createDateSchema(validation: QuestionValidation, required: boolean): z.ZodTypeAny {
   const schema = z.string()
 
-  if (validation.required) {
+  if (required) {
     return schema.min(1, { message: 'Please select a date' })
   }
 
   return schema.optional().or(z.literal(''))
 }
 
-function createFileSchema(validation: QuestionValidation): z.ZodTypeAny {
+function createFileSchema(validation: QuestionValidation, required: boolean): z.ZodTypeAny {
   const schema = z.string() // File URL after upload
 
-  if (validation.required) {
+  if (required) {
     return schema.min(1, { message: 'Please upload a file' })
   }
 
@@ -152,11 +158,15 @@ function createFileSchema(validation: QuestionValidation): z.ZodTypeAny {
 }
 
 // Create a schema for an entire step (multiple questions)
+// Questions with depends_on are made optional in the schema since they may be hidden
 export function createStepSchema(questions: ServiceQuestion[]): z.ZodObject<Record<string, z.ZodTypeAny>> {
   const shape: Record<string, z.ZodTypeAny> = {}
 
   for (const question of questions) {
-    shape[question.question_key] = createQuestionSchema(question)
+    // If question has depends_on, make it optional in schema
+    // It will be validated based on visibility at runtime
+    const forceOptional = !!question.depends_on
+    shape[question.question_key] = createQuestionSchema(question, forceOptional)
   }
 
   return z.object(shape)

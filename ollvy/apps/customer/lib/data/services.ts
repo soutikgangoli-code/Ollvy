@@ -266,6 +266,7 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
 /**
  * Fetch single service by slug for Service Detail Page (§18)
  * ALL content is fetched from the database - no static configs needed.
+ * Returns null gracefully on any error to not break static generation
  */
 export async function getServiceBySlugFromDB(slug: string): Promise<{
   service: DBServiceConfig | null
@@ -276,7 +277,8 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     return { service: null, pricing: null }
   }
 
-  const { data: pkg, error } = await supabaseServer
+  try {
+    const { data: pkg, error } = await supabaseServer
     .from('service_packages')
     .select(`
       id,
@@ -435,25 +437,51 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
   }
 
   return { service, pricing }
+  } catch (err) {
+    console.error('Failed to fetch service by slug:', err)
+    return { service: null, pricing: null }
+  }
 }
+
+// Fallback slugs for static generation when Supabase is unavailable
+const FALLBACK_SERVICE_SLUGS = [
+  'pvt-ltd-incorporation',
+  'llp-registration',
+  'opc-registration',
+  'gst-registration',
+  'msme-registration',
+  'trademark-registration',
+  'fssai-registration',
+  'iec-registration',
+  'cloud-kitchen-setup',
+]
 
 /**
  * Get all service slugs for generateStaticParams
+ * Uses fallback slugs if Supabase is unavailable to ensure build succeeds
  */
 export async function getAllServiceSlugs(): Promise<string[]> {
-  if (!supabaseServer) return []
-
-  const { data, error } = await supabaseServer
-    .from('service_packages')
-    .select('slug')
-    .eq('is_active', true)
-
-  if (error) {
-    console.error('Error fetching service slugs:', error)
-    return []
+  if (!supabaseServer) {
+    console.warn('[services] Using fallback slugs - Supabase not configured')
+    return FALLBACK_SERVICE_SLUGS
   }
 
-  return data?.map(s => s.slug) ?? []
+  try {
+    const { data, error } = await supabaseServer
+      .from('service_packages')
+      .select('slug')
+      .eq('is_active', true)
+
+    if (error) {
+      console.error('Error fetching service slugs:', error)
+      return FALLBACK_SERVICE_SLUGS
+    }
+
+    return data?.map(s => s.slug) ?? FALLBACK_SERVICE_SLUGS
+  } catch (err) {
+    console.error('Failed to fetch service slugs, using fallback:', err)
+    return FALLBACK_SERVICE_SLUGS
+  }
 }
 
 // Related service card for display
@@ -469,40 +497,46 @@ export interface RelatedServiceCard {
 
 /**
  * Fetch related services by their slugs
+ * Returns empty array gracefully on any error to not break static generation
  */
 export async function getRelatedServicesBySlugs(slugs: string[]): Promise<RelatedServiceCard[]> {
   if (!supabaseServer || slugs.length === 0) return []
 
-  const { data, error } = await supabaseServer
-    .from('service_packages')
-    .select(`
-      slug,
-      short_name,
-      name,
-      tagline,
-      short_description,
-      price_base_paisa,
-      price_govt_fees_paisa,
-      sla_working_days,
-      billing_cycle
-    `)
-    .in('slug', slugs)
-    .eq('is_active', true)
+  try {
+    const { data, error } = await supabaseServer
+      .from('service_packages')
+      .select(`
+        slug,
+        short_name,
+        name,
+        tagline,
+        short_description,
+        price_base_paisa,
+        price_govt_fees_paisa,
+        sla_working_days,
+        billing_cycle
+      `)
+      .in('slug', slugs)
+      .eq('is_active', true)
 
-  if (error) {
-    console.error('Error fetching related services:', error)
+    if (error) {
+      console.error('Error fetching related services:', error)
+      return []
+    }
+
+    return data.map(pkg => ({
+      slug: pkg.slug,
+      shortName: pkg.short_name ?? pkg.name?.split(' ').slice(0, 2).join(' ') ?? '',
+      tagline: pkg.tagline ?? pkg.short_description ?? '',
+      ollvyFee: pkg.price_base_paisa / 100,
+      govtFee: pkg.price_govt_fees_paisa / 100,
+      slaDays: pkg.sla_working_days,
+      isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
+    }))
+  } catch (err) {
+    console.error('Failed to fetch related services:', err)
     return []
   }
-
-  return data.map(pkg => ({
-    slug: pkg.slug,
-    shortName: pkg.short_name ?? pkg.name?.split(' ').slice(0, 2).join(' ') ?? '',
-    tagline: pkg.tagline ?? pkg.short_description ?? '',
-    ollvyFee: pkg.price_base_paisa / 100,
-    govtFee: pkg.price_govt_fees_paisa / 100,
-    slaDays: pkg.sla_working_days,
-    isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
-  }))
 }
 
 /**
