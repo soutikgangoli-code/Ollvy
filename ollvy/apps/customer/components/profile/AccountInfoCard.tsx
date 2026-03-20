@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Phone, Building2, MapPin, Crown, Pencil, Check, X, Loader2, FileText } from 'lucide-react'
+import { Phone, Building2, MapPin, Crown, Pencil, Check, X, Loader2, FileText, Mail, CreditCard, Fingerprint } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 
 const INDIAN_STATES = [
@@ -17,65 +17,173 @@ const INDIAN_STATES = [
   'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Puducherry', 'Chandigarh',
 ]
 
+const BUSINESS_TYPES = [
+  { value: 'sole_proprietorship', label: 'Sole Proprietorship' },
+  { value: 'partnership', label: 'Partnership' },
+  { value: 'pvt_ltd', label: 'Private Limited' },
+  { value: 'llp', label: 'LLP' },
+  { value: 'opc', label: 'One Person Company' },
+  { value: 'not_registered', label: 'Not Registered' },
+] as const
+
+type BusinessType = typeof BUSINESS_TYPES[number]['value']
+
+// Registration numbers that can be auto-filled from completed orders
+interface RegistrationNumbers {
+  gstin?: string
+  cin?: string
+  din?: string
+  tan?: string
+  iec?: string
+  fssaiNumber?: string
+  udyamNumber?: string
+  shopEstablishmentNumber?: string
+  ptNumber?: string
+  trademarkNumber?: string
+}
+
 interface AccountInfoCardProps {
   businessName?: string
   phone: string
+  email?: string
+  businessType?: BusinessType
   state?: string
   city?: string
   address?: string
-  gstin?: string
+  panNumber?: string
+  aadhaarNumber?: string
+  // Registration numbers (auto-filled from orders - read only)
+  registrationNumbers?: RegistrationNumbers
   isProUser: boolean
   avatarInitial: string
-  onSave?: (data: { businessName: string; state: string; city: string; address: string; gstin: string }) => Promise<void>
+  onSave?: (data: {
+    businessName: string
+    email: string
+    businessType: string
+    state: string
+    city: string
+    address: string
+    panNumber: string
+    aadhaarNumber: string
+  }) => Promise<void>
 }
 
 export function AccountInfoCard({
   businessName,
   phone,
+  email,
+  businessType,
   state,
   city,
   address,
-  gstin,
+  panNumber,
+  aadhaarNumber,
+  registrationNumbers,
   isProUser,
   avatarInitial,
   onSave,
 }: AccountInfoCardProps) {
+  // Registration numbers are read-only (auto-filled from completed orders)
+  const gstin = registrationNumbers?.gstin
+  const cin = registrationNumbers?.cin
+  const din = registrationNumbers?.din
+  const tan = registrationNumbers?.tan
+  const iec = registrationNumbers?.iec
+  const fssaiNumber = registrationNumbers?.fssaiNumber
+  const udyamNumber = registrationNumbers?.udyamNumber
+  const shopEstablishmentNumber = registrationNumbers?.shopEstablishmentNumber
+  const ptNumber = registrationNumbers?.ptNumber
+  const trademarkNumber = registrationNumbers?.trademarkNumber
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
 
-  // Edit form state
+  // Edit form state (registration numbers are auto-filled, not editable)
   const [editBusinessName, setEditBusinessName] = useState(businessName || '')
+  const [editEmail, setEditEmail] = useState(email || '')
+  const [editBusinessType, setEditBusinessType] = useState<string>(businessType || '')
   const [editState, setEditState] = useState(state || '')
   const [editCity, setEditCity] = useState(city || '')
   const [editAddress, setEditAddress] = useState(address || '')
-  const [editGstin, setEditGstin] = useState(gstin || '')
+  const [editPanNumber, setEditPanNumber] = useState(panNumber || '')
+  const [editAadhaarNumber, setEditAadhaarNumber] = useState(aadhaarNumber || '')
+
+  // Validation helpers
+  const validatePan = (pan: string): boolean => {
+    if (!pan) return true // Optional field
+    return /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan)
+  }
+
+  const validateAadhaar = (aadhaar: string): boolean => {
+    if (!aadhaar) return true // Optional field
+    return /^\d{12}$/.test(aadhaar)
+  }
+
+  const validateEmail = (emailValue: string): boolean => {
+    if (!emailValue) return true // Optional field
+    return /^[^@]+@[^@]+\.[^@]+$/.test(emailValue)
+  }
+
+  const maskAadhaar = (aadhaar: string): string => {
+    if (!aadhaar || aadhaar.length !== 12) return aadhaar
+    return `XXXX XXXX ${aadhaar.slice(8)}`
+  }
 
   const handleStartEdit = () => {
     setEditBusinessName(businessName || '')
+    setEditEmail(email || '')
+    setEditBusinessType(businessType || '')
     setEditState(state || '')
     setEditCity(city || '')
     setEditAddress(address || '')
-    setEditGstin(gstin || '')
+    setEditPanNumber(panNumber || '')
+    setEditAadhaarNumber(aadhaarNumber || '')
+    setValidationErrors({})
     setIsEditing(true)
   }
 
   const handleCancel = () => {
     setIsEditing(false)
+    setValidationErrors({})
   }
 
   const handleSave = async () => {
     if (!onSave) return
 
+    // Validate fields
+    const errors: Record<string, string> = {}
+
+    if (editEmail && !validateEmail(editEmail)) {
+      errors.email = 'Invalid email format'
+    }
+
+    if (editPanNumber && !validatePan(editPanNumber.toUpperCase())) {
+      errors.panNumber = 'PAN must be 10 characters (e.g., ABCDE1234F)'
+    }
+
+    if (editAadhaarNumber && !validateAadhaar(editAadhaarNumber)) {
+      errors.aadhaarNumber = 'Aadhaar must be 12 digits'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors)
+      return
+    }
+
     setIsSaving(true)
     try {
       await onSave({
         businessName: editBusinessName,
+        email: editEmail,
+        businessType: editBusinessType,
         state: editState,
         city: editCity,
         address: editAddress,
-        gstin: editGstin.toUpperCase(),
+        panNumber: editPanNumber.toUpperCase(),
+        aadhaarNumber: editAadhaarNumber,
       })
       setIsEditing(false)
+      setValidationErrors({})
     } catch (error) {
       console.error('Failed to save:', error)
     } finally {
@@ -109,6 +217,39 @@ export function AccountInfoCard({
                 placeholder="Enter business name"
                 className="h-9"
               />
+            </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Email</label>
+              <Input
+                type="email"
+                value={editEmail}
+                onChange={(e) => {
+                  setEditEmail(e.target.value)
+                  if (validationErrors.email) {
+                    setValidationErrors(prev => ({ ...prev, email: '' }))
+                  }
+                }}
+                placeholder="email@example.com"
+                className={`h-9 ${validationErrors.email ? 'border-destructive' : ''}`}
+              />
+              {validationErrors.email && (
+                <p className="text-xs text-destructive mt-1">{validationErrors.email}</p>
+              )}
+            </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Entity Type</label>
+              <select
+                value={editBusinessType}
+                onChange={(e) => setEditBusinessType(e.target.value)}
+                className="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-sm text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="">Select entity type</option>
+                {BUSINESS_TYPES.map((bt) => (
+                  <option key={bt.value} value={bt.value}>{bt.label}</option>
+                ))}
+              </select>
             </div>
 
             <div>
@@ -146,15 +287,44 @@ export function AccountInfoCard({
             </div>
 
             <div>
-              <label className="text-xs text-muted-foreground mb-1 block">GSTIN (Optional)</label>
+              <label className="text-xs text-muted-foreground mb-1 block">PAN Number</label>
               <Input
-                value={editGstin}
-                onChange={(e) => setEditGstin(e.target.value.toUpperCase())}
-                placeholder="22AAAAA0000A1Z5"
-                className="h-9 font-mono"
-                maxLength={15}
+                value={editPanNumber}
+                onChange={(e) => {
+                  setEditPanNumber(e.target.value.toUpperCase())
+                  if (validationErrors.panNumber) {
+                    setValidationErrors(prev => ({ ...prev, panNumber: '' }))
+                  }
+                }}
+                placeholder="ABCDE1234F"
+                className={`h-9 font-mono ${validationErrors.panNumber ? 'border-destructive' : ''}`}
+                maxLength={10}
               />
+              {validationErrors.panNumber && (
+                <p className="text-xs text-destructive mt-1">{validationErrors.panNumber}</p>
+              )}
             </div>
+
+            <div>
+              <label className="text-xs text-muted-foreground mb-1 block">Aadhaar Number</label>
+              <Input
+                value={editAadhaarNumber}
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '') // Only digits
+                  setEditAadhaarNumber(value)
+                  if (validationErrors.aadhaarNumber) {
+                    setValidationErrors(prev => ({ ...prev, aadhaarNumber: '' }))
+                  }
+                }}
+                placeholder="123456789012"
+                className={`h-9 font-mono ${validationErrors.aadhaarNumber ? 'border-destructive' : ''}`}
+                maxLength={12}
+              />
+              {validationErrors.aadhaarNumber && (
+                <p className="text-xs text-destructive mt-1">{validationErrors.aadhaarNumber}</p>
+              )}
+            </div>
+
           </div>
 
           {/* Action Buttons */}
@@ -219,6 +389,18 @@ export function AccountInfoCard({
 
         {/* Details */}
         <div className="space-y-2 text-sm text-muted-foreground mb-4">
+          {email && (
+            <p className="flex items-center gap-2">
+              <Mail className="h-4 w-4 flex-shrink-0" />
+              {email}
+            </p>
+          )}
+          {businessType && (
+            <p className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 flex-shrink-0" />
+              {BUSINESS_TYPES.find(bt => bt.value === businessType)?.label || businessType}
+            </p>
+          )}
           {(state || city) && (
             <p className="flex items-center gap-2">
               <MapPin className="h-4 w-4 flex-shrink-0" />
@@ -237,11 +419,83 @@ export function AccountInfoCard({
               <span className="line-clamp-2">{address}</span>
             </p>
           )}
-          {gstin && (
+          {panNumber && (
             <p className="flex items-center gap-2">
-              <FileText className="h-4 w-4 flex-shrink-0" />
-              <span className="font-mono">{gstin}</span>
+              <CreditCard className="h-4 w-4 flex-shrink-0" />
+              <span className="font-mono">{panNumber}</span>
             </p>
+          )}
+          {aadhaarNumber && (
+            <p className="flex items-center gap-2">
+              <Fingerprint className="h-4 w-4 flex-shrink-0" />
+              <span className="font-mono">{maskAadhaar(aadhaarNumber)}</span>
+            </p>
+          )}
+          {/* Registration Numbers Section */}
+          {(gstin || cin || din || tan || iec || fssaiNumber || udyamNumber || shopEstablishmentNumber || ptNumber || trademarkNumber) && (
+            <div className="pt-2 mt-2 border-t border-border space-y-1.5">
+              <p className="text-xs font-medium text-muted-foreground mb-2">Registration Numbers</p>
+              {gstin && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">GSTIN: {gstin}</span>
+                </p>
+              )}
+              {cin && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">CIN: {cin}</span>
+                </p>
+              )}
+              {din && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">DIN: {din}</span>
+                </p>
+              )}
+              {tan && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">TAN: {tan}</span>
+                </p>
+              )}
+              {iec && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">IEC: {iec}</span>
+                </p>
+              )}
+              {fssaiNumber && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">FSSAI: {fssaiNumber}</span>
+                </p>
+              )}
+              {udyamNumber && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">MSME: {udyamNumber}</span>
+                </p>
+              )}
+              {shopEstablishmentNumber && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">Shop Act: {shopEstablishmentNumber}</span>
+                </p>
+              )}
+              {ptNumber && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">PT: {ptNumber}</span>
+                </p>
+              )}
+              {trademarkNumber && (
+                <p className="flex items-center gap-2">
+                  <FileText className="h-3.5 w-3.5 flex-shrink-0" />
+                  <span className="font-mono text-xs">TM: {trademarkNumber}</span>
+                </p>
+              )}
+            </div>
           )}
         </div>
 

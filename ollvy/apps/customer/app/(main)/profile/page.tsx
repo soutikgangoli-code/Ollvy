@@ -91,11 +91,14 @@ function ProfileContent() {
   const [isSaving, setIsSaving] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  // Form state
+  // Form state (registration numbers are auto-filled from orders, not editable)
   const [businessName, setBusinessName] = useState('')
+  const [email, setEmail] = useState('')
+  const [businessType, setBusinessType] = useState('')
   const [state, setState] = useState('')
   const [city, setCity] = useState('')
-  const [gstin, setGstin] = useState('')
+  const [panNumber, setPanNumber] = useState('')
+  const [aadhaarNumber, setAadhaarNumber] = useState('')
 
   // Dashboard data
   const [activeOrders, setActiveOrders] = useState<OrderData[]>([])
@@ -121,9 +124,12 @@ function ProfileContent() {
 
     // Populate form with existing data
     setBusinessName(user.business_name || '')
+    setEmail(user.email || '')
+    setBusinessType(user.business_type || '')
     setState(user.state || '')
     setCity(user.city || '')
-    setGstin(user.gstin || '')
+    setPanNumber(user.pan_number || '')
+    setAadhaarNumber(user.aadhaar_number || '')
 
     // Fetch dashboard data
     fetchDashboardData()
@@ -361,9 +367,12 @@ function ProfileContent() {
         .from('users')
         .update({
           business_name: businessName,
+          email: email || null,
+          business_type: businessType || null,
           state,
           city,
-          gstin,
+          pan_number: panNumber || null,
+          aadhaar_number: aadhaarNumber || null,
         })
         .eq('id', user.id)
 
@@ -388,13 +397,21 @@ function ProfileContent() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  // Calculate profile completeness
+  // Calculate profile completeness (only editable fields count)
   const calculateProfileScore = () => {
     let score = 0
-    if (businessName) score += 30
-    if (state) score += 25
-    if (city) score += 20
-    if (gstin) score += 25
+    const fields = [
+      { value: businessName, weight: 20 },
+      { value: email, weight: 15 },
+      { value: businessType, weight: 15 },
+      { value: state, weight: 15 },
+      { value: city, weight: 10 },
+      { value: panNumber, weight: 15 },
+      { value: aadhaarNumber, weight: 10 },
+    ]
+    fields.forEach(field => {
+      if (field.value) score += field.weight
+    })
     return score
   }
 
@@ -451,6 +468,35 @@ function ProfileContent() {
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="email@example.com"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="businessType">Entity Type</Label>
+              <select
+                id="businessType"
+                value={businessType}
+                onChange={(e) => setBusinessType(e.target.value)}
+                className="flex h-11 w-full rounded-lg border border-border bg-background px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring appearance-none"
+              >
+                <option value="">Select entity type</option>
+                <option value="sole_proprietorship">Sole Proprietorship</option>
+                <option value="partnership">Partnership</option>
+                <option value="pvt_ltd">Private Limited</option>
+                <option value="llp">LLP</option>
+                <option value="opc">One Person Company</option>
+                <option value="not_registered">Not Registered</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="state">State</Label>
               <div className="relative">
                 <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -481,17 +527,27 @@ function ProfileContent() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="gstin">GSTIN (Optional)</Label>
+              <Label htmlFor="panNumber">PAN Number</Label>
               <Input
-                id="gstin"
-                value={gstin}
-                onChange={(e) => setGstin(e.target.value.toUpperCase())}
-                placeholder="22AAAAA0000A1Z5"
-                maxLength={15}
+                id="panNumber"
+                value={panNumber}
+                onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
+                placeholder="ABCDE1234F"
+                maxLength={10}
+                className="font-mono"
               />
-              <p className="text-xs text-muted-foreground">
-                For businesses registered under GST
-              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="aadhaarNumber">Aadhaar Number</Label>
+              <Input
+                id="aadhaarNumber"
+                value={aadhaarNumber}
+                onChange={(e) => setAadhaarNumber(e.target.value.replace(/\D/g, ''))}
+                placeholder="123456789012"
+                maxLength={12}
+                className="font-mono"
+              />
             </div>
 
             <Button onClick={handleSave} disabled={isSaving} className="w-full">
@@ -652,10 +708,25 @@ function ProfileContent() {
           <AccountInfoCard
             businessName={user.business_name}
             phone={user.phone}
+            email={user.email}
+            businessType={user.business_type}
             state={user.state}
             city={user.city}
             address={user.address}
-            gstin={user.gstin}
+            panNumber={user.pan_number}
+            aadhaarNumber={user.aadhaar_number}
+            registrationNumbers={{
+              gstin: user.gstin,
+              cin: user.cin,
+              din: user.din,
+              tan: user.tan,
+              iec: user.iec,
+              fssaiNumber: user.fssai_number,
+              udyamNumber: user.udyam_number,
+              shopEstablishmentNumber: user.shop_establishment_number,
+              ptNumber: user.pt_number,
+              trademarkNumber: user.trademark_number,
+            }}
             isProUser={user.subscription_tier === 'pro'}
             avatarInitial={
               user.business_name?.charAt(0) || user.phone?.charAt(0) || 'U'
@@ -666,10 +737,13 @@ function ProfileContent() {
                 .from('users')
                 .update({
                   business_name: data.businessName,
+                  email: data.email || null,
+                  business_type: data.businessType || null,
                   state: data.state,
                   city: data.city,
                   address: data.address,
-                  gstin: data.gstin,
+                  pan_number: data.panNumber || null,
+                  aadhaar_number: data.aadhaarNumber || null,
                 })
                 .eq('id', user.id)
 

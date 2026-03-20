@@ -454,6 +454,33 @@ export default function OrderDetailPage() {
               Order #{order.order_number} <span className="mx-2 text-muted-foreground/50">|</span> {formatDate(order.created_at)}
             </p>
           </div>
+
+          {/* Continue Setup Button - shown until both questionnaire AND documents are complete */}
+          {(() => {
+            const questionnaireComplete = !!order.questionnaire_completed_at
+            const allDocsUploaded = stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0
+
+            // Don't show if everything is done
+            if (questionnaireComplete && allDocsUploaded) return null
+
+            // Determine where to go
+            const targetPath = !questionnaireComplete
+              ? `/orders/${order.id}/questionnaire`
+              : `/orders/${order.id}/documents`
+
+            const buttonLabel = !questionnaireComplete
+              ? 'Continue Setup'
+              : 'Upload Documents'
+
+            return (
+              <Link href={targetPath}>
+                <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white">
+                  {buttonLabel}
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            )
+          })()}
         </div>
 
         {/* Stats Cards Row */}

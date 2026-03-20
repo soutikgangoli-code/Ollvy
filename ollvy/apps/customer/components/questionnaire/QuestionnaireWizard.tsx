@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo } from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { useForm, FormProvider, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import { QuestionField } from './QuestionField'
 import { useQuestionnaireStore } from '@/lib/stores/questionnaire-store'
 import { createStepSchema } from '@/lib/questionnaire/schemas'
 import type { QuestionnaireFormValues } from '@/lib/questionnaire/types'
+import { shouldShowQuestion } from '@/lib/questionnaire/types'
 import { ArrowLeft, ArrowRight, Loader2, CheckCircle, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -71,6 +72,23 @@ export function QuestionnaireWizard({ orderId }: QuestionnaireWizardProps) {
       methods.reset(stepDefaults)
     }
   }, [currentStep, currentStepData, responses, methods])
+
+  // Watch all form values to handle conditional questions
+  const watchedValues = useWatch({ control: methods.control })
+
+  // Combine watched values with saved responses for dependency checks
+  const allResponses = useMemo(() => ({
+    ...responses,
+    ...watchedValues,
+  }), [responses, watchedValues])
+
+  // Filter questions based on depends_on conditions
+  const visibleQuestions = useMemo(() => {
+    if (!currentStepData) return []
+    return currentStepData.questions.filter((q) =>
+      shouldShowQuestion(q, allResponses)
+    )
+  }, [currentStepData, allResponses])
 
   // Handle form submission for current step
   const onSubmit = async (data: QuestionnaireFormValues) => {
@@ -200,7 +218,7 @@ export function QuestionnaireWizard({ orderId }: QuestionnaireWizardProps) {
 
               {/* Questions */}
               <div className="space-y-6">
-                {currentStepData?.questions.map((question) => (
+                {visibleQuestions.map((question) => (
                   <QuestionField key={question.id} question={question} />
                 ))}
               </div>

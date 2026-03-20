@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
@@ -49,10 +49,29 @@ export function DocumentUploadWizard({
   onComplete,
   onPreview,
 }: DocumentUploadWizardProps) {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  // Start at the first document that hasn't been uploaded yet
+  const getFirstIncompleteIndex = () => {
+    const index = documents.findIndex(d => !d.uploaded_at)
+    // If all uploaded, start at last one (for review/replace)
+    return index === -1 ? Math.max(0, documents.length - 1) : index
+  }
+
+  const [currentIndex, setCurrentIndex] = useState(() => getFirstIncompleteIndex())
   const [isUploading, setIsUploading] = useState(false)
   const [uploadedInSession, setUploadedInSession] = useState<Set<string>>(new Set())
   const [showCompletion, setShowCompletion] = useState(false)
+  const hasInitialized = useRef(false)
+
+  // Update index when documents load/change (only on first meaningful load)
+  useEffect(() => {
+    if (documents.length > 0 && !hasInitialized.current) {
+      hasInitialized.current = true
+      const firstIncomplete = getFirstIncompleteIndex()
+      if (firstIncomplete !== currentIndex) {
+        setCurrentIndex(firstIncomplete)
+      }
+    }
+  }, [documents])
 
   const currentDoc = documents[currentIndex]
   const totalDocs = documents.length

@@ -6,9 +6,24 @@ export interface User {
   id: string
   auth_user_id: string
   phone: string
+  email?: string
   business_name?: string
-  business_type?: string
+  business_type?: 'sole_proprietorship' | 'partnership' | 'pvt_ltd' | 'llp' | 'opc' | 'not_registered'
+  // Identity documents
+  pan_number?: string
+  aadhaar_number?: string
+  // Registration numbers (auto-filled from completed orders)
   gstin?: string
+  cin?: string
+  din?: string
+  tan?: string
+  iec?: string
+  fssai_number?: string
+  udyam_number?: string
+  shop_establishment_number?: string
+  pt_number?: string
+  trademark_number?: string
+  // Location
   state?: string
   city?: string
   address?: string

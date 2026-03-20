@@ -30,6 +30,49 @@ export interface QuestionDependency {
   question_key: string
   value?: string
   values?: string[]
+  contains?: string // For multiselect fields - check if array contains value
+}
+
+/**
+ * Check if a question should be shown based on its depends_on condition
+ */
+export function shouldShowQuestion(
+  question: { depends_on?: QuestionDependency },
+  responses: Record<string, unknown>
+): boolean {
+  if (!question.depends_on) return true
+
+  const { question_key, value, values, contains } = question.depends_on
+  const currentValue = responses[question_key]
+
+  // No response yet for dependency - hide the dependent question
+  if (currentValue === undefined || currentValue === null || currentValue === '') {
+    return false
+  }
+
+  // Check "contains" for multiselect fields
+  if (contains !== undefined) {
+    if (Array.isArray(currentValue)) {
+      return currentValue.includes(contains)
+    }
+    return currentValue === contains
+  }
+
+  // Check single value match
+  if (value !== undefined) {
+    return currentValue === value
+  }
+
+  // Check multiple values (OR logic)
+  if (values !== undefined && values.length > 0) {
+    if (Array.isArray(currentValue)) {
+      // For multiselect - check if any of the current values match any of the required values
+      return currentValue.some((v) => values.includes(v))
+    }
+    return values.includes(currentValue as string)
+  }
+
+  return true
 }
 
 export interface ServiceQuestion {
