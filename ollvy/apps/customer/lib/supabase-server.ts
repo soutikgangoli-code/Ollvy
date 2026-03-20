@@ -19,8 +19,8 @@ function createServiceRoleClient(): SupabaseClient | null {
 
 export const supabaseServer = createServiceRoleClient()
 
-export function createServerSupabase() {
-  const cookieStore = cookies()
+export async function createServerSupabase() {
+  const cookieStore = await cookies()
 
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -50,7 +50,7 @@ export function createServerSupabase() {
 }
 
 export async function getUser() {
-  const supabase = createServerSupabase()
+  const supabase = await createServerSupabase()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) return null
@@ -66,7 +66,7 @@ export async function getUser() {
 }
 
 export async function getSession() {
-  const supabase = createServerSupabase()
+  const supabase = await createServerSupabase()
   const { data: { session } } = await supabase.auth.getSession()
   return session
 }
