@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { IndianRupee, FileText, ClipboardList, BarChart2, Check, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -136,9 +136,30 @@ const trustCards = [
 ]
 
 export function TrustLayer() {
-  // Max index is trustCards.length - 2 (so we always show 2 cards)
-  const maxIndex = trustCards.length - 2
   const [currentIndex, setCurrentIndex] = useState(0)
+  // On mobile show 1 card, on desktop show 2
+  const [visibleCount, setVisibleCount] = useState(2)
+
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      // md breakpoint is 768px
+      setVisibleCount(window.innerWidth < 768 ? 1 : 2)
+    }
+
+    updateVisibleCount()
+    window.addEventListener('resize', updateVisibleCount)
+    return () => window.removeEventListener('resize', updateVisibleCount)
+  }, [])
+
+  // Max index depends on how many cards we show at once
+  const maxIndex = trustCards.length - visibleCount
+
+  // Clamp currentIndex if it becomes invalid after resize
+  useEffect(() => {
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex)
+    }
+  }, [currentIndex, maxIndex])
 
   const goNext = useCallback(() => {
     setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0))
@@ -179,11 +200,8 @@ export function TrustLayer() {
     touchEndX.current = null
   }, [goNext, goPrev])
 
-  // Get two visible cards (current and current+1)
-  const visibleCards = [
-    trustCards[currentIndex],
-    trustCards[currentIndex + 1],
-  ]
+  // Get visible cards based on screen size
+  const visibleCards = trustCards.slice(currentIndex, currentIndex + visibleCount)
 
   return (
     <section className="relative bg-card py-16 overflow-hidden">
