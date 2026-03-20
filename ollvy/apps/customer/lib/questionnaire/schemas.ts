@@ -162,10 +162,15 @@ function createFileSchema(validation: QuestionValidation, required: boolean): z.
 export function createStepSchema(questions: ServiceQuestion[]): z.ZodObject<Record<string, z.ZodTypeAny>> {
   const shape: Record<string, z.ZodTypeAny> = {}
 
+  // TESTING MODE: All fields are optional for now
+  // TODO: Remove this flag when going to production
+  const TESTING_MODE = true
+
   for (const question of questions) {
     // If question has depends_on, make it optional in schema
     // It will be validated based on visibility at runtime
-    const forceOptional = !!question.depends_on
+    // In testing mode, all fields are optional
+    const forceOptional = TESTING_MODE || !!question.depends_on
     shape[question.question_key] = createQuestionSchema(question, forceOptional)
   }
 
