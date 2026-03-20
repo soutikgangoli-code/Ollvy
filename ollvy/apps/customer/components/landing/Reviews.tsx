@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -223,6 +223,37 @@ export function Reviews() {
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1))
   }, [maxIndex])
 
+  // Touch swipe handling for mobile
+  const touchStartX = useRef<number | null>(null)
+  const touchEndX = useRef<number | null>(null)
+  const minSwipeDistance = 50
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = null
+    touchStartX.current = e.targetTouches[0].clientX
+  }, [])
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX
+  }, [])
+
+  const onTouchEnd = useCallback(() => {
+    if (!touchStartX.current || !touchEndX.current) return
+
+    const distance = touchStartX.current - touchEndX.current
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      goRight()
+    } else if (isRightSwipe) {
+      goLeft()
+    }
+
+    touchStartX.current = null
+    touchEndX.current = null
+  }, [goLeft, goRight])
+
   const visibleTestimonials = TESTIMONIALS.slice(currentIndex, currentIndex + visibleCount)
 
   return (
@@ -292,7 +323,12 @@ export function Reviews() {
           </div>
 
           {/* Cards Container */}
-          <div className="overflow-hidden px-2">
+          <div
+            className="overflow-hidden px-2 touch-pan-y"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             <div
               className="grid gap-6 transition-transform duration-300 ease-out"
               style={{
