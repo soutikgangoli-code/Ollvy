@@ -77,19 +77,23 @@ export default function CheckoutPage() {
     orderNumber: string
   } | null>(null)
 
+  // Track if we've shown the initial auth prompt (don't keep re-opening if user dismisses)
+  const [hasShownAuthPrompt, setHasShownAuthPrompt] = useState(false)
+
   // Fetch service data regardless of auth status (public data)
   useEffect(() => {
     if (!isHydrated) return
     fetchService()
   }, [serviceId, isHydrated])
 
-  // Open auth modal if user is not logged in (after hydration)
+  // Open auth modal once on initial load if user is not logged in
   useEffect(() => {
     if (!isHydrated) return
-    if (!user && !isAuthModalOpen) {
+    if (!user && !hasShownAuthPrompt) {
       openAuthModal()
+      setHasShownAuthPrompt(true)
     }
-  }, [user, isHydrated, openAuthModal, isAuthModalOpen])
+  }, [user, isHydrated, hasShownAuthPrompt, openAuthModal])
 
   // Initialize variant and addons from URL params or service defaults after service loads
   useEffect(() => {
@@ -263,7 +267,13 @@ export default function CheckoutPage() {
   }
 
   const handleCheckout = async () => {
-    if (!service || !user || !priceBreakdown) return
+    if (!service || !priceBreakdown) return
+
+    // Require auth to checkout
+    if (!user) {
+      openAuthModal()
+      return
+    }
 
     setIsProcessing(true)
     try {
