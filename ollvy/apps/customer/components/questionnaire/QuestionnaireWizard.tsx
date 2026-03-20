@@ -17,9 +17,10 @@ import { cn } from '@/lib/utils'
 
 interface QuestionnaireWizardProps {
   orderId: string
+  forceEdit?: boolean
 }
 
-export function QuestionnaireWizard({ orderId }: QuestionnaireWizardProps) {
+export function QuestionnaireWizard({ orderId, forceEdit = false }: QuestionnaireWizardProps) {
   const router = useRouter()
   const {
     steps,
@@ -40,8 +41,8 @@ export function QuestionnaireWizard({ orderId }: QuestionnaireWizardProps) {
 
   // Load questionnaire on mount
   useEffect(() => {
-    loadQuestionnaire(orderId)
-  }, [orderId, loadQuestionnaire])
+    loadQuestionnaire(orderId, forceEdit)
+  }, [orderId, forceEdit, loadQuestionnaire])
 
   // Get current step data
   const currentStepData = useMemo(() => {

@@ -1,0 +1,1 @@
+[  104468ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed:  @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/use-websocket.js:41

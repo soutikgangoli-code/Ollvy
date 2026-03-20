@@ -1,0 +1,20 @@
+[ 1164635ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1164648ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1167573ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 1170450ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1170462ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1175720ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 1177058ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1177070ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1793666ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 1796226ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1796241ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1800705ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 1802714ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1802727ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1811466ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
+[ 1811487ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1811500ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1813687ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[ 1815973ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[ 1815986ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0

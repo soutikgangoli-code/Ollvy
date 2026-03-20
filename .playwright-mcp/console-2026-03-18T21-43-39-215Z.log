@@ -1,0 +1,8 @@
+[  345993ms] Invalid or unexpected token
+[  353490ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  353504ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  369375ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  369389ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  373694ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109
+[  376552ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
+[  376565ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0

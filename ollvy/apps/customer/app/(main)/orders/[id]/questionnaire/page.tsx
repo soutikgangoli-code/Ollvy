@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -23,7 +23,9 @@ interface OrderData {
 export default function QuestionnairePage() {
   const params = useParams()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const orderId = params.id as string
+  const forceEdit = searchParams.get('edit') === 'true'
   const { user, isHydrated } = useAuthStore()
 
   const [order, setOrder] = useState<OrderData | null>(null)
@@ -143,7 +145,7 @@ export default function QuestionnairePage() {
       </div>
 
       {/* Questionnaire Wizard */}
-      <QuestionnaireWizard orderId={orderId} />
+      <QuestionnaireWizard orderId={orderId} forceEdit={forceEdit} />
 
       {/* Help Section */}
       <div className="mt-8 p-5 bg-muted/30 rounded-xl">

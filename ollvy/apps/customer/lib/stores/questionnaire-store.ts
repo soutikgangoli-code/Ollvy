@@ -167,9 +167,35 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         // Sort steps by step number
         steps.sort((a, b) => a.stepNumber - b.stepNumber)
 
-        // Determine current step (resume from saved progress)
-        const savedStep = orderData.questionnaire_step || 0
-        const currentStep = savedStep > 0 && savedStep <= steps.length ? savedStep : 1
+        // Determine current step - find first step with unanswered questions
+        // A step is "incomplete" if it has any required question without a response
+        // or any question without a response (for better UX, start where user left off)
+        let currentStep = 1
+        for (const step of steps) {
+          const hasUnansweredQuestions = step.questions.some(q => {
+            const response = responses[q.question_key]
+            // Check if this question has no meaningful response
+            if (response === undefined || response === null || response === '') {
+              return true
+            }
+            // For arrays (multiselect), check if empty
+            if (Array.isArray(response) && response.length === 0) {
+              return true
+            }
+            return false
+          })
+
+          if (hasUnansweredQuestions) {
+            currentStep = step.stepNumber
+            break
+          }
+        }
+
+        // If all steps have answers, start from step 1 for review
+        if (currentStep === 1 && steps.length > 0) {
+          // Double-check: if first step is fully answered, user might want to review
+          // Keep at step 1 for now - they can navigate
+        }
 
         set({
           isLoading: false,

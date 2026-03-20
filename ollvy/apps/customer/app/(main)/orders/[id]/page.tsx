@@ -700,7 +700,7 @@ export default function OrderDetailPage() {
 
                           {/* Always show "Edit answers" for completed questions stage */}
                           {isQuestionsStage && stage.isCompleted && (
-                            <Link href={`/orders/${order.id}/questionnaire`}>
+                            <Link href={`/orders/${order.id}/questionnaire?edit=true`}>
                               <button className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground hover:bg-muted/80 transition-colors cursor-pointer">
                                 Edit answers
                               </button>
