@@ -575,10 +575,21 @@ export default function OrderDetailPage() {
                   <Clock className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.daysRemaining}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Days Left - {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                  </p>
+                  {stats.customerSetupComplete ? (
+                    <>
+                      <p className="text-2xl font-semibold text-foreground font-mono">{stats.daysRemaining}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Days Left - {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-lg font-semibold text-muted-foreground">Paused</p>
+                      <p className="text-xs text-muted-foreground">
+                        Complete setup to start
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -640,9 +651,20 @@ export default function OrderDetailPage() {
 
               {/* Expected Completion */}
               <div className="pt-3 border-t border-border">
-                <p className="text-sm text-muted-foreground">
-                  Expected completion: {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                </p>
+                {stats.customerSetupComplete ? (
+                  <p className="text-sm text-muted-foreground">
+                    Expected completion: {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  </p>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                      SLA Paused
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      Complete setup to start {stats.slaDays}-day SLA
+                    </span>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
