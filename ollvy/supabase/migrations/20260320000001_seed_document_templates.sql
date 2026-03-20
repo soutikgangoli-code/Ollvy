@@ -211,30 +211,6 @@ CROSS JOIN (VALUES
 WHERE sp.slug = 'cloud-kitchen-setup';
 
 -- =============================================================================
--- Also add to some other common services if they exist
+-- Note: FSSAI License document templates skipped - requires 3 separate services
+-- (Basic, State, Central) to be created in the database first
 -- =============================================================================
-
--- FSSAI License (if exists as standalone service)
-INSERT INTO service_document_templates (service_package_id, document_key, document_label, description, stage_key, is_required, display_order, tips, template_url)
-SELECT
-  sp.id,
-  dt.document_key,
-  dt.document_label,
-  dt.description,
-  dt.stage_key,
-  dt.is_required,
-  dt.display_order,
-  dt.tips,
-  dt.template_url
-FROM service_packages sp
-CROSS JOIN (VALUES
-  ('pan_card', 'PAN Card', 'Business or proprietor PAN', 'doc_collection', true, 1, ARRAY['Clear, legible copy'], NULL),
-  ('aadhaar', 'Aadhaar Card', 'Of authorized signatory', 'doc_collection', true, 2, ARRAY['OTP-linked required'], NULL),
-  ('photograph', 'Passport Photograph', 'Recent photograph', 'doc_collection', true, 3, ARRAY['White background'], NULL),
-  ('constitution_doc', 'Constitution Document', 'Based on business type', 'doc_collection', true, 4, ARRAY['COI, Partnership Deed, etc.'], NULL),
-  ('kitchen_layout', 'Kitchen/Food Area Layout', 'Floor plan of premises', 'doc_collection', true, 5, ARRAY['Show equipment placement'], NULL),
-  ('water_test_report', 'Water Test Report', 'Potable water certificate', 'doc_collection', true, 6, ARRAY['From approved lab'], NULL),
-  ('noc_landlord', 'NOC from Landlord', 'If premises is rented', 'doc_collection', false, 7, ARRAY['Permission to run food business'], NULL)
-) AS dt(document_key, document_label, description, stage_key, is_required, display_order, tips, template_url)
-WHERE sp.slug = 'fssai-license'
-ON CONFLICT (service_package_id, document_key) DO NOTHING;

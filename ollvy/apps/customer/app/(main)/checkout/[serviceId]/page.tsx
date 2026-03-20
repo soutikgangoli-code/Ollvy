@@ -77,16 +77,19 @@ export default function CheckoutPage() {
     orderNumber: string
   } | null>(null)
 
+  // Fetch service data regardless of auth status (public data)
   useEffect(() => {
     if (!isHydrated) return
-    if (!user) {
-      if (!isAuthModalOpen) {
-        openAuthModal()
-      }
-      return
-    }
     fetchService()
-  }, [serviceId, user, isHydrated, openAuthModal, isAuthModalOpen])
+  }, [serviceId, isHydrated])
+
+  // Open auth modal if user is not logged in (after hydration)
+  useEffect(() => {
+    if (!isHydrated) return
+    if (!user && !isAuthModalOpen) {
+      openAuthModal()
+    }
+  }, [user, isHydrated, openAuthModal, isAuthModalOpen])
 
   // Initialize variant and addons from URL params or service defaults after service loads
   useEffect(() => {

@@ -154,27 +154,9 @@ WHERE sp.slug = 'trademark-registration'
 ON CONFLICT (service_package_id, document_key) DO NOTHING;
 
 -- =============================================================================
--- 7. Seed FSSAI License work documents
+-- 7. Note: FSSAI License work documents skipped - requires 3 separate services
+-- (Basic, State, Central) to be created in the database first
 -- =============================================================================
-
-INSERT INTO service_work_document_templates (service_package_id, stage_key, direction, document_key, document_label, description, display_order)
-SELECT
-  sp.id,
-  t.stage_key,
-  t.direction::work_document_direction,
-  t.document_key,
-  t.document_label,
-  t.description,
-  t.display_order
-FROM service_packages sp
-CROSS JOIN (VALUES
-  ('application_filed', 'to_customer', 'fssai_application_draft', 'FSSAI License Application Draft', 'Review your FSSAI license application before portal submission. Verify name, address, food categories, and product list.', 1),
-  ('inspection_scheduled', 'from_customer', 'inspection_readiness_confirmation', 'Inspection Readiness Confirmation', 'Confirm that your premises is ready for the FSSAI inspector''s visit. We will brief you on what to have ready - the inspector checks premises hygiene, equipment, storage, and your FSMS records.', 2),
-  ('inspection_scheduled', 'from_customer', 'inspection_query_response', 'Inspection Query / Deficiency Response', 'If the inspector raises deficiencies or requests additional information post-visit, upload the compliance documents here. Common: pest control records, medical fitness certificates, updated FSMS documents.', 3),
-  ('license_issued', 'to_customer', 'fssai_license_certificate', 'FSSAI License Certificate', 'Official FSSAI License with 14-digit license number. Must be displayed prominently at the premises.', 4)
-) AS t(stage_key, direction, document_key, document_label, description, display_order)
-WHERE sp.slug = 'fssai-license'
-ON CONFLICT (service_package_id, document_key) DO NOTHING;
 
 -- =============================================================================
 -- 8. Seed Shop & Establishment work documents
