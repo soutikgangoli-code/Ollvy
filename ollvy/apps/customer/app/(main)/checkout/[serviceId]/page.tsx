@@ -486,8 +486,8 @@ export default function CheckoutPage() {
 
   const canSubmit = priceBreakdown && priceBreakdown.total > 0
 
-  // Loading state - also check isHydrated to prevent flicker during auth hydration
-  if (isLoading || !isHydrated) {
+  // Show loading state while waiting for hydration (very brief)
+  if (!isHydrated) {
     return (
       <div className="container py-12 max-w-6xl">
         <Skeleton className="h-8 w-32 mb-8" />
@@ -503,8 +503,8 @@ export default function CheckoutPage() {
     )
   }
 
-  // Error state
-  if (error || !service) {
+  // Error state (only after loading completes)
+  if (!isLoading && (error || !service)) {
     return (
       <div className="container py-20 text-center">
         <h1 className="text-2xl font-semibold text-foreground mb-4">Service Not Found</h1>
@@ -521,15 +521,25 @@ export default function CheckoutPage() {
       <div className="container py-8 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
-          <Link
-            href={`/services/${service.slug}`}
-            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Service
-          </Link>
-          <h1 className="text-2xl font-semibold text-foreground">Checkout</h1>
-          <p className="text-muted-foreground mt-1">{service.name}</p>
+          {isLoading || !service ? (
+            <>
+              <Skeleton className="h-5 w-28 mb-4" />
+              <Skeleton className="h-8 w-32 mb-2" />
+              <Skeleton className="h-5 w-48" />
+            </>
+          ) : (
+            <>
+              <Link
+                href={`/services/${service.slug}`}
+                className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Service
+              </Link>
+              <h1 className="text-2xl font-semibold text-foreground">Checkout</h1>
+              <p className="text-muted-foreground mt-1">{service.name}</p>
+            </>
+          )}
         </div>
 
         {/* Two-column layout */}
@@ -537,7 +547,7 @@ export default function CheckoutPage() {
           {/* Left column - Main flow */}
           <div className="space-y-8">
             {/* Pre-cursor answers summary (if present) */}
-            {Object.keys(preCursorAnswers).length > 0 && (
+            {service && Object.keys(preCursorAnswers).length > 0 && (
               <PreCursorSummaryCard
                 answers={preCursorAnswers}
                 serviceSlug={service.slug}
@@ -548,10 +558,17 @@ export default function CheckoutPage() {
             <CheckoutStepper currentStep={1} />
 
             {/* Step 2: Filing Timeline */}
-            <FilingTimeline
-              steps={service.workflow_stages}
-              serviceName={service.name}
-            />
+            {isLoading || !service ? (
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-32" />
+                <Skeleton className="h-48 rounded-lg" />
+              </div>
+            ) : (
+              <FilingTimeline
+                steps={service.workflow_stages}
+                serviceName={service.name}
+              />
+            )}
 
             {/* Step 3: Documents Required */}
             <div className="space-y-4">
@@ -562,35 +579,46 @@ export default function CheckoutPage() {
                   Keep these ready - your CA will guide you through each one
                 </p>
               </div>
-              <DocumentChecklist
-                serviceSlug={service.slug}
-                serviceName={service.name}
-                showSectionHeader={false}
-                customHeading=""
-              />
+              {isLoading || !service ? (
+                <Skeleton className="h-40 rounded-lg" />
+              ) : (
+                <DocumentChecklist
+                  serviceSlug={service.slug}
+                  serviceName={service.name}
+                  showSectionHeader={false}
+                  customHeading=""
+                />
+              )}
             </div>
 
             {/* Step 4: Scope of Work */}
-            <ScopeOfWorkCard
-              serviceName={service.name}
-              scopeIncluded={service.scope_included || [
-                'Name availability check via MCA RUN portal',
-                'Drafting of MoA and AoA',
-                'DSC for up to 2 directors',
-                'SPICe+ form filing with MCA',
-                'Certificate of Incorporation (CIN)',
-                'PAN + TAN application',
-              ]}
-              scopeExcluded={service.scope_excluded || [
-                'GST Registration',
-                'Trademark registration',
-                'Registered office address',
-                'Post-incorporation compliance',
-              ]}
-            />
+            {isLoading || !service ? (
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-40" />
+                <Skeleton className="h-64 rounded-lg" />
+              </div>
+            ) : (
+              <ScopeOfWorkCard
+                serviceName={service.name}
+                scopeIncluded={service.scope_included || [
+                  'Name availability check via MCA RUN portal',
+                  'Drafting of MoA and AoA',
+                  'DSC for up to 2 directors',
+                  'SPICe+ form filing with MCA',
+                  'Certificate of Incorporation (CIN)',
+                  'PAN + TAN application',
+                ]}
+                scopeExcluded={service.scope_excluded || [
+                  'GST Registration',
+                  'Trademark registration',
+                  'Registered office address',
+                  'Post-incorporation compliance',
+                ]}
+              />
+            )}
 
             {/* Step 5: Add-ons (only show if service has configurable addons) */}
-            {addonsForDisplay.length > 0 && (
+            {!isLoading && service && addonsForDisplay.length > 0 && (
               <AddOnsSection
                 addons={addonsForDisplay}
                 selectedIds={selectedAddonIds}
@@ -602,6 +630,47 @@ export default function CheckoutPage() {
           {/* Right column - Sticky order summary (desktop) */}
           <div className="hidden lg:block">
             <div className="sticky top-20">
+              {isLoading || !service ? (
+                <Skeleton className="h-[500px] rounded-lg" />
+              ) : (
+                <OrderSummarySidebar
+                  serviceName={service.name}
+                  serviceDisplayName={selectedVariantData?.sublabel}
+                  serviceFee={priceBreakdown?.serviceFee || 0}
+                  govtFees={priceBreakdown?.govtFees || 0}
+                  addons={selectedAddons}
+                  gstRate={priceBreakdown?.gstRate || 18}
+                  gstAmount={priceBreakdown?.gst || 0}
+                  total={priceBreakdown?.total || 0}
+                  promoInput={promoCode}
+                  onPromoChange={setPromoCode}
+                  onApplyPromo={handleApplyPromo}
+                  onRemovePromo={handleRemovePromo}
+                  promoLoading={promoLoading}
+                  promoError={promoError}
+                  promoApplied={promoApplied}
+                  isProcessing={isProcessing}
+                  canSubmit={canSubmit || false}
+                  onSubmit={handleCheckout}
+                  slaDays={service.sla_working_days || 15}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile bottom bar */}
+      {service && (
+        <div className="lg:hidden">
+          <MobileBottomBarComponent
+            total={priceBreakdown?.total || 0}
+            isProcessing={isProcessing}
+            canSubmit={canSubmit || false}
+            onSubmit={handleCheckout}
+            isSheetOpen={isSheetOpen}
+            setIsSheetOpen={setIsSheetOpen}
+            orderSummary={
               <OrderSummarySidebar
                 serviceName={service.name}
                 serviceDisplayName={selectedVariantData?.sublabel}
@@ -621,54 +690,19 @@ export default function CheckoutPage() {
                 isProcessing={isProcessing}
                 canSubmit={canSubmit || false}
                 onSubmit={handleCheckout}
+                isMobile
                 slaDays={service.sla_working_days || 15}
               />
-            </div>
-          </div>
+            }
+          />
         </div>
-      </div>
-
-      {/* Mobile bottom bar */}
-      <div className="lg:hidden">
-        <MobileBottomBarComponent
-          total={priceBreakdown?.total || 0}
-          isProcessing={isProcessing}
-          canSubmit={canSubmit || false}
-          onSubmit={handleCheckout}
-          isSheetOpen={isSheetOpen}
-          setIsSheetOpen={setIsSheetOpen}
-          orderSummary={
-            <OrderSummarySidebar
-              serviceName={service.name}
-              serviceDisplayName={selectedVariantData?.sublabel}
-              serviceFee={priceBreakdown?.serviceFee || 0}
-              govtFees={priceBreakdown?.govtFees || 0}
-              addons={selectedAddons}
-              gstRate={priceBreakdown?.gstRate || 18}
-              gstAmount={priceBreakdown?.gst || 0}
-              total={priceBreakdown?.total || 0}
-              promoInput={promoCode}
-              onPromoChange={setPromoCode}
-              onApplyPromo={handleApplyPromo}
-              onRemovePromo={handleRemovePromo}
-              promoLoading={promoLoading}
-              promoError={promoError}
-              promoApplied={promoApplied}
-              isProcessing={isProcessing}
-              canSubmit={canSubmit || false}
-              onSubmit={handleCheckout}
-              isMobile
-              slaDays={service.sla_working_days || 15}
-            />
-          }
-        />
-      </div>
+      )}
 
       {/* Razorpay Script */}
       <script src="https://checkout.razorpay.com/v1/checkout.js" async />
 
       {/* Success Modal */}
-      {successModal && (
+      {successModal && service && (
         <PaymentSuccessModal
           isOpen={successModal.isOpen}
           orderNumber={successModal.orderNumber}
