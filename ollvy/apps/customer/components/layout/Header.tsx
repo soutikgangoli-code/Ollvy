@@ -76,7 +76,7 @@ export function Header() {
             id: s.id,
             name: s.name,
             slug: s.slug,
-            category_name: (s.service_categories as { name: string })?.name || '',
+            category_name: (s.service_categories as { name: string }[] | null)?.[0]?.name || '',
           })))
         }
       } catch (error) {
