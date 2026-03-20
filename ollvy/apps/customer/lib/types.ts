@@ -17,6 +17,7 @@ export interface WorkflowDisplayStage {
   visual?: string
   milestone?: string
   isCompletion?: boolean
+  stage_key?: string // Added by Step 1d migration for work documents filtering
 }
 
 export interface ServiceAddon {
