@@ -12,26 +12,40 @@ import { useQuestionnaireStore } from '@/lib/stores/questionnaire-store'
 import { createStepSchema } from '@/lib/questionnaire/schemas'
 import type { QuestionnaireFormValues } from '@/lib/questionnaire/types'
 import { shouldShowQuestion } from '@/lib/questionnaire/types'
-import { ArrowLeft, ArrowRight, Loader2, CheckCircle, Sparkles } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Loader2, CheckCircle, Sparkles, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface QuestionnaireWizardProps {
-  orderId: string
+  orderId?: string                    // optional - not available in pre_payment mode
+  serviceId?: string                  // required in pre_payment mode
+  serviceSlug?: string                // required in pre_payment mode
   forceEdit?: boolean
+  mode?: 'pre_payment' | 'post_payment'  // default: 'post_payment'
+  onComplete?: (answers: Record<string, unknown>) => void  // required in pre_payment mode
 }
 
-export function QuestionnaireWizard({ orderId, forceEdit = false }: QuestionnaireWizardProps) {
+export function QuestionnaireWizard({
+  orderId,
+  serviceId,
+  serviceSlug,
+  forceEdit = false,
+  mode = 'post_payment',
+  onComplete,
+}: QuestionnaireWizardProps) {
   const router = useRouter()
   const {
     steps,
     currentStep,
     totalSteps,
     responses,
+    prePaymentResponses,
+    prePaymentQuestions,
     isLoading,
     isSaving,
     isCompleted,
     error,
     loadQuestionnaire,
+    loadPrePaymentQuestionnaire,
     nextStep,
     prevStep,
     saveStepResponses,
@@ -41,8 +55,12 @@ export function QuestionnaireWizard({ orderId, forceEdit = false }: Questionnair
 
   // Load questionnaire on mount
   useEffect(() => {
-    loadQuestionnaire(orderId, forceEdit)
-  }, [orderId, forceEdit, loadQuestionnaire])
+    if (mode === 'pre_payment' && serviceId && serviceSlug) {
+      loadPrePaymentQuestionnaire(serviceId, serviceSlug)
+    } else if (orderId) {
+      loadQuestionnaire(orderId, forceEdit)
+    }
+  }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadQuestionnaire, loadPrePaymentQuestionnaire])
 
   // Get current step data
   const currentStepData = useMemo(() => {
@@ -100,10 +118,16 @@ export function QuestionnaireWizard({ orderId, forceEdit = false }: Questionnair
     if (!saved) return
 
     if (isLastStep) {
-      // Complete questionnaire and redirect
-      const completed = await completeQuestionnaire()
-      if (completed) {
-        router.push(`/orders/${orderId}/documents`)
+      if (mode === 'pre_payment') {
+        // In pre_payment mode, call onComplete with all answers
+        const allAnswers = { ...responses, ...data }
+        onComplete?.(allAnswers)
+      } else {
+        // Complete questionnaire and redirect
+        const completed = await completeQuestionnaire()
+        if (completed && orderId) {
+          router.push(`/orders/${orderId}/documents`)
+        }
       }
     } else {
       // Go to next step
@@ -142,7 +166,13 @@ export function QuestionnaireWizard({ orderId, forceEdit = false }: Questionnair
     return (
       <div className="rounded-xl border border-destructive/50 bg-destructive/5 p-8 text-center">
         <p className="text-destructive mb-4">{error}</p>
-        <Button onClick={() => loadQuestionnaire(orderId)}>
+        <Button onClick={() => {
+          if (mode === 'pre_payment' && serviceId && serviceSlug) {
+            loadPrePaymentQuestionnaire(serviceId, serviceSlug)
+          } else if (orderId) {
+            loadQuestionnaire(orderId)
+          }
+        }}>
           Try Again
         </Button>
       </div>
@@ -176,6 +206,14 @@ export function QuestionnaireWizard({ orderId, forceEdit = false }: Questionnair
 
   // No questions configured
   if (steps.length === 0) {
+    // In pre_payment mode with no questions, call onComplete with empty answers
+    if (mode === 'pre_payment') {
+      // This shouldn't happen normally - means service has no pre-payment questions
+      // Call onComplete to proceed to checkout
+      onComplete?.({})
+      return null
+    }
+
     return (
       <div className="rounded-xl border border-border bg-card p-8 text-center">
         <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
@@ -184,7 +222,7 @@ export function QuestionnaireWizard({ orderId, forceEdit = false }: Questionnair
         <p className="text-muted-foreground mb-4">
           No setup questions required for this service.
         </p>
-        <Button onClick={() => router.push(`/orders/${orderId}/documents`)}>
+        <Button onClick={() => orderId && router.push(`/orders/${orderId}/documents`)}>
           Continue to Documents
         </Button>
       </div>
@@ -193,8 +231,42 @@ export function QuestionnaireWizard({ orderId, forceEdit = false }: Questionnair
 
   const isLastStep = currentStep === totalSteps
 
+  // Check if we have pre-payment responses to display (in post_payment mode only)
+  const hasPrePaymentAnswers = mode === 'post_payment' && Object.keys(prePaymentResponses).length > 0
+
   return (
     <div className="space-y-6">
+      {/* Pre-payment answers summary (only in post_payment mode) */}
+      {hasPrePaymentAnswers && (
+        <div className="rounded-xl border border-[hsl(var(--ollvy-green))]/20 bg-[hsl(var(--ollvy-green))]/5 p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <CheckCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
+            <h3 className="font-semibold text-foreground text-sm">Confirmed Before Payment</h3>
+          </div>
+          <div className="space-y-2">
+            {Object.entries(prePaymentResponses).map(([key, value]) => {
+              // Find the question to get its label
+              const question = prePaymentQuestions.find(q => q.question_key === key)
+              const label = question?.question_label || key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+
+              // Format the value for display
+              let displayValue = String(value)
+              if (question?.options && Array.isArray(question.options)) {
+                const option = question.options.find((o: { value: string; label: string }) => o.value === value)
+                if (option) displayValue = option.label
+              }
+
+              return (
+                <div key={key} className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">{label}</span>
+                  <span className="font-medium text-foreground">{displayValue}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Progress */}
       <QuestionnaireProgress
         currentStep={currentStep}
@@ -241,13 +313,20 @@ export function QuestionnaireWizard({ orderId, forceEdit = false }: Questionnair
                   {isSaving ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      Saving...
+                      {mode === 'pre_payment' ? 'Processing...' : 'Saving...'}
                     </>
                   ) : isLastStep ? (
-                    <>
-                      Complete
-                      <CheckCircle className="h-4 w-4" />
-                    </>
+                    mode === 'pre_payment' ? (
+                      <>
+                        See My Price
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    ) : (
+                      <>
+                        Complete
+                        <CheckCircle className="h-4 w-4" />
+                      </>
+                    )
                   ) : (
                     <>
                       Next

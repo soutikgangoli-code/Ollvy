@@ -7,14 +7,20 @@ import type {
 } from '../questionnaire/types'
 import { STEP_TITLES, DEFAULT_STEP_TITLES } from '../questionnaire/types'
 
+type QuestionnaireMode = 'pre_payment' | 'post_payment'
+
 interface QuestionnaireState {
   // Data
   orderId: string | null
+  serviceId: string | null
   serviceSlug: string | null
   serviceName: string | null
   questions: ServiceQuestion[]
   steps: QuestionnaireStep[]
   responses: QuestionnaireFormValues
+  prePaymentResponses: QuestionnaireFormValues  // Pre-cursor answers (for display in post_payment mode)
+  prePaymentQuestions: ServiceQuestion[]  // Pre-cursor questions (for labels in summary card)
+  mode: QuestionnaireMode
 
   // UI state
   currentStep: number
@@ -28,6 +34,7 @@ interface QuestionnaireState {
 interface QuestionnaireActions {
   // Initialize
   loadQuestionnaire: (orderId: string, forceEdit?: boolean) => Promise<void>
+  loadPrePaymentQuestionnaire: (serviceId: string, serviceSlug: string) => Promise<void>
 
   // Navigation
   goToStep: (step: number) => void
@@ -49,11 +56,15 @@ interface QuestionnaireActions {
 
 const initialState: QuestionnaireState = {
   orderId: null,
+  serviceId: null,
   serviceSlug: null,
   serviceName: null,
   questions: [],
   steps: [],
   responses: {},
+  prePaymentResponses: {},
+  prePaymentQuestions: [],
+  mode: 'post_payment',
   currentStep: 1,
   totalSteps: 0,
   isLoading: false,
@@ -113,16 +124,30 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           return
         }
 
-        // Fetch questions for this service
+        // Fetch post-payment questions for this service (excludes pre-payment questions)
         const { data: questionsData, error: questionsError } = await supabase
           .from('service_questionnaires')
           .select('*')
           .eq('service_package_id', servicePackage.id)
           .eq('is_active', true)
+          .eq('is_pre_payment', false)
           .order('step_number', { ascending: true })
           .order('display_order', { ascending: true })
 
         if (questionsError) throw questionsError
+
+        // Also fetch pre-payment questions (for display in summary card)
+        const { data: prePaymentQuestionsData } = await supabase
+          .from('service_questionnaires')
+          .select('*')
+          .eq('service_package_id', servicePackage.id)
+          .eq('is_active', true)
+          .eq('is_pre_payment', true)
+          .order('display_order', { ascending: true })
+
+        const prePaymentQuestionKeys = new Set(
+          (prePaymentQuestionsData || []).map(q => q.question_key)
+        )
 
         // Fetch existing responses
         const { data: responsesData } = await supabase
@@ -130,11 +155,17 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           .select('question_key, response_value')
           .eq('order_id', orderId)
 
-        // Build responses object
+        // Build responses object and separate pre-payment responses
         const responses: QuestionnaireFormValues = {}
+        const prePaymentResponses: QuestionnaireFormValues = {}
         if (responsesData) {
           for (const r of responsesData) {
-            responses[r.question_key] = r.response_value as string | number | string[]
+            const value = r.response_value as string | number | string[]
+            if (prePaymentQuestionKeys.has(r.question_key)) {
+              prePaymentResponses[r.question_key] = value
+            } else {
+              responses[r.question_key] = value
+            }
           }
         }
 
@@ -204,14 +235,96 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           questions: questionsData as ServiceQuestion[],
           steps,
           responses,
+          prePaymentResponses,
+          prePaymentQuestions: (prePaymentQuestionsData || []) as ServiceQuestion[],
           currentStep,
           totalSteps: steps.length,
+          mode: 'post_payment',
         })
       } catch (error) {
         console.error('Failed to load questionnaire:', error)
         set({
           isLoading: false,
           error: 'Failed to load questionnaire',
+        })
+      }
+    },
+
+    loadPrePaymentQuestionnaire: async (serviceId: string, serviceSlug: string) => {
+      set({ isLoading: true, error: null, serviceId, serviceSlug, mode: 'pre_payment' })
+
+      try {
+        const supabase = getClient()
+
+        // Fetch service package details
+        const { data: servicePackage, error: serviceError } = await supabase
+          .from('service_packages')
+          .select('id, slug, name')
+          .eq('id', serviceId)
+          .single()
+
+        if (serviceError) throw serviceError
+
+        // Fetch only pre-payment questions for this service
+        const { data: questionsData, error: questionsError } = await supabase
+          .from('service_questionnaires')
+          .select('*')
+          .eq('service_package_id', serviceId)
+          .eq('is_active', true)
+          .eq('is_pre_payment', true)
+          .order('step_number', { ascending: true })
+          .order('display_order', { ascending: true })
+
+        if (questionsError) throw questionsError
+
+        // No existing responses in pre-payment mode - answers start empty
+        const responses: QuestionnaireFormValues = {}
+
+        // Group questions by step
+        const stepMap = new Map<number, ServiceQuestion[]>()
+        for (const q of questionsData || []) {
+          const stepNum = q.step_number
+          if (!stepMap.has(stepNum)) {
+            stepMap.set(stepNum, [])
+          }
+          stepMap.get(stepNum)!.push(q as ServiceQuestion)
+        }
+
+        // Build steps array with titles
+        const stepTitles = STEP_TITLES[serviceSlug] || DEFAULT_STEP_TITLES
+        const steps: QuestionnaireStep[] = []
+        for (const [stepNum, questions] of stepMap) {
+          const titleConfig = stepTitles[stepNum] || DEFAULT_STEP_TITLES[stepNum] || {
+            title: `Step ${stepNum}`,
+            description: '',
+          }
+          steps.push({
+            stepNumber: stepNum,
+            title: titleConfig.title,
+            description: titleConfig.description,
+            questions,
+          })
+        }
+
+        // Sort steps by step number
+        steps.sort((a, b) => a.stepNumber - b.stepNumber)
+
+        set({
+          isLoading: false,
+          serviceSlug: servicePackage.slug,
+          serviceName: servicePackage.name,
+          questions: questionsData as ServiceQuestion[],
+          steps,
+          responses,
+          currentStep: 1,
+          totalSteps: steps.length,
+          mode: 'pre_payment',
+        })
+      } catch (error) {
+        console.error('Failed to load pre-payment questionnaire:', error)
+        set({
+          isLoading: false,
+          error: 'Failed to load eligibility questions',
         })
       }
     },
@@ -252,17 +365,24 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
     },
 
     saveStepResponses: async (stepResponses: QuestionnaireFormValues) => {
-      const { orderId, currentStep, responses } = get()
+      const { orderId, currentStep, responses, mode } = get()
+
+      // Merge with existing responses
+      const newResponses = { ...responses, ...stepResponses }
+      set({ responses: newResponses })
+
+      // In pre_payment mode, don't persist to database - just update local state
+      if (mode === 'pre_payment') {
+        return true
+      }
+
+      // Post-payment mode requires orderId
       if (!orderId) return false
 
       set({ isSaving: true, error: null })
 
       try {
         const supabase = getClient()
-
-        // Merge with existing responses
-        const newResponses = { ...responses, ...stepResponses }
-        set({ responses: newResponses })
 
         // Upsert each response
         const upsertPromises = Object.entries(stepResponses).map(([key, value]) => {

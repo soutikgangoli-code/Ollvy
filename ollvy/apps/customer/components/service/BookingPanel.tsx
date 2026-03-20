@@ -114,7 +114,7 @@ export function BookingPanel({
   const baseCheckoutUrl = priceVariesByState
     ? `/quote/request/${checkoutId}`
     : priceVariesByQuestionnaire
-    ? `/eligibility/${service.slug}`
+    ? `/checkout/${checkoutId}/eligibility`
     : `/checkout/${checkoutId}`
   const urlParams = new URLSearchParams({
     utm_source: 'service_page',

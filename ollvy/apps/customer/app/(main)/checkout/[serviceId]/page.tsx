@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { getFullAttributionData, clearAllAttributionData } from '@/lib/utm'
+import { getPreCursorAnswers, clearPreCursorAnswers } from '@/lib/pre-cursor'
 import type { ServicePackage, ServiceAddon, ServiceVariant } from '@/lib/types'
 import { cn } from '@/lib/utils'
 
@@ -80,6 +81,9 @@ export default function CheckoutPage() {
   // Track if we've shown the initial auth prompt (don't keep re-opening if user dismisses)
   const [hasShownAuthPrompt, setHasShownAuthPrompt] = useState(false)
 
+  // Pre-cursor answers from eligibility page (stored in sessionStorage)
+  const [preCursorAnswers, setPreCursorAnswers] = useState<Record<string, unknown>>({})
+
   // Fetch service data regardless of auth status (public data)
   useEffect(() => {
     if (!isHydrated) return
@@ -94,6 +98,15 @@ export default function CheckoutPage() {
       setHasShownAuthPrompt(true)
     }
   }, [user, isHydrated, hasShownAuthPrompt, openAuthModal])
+
+  // Load pre-cursor answers from sessionStorage when service is available
+  useEffect(() => {
+    if (!service) return
+    const stored = getPreCursorAnswers(service.slug)
+    if (stored) {
+      setPreCursorAnswers(stored)
+    }
+  }, [service])
 
   // Initialize variant and addons from URL params or service defaults after service loads
   useEffect(() => {
@@ -178,7 +191,7 @@ export default function CheckoutPage() {
     return service.variants.find(v => v.id === selectedVariant) || null
   }, [service?.variants, selectedVariant])
 
-  // Calculate price with variant adjustments and actual service addons
+  // Calculate price with variant adjustments, actual service addons, and pre-cursor adjustments
   const priceBreakdown = useMemo((): PriceBreakdown | null => {
     if (!service) return null
 
@@ -187,7 +200,65 @@ export default function CheckoutPage() {
     const variantGovtFeeAdjustment = selectedVariantData?.govtFeeAdjustment ?? 0
 
     const serviceFee = service.price_base_paisa + variantPriceAdjustment
-    const govtFees = (service.price_govt_fees_paisa || 0) + variantGovtFeeAdjustment
+
+    // Calculate govt fees - may be overridden by pre-cursor answers
+    let govtFeePaisa = (service.price_govt_fees_paisa || 0) + variantGovtFeeAdjustment
+
+    // --- TRADEMARK ---
+    // Govt fee = rate per class x number of classes
+    // Ollvy fee stays fixed at price_base_paisa
+    if (service.slug === 'trademark-registration' && preCursorAnswers.trademark_class_count) {
+      const classCount = Number(preCursorAnswers.trademark_class_count)
+      const applicantType = String(preCursorAnswers.applicant_type || '')
+      const isDiscountEligible = ['individual', 'proprietorship', 'msme', 'startup'].includes(applicantType)
+      // Individual/Proprietor/MSME/Startup: Rs 4,500/class (450000 paisa)
+      // Company/LLP/Partnership/Others: Rs 9,000/class (900000 paisa)
+      govtFeePaisa = (isDiscountEligible ? 450000 : 900000) * classCount
+    }
+
+    // --- PRIVATE LIMITED COMPANY ---
+    // Govt fee = MCA ROC filing fee + Delhi stamp duty on authorized capital
+    // Ollvy fee stays fixed at price_base_paisa
+    // Base case (Rs 1L capital, 2 directors) = Rs 7,999 govt fee (current seeded value)
+    // DSC base covers 2 directors. Each additional director = Rs 1,200 extra
+    if (service.slug === 'pvt-ltd-incorporation' && preCursorAnswers.authorized_capital) {
+      const capital = String(preCursorAnswers.authorized_capital)
+      const directors = Number(preCursorAnswers.number_of_directors) || 2
+      const additionalDSCCost = Math.max(0, directors - 2) * 120000 // Rs 1,200 per director beyond 2
+
+      // Delhi-based stamp duty + MCA ROC fee slabs (approximate)
+      const capitalSlabs: Record<string, number> = {
+        '100000':   799900,   // Rs 1L   -> Rs 7,999 govt fee  (current base)
+        '500000':   1000000,  // Rs 5L   -> Rs 10,000 govt fee
+        '1000000':  1500000,  // Rs 10L  -> Rs 15,000 govt fee
+        '2500000':  2500000,  // Rs 25L  -> Rs 25,000 govt fee
+        '5000000':  3500000,  // Rs 50L  -> Rs 35,000 govt fee
+      }
+
+      govtFeePaisa = (capitalSlabs[capital] ?? 799900) + additionalDSCCost
+    }
+
+    // --- LLP ---
+    // Govt fee = FiLLiP stamp duty on total capital contribution
+    // Ollvy fee stays fixed at price_base_paisa
+    // Base case (up to Rs 1L contribution, 2 partners) = Rs 5,000 govt fee
+    // DSC/DPIN base covers 2 partners. Each additional partner = Rs 1,200 extra
+    if (service.slug === 'llp-incorporation' && preCursorAnswers.total_contribution) {
+      const contribution = String(preCursorAnswers.total_contribution)
+      const partners = Number(preCursorAnswers.number_of_partners) || 2
+      const additionalDSCCost = Math.max(0, partners - 2) * 120000 // Rs 1,200 per partner beyond 2
+
+      // FiLLiP govt fee slabs (central government - uniform across states)
+      const contributionSlabs: Record<string, number> = {
+        'upto_1l':    50000,   // Up to Rs 1L   -> Rs 500 govt fee
+        '1l_to_5l':   200000,  // Rs 1L-Rs 5L   -> Rs 2,000 govt fee
+        '5l_to_10l':  400000,  // Rs 5L-Rs 10L  -> Rs 4,000 govt fee
+        'above_10l':  500000,  // Above Rs 10L  -> Rs 5,000 govt fee
+      }
+
+      govtFeePaisa = (contributionSlabs[contribution] ?? 500000) + additionalDSCCost
+    }
+
     const gstRate = service.price_gst_rate || 18
 
     // Calculate add-ons total from service's actual addons (not hardcoded)
@@ -203,18 +274,18 @@ export default function CheckoutPage() {
     const gst = Math.round(taxableAmount * (gstRate / 100))
 
     const promoDiscount = promoApplied?.discount || 0
-    const total = serviceFee + govtFees + addonsTotal + gst - promoDiscount
+    const total = serviceFee + govtFeePaisa + addonsTotal + gst - promoDiscount
 
     return {
       serviceFee,
-      govtFees,
+      govtFees: govtFeePaisa,
       addonsTotal,
       gst,
       gstRate,
       promoDiscount,
       total: Math.max(0, total),
     }
-  }, [service, selectedAddonIds, promoApplied, selectedVariantData])
+  }, [service, selectedAddonIds, promoApplied, selectedVariantData, preCursorAnswers])
 
   const handleToggleAddon = (id: string) => {
     // Don't toggle required addons
@@ -323,6 +394,19 @@ export default function CheckoutPage() {
       // For test mode (no Razorpay credentials), the edge function still creates
       // a real order and returns order_id/order_number - skip Razorpay modal
       if (data.razorpay_order_id?.startsWith('order_test_')) {
+        // Save pre-cursor answers to order_questionnaire_responses if present
+        if (Object.keys(preCursorAnswers).length > 0) {
+          const supabaseClient = getClient()
+          await supabaseClient.from('order_questionnaire_responses').upsert(
+            Object.entries(preCursorAnswers).map(([question_key, response_value]) => ({
+              order_id: data.order_id,
+              question_key,
+              response_value,
+            })),
+            { onConflict: 'order_id,question_key' }
+          )
+        }
+        clearPreCursorAnswers()
         clearAllAttributionData()
         setSuccessModal({
           isOpen: true,
@@ -341,6 +425,19 @@ export default function CheckoutPage() {
         description: service.name,
         order_id: data.razorpay_order_id,
         handler: async () => {
+          // Save pre-cursor answers to order_questionnaire_responses if present
+          if (Object.keys(preCursorAnswers).length > 0) {
+            const supabaseClient = getClient()
+            await supabaseClient.from('order_questionnaire_responses').upsert(
+              Object.entries(preCursorAnswers).map(([question_key, response_value]) => ({
+                order_id: data.order_id,
+                question_key,
+                response_value,
+              })),
+              { onConflict: 'order_id,question_key' }
+            )
+          }
+          clearPreCursorAnswers()
           clearAllAttributionData()
           setSuccessModal({
             isOpen: true,
@@ -439,6 +536,14 @@ export default function CheckoutPage() {
         <div className="grid lg:grid-cols-[1fr_380px] gap-8">
           {/* Left column - Main flow */}
           <div className="space-y-8">
+            {/* Pre-cursor answers summary (if present) */}
+            {Object.keys(preCursorAnswers).length > 0 && (
+              <PreCursorSummaryCard
+                answers={preCursorAnswers}
+                serviceSlug={service.slug}
+              />
+            )}
+
             {/* Step 1: Stepper */}
             <CheckoutStepper currentStep={1} />
 
@@ -935,6 +1040,113 @@ function OrderSummarySidebar({
             </a>
           </Button>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// Pre-cursor Summary Card Component
+interface PreCursorSummaryCardProps {
+  answers: Record<string, unknown>
+  serviceSlug: string
+}
+
+function PreCursorSummaryCard({ answers, serviceSlug }: PreCursorSummaryCardProps) {
+  // Human-readable labels for question keys
+  const getLabel = (key: string): string => {
+    const labels: Record<string, string> = {
+      // Trademark
+      applicant_type: 'Applicant Type',
+      trademark_type: 'Trademark Type',
+      trademark_class_count: 'Number of Classes',
+      // Pvt Ltd
+      authorized_capital: 'Authorized Capital',
+      number_of_directors: 'Number of Directors',
+      // LLP
+      total_contribution: 'Total Capital Contribution',
+      number_of_partners: 'Number of Partners',
+      // Professional Tax
+      state: 'State',
+      registration_type: 'Registration Type',
+      // ESI/PF
+      employee_count: 'Number of Employees',
+      voluntary_registration: 'Voluntary Registration',
+      // Copyright
+      work_category: 'Work Category',
+    }
+    return labels[key] || key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+  }
+
+  // Format value for display
+  const formatValue = (key: string, value: unknown): string => {
+    if (value === null || value === undefined) return '-'
+
+    // Format capital amounts
+    if (key === 'authorized_capital') {
+      const capitalLabels: Record<string, string> = {
+        '100000': 'Rs 1 Lakh',
+        '500000': 'Rs 5 Lakhs',
+        '1000000': 'Rs 10 Lakhs',
+        '2500000': 'Rs 25 Lakhs',
+        '5000000': 'Rs 50 Lakhs',
+      }
+      return capitalLabels[String(value)] || String(value)
+    }
+
+    // Format contribution amounts
+    if (key === 'total_contribution') {
+      const contributionLabels: Record<string, string> = {
+        'upto_1l': 'Up to Rs 1 Lakh',
+        '1l_to_5l': 'Rs 1 Lakh - Rs 5 Lakhs',
+        '5l_to_10l': 'Rs 5 Lakhs - Rs 10 Lakhs',
+        'above_10l': 'Above Rs 10 Lakhs',
+      }
+      return contributionLabels[String(value)] || String(value)
+    }
+
+    // Format applicant type
+    if (key === 'applicant_type') {
+      const typeLabels: Record<string, string> = {
+        'individual': 'Individual',
+        'proprietorship': 'Proprietorship',
+        'msme': 'MSME',
+        'startup': 'Startup India Registered',
+        'company': 'Company',
+        'llp': 'LLP',
+        'partnership': 'Partnership',
+        'others': 'Others',
+      }
+      return typeLabels[String(value)] || String(value)
+    }
+
+    // Format yes/no values
+    if (key === 'voluntary_registration') {
+      return String(value) === 'yes' ? 'Yes' : 'No'
+    }
+
+    return String(value)
+  }
+
+  // Filter out irrelevant answers
+  const relevantAnswers = Object.entries(answers).filter(([, value]) =>
+    value !== null && value !== undefined && value !== ''
+  )
+
+  if (relevantAnswers.length === 0) return null
+
+  return (
+    <div className="rounded-xl border border-[hsl(var(--ollvy-green))]/20 bg-[hsl(var(--ollvy-green))]/5 p-5">
+      <div className="flex items-center gap-2 mb-4">
+        <CheckCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
+        <h3 className="font-semibold text-foreground text-sm">Confirmed Before Payment</h3>
+      </div>
+      <div className="space-y-2">
+        {relevantAnswers.map(([key, value]) => (
+          <div key={key} className="flex justify-between items-center text-sm">
+            <span className="text-muted-foreground">{getLabel(key)}</span>
+            <span className="font-medium text-foreground">{formatValue(key, value)}</span>
+          </div>
+        ))}
       </div>
     </div>
   )

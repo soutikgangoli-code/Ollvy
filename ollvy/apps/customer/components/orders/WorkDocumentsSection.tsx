@@ -34,6 +34,7 @@ interface WorkDocumentsSectionProps {
   workDocuments: OrderWorkDocument[]
   onDocumentsUpdated: () => void
   hasProfessional: boolean
+  activeStageKey?: string  // When provided, filter to documents matching this stage
 }
 
 export function WorkDocumentsSection({
@@ -41,15 +42,21 @@ export function WorkDocumentsSection({
   workDocuments,
   onDocumentsUpdated,
   hasProfessional,
+  activeStageKey,
 }: WorkDocumentsSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<'deliverables' | 'requests'>('deliverables')
   const [uploadingDocId, setUploadingDocId] = useState<string | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
 
+  // Filter documents by stage if activeStageKey is provided
+  const filteredDocuments = activeStageKey
+    ? workDocuments.filter(d => d.stage_key === activeStageKey)
+    : workDocuments
+
   // Separate documents by direction
-  const deliverables = workDocuments.filter(d => d.direction === 'to_customer')
-  const requests = workDocuments.filter(d => d.direction === 'from_customer')
+  const deliverables = filteredDocuments.filter(d => d.direction === 'to_customer')
+  const requests = filteredDocuments.filter(d => d.direction === 'from_customer')
 
   // Calculate stats
   const pendingRequests = requests.filter(r => r.status === 'pending')

@@ -261,9 +261,9 @@ function ProfileContent() {
 
         const progress = Math.min(95, baseProgress + stageProgress)
 
-        // Get current stage name
+        // Get current stage name (title is the human-readable field in workflow_stages JSONB)
         const currentStageIndex = Math.min(completedStages, workflowStages.length - 1)
-        const currentStage = workflowStages[currentStageIndex]?.stage_name ||
+        const currentStage = workflowStages[currentStageIndex]?.title ||
           (order.status === 'pending_assignment' ? 'Assigning Professional' : 'Processing')
 
         // Calculate pending documents

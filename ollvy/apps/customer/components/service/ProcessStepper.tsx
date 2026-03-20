@@ -26,10 +26,18 @@ const STEP_ICONS = {
 interface ProcessStepperProps {
   steps: DBProcessStep[]
   serviceId?: string
+  serviceSlug?: string
   priceVariesByState?: boolean
 }
 
-export function ProcessStepper({ steps, serviceId, priceVariesByState }: ProcessStepperProps) {
+// Services where govt fees vary based on questionnaire answers
+const QUESTIONNAIRE_BASED_SERVICES = [
+  'trademark-registration',
+  'pvt-ltd-incorporation',
+  'llp-incorporation',
+]
+
+export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesByState }: ProcessStepperProps) {
   const [active, setActive] = useState(0)
 
   const step = steps[active]
@@ -143,8 +151,17 @@ export function ProcessStepper({ steps, serviceId, priceVariesByState }: Process
           </Button>
         ) : (
           <Button size="sm" asChild>
-            <a href={serviceId ? (priceVariesByState ? `/quote/request/${serviceId}` : `/checkout/${serviceId}`) : '/services'}>
-              Book this service →
+            <a href={(() => {
+              if (!serviceId) return '/services'
+              if (priceVariesByState) return `/quote/request/${serviceId}`
+              if (serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)) {
+                return `/checkout/${serviceId}/eligibility`
+              }
+              return `/checkout/${serviceId}`
+            })()}>
+              {serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)
+                ? 'Check Eligibility & Price →'
+                : 'Book this service →'}
             </a>
           </Button>
         )}

@@ -12,6 +12,7 @@
 
 -- 1.1 Create service_filter_categories table
 -- Used by: getActiveServices() in apps/customer/lib/data/services.ts:71
+DROP TABLE IF EXISTS public.service_filter_categories CASCADE;
 CREATE TABLE IF NOT EXISTS public.service_filter_categories (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -33,11 +34,12 @@ CREATE POLICY "Admins can manage filter categories"
 ON public.service_filter_categories
 USING (public.is_admin());
 
-CREATE INDEX idx_service_filter_categories_slug ON public.service_filter_categories(slug);
-CREATE INDEX idx_service_filter_categories_active ON public.service_filter_categories(is_active);
+CREATE INDEX IF NOT EXISTS idx_service_filter_categories_slug ON public.service_filter_categories(slug);
+CREATE INDEX IF NOT EXISTS idx_service_filter_categories_active ON public.service_filter_categories(is_active);
 
 -- 1.2 Create quote_requests table
 -- Used by: create-quote-request edge function, Quote pages
+DROP TABLE IF EXISTS public.quote_requests CASCADE;
 CREATE TABLE IF NOT EXISTS public.quote_requests (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
@@ -67,9 +69,9 @@ CREATE POLICY "Admins can manage all quote requests"
 ON public.quote_requests
 USING (public.is_admin());
 
-CREATE INDEX idx_quote_requests_user_id ON public.quote_requests(user_id);
-CREATE INDEX idx_quote_requests_status ON public.quote_requests(status);
-CREATE INDEX idx_quote_requests_service ON public.quote_requests(service_package_id);
+CREATE INDEX IF NOT EXISTS idx_quote_requests_user_id ON public.quote_requests(user_id);
+CREATE INDEX IF NOT EXISTS idx_quote_requests_status ON public.quote_requests(status);
+CREATE INDEX IF NOT EXISTS idx_quote_requests_service ON public.quote_requests(service_package_id);
 
 -- Trigger to update updated_at
 CREATE OR REPLACE TRIGGER update_quote_requests_updated_at
@@ -78,6 +80,8 @@ CREATE OR REPLACE TRIGGER update_quote_requests_updated_at
 
 -- 1.3 Create promo_codes table
 -- Used by: create-razorpay-order edge function, resolve-promo edge function
+DROP TABLE IF EXISTS public.promo_code_usages CASCADE;
+DROP TABLE IF EXISTS public.promo_codes CASCADE;
 CREATE TABLE IF NOT EXISTS public.promo_codes (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     code VARCHAR(50) NOT NULL UNIQUE,
@@ -108,8 +112,8 @@ CREATE POLICY "Admins can manage promo codes"
 ON public.promo_codes
 USING (public.is_admin());
 
-CREATE INDEX idx_promo_codes_code ON public.promo_codes(code);
-CREATE INDEX idx_promo_codes_active ON public.promo_codes(is_active);
+CREATE INDEX IF NOT EXISTS idx_promo_codes_code ON public.promo_codes(code);
+CREATE INDEX IF NOT EXISTS idx_promo_codes_active ON public.promo_codes(is_active);
 
 -- Track promo code usage per user
 CREATE TABLE IF NOT EXISTS public.promo_code_usages (
@@ -134,6 +138,7 @@ USING (auth.role() = 'service_role');
 
 -- 1.4 Create service_state_pricing table
 -- Used by: getStatePricing() in apps/customer/lib/data/services.ts:236
+DROP TABLE IF EXISTS public.service_state_pricing CASCADE;
 CREATE TABLE IF NOT EXISTS public.service_state_pricing (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     service_package_id UUID NOT NULL REFERENCES public.service_packages(id) ON DELETE CASCADE,
@@ -157,11 +162,13 @@ CREATE POLICY "Admins can manage state pricing"
 ON public.service_state_pricing
 USING (public.is_admin());
 
-CREATE INDEX idx_service_state_pricing_service ON public.service_state_pricing(service_package_id);
-CREATE INDEX idx_service_state_pricing_state ON public.service_state_pricing(state);
+CREATE INDEX IF NOT EXISTS idx_service_state_pricing_service ON public.service_state_pricing(service_package_id);
+CREATE INDEX IF NOT EXISTS idx_service_state_pricing_state ON public.service_state_pricing(state);
 
 -- 1.5 Create compliance_obligation_rules table (parent table)
 -- Used by: getUserComplianceObligations() in apps/customer/lib/data/services.ts:363
+DROP TABLE IF EXISTS public.compliance_obligations CASCADE;
+DROP TABLE IF EXISTS public.compliance_obligation_rules CASCADE;
 CREATE TABLE IF NOT EXISTS public.compliance_obligation_rules (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     code VARCHAR(50) NOT NULL UNIQUE, -- e.g., 'GST_MONTHLY', 'ITR_ANNUAL'
@@ -219,9 +226,9 @@ CREATE POLICY "Service role can manage compliance obligations"
 ON public.compliance_obligations
 USING (auth.role() = 'service_role');
 
-CREATE INDEX idx_compliance_obligations_user ON public.compliance_obligations(user_id);
-CREATE INDEX idx_compliance_obligations_due_date ON public.compliance_obligations(due_date);
-CREATE INDEX idx_compliance_obligations_status ON public.compliance_obligations(status);
+CREATE INDEX IF NOT EXISTS idx_compliance_obligations_user ON public.compliance_obligations(user_id);
+CREATE INDEX IF NOT EXISTS idx_compliance_obligations_due_date ON public.compliance_obligations(due_date);
+CREATE INDEX IF NOT EXISTS idx_compliance_obligations_status ON public.compliance_obligations(status);
 
 -- Trigger to update updated_at
 CREATE OR REPLACE TRIGGER update_compliance_obligations_updated_at
@@ -232,7 +239,11 @@ CREATE OR REPLACE TRIGGER update_compliance_obligations_updated_at
 -- PART 2: ADD MISSING COLUMNS TO service_packages
 -- ============================================================================
 
--- Add scope_included column (frontend uses this, currently only deliverables exists)
+-- Add deliverables column (needed by seed migrations)
+ALTER TABLE public.service_packages
+ADD COLUMN IF NOT EXISTS deliverables JSONB DEFAULT '[]';
+
+-- Add scope_included column (frontend uses this)
 ALTER TABLE public.service_packages
 ADD COLUMN IF NOT EXISTS scope_included TEXT[] DEFAULT '{}';
 
@@ -255,10 +266,15 @@ ADD COLUMN IF NOT EXISTS filter_category_id UUID REFERENCES public.service_filte
 CREATE INDEX IF NOT EXISTS idx_service_packages_filter_category
 ON public.service_packages(filter_category_id);
 
--- Copy deliverables to scope_included for existing data
-UPDATE public.service_packages
-SET scope_included = ARRAY(SELECT jsonb_array_elements_text(deliverables))
-WHERE scope_included = '{}' AND deliverables IS NOT NULL AND deliverables != '[]'::jsonb;
+-- Copy deliverables to scope_included for existing data (only if deliverables column exists)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'service_packages' AND column_name = 'deliverables') THEN
+    UPDATE public.service_packages
+    SET scope_included = ARRAY(SELECT jsonb_array_elements_text(deliverables))
+    WHERE scope_included = '{}' AND deliverables IS NOT NULL AND deliverables != '[]'::jsonb;
+  END IF;
+END $$;
 
 -- ============================================================================
 -- PART 3: ADD MISSING COLUMNS TO orders
@@ -326,13 +342,18 @@ ADD COLUMN IF NOT EXISTS chat_conversation_id UUID;
 CREATE INDEX IF NOT EXISTS idx_orders_chat_conversation
 ON public.orders(chat_conversation_id);
 
--- Migrate existing data to new column names
-UPDATE public.orders
-SET price_base_paisa_snapshot = base_price,
-    price_govt_fees_paisa_snapshot = government_fees,
-    price_gst_paisa_snapshot = gst_amount,
-    total_paisa_snapshot = total_amount
-WHERE price_base_paisa_snapshot IS NULL;
+-- Migrate existing data to new column names (only if old columns exist)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'orders' AND column_name = 'base_price') THEN
+    UPDATE public.orders
+    SET price_base_paisa_snapshot = base_price,
+        price_govt_fees_paisa_snapshot = government_fees,
+        price_gst_paisa_snapshot = gst_amount,
+        total_paisa_snapshot = total_amount
+    WHERE price_base_paisa_snapshot IS NULL;
+  END IF;
+END $$;
 
 -- ============================================================================
 -- PART 4: ADD MISSING COLUMNS TO users
@@ -367,26 +388,31 @@ ADD COLUMN IF NOT EXISTS name VARCHAR(255) GENERATED ALWAYS AS (full_name) STORE
 -- PART 6: FIX ORDER STATUS VALUES
 -- ============================================================================
 
--- The orders.status column uses VARCHAR, so we can add new status values
+-- The orders.status column may use VARCHAR or enum, handle both cases
 -- Frontend expects: pending_assignment, waitlisted, in_progress, completed, disputed, cancelled
 -- DB currently uses: placed, assigned, in_progress, completed, cancelled
 
--- Migrate existing 'placed' orders to 'pending_assignment'
-UPDATE public.orders
-SET status = 'pending_assignment'
-WHERE status = 'placed';
+-- Skip status migration if using enum type (will be handled separately)
+-- For VARCHAR columns, migrate 'placed' to 'pending_assignment'
+DO $$
+DECLARE
+  status_type text;
+BEGIN
+  SELECT data_type INTO status_type
+  FROM information_schema.columns
+  WHERE table_name = 'orders' AND column_name = 'status';
 
--- Migrate 'assigned' to 'in_progress' (or keep as intermediate status)
--- For now, let's keep 'assigned' as is since it's a valid intermediate state
+  IF status_type = 'character varying' THEN
+    UPDATE public.orders
+    SET status = 'pending_assignment'
+    WHERE status = 'placed';
 
--- Add check constraint to validate status values
--- First drop existing constraint if any
-ALTER TABLE public.orders
-DROP CONSTRAINT IF EXISTS orders_status_check;
-
-ALTER TABLE public.orders
-ADD CONSTRAINT orders_status_check
-CHECK (status IN ('pending_assignment', 'waitlisted', 'assigned', 'in_progress', 'completed', 'disputed', 'cancelled'));
+    -- Add check constraint to validate status values
+    ALTER TABLE public.orders DROP CONSTRAINT IF EXISTS orders_status_check;
+    ALTER TABLE public.orders ADD CONSTRAINT orders_status_check
+    CHECK (status IN ('pending_assignment', 'waitlisted', 'assigned', 'in_progress', 'completed', 'disputed', 'cancelled'));
+  END IF;
+END $$;
 
 -- ============================================================================
 -- PART 7: ADD ORDER STAGE HISTORY MISSING COLUMNS

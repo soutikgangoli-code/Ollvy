@@ -327,11 +327,12 @@ export function UnifiedServicePage({
 
   // Build base checkout/eligibility URL
   const getCtaUrl = (utmMedium: string, includeVariant = false) => {
+    const serviceId = service.id || service.slug
     const baseUrl = service.priceVariesByState
-      ? `/quote/request/${service.id || service.slug}`
+      ? `/quote/request/${serviceId}`
       : priceVariesByQuestionnaire
-      ? `/eligibility/${service.slug}`
-      : `/checkout/${service.id || service.slug}`
+      ? `/checkout/${serviceId}/eligibility`
+      : `/checkout/${serviceId}`
     const params = new URLSearchParams({
       utm_source: 'service_page',
       utm_medium: utmMedium,
@@ -684,7 +685,7 @@ export function UnifiedServicePage({
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8">
                     {getProcessHeading(service.name, service.shortName)}
                   </h2>
-                  <ProcessStepper steps={service.processSteps} serviceId={service.id || service.slug} priceVariesByState={service.priceVariesByState} />
+                  <ProcessStepper steps={service.processSteps} serviceId={service.id || service.slug} serviceSlug={service.slug} priceVariesByState={service.priceVariesByState} />
 
                   {/* What is [Service Type]? - Trigger */}
                   {service.serviceExplainer && service.serviceExplainer.steps.length > 0 && (

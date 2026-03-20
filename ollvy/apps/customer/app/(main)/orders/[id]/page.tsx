@@ -340,6 +340,16 @@ export default function OrderDetailPage() {
 
   const completedStagesCount = timelineStages.filter(s => s.isCompleted).length
 
+  // Calculate active stage key for work documents filtering
+  const activeStageKey = useMemo(() => {
+    const workflowStages = order?.service_package?.workflow_stages || []
+    // Find the current stage index (first incomplete stage, or last stage if all complete)
+    const currentStageIndex = Math.min(completedStagesCount, workflowStages.length - 1)
+    const currentStage = workflowStages[currentStageIndex]
+    // Return the stage_key if it exists (added by Step 1d migration)
+    return currentStage?.stage_key || null
+  }, [order?.service_package?.workflow_stages, completedStagesCount])
+
   const handleDownloadInvoice = () => {
     console.log('Download invoice')
   }
@@ -1168,6 +1178,7 @@ export default function OrderDetailPage() {
               workDocuments={workDocuments}
               onDocumentsUpdated={fetchOrder}
               hasProfessional={!!order.professional_id}
+              activeStageKey={activeStageKey || undefined}
             />
           </div>
 
