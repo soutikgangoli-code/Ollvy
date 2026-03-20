@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { Card } from '@/components/ui/card'
 import { IndianRupee, FileText, ClipboardList, BarChart2, Check, Minus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -148,6 +148,37 @@ export function TrustLayer() {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : maxIndex))
   }, [maxIndex])
 
+  // Touch swipe handling for mobile
+  const touchStartX = useRef<number | null>(null)
+  const touchEndX = useRef<number | null>(null)
+  const minSwipeDistance = 50
+
+  const onTouchStart = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = null
+    touchStartX.current = e.targetTouches[0].clientX
+  }, [])
+
+  const onTouchMove = useCallback((e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX
+  }, [])
+
+  const onTouchEnd = useCallback(() => {
+    if (!touchStartX.current || !touchEndX.current) return
+
+    const distance = touchStartX.current - touchEndX.current
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+
+    if (isLeftSwipe) {
+      goNext()
+    } else if (isRightSwipe) {
+      goPrev()
+    }
+
+    touchStartX.current = null
+    touchEndX.current = null
+  }, [goNext, goPrev])
+
   // Get two visible cards (current and current+1)
   const visibleCards = [
     trustCards[currentIndex],
@@ -164,7 +195,10 @@ export function TrustLayer() {
 
         {/* Carousel Container */}
         <div
-          className="relative mt-8"
+          className="relative mt-8 touch-pan-y"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
         >
           {/* Cards Display - 1 on mobile, 2 on desktop */}
           <div className="max-w-5xl mx-auto">
