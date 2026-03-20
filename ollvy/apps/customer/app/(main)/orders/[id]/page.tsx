@@ -208,7 +208,31 @@ export default function OrderDetailPage() {
     // Calculate estimated completion
     const slaDays = order?.service_package?.sla_working_days || 7
     const createdAt = order?.created_at ? new Date(order.created_at) : new Date()
-    const estimatedCompletion = new Date(createdAt)
+
+    // Check if customer has completed their part (questionnaire + documents)
+    const hasQuestionnaireAnswers = questionnaireResponses.length > 0
+    const questionnaireComplete = !!order?.questionnaire_completed_at && hasQuestionnaireAnswers
+    const allDocsUploaded = uploadedDocs === totalDocs && totalDocs > 0
+    const customerSetupComplete = questionnaireComplete && allDocsUploaded
+
+    // SLA starts from when customer completes setup, not from order creation
+    // If setup not complete, use TODAY as base (dates keep extending)
+    // If setup complete, use the later of questionnaire completion or last doc upload
+    let slaStartDate: Date
+    if (customerSetupComplete) {
+      // Find the latest completion date
+      const questionnaireDate = order?.questionnaire_completed_at ? new Date(order.questionnaire_completed_at) : new Date()
+      const lastDocUpload = documents
+        .filter(d => d.uploaded_at)
+        .sort((a, b) => new Date(b.uploaded_at!).getTime() - new Date(a.uploaded_at!).getTime())[0]
+      const lastDocDate = lastDocUpload?.uploaded_at ? new Date(lastDocUpload.uploaded_at) : new Date()
+      slaStartDate = questionnaireDate > lastDocDate ? questionnaireDate : lastDocDate
+    } else {
+      // Setup not complete - SLA starts from today (keeps extending)
+      slaStartDate = new Date()
+    }
+
+    const estimatedCompletion = new Date(slaStartDate)
     estimatedCompletion.setDate(estimatedCompletion.getDate() + slaDays)
 
     const today = new Date()
@@ -224,12 +248,15 @@ export default function OrderDetailPage() {
       daysRemaining,
       slaDays,
       createdAt,
+      slaStartDate,
+      customerSetupComplete,
     }
-  }, [order, documents])
+  }, [order, documents, questionnaireResponses])
 
   // Calculate dynamic dates for each stage
+  // Uses slaStartDate which extends until customer completes setup
   const calculateStageDate = (stageIndex: number, isStart: boolean = true) => {
-    const createdAt = stats.createdAt
+    const baseDate = stats.slaStartDate
     const workflowStages = order?.service_package?.workflow_stages || []
 
     const stage = workflowStages[stageIndex]
@@ -241,7 +268,7 @@ export default function OrderDetailPage() {
     const startDay = parseInt(match[1])
     const endDay = match[2] ? parseInt(match[2]) : startDay
 
-    const targetDate = new Date(createdAt)
+    const targetDate = new Date(baseDate)
     targetDate.setDate(targetDate.getDate() + (isStart ? startDay : endDay))
 
     return targetDate
