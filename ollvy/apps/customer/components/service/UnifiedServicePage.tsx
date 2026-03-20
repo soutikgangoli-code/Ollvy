@@ -268,6 +268,7 @@ export function UnifiedServicePage({
   // Refs for smooth underline indicator
   const heroNavRef = useRef<HTMLDivElement>(null)
   const stickyNavRef = useRef<HTMLElement>(null)
+  const mobileTabsRef = useRef<HTMLDivElement>(null)
   const [heroIndicator, setHeroIndicator] = useState({ left: 0, width: 0 })
   const [stickyIndicator, setStickyIndicator] = useState({ left: 0, width: 0 })
 
@@ -359,6 +360,18 @@ export function UnifiedServicePage({
           setStickyIndicator({
             left: activeButton.offsetLeft,
             width: activeButton.offsetWidth,
+          })
+        }
+      }
+
+      // Mobile tabs: scroll active tab into view (at the start)
+      if (mobileTabsRef.current) {
+        const activeButton = mobileTabsRef.current.querySelector(`[data-section="${activeSection}"]`) as HTMLElement
+        if (activeButton) {
+          // Scroll the active tab to the left edge with some padding
+          mobileTabsRef.current.scrollTo({
+            left: activeButton.offsetLeft - 16,
+            behavior: 'smooth'
           })
         }
       }
@@ -487,7 +500,7 @@ export function UnifiedServicePage({
         </div>
 
         {/* Mobile: Only section tabs */}
-        <div className="md:hidden overflow-x-auto scrollbar-hide">
+        <div ref={mobileTabsRef} className="md:hidden overflow-x-auto scrollbar-hide">
           <div className="flex gap-0 min-w-max px-4">
             {SECTIONS.map((section) => (
               <button
