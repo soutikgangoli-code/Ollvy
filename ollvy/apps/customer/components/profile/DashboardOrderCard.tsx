@@ -34,11 +34,12 @@ export function DashboardOrderCard({
   isRetainer,
   nextCycleDate,
 }: DashboardOrderCardProps) {
+  // Check for pending work from user
+  const hasDocsPending = documentsNeeded !== undefined && documentsNeeded > 0
+  const hasQuestionsPending = questionnaireCompleted === false
+
   // Determine the actual status label based on questionnaire and documents
   const getStatusLabel = () => {
-    const hasDocsPending = documentsNeeded && documentsNeeded > 0
-    const hasQuestionsPending = questionnaireCompleted === false
-
     if (hasQuestionsPending && hasDocsPending) {
       return 'Questions & Documents Pending'
     }
@@ -61,9 +62,6 @@ export function DashboardOrderCard({
 
   // Determine display stage
   const getDisplayStage = () => {
-    const hasDocsPending = documentsNeeded && documentsNeeded > 0
-    const hasQuestionsPending = questionnaireCompleted === false
-
     if (hasQuestionsPending && hasDocsPending) {
       return 'Questions and Documents Pending'
     }
@@ -84,7 +82,7 @@ export function DashboardOrderCard({
   }
 
   // Use amber color if there's pending work from user
-  const hasUserPendingWork = (documentsNeeded && documentsNeeded > 0) || questionnaireCompleted === false
+  const hasUserPendingWork = hasDocsPending || hasQuestionsPending
   const statusColor = hasUserPendingWork ? 'text-amber-600 dark:text-amber-400' : statusColors[status]
 
   return (
