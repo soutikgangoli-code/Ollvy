@@ -493,9 +493,9 @@ export function UnifiedServicePage({
             ref={heroRef}
             className="relative min-h-[65vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-10"
           >
-            <div className="relative z-10 text-center max-w-[800px] px-4 md:px-6">
+            <div className="relative z-10 text-center w-full max-w-[800px] px-4 md:px-6">
               {/* Service name - large and bold */}
-              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1] font-mono">
+              <h1 className="text-xl sm:text-2xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-tight md:leading-[1.1] font-mono break-words">
                 {service.name}
                 {geoContext && (
                   <span className="text-muted-foreground"> in {geoContext.city}</span>
@@ -503,23 +503,23 @@ export function UnifiedServicePage({
               </h1>
 
               {/* Tagline */}
-              <p className="text-base text-muted-foreground mt-4 md:whitespace-nowrap">
+              <p className="text-sm md:text-base text-muted-foreground mt-3 md:mt-4 px-2">
                 {service.tagline}
               </p>
 
               {/* CTA row */}
-              <div className="mt-6 flex flex-col items-center gap-2">
+              <div className="mt-5 md:mt-6 flex flex-col items-center gap-2">
                 {/* Guarantee badge */}
                 {guaranteedDate && (
-                  <p className="text-[15px] font-mono text-foreground mb-1">
-                    <CheckCircle size={15} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
+                  <p className="text-sm md:text-[15px] font-mono text-foreground mb-1">
+                    <CheckCircle size={14} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
                     {service.isRetainer
                       ? `Current cycle due: ${guaranteedDate}`
                       : `Guaranteed by ${guaranteedDate}`}
                   </p>
                 )}
 
-                <Button size="lg" className="h-12 px-10" asChild>
+                <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild>
                   <a
                     href={
                       service.priceVariesByState
@@ -533,28 +533,28 @@ export function UnifiedServicePage({
               </div>
 
               {/* Metadata pills */}
-              <div className="flex flex-wrap md:flex-nowrap justify-center gap-2 md:gap-3 mt-5 md:mt-8 px-2">
-                <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
-                  <span className="text-xs text-muted-foreground">For </span>
-                  <span className="text-xs font-medium text-foreground">{service.mandatoryFor}</span>
+              <div className="flex flex-wrap justify-center gap-1.5 md:gap-3 mt-4 md:mt-8">
+                <div className="px-2.5 md:px-4 py-1 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono">
+                  <span className="text-[10px] md:text-xs text-muted-foreground">For </span>
+                  <span className="text-[10px] md:text-xs font-medium text-foreground">{service.mandatoryFor}</span>
                 </div>
-                <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
-                  <span className="text-xs text-muted-foreground">Type </span>
-                  <span className="text-xs font-medium text-foreground">{service.serviceType}</span>
+                <div className="px-2.5 md:px-4 py-1 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono">
+                  <span className="text-[10px] md:text-xs text-muted-foreground">Type </span>
+                  <span className="text-[10px] md:text-xs font-medium text-foreground">{service.serviceType}</span>
                 </div>
-                <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono whitespace-nowrap">
-                  <span className="text-xs text-muted-foreground">Turnaround </span>
-                  <span className="text-xs font-medium text-foreground">
+                <div className="px-2.5 md:px-4 py-1 md:py-2 rounded-full bg-muted/50 border border-border/50 font-mono">
+                  <span className="text-[10px] md:text-xs text-muted-foreground">Turnaround </span>
+                  <span className="text-[10px] md:text-xs font-medium text-foreground">
                     {service.isRetainer ? 'Ongoing' : `${service.slaDays} days`}
                   </span>
                 </div>
                 {showRating && service.avgRating && (
-                  <div className="px-3 md:px-4 py-1.5 md:py-2 rounded-full bg-muted/50 border border-border/50 flex items-center gap-1 md:gap-1.5 font-mono whitespace-nowrap">
+                  <div className="px-2.5 md:px-4 py-1 md:py-2 rounded-full bg-muted/50 border border-border/50 flex items-center gap-1 font-mono">
                     <Star size={10} className="fill-yellow-400 text-yellow-400" />
-                    <span className="text-xs font-medium text-foreground">
+                    <span className="text-[10px] md:text-xs font-medium text-foreground">
                       {service.avgRating.toFixed(1)}
                     </span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-[10px] md:text-xs text-muted-foreground">
                       ({service.totalRatings})
                     </span>
                   </div>
