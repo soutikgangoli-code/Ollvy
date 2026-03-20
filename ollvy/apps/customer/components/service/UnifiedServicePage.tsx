@@ -1236,28 +1236,16 @@ export function UnifiedServicePage({
       {/* Mobile booking bar - fixed bottom */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 flex items-center justify-between lg:hidden">
         <div>
-          <p className="text-xs text-muted-foreground">Total</p>
+          <p className="text-xs text-muted-foreground">
+            {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
+          </p>
           <p className="font-mono font-bold text-foreground">
             ₹{totalFee.toLocaleString('en-IN')}
           </p>
         </div>
         <Button size="lg" className="flex-1 ml-4" asChild>
-          <a
-            href={(() => {
-              const baseUrl = service.priceVariesByState
-                ? `/quote/request/${service.id || service.slug}`
-                : `/checkout/${service.id || service.slug}`
-              const params = new URLSearchParams({
-                utm_source: 'service_page',
-                utm_medium: 'mobile_bar',
-              })
-              if (service.variants && selectedVariant) {
-                params.set('variant', selectedVariant)
-              }
-              return `${baseUrl}?${params.toString()}`
-            })()}
-          >
-            {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
+          <a href={getCtaUrl('mobile_bar', true)}>
+            {ctaLabel}
           </a>
         </Button>
       </div>
