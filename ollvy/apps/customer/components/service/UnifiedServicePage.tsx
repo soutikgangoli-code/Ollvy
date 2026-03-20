@@ -493,9 +493,9 @@ export function UnifiedServicePage({
             ref={heroRef}
             className="relative min-h-[65vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-10"
           >
-            <div className="relative z-10 text-center max-w-[800px] px-6">
+            <div className="relative z-10 text-center max-w-[800px] px-4 md:px-6">
               {/* Service name - large and bold */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1] font-mono">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight leading-[1.1] font-mono">
                 {service.name}
                 {geoContext && (
                   <span className="text-muted-foreground"> in {geoContext.city}</span>
