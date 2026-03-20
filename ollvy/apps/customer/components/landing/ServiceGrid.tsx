@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -218,6 +218,12 @@ export function ServiceGrid({ services }: ServiceGridProps) {
     }
   }
 
+  // Touch handlers to update buttons after swipe
+  const onTouchEnd = useCallback(() => {
+    // Update scroll buttons after touch scroll ends
+    setTimeout(updateScrollButtons, 100)
+  }, [])
+
   return (
     <section id="services" className="bg-background pt-12 pb-24">
       <div className="container">
@@ -260,8 +266,9 @@ export function ServiceGrid({ services }: ServiceGridProps) {
         <div className="relative">
           <div
             ref={carouselRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4"
+            className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4 touch-pan-x"
             onScroll={updateScrollButtons}
+            onTouchEnd={onTouchEnd}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {displayServices.map((service) => (
