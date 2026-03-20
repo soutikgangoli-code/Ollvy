@@ -68,6 +68,14 @@ export function ServiceCard({ service }: ServiceCardProps) {
   // User can add more services on the detail page
   const nonBundleTotal = baseOllvyFee + govtFee
 
+  // Services where govt fees vary based on questionnaire answers
+  // These show "Starting from" prefix since final price depends on user input
+  const priceVariesByQuestionnaire = [
+    'trademark-registration',
+    'pvt-ltd-incorporation',
+    'llp-incorporation',
+  ].includes(service.slug)
+
   return (
     <Link href={`/services/${service.slug}`} className="group">
       <Card className="h-full hover:border-foreground/20 hover:bg-foreground/[0.03] transition-all duration-300 overflow-hidden flex flex-col min-h-[320px]">
@@ -164,7 +172,9 @@ export function ServiceCard({ service }: ServiceCardProps) {
                   </div>
                 )}
                 <div className="flex justify-between items-baseline border-t border-border pt-1 mt-1">
-                  <span className="text-xs font-medium text-foreground">Total</span>
+                  <span className="text-xs font-medium text-foreground">
+                    {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
+                  </span>
                   <span className="font-mono text-base font-bold text-foreground">
                     {service.price_varies_by_state ? 'Get Quote' : `₹${nonBundleTotal.toLocaleString('en-IN')}`}
                     {!service.price_varies_by_state && billingLabel && (

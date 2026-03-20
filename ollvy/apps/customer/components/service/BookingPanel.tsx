@@ -91,13 +91,30 @@ export function BookingPanel({
 
   const totalFee = baseServiceFee + addonTotals
 
+  // Services where govt fees vary based on questionnaire answers
+  // These show "Starting from" prefix since final price depends on user input
+  const priceVariesByQuestionnaire = [
+    'trademark-registration',
+    'pvt-ltd-incorporation',
+    'llp-incorporation',
+  ].includes(service.slug)
+
   // Use DB ID for checkout if available, otherwise fall back to slug
   const checkoutId = serviceId ?? service.slug
-  const ctaLabel = priceVariesByState ? 'Get Quote' : 'Book Now'
+
+  // Determine CTA label and URL based on service type
+  const ctaLabel = priceVariesByState
+    ? 'Get Quote'
+    : priceVariesByQuestionnaire
+    ? 'Check Eligibility & Price'
+    : 'Book Now'
 
   // Build checkout URL with optional variant and addon params
+  // Services with questionnaire-based pricing go to eligibility page first
   const baseCheckoutUrl = priceVariesByState
     ? `/quote/request/${checkoutId}`
+    : priceVariesByQuestionnaire
+    ? `/eligibility/${service.slug}`
     : `/checkout/${checkoutId}`
   const urlParams = new URLSearchParams({
     utm_source: 'service_page',
@@ -216,7 +233,7 @@ export function BookingPanel({
       {/* Total amount - prominent */}
       <div className="mb-1">
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
-          Total to pay now
+          {priceVariesByQuestionnaire ? 'Starting from' : 'Total to pay now'}
         </p>
         <p className="font-mono text-4xl font-bold text-foreground mt-1">
           ₹{totalFee.toLocaleString('en-IN')}

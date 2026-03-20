@@ -310,6 +310,38 @@ export function UnifiedServicePage({
 
   const totalFee = adjustedOllvyFee + adjustedGovtFee
 
+  // Services where govt fees vary based on questionnaire answers
+  // These show "Starting from" prefix and use eligibility flow
+  const priceVariesByQuestionnaire = [
+    'trademark-registration',
+    'pvt-ltd-incorporation',
+    'llp-incorporation',
+  ].includes(service.slug)
+
+  // Determine CTA label and URL for this service
+  const ctaLabel = service.priceVariesByState
+    ? 'Get Quote'
+    : priceVariesByQuestionnaire
+    ? 'Check Eligibility & Price'
+    : 'Book Now'
+
+  // Build base checkout/eligibility URL
+  const getCtaUrl = (utmMedium: string, includeVariant = false) => {
+    const baseUrl = service.priceVariesByState
+      ? `/quote/request/${service.id || service.slug}`
+      : priceVariesByQuestionnaire
+      ? `/eligibility/${service.slug}`
+      : `/checkout/${service.id || service.slug}`
+    const params = new URLSearchParams({
+      utm_source: 'service_page',
+      utm_medium: utmMedium,
+    })
+    if (includeVariant && service.variants && selectedVariant) {
+      params.set('variant', selectedVariant)
+    }
+    return `${baseUrl}?${params.toString()}`
+  }
+
   // Scroll to section
   const scrollToSection = useCallback((sectionId: SectionId) => {
     const element = sectionRefs.current[sectionId]
@@ -486,14 +518,8 @@ export function UnifiedServicePage({
 
             {/* Right: CTA */}
             <Button size="sm" asChild>
-              <a
-                href={
-                  service.priceVariesByState
-                    ? `/quote/request/${service.id || service.slug}`
-                    : `/checkout/${service.id || service.slug}`
-                }
-              >
-                {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
+              <a href={getCtaUrl('sticky_header')}>
+                {ctaLabel}
               </a>
             </Button>
           </div>
@@ -557,14 +583,8 @@ export function UnifiedServicePage({
                 )}
 
                 <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild>
-                  <a
-                    href={
-                      service.priceVariesByState
-                        ? `/quote/request/${service.id || service.slug}?utm_source=service_page&utm_medium=hero`
-                        : `/checkout/${service.id || service.slug}?utm_source=service_page&utm_medium=hero`
-                    }
-                  >
-                    {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
+                  <a href={getCtaUrl('hero')}>
+                    {ctaLabel}
                   </a>
                 </Button>
               </div>
@@ -1204,14 +1224,8 @@ export function UnifiedServicePage({
                 Fixed price. Verified CA. Done within {service.slaDays} working days.
               </p>
               <Button size="lg" className="mt-8" asChild>
-                <a
-                  href={
-                    service.priceVariesByState
-                      ? `/quote/request/${service.id || service.slug}?utm_source=service_page&utm_medium=final_cta`
-                      : `/checkout/${service.id || service.slug}?utm_source=service_page&utm_medium=final_cta`
-                  }
-                >
-                  {service.priceVariesByState ? 'Get Quote' : 'Book Now'}
+                <a href={getCtaUrl('final_cta')}>
+                  {ctaLabel}
                 </a>
               </Button>
             </div>
