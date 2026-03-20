@@ -1,6 +1,0 @@
-{
-  "buildCommand": "pnpm --filter @ollvy/customer build",
-  "outputDirectory": "apps/customer/.next",
-  "installCommand": "pnpm install",
-  "framework": "nextjs"
-}
