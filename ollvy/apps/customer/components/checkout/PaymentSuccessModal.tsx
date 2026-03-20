@@ -46,6 +46,7 @@ export function PaymentSuccessModal({
   onClose,
 }: PaymentSuccessModalProps) {
   const [mounted, setMounted] = useState(false)
+  const [countdown, setCountdown] = useState(5)
 
   useEffect(() => {
     if (isOpen) {
@@ -53,8 +54,27 @@ export function PaymentSuccessModal({
       return () => clearTimeout(timer)
     } else {
       setMounted(false)
+      setCountdown(5) // Reset countdown when modal closes
     }
   }, [isOpen])
+
+  // Auto-redirect countdown
+  useEffect(() => {
+    if (!isOpen || !mounted) return
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval)
+          onClose() // Redirect when countdown reaches 0
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [isOpen, mounted, onClose])
 
   const handleViewOrder = () => {
     onClose()
@@ -124,7 +144,7 @@ export function PaymentSuccessModal({
         </div>
 
         {/* CTA */}
-        <div className="px-6 pb-6">
+        <div className="px-6 pb-6 space-y-3">
           <Button
             onClick={handleViewOrder}
             className="w-full h-11 text-sm font-medium gap-2"
@@ -132,6 +152,9 @@ export function PaymentSuccessModal({
             Start Setup
             <ArrowRight className="h-4 w-4" />
           </Button>
+          <p className="text-xs text-muted-foreground text-center">
+            Redirecting automatically in {countdown}s...
+          </p>
         </div>
       </DialogContent>
     </Dialog>
