@@ -206,6 +206,12 @@ export interface DBServiceConfig {
 
   // Service explainer (optional, for "What is [Service]?" section)
   serviceExplainer?: DBServiceExplainer
+
+  // Completion estimate fields (for govt processing services)
+  hasGovtProcessing?: boolean
+  completionMinDays?: number | null
+  completionMaxDays?: number | null
+  completionRangeText?: string | null
 }
 
 /**
@@ -327,7 +333,11 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
       comparison_with,
       addons,
       is_bundle,
-      service_explainer
+      service_explainer,
+      has_govt_processing,
+      completion_min_days,
+      completion_max_days,
+      completion_range_text
     `)
     .eq('slug', slug)
     .single()
@@ -420,6 +430,12 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
 
     // Service explainer (optional)
     serviceExplainer: pkg.service_explainer ?? undefined,
+
+    // Completion estimate fields
+    hasGovtProcessing: pkg.has_govt_processing ?? false,
+    completionMinDays: pkg.completion_min_days ?? null,
+    completionMaxDays: pkg.completion_max_days ?? null,
+    completionRangeText: pkg.completion_range_text ?? null,
   }
 
   // Also return legacy pricing structure for backwards compatibility

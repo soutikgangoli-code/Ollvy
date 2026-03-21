@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, Loader2, User, LogOut, ShoppingBag, Repeat } from 'lucide-react'
+import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, Loader2, User, LogOut, ShoppingBag, Repeat, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -84,6 +84,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [services, setServices] = useState<ServicePackage[]>([])
   const [isLoadingServices, setIsLoadingServices] = useState(false)
@@ -119,12 +120,12 @@ export function Navbar() {
     }
   }, [])
 
-  // Fetch services when search dialog opens
+  // Fetch services when search dialog opens (desktop or mobile)
   useEffect(() => {
-    if (searchOpen && services.length === 0) {
+    if ((searchOpen || mobileSearchOpen) && services.length === 0) {
       fetchServices()
     }
-  }, [searchOpen, services.length, fetchServices])
+  }, [searchOpen, mobileSearchOpen, services.length, fetchServices])
 
   // Filter services based on search query
   const filteredServices = useMemo(() => {
@@ -151,6 +152,7 @@ export function Navbar() {
 
   const handleServiceClick = (slug: string) => {
     setSearchOpen(false)
+    setMobileSearchOpen(false)
     setSearchQuery('')
     router.push(`/services/${slug}`)
   }
@@ -315,16 +317,25 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile Menu Button */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={() => setMobileMenuOpen(true)}
-        >
-          <Menu className="h-5 w-5" />
-          <span className="sr-only">Open menu</span>
-        </Button>
+        {/* Mobile Search + Menu Buttons */}
+        <div className="flex items-center gap-1 md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileSearchOpen(true)}
+          >
+            <Search className="h-5 w-5" />
+            <span className="sr-only">Search</span>
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        </div>
 
         {/* Mobile Sheet */}
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -524,7 +535,139 @@ export function Navbar() {
             </div>
           </DialogContent>
         </Dialog>
+
       </div>
+
+      {/* Mobile Search Overlay - Expands from search button, keeps header visible */}
+      {mobileSearchOpen && (
+        <div
+          className="fixed inset-x-0 top-0 bottom-0 z-[60] md:hidden flex flex-col bg-card origin-top-right animate-in zoom-in-95 fade-in duration-200 ease-out"
+          style={{ backdropFilter: 'none' }}
+        >
+          {/* Header row - matches main header */}
+          <div className={cn(
+            'flex items-center justify-between px-4 border-b border-border bg-card transition-all duration-200',
+            scrolled ? 'h-[52px]' : 'h-16'
+          )}>
+            {/* Logo */}
+            <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
+              Ollvy
+            </Link>
+
+            {/* Search input - expands from right */}
+            <div className="flex-1 mx-4 animate-in slide-in-from-right-4 fade-in duration-300 delay-75">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search services..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-10 pl-10 pr-10 rounded-full bg-muted border-0 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                  autoFocus
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5"
+                  >
+                    <X className="h-4 w-4 text-muted-foreground" />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Close + Menu buttons */}
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setMobileSearchOpen(false)
+                  setSearchQuery('')
+                }}
+              >
+                <X className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setMobileSearchOpen(false)
+                  setMobileMenuOpen(true)
+                }}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+
+          {/* Search Results */}
+          <div className="flex-1 overflow-y-auto bg-card">
+            {isLoadingServices ? (
+              <div className="px-4 py-12 flex flex-col items-center justify-center text-muted-foreground animate-in fade-in duration-300">
+                <Loader2 className="h-6 w-6 animate-spin mb-2" />
+                <span className="text-sm">Loading services...</span>
+              </div>
+            ) : filteredServices.length === 0 ? (
+              <div className="px-4 py-12 text-center animate-in fade-in duration-300">
+                <Search className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
+                <p className="text-muted-foreground">
+                  {searchQuery ? `No services found for "${searchQuery}"` : 'Start typing to search'}
+                </p>
+              </div>
+            ) : (
+              <div className="py-2 animate-in fade-in duration-200 delay-100">
+                <div className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {searchQuery ? `${filteredServices.length} results` : `${filteredServices.length} Services`}
+                </div>
+                {filteredServices.map((service, index) => (
+                  <button
+                    key={service.slug}
+                    onClick={() => handleServiceClick(service.slug)}
+                    className="w-full px-4 py-4 flex items-center gap-3 active:bg-muted transition-all text-left border-b border-border/50 bg-card"
+                    style={{
+                      animation: 'fadeSlideIn 0.3s ease-out forwards',
+                      animationDelay: `${Math.min(index * 40, 400)}ms`,
+                      opacity: 0
+                    }}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-foreground">
+                        {service.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground line-clamp-1">
+                        {service.short_description}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full whitespace-nowrap">
+                        {service.order_type === 'recurring' ? 'Monthly' : 'One-time'}
+                      </span>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Custom keyframe for staggered list animation */}
+      <style jsx global>{`
+        @keyframes fadeSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </header>
   )
 }

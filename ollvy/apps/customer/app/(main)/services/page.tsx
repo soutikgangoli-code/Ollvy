@@ -81,13 +81,11 @@ function ServicesContent() {
 
       if (error) {
         console.error('Error fetching services:', error)
-        // Fall back to static services
-        setServices(filterStaticServices(STATIC_SERVICES, searchQuery, selectedFilters))
-      } else if (!data || data.length === 0) {
-        // If DB returns empty, use static services
+        // Fall back to static services only on actual errors
         setServices(filterStaticServices(STATIC_SERVICES, searchQuery, selectedFilters))
       } else {
-        setServices(data)
+        // Use DB results even if empty (0 results is a valid search outcome)
+        setServices(data || [])
       }
     } catch (err) {
       console.error('Failed to fetch services:', err)

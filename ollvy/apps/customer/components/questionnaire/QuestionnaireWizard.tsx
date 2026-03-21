@@ -155,6 +155,18 @@ export function QuestionnaireWizard({
     } else {
       // Go to next step
       nextStep()
+
+      // Explicitly reset form with next step's data from fresh store state
+      // (don't rely on useEffect timing)
+      const { responses: freshResponses, steps: freshSteps, currentStep: newStep } = useQuestionnaireStore.getState()
+      const nextStepData = freshSteps.find((s) => s.stepNumber === newStep)
+      if (nextStepData) {
+        const stepDefaults: QuestionnaireFormValues = {}
+        for (const q of nextStepData.questions) {
+          stepDefaults[q.question_key] = freshResponses[q.question_key] ?? (q.question_type === 'multiselect' ? [] : '')
+        }
+        methods.reset(stepDefaults)
+      }
     }
   }
 
@@ -163,6 +175,18 @@ export function QuestionnaireWizard({
     const currentValues = methods.getValues()
     await saveStepResponses(currentValues)
     prevStep()
+
+    // Explicitly reset form with previous step's data from fresh store state
+    // (don't rely on useEffect timing)
+    const { responses: freshResponses, steps: freshSteps, currentStep: newStep } = useQuestionnaireStore.getState()
+    const prevStepData = freshSteps.find((s) => s.stepNumber === newStep)
+    if (prevStepData) {
+      const stepDefaults: QuestionnaireFormValues = {}
+      for (const q of prevStepData.questions) {
+        stepDefaults[q.question_key] = freshResponses[q.question_key] ?? (q.question_type === 'multiselect' ? [] : '')
+      }
+      methods.reset(stepDefaults)
+    }
   }
 
   // Loading state - also show loading if we haven't loaded data yet in pre_payment mode

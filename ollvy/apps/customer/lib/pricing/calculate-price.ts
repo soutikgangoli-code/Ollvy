@@ -60,6 +60,7 @@ export function calculateServicePrice(
       '1000000':  1500000,  // Rs 10L  -> Rs 15,000 govt fee
       '2500000':  2500000,  // Rs 25L  -> Rs 25,000 govt fee
       '5000000':  3500000,  // Rs 50L  -> Rs 35,000 govt fee
+      '10000000': 4500000,  // Rs 1Cr  -> Rs 45,000 govt fee
     }
 
     govtFeePaisa = (capitalSlabs[capital] ?? 799900) + additionalDSCCost
