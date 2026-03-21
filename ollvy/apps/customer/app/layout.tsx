@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: 'Ollvy',
     images: [
       {
-        url: '/og-home.png',
+        url: '/logo.png',
         width: 1200,
         height: 630,
         alt: 'Ollvy - Company Registration & Compliance Services India',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Ollvy - Company Registration & Compliance, Sorted',
     description: 'Fixed-price compliance services with vetted CAs. LLP, Pvt Ltd, GST, Trademark, FSSAI and more.',
-    images: ['/og-home.png'],
+    images: ['/logo.png'],
   },
 }
 

@@ -6,6 +6,21 @@ import { FileText, Calculator, ArrowRight } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Free Business Tools | Ollvy',
   description: 'Free tools to help Indian businesses - Document checklists for company registration and penalty calculators for compliance deadlines.',
+  alternates: {
+    canonical: 'https://ollvy.com/tools',
+  },
+  openGraph: {
+    title: 'Free Business Tools | Ollvy',
+    description: 'Free tools to help Indian businesses - Document checklists and penalty calculators.',
+    url: 'https://ollvy.com/tools',
+    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Business Tools | Ollvy',
+    description: 'Free tools to help Indian businesses - Document checklists and penalty calculators.',
+    images: ['https://ollvy.com/logo.png'],
+  },
 }
 
 const documentTools = [
@@ -59,9 +74,35 @@ const penaltyTools = [
   },
 ]
 
+// WebPage + ItemList JSON-LD schema
+const toolsJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Free Business Tools',
+  description: 'Free tools to help Indian businesses - Document checklists for company registration and penalty calculators for compliance deadlines.',
+  url: 'https://ollvy.com/tools',
+  mainEntity: {
+    '@type': 'ItemList',
+    name: 'Business Tools Collection',
+    numberOfItems: documentTools.length + penaltyTools.length,
+    itemListElement: [...documentTools, ...penaltyTools].map((tool, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: tool.title,
+      description: tool.description,
+      url: `https://ollvy.com${tool.href}`,
+    })),
+  },
+}
+
 export default function ToolsPage() {
   return (
-    <div className="py-24">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(toolsJsonLd) }}
+      />
+      <div className="py-24">
       <div className="container max-w-5xl">
         {/* Header */}
         <div className="text-center mb-16">
@@ -134,5 +175,6 @@ export default function ToolsPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

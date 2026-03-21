@@ -88,9 +88,6 @@ export function Footer() {
           <FooterColumn
             title="Company"
             links={[
-              { label: 'About', href: '/about' },
-              { label: 'Blog', href: '/blog' },
-              { label: 'Careers', href: '/careers' },
               { label: 'Contact', href: 'mailto:support@ollvy.com' },
             ]}
           />

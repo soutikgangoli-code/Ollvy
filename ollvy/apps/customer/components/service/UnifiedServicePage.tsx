@@ -440,10 +440,15 @@ export function UnifiedServicePage({
     '@type': 'Service',
     name: service.name,
     description: service.tagline,
+    url: service.canonicalUrl,
     provider: {
       '@type': 'Organization',
       name: 'Ollvy Technologies Private Limited',
       url: 'https://ollvy.com',
+    },
+    areaServed: {
+      '@type': 'Country',
+      name: 'India',
     },
     offers: {
       '@type': 'Offer',

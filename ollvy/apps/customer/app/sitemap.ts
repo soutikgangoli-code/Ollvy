@@ -1,89 +1,167 @@
 import { MetadataRoute } from 'next'
+import { getAllServiceSlugs } from '@/lib/data/services'
+import { LEARN_PAGES } from '@/lib/learn/pages'
 
 /**
- * Sitemap for Ollvy - per SEO mandate Section 3.9
- * Includes homepage and all service pages
+ * Sitemap for Ollvy - per SEO mandate
+ * Includes all public routes:
+ * - Homepage
+ * - Services listing and detail pages
+ * - Tools index and all tool pages
+ * - Learn index and all learn pages
+ * - Legal pages (privacy, terms)
+ *
  * Excludes: /admin, /pro, /api/*, /order/*, /profile, /dashboard
  */
-export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+
+const BASE_URL = 'https://ollvy.com'
+
+// Document checklist slugs (static routes)
+const DOCUMENT_CHECKLIST_SLUGS = [
+  'private-limited-company',
+  'llp',
+  'partnership',
+  'sole-proprietor',
+  'gst-registration',
+  'individual-itr',
+  'business-itr',
+  'trademark',
+]
+
+// Penalty calculator slugs (static routes)
+const PENALTY_CALCULATOR_SLUGS = [
+  'gst-late-filing',
+  'itr-late-filing',
+  'tds-late-filing',
+  'mca-annual-filing',
+  'pf-esic-penalty',
+  'director-kyc',
+  'gst-demand-notice',
+  'professional-tax-penalty',
+  'shops-establishment-penalty',
+  'startup-dpiit-compliance',
+]
+
+// Pack slugs (if public) - add slugs here when packs are live
+const PACK_SLUGS: string[] = []
+
+// Geo page slugs (if public) - add slugs here when geo pages are live
+const GEO_SLUGS: string[] = []
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Fetch service slugs from database
+  const serviceSlugs = await getAllServiceSlugs()
+
+  // Get learn page slugs from config
+  const learnSlugs = LEARN_PAGES.map(p => p.slug)
+
+  // Static routes
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
-      url: 'https://ollvy.com',
+      url: BASE_URL,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1.0,
     },
     {
-      url: 'https://ollvy.com/services/llp-incorporation',
+      url: `${BASE_URL}/services`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: 'https://ollvy.com/services/pvt-ltd-incorporation',
+      url: `${BASE_URL}/tools`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.9,
+      priority: 0.8,
     },
     {
-      url: 'https://ollvy.com/services/gst-registration',
+      url: `${BASE_URL}/learn`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
+      changeFrequency: 'weekly',
+      priority: 0.8,
     },
     {
-      url: 'https://ollvy.com/services/trademark-registration',
+      url: `${BASE_URL}/privacy`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
     {
-      url: 'https://ollvy.com/services/fssai-license',
+      url: `${BASE_URL}/terms`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
     {
-      url: 'https://ollvy.com/services/iec-code',
+      url: `${BASE_URL}/cancellation`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
     {
-      url: 'https://ollvy.com/services/business-itr',
+      url: `${BASE_URL}/refunds`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
-    {
-      url: 'https://ollvy.com/services/mca-annual-filing',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://ollvy.com/services/gst-monthly-filing',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://ollvy.com/services/tds-compliance',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://ollvy.com/services/payroll-management',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://ollvy.com/services/director-kyc',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
+  ]
+
+  // Service detail pages
+  const serviceRoutes: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
+    url: `${BASE_URL}/services/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.85,
+  }))
+
+  // Document checklist pages
+  const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/tools/documents/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  // Penalty calculator pages
+  const penaltyRoutes: MetadataRoute.Sitemap = PENALTY_CALCULATOR_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/tools/penalty-calculator/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }))
+
+  // Learn pages
+  const learnRoutes: MetadataRoute.Sitemap = learnSlugs.map((slug) => ({
+    url: `${BASE_URL}/learn/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.75,
+  }))
+
+  // Pack pages (if any exist)
+  const packRoutes: MetadataRoute.Sitemap = PACK_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/packs/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.75,
+  }))
+
+  // Geo pages (if any exist)
+  const geoRoutes: MetadataRoute.Sitemap = GEO_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/in/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.65,
+  }))
+
+  return [
+    ...staticRoutes,
+    ...serviceRoutes,
+    ...documentRoutes,
+    ...penaltyRoutes,
+    ...learnRoutes,
+    ...packRoutes,
+    ...geoRoutes,
   ]
 }

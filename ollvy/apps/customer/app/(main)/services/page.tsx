@@ -125,8 +125,30 @@ function ServicesContent() {
     router.replace(newUrl, { scroll: false })
   }, [searchQuery, selectedFilters, router])
 
+  // JSON-LD structured data for services listing
+  const servicesJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Business Compliance Services',
+    description: 'Fixed-price compliance packages for Indian SMEs',
+    url: 'https://ollvy.com/services',
+    numberOfItems: services.length,
+    itemListElement: services.map((service, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: service.name,
+      url: `https://ollvy.com/services/${service.slug}`,
+    })),
+  }
+
   return (
     <div className="container py-12">
+      {/* JSON-LD Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
+      />
+
       {/* Header */}
       <div className="mb-10">
         <h1 className="text-3xl font-semibold text-foreground">All Services</h1>
