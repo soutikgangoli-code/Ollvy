@@ -84,6 +84,9 @@ export default function CheckoutPage() {
   // Pre-cursor answers from eligibility page (stored in sessionStorage)
   const [preCursorAnswers, setPreCursorAnswers] = useState<Record<string, unknown>>({})
 
+  // Track if we're checking for pre-payment questions (to avoid flicker)
+  const [isCheckingEligibility, setIsCheckingEligibility] = useState(true)
+
   // Fetch service data regardless of auth status (public data)
   useEffect(() => {
     if (!isHydrated) return
@@ -115,6 +118,7 @@ export default function CheckoutPage() {
     // If user already has answers, don't redirect
     const existingAnswers = getPreCursorAnswers(service.slug)
     if (existingAnswers && Object.keys(existingAnswers).length > 0) {
+      setIsCheckingEligibility(false)
       return
     }
 
@@ -136,6 +140,9 @@ export default function CheckoutPage() {
         const queryString = params.toString()
         const eligibilityUrl = `/checkout/${serviceId}/eligibility${queryString ? '?' + queryString : ''}`
         router.replace(eligibilityUrl)
+      } else {
+        // No pre-payment questions, safe to show checkout
+        setIsCheckingEligibility(false)
       }
     }
 
@@ -520,8 +527,8 @@ export default function CheckoutPage() {
 
   const canSubmit = priceBreakdown && priceBreakdown.total > 0
 
-  // Show loading state while waiting for hydration (very brief)
-  if (!isHydrated) {
+  // Show loading state while waiting for hydration or checking eligibility
+  if (!isHydrated || isCheckingEligibility) {
     return (
       <div className="container py-12 max-w-6xl">
         <Skeleton className="h-8 w-32 mb-8" />
