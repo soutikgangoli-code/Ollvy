@@ -57,52 +57,52 @@ const FAQ_DATA = [
         <p className="mb-4">
           Company registration timelines in India have improved significantly since MCA21 Version 3.0 launched in 2022. Here are the realistic timelines for each structure, assuming all documents are in order and there are no queries from the Registrar.
         </p>
-        <div className="overflow-x-auto mb-4">
-          <table className="w-full text-sm border-collapse">
+        <div className="overflow-x-auto mb-4 rounded-lg border border-border/50">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-2 pr-4 font-semibold">Structure</th>
-                <th className="text-left py-2 pr-4 font-semibold">Typical timeline</th>
-                <th className="text-left py-2 pr-4 font-semibold">Fastest possible</th>
-                <th className="text-left py-2 font-semibold">What causes delays</th>
+              <tr className="border-b border-border/30 bg-muted/30">
+                <th className="text-left py-3 pr-4 pl-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Structure</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Typical timeline</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Fastest possible</th>
+                <th className="text-left py-3 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">What causes delays</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-border">
-                <td className="py-2 pr-4"><Link href="/services/pvt-ltd-incorporation" className="text-primary underline hover:no-underline">Private Limited Company</Link></td>
-                <td className="py-2 pr-4">12-15 working days</td>
-                <td className="py-2 pr-4">7-8 working days</td>
-                <td className="py-2">Name rejection (RUN), DSC delays, document issues</td>
+              <tr className="border-b border-border/30">
+                <td className="py-3 pr-4 pl-4"><Link href="/services/pvt-ltd-incorporation" className="text-primary hover:underline">Private Limited Company</Link></td>
+                <td className="py-3 pr-4 font-mono text-sm">12-15 working days</td>
+                <td className="py-3 pr-4 font-mono text-sm">7-8 working days</td>
+                <td className="py-3 pr-4 text-muted-foreground">Name rejection (RUN), DSC delays, document issues</td>
               </tr>
-              <tr className="border-b border-border">
-                <td className="py-2 pr-4"><Link href="/services/llp-incorporation" className="text-primary underline hover:no-underline">LLP</Link></td>
-                <td className="py-2 pr-4">10-12 working days</td>
-                <td className="py-2 pr-4">6-7 working days</td>
-                <td className="py-2">Name rejection, partner DSC delays</td>
+              <tr className="border-b border-border/30">
+                <td className="py-3 pr-4 pl-4"><Link href="/services/llp-incorporation" className="text-primary hover:underline">LLP</Link></td>
+                <td className="py-3 pr-4 font-mono text-sm">10-12 working days</td>
+                <td className="py-3 pr-4 font-mono text-sm">6-7 working days</td>
+                <td className="py-3 pr-4 text-muted-foreground">Name rejection, partner DSC delays</td>
               </tr>
-              <tr className="border-b border-border">
-                <td className="py-2 pr-4">OPC (One Person Company)</td>
-                <td className="py-2 pr-4">10-12 working days</td>
-                <td className="py-2 pr-4">6-7 working days</td>
-                <td className="py-2">Nominee consent issues</td>
+              <tr className="border-b border-border/30">
+                <td className="py-3 pr-4 pl-4">OPC (One Person Company)</td>
+                <td className="py-3 pr-4 font-mono text-sm">10-12 working days</td>
+                <td className="py-3 pr-4 font-mono text-sm">6-7 working days</td>
+                <td className="py-3 pr-4 text-muted-foreground">Nominee consent issues</td>
               </tr>
-              <tr className="border-b border-border">
-                <td className="py-2 pr-4"><Link href="/services/gst-registration" className="text-primary underline hover:no-underline">GST Registration</Link></td>
-                <td className="py-2 pr-4">5-7 working days</td>
-                <td className="py-2 pr-4">3-4 working days</td>
-                <td className="py-2">Officer queries, address proof issues</td>
+              <tr className="border-b border-border/30">
+                <td className="py-3 pr-4 pl-4"><Link href="/services/gst-registration" className="text-primary hover:underline">GST Registration</Link></td>
+                <td className="py-3 pr-4 font-mono text-sm">5-7 working days</td>
+                <td className="py-3 pr-4 font-mono text-sm">3-4 working days</td>
+                <td className="py-3 pr-4 text-muted-foreground">Officer queries, address proof issues</td>
               </tr>
-              <tr className="border-b border-border">
-                <td className="py-2 pr-4"><Link href="/services/trademark-registration" className="text-primary underline hover:no-underline">Trademark Registration</Link></td>
-                <td className="py-2 pr-4">1-2 days to file, 12-18 months for certificate</td>
-                <td className="py-2 pr-4">Filing is instant</td>
-                <td className="py-2">Examination process is fixed by government</td>
+              <tr className="border-b border-border/30">
+                <td className="py-3 pr-4 pl-4"><Link href="/services/trademark-registration" className="text-primary hover:underline">Trademark Registration</Link></td>
+                <td className="py-3 pr-4 font-mono text-sm">1-2 days to file, 12-18 months for certificate</td>
+                <td className="py-3 pr-4 font-mono text-sm">Filing is instant</td>
+                <td className="py-3 pr-4 text-muted-foreground">Examination process is fixed by government</td>
               </tr>
-              <tr className="border-b border-border">
-                <td className="py-2 pr-4"><Link href="/services/fssai-license" className="text-primary underline hover:no-underline">FSSAI License (State)</Link></td>
-                <td className="py-2 pr-4">30-45 working days</td>
-                <td className="py-2 pr-4">20 working days</td>
-                <td className="py-2">State authority processing time</td>
+              <tr>
+                <td className="py-3 pr-4 pl-4"><Link href="/services/fssai-license" className="text-primary hover:underline">FSSAI License (State)</Link></td>
+                <td className="py-3 pr-4 font-mono text-sm">30-45 working days</td>
+                <td className="py-3 pr-4 font-mono text-sm">20 working days</td>
+                <td className="py-3 pr-4 text-muted-foreground">State authority processing time</td>
               </tr>
             </tbody>
           </table>
@@ -157,47 +157,47 @@ const FAQ_DATA = [
         <p className="mb-4">
           The total cost of company registration in India has two components: professional fees (what you pay a CA or service provider) and government fees (paid directly to MCA). Here is a full breakdown.
         </p>
-        <div className="overflow-x-auto mb-4">
-          <table className="w-full text-sm border-collapse">
+        <div className="overflow-x-auto mb-4 rounded-lg border border-border/50">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-2 pr-4 font-semibold">Service</th>
-                <th className="text-left py-2 pr-4 font-semibold">Ollvy fee</th>
-                <th className="text-left py-2 pr-4 font-semibold">Govt. fees (approx.)</th>
-                <th className="text-left py-2 pr-4 font-semibold">Total</th>
-                <th className="text-left py-2 font-semibold">What's included</th>
+              <tr className="border-b border-border/30 bg-muted/30">
+                <th className="text-left py-3 pr-4 pl-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Service</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Ollvy fee</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Govt. fees (approx.)</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Total</th>
+                <th className="text-left py-3 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">What's included</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/llp-incorporation" className="text-primary underline hover:no-underline">LLP Incorporation</Link></td>
                 <td className="py-2 pr-4">Rs 7,999</td>
                 <td className="py-2 pr-4">Rs 500-800</td>
                 <td className="py-2 pr-4">~Rs 8,800</td>
                 <td className="py-2">DSC, name reservation, LLP agreement, Form 2 filing, CoI, compliance calendar</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/pvt-ltd-incorporation" className="text-primary underline hover:no-underline">Private Limited Company</Link></td>
                 <td className="py-2 pr-4">Rs 9,999</td>
                 <td className="py-2 pr-4">Rs 3,000-6,000</td>
                 <td className="py-2 pr-4">~Rs 14,000</td>
                 <td className="py-2">DSC for 2 directors, SPICe+ filing, PAN, TAN, CoI, MOA/AOA, compliance calendar</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">OPC Incorporation</td>
                 <td className="py-2 pr-4">Rs 8,499</td>
                 <td className="py-2 pr-4">Rs 1,500-3,000</td>
                 <td className="py-2 pr-4">~Rs 11,000</td>
                 <td className="py-2">Single director DSC, SPICe+ filing, CoI, PAN, TAN</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/gst-registration" className="text-primary underline hover:no-underline">GST Registration</Link></td>
                 <td className="py-2 pr-4">Rs 2,999</td>
                 <td className="py-2 pr-4">Rs 0</td>
                 <td className="py-2 pr-4">Rs 2,999</td>
                 <td className="py-2">Portal application, document prep, officer query handling, GSTIN delivery</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/trademark-registration" className="text-primary underline hover:no-underline">Trademark Registration</Link></td>
                 <td className="py-2 pr-4">Rs 6,999</td>
                 <td className="py-2 pr-4">Rs 4,500-9,000</td>
@@ -333,37 +333,37 @@ const FAQ_DATA = [
         <p className="mb-4">
           <strong>Step 6 - Registration certificate:</strong> If there is no opposition, the registration certificate is issued. You can now use the (R) symbol. The certificate is backdated to the original filing date.
         </p>
-        <div className="overflow-x-auto mb-4">
-          <table className="w-full text-sm border-collapse">
+        <div className="overflow-x-auto mb-4 rounded-lg border border-border/50">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-2 pr-4 font-semibold">Stage</th>
-                <th className="text-left py-2 pr-4 font-semibold">Timeline</th>
-                <th className="text-left py-2 font-semibold">What you do</th>
+              <tr className="border-b border-border/30 bg-muted/30">
+                <th className="text-left py-3 pr-4 pl-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Stage</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Timeline</th>
+                <th className="text-left py-3 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">What you do</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">Trademark search</td>
                 <td className="py-2 pr-4">1-2 days</td>
                 <td className="py-2">Nothing - our lawyer handles it</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">TM-A filing</td>
                 <td className="py-2 pr-4">1 day</td>
                 <td className="py-2">Nothing - our lawyer files it</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">Examination</td>
                 <td className="py-2 pr-4">3-6 months</td>
                 <td className="py-2">Nothing unless an examination report is raised</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">Journal publication</td>
                 <td className="py-2 pr-4">4 months</td>
                 <td className="py-2">Nothing unless a third party opposes</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">Certificate issued</td>
                 <td className="py-2 pr-4">1-2 months after publication</td>
                 <td className="py-2">Nothing - delivered to your vault</td>
@@ -390,33 +390,33 @@ const FAQ_DATA = [
         <p className="mb-4">
           FSSAI compliance comes in three tiers depending on the size and nature of your food business. Choosing the wrong tier is one of the most common mistakes food entrepreneurs make.
         </p>
-        <div className="overflow-x-auto mb-4">
-          <table className="w-full text-sm border-collapse">
+        <div className="overflow-x-auto mb-4 rounded-lg border border-border/50">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-2 pr-4 font-semibold">Type</th>
-                <th className="text-left py-2 pr-4 font-semibold">Who needs it</th>
-                <th className="text-left py-2 pr-4 font-semibold">Annual turnover</th>
-                <th className="text-left py-2 pr-4 font-semibold">Validity</th>
-                <th className="text-left py-2 font-semibold">Ollvy fee</th>
+              <tr className="border-b border-border/30 bg-muted/30">
+                <th className="text-left py-3 pr-4 pl-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Type</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Who needs it</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Annual turnover</th>
+                <th className="text-left py-3 pr-4 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Validity</th>
+                <th className="text-left py-3 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">Ollvy fee</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">Basic Registration</td>
                 <td className="py-2 pr-4">Petty food businesses, home bakers, street vendors, small dhabas</td>
                 <td className="py-2 pr-4">Below Rs 12 lakhs</td>
                 <td className="py-2 pr-4">1-5 years</td>
                 <td className="py-2">Rs 3,999</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">State Licence</td>
                 <td className="py-2 pr-4">Restaurants, bakeries, mid-size food manufacturers, caterers</td>
                 <td className="py-2 pr-4">Rs 12 lakhs - Rs 20 crores</td>
                 <td className="py-2 pr-4">1-5 years</td>
                 <td className="py-2">Rs 5,999</td>
               </tr>
-              <tr className="border-b border-border">
+              <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">Central Licence</td>
                 <td className="py-2 pr-4">Large manufacturers, importers/exporters, chains with 21+ outlets, milk/meat processing</td>
                 <td className="py-2 pr-4">Above Rs 20 crores, or multi-state</td>
@@ -478,20 +478,29 @@ export function HomeFAQ() {
   return (
     <section id="faqs" className="bg-background pt-24 pb-12">
       <div className="container max-w-4xl">
-        {/* Section Heading - per spec Section 3.5 */}
+        {/* Section Heading */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center mb-12">
           Frequently asked questions
         </h2>
 
-        <Accordion type="multiple" className="w-full">
-          {FAQ_DATA.map((faq) => (
-            <AccordionItem key={faq.id} value={faq.id} className="border-border">
-              <AccordionTrigger className="text-left hover:no-underline py-6">
-                <h3 className="text-base md:text-lg font-normal text-foreground pr-4">
-                  {faq.question}
-                </h3>
+        <Accordion type="multiple" className="w-full space-y-3">
+          {FAQ_DATA.map((faq, index) => (
+            <AccordionItem
+              key={faq.id}
+              value={faq.id}
+              className="rounded-lg border border-border/50 bg-card overflow-hidden px-0 data-[state=open]:bg-muted/20"
+            >
+              <AccordionTrigger className="text-left hover:no-underline py-5 px-5 hover:bg-muted/30 transition-colors [&[data-state=open]]:border-b [&[data-state=open]]:border-border/30">
+                <div className="flex items-start gap-4 pr-4">
+                  <span className="font-mono text-[10px] text-muted-foreground mt-1.5 shrink-0">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="text-sm md:text-base font-medium text-foreground">
+                    {faq.question}
+                  </h3>
+                </div>
               </AccordionTrigger>
-              <AccordionContent className="text-foreground leading-relaxed pb-6">
+              <AccordionContent forceMount className="text-sm text-foreground/90 leading-relaxed px-5 pb-5 pt-4 ml-9">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

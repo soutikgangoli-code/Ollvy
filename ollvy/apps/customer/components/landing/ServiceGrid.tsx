@@ -3,11 +3,9 @@
 import { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Star, ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Star, ArrowRight, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getGuaranteedDate, getNextGstrDueDate } from '@/lib/dates'
+import { getGuaranteedDate } from '@/lib/dates'
 import { ServiceCardData } from '@/lib/types/database'
 
 interface ServiceCardProps {
@@ -122,58 +120,60 @@ function ServiceCard({
   const totalPrice = ollvyFee + (govtFee ?? 0)
 
   return (
-    <Card className="relative border border-border bg-card hover:bg-card/80 hover:border-ollvy-green/30 transition-all duration-200 cursor-pointer group h-[180px] overflow-hidden">
-      {isPopular && (
-        <div className="absolute top-0 right-0">
-          <div className="bg-ollvy-green text-background text-[10px] font-medium px-2 py-0.5 rounded-bl-lg">
-            Popular
-          </div>
-        </div>
-      )}
-      <CardContent className="p-4 h-full flex flex-col">
-        {/* Service Name - fixed height */}
-        <h3 className="font-semibold text-foreground text-sm leading-tight pr-12 line-clamp-2 h-[40px]">{name}</h3>
+    <div className="h-full rounded-lg border border-border/50 bg-card hover:border-border transition-all duration-200 cursor-pointer group overflow-hidden flex flex-col">
+      {/* Title */}
+      <div className="px-5 pt-5 pb-3">
+        <h3 className="font-medium text-foreground text-sm leading-tight line-clamp-2 min-h-[2.5rem]">
+          {name}
+        </h3>
+      </div>
 
-        {/* Price section - grows to fill space */}
-        <div className="flex-grow flex flex-col justify-end">
-          <div>
-            <span className="font-mono text-2xl font-bold text-foreground">
-              ₹{totalPrice.toLocaleString('en-IN')}
+      {/* Price section */}
+      <div className="px-5 pb-4 flex-1 flex flex-col justify-end">
+        <p className="text-3xl font-mono font-semibold text-foreground tracking-tight">
+          ₹{totalPrice.toLocaleString('en-IN')}
+          {isRetainer && <span className="text-base font-normal text-muted-foreground ml-0.5">/mo</span>}
+        </p>
+
+        {/* Timeline */}
+        <div className="mt-2">
+          {isRetainer ? (
+            <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.1em]">
+              Monthly retainer
             </span>
-            {isRetainer && <span className="text-sm text-muted-foreground ml-0.5">/mo</span>}
-          </div>
-
-          {/* Timeline - fixed height */}
-          <div className="h-5 mt-1">
-            {isRetainer ? (
-              <span className="text-xs text-muted-foreground">Monthly retainer</span>
-            ) : guaranteedDate ? (
-              <span className="inline-flex items-center gap-1 text-xs text-ollvy-green">
-                <Check className="h-3 w-3" />
-                Guaranteed by {guaranteedDate}
-              </span>
-            ) : (
-              <span className="text-xs text-muted-foreground">{slaDays} working days</span>
-            )}
-          </div>
+          ) : guaranteedDate ? (
+            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              Guaranteed by {guaranteedDate}
+            </span>
+          ) : (
+            <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-[0.1em]">
+              {slaDays} working days
+            </span>
+          )}
         </div>
+      </div>
 
-        {/* Arrow row - always at bottom */}
-        <div className="flex items-center justify-between pt-2 border-t border-border mt-2">
-          {showRating ? (
-            <div className="flex items-center gap-1">
-              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-              <span className="text-xs text-muted-foreground font-medium">
+      {/* Footer */}
+      <div className="px-5 py-3 bg-muted/30 border-t border-border/30 flex items-center justify-between mt-auto">
+        <div className="flex items-center gap-2">
+          {isPopular && (
+            <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              POPULAR
+            </span>
+          )}
+          {showRating && (
+            <span className="flex items-center gap-1">
+              <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+              <span className="font-mono text-[10px] text-muted-foreground">
                 {avgRating!.toFixed(1)}
               </span>
-            </div>
-          ) : (
-            <div />
+            </span>
           )}
-          <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-ollvy-green group-hover:translate-x-1 transition-all duration-200" />
         </div>
-      </CardContent>
-    </Card>
+        <ArrowRight className="h-4 w-4 text-muted-foreground/50 group-hover:text-foreground transition-colors" />
+      </div>
+    </div>
   )
 }
 
@@ -278,7 +278,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
                   ? `/services/${service.slug}?utm_source=homepage&utm_medium=landing&utm_content=service_grid`
                   : `/services?utm_source=homepage&utm_medium=landing&utm_content=service_grid`
                 }
-                className="flex-shrink-0 w-[260px] md:w-[calc(25%-12px)] snap-start"
+                className="flex-shrink-0 w-[260px] md:w-[calc(25%-12px)] snap-start h-[200px]"
               >
                 <ServiceCard {...service} />
               </Link>

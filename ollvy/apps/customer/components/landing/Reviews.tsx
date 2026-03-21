@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useEffect, useState, useCallback, useRef } from 'react'
-import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -266,7 +265,7 @@ export function Reviews() {
           {KEYWORD_CHIPS.map((chip) => (
             <span
               key={chip}
-              className="border border-border bg-muted/30 text-muted-foreground rounded-full px-3 py-1.5 text-sm"
+              className="font-mono text-[10px] px-2.5 py-1.5 uppercase tracking-[0.1em] text-muted-foreground bg-muted/50 border border-border/50 rounded-sm"
             >
               "{chip}"
             </span>
@@ -310,18 +309,17 @@ export function Reviews() {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {TESTIMONIALS.map((t) => (
-              <Card key={t.name} className="flex-shrink-0 w-[85vw] snap-center border border-border bg-card p-6 h-[320px] flex flex-col">
-                <div className="text-4xl leading-none text-muted-foreground/20 font-serif">
-                  &ldquo;
+              <div key={t.name} className="flex-shrink-0 w-[85vw] snap-center rounded-lg border border-border/50 bg-card overflow-hidden h-[340px] flex flex-col">
+                <div className="px-6 pt-6 pb-4 flex-grow flex flex-col">
+                  <p className="text-sm text-foreground leading-[1.8] flex-grow">{formatQuoteWithMono(t.quote)}</p>
                 </div>
-                <p className="text-sm text-foreground leading-relaxed mt-3 flex-grow">{formatQuoteWithMono(t.quote)}</p>
-                <div className="border-t border-border pt-4 mt-auto">
-                  <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                <div className="px-6 py-4 bg-muted/30 border-t border-border/30 mt-auto">
+                  <p className="text-sm font-medium text-foreground">{t.name}</p>
+                  <p className="font-mono text-[10px] text-muted-foreground mt-1 uppercase tracking-[0.1em]">
                     {t.role} · {t.business} · {t.city}
                   </p>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
 
@@ -336,18 +334,17 @@ export function Reviews() {
               }}
             >
               {visibleTestimonials.map((t) => (
-                <Card key={t.name} className="border border-border bg-card p-6 h-[320px] flex flex-col">
-                  <div className="text-4xl leading-none text-muted-foreground/20 font-serif">
-                    &ldquo;
+                <div key={t.name} className="rounded-lg border border-border/50 bg-card overflow-hidden h-[340px] flex flex-col">
+                  <div className="px-6 pt-6 pb-4 flex-grow flex flex-col">
+                    <p className="text-sm text-foreground leading-[1.8] flex-grow">{formatQuoteWithMono(t.quote)}</p>
                   </div>
-                  <p className="text-sm text-foreground leading-relaxed mt-3 flex-grow">{formatQuoteWithMono(t.quote)}</p>
-                  <div className="border-t border-border pt-4 mt-auto">
-                    <p className="text-sm font-semibold text-foreground">{t.name}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">
+                  <div className="px-6 py-4 bg-muted/30 border-t border-border/30 mt-auto">
+                    <p className="text-sm font-medium text-foreground">{t.name}</p>
+                    <p className="font-mono text-[10px] text-muted-foreground mt-1 uppercase tracking-[0.1em]">
                       {t.role} · {t.business} · {t.city}
                     </p>
                   </div>
-                </Card>
+                </div>
               ))}
             </div>
           </div>

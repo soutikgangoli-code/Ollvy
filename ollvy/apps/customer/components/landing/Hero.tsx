@@ -3,8 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Check, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 function FloatingCards() {
@@ -21,116 +20,131 @@ function FloatingCards() {
   return (
     <div className="relative w-[420px] h-[520px] hidden lg:block shrink-0">
       {/* Card 1 - GST Filing with proof */}
-      <Card
+      <div
         className={cn(
-          'absolute top-0 right-0 w-[240px] border border-border bg-card p-4 transition-all duration-700 ease-out origin-center',
+          'absolute top-0 right-0 w-[240px] rounded-lg border border-border/50 bg-card overflow-hidden transition-all duration-700 ease-out origin-center',
           activeIndex === 0 ? 'scale-[1.05] z-20' : 'scale-100 z-10'
         )}
       >
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-foreground">GSTR-3B Filed</span>
-          <span className="text-[10px] text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full font-medium">
-            <Check className="h-2.5 w-2.5 inline mr-0.5" />
-            Done
-          </span>
+        <div className="px-5 pt-5 pb-4">
+          <div className="flex items-center justify-between">
+            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">GSTR-3B Filed</span>
+            <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              DONE
+            </span>
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Filed on</span>
+              <span className="text-foreground">18 Mar 2025</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">ARN</span>
+              <span className="font-mono text-emerald-600 dark:text-emerald-400 text-xs">AA290325001234X</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Late fees</span>
+              <span className="font-mono font-medium text-foreground">₹0</span>
+            </div>
+          </div>
         </div>
-        <div className="mt-3 space-y-2">
-          <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Filed on</span>
-            <span className="text-foreground">18 Mar 2025</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">ARN</span>
-            <span className="font-mono text-emerald-500 text-[11px]">AA290325001234X</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Late fees</span>
-            <span className="font-mono text-foreground">₹0</span>
-          </div>
+        <div className="px-5 py-3 bg-muted/30 border-t border-border/30">
+          <p className="font-mono text-[10px] text-muted-foreground">
+            Filed 2 days before deadline
+          </p>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-3 pt-2 border-t border-border">
-          Filed 2 days before deadline
-        </p>
-      </Card>
+      </div>
 
       {/* Card 2 - Pvt Ltd Progress */}
-      <Card
+      <div
         className={cn(
-          'absolute top-[200px] -left-2 w-[250px] border border-border bg-card p-4 transition-all duration-700 ease-out origin-center',
+          'absolute top-[200px] -left-2 w-[250px] rounded-lg border border-border/50 bg-card overflow-hidden transition-all duration-700 ease-out origin-center',
           activeIndex === 1 ? 'scale-[1.05] z-20' : 'scale-100 z-10'
         )}
       >
-        <span className="text-sm font-semibold text-foreground">Pvt Ltd Incorporation</span>
-        <div className="flex gap-1 mt-3">
-          {['Name', 'DSC', 'DIN', 'MOA', 'Cert'].map((stage, i) => (
-            <div
-              key={stage}
-              className={cn(
-                'h-1.5 flex-1 rounded-full',
-                i < 3 ? 'bg-emerald-500' : 'bg-muted'
-              )}
-            />
-          ))}
+        <div className="px-5 pt-5 pb-4">
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Pvt Ltd Incorporation</span>
+          <div className="flex gap-1 mt-4">
+            {['Name', 'DSC', 'DIN', 'MOA', 'Cert'].map((stage, i) => (
+              <div
+                key={stage}
+                className={cn(
+                  'h-1.5 flex-1 rounded-full',
+                  i < 3 ? 'bg-emerald-500' : 'bg-muted'
+                )}
+              />
+            ))}
+          </div>
+          <div className="flex justify-between items-center mt-3">
+            <p className="text-sm text-muted-foreground">Stage 3 of 5</p>
+            <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              IN PROGRESS
+            </span>
+          </div>
         </div>
-        <div className="flex justify-between items-center mt-2">
-          <p className="text-xs text-muted-foreground">Stage 3 of 5</p>
-          <span className="text-[10px] text-emerald-500 font-medium">In Progress</span>
+        <div className="px-5 py-3 bg-muted/30 border-t border-border/30">
+          <p className="font-mono text-[10px] text-muted-foreground">
+            Expected completion: 28 Mar 2025
+          </p>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-3 pt-2 border-t border-border">
-          Expected completion: 28 Mar 2025
-        </p>
-      </Card>
+      </div>
 
       {/* Card 3 - Compliance Score */}
-      <Card
+      <div
         className={cn(
-          'absolute bottom-0 right-8 w-[220px] border border-border bg-card p-4 transition-all duration-700 ease-out origin-center',
+          'absolute -bottom-4 right-8 w-[220px] rounded-lg border border-border/50 bg-card overflow-hidden transition-all duration-700 ease-out origin-center',
           activeIndex === 2 ? 'scale-[1.05] z-20' : 'scale-100 z-10'
         )}
       >
-        <div className="flex justify-between items-center">
-          <span className="text-sm font-semibold text-foreground">Compliance Score</span>
-          <span className="text-[10px] text-emerald-500 font-medium">On Track</span>
-        </div>
-        <div className="flex items-center gap-4 mt-3">
-          <svg viewBox="0 0 50 50" width="50" height="50" className="shrink-0">
-            <circle
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              stroke="hsl(var(--muted))"
-              strokeWidth="3"
-            />
-            <circle
-              cx="25"
-              cy="25"
-              r="20"
-              fill="none"
-              stroke="hsl(var(--ollvy-green))"
-              strokeWidth="3"
-              strokeDasharray={`${(84 / 100) * 125.6} 125.6`}
-              strokeLinecap="round"
-              transform="rotate(-90 25 25)"
-            />
-            <text
-              x="25"
-              y="29"
-              textAnchor="middle"
-              className="text-sm fill-foreground font-bold font-mono"
-            >
-              84
-            </text>
-          </svg>
-          <div>
-            <p className="text-xs text-foreground font-medium">3 deadlines</p>
-            <p className="text-[10px] text-muted-foreground">this month</p>
+        <div className="px-5 pt-5 pb-4">
+          <div className="flex justify-between items-center">
+            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">Compliance Score</span>
+            <span className="font-mono text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              ON TRACK
+            </span>
+          </div>
+          <div className="flex items-center gap-4 mt-4">
+            <svg viewBox="0 0 50 50" width="50" height="50" className="shrink-0">
+              <circle
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                stroke="hsl(var(--muted))"
+                strokeWidth="3"
+              />
+              <circle
+                cx="25"
+                cy="25"
+                r="20"
+                fill="none"
+                stroke="hsl(var(--ollvy-green))"
+                strokeWidth="3"
+                strokeDasharray={`${(84 / 100) * 125.6} 125.6`}
+                strokeLinecap="round"
+                transform="rotate(-90 25 25)"
+              />
+              <text
+                x="25"
+                y="29"
+                textAnchor="middle"
+                className="text-sm fill-foreground font-bold font-mono"
+              >
+                84
+              </text>
+            </svg>
+            <div>
+              <p className="text-sm text-foreground font-medium">3 deadlines</p>
+              <p className="text-xs text-muted-foreground">this month</p>
+            </div>
           </div>
         </div>
-        <p className="text-[10px] text-muted-foreground mt-3 pt-2 border-t border-border">
-          All filings up to date
-        </p>
-      </Card>
+        <div className="px-5 py-3 bg-muted/30 border-t border-border/30">
+          <p className="font-mono text-[10px] text-muted-foreground">
+            All filings up to date
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -180,18 +194,18 @@ export function Hero() {
             </div>
 
             {/* Trust indicators */}
-            <div className="flex flex-wrap gap-3 mt-14 pt-8 border-t border-border">
+            <div className="flex flex-wrap gap-2 mt-14 pt-8 border-t border-border/50">
               {[
                 'Real-Time Tracking',
                 '98% On-Time',
                 'Handles Disputes',
               ].map((item) => (
-                <div
+                <span
                   key={item}
-                  className="px-4 py-2 text-xs font-mono font-medium uppercase tracking-wide text-muted-foreground bg-muted/30 border border-border"
+                  className="font-mono text-[10px] px-2.5 py-1.5 uppercase tracking-[0.1em] text-muted-foreground bg-muted/50 border border-border/50 rounded-sm"
                 >
                   {item}
-                </div>
+                </span>
               ))}
             </div>
           </div>
