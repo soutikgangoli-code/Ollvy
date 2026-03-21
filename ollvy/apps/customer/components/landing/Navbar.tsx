@@ -179,6 +179,7 @@ export function Navbar() {
   }
 
   return (
+    <>
     <header
       className={cn(
         'fixed top-0 left-0 z-50 w-[100vw] transition-all duration-200 bg-background/80 backdrop-blur-xl',
@@ -318,23 +319,50 @@ export function Navbar() {
         </div>
 
         {/* Mobile Search + Menu Buttons */}
-        <div className="flex items-center gap-1 md:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileSearchOpen(true)}
-          >
-            <Search className="h-5 w-5" />
-            <span className="sr-only">Search</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
+        <div className="flex items-center gap-2 md:hidden">
+          {mobileSearchOpen ? (
+            <>
+              {/* Expanded search input - expands from right to left */}
+              <div className="flex-1 relative origin-right animate-[expandLeft_200ms_ease-out_forwards]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search services..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full h-9 pl-9 pr-9 rounded-full bg-muted border-0 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileSearchOpen(false)
+                    setSearchQuery('')
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 focus:outline-none"
+                >
+                  <X className="h-4 w-4 text-muted-foreground" />
+                </button>
+              </div>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setMobileSearchOpen(true)}
+              className="p-2 rounded-md text-foreground hover:bg-muted active:bg-muted/80 transition-colors focus:outline-none"
+            >
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Search</span>
+            </button>
+          )}
+          <button
+            type="button"
             onClick={() => setMobileMenuOpen(true)}
+            className="p-2 rounded-md text-foreground hover:bg-muted active:bg-muted/80 transition-colors focus:outline-none shrink-0"
           >
             <Menu className="h-5 w-5" />
             <span className="sr-only">Open menu</span>
-          </Button>
+          </button>
         </div>
 
         {/* Mobile Sheet */}
@@ -537,101 +565,51 @@ export function Navbar() {
         </Dialog>
 
       </div>
+    </header>
 
-      {/* Mobile Search Overlay - Expands from search button, keeps header visible */}
+      {/* Mobile Search Results - Appears below header */}
       {mobileSearchOpen && (
         <div
-          className="fixed inset-x-0 top-0 bottom-0 z-[60] md:hidden flex flex-col bg-card origin-top-right animate-in zoom-in-95 fade-in duration-200 ease-out"
-          style={{ backdropFilter: 'none' }}
+          className={cn(
+            "fixed inset-x-0 bottom-0 z-[100] md:hidden",
+            scrolled ? "top-[52px]" : "top-16"
+          )}
         >
-          {/* Header row - matches main header */}
-          <div className={cn(
-            'flex items-center justify-between px-4 border-b border-border bg-card transition-all duration-200',
-            scrolled ? 'h-[52px]' : 'h-16'
-          )}>
-            {/* Logo */}
-            <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
-              Ollvy
-            </Link>
+          {/* Solid background */}
+          <div className="absolute inset-0 bg-card" />
 
-            {/* Search input - expands from right */}
-            <div className="flex-1 mx-4 animate-in slide-in-from-right-4 fade-in duration-300 delay-75">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="Search services..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-10 pl-10 pr-10 rounded-full bg-muted border-0 text-base text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  autoFocus
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5"
-                  >
-                    <X className="h-4 w-4 text-muted-foreground" />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Close + Menu buttons */}
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  setMobileSearchOpen(false)
-                  setSearchQuery('')
-                }}
-              >
-                <X className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => {
-                  setMobileSearchOpen(false)
-                  setMobileMenuOpen(true)
-                }}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            </div>
-          </div>
+          {/* Content container */}
+          <div className="relative h-full flex flex-col">
 
           {/* Search Results */}
-          <div className="flex-1 overflow-y-auto bg-card">
+          <div className="relative flex-1 overflow-y-auto bg-card">
             {isLoadingServices ? (
-              <div className="px-4 py-12 flex flex-col items-center justify-center text-muted-foreground animate-in fade-in duration-300">
+              <div className="px-4 py-12 flex flex-col items-center justify-center text-muted-foreground">
                 <Loader2 className="h-6 w-6 animate-spin mb-2" />
                 <span className="text-sm">Loading services...</span>
               </div>
-            ) : filteredServices.length === 0 ? (
-              <div className="px-4 py-12 text-center animate-in fade-in duration-300">
+            ) : filteredServices.length === 0 && searchQuery ? (
+              <div className="px-4 py-12 text-center">
                 <Search className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
                 <p className="text-muted-foreground">
-                  {searchQuery ? `No services found for "${searchQuery}"` : 'Start typing to search'}
+                  No services found for "{searchQuery}"
                 </p>
               </div>
+            ) : filteredServices.length === 0 ? (
+              <div className="px-4 py-12 text-center">
+                <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-muted-foreground" />
+                <p className="text-muted-foreground">Loading services...</p>
+              </div>
             ) : (
-              <div className="py-2 animate-in fade-in duration-200 delay-100">
+              <div className="py-2">
                 <div className="px-4 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   {searchQuery ? `${filteredServices.length} results` : `${filteredServices.length} Services`}
                 </div>
-                {filteredServices.map((service, index) => (
+                {filteredServices.map((service) => (
                   <button
                     key={service.slug}
                     onClick={() => handleServiceClick(service.slug)}
-                    className="w-full px-4 py-4 flex items-center gap-3 active:bg-muted transition-all text-left border-b border-border/50 bg-card"
-                    style={{
-                      animation: 'fadeSlideIn 0.3s ease-out forwards',
-                      animationDelay: `${Math.min(index * 40, 400)}ms`,
-                      opacity: 0
-                    }}
+                    className="w-full px-4 py-4 flex items-center gap-3 active:bg-muted text-left border-b border-border/50 bg-card"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-foreground">
@@ -652,22 +630,23 @@ export function Navbar() {
               </div>
             )}
           </div>
+          </div>
         </div>
       )}
 
-      {/* Custom keyframe for staggered list animation */}
+      {/* Custom keyframe for search bar expansion from right to left */}
       <style jsx global>{`
-        @keyframes fadeSlideIn {
+        @keyframes expandLeft {
           from {
+            transform: scaleX(0);
             opacity: 0;
-            transform: translateY(8px);
           }
           to {
+            transform: scaleX(1);
             opacity: 1;
-            transform: translateY(0);
           }
         }
       `}</style>
-    </header>
+    </>
   )
 }
