@@ -1210,17 +1210,15 @@ export function UnifiedServicePage({
                 <HowWeReviewed service={service} />
               </div>
 
-              {/* Right: Booking panel - flows with page (no sticky so it scrolls with content) */}
-              <aside className="hidden lg:block self-start">
-                <div>
-                  <BookingPanel
-                    service={service}
-                    serviceId={service.id || service.slug}
-                    priceVariesByState={service.priceVariesByState}
-                    selectedVariant={selectedVariant}
-                    onVariantChange={setSelectedVariant}
-                  />
-                </div>
+              {/* Right: Booking panel - sticky sidebar */}
+              <aside className="hidden lg:block sticky top-20 self-start">
+                <BookingPanel
+                  service={service}
+                  serviceId={service.id || service.slug}
+                  priceVariesByState={service.priceVariesByState}
+                  selectedVariant={selectedVariant}
+                  onVariantChange={setSelectedVariant}
+                />
               </aside>
             </div>
           </div>

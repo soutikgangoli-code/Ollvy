@@ -179,6 +179,17 @@ export function Reviews() {
   const [stats, setStats] = useState<ReviewStats | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [visibleCount, setVisibleCount] = useState(3)
+  const mobileScrollRef = useRef<HTMLDivElement>(null)
+
+  // Handle mobile scroll to update active dot
+  const handleMobileScroll = useCallback(() => {
+    if (!mobileScrollRef.current) return
+    const container = mobileScrollRef.current
+    const scrollLeft = container.scrollLeft
+    const cardWidth = container.offsetWidth * 0.85 + 16 // 85vw + gap
+    const newIndex = Math.round(scrollLeft / cardWidth)
+    setCurrentIndex(Math.min(newIndex, TESTIMONIALS.length - 1))
+  }, [])
 
   // Determine how many cards to show based on screen size
   useEffect(() => {
@@ -223,37 +234,6 @@ export function Reviews() {
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1))
   }, [maxIndex])
 
-  // Touch swipe handling for mobile
-  const touchStartX = useRef<number | null>(null)
-  const touchEndX = useRef<number | null>(null)
-  const minSwipeDistance = 50
-
-  const onTouchStart = useCallback((e: React.TouchEvent) => {
-    touchEndX.current = null
-    touchStartX.current = e.targetTouches[0].clientX
-  }, [])
-
-  const onTouchMove = useCallback((e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX
-  }, [])
-
-  const onTouchEnd = useCallback(() => {
-    if (!touchStartX.current || !touchEndX.current) return
-
-    const distance = touchStartX.current - touchEndX.current
-    const isLeftSwipe = distance > minSwipeDistance
-    const isRightSwipe = distance < -minSwipeDistance
-
-    if (isLeftSwipe) {
-      goRight()
-    } else if (isRightSwipe) {
-      goLeft()
-    }
-
-    touchStartX.current = null
-    touchEndX.current = null
-  }, [goLeft, goRight])
-
   const visibleTestimonials = TESTIMONIALS.slice(currentIndex, currentIndex + visibleCount)
 
   return (
@@ -295,8 +275,8 @@ export function Reviews() {
 
         {/* Testimonial Carousel */}
         <div className="relative">
-          {/* Navigation Buttons */}
-          <div className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 z-10">
+          {/* Navigation Buttons - Hidden on mobile */}
+          <div className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 z-10 hidden md:block">
             <Button
               variant="outline"
               size="icon"
@@ -309,7 +289,7 @@ export function Reviews() {
             </Button>
           </div>
 
-          <div className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 z-10">
+          <div className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 z-10 hidden md:block">
             <Button
               variant="outline"
               size="icon"
@@ -322,12 +302,32 @@ export function Reviews() {
             </Button>
           </div>
 
-          {/* Cards Container */}
+          {/* Mobile: Native horizontal scroll */}
           <div
-            className="overflow-hidden px-2 touch-pan-y"
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-            onTouchEnd={onTouchEnd}
+            ref={mobileScrollRef}
+            onScroll={handleMobileScroll}
+            className="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-4 -mx-4 px-4 pb-4"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {TESTIMONIALS.map((t) => (
+              <Card key={t.name} className="flex-shrink-0 w-[85vw] snap-center border border-border bg-card p-6 h-[320px] flex flex-col">
+                <div className="text-4xl leading-none text-muted-foreground/20 font-serif">
+                  &ldquo;
+                </div>
+                <p className="text-sm text-foreground leading-relaxed mt-3 flex-grow">{formatQuoteWithMono(t.quote)}</p>
+                <div className="border-t border-border pt-4 mt-auto">
+                  <p className="text-sm font-semibold text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {t.role} · {t.business} · {t.city}
+                  </p>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          {/* Desktop: Grid with navigation */}
+          <div
+            className="hidden md:block overflow-hidden px-2"
           >
             <div
               className="grid gap-6 transition-transform duration-300 ease-out"
@@ -352,8 +352,28 @@ export function Reviews() {
             </div>
           </div>
 
-          {/* Dot Indicators */}
-          <div className="flex justify-center gap-2 mt-6">
+          {/* Dot Indicators - Mobile (all testimonials) */}
+          <div className="flex md:hidden justify-center gap-2 mt-6">
+            {TESTIMONIALS.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  if (!mobileScrollRef.current) return
+                  const cardWidth = mobileScrollRef.current.offsetWidth * 0.85 + 16
+                  mobileScrollRef.current.scrollTo({ left: cardWidth * idx, behavior: 'smooth' })
+                }}
+                className={`h-2 rounded-full transition-all ${
+                  idx === currentIndex
+                    ? 'w-6 bg-primary'
+                    : 'w-2 bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                }`}
+                aria-label={`Go to review ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Dot Indicators - Desktop (paginated) */}
+          <div className="hidden md:flex justify-center gap-2 mt-6">
             {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
               <button
                 key={idx}

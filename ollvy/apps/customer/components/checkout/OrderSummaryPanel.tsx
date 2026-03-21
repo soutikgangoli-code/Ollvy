@@ -86,7 +86,7 @@ export function OrderSummaryPanel({
   const completionDate = completionEstimate?.guaranteedDate ?? null
 
   return (
-    <Card className="sticky top-20 border-border">
+    <Card className="border-border">
       {/* Guaranteed Date Header */}
       {completionDate && (
         <div className="bg-[hsl(var(--ollvy-green))]/10 border-b border-[hsl(var(--ollvy-green))]/20 px-6 py-4 rounded-t-xl">

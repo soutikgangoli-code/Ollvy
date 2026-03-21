@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Loader2, ArrowRight, Check, X, ChevronDown, CheckCircle, Phone, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
@@ -638,37 +638,35 @@ export default function CheckoutPage() {
           </div>
 
           {/* Right column - Sticky order summary (desktop) */}
-          <div className="hidden lg:block">
-            <div className="sticky top-20">
-              {isLoading || !service ? (
-                <Skeleton className="h-[500px] rounded-lg" />
-              ) : (
-                <OrderSummarySidebar
-                  serviceName={service.name}
-                  serviceDisplayName={selectedVariantData?.sublabel}
-                  serviceFee={priceBreakdown?.serviceFee || 0}
-                  govtFees={priceBreakdown?.govtFees || 0}
-                  addons={selectedAddons}
-                  gstRate={priceBreakdown?.gstRate || 18}
-                  gstAmount={priceBreakdown?.gst || 0}
-                  total={priceBreakdown?.total || 0}
-                  promoInput={promoCode}
-                  onPromoChange={setPromoCode}
-                  onApplyPromo={handleApplyPromo}
-                  onRemovePromo={handleRemovePromo}
-                  promoLoading={promoLoading}
-                  promoError={promoError}
-                  promoApplied={promoApplied}
-                  isProcessing={isProcessing}
-                  canSubmit={canSubmit || false}
-                  onSubmit={handleCheckout}
-                  slaDays={service.sla_working_days || 15}
-                  hasGovtProcessing={service.has_govt_processing ?? false}
-                  completionMaxDays={service.completion_max_days}
-                  completionRangeText={service.completion_range_text}
-                />
-              )}
-            </div>
+          <div className="hidden lg:block sticky top-20 self-start">
+            {isLoading || !service ? (
+              <Skeleton className="h-[500px] rounded-lg" />
+            ) : (
+              <OrderSummarySidebar
+                serviceName={service.name}
+                serviceDisplayName={selectedVariantData?.sublabel}
+                serviceFee={priceBreakdown?.serviceFee || 0}
+                govtFees={priceBreakdown?.govtFees || 0}
+                addons={selectedAddons}
+                gstRate={priceBreakdown?.gstRate || 18}
+                gstAmount={priceBreakdown?.gst || 0}
+                total={priceBreakdown?.total || 0}
+                promoInput={promoCode}
+                onPromoChange={setPromoCode}
+                onApplyPromo={handleApplyPromo}
+                onRemovePromo={handleRemovePromo}
+                promoLoading={promoLoading}
+                promoError={promoError}
+                promoApplied={promoApplied}
+                isProcessing={isProcessing}
+                canSubmit={canSubmit || false}
+                onSubmit={handleCheckout}
+                slaDays={service.sla_working_days || 15}
+                hasGovtProcessing={service.has_govt_processing ?? false}
+                completionMaxDays={service.completion_max_days}
+                completionRangeText={service.completion_range_text}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -741,7 +739,7 @@ export default function CheckoutPage() {
   )
 }
 
-// Scope of Work Card Component - Stepper Carousel
+// Scope of Work Card Component - Touch Scrollable Carousel
 interface ScopeOfWorkCardProps {
   serviceName: string
   scopeIncluded: string[]
@@ -753,23 +751,44 @@ function ScopeOfWorkCard({
   scopeIncluded,
   scopeExcluded,
 }: ScopeOfWorkCardProps) {
-  const [currentStep, setCurrentStep] = useState(0)
-  const totalSteps = 2
+  const [activeIndex, setActiveIndex] = useState(0)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const steps = [
     {
       title: "What's Included",
       description: `Everything covered in your ${serviceName} order. Review the deliverables before proceeding.`,
       items: scopeIncluded,
+      isIncluded: true,
     },
     {
       title: "What's Not Included",
       description: "These items are available as add-ons or separate services if needed.",
       items: scopeExcluded,
+      isIncluded: false,
     },
   ]
 
-  const currentStepData = steps[currentStep]
+  // Find the max number of items to ensure equal card heights
+  const maxItems = Math.max(scopeIncluded.length, scopeExcluded.length)
+
+  // Handle scroll to update active dot
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return
+    const container = scrollContainerRef.current
+    const scrollLeft = container.scrollLeft
+    const cardWidth = container.offsetWidth
+    const newIndex = Math.round(scrollLeft / cardWidth)
+    setActiveIndex(newIndex)
+  }
+
+  // Scroll to card when dot is clicked
+  const scrollToCard = (index: number) => {
+    if (!scrollContainerRef.current) return
+    const container = scrollContainerRef.current
+    const cardWidth = container.offsetWidth
+    container.scrollTo({ left: cardWidth * index, behavior: 'smooth' })
+  }
 
   return (
     <div className="space-y-6">
@@ -782,85 +801,78 @@ function ScopeOfWorkCard({
         </p>
       </div>
 
-      {/* Card */}
-      <div className="border border-border rounded-xl overflow-hidden bg-card">
-        {/* Header with title and slider dots */}
-        <div className="p-5 border-b border-border">
-          <div className="flex items-center justify-between">
-            <h4 className="font-semibold text-foreground text-lg">
-              {currentStepData.title}
-            </h4>
-            {/* Slider dots */}
-            <div className="flex items-center gap-2">
-              {steps.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentStep(index)}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-colors",
-                    index === currentStep
-                      ? "bg-foreground"
-                      : "bg-muted-foreground/30"
-                  )}
-                />
-              ))}
-            </div>
-          </div>
-          <p className="text-muted-foreground text-sm mt-1">
-            {currentStepData.description}
-          </p>
-        </div>
+      {/* Scrollable Cards Container */}
+      <div className="relative">
+        {/* Horizontal scroll container */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {steps.map((step, stepIndex) => (
+            <div
+              key={stepIndex}
+              className="flex-shrink-0 w-full snap-center"
+            >
+              <div className="border border-border rounded-xl overflow-hidden bg-card h-full flex flex-col">
+                {/* Header */}
+                <div className="p-5 border-b border-border">
+                  <h4 className="font-semibold text-foreground text-lg">
+                    {step.title}
+                  </h4>
+                  <p className="text-muted-foreground text-sm mt-1">
+                    {step.description}
+                  </p>
+                </div>
 
-        {/* Content - Items list */}
-        <div className="p-5">
-          <div className="divide-y divide-border">
-            {currentStepData.items.map((item, i) => (
-              <div key={i} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
-                {currentStep === 0 ? (
-                  <span className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/10 flex items-center justify-center flex-shrink-0">
-                    <Check className="w-3 h-3 text-[hsl(var(--ollvy-green))]" />
-                  </span>
-                ) : (
-                  <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-                    <X className="w-3 h-3 text-muted-foreground" />
-                  </span>
-                )}
-                <span className="text-sm text-foreground">{item}</span>
+                {/* Content - Items list with fixed min-height for equal sizing */}
+                <div className="p-5 flex-1">
+                  <div className="divide-y divide-border">
+                    {step.items.map((item, i) => (
+                      <div key={i} className="flex items-center gap-3 py-3 first:pt-0 last:pb-0">
+                        {step.isIncluded ? (
+                          <span className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/10 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-3 h-3 text-[hsl(var(--ollvy-green))]" />
+                          </span>
+                        ) : (
+                          <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                            <X className="w-3 h-3 text-muted-foreground" />
+                          </span>
+                        )}
+                        <span className="text-sm text-foreground">{item}</span>
+                      </div>
+                    ))}
+                    {/* Spacer items for equal height */}
+                    {Array.from({ length: maxItems - step.items.length }).map((_, i) => (
+                      <div key={`spacer-${i}`} className="py-3 invisible">
+                        <div className="flex items-center gap-3">
+                          <span className="w-5 h-5 flex-shrink-0" />
+                          <span className="text-sm">&nbsp;</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
-        {/* Navigation */}
-        <div className="border-t border-border" />
-        <div className="p-5 flex items-center justify-between">
-          <button
-            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-            disabled={currentStep === 0}
-            className={cn(
-              "flex items-center gap-1 text-sm font-medium transition-colors",
-              currentStep === 0
-                ? "text-muted-foreground/50 cursor-not-allowed"
-                : "text-muted-foreground hover:text-foreground"
-            )}
-          >
-            <ChevronLeft className="h-4 w-4" />
-            Previous Step
-          </button>
-
-          <button
-            onClick={() => setCurrentStep(Math.min(totalSteps - 1, currentStep + 1))}
-            disabled={currentStep === totalSteps - 1}
-            className={cn(
-              "flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors",
-              currentStep === totalSteps - 1
-                ? "bg-muted text-muted-foreground cursor-not-allowed"
-                : "bg-[hsl(var(--ollvy-green))] text-white hover:bg-[hsl(var(--ollvy-green))]/90"
-            )}
-          >
-            Next Step
-            <ChevronRight className="h-4 w-4" />
-          </button>
+        {/* Indicator dots (centered below cards) */}
+        <div className="flex items-center justify-center gap-2 mt-4">
+          {steps.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollToCard(index)}
+              className={cn(
+                "w-2 h-2 rounded-full transition-colors",
+                index === activeIndex
+                  ? "bg-foreground"
+                  : "bg-muted-foreground/30"
+              )}
+            />
+          ))}
         </div>
       </div>
     </div>

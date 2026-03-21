@@ -8,6 +8,7 @@ import { ReferFounder } from '@/components/landing/ReferFounder'
 import { FinalCTA } from '@/components/landing/FinalCTA'
 import { Footer } from '@/components/landing/Footer'
 import { HomeFAQ } from '@/components/landing/HomeFAQ'
+import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
 import { getActiveServices } from '@/lib/data/services'
 import Script from 'next/script'
 
@@ -144,7 +145,7 @@ export default async function LandingPage() {
   // Fetch data from Supabase (per §23 Connection Point 1)
   const services = await getActiveServices()
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-20 lg:pb-0">
       {/* JSON-LD Structured Data */}
       <Script
         id="organization-schema"
@@ -188,6 +189,9 @@ export default async function LandingPage() {
 
       {/* §16 - Footer */}
       <Footer />
+
+      {/* Mobile sticky CTA */}
+      <MobileBottomCTA />
     </div>
   )
 }
