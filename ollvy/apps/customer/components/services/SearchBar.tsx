@@ -1,9 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Input } from '@/components/ui/input'
+import { useState, useEffect, useRef } from 'react'
 import { Search, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 interface SearchBarProps {
   value: string
@@ -19,6 +18,8 @@ export function SearchBar({
   debounceMs = 300,
 }: SearchBarProps) {
   const [localValue, setLocalValue] = useState(value)
+  const [isFocused, setIsFocused] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -34,31 +35,74 @@ export function SearchBar({
     setLocalValue(value)
   }, [value])
 
+  // Keyboard shortcut: Cmd/Ctrl + K to focus search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        inputRef.current?.focus()
+      }
+      // Escape to blur
+      if (e.key === 'Escape' && document.activeElement === inputRef.current) {
+        inputRef.current?.blur()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   const handleClear = () => {
     setLocalValue('')
     onChange('')
+    inputRef.current?.focus()
   }
 
   return (
-    <div className="relative">
-      <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-      <Input
+    <div
+      className={cn(
+        'relative flex items-center rounded-xl border bg-card transition-all duration-200',
+        isFocused
+          ? 'border-foreground/20 ring-2 ring-foreground/5'
+          : 'border-border/60 hover:border-border'
+      )}
+    >
+      {/* Search icon */}
+      <div className="pl-4 pr-2 flex items-center">
+        <Search className={cn(
+          'h-4 w-4 transition-colors',
+          isFocused ? 'text-foreground' : 'text-muted-foreground'
+        )} />
+      </div>
+
+      {/* Input */}
+      <input
+        ref={inputRef}
         type="text"
         placeholder={placeholder}
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
-        className="pl-11 pr-11 h-12 bg-muted/50 border-border text-foreground placeholder:text-muted-foreground"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        className="flex-1 h-12 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
       />
-      {localValue && (
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-          onClick={handleClear}
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      )}
+
+      {/* Right side: clear button or keyboard hint */}
+      <div className="pr-3 flex items-center gap-2">
+        {localValue ? (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="p-1.5 rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        ) : (
+          <kbd className="hidden sm:inline-flex items-center gap-1 px-2 py-1 rounded-md bg-muted/60 border border-border/50 text-muted-foreground font-mono text-[10px]">
+            <span className="text-xs">⌘</span>K
+          </kbd>
+        )}
+      </div>
     </div>
   )
 }

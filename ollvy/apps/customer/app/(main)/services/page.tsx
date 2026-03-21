@@ -129,10 +129,7 @@ function ServicesContent() {
     <div className="container py-12">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-3xl font-semibold text-foreground mb-3">All Services</h1>
-        <p className="text-muted-foreground text-lg">
-          Browse our full catalogue of professional services
-        </p>
+        <h1 className="text-3xl font-semibold text-foreground">All Services</h1>
       </div>
 
       {/* Search & Filters */}

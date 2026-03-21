@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, Loader2, User, LogOut, ShoppingBag, Repeat, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -253,18 +252,17 @@ export function Navbar() {
         {/* Theme Toggle + Desktop Search Button + Profile */}
         <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
-          <Button
-            size="sm"
-            variant="outline"
-            className="rounded-full gap-2 pl-3 pr-2"
+          <button
+            type="button"
             onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-2 h-9 pl-3 pr-2 rounded-lg border border-border/60 bg-card hover:border-border hover:bg-muted/30 transition-all text-sm text-muted-foreground"
           >
             <Search className="h-4 w-4" />
-            <span>Search Services</span>
-            <kbd className="hidden lg:inline-flex h-5 items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground">
+            <span className="text-muted-foreground">Search Services</span>
+            <kbd className="hidden lg:inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-muted/60 border border-border/50 font-mono text-[10px] text-muted-foreground">
               <span className="text-xs">⌘</span>K
             </kbd>
-          </Button>
+          </button>
 
           {user ? (
             <DropdownMenu modal={false}>
