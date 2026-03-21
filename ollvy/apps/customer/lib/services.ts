@@ -126,6 +126,10 @@ import { iecCode } from './services/iec-code'
 import { mcaAnnualFiling } from './services/mca-annual-filing'
 import { tdsMonthlyCompliance } from './services/tds-monthly-compliance'
 import { payrollManagement } from './services/payroll-management'
+import { gstCancellation } from './services/gst-cancellation'
+import { gstRevocation } from './services/gst-revocation'
+import { companyNameChange } from './services/company-name-change'
+import { dinReactivation } from './services/din-reactivation'
 
 // Export all services
 export const SERVICES: ServiceConfig[] = [
@@ -146,6 +150,11 @@ export const SERVICES: ServiceConfig[] = [
   tdsMonthlyCompliance,
   // Payroll
   payrollManagement,
+  // New services
+  gstCancellation,
+  gstRevocation,
+  companyNameChange,
+  dinReactivation,
 ]
 
 // Alias for backwards compatibility (existing code uses SERVICE_CONFIGS)

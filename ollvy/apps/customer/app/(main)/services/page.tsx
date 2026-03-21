@@ -10,14 +10,19 @@ import { SERVICES } from '@/lib/services'
 import type { ServicePackage } from '@/lib/types'
 import { Skeleton } from '@/components/ui/skeleton'
 
-// These match actual situation_tags in the database
+// These match actual situation_tags in the database (plus special filters)
 const CATEGORY_FILTERS = [
   { id: 'just_starting_out', label: 'Starting Out' },
   { id: 'filing_taxes', label: 'Tax Filing' },
   { id: 'taking_payments', label: 'GST & Payments' },
   { id: 'have_investors', label: 'Investors' },
   { id: 'importing_exporting', label: 'Import/Export' },
+  { id: 'bundles', label: 'Bundles' },
+  { id: 'cloud_kitchen', label: 'Cloud Kitchen' },
 ]
+
+// Special filters that don't use situation_tags
+const SPECIAL_FILTERS = ['bundles', 'cloud_kitchen']
 
 // Convert static services to ServicePackage format for fallback
 const STATIC_SERVICES: ServicePackage[] = SERVICES.map((s, index) => ({
@@ -73,8 +78,19 @@ function ServicesContent() {
         query = query.or(`name.ilike.%${searchQuery}%,short_description.ilike.%${searchQuery}%`)
       }
 
-      if (selectedFilters.length > 0) {
-        query = query.overlaps('situation_tags', selectedFilters)
+      // Separate special filters from situation_tag filters
+      const tagFilters = selectedFilters.filter(f => !SPECIAL_FILTERS.includes(f))
+
+      if (tagFilters.length > 0) {
+        query = query.overlaps('situation_tags', tagFilters)
+      }
+
+      // Handle special filters
+      if (selectedFilters.includes('bundles')) {
+        query = query.eq('is_bundle', true)
+      }
+      if (selectedFilters.includes('cloud_kitchen')) {
+        query = query.ilike('name', '%cloud kitchen%')
       }
 
       const { data, error } = await query

@@ -470,6 +470,12 @@ const FALLBACK_SERVICE_SLUGS = [
   'fssai-registration',
   'iec-registration',
   'cloud-kitchen-setup',
+  // New services
+  'gst-cancellation',
+  'gst-revocation',
+  'company-name-change',
+  'din-reactivation',
+  'tds-monthly-compliance',
 ]
 
 /**

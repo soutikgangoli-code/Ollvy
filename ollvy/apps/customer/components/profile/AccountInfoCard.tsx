@@ -7,6 +7,13 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Phone, Building2, MapPin, Crown, Pencil, Check, X, Loader2, FileText, Mail, CreditCard, Fingerprint } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -240,30 +247,30 @@ export function AccountInfoCard({
 
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">Entity Type</label>
-              <select
-                value={editBusinessType}
-                onChange={(e) => setEditBusinessType(e.target.value)}
-                className="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-sm text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <option value="">Select entity type</option>
-                {BUSINESS_TYPES.map((bt) => (
-                  <option key={bt.value} value={bt.value}>{bt.label}</option>
-                ))}
-              </select>
+              <Select value={editBusinessType} onValueChange={setEditBusinessType}>
+                <SelectTrigger className="h-9">
+                  <SelectValue placeholder="Select entity type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {BUSINESS_TYPES.map((bt) => (
+                    <SelectItem key={bt.value} value={bt.value}>{bt.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
               <label className="text-xs text-muted-foreground mb-1 block">State</label>
-              <select
-                value={editState}
-                onChange={(e) => setEditState(e.target.value)}
-                className="flex h-9 w-full rounded-lg border border-input bg-background px-3 py-1 text-sm text-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
-              >
-                <option value="">Select state</option>
-                {INDIAN_STATES.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
+              <Select value={editState} onValueChange={setEditState}>
+                <SelectTrigger className="h-9">
+                  <SelectValue placeholder="Select state" />
+                </SelectTrigger>
+                <SelectContent>
+                  {INDIAN_STATES.map((s) => (
+                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>

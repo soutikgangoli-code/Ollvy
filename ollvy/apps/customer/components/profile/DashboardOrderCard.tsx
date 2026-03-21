@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { ArrowRight, Calendar, FileUp, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -110,71 +109,73 @@ export function DashboardOrderCard({
   const statusColor = getStatusColor()
 
   return (
-    <Card className="border-border hover:border-muted-foreground/50 transition-colors">
-      <CardContent className="p-5">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div className="min-w-0 flex-1">
-            <h3 className="font-medium text-foreground truncate">{serviceName}</h3>
-            <p className="text-sm text-muted-foreground font-mono">{orderNumber}</p>
+    <Link href={`/orders/${orderId}`} className="block">
+      <Card className="border-border hover:border-muted-foreground/50 transition-colors cursor-pointer">
+        <CardContent className="p-5">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div className="min-w-0 flex-1">
+              <h3 className="font-medium text-foreground truncate">{serviceName}</h3>
+              <p className="text-sm text-muted-foreground font-mono">{orderNumber}</p>
+            </div>
+            <span className={cn('text-xs font-medium', statusColor)}>
+              {getStatusLabel()}
+            </span>
           </div>
-          <span className={cn('text-xs font-medium', statusColor)}>
-            {getStatusLabel()}
-          </span>
-        </div>
 
-        {/* Progress Bar */}
-        <div className="mb-4">
-          <div className="flex items-center justify-between text-sm mb-2">
-            <span className="text-muted-foreground font-mono text-xs">
-              {getDisplayStage()}
-            </span>
-            <span className="font-mono text-xs text-foreground">{progress}%</span>
+          {/* Progress Bar */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between text-sm mb-2">
+              <span className="text-muted-foreground font-mono text-xs">
+                {getDisplayStage()}
+              </span>
+              <span className="font-mono text-xs text-foreground">{progress}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
           </div>
-          <Progress value={progress} className="h-2" />
-        </div>
 
-        {/* Info Row */}
-        <div className="flex items-center flex-wrap gap-3 text-xs text-muted-foreground mb-4">
-          {hasWorkDocsRejected && (
-            <span className="flex items-center gap-1 text-red-400">
-              <FileUp className="h-3.5 w-3.5" />
-              {workDocsRejected} rejected
-            </span>
-          )}
-          {hasWorkDocsPending && (
-            <span className="flex items-center gap-1 text-orange-400">
-              <FileUp className="h-3.5 w-3.5" />
-              {workDocsPending} work docs needed
-            </span>
-          )}
-          {hasInitialDocsPending && (
-            <span className="flex items-center gap-1 text-orange-400">
-              <FileUp className="h-3.5 w-3.5" />
-              {documentsNeeded} docs needed
-            </span>
-          )}
-          {dueDate && (
-            <span className="flex items-center gap-1">
-              <Calendar className="h-3.5 w-3.5" />
-              Due: {dueDate}
-            </span>
-          )}
-          {isRetainer && nextCycleDate && (
-            <span className="flex items-center gap-1">
-              <Clock className="h-3.5 w-3.5" />
-              Next: {nextCycleDate}
-            </span>
-          )}
-        </div>
+          {/* Info Row */}
+          <div className="flex items-center flex-wrap gap-3 text-xs text-muted-foreground mb-4">
+            {hasWorkDocsRejected && (
+              <span className="flex items-center gap-1 text-red-400">
+                <FileUp className="h-3.5 w-3.5" />
+                {workDocsRejected} rejected
+              </span>
+            )}
+            {hasWorkDocsPending && (
+              <span className="flex items-center gap-1 text-orange-400">
+                <FileUp className="h-3.5 w-3.5" />
+                {workDocsPending} work docs needed
+              </span>
+            )}
+            {hasInitialDocsPending && (
+              <span className="flex items-center gap-1 text-orange-400">
+                <FileUp className="h-3.5 w-3.5" />
+                {documentsNeeded} docs needed
+              </span>
+            )}
+            {dueDate && (
+              <span className="flex items-center gap-1">
+                <Calendar className="h-3.5 w-3.5" />
+                Due: {dueDate}
+              </span>
+            )}
+            {isRetainer && nextCycleDate && (
+              <span className="flex items-center gap-1">
+                <Clock className="h-3.5 w-3.5" />
+                Next: {nextCycleDate}
+              </span>
+            )}
+          </div>
 
-        {/* Action */}
-        <Link href={`/orders/${orderId}`}>
-          <Button variant="outline" size="sm" className="w-full gap-2">
+          {/* Action */}
+          <div
+            className="inline-flex items-center justify-center gap-2 w-full h-8 px-3 text-sm font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+          >
             View Details
             <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
-        </Link>
-      </CardContent>
-    </Card>
+          </div>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }

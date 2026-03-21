@@ -760,6 +760,15 @@ export default function OrderDetailPage() {
                             </Link>
                           )}
 
+                          {/* Show badge for in-progress questionnaire */}
+                          {isQuestionsStage && stage.isCurrent && !stage.isCompleted && (
+                            <Link href={`/orders/${order.id}/questionnaire`}>
+                              <button className="text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground hover:bg-muted/80 transition-colors cursor-pointer">
+                                {questionnaireResponses.length > 0 ? 'Continue where you left off' : 'Get started'}
+                              </button>
+                            </Link>
+                          )}
+
                           {/* Show pending docs count for documents stage */}
                           {isDocumentsStage && !stage.isCompleted && pendingDocsCount > 0 && (
                             <Popover>
@@ -768,36 +777,31 @@ export default function OrderDetailPage() {
                                   {pendingDocsCount} pending
                                 </button>
                               </PopoverTrigger>
-                              <PopoverContent className="w-80 p-0" align="start">
-                                <div className="px-4 py-3 border-b border-border bg-muted/30">
-                                  <p className="font-medium text-sm text-foreground">Pending Documents</p>
-                                  <p className="text-xs text-muted-foreground">Upload these to continue</p>
+                              <PopoverContent className="w-80 p-0" align="start" side="bottom" sideOffset={4}>
+                                <div className="px-4 py-3 border-b border-border bg-muted/50">
+                                  <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                                    Pending Documents
+                                  </p>
+                                  <p className="text-sm text-foreground mt-1">Upload these to continue</p>
                                 </div>
                                 <div className="py-2 max-h-64 overflow-y-auto">
                                   {stats.pendingDocs.map((doc) => (
                                     <div
                                       key={doc.id}
-                                      className="flex items-center gap-3 px-4 py-2.5 hover:bg-muted/50 transition-colors"
+                                      className="flex items-center gap-3 px-4 py-2 hover:bg-muted/50 transition-colors"
                                     >
-                                      <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
-                                        <FileText className="h-4 w-4 text-muted-foreground" />
+                                      <div className="w-7 h-7 rounded-md bg-muted flex items-center justify-center flex-shrink-0">
+                                        <FileText className="h-3.5 w-3.5 text-muted-foreground" />
                                       </div>
-                                      <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-foreground truncate">
-                                          {doc.document_label}
-                                        </p>
-                                        {doc.is_required && (
-                                          <p className="text-xs text-amber-600 dark:text-amber-400">
-                                            Required
-                                          </p>
-                                        )}
-                                      </div>
+                                      <p className="text-sm text-foreground truncate flex-1">
+                                        {doc.document_label}
+                                      </p>
                                     </div>
                                   ))}
                                 </div>
-                                <div className="p-3 border-t border-border bg-muted/30">
+                                <div className="px-3 py-2 border-t border-border flex justify-center">
                                   <Link href={`/orders/${order.id}/documents`}>
-                                    <Button size="sm" className="w-full gap-1">
+                                    <Button size="xs" className="gap-1 h-7 text-xs px-4">
                                       Upload Documents
                                       <ChevronRight className="h-3 w-3" />
                                     </Button>
@@ -1111,17 +1115,6 @@ export default function OrderDetailPage() {
                     </div>
                   )}
 
-                  {/* Trust Signals */}
-                  <div className="space-y-2 pt-4 border-t border-border">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Shield className="h-3.5 w-3.5" />
-                      <span>100% Money Back Guarantee</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      <span>Verified Professionals Only</span>
-                    </div>
-                  </div>
                 </CardContent>
               </CollapsibleContent>
             </Collapsible>

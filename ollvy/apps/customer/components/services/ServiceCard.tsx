@@ -1,39 +1,37 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import {
-  Clock,
-  ArrowUpRight,
-  Star,
-  FileText,
-  Scale,
-  Building2,
-  Shield,
-  Briefcase,
-  Calculator,
-  Users,
-  Landmark,
-  Receipt,
-  FileCheck,
-  Check
-} from 'lucide-react'
+import { ArrowUpRight, Star, Check } from 'lucide-react'
 import { formatPaisa } from '@/lib/utils'
 import { getCompletionEstimate } from '@/lib/dates'
 import type { ServicePackage } from '@/lib/types'
 
-// Map icon names to Lucide components
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  FileText,
-  Scale,
-  Building2,
-  Shield,
-  Briefcase,
-  Calculator,
-  Users,
-  Landmark,
-  Receipt,
-  FileCheck,
+// Map service slugs to category labels
+const getCategoryLabel = (slug: string): string => {
+  // GST related
+  if (slug.includes('gst')) return 'GST'
+  // Company incorporation
+  if (slug.includes('pvt-ltd') || slug.includes('llp') || slug.includes('opc') || slug.includes('incorporation')) return 'Incorporation'
+  // Trademark & IP
+  if (slug.includes('trademark') || slug.includes('copyright') || slug.includes('patent')) return 'Trademark & IP'
+  // Tax filings
+  if (slug.includes('itr') || slug.includes('tds') || slug.includes('tax')) return 'Tax Filing'
+  // Compliance
+  if (slug.includes('annual') || slug.includes('aoc') || slug.includes('mgt') || slug.includes('compliance') || slug.includes('kyc') || slug.includes('dir-3')) return 'Compliance'
+  // Licensing
+  if (slug.includes('fssai') || slug.includes('license') || slug.includes('iec') || slug.includes('shop') || slug.includes('msme') || slug.includes('udyam')) return 'Licensing'
+  // Payroll
+  if (slug.includes('payroll') || slug.includes('pf') || slug.includes('esi') || slug.includes('pt')) return 'Payroll'
+  // Import/Export
+  if (slug.includes('import') || slug.includes('export')) return 'Import/Export'
+  // Changes/Modifications
+  if (slug.includes('change') || slug.includes('amendment') || slug.includes('modification')) return 'Amendment'
+  // Closure
+  if (slug.includes('closure') || slug.includes('cancellation') || slug.includes('strike-off')) return 'Closure'
+  // Director related
+  if (slug.includes('director') || slug.includes('din')) return 'Director'
+  // Default based on common patterns
+  return 'Registration'
 }
 
 interface ServiceCardProps {
@@ -65,10 +63,8 @@ export function ServiceCard({ service }: ServiceCardProps) {
     : null
   const guaranteedDate = completionEstimate?.guaranteedDate ?? null
 
-  // Get icon component or default to FileText
-  const IconComponent = service.icon_name && iconMap[service.icon_name]
-    ? iconMap[service.icon_name]
-    : FileText
+  // Get category label from slug
+  const categoryLabel = getCategoryLabel(service.slug)
 
   // Format govt fee if present
   const govtFee = service.price_govt_fees_paisa ? service.price_govt_fees_paisa / 100 : 0
@@ -108,7 +104,9 @@ export function ServiceCard({ service }: ServiceCardProps) {
           </div>
         ) : (
           <div className="h-16 w-full bg-muted/50 flex items-center justify-center border-b border-border flex-shrink-0">
-            <IconComponent className="h-6 w-6 text-muted-foreground/50" />
+            <span className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
+              {categoryLabel}
+            </span>
           </div>
         )}
 
@@ -133,17 +131,17 @@ export function ServiceCard({ service }: ServiceCardProps) {
               <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-mono mb-2">
                 INCLUDES
               </p>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {service.addons.slice(0, 4).map((addon) => (
                   <span
                     key={addon.id}
-                    className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground"
+                    className="text-[10px] px-2 py-0.5 rounded bg-muted/50 text-muted-foreground border border-border"
                   >
                     {addon.name}
                   </span>
                 ))}
                 {service.addons.length > 4 && (
-                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-muted/50 text-muted-foreground border border-border">
                     +{service.addons.length - 4} more
                   </span>
                 )}
@@ -196,54 +194,51 @@ export function ServiceCard({ service }: ServiceCardProps) {
             )}
           </div>
 
-          {/* SLA / Deadline */}
-          <div className="mt-3">
+          {/* Footer: consistent positioning across all cards */}
+          <div className="mt-auto pt-3 space-y-2">
+            {/* Disclaimer or SLA text (if no guaranteed date) */}
             {isRetainer ? (
-              <span className="text-xs text-muted-foreground">
+              <p className="text-[10px] text-muted-foreground">
                 Recurring {service.billing_cycle} service
-              </span>
-            ) : guaranteedDate ? (
-              <div className="space-y-0.5">
-                <Badge
-                  className="bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 text-xs"
-                >
-                  <Check className="h-3 w-3 mr-1" />
-                  Guaranteed by {guaranteedDate}
-                </Badge>
-                {completionEstimate?.govtDisclaimer && (
-                  <p className="text-[10px] text-muted-foreground">
-                    {completionEstimate.govtDisclaimer}
-                  </p>
+              </p>
+            ) : !guaranteedDate && service.sla_working_days > 0 ? (
+              <p className="text-[10px] text-muted-foreground">
+                {service.sla_working_days} working days
+              </p>
+            ) : completionEstimate?.govtDisclaimer ? (
+              <p className="text-[10px] text-muted-foreground">
+                {completionEstimate.govtDisclaimer}
+              </p>
+            ) : null}
+
+            {/* Bottom row: Guaranteed + Rating on left, Urgent + Tier on right */}
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                {guaranteedDate && !isRetainer && (
+                  <span className="inline-flex items-center rounded px-2 py-1 text-[10px] font-medium bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/30">
+                    <Check className="h-3 w-3 mr-1" />
+                    Guaranteed by {guaranteedDate}
+                  </span>
+                )}
+                {service.avg_rating && service.rating_count > 0 && (
+                  <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                    {service.avg_rating.toFixed(1)}
+                  </span>
                 )}
               </div>
-            ) : (
-              <span className="text-xs text-muted-foreground">
-                {service.sla_working_days} working days
-              </span>
-            )}
-          </div>
-
-          {/* Rating & badges */}
-          <div className="flex items-center justify-between mt-3">
-            <div className="flex items-center gap-1">
-              {service.avg_rating && service.rating_count > 0 && (
-                <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                  {service.avg_rating.toFixed(1)} ({service.rating_count})
-                </span>
-              )}
-            </div>
-            <div className="flex gap-1.5">
-              {isUrgent && (
-                <Badge variant="outline" className="text-[10px] uppercase tracking-wider border-red-400/30 text-red-500 dark:text-red-400">
-                  Urgent
-                </Badge>
-              )}
-              {service.tier_label && (
-                <Badge variant="secondary" className="text-[10px]">
-                  {service.tier_label}
-                </Badge>
-              )}
+              <div className="flex gap-1">
+                {isUrgent && (
+                  <span className="inline-flex items-center rounded px-2 py-1 text-[10px] font-medium uppercase tracking-wider bg-red-500/10 text-red-500 dark:text-red-400 border border-red-500/30">
+                    Urgent
+                  </span>
+                )}
+                {service.tier_label && (
+                  <span className="inline-flex items-center rounded px-2 py-1 text-[10px] font-medium bg-muted/50 text-muted-foreground border border-border">
+                    {service.tier_label}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </CardContent>

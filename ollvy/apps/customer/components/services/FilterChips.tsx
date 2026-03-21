@@ -43,14 +43,14 @@ export function FilterChips({
   }
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible md:flex-wrap">
+    <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible md:flex-wrap">
       <button
         onClick={() => handleClick('all')}
         className={cn(
-          'inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0',
+          'inline-flex items-center rounded px-3 py-1.5 text-xs font-medium border transition-all duration-200 whitespace-nowrap shrink-0',
           isSelected('all')
-            ? 'bg-foreground text-background border-foreground'
-            : 'bg-transparent text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground'
+            ? 'bg-foreground/10 text-foreground border-foreground/20'
+            : 'bg-muted/50 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground'
         )}
       >
         All
@@ -60,10 +60,10 @@ export function FilterChips({
           key={filter.id}
           onClick={() => handleClick(filter.id)}
           className={cn(
-            'inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0',
+            'inline-flex items-center rounded px-3 py-1.5 text-xs font-medium border transition-all duration-200 whitespace-nowrap shrink-0',
             isSelected(filter.id)
-              ? 'bg-foreground text-background border-foreground'
-              : 'bg-transparent text-muted-foreground border-border hover:border-foreground/30 hover:text-foreground'
+              ? 'bg-foreground/10 text-foreground border-foreground/20'
+              : 'bg-muted/50 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground'
           )}
         >
           {filter.label}

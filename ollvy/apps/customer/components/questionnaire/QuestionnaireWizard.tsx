@@ -286,12 +286,14 @@ export function QuestionnaireWizard({
     <div className="space-y-6">
       {/* Pre-payment answers summary (only in post_payment mode) */}
       {hasPrePaymentAnswers && (
-        <div className="rounded-xl border border-[hsl(var(--ollvy-green))]/20 bg-[hsl(var(--ollvy-green))]/5 p-5">
+        <div className="rounded-xl border border-border bg-muted/50 p-5">
           <div className="flex items-center gap-2 mb-4">
             <CheckCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
-            <h3 className="font-semibold text-foreground text-sm">Confirmed Before Payment</h3>
+            <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+              Your Selections
+            </p>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {Object.entries(prePaymentResponses).map(([key, value]) => {
               // Find the question to get its label
               const question = prePaymentQuestions.find(q => q.question_key === key)
@@ -304,10 +306,15 @@ export function QuestionnaireWizard({
                 if (option) displayValue = option.label
               }
 
+              // Check if value is numeric
+              const isNumeric = /^\d+$/.test(displayValue)
+
               return (
                 <div key={key} className="flex justify-between items-center text-sm">
                   <span className="text-muted-foreground">{label}</span>
-                  <span className="font-medium text-foreground">{displayValue}</span>
+                  <span className={`text-foreground ${isNumeric ? 'font-mono font-semibold' : 'font-medium'}`}>
+                    {displayValue}
+                  </span>
                 </div>
               )
             })}

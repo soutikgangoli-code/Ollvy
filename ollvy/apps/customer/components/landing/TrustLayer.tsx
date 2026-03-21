@@ -80,7 +80,7 @@ const trustCards = [
     description:
       "Before checkout, you get an Engagement Letter: what the service covers, and what it doesn't. This is generated automatically and stored in your account. If there's ever a dispute about what was agreed, there's a document.",
     visual: (
-      <div className="space-y-2">
+      <div className="bg-muted/50 rounded-lg p-3 space-y-2">
         <p className="text-xs font-medium text-foreground">
           GST Monthly Filing retainer - scope preview:
         </p>
@@ -98,7 +98,7 @@ const trustCards = [
         </div>
       </div>
     ),
-    visualCaption: null,
+    visualCaption: 'Scope defined before payment',
   },
   {
     icon: BarChart2,
@@ -220,27 +220,27 @@ export function TrustLayer() {
         >
           {/* Cards Display - 1 on mobile, 2 on desktop */}
           <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {visibleCards.map((card, idx) => (
                 <Card
                   key={`${currentIndex}-${idx}`}
                   className={cn(
-                    "border border-border bg-background p-6 md:p-8 flex flex-col h-full",
-                    idx === 1 && "hidden md:block"
+                    "border border-border bg-background p-6 md:p-8 flex flex-col h-[480px] md:h-[460px]",
+                    idx === 1 && "hidden md:flex"
                   )}
                 >
                   <h3 className="text-xl font-semibold text-foreground leading-snug">
                     {card.title}
                   </h3>
 
-                  <p className="text-base text-muted-foreground mt-3 leading-relaxed">
+                  <p className="text-base text-muted-foreground mt-3 leading-relaxed flex-1">
                     {card.description}
                   </p>
 
                   {/* Visual Element */}
-                  <div className="mt-6 pt-6 border-t border-border flex-1 flex flex-col">
-                    <div className="flex-1">{card.visual}</div>
-                    <p className="text-sm text-muted-foreground italic mt-3 min-h-[1.25rem]">
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <div>{card.visual}</div>
+                    <p className="text-sm text-muted-foreground italic mt-3">
                       {card.visualCaption || '\u00A0'}
                     </p>
                   </div>

@@ -1208,12 +1208,20 @@ function PreCursorSummaryCard({ answers, serviceSlug, serviceId, onEdit }: PreCu
 
   if (relevantAnswers.length === 0) return null
 
+  // Check if a value looks like a number
+  const isNumericValue = (val: unknown): boolean => {
+    const str = String(val)
+    return /^\d+$/.test(str)
+  }
+
   return (
-    <div className="rounded-xl border border-[hsl(var(--ollvy-green))]/20 bg-[hsl(var(--ollvy-green))]/5 p-5">
+    <div className="rounded-xl border border-border bg-muted/50 p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <CheckCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
-          <h3 className="font-semibold text-foreground text-sm">Confirmed Before Payment</h3>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+            Your Selections
+          </p>
         </div>
         <button
           onClick={onEdit}
@@ -1222,13 +1230,19 @@ function PreCursorSummaryCard({ answers, serviceSlug, serviceId, onEdit }: PreCu
           Edit
         </button>
       </div>
-      <div className="space-y-2">
-        {relevantAnswers.map(([key, value]) => (
-          <div key={key} className="flex justify-between items-center text-sm">
-            <span className="text-muted-foreground">{getLabel(key)}</span>
-            <span className="font-medium text-foreground">{formatValue(key, value)}</span>
-          </div>
-        ))}
+      <div className="space-y-3">
+        {relevantAnswers.map(([key, value]) => {
+          const formattedValue = formatValue(key, value)
+          const useMonoFont = isNumericValue(formattedValue) || key === 'trademark_class_count' || key === 'director_count' || key === 'partner_count'
+          return (
+            <div key={key} className="flex justify-between items-center text-sm">
+              <span className="text-muted-foreground">{getLabel(key)}</span>
+              <span className={`text-foreground ${useMonoFont ? 'font-mono font-semibold' : 'font-medium'}`}>
+                {formattedValue}
+              </span>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

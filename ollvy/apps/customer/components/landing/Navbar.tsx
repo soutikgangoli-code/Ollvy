@@ -308,18 +308,17 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button
-              size="sm"
-              className="rounded-full"
+            <button
               onClick={() => openAuthModal()}
+              className="px-3 py-1.5 text-xs font-medium rounded bg-muted/50 text-muted-foreground border border-border hover:bg-muted hover:text-foreground transition-colors"
             >
               Sign in
-            </Button>
+            </button>
           )}
         </div>
 
-        {/* Mobile Search + Menu Buttons */}
-        <div className="flex items-center gap-2 md:hidden">
+        {/* Mobile Search + Theme + Menu Buttons */}
+        <div className="flex items-center gap-1 md:hidden">
           {mobileSearchOpen ? (
             <>
               {/* Expanded search input - expands from right to left */}
@@ -346,14 +345,17 @@ export function Navbar() {
               </div>
             </>
           ) : (
-            <button
-              type="button"
-              onClick={() => setMobileSearchOpen(true)}
-              className="p-2 rounded-md text-foreground hover:bg-muted active:bg-muted/80 transition-colors focus:outline-none"
-            >
-              <Search className="h-5 w-5" />
-              <span className="sr-only">Search</span>
-            </button>
+            <>
+              <ThemeToggle />
+              <button
+                type="button"
+                onClick={() => setMobileSearchOpen(true)}
+                className="p-2 rounded-md text-foreground hover:bg-muted active:bg-muted/80 transition-colors focus:outline-none"
+              >
+                <Search className="h-5 w-5" />
+                <span className="sr-only">Search</span>
+              </button>
+            </>
           )}
           <button
             type="button"
@@ -429,21 +431,6 @@ export function Navbar() {
             </nav>
 
             <SheetFooter className="p-4 border-t border-border mt-auto flex flex-col gap-3">
-              <div className="flex items-center justify-between px-2 py-1">
-                <span className="font-mono text-xs uppercase tracking-wide text-muted-foreground">Theme</span>
-                <ThemeToggle />
-              </div>
-              <Button
-                variant="outline"
-                className="w-full gap-2 rounded-full font-mono text-sm"
-                onClick={() => {
-                  setMobileMenuOpen(false)
-                  setSearchOpen(true)
-                }}
-              >
-                <Search className="h-4 w-4" />
-                Search Services
-              </Button>
               {user ? (
                 <div className="space-y-1 pt-2">
                   <Link
