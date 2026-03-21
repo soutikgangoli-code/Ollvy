@@ -108,6 +108,40 @@ export default function CheckoutPage() {
     }
   }, [service])
 
+  // Check for pre-payment questions and redirect if user hasn't answered them
+  useEffect(() => {
+    if (!service) return
+
+    // If user already has answers, don't redirect
+    const existingAnswers = getPreCursorAnswers(service.slug)
+    if (existingAnswers && Object.keys(existingAnswers).length > 0) {
+      return
+    }
+
+    // Check if service has pre-payment questions
+    const checkForPrePaymentQuestions = async () => {
+      const supabase = getClient()
+      const { count } = await supabase
+        .from('service_questionnaires')
+        .select('*', { count: 'exact', head: true })
+        .eq('service_package_id', service.id)
+        .eq('is_active', true)
+        .eq('is_pre_payment', true)
+
+      if (count && count > 0) {
+        // Preserve URL params when redirecting
+        const params = new URLSearchParams()
+        if (variantFromUrl) params.set('variant', variantFromUrl)
+        if (addonsFromUrl) params.set('addons', addonsFromUrl)
+        const queryString = params.toString()
+        const eligibilityUrl = `/checkout/${serviceId}/eligibility${queryString ? '?' + queryString : ''}`
+        router.replace(eligibilityUrl)
+      }
+    }
+
+    checkForPrePaymentQuestions()
+  }, [service, serviceId, router, variantFromUrl, addonsFromUrl])
+
   // Initialize variant and addons from URL params or service defaults after service loads
   useEffect(() => {
     if (!service) return
