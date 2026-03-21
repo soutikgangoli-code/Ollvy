@@ -156,7 +156,8 @@ export default function QuoteDetailPage() {
       if (data.order_id) {
         router.push(`/orders/${data.order_id}`)
       } else {
-        router.push(`/checkout/${quote.service_package.id}?quote=${quote.id}`)
+        // Go through eligibility which handles redirect to checkout if no questions
+        router.push(`/checkout/${quote.service_package.id}/eligibility?quote=${quote.id}`)
       }
     } catch (err: any) {
       console.error('Accept quote error:', err)

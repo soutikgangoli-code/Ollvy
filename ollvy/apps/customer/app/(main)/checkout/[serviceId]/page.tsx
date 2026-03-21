@@ -13,6 +13,7 @@ import { getFullAttributionData, clearAllAttributionData } from '@/lib/utm'
 import { getPreCursorAnswers, clearPreCursorAnswers } from '@/lib/pre-cursor'
 import type { ServicePackage, ServiceAddon, ServiceVariant } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { getCompletionEstimate } from '@/lib/dates'
 
 import {
   CheckoutStepper,
@@ -84,9 +85,6 @@ export default function CheckoutPage() {
   // Pre-cursor answers from eligibility page (stored in sessionStorage)
   const [preCursorAnswers, setPreCursorAnswers] = useState<Record<string, unknown>>({})
 
-  // Track if we're checking for pre-payment questions (to avoid flicker)
-  const [isCheckingEligibility, setIsCheckingEligibility] = useState(true)
-
   // Fetch service data regardless of auth status (public data)
   useEffect(() => {
     if (!isHydrated) return
@@ -110,44 +108,6 @@ export default function CheckoutPage() {
       setPreCursorAnswers(stored)
     }
   }, [service])
-
-  // Check for pre-payment questions and redirect if user hasn't answered them
-  useEffect(() => {
-    if (!service) return
-
-    // If user already has answers, don't redirect
-    const existingAnswers = getPreCursorAnswers(service.slug)
-    if (existingAnswers && Object.keys(existingAnswers).length > 0) {
-      setIsCheckingEligibility(false)
-      return
-    }
-
-    // Check if service has pre-payment questions
-    const checkForPrePaymentQuestions = async () => {
-      const supabase = getClient()
-      const { count } = await supabase
-        .from('service_questionnaires')
-        .select('*', { count: 'exact', head: true })
-        .eq('service_package_id', service.id)
-        .eq('is_active', true)
-        .eq('is_pre_payment', true)
-
-      if (count && count > 0) {
-        // Preserve URL params when redirecting
-        const params = new URLSearchParams()
-        if (variantFromUrl) params.set('variant', variantFromUrl)
-        if (addonsFromUrl) params.set('addons', addonsFromUrl)
-        const queryString = params.toString()
-        const eligibilityUrl = `/checkout/${serviceId}/eligibility${queryString ? '?' + queryString : ''}`
-        router.replace(eligibilityUrl)
-      } else {
-        // No pre-payment questions, safe to show checkout
-        setIsCheckingEligibility(false)
-      }
-    }
-
-    checkForPrePaymentQuestions()
-  }, [service, serviceId, router, variantFromUrl, addonsFromUrl])
 
   // Initialize variant and addons from URL params or service defaults after service loads
   useEffect(() => {
@@ -527,8 +487,8 @@ export default function CheckoutPage() {
 
   const canSubmit = priceBreakdown && priceBreakdown.total > 0
 
-  // Show loading state while waiting for hydration or checking eligibility
-  if (!isHydrated || isCheckingEligibility) {
+  // Show loading state while waiting for hydration
+  if (!isHydrated) {
     return (
       <div className="container py-12 max-w-6xl">
         <Skeleton className="h-8 w-32 mb-8" />
@@ -592,6 +552,15 @@ export default function CheckoutPage() {
               <PreCursorSummaryCard
                 answers={preCursorAnswers}
                 serviceSlug={service.slug}
+                serviceId={serviceId}
+                onEdit={() => {
+                  // Redirect to eligibility page with edit flag (keep answers for editing)
+                  const params = new URLSearchParams()
+                  params.set('edit', 'true')
+                  if (variantFromUrl) params.set('variant', variantFromUrl)
+                  if (addonsFromUrl) params.set('addons', addonsFromUrl)
+                  router.push(`/checkout/${serviceId}/eligibility?${params.toString()}`)
+                }}
               />
             )}
 
@@ -694,6 +663,9 @@ export default function CheckoutPage() {
                   canSubmit={canSubmit || false}
                   onSubmit={handleCheckout}
                   slaDays={service.sla_working_days || 15}
+                  hasGovtProcessing={service.has_govt_processing ?? false}
+                  completionMaxDays={service.completion_max_days}
+                  completionRangeText={service.completion_range_text}
                 />
               )}
             </div>
@@ -733,6 +705,9 @@ export default function CheckoutPage() {
                 onSubmit={handleCheckout}
                 isMobile
                 slaDays={service.sla_working_days || 15}
+                hasGovtProcessing={service.has_govt_processing ?? false}
+                completionMaxDays={service.completion_max_days}
+                completionRangeText={service.completion_range_text}
               />
             }
           />
@@ -751,6 +726,9 @@ export default function CheckoutPage() {
           orderId={successModal.orderId}
           amountPaisa={priceBreakdown?.total || 0}
           slaDays={service.sla_working_days || 15}
+          hasGovtProcessing={service.has_govt_processing ?? false}
+          completionMaxDays={service.completion_max_days}
+          completionRangeText={service.completion_range_text}
           onClose={() => {
             const orderId = successModal.orderId
             setSuccessModal(null)
@@ -911,6 +889,10 @@ interface OrderSummarySidebarProps {
   onSubmit: () => void
   isMobile?: boolean
   slaDays?: number
+  // Completion estimate fields for govt processing awareness
+  hasGovtProcessing?: boolean
+  completionMaxDays?: number | null
+  completionRangeText?: string | null
 }
 
 function OrderSummarySidebar({
@@ -934,31 +916,34 @@ function OrderSummarySidebar({
   onSubmit,
   isMobile = false,
   slaDays = 15,
+  hasGovtProcessing = false,
+  completionMaxDays,
+  completionRangeText,
 }: OrderSummarySidebarProps) {
-  // Calculate guaranteed date
-  const getGuaranteedDate = (days: number) => {
-    const date = new Date()
-    let addedDays = 0
-    while (addedDays < days) {
-      date.setDate(date.getDate() + 1)
-      const dayOfWeek = date.getDay()
-      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-        addedDays++
-      }
-    }
-    return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
-  }
-
-  const guaranteedDate = getGuaranteedDate(slaDays)
+  // Calculate completion estimate with govt processing awareness
+  const completionEstimate = getCompletionEstimate(
+    slaDays,
+    hasGovtProcessing,
+    completionMaxDays,
+    completionRangeText
+  )
+  const guaranteedDate = completionEstimate?.guaranteedDate ?? ''
 
   return (
     <div className={cn('bg-card border border-border rounded-xl p-6', isMobile && 'border-0 p-0')}>
       {/* Guaranteed date at top */}
-      <div className="flex items-center gap-2 pb-5 border-b border-border mb-5">
-        <CheckCircle className="h-3.5 w-3.5 text-[hsl(var(--ollvy-green))] shrink-0" />
-        <p className="text-sm font-semibold text-foreground font-mono">
-          Guaranteed by {guaranteedDate}
-        </p>
+      <div className="pb-5 border-b border-border mb-5">
+        <div className="flex items-center gap-2">
+          <CheckCircle className="h-3.5 w-3.5 text-[hsl(var(--ollvy-green))] shrink-0" />
+          <p className="text-sm font-semibold text-foreground font-mono">
+            Guaranteed by {guaranteedDate}
+          </p>
+        </div>
+        {completionEstimate?.govtDisclaimer && (
+          <p className="text-xs text-muted-foreground mt-1 ml-[22px]">
+            ({completionEstimate.govtDisclaimer})
+          </p>
+        )}
       </div>
 
       {/* Total amount - prominent */}
@@ -1124,9 +1109,11 @@ function OrderSummarySidebar({
 interface PreCursorSummaryCardProps {
   answers: Record<string, unknown>
   serviceSlug: string
+  serviceId: string
+  onEdit: () => void
 }
 
-function PreCursorSummaryCard({ answers, serviceSlug }: PreCursorSummaryCardProps) {
+function PreCursorSummaryCard({ answers, serviceSlug, serviceId, onEdit }: PreCursorSummaryCardProps) {
   // Human-readable labels for question keys
   const getLabel = (key: string): string => {
     const labels: Record<string, string> = {
@@ -1211,9 +1198,17 @@ function PreCursorSummaryCard({ answers, serviceSlug }: PreCursorSummaryCardProp
 
   return (
     <div className="rounded-xl border border-[hsl(var(--ollvy-green))]/20 bg-[hsl(var(--ollvy-green))]/5 p-5">
-      <div className="flex items-center gap-2 mb-4">
-        <CheckCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
-        <h3 className="font-semibold text-foreground text-sm">Confirmed Before Payment</h3>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <CheckCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
+          <h3 className="font-semibold text-foreground text-sm">Confirmed Before Payment</h3>
+        </div>
+        <button
+          onClick={onEdit}
+          className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-2"
+        >
+          Edit
+        </button>
       </div>
       <div className="space-y-2">
         {relevantAnswers.map(([key, value]) => (

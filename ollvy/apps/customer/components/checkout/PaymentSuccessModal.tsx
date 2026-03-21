@@ -8,6 +8,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Check, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { getCompletionEstimate } from '@/lib/dates'
 
 interface PaymentSuccessModalProps {
   isOpen: boolean
@@ -17,23 +18,14 @@ interface PaymentSuccessModalProps {
   amountPaisa: number
   slaDays: number
   onClose: () => void
+  // Completion estimate fields for govt processing awareness
+  hasGovtProcessing?: boolean
+  completionMaxDays?: number | null
+  completionRangeText?: string | null
 }
 
 function formatPrice(paisa: number): string {
   return '\u20B9' + Math.ceil(paisa / 100).toLocaleString('en-IN')
-}
-
-function getGuaranteedDate(days: number): string {
-  const date = new Date()
-  let addedDays = 0
-  while (addedDays < days) {
-    date.setDate(date.getDate() + 1)
-    const dayOfWeek = date.getDay()
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-      addedDays++
-    }
-  }
-  return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 export function PaymentSuccessModal({
@@ -44,6 +36,9 @@ export function PaymentSuccessModal({
   amountPaisa,
   slaDays,
   onClose,
+  hasGovtProcessing = false,
+  completionMaxDays,
+  completionRangeText,
 }: PaymentSuccessModalProps) {
   const [mounted, setMounted] = useState(false)
   const [countdown, setCountdown] = useState(5)
@@ -80,7 +75,14 @@ export function PaymentSuccessModal({
     onClose()
   }
 
-  const guaranteedDate = getGuaranteedDate(slaDays)
+  // Calculate completion estimate with govt processing awareness
+  const completionEstimate = getCompletionEstimate(
+    slaDays,
+    hasGovtProcessing,
+    completionMaxDays,
+    completionRangeText
+  )
+  const guaranteedDate = completionEstimate?.guaranteedDate ?? ''
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleViewOrder()}>
@@ -132,13 +134,15 @@ export function PaymentSuccessModal({
             </div>
 
             {/* Guaranteed by */}
-            <div className="px-4 py-3 flex justify-between items-center">
-              <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
-                GUARANTEED BY
-              </span>
-              <span className="text-sm font-mono font-medium text-[hsl(var(--ollvy-green))]">
-                {guaranteedDate}
-              </span>
+            <div className="px-4 py-3">
+              <div className="flex justify-between items-center">
+                <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                  GUARANTEED BY
+                </span>
+                <span className="text-sm font-mono font-medium text-[hsl(var(--ollvy-green))]">
+                  {guaranteedDate}
+                </span>
+              </div>
             </div>
           </div>
         </div>

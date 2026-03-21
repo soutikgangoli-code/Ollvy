@@ -21,7 +21,9 @@ interface QuestionnaireWizardProps {
   serviceSlug?: string                // required in pre_payment mode
   forceEdit?: boolean
   mode?: 'pre_payment' | 'post_payment'  // default: 'post_payment'
+  loadExisting?: boolean              // load existing answers from sessionStorage (for editing)
   onComplete?: (answers: Record<string, unknown>) => void  // required in pre_payment mode
+  onValuesChange?: (values: Record<string, unknown>) => void  // real-time value updates for live pricing
 }
 
 export function QuestionnaireWizard({
@@ -30,7 +32,9 @@ export function QuestionnaireWizard({
   serviceSlug,
   forceEdit = false,
   mode = 'post_payment',
+  loadExisting = false,
   onComplete,
+  onValuesChange,
 }: QuestionnaireWizardProps) {
   const router = useRouter()
   const {
@@ -40,6 +44,7 @@ export function QuestionnaireWizard({
     responses,
     prePaymentResponses,
     prePaymentQuestions,
+    serviceName,
     isLoading,
     isSaving,
     isCompleted,
@@ -56,11 +61,19 @@ export function QuestionnaireWizard({
   // Load questionnaire on mount
   useEffect(() => {
     if (mode === 'pre_payment' && serviceId && serviceSlug) {
-      loadPrePaymentQuestionnaire(serviceId, serviceSlug)
+      loadPrePaymentQuestionnaire(serviceId, serviceSlug, loadExisting)
     } else if (orderId) {
       loadQuestionnaire(orderId, forceEdit)
     }
-  }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadQuestionnaire, loadPrePaymentQuestionnaire])
+  }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadExisting, loadQuestionnaire, loadPrePaymentQuestionnaire])
+
+  // Handle case where there are no pre-payment questions (redirect to checkout)
+  // Only trigger after data has loaded (serviceName is set)
+  useEffect(() => {
+    if (!isLoading && mode === 'pre_payment' && serviceName && steps.length === 0) {
+      onComplete?.({})
+    }
+  }, [isLoading, mode, serviceName, steps.length, onComplete])
 
   // Get current step data
   const currentStepData = useMemo(() => {
@@ -88,6 +101,7 @@ export function QuestionnaireWizard({
       for (const q of currentStepData.questions) {
         stepDefaults[q.question_key] = responses[q.question_key] ?? (q.question_type === 'multiselect' ? [] : '')
       }
+      console.log('[QuestionnaireWizard] Resetting form for step', currentStep, 'with defaults:', stepDefaults, 'from responses:', responses)
       methods.reset(stepDefaults)
     }
   }, [currentStep, currentStepData, responses, methods])
@@ -100,6 +114,14 @@ export function QuestionnaireWizard({
     ...responses,
     ...watchedValues,
   }), [responses, watchedValues])
+
+  // Notify parent of value changes for live pricing
+  useEffect(() => {
+    if (onValuesChange && mode === 'pre_payment') {
+      console.log('[QuestionnaireWizard] onValuesChange:', allResponses)
+      onValuesChange(allResponses)
+    }
+  }, [allResponses, onValuesChange, mode])
 
   // Filter questions based on depends_on conditions
   const visibleQuestions = useMemo(() => {
@@ -120,8 +142,9 @@ export function QuestionnaireWizard({
     if (isLastStep) {
       if (mode === 'pre_payment') {
         // In pre_payment mode, call onComplete with all answers
-        const allAnswers = { ...responses, ...data }
-        onComplete?.(allAnswers)
+        // Get fresh responses from store (includes all saved steps including current)
+        const freshResponses = useQuestionnaireStore.getState().responses
+        onComplete?.(freshResponses)
       } else {
         // Complete questionnaire and redirect
         const completed = await completeQuestionnaire()
@@ -135,12 +158,16 @@ export function QuestionnaireWizard({
     }
   }
 
-  const handleBack = () => {
+  const handleBack = async () => {
+    // Save current step answers before going back (so they're preserved)
+    const currentValues = methods.getValues()
+    await saveStepResponses(currentValues)
     prevStep()
   }
 
-  // Loading state
-  if (isLoading) {
+  // Loading state - also show loading if we haven't loaded data yet in pre_payment mode
+  const isWaitingForData = mode === 'pre_payment' && !serviceName && !error
+  if (isLoading || isWaitingForData) {
     return (
       <div className="space-y-6">
         <div className="space-y-3">
@@ -206,11 +233,8 @@ export function QuestionnaireWizard({
 
   // No questions configured
   if (steps.length === 0) {
-    // In pre_payment mode with no questions, call onComplete with empty answers
+    // In pre_payment mode with no questions, useEffect will handle redirect
     if (mode === 'pre_payment') {
-      // This shouldn't happen normally - means service has no pre-payment questions
-      // Call onComplete to proceed to checkout
-      onComplete?.({})
       return null
     }
 

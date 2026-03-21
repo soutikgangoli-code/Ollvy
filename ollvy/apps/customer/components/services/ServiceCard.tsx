@@ -19,7 +19,7 @@ import {
   Check
 } from 'lucide-react'
 import { formatPaisa } from '@/lib/utils'
-import { getGuaranteedDate } from '@/lib/dates'
+import { getCompletionEstimate } from '@/lib/dates'
 import type { ServicePackage } from '@/lib/types'
 
 // Map icon names to Lucide components
@@ -53,7 +53,17 @@ export function ServiceCard({ service }: ServiceCardProps) {
 
   const isUrgent = service.urgency_score >= 80
   const isRetainer = service.billing_cycle === 'monthly' || service.billing_cycle === 'yearly'
-  const guaranteedDate = service.sla_working_days > 0 ? getGuaranteedDate(service.sla_working_days) : null
+
+  // Calculate completion estimate with govt processing awareness
+  const completionEstimate = service.sla_working_days > 0
+    ? getCompletionEstimate(
+        service.sla_working_days,
+        service.has_govt_processing ?? false,
+        service.completion_max_days,
+        service.completion_range_text
+      )
+    : null
+  const guaranteedDate = completionEstimate?.guaranteedDate ?? null
 
   // Get icon component or default to FileText
   const IconComponent = service.icon_name && iconMap[service.icon_name]
@@ -193,12 +203,19 @@ export function ServiceCard({ service }: ServiceCardProps) {
                 Recurring {service.billing_cycle} service
               </span>
             ) : guaranteedDate ? (
-              <Badge
-                className="bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 text-xs"
-              >
-                <Check className="h-3 w-3 mr-1" />
-                Guaranteed by {guaranteedDate}
-              </Badge>
+              <div className="space-y-0.5">
+                <Badge
+                  className="bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 text-xs"
+                >
+                  <Check className="h-3 w-3 mr-1" />
+                  Guaranteed by {guaranteedDate}
+                </Badge>
+                {completionEstimate?.govtDisclaimer && (
+                  <p className="text-[10px] text-muted-foreground">
+                    {completionEstimate.govtDisclaimer}
+                  </p>
+                )}
+              </div>
             ) : (
               <span className="text-xs text-muted-foreground">
                 {service.sla_working_days} working days

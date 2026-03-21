@@ -1,4 +1,4 @@
-import { addBusinessDays, format, isWeekend } from 'date-fns'
+import { addBusinessDays, addDays, format, isWeekend } from 'date-fns'
 
 // Indian public holidays FY 2025-26 - update annually
 export const HOLIDAYS: string[] = [
@@ -27,6 +27,79 @@ export function getGuaranteedDate(slaDays: number): string | null {
   }
 
   return format(date, 'd MMM') // "25 Mar"
+}
+
+/**
+ * Result of completion estimate calculation
+ */
+export interface CompletionEstimate {
+  /** Formatted date string: "28 Mar" or "September 2027" */
+  guaranteedDate: string
+  /** Whether this service involves government processing */
+  hasGovtProcessing: boolean
+  /** Disclaimer text for govt services, e.g., "Includes 12-18 months govt processing" */
+  govtDisclaimer?: string
+}
+
+/**
+ * Calculate completion estimate with appropriate formatting
+ *
+ * For services with government processing (has_govt_processing = true):
+ * - Uses completion_max_days to calculate the guaranteed date
+ * - Returns a disclaimer with the range text
+ * - For long timelines (> 60 days), formats as "Month Year" instead of "Day Month"
+ *
+ * For Ollvy-controlled services (has_govt_processing = false):
+ * - Uses regular SLA days
+ * - No disclaimer needed
+ */
+export function getCompletionEstimate(
+  slaDays: number,
+  hasGovtProcessing: boolean,
+  completionMaxDays: number | null | undefined,
+  completionRangeText: string | null | undefined
+): CompletionEstimate | null {
+  // For services with government processing and range data
+  if (hasGovtProcessing && completionMaxDays && completionRangeText) {
+    // For long timelines (> 60 days), use calendar days and format as "Month Year"
+    // For shorter timelines, use business days and format as "Day Month"
+    let date: Date
+    let formattedDate: string
+
+    if (completionMaxDays > 60) {
+      // Use calendar days for long government processes
+      date = addDays(new Date(), completionMaxDays)
+      formattedDate = format(date, 'MMMM yyyy') // "September 2027"
+    } else {
+      // Use business days for shorter processes
+      date = addBusinessDays(new Date(), completionMaxDays)
+      let iterations = 0
+      while ((HOLIDAYS.includes(format(date, 'yyyy-MM-dd')) || isWeekend(date)) && iterations < 20) {
+        date = addBusinessDays(date, 1)
+        iterations++
+      }
+      formattedDate = format(date, 'd MMM') // "28 Mar"
+    }
+
+    return {
+      guaranteedDate: formattedDate,
+      hasGovtProcessing: true,
+      govtDisclaimer: `Includes ${completionRangeText} govt processing`,
+    }
+  }
+
+  // Ollvy-controlled services - use standard SLA
+  if (slaDays > 0) {
+    const date = getGuaranteedDate(slaDays)
+    if (date) {
+      return {
+        guaranteedDate: date,
+        hasGovtProcessing: false,
+      }
+    }
+  }
+
+  return null
 }
 
 export function getNextGstrDueDate(): string {

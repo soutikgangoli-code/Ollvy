@@ -79,9 +79,9 @@ export default function QuoteRequestPage() {
 
       if (fetchError) throw fetchError
 
-      // If fixed price, redirect to checkout
+      // If fixed price, redirect to eligibility (which handles redirect to checkout if no questions)
       if (!data.price_varies_by_state) {
-        router.push(`/checkout/${serviceId}`)
+        router.push(`/checkout/${serviceId}/eligibility`)
         return
       }
 

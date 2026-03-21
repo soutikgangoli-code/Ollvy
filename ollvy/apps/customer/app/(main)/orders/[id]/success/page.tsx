@@ -12,7 +12,6 @@ import { formatPaisa } from '@/lib/utils'
 import {
   CheckCircle,
   FileUp,
-  Clock,
   UserCheck,
   FileCheck,
   ArrowRight,
@@ -20,6 +19,7 @@ import {
   MessageCircle,
   ClipboardList,
 } from 'lucide-react'
+import { getCompletionEstimate } from '@/lib/dates'
 import { cn } from '@/lib/utils'
 
 interface OrderData {
@@ -37,6 +37,10 @@ interface OrderData {
       stage_key: string
       stage_name: string
     }>
+    // Completion estimate fields for govt processing awareness
+    has_govt_processing?: boolean
+    completion_max_days?: number | null
+    completion_range_text?: string | null
   }
   documents_count?: number
   documents_uploaded?: number
@@ -84,7 +88,10 @@ export default function PaymentSuccessPage() {
             name,
             slug,
             sla_working_days,
-            workflow_stages
+            workflow_stages,
+            has_govt_processing,
+            completion_max_days,
+            completion_range_text
           )
         `)
         .eq('id', orderId)
@@ -92,7 +99,7 @@ export default function PaymentSuccessPage() {
 
       if (orderError) throw orderError
 
-      const servicePackage = (orderData.service_package as unknown) as { id: string; name: string; slug: string; sla_working_days: number; workflow_stages: unknown[] }
+      const servicePackage = (orderData.service_package as unknown) as { id: string; name: string; slug: string; sla_working_days: number; workflow_stages: unknown[]; has_govt_processing?: boolean; completion_max_days?: number | null; completion_range_text?: string | null }
 
       // Fetch document counts
       const { data: docsData } = await supabase
@@ -308,12 +315,22 @@ export default function PaymentSuccessPage() {
           </div>
           <div className="flex gap-4">
             <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
-              <Clock className="h-5 w-5 text-muted-foreground" />
+              <CheckCircle className="h-5 w-5 text-muted-foreground" />
             </div>
             <div>
               <p className="font-medium text-foreground">Guaranteed Completion</p>
               <p className="text-sm text-muted-foreground">
-                Your {order.service_package?.name} will be completed in {order.service_package?.sla_working_days} working days
+                {(() => {
+                  const estimate = getCompletionEstimate(
+                    order.service_package?.sla_working_days ?? 0,
+                    order.service_package?.has_govt_processing ?? false,
+                    order.service_package?.completion_max_days,
+                    order.service_package?.completion_range_text
+                  )
+                  return estimate?.guaranteedDate
+                    ? `Guaranteed by ${estimate.guaranteedDate}`
+                    : `Your ${order.service_package?.name} will be completed in ${order.service_package?.sla_working_days} working days`
+                })()}
               </p>
             </div>
           </div>

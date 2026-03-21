@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Phone, MessageCircle, Square, CheckSquare } from 'lucide-react'
-import { getGuaranteedDate } from '@/lib/dates'
+import { getCompletionEstimate } from '@/lib/dates'
 import { DBServiceConfig } from '@/lib/data/services'
 import { cn } from '@/lib/utils'
 
@@ -70,9 +70,19 @@ export function BookingPanel({
     }
   }
 
+  // Calculate completion estimate with govt processing awareness
+  const completionEstimate = service.isRetainer
+    ? null
+    : getCompletionEstimate(
+        service.slaDays,
+        service.hasGovtProcessing ?? false,
+        service.completionMaxDays,
+        service.completionRangeText
+      )
+
   const guaranteedDate = service.isRetainer
     ? service.nextDueDateValue
-    : getGuaranteedDate(service.slaDays)
+    : completionEstimate?.guaranteedDate ?? null
 
   // Calculate price with variant adjustment
   const selectedVariantData = service.variants?.find(v => v.id === selectedVariant)
@@ -133,16 +143,18 @@ export function BookingPanel({
     <Card className="border border-border bg-card p-6 w-full">
       {/* Guaranteed date at top */}
       {guaranteedDate && (
-        <div className="flex items-center gap-2 pb-5 border-b border-border mb-5">
-          <CheckCircle
-            size={14}
-            className="text-[hsl(var(--ollvy-green))] shrink-0"
-          />
-          <p className="text-sm font-semibold text-foreground font-mono">
-            {service.isRetainer
-              ? `Current cycle due: ${guaranteedDate}`
-              : `Guaranteed by ${guaranteedDate}`}
-          </p>
+        <div className="pb-5 border-b border-border mb-5">
+          <div className="flex items-center gap-2">
+            <CheckCircle
+              size={14}
+              className="text-[hsl(var(--ollvy-green))] shrink-0"
+            />
+            <p className="text-sm font-semibold text-foreground font-mono">
+              {service.isRetainer
+                ? `Current cycle due: ${guaranteedDate}`
+                : `Guaranteed by ${guaranteedDate}`}
+            </p>
+          </div>
         </div>
       )}
 

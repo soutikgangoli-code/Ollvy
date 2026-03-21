@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { getClient } from '../supabase'
+import { getPreCursorAnswers } from '../pre-cursor'
 import type {
   ServiceQuestion,
   QuestionnaireStep,
@@ -34,7 +35,7 @@ interface QuestionnaireState {
 interface QuestionnaireActions {
   // Initialize
   loadQuestionnaire: (orderId: string, forceEdit?: boolean) => Promise<void>
-  loadPrePaymentQuestionnaire: (serviceId: string, serviceSlug: string) => Promise<void>
+  loadPrePaymentQuestionnaire: (serviceId: string, serviceSlug: string, loadExisting?: boolean) => Promise<void>
 
   // Navigation
   goToStep: (step: number) => void
@@ -250,8 +251,9 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
       }
     },
 
-    loadPrePaymentQuestionnaire: async (serviceId: string, serviceSlug: string) => {
-      set({ isLoading: true, error: null, serviceId, serviceSlug, mode: 'pre_payment' })
+    loadPrePaymentQuestionnaire: async (serviceId: string, serviceSlug: string, loadExisting: boolean = false) => {
+      // Reset store to clear any cached data from previous loads
+      set({ ...initialState, isLoading: true, error: null, serviceId, serviceSlug, mode: 'pre_payment' })
 
       try {
         const supabase = getClient()
@@ -277,8 +279,16 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
 
         if (questionsError) throw questionsError
 
-        // No existing responses in pre-payment mode - answers start empty
-        const responses: QuestionnaireFormValues = {}
+        // Load existing responses from sessionStorage only when editing
+        let responses: QuestionnaireFormValues = {}
+        if (loadExisting) {
+          const existingAnswers = getPreCursorAnswers(serviceSlug)
+          if (existingAnswers) {
+            responses = Object.fromEntries(
+              Object.entries(existingAnswers).map(([k, v]) => [k, v as string | number | string[]])
+            )
+          }
+        }
 
         // Group questions by step
         const stepMap = new Map<number, ServiceQuestion[]>()

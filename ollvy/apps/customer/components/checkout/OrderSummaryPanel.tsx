@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowRight, Loader2, CheckCircle, Check, Tag, Calendar } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { getCompletionDate } from '@/lib/dates'
+import { getCompletionEstimate } from '@/lib/dates'
 
 interface PriceBreakdown {
   base: number
@@ -43,6 +43,10 @@ interface OrderSummaryPanelProps {
   promoLoading?: boolean
   promoError?: string | null
   promoApplied?: { code: string; discount: number } | null
+  // Completion estimate fields for govt processing awareness
+  hasGovtProcessing?: boolean
+  completionMaxDays?: number | null
+  completionRangeText?: string | null
 }
 
 function formatPaisa(paisa: number): string {
@@ -67,8 +71,19 @@ export function OrderSummaryPanel({
   promoLoading = false,
   promoError,
   promoApplied,
+  // Completion estimate props
+  hasGovtProcessing = false,
+  completionMaxDays,
+  completionRangeText,
 }: OrderSummaryPanelProps) {
-  const completionDate = slaDays ? getCompletionDate(slaDays) : null
+  // Calculate completion estimate with govt processing awareness
+  const completionEstimate = slaDays ? getCompletionEstimate(
+    slaDays,
+    hasGovtProcessing,
+    completionMaxDays,
+    completionRangeText
+  ) : null
+  const completionDate = completionEstimate?.guaranteedDate ?? null
 
   return (
     <Card className="sticky top-20 border-border">
@@ -86,6 +101,11 @@ export function OrderSummaryPanel({
               <p className="font-mono text-lg font-semibold text-[hsl(var(--ollvy-green))]">
                 {completionDate}
               </p>
+              {completionEstimate?.govtDisclaimer && (
+                <p className="text-xs text-[hsl(var(--ollvy-green))]/80 mt-0.5">
+                  ({completionEstimate.govtDisclaimer})
+                </p>
+              )}
             </div>
           </div>
         </div>

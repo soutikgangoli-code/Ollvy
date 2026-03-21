@@ -145,7 +145,8 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
     if (service?.price_varies_by_state) {
       router.push(`/quote/request/${targetId}?utm_source=service_page&utm_medium=cta&utm_content=${slug}`)
     } else {
-      router.push(`/checkout/${targetId}?utm_source=service_page&utm_medium=cta&utm_content=${slug}`)
+      // Always go through eligibility first - it handles redirect if no questions
+      router.push(`/checkout/${targetId}/eligibility?utm_source=service_page&utm_medium=cta&utm_content=${slug}`)
     }
   }
 

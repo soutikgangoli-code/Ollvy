@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { QuestionnaireWizard } from '@/components/questionnaire/QuestionnaireWizard'
+import { LivePricePreview, LivePricePreviewCompact } from '@/components/questionnaire/LivePricePreview'
 import { storePreCursorAnswers } from '@/lib/pre-cursor'
 import type { ServicePackage } from '@/lib/types'
 
@@ -18,11 +19,22 @@ export default function EligibilityPage() {
   const serviceId = params.serviceId as string
   const { user, isHydrated, openAuthModal } = useAuthStore()
 
+  // Live values for price preview (updated in real-time as user fills form)
+  const [liveValues, setLiveValues] = useState<Record<string, unknown>>({})
+
+  // Debug: log when liveValues changes
+  useEffect(() => {
+    console.log('[EligibilityPage] liveValues updated:', liveValues)
+  }, [liveValues])
+
   const [service, setService] = useState<ServicePackage | null>(null)
   const [hasPrePaymentQuestions, setHasPrePaymentQuestions] = useState<boolean | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [hasShownAuthPrompt, setHasShownAuthPrompt] = useState(false)
+
+  // Check if user is editing (coming from checkout Edit button)
+  const isEditing = searchParams.get('edit') === 'true'
 
   // Fetch service data
   useEffect(() => {
@@ -164,8 +176,16 @@ export default function EligibilityPage() {
     )
   }
 
+  // Service price config for live preview
+  const servicePriceConfig = {
+    slug: service.slug,
+    priceBasePaisa: service.price_base_paisa || 0,
+    priceGovtFeesPaisa: service.price_govt_fees_paisa || 0,
+    priceGstRate: service.price_gst_rate || 18,
+  }
+
   return (
-    <div className="container max-w-3xl mx-auto py-8 px-4">
+    <div className="container max-w-5xl mx-auto py-8 px-4">
       {/* Header */}
       <div className="mb-8">
         <Button variant="ghost" size="sm" className="mb-4 -ml-2" asChild>
@@ -182,13 +202,40 @@ export default function EligibilityPage() {
         </p>
       </div>
 
-      {/* Questionnaire */}
-      <QuestionnaireWizard
-        serviceId={service.id}
-        serviceSlug={service.slug}
-        mode="pre_payment"
-        onComplete={handleComplete}
-      />
+      {/* Two column layout on desktop */}
+      <div className="grid lg:grid-cols-[1fr_320px] gap-8">
+        {/* Questionnaire */}
+        <QuestionnaireWizard
+          serviceId={service.id}
+          serviceSlug={service.slug}
+          mode="pre_payment"
+          loadExisting={isEditing}
+          onComplete={handleComplete}
+          onValuesChange={setLiveValues}
+        />
+
+        {/* Live Price Preview - Desktop sidebar */}
+        <div className="hidden lg:block">
+          <div className="sticky top-20">
+            <LivePricePreview
+              service={servicePriceConfig}
+              answers={liveValues}
+              showBreakdown={true}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Live Price Preview - Mobile sticky footer */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40">
+        <LivePricePreviewCompact
+          service={servicePriceConfig}
+          answers={liveValues}
+        />
+      </div>
+
+      {/* Spacer for mobile sticky footer */}
+      <div className="lg:hidden h-16" />
     </div>
   )
 }

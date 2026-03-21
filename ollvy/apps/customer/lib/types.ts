@@ -63,6 +63,11 @@ export interface ServicePackage {
   icon_name?: string
   created_at: string
   updated_at: string
+  // Completion estimate fields for accurate timeline display
+  has_govt_processing?: boolean
+  completion_min_days?: number | null
+  completion_max_days?: number | null
+  completion_range_text?: string | null
 }
 
 export interface FilterCategory {

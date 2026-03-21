@@ -333,11 +333,7 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
       comparison_with,
       addons,
       is_bundle,
-      service_explainer,
-      has_govt_processing,
-      completion_min_days,
-      completion_max_days,
-      completion_range_text
+      service_explainer
     `)
     .eq('slug', slug)
     .single()

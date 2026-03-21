@@ -22,7 +22,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { getGuaranteedDate } from '@/lib/dates'
+import { getCompletionEstimate } from '@/lib/dates'
 import { cn } from '@/lib/utils'
 import {
   CheckCircle,
@@ -284,10 +284,19 @@ export function UnifiedServicePage({
   })
 
   // For retainers, use pre-computed nextDueDateValue
-  // Otherwise, calculate the guaranteed date based on SLA days
+  // Otherwise, calculate the guaranteed date based on SLA days with govt processing awareness
+  const completionEstimate = service.isRetainer
+    ? null
+    : getCompletionEstimate(
+        service.slaDays,
+        service.hasGovtProcessing ?? false,
+        service.completionMaxDays,
+        service.completionRangeText
+      )
+
   const guaranteedDate = service.isRetainer
     ? service.nextDueDateValue
-    : getGuaranteedDate(service.slaDays)
+    : completionEstimate?.guaranteedDate ?? null
 
   // Show rating if DB rating exists and has sufficient reviews (>=10)
   const showRating =
@@ -326,13 +335,12 @@ export function UnifiedServicePage({
     : 'Book Now'
 
   // Build base checkout/eligibility URL
+  // Always go through eligibility first - it handles redirect to checkout if no questions
   const getCtaUrl = (utmMedium: string, includeVariant = false) => {
     const serviceId = service.id || service.slug
     const baseUrl = service.priceVariesByState
       ? `/quote/request/${serviceId}`
-      : priceVariesByQuestionnaire
-      ? `/checkout/${serviceId}/eligibility`
-      : `/checkout/${serviceId}`
+      : `/checkout/${serviceId}/eligibility`
     const params = new URLSearchParams({
       utm_source: 'service_page',
       utm_medium: utmMedium,
@@ -575,12 +583,14 @@ export function UnifiedServicePage({
               <div className="mt-5 md:mt-6 flex flex-col items-center gap-2">
                 {/* Guarantee badge */}
                 {guaranteedDate && (
-                  <p className="text-sm md:text-[15px] font-mono text-foreground mb-1">
-                    <CheckCircle size={14} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
-                    {service.isRetainer
-                      ? `Current cycle due: ${guaranteedDate}`
-                      : `Guaranteed by ${guaranteedDate}`}
-                  </p>
+                  <div className="text-center mb-1">
+                    <p className="text-sm md:text-[15px] font-mono text-foreground">
+                      <CheckCircle size={14} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
+                      {service.isRetainer
+                        ? `Current cycle due: ${guaranteedDate}`
+                        : `Guaranteed by ${guaranteedDate}`}
+                    </p>
+                  </div>
                 )}
 
                 <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild>
