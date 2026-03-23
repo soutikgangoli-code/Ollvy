@@ -243,13 +243,17 @@ export default function GSTLatePenaltyPage() {
       </div>
 
       {/* Print styles */}
-      <style jsx global>{`
-        @media print {
-          .print-hidden {
-            display: none !important;
-          }
-        }
-      `}</style>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            @media print {
+              .print-hidden {
+                display: none !important;
+              }
+            }
+          `,
+        }}
+      />
     </>
   )
 }
