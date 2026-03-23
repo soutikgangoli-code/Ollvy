@@ -32,9 +32,9 @@ export const metadata: Metadata = {
   robots: 'index, follow',
   metadataBase: new URL('https://ollvy.com'),
   icons: {
-    icon: '/logo.png',
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
   alternates: {
     canonical: 'https://ollvy.com',

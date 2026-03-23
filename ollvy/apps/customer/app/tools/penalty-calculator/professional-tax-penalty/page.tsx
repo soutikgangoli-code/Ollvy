@@ -1,189 +1,13 @@
-'use client'
-
-import { useState, useMemo, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { Calculator, SlidersHorizontal, AlertTriangle } from 'lucide-react'
-import {
-  EmployeeCountSlider,
-  MonthsLateSlider,
-  RupeeInput,
-  ResultsPanel,
-  WarningBanner,
-  InfoBanner,
-} from '@/components/penalty-calculator'
-import { safeParseInt } from '@/lib/parse-url-params'
+import { ProfessionalTaxCalculator, CalculatorSkeleton } from '@/components/penalty-calculator/ProfessionalTaxCalculator'
 
-// PT-applicable states with rates
-interface PTStateInfo {
-  name: string
-  maxAnnualPT: number
-  penaltyType: 'percent_per_month' | 'flat_percent' | 'percent_plus_interest'
-  penaltyRate: number
-  interestRate?: number
-  penaltyDescription: string
-}
-
-const PT_STATES: Record<string, PTStateInfo> = {
-  'Maharashtra': {
-    name: 'Maharashtra',
-    maxAnnualPT: 2500,
-    penaltyType: 'percent_per_month',
-    penaltyRate: 0.10,
-    penaltyDescription: '10% of tax due per month',
-  },
-  'Karnataka': {
-    name: 'Karnataka',
-    maxAnnualPT: 2400,
-    penaltyType: 'percent_per_month',
-    penaltyRate: 0.02,
-    penaltyDescription: '2% per month',
-  },
-  'West Bengal': {
-    name: 'West Bengal',
-    maxAnnualPT: 2500,
-    penaltyType: 'flat_percent',
-    penaltyRate: 0.25,
-    penaltyDescription: '25% of tax due (flat)',
-  },
-  'Andhra Pradesh': {
-    name: 'Andhra Pradesh',
-    maxAnnualPT: 2400,
-    penaltyType: 'flat_percent',
-    penaltyRate: 0.25,
-    penaltyDescription: '25% of tax due (flat)',
-  },
-  'Telangana': {
-    name: 'Telangana',
-    maxAnnualPT: 2400,
-    penaltyType: 'flat_percent',
-    penaltyRate: 0.25,
-    penaltyDescription: '25% of tax due (flat)',
-  },
-  'Tamil Nadu': {
-    name: 'Tamil Nadu',
-    maxAnnualPT: 2400,
-    penaltyType: 'percent_plus_interest',
-    penaltyRate: 0.10,
-    interestRate: 0.02,
-    penaltyDescription: '10% penalty + 2% per month interest',
-  },
-  'Gujarat': {
-    name: 'Gujarat',
-    maxAnnualPT: 2500,
-    penaltyType: 'percent_per_month',
-    penaltyRate: 0.02,
-    penaltyDescription: '2% per month',
-  },
-  'Assam': {
-    name: 'Assam',
-    maxAnnualPT: 2500,
-    penaltyType: 'percent_per_month',
-    penaltyRate: 0.02,
-    penaltyDescription: '2% per month',
-  },
-  'Kerala': {
-    name: 'Kerala',
-    maxAnnualPT: 2400,
-    penaltyType: 'percent_per_month',
-    penaltyRate: 0.01,
-    penaltyDescription: '12% per annum (1% per month)',
-  },
-  'Odisha': {
-    name: 'Odisha',
-    maxAnnualPT: 2400,
-    penaltyType: 'percent_per_month',
-    penaltyRate: 0.02,
-    penaltyDescription: '2% per month',
-  },
-}
-
-// Non-PT states
-const NON_PT_STATES = [
-  'Delhi', 'Uttar Pradesh', 'Rajasthan', 'Haryana', 'Punjab', 'Himachal Pradesh',
-  'Uttarakhand', 'Jammu and Kashmir', 'Ladakh', 'Chandigarh', 'Goa', 'Bihar',
-  'Jharkhand', 'Chhattisgarh', 'Madhya Pradesh', 'Arunachal Pradesh', 'Manipur',
-  'Meghalaya', 'Mizoram', 'Nagaland', 'Sikkim', 'Tripura', 'Andaman and Nicobar Islands',
-  'Dadra and Nagar Haveli', 'Daman and Diu', 'Lakshadweep', 'Puducherry',
-]
-
-// All states for dropdown
-const ALL_STATES = [
-  ...Object.keys(PT_STATES),
-  ...NON_PT_STATES,
-].sort()
-
-interface CalculationResult {
-  monthlyPTDue: number
-  totalPTDue: number
-  penalty: number
-  interest: number
-  total: number
-  penaltyDescription: string
-}
-
-function calculatePTPenalty(
-  state: string,
-  employeeCount: number,
-  avgMonthlySalary: number,
-  monthsLate: number,
-  monthlyPTOverride: number | null
-): CalculationResult | null {
-  const stateInfo = PT_STATES[state]
-  if (!stateInfo) return null
-
-  // Auto-calculate monthly PT (simplified - assume max PT for each employee)
-  // In reality, PT has slabs, but we use max for estimation
-  const autoMonthlyPT = Math.round((stateInfo.maxAnnualPT / 12) * employeeCount)
-  const monthlyPTDue = monthlyPTOverride ?? autoMonthlyPT
-  const totalPTDue = monthlyPTDue * monthsLate
-
-  let penalty = 0
-  let interest = 0
-
-  switch (stateInfo.penaltyType) {
-    case 'percent_per_month':
-      penalty = Math.round(totalPTDue * stateInfo.penaltyRate * monthsLate)
-      break
-    case 'flat_percent':
-      penalty = Math.round(totalPTDue * stateInfo.penaltyRate)
-      break
-    case 'percent_plus_interest':
-      penalty = Math.round(totalPTDue * stateInfo.penaltyRate)
-      interest = Math.round(totalPTDue * (stateInfo.interestRate || 0) * monthsLate)
-      break
-  }
-
-  return {
-    monthlyPTDue,
-    totalPTDue,
-    penalty,
-    interest,
-    total: penalty + interest,
-    penaltyDescription: stateInfo.penaltyDescription,
-  }
-}
-
-// FAQs
+// FAQs for SEO
 const faqs = [
   {
     question: 'What is Professional Tax (PT) in India?',
-    answer: 'Professional Tax is a state-level tax levied on salaried employees, professionals, and traders. It is deducted by employers from employee salaries and remitted to the state government. The maximum PT is capped at ₹2,500 per year as per Article 276 of the Constitution.',
+    answer: 'Professional Tax is a state-level tax levied on salaried employees, professionals, and traders. It is deducted by employers from employee salaries and remitted to the state government. The maximum PT is capped at Rs.2,500 per year as per Article 276 of the Constitution.',
   },
   {
     question: 'Which states levy Professional Tax in India?',
@@ -191,15 +15,15 @@ const faqs = [
   },
   {
     question: 'What is the penalty for late PT payment in Maharashtra?',
-    answer: 'In Maharashtra, the penalty for late PT payment is 10% of the tax due per month of delay. For example, if PT due is ₹10,000 and it is 3 months late, penalty would be ₹10,000 × 10% × 3 = ₹3,000.',
+    answer: 'In Maharashtra, the penalty for late PT payment is 10% of the tax due per month of delay. For example, if PT due is Rs.10,000 and it is 3 months late, penalty would be Rs.10,000 x 10% x 3 = Rs.3,000.',
   },
   {
     question: 'How is PT different from Income Tax?',
-    answer: 'PT is a state tax with a maximum cap of ₹2,500/year, deducted by employers. Income Tax is a central tax with progressive rates up to 30%, filed by individuals. PT paid is deductible while computing taxable income for Income Tax.',
+    answer: 'PT is a state tax with a maximum cap of Rs.2,500/year, deducted by employers. Income Tax is a central tax with progressive rates up to 30%, filed by individuals. PT paid is deductible while computing taxable income for Income Tax.',
   },
   {
     question: 'Who is liable to pay Professional Tax?',
-    answer: 'All salaried employees, self-employed professionals (doctors, lawyers, CAs, etc.), and traders earning above the threshold (varies by state, typically ₹10,000-15,000/month) are liable to pay PT.',
+    answer: 'All salaried employees, self-employed professionals (doctors, lawyers, CAs, etc.), and traders earning above the threshold (varies by state, typically Rs.10,000-15,000/month) are liable to pay PT.',
   },
   {
     question: 'How to register for Professional Tax as an employer?',
@@ -215,270 +39,66 @@ const faqs = [
   },
 ]
 
-function ProfessionalTaxCalculator() {
-  const searchParams = useSearchParams()
+// JSON-LD Schemas
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+}
 
-  // Initialize from URL params
-  const [state, setState] = useState(
-    searchParams.get('state') || 'Maharashtra'
-  )
-  const [employeeCount, setEmployeeCount] = useState(
-    safeParseInt(searchParams.get('employees'), 25)
-  )
-  const [avgMonthlySalary, setAvgMonthlySalary] = useState(
-    safeParseInt(searchParams.get('salary'), 30000)
-  )
-  const [monthsLate, setMonthsLate] = useState(
-    safeParseInt(searchParams.get('months'), 3)
-  )
-  const [monthlyPTOverride, setMonthlyPTOverride] = useState<number | null>(null)
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to calculate Professional Tax penalty',
+  step: [
+    { '@type': 'HowToStep', name: 'Select state', text: 'Choose your state of registration' },
+    { '@type': 'HowToStep', name: 'Enter employee count', text: 'Specify the number of employees' },
+    { '@type': 'HowToStep', name: 'Enter months late', text: 'Specify how many months the payment is overdue' },
+    { '@type': 'HowToStep', name: 'View penalty', text: 'See total penalty based on your state\'s PT rules' },
+  ],
+}
 
-  // Check if state has PT
-  const isPTState = state in PT_STATES
-  const stateInfo = PT_STATES[state]
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
+    { '@type': 'ListItem', position: 4, name: 'Professional Tax Penalty', item: 'https://ollvy.com/tools/penalty-calculator/professional-tax-penalty' },
+  ],
+}
 
-  // Calculate penalty
-  const result = useMemo(() => {
-    if (!isPTState) return null
-    return calculatePTPenalty(state, employeeCount, avgMonthlySalary, monthsLate, monthlyPTOverride)
-  }, [state, employeeCount, avgMonthlySalary, monthsLate, monthlyPTOverride, isPTState])
-
-  // Update URL params
-  useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('state', state)
-    params.set('employees', employeeCount.toString())
-    params.set('salary', avgMonthlySalary.toString())
-    params.set('months', monthsLate.toString())
-
-    const newUrl = `${window.location.pathname}?${params.toString()}`
-    window.history.replaceState(null, '', newUrl)
-  }, [state, employeeCount, avgMonthlySalary, monthsLate])
-
-  // Breakdown for ResultsPanel
-  const breakdown = useMemo(() => {
-    if (!result) return []
-
-    const items = [
-      {
-        label: 'Penalty',
-        amount: result.penalty,
-        subItems: [
-          { label: `PT Due: ₹${result.totalPTDue.toLocaleString('en-IN')}`, amount: 0 },
-          { label: result.penaltyDescription, amount: result.penalty },
-        ],
-        statuteShort: `${state} PT Act`,
-        statuteFull: `${state} Professional Tax Act - Penalty for delayed payment`,
-      },
-    ]
-
-    if (result.interest > 0) {
-      items.push({
-        label: 'Interest',
-        amount: result.interest,
-        subItems: [
-          { label: `2% per month × ${monthsLate} months`, amount: result.interest },
-        ],
-        statuteShort: `${state} PT Act`,
-        statuteFull: `${state} Professional Tax Act - Interest on delayed payment`,
-      })
-    }
-
-    return items
-  }, [result, state, monthsLate])
-
+export default function ProfessionalTaxPenaltyPage() {
   return (
     <>
-      {/* JSON-LD Schema - FAQPage */}
+      {/* JSON-LD Schemas - Server Rendered */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: faqs.map(faq => ({
-              '@type': 'Question',
-              name: faq.question,
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: faq.answer,
-              },
-            })),
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-
-      {/* JSON-LD Schema - HowTo */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'HowTo',
-            name: 'How to calculate Professional Tax penalty',
-            step: [
-              { '@type': 'HowToStep', name: 'Select state', text: 'Choose your state of registration' },
-              { '@type': 'HowToStep', name: 'Enter employee count', text: 'Specify the number of employees' },
-              { '@type': 'HowToStep', name: 'Enter months late', text: 'Specify how many months the payment is overdue' },
-              { '@type': 'HowToStep', name: 'View penalty', text: 'See total penalty based on your state\'s PT rules' },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-
-      {/* JSON-LD Schema - BreadcrumbList */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
-              { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-              { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
-              { '@type': 'ListItem', position: 4, name: 'Professional Tax Penalty', item: 'https://ollvy.com/tools/penalty-calculator/professional-tax-penalty' },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">
-        {/* Input Section */}
-        <div className="rounded-xl border border-border bg-card p-6">
-          <h2 className="text-lg font-semibold mb-6 flex items-center gap-2">
-            <Calculator className="h-5 w-5 text-emerald-600" />
-            Professional Tax Penalty Calculator
-          </h2>
+      {/* Calculator - Client Component */}
+      <Suspense fallback={<CalculatorSkeleton />}>
+        <ProfessionalTaxCalculator />
+      </Suspense>
 
-          <div className="space-y-6">
-            {/* State Selector - FIRST INPUT */}
-            <div className="space-y-1.5">
-              <Label>State of Registration</Label>
-              <Select value={state} onValueChange={setState}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {ALL_STATES.map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {s} {s in PT_STATES ? '' : '(No PT)'}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {isPTState && stateInfo && (
-                <p className="text-xs text-muted-foreground">
-                  Max PT: ₹{stateInfo.maxAnnualPT}/year | Penalty: {stateInfo.penaltyDescription}
-                </p>
-              )}
-            </div>
-
-            {/* Non-PT State Message */}
-            {!isPTState && (
-              <div className="p-6 rounded-lg bg-amber-50 border border-amber-200 text-amber-900">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold">Professional Tax is not levied in {state}</p>
-                    <p className="text-sm mt-1">
-                      This calculator does not apply. Professional Tax is a state-level tax and
-                      {state} does not levy PT. Only certain states like Maharashtra, Karnataka,
-                      West Bengal, Tamil Nadu, etc. levy Professional Tax.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Other inputs - only show if PT state */}
-            {isPTState && (
-              <>
-                {/* Number of Employees */}
-                <EmployeeCountSlider
-                  value={employeeCount}
-                  onChange={setEmployeeCount}
-                  label="Number of Employees"
-                />
-
-                {/* Average Monthly Salary */}
-                <RupeeInput
-                  value={avgMonthlySalary}
-                  onChange={setAvgMonthlySalary}
-                  label="Average Monthly Salary (₹)"
-                  helpText="Used to estimate PT liability"
-                />
-
-                {/* Months Late */}
-                <MonthsLateSlider
-                  value={monthsLate}
-                  onChange={setMonthsLate}
-                  label="Months of Default"
-                />
-
-                {/* Advanced Filters */}
-                <Accordion type="single" collapsible>
-                  <AccordionItem value="advanced" className="border-none">
-                    <AccordionTrigger className="text-sm font-medium hover:no-underline py-2">
-                      <span className="flex items-center gap-2">
-                        <SlidersHorizontal className="h-4 w-4" />
-                        Advanced filters
-                      </span>
-                    </AccordionTrigger>
-                    <AccordionContent className="space-y-6 pt-4">
-                      {/* Monthly PT Override */}
-                      <RupeeInput
-                        value={monthlyPTOverride ?? (result?.monthlyPTDue || 0)}
-                        onChange={(v) => setMonthlyPTOverride(v)}
-                        label="Monthly PT Due (₹)"
-                        helpText={`Auto-calculated based on max PT of ₹${stateInfo?.maxAnnualPT}/year`}
-                      />
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Results Section */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          {isPTState && result ? (
-            <ResultsPanel
-              total={result.total}
-              breakdown={breakdown}
-              dueDate="Varies by state (typically monthly or quarterly)"
-              statute={`${state} Professional Tax Act`}
-              ctaText="Get PT Compliance Help"
-              ctaHref="/services/payroll-compliance"
-              showCta={result.total > 0}
-            >
-              {/* PT Due Info */}
-              <InfoBanner
-                title="Total PT Due (Principal)"
-                body={`₹${result.totalPTDue.toLocaleString('en-IN')} for ${monthsLate} month${monthsLate > 1 ? 's' : ''}. This is payable in addition to the penalty shown above.`}
-              />
-
-              {/* Warning for high penalty */}
-              {monthsLate > 6 && (
-                <WarningBanner
-                  variant="yellow"
-                  title="Extended Default Period"
-                  body="Prolonged non-payment may attract additional scrutiny from the PT department. Some states may initiate prosecution for willful non-compliance."
-                />
-              )}
-            </ResultsPanel>
-          ) : (
-            <Card className="p-6">
-              <p className="text-muted-foreground text-center">
-                Select a PT-applicable state to calculate penalty
-              </p>
-            </Card>
-          )}
-        </div>
-      </div>
-
-      {/* SEO Content - H2 Sections */}
+      {/* SEO Content - Server Rendered */}
       <div className="mt-16 max-w-3xl space-y-12">
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
@@ -489,7 +109,7 @@ function ProfessionalTaxCalculator() {
             employment, profession, or trade. It is collected by employers from employee
             salaries and remitted to the state government. Under Article 276 of the Indian
             Constitution, the maximum Professional Tax that can be levied is capped at
-            ₹2,500 per person per year. Not all states levy PT - it is primarily collected
+            Rs.2,500 per person per year. Not all states levy PT - it is primarily collected
             in Maharashtra, Karnataka, West Bengal, Andhra Pradesh, Telangana, Tamil Nadu,
             Gujarat, and a few other states.
           </p>
@@ -503,13 +123,13 @@ function ProfessionalTaxCalculator() {
             Professional Tax is levied by the following states and union territories:
           </p>
           <ul className="list-disc list-inside text-muted-foreground space-y-1">
-            <li><strong>Maharashtra:</strong> Max ₹2,500/year, 10% penalty per month</li>
-            <li><strong>Karnataka:</strong> Max ₹2,400/year, 2% penalty per month</li>
-            <li><strong>West Bengal:</strong> Max ₹2,500/year, 25% flat penalty</li>
-            <li><strong>Tamil Nadu:</strong> Max ₹2,400/year, 10% + 2%/month interest</li>
-            <li><strong>Andhra Pradesh & Telangana:</strong> Max ₹2,400/year, 25% flat penalty</li>
-            <li><strong>Gujarat:</strong> Max ₹2,500/year, 2% penalty per month</li>
-            <li><strong>Kerala:</strong> Max ₹2,400/year, 12% per annum</li>
+            <li><strong>Maharashtra:</strong> Max Rs.2,500/year, 10% penalty per month</li>
+            <li><strong>Karnataka:</strong> Max Rs.2,400/year, 2% penalty per month</li>
+            <li><strong>West Bengal:</strong> Max Rs.2,500/year, 25% flat penalty</li>
+            <li><strong>Tamil Nadu:</strong> Max Rs.2,400/year, 10% + 2%/month interest</li>
+            <li><strong>Andhra Pradesh &amp; Telangana:</strong> Max Rs.2,400/year, 25% flat penalty</li>
+            <li><strong>Gujarat:</strong> Max Rs.2,500/year, 2% penalty per month</li>
+            <li><strong>Kerala:</strong> Max Rs.2,400/year, 12% per annum</li>
           </ul>
           <p className="text-muted-foreground leading-relaxed mt-4">
             States like Delhi, Uttar Pradesh, Rajasthan, Haryana, and Punjab do not levy
@@ -537,28 +157,28 @@ function ProfessionalTaxCalculator() {
               </thead>
               <tbody>
                 <tr className="border-b">
-                  <td className="py-2 pr-4">Up to ₹10,000</td>
+                  <td className="py-2 pr-4">Up to Rs.10,000</td>
                   <td className="py-2 pr-4">Nil</td>
                   <td className="py-2 pr-4">Nil</td>
                   <td className="py-2">Nil</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="py-2 pr-4">₹10,001 - ₹15,000</td>
-                  <td className="py-2 pr-4">₹175</td>
-                  <td className="py-2 pr-4">₹150</td>
-                  <td className="py-2">₹110</td>
+                  <td className="py-2 pr-4">Rs.10,001 - Rs.15,000</td>
+                  <td className="py-2 pr-4">Rs.175</td>
+                  <td className="py-2 pr-4">Rs.150</td>
+                  <td className="py-2">Rs.110</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="py-2 pr-4">₹15,001 - ₹25,000</td>
-                  <td className="py-2 pr-4">₹200</td>
-                  <td className="py-2 pr-4">₹200</td>
-                  <td className="py-2">₹130</td>
+                  <td className="py-2 pr-4">Rs.15,001 - Rs.25,000</td>
+                  <td className="py-2 pr-4">Rs.200</td>
+                  <td className="py-2 pr-4">Rs.200</td>
+                  <td className="py-2">Rs.130</td>
                 </tr>
                 <tr>
-                  <td className="py-2 pr-4">Above ₹25,000</td>
-                  <td className="py-2 pr-4">₹200 (₹300 in Feb)</td>
-                  <td className="py-2 pr-4">₹200</td>
-                  <td className="py-2">₹200</td>
+                  <td className="py-2 pr-4">Above Rs.25,000</td>
+                  <td className="py-2 pr-4">Rs.200 (Rs.300 in Feb)</td>
+                  <td className="py-2 pr-4">Rs.200</td>
+                  <td className="py-2">Rs.200</td>
                 </tr>
               </tbody>
             </table>
@@ -591,7 +211,7 @@ function ProfessionalTaxCalculator() {
             <li>Visit your state&apos;s PT portal (e.g., mahagst.gov.in for Maharashtra)</li>
             <li>Apply for PT Enrollment Certificate (PTEC) as an employer</li>
             <li>Submit required documents: PAN, address proof, employee details</li>
-            <li>Pay the registration fee (typically ₹2,500 for 5 years)</li>
+            <li>Pay the registration fee (typically Rs.2,500 for 5 years)</li>
             <li>Receive PTEC number for filing returns and making payments</li>
           </ol>
           <p className="text-muted-foreground leading-relaxed mt-4">
@@ -604,7 +224,7 @@ function ProfessionalTaxCalculator() {
         </section>
       </div>
 
-      {/* FAQs Section */}
+      {/* FAQs Section - Server Rendered */}
       <div className="mt-16 max-w-3xl">
         <h2 className="text-2xl font-semibold text-foreground mb-6">
           Frequently Asked Questions
@@ -619,7 +239,7 @@ function ProfessionalTaxCalculator() {
         </div>
       </div>
 
-      {/* Related Tools */}
+      {/* Related Tools - Server Rendered */}
       <div className="mt-16 max-w-3xl">
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
@@ -641,24 +261,15 @@ function ProfessionalTaxCalculator() {
           </Link>
         </div>
       </div>
+
+      {/* Print styles */}
+      <style jsx global>{`
+        @media print {
+          .print-hidden {
+            display: none !important;
+          }
+        }
+      `}</style>
     </>
-  )
-}
-
-// Loading fallback for Suspense
-function CalculatorSkeleton() {
-  return (
-    <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8 animate-pulse">
-      <div className="bg-muted rounded-lg h-[500px]" />
-      <div className="bg-muted rounded-lg h-[400px]" />
-    </div>
-  )
-}
-
-export default function ProfessionalTaxPenaltyPage() {
-  return (
-    <Suspense fallback={<CalculatorSkeleton />}>
-      <ProfessionalTaxCalculator />
-    </Suspense>
   )
 }

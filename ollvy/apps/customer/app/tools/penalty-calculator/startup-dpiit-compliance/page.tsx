@@ -1,100 +1,9 @@
-'use client'
-
-import { useState, useMemo, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Checkbox } from '@/components/ui/checkbox'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { Calculator, SlidersHorizontal } from 'lucide-react'
-import {
-  MonthsLateSlider,
-  RupeeInput,
-  ResultsPanel,
-  InfoBanner,
-} from '@/components/penalty-calculator'
-import { safeParseInt } from '@/lib/parse-url-params'
+import { StartupDPIITCalculator, CalculatorSkeleton } from '@/components/penalty-calculator/StartupDPIITCalculator'
 
-type ComplianceType = 'fc_gpr' | 'fc_trs' | 'esop' | 'angel_tax'
-
-interface CalculationResult {
-  fcGprPenaltyMin: number
-  fcGprPenaltyMax: number
-  fcTrsPenaltyMin: number
-  fcTrsPenaltyMax: number
-  esopPenaltyMin: number
-  esopPenaltyMax: number
-  totalMin: number
-  totalMax: number
-  showRange: boolean
-}
-
-function calculateStartupPenalty(
-  complianceTypes: ComplianceType[],
-  foreignInvestmentAmount: number,
-  monthsLate: number,
-  isDPIITRecognised: boolean
-): CalculationResult {
-  let fcGprPenaltyMin = 0
-  let fcGprPenaltyMax = 0
-  let fcTrsPenaltyMin = 0
-  let fcTrsPenaltyMax = 0
-  let esopPenaltyMin = 0
-  let esopPenaltyMax = 0
-
-  // FC-GPR Non-Filing
-  // Compounding fee: ₹5,000 to 1% of amount, case-by-case by RBI
-  if (complianceTypes.includes('fc_gpr') && foreignInvestmentAmount > 0) {
-    fcGprPenaltyMin = 5000
-    fcGprPenaltyMax = Math.round(foreignInvestmentAmount * 0.01)
-    if (fcGprPenaltyMax < fcGprPenaltyMin) {
-      fcGprPenaltyMax = fcGprPenaltyMin
-    }
-  }
-
-  // FC-TRS Non-Filing - similar to FC-GPR
-  if (complianceTypes.includes('fc_trs') && foreignInvestmentAmount > 0) {
-    fcTrsPenaltyMin = 5000
-    fcTrsPenaltyMax = Math.round(foreignInvestmentAmount * 0.01)
-    if (fcTrsPenaltyMax < fcTrsPenaltyMin) {
-      fcTrsPenaltyMax = fcTrsPenaltyMin
-    }
-  }
-
-  // ESOP Non-compliance - typically ₹5,000 to 0.5% of ESOP pool value
-  if (complianceTypes.includes('esop') && foreignInvestmentAmount > 0) {
-    esopPenaltyMin = 5000
-    esopPenaltyMax = Math.round(foreignInvestmentAmount * 0.005)
-    if (esopPenaltyMax < esopPenaltyMin) {
-      esopPenaltyMax = esopPenaltyMin
-    }
-  }
-
-  const totalMin = fcGprPenaltyMin + fcTrsPenaltyMin + esopPenaltyMin
-  const totalMax = fcGprPenaltyMax + fcTrsPenaltyMax + esopPenaltyMax
-  const showRange = totalMin !== totalMax
-
-  return {
-    fcGprPenaltyMin,
-    fcGprPenaltyMax,
-    fcTrsPenaltyMin,
-    fcTrsPenaltyMax,
-    esopPenaltyMin,
-    esopPenaltyMax,
-    totalMin,
-    totalMax,
-    showRange,
-  }
-}
-
-// FAQs
+// FAQs for SEO
 const faqs = [
   {
     question: 'What is FC-GPR and when must it be filed?',
@@ -102,7 +11,7 @@ const faqs = [
   },
   {
     question: 'What is the penalty for not filing FC-GPR?',
-    answer: 'Late or non-filing of FC-GPR is a FEMA contravention. RBI can impose compounding fees ranging from ₹5,000 to 1% of the amount involved, determined on a case-by-case basis. In severe cases, RBI may decline compounding and refer the matter to the Enforcement Directorate.',
+    answer: 'Late or non-filing of FC-GPR is a FEMA contravention. RBI can impose compounding fees ranging from Rs.5,000 to 1% of the amount involved, determined on a case-by-case basis. In severe cases, RBI may decline compounding and refer the matter to the Enforcement Directorate.',
   },
   {
     question: 'What is FC-TRS and how is it different from FC-GPR?',
@@ -114,7 +23,7 @@ const faqs = [
   },
   {
     question: 'How do I get DPIIT recognition for my startup?',
-    answer: 'Apply on the Startup India portal. Requirements: (1) Entity age < 10 years, (2) Annual turnover < ₹100 Crore, (3) Working towards innovation or scalable business model, (4) Not formed by splitting/reconstruction. Recognition is typically granted within 2-3 weeks.',
+    answer: 'Apply on the Startup India portal. Requirements: (1) Entity age < 10 years, (2) Annual turnover < Rs.100 Crore, (3) Working towards innovation or scalable business model, (4) Not formed by splitting/reconstruction. Recognition is typically granted within 2-3 weeks.',
   },
   {
     question: 'What ESOP compliances are required under FEMA?',
@@ -130,294 +39,67 @@ const faqs = [
   },
 ]
 
-function StartupDPIITComplianceCalculator() {
-  const searchParams = useSearchParams()
+// JSON-LD Schemas
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+}
 
-  // Initialize from URL params
-  const [complianceTypes, setComplianceTypes] = useState<ComplianceType[]>(() => {
-    const types = searchParams.get('types')?.split(',') as ComplianceType[] || ['fc_gpr']
-    return types.filter(t => ['fc_gpr', 'fc_trs', 'esop', 'angel_tax'].includes(t))
-  })
-  const [foreignInvestmentAmount, setForeignInvestmentAmount] = useState(
-    safeParseInt(searchParams.get('amount'), 5000000)
-  )
-  const [monthsLate, setMonthsLate] = useState(
-    safeParseInt(searchParams.get('months'), 6)
-  )
-  const [isDPIITRecognised, setIsDPIITRecognised] = useState(
-    searchParams.get('dpiit') !== 'false'
-  )
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to calculate FEMA penalty for startup compliance',
+  step: [
+    { '@type': 'HowToStep', name: 'Select compliance type', text: 'Choose FC-GPR, FC-TRS, ESOP, or Angel Tax exposure' },
+    { '@type': 'HowToStep', name: 'Enter foreign investment amount', text: 'Input the total foreign investment received in rupees' },
+    { '@type': 'HowToStep', name: 'Set months of default', text: 'Specify how many months the filing is overdue' },
+    { '@type': 'HowToStep', name: 'Indicate DPIIT status', text: 'Toggle whether your startup has DPIIT recognition' },
+    { '@type': 'HowToStep', name: 'View penalty range', text: 'See estimated compounding fee range and advisory notes' },
+  ],
+}
 
-  // Calculate penalty
-  const result = useMemo(() => {
-    return calculateStartupPenalty(
-      complianceTypes,
-      foreignInvestmentAmount,
-      monthsLate,
-      isDPIITRecognised
-    )
-  }, [complianceTypes, foreignInvestmentAmount, monthsLate, isDPIITRecognised])
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
+    { '@type': 'ListItem', position: 4, name: 'Startup DPIIT Compliance', item: 'https://ollvy.com/tools/penalty-calculator/startup-dpiit-compliance' },
+  ],
+}
 
-  // Toggle compliance type
-  const toggleComplianceType = (type: ComplianceType) => {
-    setComplianceTypes(prev => {
-      if (prev.includes(type)) {
-        return prev.filter(t => t !== type)
-      } else {
-        return [...prev, type]
-      }
-    })
-  }
-
-  // Update URL params
-  useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('types', complianceTypes.join(','))
-    params.set('amount', foreignInvestmentAmount.toString())
-    params.set('months', monthsLate.toString())
-    params.set('dpiit', isDPIITRecognised.toString())
-
-    const newUrl = `${window.location.pathname}?${params.toString()}`
-    window.history.replaceState(null, '', newUrl)
-  }, [complianceTypes, foreignInvestmentAmount, monthsLate, isDPIITRecognised])
-
-  // Breakdown for ResultsPanel
-  const breakdown = useMemo(() => {
-    const items = []
-
-    if (result.fcGprPenaltyMax > 0) {
-      items.push({
-        label: 'FC-GPR Late Filing (FEMA)',
-        amount: result.fcGprPenaltyMax,
-        subItems: [
-          {
-            label: `Range: ₹${result.fcGprPenaltyMin.toLocaleString('en-IN')} - ₹${result.fcGprPenaltyMax.toLocaleString('en-IN')}`,
-            amount: 0,
-          },
-        ],
-        statuteShort: 'FEMA Sec 15',
-        statuteFull: 'Section 15, FEMA 1999 - Compounding of contraventions',
-      })
-    }
-
-    if (result.fcTrsPenaltyMax > 0) {
-      items.push({
-        label: 'FC-TRS Late Filing (FEMA)',
-        amount: result.fcTrsPenaltyMax,
-        subItems: [
-          {
-            label: `Range: ₹${result.fcTrsPenaltyMin.toLocaleString('en-IN')} - ₹${result.fcTrsPenaltyMax.toLocaleString('en-IN')}`,
-            amount: 0,
-          },
-        ],
-        statuteShort: 'FEMA Sec 15',
-        statuteFull: 'Section 15, FEMA 1999 - Compounding of contraventions',
-      })
-    }
-
-    if (result.esopPenaltyMax > 0) {
-      items.push({
-        label: 'ESOP Non-Compliance',
-        amount: result.esopPenaltyMax,
-        subItems: [
-          {
-            label: `Range: ₹${result.esopPenaltyMin.toLocaleString('en-IN')} - ₹${result.esopPenaltyMax.toLocaleString('en-IN')}`,
-            amount: 0,
-          },
-        ],
-        statuteShort: 'FEMA Sec 15',
-        statuteFull: 'Section 15, FEMA 1999 - Compounding of contraventions',
-      })
-    }
-
-    return items
-  }, [result])
-
-  // Check if angel tax is selected
-  const showAngelTaxInfo = complianceTypes.includes('angel_tax')
-  const hasCalculablePenalty = complianceTypes.includes('fc_gpr') || complianceTypes.includes('fc_trs') || complianceTypes.includes('esop')
-
+export default function StartupDPIITCompliancePage() {
   return (
     <>
-      {/* JSON-LD Schema - FAQPage */}
+      {/* JSON-LD Schemas - Server Rendered */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: faqs.map((faq) => ({
-              '@type': 'Question',
-              name: faq.question,
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: faq.answer,
-              },
-            })),
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-
-      {/* JSON-LD Schema - HowTo */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'HowTo',
-            name: 'How to calculate FEMA penalty for startup compliance',
-            step: [
-              { '@type': 'HowToStep', name: 'Select compliance type', text: 'Choose FC-GPR, FC-TRS, ESOP, or Angel Tax exposure' },
-              { '@type': 'HowToStep', name: 'Enter foreign investment amount', text: 'Input the total foreign investment received in rupees' },
-              { '@type': 'HowToStep', name: 'Set months of default', text: 'Specify how many months the filing is overdue' },
-              { '@type': 'HowToStep', name: 'Indicate DPIIT status', text: 'Toggle whether your startup has DPIIT recognition' },
-              { '@type': 'HowToStep', name: 'View penalty range', text: 'See estimated compounding fee range and advisory notes' },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-
-      {/* JSON-LD Schema - BreadcrumbList */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
-              { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-              { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
-              { '@type': 'ListItem', position: 4, name: 'Startup DPIIT Compliance', item: 'https://ollvy.com/tools/penalty-calculator/startup-dpiit-compliance' },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
-        {/* Input Section */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-8">
-          <div className="space-y-6">
-            {/* Compliance Type - Multi-select */}
-            <div className="space-y-3">
-              <Label>Compliance Type</Label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    checked={complianceTypes.includes('fc_gpr')}
-                    onCheckedChange={() => toggleComplianceType('fc_gpr')}
-                  />
-                  <span className="text-sm">FC-GPR not filed</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    checked={complianceTypes.includes('fc_trs')}
-                    onCheckedChange={() => toggleComplianceType('fc_trs')}
-                  />
-                  <span className="text-sm">FC-TRS not filed</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    checked={complianceTypes.includes('esop')}
-                    onCheckedChange={() => toggleComplianceType('esop')}
-                  />
-                  <span className="text-sm">ESOP non-compliance</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <Checkbox
-                    checked={complianceTypes.includes('angel_tax')}
-                    onCheckedChange={() => toggleComplianceType('angel_tax')}
-                  />
-                  <span className="text-sm">Angel Tax exposure</span>
-                </label>
-              </div>
-            </div>
+      {/* Calculator - Client Component */}
+      <Suspense fallback={<CalculatorSkeleton />}>
+        <StartupDPIITCalculator />
+      </Suspense>
 
-            {/* Foreign Investment Amount */}
-            <RupeeInput
-              value={foreignInvestmentAmount}
-              onChange={setForeignInvestmentAmount}
-              label="Foreign Investment Amount (₹)"
-              helpText="Total amount received from foreign investors"
-            />
-
-            {/* Months of Default */}
-            <MonthsLateSlider
-              value={monthsLate}
-              onChange={setMonthsLate}
-              maxMonths={60}
-              label="Months of Default"
-            />
-
-            {/* DPIIT Recognition Toggle */}
-            <div className="flex items-center justify-between">
-              <div>
-                <Label htmlFor="dpiit">Is Company DPIIT Recognised?</Label>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  DPIIT recognition provides Angel Tax exemption
-                </p>
-              </div>
-              <Switch
-                id="dpiit"
-                checked={isDPIITRecognised}
-                onCheckedChange={setIsDPIITRecognised}
-              />
-            </div>
-
-            {/* Advanced filters accordion */}
-            <Accordion type="single" collapsible>
-              <AccordionItem value="advanced" className="border-none">
-                <AccordionTrigger className="text-sm font-medium hover:no-underline py-2">
-                  <span className="flex items-center gap-2">
-                    <SlidersHorizontal className="h-4 w-4" />
-                    Advanced filters
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 pt-4">
-                  <p className="text-sm text-muted-foreground">
-                    FEMA compounding fees are determined by RBI on a case-by-case basis.
-                    Factors include: nature of contravention, period of delay, voluntary disclosure,
-                    and amount involved. This calculator shows the typical range.
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </div>
-
-        {/* Results Section */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          <ResultsPanel
-            total={result.totalMax}
-            breakdown={breakdown}
-            statute={result.showRange ? `Estimated range: ₹${result.totalMin.toLocaleString('en-IN')} - ₹${result.totalMax.toLocaleString('en-IN')}` : 'FEMA Section 15 - Compounding'}
-            ctaText="Get FEMA Compliance Help"
-            ctaHref="/services/startup-compliance"
-            showCta={hasCalculablePenalty && result.totalMax > 0}
-          >
-            {/* Angel Tax InfoBanner */}
-            {showAngelTaxInfo && (
-              <InfoBanner
-                title={isDPIITRecognised ? 'Angel Tax Exempt' : 'Angel Tax Applies'}
-                body={isDPIITRecognised
-                  ? 'As a DPIIT-recognised startup, you are exempt from Angel Tax under Section 56(2)(viib) if you have filed Form 2 with DPIIT.'
-                  : 'Without DPIIT recognition, investment above fair market value is taxed as income under Section 56(2)(viib) at 30%.'
-                }
-              />
-            )}
-
-            {/* FEMA Range Note */}
-            {hasCalculablePenalty && (
-              <InfoBanner
-                title="Compounding fee is estimated"
-                body="FEMA compounding fees range from ₹5,000 to 1% of the amount. RBI determines the exact fee on a case-by-case basis."
-              />
-            )}
-          </ResultsPanel>
-        </div>
-      </div>
-
-      {/* SEO Content - H2 Sections */}
+      {/* SEO Content - Server Rendered */}
       <div className="mt-16 max-w-3xl space-y-12">
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
@@ -444,7 +126,7 @@ function StartupDPIITComplianceCalculator() {
             When a company fails to file FC-GPR or FC-TRS within the stipulated timeline, it
             constitutes a FEMA contravention. RBI has the power to compound such violations
             under Section 15 of FEMA, 1999. The compounding fee is determined on a case-by-case
-            basis and typically ranges from ₹5,000 to 1% of the amount involved. Factors that
+            basis and typically ranges from Rs.5,000 to 1% of the amount involved. Factors that
             influence the compounding fee include the nature and extent of the contravention,
             whether it was a technical violation or willful non-compliance, the period of delay,
             and the company&apos;s overall compliance history.{' '}
@@ -480,7 +162,7 @@ function StartupDPIITComplianceCalculator() {
             days. Additionally, if the ESOP allows cashless exercise or involves a trust
             structure, specific RBI regulations apply. Non-compliance with ESOP-related FEMA
             requirements can result in compounding fees and may create issues during due
-            diligence for subsequent fundraising or M&A transactions.
+            diligence for subsequent fundraising or M&amp;A transactions.
           </p>
         </section>
 
@@ -501,7 +183,7 @@ function StartupDPIITComplianceCalculator() {
         </section>
       </div>
 
-      {/* FAQs Section */}
+      {/* FAQs Section - Server Rendered */}
       <div className="mt-16 max-w-3xl">
         <h2 className="text-2xl font-semibold text-foreground mb-6">
           Frequently Asked Questions
@@ -516,7 +198,7 @@ function StartupDPIITComplianceCalculator() {
         </div>
       </div>
 
-      {/* Related Tools */}
+      {/* Related Tools - Server Rendered */}
       <div className="mt-16 max-w-3xl">
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
@@ -532,7 +214,7 @@ function StartupDPIITComplianceCalculator() {
             <Card className="p-4 rounded-none hover:border-emerald-500 transition-colors">
               <h3 className="font-semibold text-foreground">Director KYC Penalty</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                ₹5,000 per director for DIR-3 KYC non-filing
+                Rs.5,000 per director for DIR-3 KYC non-filing
               </p>
             </Card>
           </Link>
@@ -566,22 +248,3 @@ function StartupDPIITComplianceCalculator() {
     </>
   )
 }
-
-// Loading fallback for Suspense
-function CalculatorSkeleton() {
-  return (
-    <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8 animate-pulse">
-      <div className="bg-muted rounded-lg h-[500px]" />
-      <div className="bg-muted rounded-lg h-[350px]" />
-    </div>
-  )
-}
-
-export default function StartupDPIITCompliancePage() {
-  return (
-    <Suspense fallback={<CalculatorSkeleton />}>
-      <StartupDPIITComplianceCalculator />
-    </Suspense>
-  )
-}
-

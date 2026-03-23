@@ -1,158 +1,9 @@
-'use client'
-
-import { useState, useMemo, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { Calculator, SlidersHorizontal } from 'lucide-react'
-import {
-  EmployeeCountSlider,
-  MonthsLateSlider,
-  ResultsPanel,
-  InfoBanner,
-  WarningBanner,
-} from '@/components/penalty-calculator'
-import { safeParseInt } from '@/lib/parse-url-params'
+import { ShopsEstablishmentCalculator, CalculatorSkeleton } from '@/components/penalty-calculator/ShopsEstablishmentCalculator'
 
-type DefaultType = 'not_registered' | 'not_renewed' | 'outside_hours'
-
-// State-wise penalty data for 6 major states
-interface StatePenaltyData {
-  name: string
-  firstOffence: { min: number; max: number }
-  repeatOffence: { min: number; max: number }
-  notes?: string
-}
-
-const statePenalties: Record<string, StatePenaltyData> = {
-  maharashtra: {
-    name: 'Maharashtra',
-    firstOffence: { min: 1000, max: 5000 },
-    repeatOffence: { min: 5000, max: 10000 },
-    notes: 'Under Maharashtra Shops and Establishments Act, 2017',
-  },
-  karnataka: {
-    name: 'Karnataka',
-    firstOffence: { min: 500, max: 3000 },
-    repeatOffence: { min: 3000, max: 10000 },
-    notes: 'Under Karnataka Shops and Commercial Establishments Act, 1961',
-  },
-  delhi: {
-    name: 'Delhi',
-    firstOffence: { min: 500, max: 2500 },
-    repeatOffence: { min: 2500, max: 5000 },
-    notes: 'Under Delhi Shops and Establishments Act, 1954',
-  },
-  tamil_nadu: {
-    name: 'Tamil Nadu',
-    firstOffence: { min: 500, max: 5000 },
-    repeatOffence: { min: 5000, max: 10000 },
-    notes: 'Under Tamil Nadu Shops and Establishments Act, 1947',
-  },
-  gujarat: {
-    name: 'Gujarat',
-    firstOffence: { min: 500, max: 3000 },
-    repeatOffence: { min: 3000, max: 10000 },
-    notes: 'Under Gujarat Shops and Establishments Act, 2019',
-  },
-  west_bengal: {
-    name: 'West Bengal',
-    firstOffence: { min: 500, max: 2000 },
-    repeatOffence: { min: 2000, max: 5000 },
-    notes: 'Under West Bengal Shops and Establishments Act, 1963',
-  },
-}
-
-const majorStates = Object.keys(statePenalties)
-
-const allStates = [
-  { value: 'maharashtra', label: 'Maharashtra' },
-  { value: 'karnataka', label: 'Karnataka' },
-  { value: 'delhi', label: 'Delhi' },
-  { value: 'tamil_nadu', label: 'Tamil Nadu' },
-  { value: 'gujarat', label: 'Gujarat' },
-  { value: 'west_bengal', label: 'West Bengal' },
-  { value: 'andhra_pradesh', label: 'Andhra Pradesh' },
-  { value: 'telangana', label: 'Telangana' },
-  { value: 'uttar_pradesh', label: 'Uttar Pradesh' },
-  { value: 'madhya_pradesh', label: 'Madhya Pradesh' },
-  { value: 'rajasthan', label: 'Rajasthan' },
-  { value: 'bihar', label: 'Bihar' },
-  { value: 'kerala', label: 'Kerala' },
-  { value: 'punjab', label: 'Punjab' },
-  { value: 'haryana', label: 'Haryana' },
-  { value: 'odisha', label: 'Odisha' },
-  { value: 'assam', label: 'Assam' },
-  { value: 'jharkhand', label: 'Jharkhand' },
-  { value: 'chhattisgarh', label: 'Chhattisgarh' },
-  { value: 'uttarakhand', label: 'Uttarakhand' },
-  { value: 'himachal_pradesh', label: 'Himachal Pradesh' },
-  { value: 'goa', label: 'Goa' },
-  { value: 'other', label: 'Other State/UT' },
-]
-
-interface CalculationResult {
-  penaltyMin: number
-  penaltyMax: number
-  isExactPenalty: boolean
-  stateName: string
-  notes: string
-}
-
-function calculateShopsEstablishmentPenalty(
-  state: string,
-  defaultType: DefaultType,
-  employeeCount: number,
-  monthsLate: number
-): CalculationResult {
-  const isMajorState = majorStates.includes(state)
-  const stateData = statePenalties[state]
-
-  if (isMajorState && stateData) {
-    const isRepeatOffence = monthsLate > 12
-
-    const penalty = isRepeatOffence
-      ? stateData.repeatOffence
-      : stateData.firstOffence
-
-    let multiplier = 1
-    if (employeeCount > 50) multiplier = 1.5
-    if (employeeCount > 100) multiplier = 2
-
-    return {
-      penaltyMin: Math.round(penalty.min * multiplier),
-      penaltyMax: Math.round(penalty.max * multiplier),
-      isExactPenalty: true,
-      stateName: stateData.name,
-      notes: stateData.notes || '',
-    }
-  } else {
-    return {
-      penaltyMin: 200,
-      penaltyMax: monthsLate > 12 ? 10000 : 5000,
-      isExactPenalty: false,
-      stateName: allStates.find((s) => s.value === state)?.label || state,
-      notes: 'Penalty typically ₹200-₹5,000 for first offence, up to ₹10,000 for repeat. Check your state-specific act for exact rates.',
-    }
-  }
-}
-
-// FAQs
+// FAQs for SEO
 const faqs = [
   {
     question: 'What is the Shops and Establishment Act?',
@@ -164,7 +15,7 @@ const faqs = [
   },
   {
     question: 'What is the penalty for not registering under the S&E Act?',
-    answer: 'Penalties vary by state but typically range from ₹500 to ₹5,000 for first offence and up to ₹10,000 for repeat offences. Some states like Maharashtra and Gujarat have updated their acts with higher penalties. Non-registration can also result in business closure orders.',
+    answer: 'Penalties vary by state but typically range from Rs.500 to Rs.5,000 for first offence and up to Rs.10,000 for repeat offences. Some states like Maharashtra and Gujarat have updated their acts with higher penalties. Non-registration can also result in business closure orders.',
   },
   {
     question: 'How often does S&E registration need to be renewed?',
@@ -184,245 +35,71 @@ const faqs = [
   },
   {
     question: 'What happens if I operate a shop beyond permitted hours?',
-    answer: 'Operating beyond permitted hours is a violation that can attract penalties ranging from ₹500 to ₹5,000 depending on the state. Repeated violations can result in suspension of registration, closure orders, or prosecution. Night operations typically require special permits.',
+    answer: 'Operating beyond permitted hours is a violation that can attract penalties ranging from Rs.500 to Rs.5,000 depending on the state. Repeated violations can result in suspension of registration, closure orders, or prosecution. Night operations typically require special permits.',
   },
 ]
 
-function ShopsEstablishmentPenaltyCalculator() {
-  const searchParams = useSearchParams()
+// JSON-LD Schemas
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+}
 
-  // Initialize from URL params
-  const [state, setState] = useState(searchParams.get('state') || 'maharashtra')
-  const [defaultType, setDefaultType] = useState<DefaultType>(
-    (searchParams.get('type') as DefaultType) || 'not_registered'
-  )
-  const [employeeCount, setEmployeeCount] = useState(
-    safeParseInt(searchParams.get('employees'), 5)
-  )
-  const [monthsLate, setMonthsLate] = useState(
-    safeParseInt(searchParams.get('months'), 3)
-  )
+const howToSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to calculate Shops and Establishment Act penalty',
+  step: [
+    { '@type': 'HowToStep', name: 'Select your state', text: 'Choose the state where your business operates' },
+    { '@type': 'HowToStep', name: 'Select default type', text: 'Choose whether not registered, not renewed, or operating outside hours' },
+    { '@type': 'HowToStep', name: 'Enter employee count', text: 'Specify the number of employees in your establishment' },
+    { '@type': 'HowToStep', name: 'Set months of default', text: 'Indicate how long the registration has been overdue' },
+    { '@type': 'HowToStep', name: 'View penalty range', text: 'See the estimated penalty range based on state law' },
+  ],
+}
 
-  // Calculate penalty
-  const result = useMemo(() => {
-    return calculateShopsEstablishmentPenalty(
-      state,
-      defaultType,
-      employeeCount,
-      monthsLate
-    )
-  }, [state, defaultType, employeeCount, monthsLate])
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
+    { '@type': 'ListItem', position: 4, name: 'Shops & Establishment', item: 'https://ollvy.com/tools/penalty-calculator/shops-establishment-penalty' },
+  ],
+}
 
-  // Update URL params
-  useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('state', state)
-    params.set('type', defaultType)
-    params.set('employees', employeeCount.toString())
-    params.set('months', monthsLate.toString())
-
-    const newUrl = `${window.location.pathname}?${params.toString()}`
-    window.history.replaceState(null, '', newUrl)
-  }, [state, defaultType, employeeCount, monthsLate])
-
-  // Breakdown for ResultsPanel
-  const breakdown = useMemo(() => {
-    return [
-      {
-        label: `S&E Penalty (${result.stateName})`,
-        amount: result.penaltyMax,
-        subItems: [
-          {
-            label: `Range: ₹${result.penaltyMin.toLocaleString('en-IN')} - ₹${result.penaltyMax.toLocaleString('en-IN')}`,
-            amount: 0,
-          },
-        ],
-        statuteShort: 'S&E Act',
-        statuteFull: `${result.notes || 'State Shops and Establishments Act'}`,
-      },
-    ]
-  }, [result])
-
-  // Check if repeat offence warning should show
-  const showRepeatWarning = monthsLate > 12
-
+export default function ShopsEstablishmentPenaltyPage() {
   return (
     <>
-      {/* JSON-LD Schema - FAQPage */}
+      {/* JSON-LD Schemas - Server Rendered */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: faqs.map((faq) => ({
-              '@type': 'Question',
-              name: faq.question,
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: faq.answer,
-              },
-            })),
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
-
-      {/* JSON-LD Schema - HowTo */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'HowTo',
-            name: 'How to calculate Shops and Establishment Act penalty',
-            step: [
-              { '@type': 'HowToStep', name: 'Select your state', text: 'Choose the state where your business operates' },
-              { '@type': 'HowToStep', name: 'Select default type', text: 'Choose whether not registered, not renewed, or operating outside hours' },
-              { '@type': 'HowToStep', name: 'Enter employee count', text: 'Specify the number of employees in your establishment' },
-              { '@type': 'HowToStep', name: 'Set months of default', text: 'Indicate how long the registration has been overdue' },
-              { '@type': 'HowToStep', name: 'View penalty range', text: 'See the estimated penalty range based on state law' },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
       />
-
-      {/* JSON-LD Schema - BreadcrumbList */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
-              { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-              { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
-              { '@type': 'ListItem', position: 4, name: 'Shops & Establishment', item: 'https://ollvy.com/tools/penalty-calculator/shops-establishment-penalty' },
-            ],
-          }),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="grid lg:grid-cols-[1.2fr,1fr] gap-10">
-        {/* Input Section */}
-        <div className="rounded-xl border border-border bg-card p-6 space-y-8">
-          <div className="space-y-6">
-            {/* State Selector - First Input */}
-            <div className="space-y-1.5">
-              <Label>State</Label>
-              <Select value={state} onValueChange={setState}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select state" />
-                </SelectTrigger>
-                <SelectContent>
-                  {allStates.map((s) => (
-                    <SelectItem key={s.value} value={s.value}>
-                      {s.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+      {/* Calculator - Client Component */}
+      <Suspense fallback={<CalculatorSkeleton />}>
+        <ShopsEstablishmentCalculator />
+      </Suspense>
 
-            {/* Default Type */}
-            <div className="space-y-3">
-              <Label>Type of Default</Label>
-              <RadioGroup
-                value={defaultType}
-                onValueChange={(v) => setDefaultType(v as DefaultType)}
-                className="space-y-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="not_registered" id="not_registered" />
-                  <Label htmlFor="not_registered" className="font-normal cursor-pointer">
-                    Not registered
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="not_renewed" id="not_renewed" />
-                  <Label htmlFor="not_renewed" className="font-normal cursor-pointer">
-                    Registered but not renewed
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="outside_hours" id="outside_hours" />
-                  <Label htmlFor="outside_hours" className="font-normal cursor-pointer">
-                    Operating outside permitted hours
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {/* Number of Employees */}
-            <EmployeeCountSlider
-              value={employeeCount}
-              onChange={setEmployeeCount}
-              maxCount={10000}
-            />
-
-            {/* Months of Default */}
-            <MonthsLateSlider
-              value={monthsLate}
-              onChange={setMonthsLate}
-              maxMonths={60}
-              label="Months of Default"
-            />
-
-            {/* Advanced filters accordion */}
-            <Accordion type="single" collapsible>
-              <AccordionItem value="advanced" className="border-none">
-                <AccordionTrigger className="text-sm font-medium hover:no-underline py-2">
-                  <span className="flex items-center gap-2">
-                    <SlidersHorizontal className="h-4 w-4" />
-                    Advanced filters
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="space-y-4 pt-4">
-                  <p className="text-sm text-muted-foreground">
-                    Shops and Establishment penalties vary significantly by state. This calculator
-                    shows exact penalties for Maharashtra, Karnataka, Delhi, Tamil Nadu, Gujarat,
-                    and West Bengal. For other states, a typical range is shown.
-                  </p>
-                  {result.notes && (
-                    <p className="text-sm text-muted-foreground">{result.notes}</p>
-                  )}
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </div>
-        </div>
-
-        {/* Results Section */}
-        <div className="lg:sticky lg:top-24 lg:self-start">
-          <ResultsPanel
-            total={result.penaltyMax}
-            breakdown={breakdown}
-            statute={`Estimated range: ₹${result.penaltyMin.toLocaleString('en-IN')} - ₹${result.penaltyMax.toLocaleString('en-IN')}`}
-            ctaText="Get S&E Registration"
-            ctaHref="/services/shops-establishment-registration"
-            showCta={result.penaltyMax > 0}
-          >
-            {/* Repeat Offence Warning */}
-            {showRepeatWarning && (
-              <WarningBanner
-                variant="yellow"
-                title="Extended non-compliance"
-                body="At over 12 months, this may be treated as a repeat offence with higher penalties. Continued non-compliance can result in business closure orders."
-              />
-            )}
-
-            {/* State-Specific Note for non-major states */}
-            {!result.isExactPenalty && (
-              <InfoBanner
-                title="State-specific rates unavailable"
-                body={`We don't have exact penalty rates for ${result.stateName}. Check your state's Shops and Establishment Act for precise amounts.`}
-              />
-            )}
-          </ResultsPanel>
-        </div>
-      </div>
-
-      {/* SEO Content - H2 Sections */}
+      {/* SEO Content - Server Rendered */}
       <div className="mt-16 max-w-3xl space-y-12">
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
@@ -445,21 +122,21 @@ function ShopsEstablishmentPenaltyCalculator() {
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Operating a commercial establishment without registration under the Shops and
-            Establishment Act is an offence that can attract penalties ranging from ₹200 to
-            ₹10,000 depending on the state. First-time offenders typically face lower
-            penalties (₹500-₹5,000), while repeat offenders can be penalized more heavily.
+            Establishment Act is an offence that can attract penalties ranging from Rs.200 to
+            Rs.10,000 depending on the state. First-time offenders typically face lower
+            penalties (Rs.500-Rs.5,000), while repeat offenders can be penalized more heavily.
             Beyond monetary penalties, non-registration can result in closure notices from
             the labour inspector, inability to obtain other business licenses, issues with
             GST registration, and difficulties in opening bank accounts.{' '}
             <Link href="/services/shops-establishment-registration" className="text-emerald-600 hover:underline">
-              Get your S&E registration done on Ollvy
+              Get your S&amp;E registration done on Ollvy
             </Link>.
           </p>
         </section>
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            State-wise S&E registration requirements
+            State-wise S&amp;E registration requirements
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             Registration requirements and penalties vary significantly across states.
@@ -475,7 +152,7 @@ function ShopsEstablishmentPenaltyCalculator() {
 
         <section>
           <h2 className="text-2xl font-semibold text-foreground mb-4">
-            Working hours and overtime under S&E Act
+            Working hours and overtime under S&amp;E Act
           </h2>
           <p className="text-muted-foreground leading-relaxed">
             The Shops and Establishment Act prescribes maximum working hours to protect
@@ -503,7 +180,7 @@ function ShopsEstablishmentPenaltyCalculator() {
         </section>
       </div>
 
-      {/* FAQs Section */}
+      {/* FAQs Section - Server Rendered */}
       <div className="mt-16 max-w-3xl">
         <h2 className="text-2xl font-semibold text-foreground mb-6">
           Frequently Asked Questions
@@ -518,7 +195,7 @@ function ShopsEstablishmentPenaltyCalculator() {
         </div>
       </div>
 
-      {/* Related Tools */}
+      {/* Related Tools - Server Rendered */}
       <div className="mt-16 max-w-3xl">
         <h2 className="text-2xl font-semibold text-foreground mb-6">Related Tools</h2>
         <div className="grid sm:grid-cols-2 gap-4">
@@ -568,22 +245,3 @@ function ShopsEstablishmentPenaltyCalculator() {
     </>
   )
 }
-
-// Loading fallback for Suspense
-function CalculatorSkeleton() {
-  return (
-    <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8 animate-pulse">
-      <div className="bg-muted rounded-lg h-[500px]" />
-      <div className="bg-muted rounded-lg h-[350px]" />
-    </div>
-  )
-}
-
-export default function ShopsEstablishmentPenaltyPage() {
-  return (
-    <Suspense fallback={<CalculatorSkeleton />}>
-      <ShopsEstablishmentPenaltyCalculator />
-    </Suspense>
-  )
-}
-
