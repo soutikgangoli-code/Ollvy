@@ -1,0 +1,990 @@
+'use server'
+
+import { supabaseServer } from '@/lib/supabase-server'
+import { getAdminUser } from '@/lib/admin/get-admin-user'
+import { logActivity, LOG_ACTIONS } from '@/lib/admin/log-activity'
+import { revalidatePath } from 'next/cache'
+
+// Cancellation reason labels
+const CANCELLATION_REASON_LABELS: Record<string, string> = {
+  user_requested: 'User requested cancellation',
+  user_unresponsive: 'User unresponsive for 7+ days',
+  duplicate_order: 'Duplicate order',
+  service_unavailable: 'Service not available in region',
+  payment_issue: 'Payment issue',
+  internal_error: 'Internal error',
+  other: 'Other',
+}
+
+// Update order status
+export async function updateOrderStatus(orderId: string, newStatus: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get current status for logging
+  const { data: order } = await supabaseServer
+    .from('orders')
+    .select('status')
+    .eq('id', orderId)
+    .single()
+
+  const oldStatus = order?.status
+
+  await supabaseServer
+    .from('orders')
+    .update({ status: newStatus })
+    .eq('id', orderId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.STATUS_CHANGED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Status changed from ${oldStatus} to ${newStatus}`,
+    metadata: { from: oldStatus, to: newStatus },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Assign professional to order
+export async function assignProfessional(orderId: string, professionalId: string, currentStatus: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get previous professional if any
+  const { data: order } = await supabaseServer
+    .from('orders')
+    .select('professional_id')
+    .eq('id', orderId)
+    .single()
+
+  const oldProfessionalId = order?.professional_id
+  const isReassignment = !!oldProfessionalId
+
+  // Get professional name
+  const { data: professional } = await supabaseServer
+    .from('professionals')
+    .select('full_name')
+    .eq('id', professionalId)
+    .single()
+
+  const updates: Record<string, string> = { professional_id: professionalId }
+  if (currentStatus === 'pending_assignment') {
+    updates.status = 'in_progress'
+  }
+
+  await supabaseServer.from('orders').update(updates).eq('id', orderId)
+
+  // Close old professional assignment history row if exists
+  if (isReassignment) {
+    await supabaseServer
+      .from('order_professional_assignment_history')
+      .update({ unassigned_at: new Date().toISOString() })
+      .eq('order_id', orderId)
+      .is('unassigned_at', null)
+  }
+
+  // Insert new professional assignment history
+  await supabaseServer.from('order_professional_assignment_history').insert({
+    order_id: orderId,
+    professional_id: professionalId,
+    assigned_by_admin_id: adminUser.id,
+    professional_name: professional?.full_name || 'Unknown',
+    assigned_by_name: adminUser.name,
+    assigned_at: new Date().toISOString(),
+  })
+
+  // Post system chat message if reassignment
+  if (isReassignment) {
+    const { data: chatOrder } = await supabaseServer
+      .from('orders')
+      .select('chat_conversation_id')
+      .eq('id', orderId)
+      .single()
+
+    if (chatOrder?.chat_conversation_id) {
+      await supabaseServer.from('chat_messages').insert({
+        conversation_id: chatOrder.chat_conversation_id,
+        sender_type: 'system',
+        content: 'Your assigned expert has been updated.',
+        message_type: 'system',
+        sent_at: new Date().toISOString(),
+      })
+    }
+  }
+
+  await logActivity({
+    orderId,
+    actionType: isReassignment ? LOG_ACTIONS.PROFESSIONAL_REASSIGNED : LOG_ACTIONS.PROFESSIONAL_ASSIGNED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: isReassignment
+      ? `Professional reassigned to ${professional?.full_name}`
+      : `Professional assigned: ${professional?.full_name}`,
+    metadata: { professional_id: professionalId, professional_name: professional?.full_name },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Verify initial document (order_documents)
+export async function verifyInitialDocument(documentId: string, orderId: string, internalNote?: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get document label
+  const { data: doc } = await supabaseServer
+    .from('order_documents')
+    .select('document_label')
+    .eq('id', documentId)
+    .single()
+
+  const updateData: Record<string, any> = {
+    verified_at: new Date().toISOString(),
+    verified_by: adminUser.id,
+    rejection_reason: null
+  }
+
+  if (internalNote?.trim()) {
+    updateData.internal_note = internalNote.trim()
+    updateData.internal_note_by = adminUser.id
+    updateData.internal_note_at = new Date().toISOString()
+  }
+
+  await supabaseServer.from('order_documents')
+    .update(updateData)
+    .eq('id', documentId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DOCUMENT_VERIFIED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Document verified: ${doc?.document_label}`,
+    metadata: { document_label: doc?.document_label, document_id: documentId },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Reject initial document (order_documents)
+export async function rejectInitialDocument(documentId: string, orderId: string, rejectionReason: string, internalNote?: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get document label
+  const { data: doc } = await supabaseServer
+    .from('order_documents')
+    .select('document_label')
+    .eq('id', documentId)
+    .single()
+
+  const updateData: Record<string, any> = {
+    rejection_reason: rejectionReason,
+    verified_at: null,
+    verified_by: null
+  }
+
+  if (internalNote?.trim()) {
+    updateData.internal_note = internalNote.trim()
+    updateData.internal_note_by = adminUser.id
+    updateData.internal_note_at = new Date().toISOString()
+  }
+
+  await supabaseServer.from('order_documents')
+    .update(updateData)
+    .eq('id', documentId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DOCUMENT_REJECTED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Document rejected: ${doc?.document_label} - ${rejectionReason}`,
+    metadata: { document_label: doc?.document_label, rejection_reason: rejectionReason, document_id: documentId },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Verify work document (order_work_documents)
+export async function verifyWorkDocument(documentId: string, orderId: string, internalNote?: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get document label
+  const { data: doc } = await supabaseServer
+    .from('order_work_documents')
+    .select('document_label')
+    .eq('id', documentId)
+    .single()
+
+  const updateData: Record<string, any> = {
+    status: 'verified',
+    verified_at: new Date().toISOString(),
+    verified_by: adminUser.id,
+    rejection_reason: null
+  }
+
+  if (internalNote?.trim()) {
+    updateData.internal_note = internalNote.trim()
+    updateData.internal_note_by = adminUser.id
+    updateData.internal_note_at = new Date().toISOString()
+  }
+
+  await supabaseServer.from('order_work_documents')
+    .update(updateData)
+    .eq('id', documentId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DOCUMENT_VERIFIED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Document verified: ${doc?.document_label}`,
+    metadata: { document_label: doc?.document_label, document_id: documentId },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Reject work document (order_work_documents)
+export async function rejectWorkDocument(documentId: string, orderId: string, rejectionReason: string, internalNote?: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get document label
+  const { data: doc } = await supabaseServer
+    .from('order_work_documents')
+    .select('document_label')
+    .eq('id', documentId)
+    .single()
+
+  const updateData: Record<string, any> = {
+    status: 'rejected',
+    rejection_reason: rejectionReason,
+    verified_at: null,
+    verified_by: null
+  }
+
+  if (internalNote?.trim()) {
+    updateData.internal_note = internalNote.trim()
+    updateData.internal_note_by = adminUser.id
+    updateData.internal_note_at = new Date().toISOString()
+  }
+
+  await supabaseServer.from('order_work_documents')
+    .update(updateData)
+    .eq('id', documentId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DOCUMENT_REJECTED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Document rejected: ${doc?.document_label} - ${rejectionReason}`,
+    metadata: { document_label: doc?.document_label, rejection_reason: rejectionReason, document_id: documentId },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Skip work document
+export async function skipWorkDocument(documentId: string, orderId: string, skipReason: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get document label
+  const { data: doc } = await supabaseServer
+    .from('order_work_documents')
+    .select('document_label')
+    .eq('id', documentId)
+    .single()
+
+  await supabaseServer.from('order_work_documents')
+    .update({
+      skipped_at: new Date().toISOString(),
+      skip_reason: skipReason
+    })
+    .eq('id', documentId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DOCUMENT_SKIPPED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Document skipped: ${doc?.document_label} - ${skipReason}`,
+    metadata: { document_label: doc?.document_label, skip_reason: skipReason, document_id: documentId },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Undo verification
+export async function undoVerification(documentId: string, orderId: string, tableType: 'initial' | 'work') {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  if (tableType === 'initial') {
+    await supabaseServer.from('order_documents')
+      .update({ verified_at: null, verified_by: null })
+      .eq('id', documentId)
+  } else {
+    await supabaseServer.from('order_work_documents')
+      .update({ status: 'uploaded', verified_at: null, verified_by: null })
+      .eq('id', documentId)
+  }
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Undo rejection
+export async function undoRejection(documentId: string, orderId: string, tableType: 'initial' | 'work') {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  if (tableType === 'initial') {
+    await supabaseServer.from('order_documents')
+      .update({ rejection_reason: null })
+      .eq('id', documentId)
+  } else {
+    await supabaseServer.from('order_work_documents')
+      .update({ status: 'uploaded', rejection_reason: null })
+      .eq('id', documentId)
+  }
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Update round title
+export async function updateRoundTitle(roundId: string, orderId: string, newTitle: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('order_rounds')
+    .update({ title: newTitle })
+    .eq('id', roundId)
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Mark round complete
+export async function markRoundComplete(roundId: string, orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get round info for logging
+  const { data: round } = await supabaseServer
+    .from('order_rounds')
+    .select('round_number, title')
+    .eq('id', roundId)
+    .single()
+
+  await supabaseServer.from('order_rounds')
+    .update({
+      status: 'completed',
+      completed_at: new Date().toISOString()
+    })
+    .eq('id', roundId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.ROUND_COMPLETED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Round ${round?.round_number} completed: ${round?.title}`,
+    metadata: { round_id: roundId, round_number: round?.round_number, round_title: round?.title },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Add question to round
+export async function addQuestionToRound(roundId: string, orderId: string, questionText: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Get max position
+  const { data: existing } = await supabaseServer
+    .from('round_question_requests')
+    .select('position')
+    .eq('round_id', roundId)
+    .order('position', { ascending: false })
+    .limit(1)
+
+  const nextPosition = (existing?.[0]?.position ?? -1) + 1
+
+  await supabaseServer.from('round_question_requests').insert({
+    round_id: roundId,
+    question_text: questionText,
+    position: nextPosition,
+  })
+
+  // Set round status to awaiting_user
+  await supabaseServer.from('order_rounds')
+    .update({ status: 'awaiting_user' })
+    .eq('id', roundId)
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Create admin note
+export async function createAdminNote(orderId: string, content: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('order_admin_notes').insert({
+    order_id: orderId,
+    admin_id: adminUser.id,
+    content,
+  })
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.NOTE_ADDED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Internal note added by ${adminUser.name}`,
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Delete admin note
+export async function deleteAdminNote(noteId: string, orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Only allow deleting own notes
+  await supabaseServer.from('order_admin_notes')
+    .delete()
+    .eq('id', noteId)
+    .eq('admin_id', adminUser.id)
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Resolve dispute - Refund
+export async function resolveDisputeRefund(orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Check if dispute row exists
+  const { data: disputeRow } = await supabaseServer
+    .from('disputes')
+    .select('id')
+    .eq('order_id', orderId)
+    .in('status', ['open', 'admin_reviewing'])
+    .maybeSingle()
+
+  if (disputeRow) {
+    await supabaseServer.from('disputes')
+      .update({
+        status: 'resolved_refund',
+        resolved_at: new Date().toISOString(),
+        resolved_by: adminUser.id
+      })
+      .eq('id', disputeRow.id)
+  }
+
+  await supabaseServer.from('orders')
+    .update({ status: 'cancelled', dispute_outcome: 'refund' })
+    .eq('id', orderId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DISPUTE_RESOLVED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Dispute resolved with refund`,
+    metadata: { outcome: 'refund' },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Resolve dispute - Continue
+export async function resolveDisputeContinue(orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  const { data: disputeRow } = await supabaseServer
+    .from('disputes')
+    .select('id')
+    .eq('order_id', orderId)
+    .in('status', ['open', 'admin_reviewing'])
+    .maybeSingle()
+
+  if (disputeRow) {
+    await supabaseServer.from('disputes')
+      .update({
+        status: 'resolved_no_refund',
+        resolved_at: new Date().toISOString(),
+        resolved_by: adminUser.id
+      })
+      .eq('id', disputeRow.id)
+  }
+
+  await supabaseServer.from('orders')
+    .update({ status: 'in_progress', dispute_outcome: 'continue' })
+    .eq('id', orderId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DISPUTE_RESOLVED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Dispute resolved - order continuing`,
+    metadata: { outcome: 'continue' },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Resolve dispute - Close
+export async function resolveDisputeClose(orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  const { data: disputeRow } = await supabaseServer
+    .from('disputes')
+    .select('id')
+    .eq('order_id', orderId)
+    .in('status', ['open', 'admin_reviewing'])
+    .maybeSingle()
+
+  if (disputeRow) {
+    await supabaseServer.from('disputes')
+      .update({
+        status: 'resolved_no_refund',
+        resolved_at: new Date().toISOString(),
+        resolved_by: adminUser.id
+      })
+      .eq('id', disputeRow.id)
+  }
+
+  await supabaseServer.from('orders')
+    .update({ status: 'cancelled', dispute_outcome: 'closed' })
+    .eq('id', orderId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DISPUTE_RESOLVED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Dispute closed without refund`,
+    metadata: { outcome: 'closed' },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Insert completion notification
+export async function insertCompletionNotification(orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('round_notifications').insert({
+    order_id: orderId,
+    message: 'Your order is complete. Your final document is ready to download.',
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Upload admin document (to_customer)
+export async function uploadAdminDocument(
+  orderId: string,
+  roundId: string,
+  fileUrl: string,
+  fileName: string,
+  tag: string,
+  documentLabel: string,
+  description: string | null,
+  signLabel?: string
+) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Insert to_customer document
+  const { data: toCustomerRow } = await supabaseServer
+    .from('order_work_documents')
+    .insert({
+      order_id: orderId,
+      direction: 'to_customer',
+      round_id: roundId,
+      tag,
+      document_label: documentLabel,
+      description,
+      file_url: fileUrl,
+      file_name: fileName,
+      uploaded_at: new Date().toISOString(),
+      uploaded_by_type: 'admin',
+      status: 'uploaded',
+    })
+    .select()
+    .single()
+
+  // If for_signing, create linked from_customer row
+  if (tag === 'for_signing' && signLabel && toCustomerRow) {
+    const { data: fromCustomerRow } = await supabaseServer
+      .from('order_work_documents')
+      .insert({
+        order_id: orderId,
+        direction: 'from_customer',
+        round_id: roundId,
+        document_label: signLabel,
+        status: 'pending',
+      })
+      .select()
+      .single()
+
+    if (fromCustomerRow) {
+      await supabaseServer
+        .from('order_work_documents')
+        .update({ linked_request_id: fromCustomerRow.id })
+        .eq('id', toCustomerRow.id)
+    }
+
+    // Set round status to awaiting_user
+    await supabaseServer.from('order_rounds')
+      .update({ status: 'awaiting_user' })
+      .eq('id', roundId)
+  }
+
+  // If government_processing, set round status to active
+  if (tag === 'government_processing') {
+    await supabaseServer.from('order_rounds')
+      .update({ status: 'active' })
+      .eq('id', roundId)
+  }
+
+  revalidatePath(`/admin/orders/${orderId}`)
+  return toCustomerRow
+}
+
+// Delete work document
+export async function deleteWorkDocument(documentId: string, orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('order_work_documents')
+    .delete()
+    .eq('id', documentId)
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Form data type for createRound
+interface AddRoundFormData {
+  title: string
+  questions: string[]
+  docRequests: Array<{
+    label: string
+    description?: string
+    isReuploadOfWorkDocId?: string
+  }>
+  adminUpload?: {
+    tag: string
+    label: string
+    description?: string
+    fileUrl: string
+    fileName: string
+    signLabel?: string
+  }
+  notificationMessage?: string
+  isVisibleToUser: boolean
+}
+
+// Create round
+export async function createRound(orderId: string, formData: AddRoundFormData) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Step 1: Calculate the next round_number
+  const { data: existingRounds } = await supabaseServer
+    .from('order_rounds')
+    .select('round_number')
+    .eq('order_id', orderId)
+    .order('round_number', { ascending: false })
+    .limit(1)
+
+  const nextRoundNumber = existingRounds?.[0]?.round_number != null
+    ? existingRounds[0].round_number + 1
+    : 1 // Round 0 always exists for paid orders; first manual round is always 1
+
+  // Step 2: Determine round status
+  const requiresUserAction = formData.questions.length > 0 || formData.docRequests.length > 0
+  const roundStatus = requiresUserAction ? 'awaiting_user' : 'active'
+
+  // Step 3: Insert order_rounds
+  const { data: newRound } = await supabaseServer
+    .from('order_rounds')
+    .insert({
+      order_id: orderId,
+      created_by_admin_id: adminUser.id,
+      round_number: nextRoundNumber,
+      title: formData.title,
+      status: roundStatus,
+      is_visible_to_user: formData.isVisibleToUser,
+    })
+    .select()
+    .single()
+
+  if (!newRound) throw new Error('Failed to create round')
+
+  // Step 4: Insert round_question_requests
+  if (formData.questions.length > 0) {
+    await supabaseServer.from('round_question_requests').insert(
+      formData.questions.map((q, i) => ({
+        round_id: newRound.id,
+        question_text: q,
+        position: i,
+      }))
+    )
+  }
+
+  // Step 5: Insert from_customer doc request rows
+  for (const docReq of formData.docRequests) {
+    await supabaseServer.from('order_work_documents').insert({
+      order_id: orderId,
+      direction: 'from_customer',
+      round_id: newRound.id,
+      document_label: docReq.label,
+      description: docReq.description || null,
+      status: 'pending',
+      linked_request_id: docReq.isReuploadOfWorkDocId ?? null,
+    })
+  }
+
+  // Step 6: Insert to_customer upload if admin uploaded a file
+  if (formData.adminUpload) {
+    const { data: toCustomerRow } = await supabaseServer
+      .from('order_work_documents')
+      .insert({
+        order_id: orderId,
+        direction: 'to_customer',
+        round_id: newRound.id,
+        tag: formData.adminUpload.tag,
+        document_label: formData.adminUpload.label,
+        description: formData.adminUpload.description || null,
+        file_url: formData.adminUpload.fileUrl,
+        file_name: formData.adminUpload.fileName,
+        uploaded_at: new Date().toISOString(),
+        uploaded_by_type: 'admin',
+        status: 'uploaded',
+      })
+      .select()
+      .single()
+
+    // If for_signing: create linked from_customer row and set linked_request_id
+    if (formData.adminUpload.tag === 'for_signing' && formData.adminUpload.signLabel && toCustomerRow) {
+      const { data: signingRequest } = await supabaseServer
+        .from('order_work_documents')
+        .insert({
+          order_id: orderId,
+          direction: 'from_customer',
+          round_id: newRound.id,
+          document_label: formData.adminUpload.signLabel,
+          status: 'pending',
+        })
+        .select()
+        .single()
+
+      if (signingRequest) {
+        await supabaseServer
+          .from('order_work_documents')
+          .update({ linked_request_id: signingRequest.id })
+          .eq('id', toCustomerRow.id)
+      }
+    }
+  }
+
+  // Step 7: Insert round_notifications if visible to user
+  if (formData.isVisibleToUser && formData.notificationMessage) {
+    await supabaseServer.from('round_notifications').insert({
+      order_id: orderId,
+      round_id: newRound.id,
+      message: formData.notificationMessage,
+    })
+  }
+
+  // Step 8: Set user_response_deadline on round if awaiting_user
+  if (roundStatus === 'awaiting_user') {
+    await supabaseServer.from('order_rounds')
+      .update({ user_response_deadline: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString() })
+      .eq('id', newRound.id)
+  }
+
+  // Step 9: Log activity
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.ROUND_CREATED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Round ${nextRoundNumber} created: ${formData.title}`,
+    metadata: { round_number: nextRoundNumber, round_title: formData.title, round_id: newRound.id },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+  return newRound
+}
+
+// Cancel order with reason
+export async function cancelOrderWithReason(
+  orderId: string,
+  reason: string,
+  reasonDetail: string | null,
+  userMessage: string
+) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  // Update order
+  await supabaseServer.from('orders')
+    .update({
+      status: 'cancelled',
+      cancellation_reason: reason,
+      cancellation_reason_detail: reasonDetail || null,
+    })
+    .eq('id', orderId)
+
+  // Insert banner notification for user
+  await supabaseServer.from('round_notifications').insert({
+    order_id: orderId,
+    message: userMessage,
+    is_dismissed: false,
+    created_at: new Date().toISOString(),
+  })
+
+  // Log activity
+  const reasonLabel = CANCELLATION_REASON_LABELS[reason] || reason
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.ORDER_CANCELLED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Order cancelled. Reason: ${reasonLabel}${reasonDetail ? ` - ${reasonDetail}` : ''}`,
+    metadata: { reason, detail: reasonDetail, message_to_user: userMessage },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Assign admin to order
+export async function assignAdminToOrder(
+  orderId: string,
+  assignToAdminId: string,
+  assignToAdminName: string
+) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+  const now = new Date().toISOString()
+
+  // Get current assignment
+  const { data: order } = await supabaseServer
+    .from('orders')
+    .select('assigned_admin_id')
+    .eq('id', orderId)
+    .single()
+
+  const isReassignment = !!order?.assigned_admin_id
+
+  // Update order
+  await supabaseServer.from('orders')
+    .update({ assigned_admin_id: assignToAdminId })
+    .eq('id', orderId)
+
+  // Close old assignment history row if exists
+  if (isReassignment) {
+    await supabaseServer.from('order_admin_assignment_history')
+      .update({ unassigned_at: now })
+      .eq('order_id', orderId)
+      .is('unassigned_at', null)
+  }
+
+  // Insert new history row
+  await supabaseServer.from('order_admin_assignment_history').insert({
+    order_id: orderId,
+    assigned_to_admin_id: assignToAdminId,
+    assigned_by_admin_id: adminUser.id,
+    assigned_to_name: assignToAdminName,
+    assigned_by_name: adminUser.name,
+    assigned_at: now,
+  })
+
+  // Log activity
+  await logActivity({
+    orderId,
+    actionType: isReassignment ? LOG_ACTIONS.ADMIN_REASSIGNED : LOG_ACTIONS.ADMIN_ASSIGNED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `Order assigned to ${assignToAdminName} by ${adminUser.name}`,
+    metadata: { assigned_to: assignToAdminName, assigned_to_id: assignToAdminId },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Update SLA deadline
+export async function updateSlaDeadline(orderId: string, newDate: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('orders')
+    .update({ expected_completion_date: newDate })
+    .eq('id', orderId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.SLA_MANUALLY_OVERRIDDEN,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `SLA deadline manually set to ${newDate} by ${adminUser.name}`,
+    metadata: { new_date: newDate },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Update round deadline
+export async function updateRoundDeadline(roundId: string, orderId: string, newDeadline: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('order_rounds')
+    .update({
+      user_response_deadline: newDeadline,
+      deadline_manually_overridden: true,
+    })
+    .eq('id', roundId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.SLA_MANUALLY_OVERRIDDEN,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: `User response deadline manually set by ${adminUser.name}`,
+    metadata: { round_id: roundId, new_deadline: newDeadline },
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}

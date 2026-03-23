@@ -30,6 +30,10 @@ import { formatPaisa, formatDate, cn } from '@/lib/utils'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
 import { WorkDocumentsSection } from '@/components/orders/WorkDocumentsSection'
+import { RoundNotificationBanner } from '@/components/orders/RoundNotificationBanner'
+import { FinalOutputBanner } from '@/components/orders/FinalOutputBanner'
+import { RoundsTimeline } from '@/components/orders/RoundsTimeline'
+import { ChatWindow } from '@/components/chat/ChatWindow'
 import {
   ArrowLeft,
   MessageSquare,
@@ -49,7 +53,6 @@ import {
   Check,
   Circle,
   Upload,
-  Send,
   User,
   Star,
   FolderOpen,
@@ -148,10 +151,12 @@ export default function OrderDetailPage() {
       setDocuments(docsData || [])
 
       // Fetch work documents (deliverables and requests)
+      // Filter out round-scoped docs (round_id IS NULL) - those show in RoundsTimeline
       const { data: workDocsData } = await supabase
         .from('order_work_documents')
         .select('*')
         .eq('order_id', orderId)
+        .is('round_id', null)
         .order('created_at', { ascending: false })
 
       setWorkDocuments(workDocsData || [])
@@ -417,6 +422,12 @@ export default function OrderDetailPage() {
           Back to Orders
         </Button>
       </Link>
+
+      {/* Final Output Banner - absolute top */}
+      <FinalOutputBanner orderId={orderId} />
+
+      {/* Round Notification Banner */}
+      <RoundNotificationBanner orderId={orderId} />
 
       {/* Notification Banner - Pending Work Documents */}
       {pendingWorkDocs.length > 0 && (
@@ -887,6 +898,11 @@ export default function OrderDetailPage() {
             </CardContent>
           </Card>
 
+          {/* Rounds Timeline - admin-created rounds for additional info/docs */}
+          {order.service_package?.id && (
+            <RoundsTimeline orderId={orderId} servicePackageId={order.service_package.id} />
+          )}
+
         </div>
 
         {/* Sidebar */}
@@ -1176,39 +1192,30 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Chat with CA */}
-          <Card className="flex flex-col">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium flex items-center gap-2">
-                <MessageSquare className="h-4 w-4 text-muted-foreground" />
-                Chat with CA
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 flex flex-col pt-0">
-              {/* Chat Messages Area */}
-              <div className="flex-1 min-h-[200px] max-h-[300px] overflow-y-auto bg-muted/20 rounded-lg p-3 mb-3 space-y-3">
-                {/* Placeholder for no messages */}
-                <div className="h-full flex items-center justify-center text-center">
-                  <div>
-                    <MessageSquare className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">No messages yet</p>
-                    <p className="text-xs text-muted-foreground/70">Your CA will respond here</p>
-                  </div>
+          {order.chat_conversation_id ? (
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                  Chat with your CA
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="h-[400px]">
+                  <ChatWindow
+                    conversationId={order.chat_conversation_id}
+                    professionalName={(order.professionals as { display_name?: string; full_name?: string })?.display_name || (order.professionals as { full_name?: string })?.full_name || 'Your CA'}
+                  />
                 </div>
-              </div>
-
-              {/* Chat Input */}
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Type a message..."
-                  className="flex-1 px-3 py-2 text-sm bg-background border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-                <Button size="sm" className="px-3">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="py-6 text-center text-sm text-muted-foreground">
+                Chat will be available once your order is assigned.
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 

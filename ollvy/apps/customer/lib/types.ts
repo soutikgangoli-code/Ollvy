@@ -268,12 +268,18 @@ export interface OrderWorkDocument {
   file_name?: string
   due_date?: string
   uploaded_at?: string
-  uploaded_by_type?: 'professional' | 'customer'
+  uploaded_by_type?: 'professional' | 'customer' | 'admin'
   verified_at?: string
   verified_by?: string
   rejection_reason?: string
   created_at: string
   updated_at: string
+  // Admin rounds fields
+  round_id?: string
+  tag?: 'for_signing' | 'government_processing' | 'final_output' | 'informational'
+  linked_request_id?: string
+  skipped_at?: string
+  skip_reason?: string
 }
 
 // User types
@@ -297,4 +303,86 @@ export interface User {
   referral_credit_balance_paisa: number
   preferred_professional_id?: string
   created_at: string
+}
+
+// Admin rounds types
+export type OrderRoundStatus = 'pending' | 'awaiting_user' | 'active' | 'completed'
+
+export interface OrderRound {
+  id: string
+  order_id: string
+  created_by_admin_id?: string
+  round_number: number
+  title: string
+  status: OrderRoundStatus
+  is_visible_to_user: boolean
+  created_at: string
+  completed_at?: string
+  // Nested data from joins
+  round_question_requests?: RoundQuestionRequest[]
+  order_work_documents?: OrderWorkDocument[]
+}
+
+export interface RoundQuestionRequest {
+  id: string
+  round_id: string
+  question_text: string
+  answer_text?: string
+  answered_at?: string
+  position: number
+  created_at: string
+}
+
+export interface RoundNotification {
+  id: string
+  order_id: string
+  round_id?: string
+  message: string
+  is_dismissed: boolean
+  dismissed_at?: string
+  created_at: string
+}
+
+export interface OrderAdminNote {
+  id: string
+  order_id: string
+  admin_id?: string
+  content: string
+  created_at: string
+  // Joined data
+  admin_users?: { name: string }
+}
+
+export interface OrderActivityLog {
+  id: string
+  order_id: string
+  action_type: string
+  actor_type: 'admin' | 'system' | 'user'
+  actor_id?: string
+  actor_name: string
+  description: string
+  metadata?: Record<string, any>
+  created_at: string
+}
+
+export interface OrderAdminAssignmentHistory {
+  id: string
+  order_id: string
+  assigned_to_admin_id?: string
+  assigned_by_admin_id?: string
+  assigned_to_name: string
+  assigned_by_name: string
+  assigned_at: string
+  unassigned_at?: string
+}
+
+export interface OrderProfessionalAssignmentHistory {
+  id: string
+  order_id: string
+  professional_id?: string
+  assigned_by_admin_id?: string
+  professional_name: string
+  assigned_by_name: string
+  assigned_at: string
+  unassigned_at?: string
 }
