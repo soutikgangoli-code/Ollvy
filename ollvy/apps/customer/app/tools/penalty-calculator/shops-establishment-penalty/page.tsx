@@ -27,6 +27,7 @@ import {
   InfoBanner,
   WarningBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 type DefaultType = 'not_registered' | 'not_renewed' | 'outside_hours'
 
@@ -196,10 +197,10 @@ function ShopsEstablishmentPenaltyCalculator() {
     (searchParams.get('type') as DefaultType) || 'not_registered'
   )
   const [employeeCount, setEmployeeCount] = useState(
-    parseInt(searchParams.get('employees') || '5', 10)
+    safeParseInt(searchParams.get('employees'), 5)
   )
   const [monthsLate, setMonthsLate] = useState(
-    parseInt(searchParams.get('months') || '3', 10)
+    safeParseInt(searchParams.get('months'), 3)
   )
 
   // Calculate penalty

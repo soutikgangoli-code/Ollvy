@@ -11,6 +11,13 @@ export const metadata: Metadata = {
     title: 'Business Compliance Guides | Ollvy',
     description: 'Free guides to Indian business compliance. GST, incorporation, licensing, and startup registration explained.',
     url: 'https://ollvy.com/learn',
+    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Business Compliance Guides | Ollvy',
+    description: 'Free guides to Indian business compliance. GST, incorporation, licensing, and startup registration explained.',
+    images: ['https://ollvy.com/logo.png'],
   },
 };
 

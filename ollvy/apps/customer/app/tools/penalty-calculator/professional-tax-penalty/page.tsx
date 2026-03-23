@@ -27,6 +27,7 @@ import {
   WarningBanner,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 // PT-applicable states with rates
 interface PTStateInfo {
@@ -222,13 +223,13 @@ function ProfessionalTaxCalculator() {
     searchParams.get('state') || 'Maharashtra'
   )
   const [employeeCount, setEmployeeCount] = useState(
-    parseInt(searchParams.get('employees') || '25', 10)
+    safeParseInt(searchParams.get('employees'), 25)
   )
   const [avgMonthlySalary, setAvgMonthlySalary] = useState(
-    parseInt(searchParams.get('salary') || '30000', 10)
+    safeParseInt(searchParams.get('salary'), 30000)
   )
   const [monthsLate, setMonthsLate] = useState(
-    parseInt(searchParams.get('months') || '3', 10)
+    safeParseInt(searchParams.get('months'), 3)
   )
   const [monthlyPTOverride, setMonthlyPTOverride] = useState<number | null>(null)
 

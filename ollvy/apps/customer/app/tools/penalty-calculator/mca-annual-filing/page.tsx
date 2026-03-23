@@ -26,6 +26,7 @@ import {
   ResultsPanel,
   WarningBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 type EntityType = 'pvt_ltd' | 'public_ltd' | 'llp'
 type FormType = 'AOC-4' | 'MGT-7' | 'MGT-7A' | 'LLP Form 8' | 'LLP Form 11'
@@ -110,13 +111,13 @@ function MCAFilingCalculator() {
     return entityType === 'llp' ? ['LLP Form 8', 'LLP Form 11'] : ['AOC-4', 'MGT-7']
   })
   const [daysLate, setDaysLate] = useState(
-    parseInt(searchParams.get('days') || '30', 10)
+    safeParseInt(searchParams.get('days'), 30)
   )
   const [yearsInDefault, setYearsInDefault] = useState(
-    parseInt(searchParams.get('years') || '1', 10)
+    safeParseInt(searchParams.get('years'), 1)
   )
   const [numberOfDirectors, setNumberOfDirectors] = useState(
-    parseInt(searchParams.get('directors') || '2', 10)
+    safeParseInt(searchParams.get('directors'), 2)
   )
   const [paidUpCapital, setPaidUpCapital] = useState<string>(
     searchParams.get('capital') || 'under_10l'

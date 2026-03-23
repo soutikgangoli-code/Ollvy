@@ -33,18 +33,20 @@ function formatIndianCurrency(value: number): string {
 }
 
 function sliderToValue(sliderPos: number, maxValue: number): number {
-  if (sliderPos === 0) return 0
+  if (sliderPos === 0 || maxValue <= 1) return 0
   const minLog = Math.log(1)
   const maxLog = Math.log(maxValue)
   const scale = (maxLog - minLog) / 100
+  if (!Number.isFinite(scale) || scale === 0) return 0
   return Math.round(Math.exp(minLog + scale * sliderPos))
 }
 
 function valueToSlider(value: number, maxValue: number): number {
-  if (value <= 0) return 0
+  if (value <= 0 || maxValue <= 1) return 0
   const minLog = Math.log(1)
   const maxLog = Math.log(maxValue)
   const scale = (maxLog - minLog) / 100
+  if (!Number.isFinite(scale) || scale === 0) return 0
   return Math.round((Math.log(value) - minLog) / scale)
 }
 

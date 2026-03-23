@@ -27,6 +27,7 @@ import {
   WarningBanner,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 // Indian states and UTs
 const INDIAN_STATES = [
@@ -172,13 +173,13 @@ function GSTLatePenaltyCalculator() {
     searchParams.get('nil') === 'true'
   )
   const [turnover, setTurnover] = useState(
-    parseInt(searchParams.get('turnover') || '10000000', 10) // Default ₹1 Crore
+    safeParseInt(searchParams.get('turnover'), 10000000) // Default ₹1 Crore
   )
   const [daysLate, setDaysLate] = useState(
-    parseInt(searchParams.get('days') || '30', 10)
+    safeParseInt(searchParams.get('days'), 30)
   )
   const [outstandingTax, setOutstandingTax] = useState(
-    parseInt(searchParams.get('liability') || '0', 10)
+    safeParseInt(searchParams.get('liability'), 0)
   )
   const [filingFrequency, setFilingFrequency] = useState<FilingFrequency>(
     (searchParams.get('frequency') as FilingFrequency) || 'monthly'
@@ -445,7 +446,7 @@ function GSTLatePenaltyCalculator() {
             )}
 
             {/* Info: Cap hit for GSTR-9 */}
-            {result.capHit && returnType === 'GSTR-9' && (
+            {result.capHit && returnType === 'GSTR-9' && result.maxCap > 0 && (
               <InfoBanner
                 title="Turnover-based cap applied"
                 body={`Your GSTR-9 late fee is capped at 0.25% of your annual turnover (${formatTurnover(result.maxCap)}).`}

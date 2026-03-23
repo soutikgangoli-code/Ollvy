@@ -36,7 +36,7 @@ export function MonthsLateSlider({
     const ticks = [1, 3, 6, 12, 24, 36, 48, 60].filter(t => t <= maxMonths)
     return ticks.map(t => ({
       value: t,
-      position: ((t - 1) / (maxMonths - 1)) * 100,
+      position: maxMonths <= 1 ? 0 : ((t - 1) / (maxMonths - 1)) * 100,
       label: t >= 12 ? `${t / 12}y` : `${t}m`,
     }))
   }, [maxMonths])

@@ -28,6 +28,7 @@ import {
   WarningBanner,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 type EntityType = 'individual' | 'huf' | 'partnership' | 'llp' | 'company'
 type FinancialYear = 'FY2024-25' | 'FY2023-24' | 'FY2022-23' | 'FY2021-22'
@@ -174,22 +175,22 @@ function ITRLatePenaltyCalculator() {
     searchParams.get('audit') === 'true'
   )
   const [totalIncome, setTotalIncome] = useState(
-    parseInt(searchParams.get('income') || '1000000', 10) // Default ₹10 Lakh
+    safeParseInt(searchParams.get('income'), 1000000) // Default ₹10 Lakh
   )
   const [outstandingTax, setOutstandingTax] = useState(
-    parseInt(searchParams.get('tax') || '0', 10)
+    safeParseInt(searchParams.get('tax'), 0)
   )
   const [daysLate, setDaysLate] = useState(
-    parseInt(searchParams.get('days') || '30', 10)
+    safeParseInt(searchParams.get('days'), 30)
   )
   const [wasAdvanceTaxPaid, setWasAdvanceTaxPaid] = useState(
     searchParams.get('advance_paid') !== 'false'
   )
   const [advanceTaxPaid, setAdvanceTaxPaid] = useState(
-    parseInt(searchParams.get('advance_amount') || '0', 10)
+    safeParseInt(searchParams.get('advance_amount'), 0)
   )
   const [tdsDeducted, setTdsDeducted] = useState(
-    parseInt(searchParams.get('tds') || '0', 10)
+    safeParseInt(searchParams.get('tds'), 0)
   )
 
   // Get due date info

@@ -2,6 +2,17 @@ import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
 import { businessITRDocuments } from '@/lib/data/document-checklists'
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://ollvy.com/tools/documents' },
+    { '@type': 'ListItem', position: 4, name: 'Business ITR Documents', item: 'https://ollvy.com/tools/documents/business-itr' },
+  ],
+}
+
 const howToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
@@ -71,6 +82,10 @@ export const metadata: Metadata = {
 export default function BusinessITRDocumentsPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}

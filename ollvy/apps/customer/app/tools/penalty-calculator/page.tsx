@@ -6,6 +6,21 @@ import { ArrowRight, Receipt, FileText, Building2, UserCheck, Banknote } from 'l
 export const metadata: Metadata = {
   title: 'Penalty Calculators for Indian Business Compliance | Ollvy',
   description: 'Calculate penalties for late GST filing, ITR filing, MCA annual filing, Director KYC, and TDS compliance. Real calculations based on Indian law.',
+  alternates: {
+    canonical: 'https://ollvy.com/tools/penalty-calculator',
+  },
+  openGraph: {
+    title: 'Penalty Calculators for Indian Business Compliance | Ollvy',
+    description: 'Calculate penalties for late GST filing, ITR filing, MCA annual filing, Director KYC, and TDS compliance.',
+    url: 'https://ollvy.com/tools/penalty-calculator',
+    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Penalty Calculators for Business Compliance | Ollvy',
+    description: 'Calculate penalties for late GST, ITR, MCA, Director KYC, and TDS filings. Real calculations based on Indian law.',
+    images: ['https://ollvy.com/logo.png'],
+  },
 }
 
 const penaltyCalculators = [

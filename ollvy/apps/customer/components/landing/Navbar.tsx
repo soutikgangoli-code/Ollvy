@@ -33,6 +33,7 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 
 const navLinks = [
   { href: '/services', label: 'Services', sectionId: null },
+  { href: '/learn', label: 'Learn', sectionId: null },
 ]
 
 const toolsItems = [

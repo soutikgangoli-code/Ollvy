@@ -9,7 +9,22 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/admin', '/pro', '/api/', '/order/', '/profile', '/dashboard'],
+      disallow: [
+        '/admin',
+        '/pro',
+        '/api/',
+        '/order/',
+        '/orders/',
+        '/profile',
+        '/dashboard',
+        '/checkout/',
+        '/quote/',
+        '/retainers/',
+        '/compliance',
+        '/settings',
+        '/notifications',
+        '/upgrade',
+      ],
     },
     sitemap: 'https://ollvy.com/sitemap.xml',
   }

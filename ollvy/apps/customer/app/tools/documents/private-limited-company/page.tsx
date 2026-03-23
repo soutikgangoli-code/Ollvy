@@ -2,6 +2,17 @@ import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
 import { pvtLtdDocuments } from '@/lib/data/document-checklists'
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://ollvy.com/tools/documents' },
+    { '@type': 'ListItem', position: 4, name: 'Pvt Ltd Documents', item: 'https://ollvy.com/tools/documents/private-limited-company' },
+  ],
+}
+
 const howToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
@@ -48,21 +59,21 @@ const howToJsonLd = {
 }
 
 export const metadata: Metadata = {
-  title: 'Documents Required for Private Limited Company Registration in India | Ollvy',
+  title: 'Pvt Ltd Documents Checklist | Ollvy',
   description: 'Complete checklist of documents needed to register a Private Limited Company in India. Director PAN, Aadhaar, registered office proof, DSC, DIN requirements and more.',
   keywords: ['private limited company documents', 'pvt ltd registration documents', 'company incorporation documents india', 'director documents for company registration'],
   alternates: {
     canonical: 'https://ollvy.com/tools/documents/private-limited-company',
   },
   openGraph: {
-    title: 'Documents Required for Private Limited Company Registration in India | Ollvy',
+    title: 'Pvt Ltd Company Documents Checklist | Ollvy',
     description: 'Complete checklist of documents needed to register a Private Limited Company in India.',
     url: 'https://ollvy.com/tools/documents/private-limited-company',
     images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Documents Required for Private Limited Company Registration | Ollvy',
+    title: 'Pvt Ltd Documents Checklist | Ollvy',
     description: 'Complete checklist of documents needed to register a Private Limited Company in India.',
     images: ['https://ollvy.com/logo.png'],
   },
@@ -71,6 +82,10 @@ export const metadata: Metadata = {
 export default function PrivateLimitedDocumentsPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}

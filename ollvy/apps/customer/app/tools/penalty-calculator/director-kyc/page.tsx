@@ -12,6 +12,7 @@ import {
   ResultsPanel,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 // FAQs from Section 14.4
 const faqs = [
@@ -54,7 +55,7 @@ function DirectorKYCCalculator() {
 
   // Initialize from URL params
   const [numberOfDirectors, setNumberOfDirectors] = useState(
-    parseInt(searchParams.get('directors') || '1', 10)
+    safeParseInt(searchParams.get('directors'), 1)
   )
   const [isDINDeactivated, setIsDINDeactivated] = useState(
     searchParams.get('deactivated') === 'true'

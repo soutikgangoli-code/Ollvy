@@ -22,6 +22,7 @@ import {
   WarningBanner,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 type DefaultType = 'pf_only' | 'esic_only' | 'both'
 
@@ -141,13 +142,13 @@ function PFESICPenaltyCalculator() {
 
   // Initialize from URL params
   const [employeeCount, setEmployeeCount] = useState(
-    parseInt(searchParams.get('employees') || '25', 10)
+    safeParseInt(searchParams.get('employees'), 25)
   )
   const [avgMonthlySalary, setAvgMonthlySalary] = useState(
-    parseInt(searchParams.get('salary') || '20000', 10)
+    safeParseInt(searchParams.get('salary'), 20000)
   )
   const [monthsLate, setMonthsLate] = useState(
-    parseInt(searchParams.get('months') || '3', 10)
+    safeParseInt(searchParams.get('months'), 3)
   )
   const [defaultType, setDefaultType] = useState<DefaultType>(
     (searchParams.get('type') as DefaultType) || 'both'

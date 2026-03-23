@@ -48,6 +48,13 @@ const PACK_SLUGS: string[] = []
 // Geo page slugs (if public) - add slugs here when geo pages are live
 const GEO_SLUGS: string[] = []
 
+// Deadline campaign pages
+const DEADLINE_SLUGS = [
+  'director-kyc-2025',
+  'itr-2025',
+  'gst-annual-2025',
+]
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch service slugs from database
   const serviceSlugs = await getAllServiceSlugs()
@@ -82,6 +89,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${BASE_URL}/tools/documents`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${BASE_URL}/tools/penalty-calculator`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
       url: `${BASE_URL}/privacy`,
       lastModified: new Date(),
       changeFrequency: 'yearly',
@@ -104,6 +123,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'yearly',
       priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/pricing`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/startup`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${BASE_URL}/join`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
     },
   ]
 
@@ -155,12 +192,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.65,
   }))
 
+  // Deadline campaign pages
+  const deadlineRoutes: MetadataRoute.Sitemap = DEADLINE_SLUGS.map((slug) => ({
+    url: `${BASE_URL}/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+
   return [
     ...staticRoutes,
     ...serviceRoutes,
     ...documentRoutes,
     ...penaltyRoutes,
     ...learnRoutes,
+    ...deadlineRoutes,
     ...packRoutes,
     ...geoRoutes,
   ]

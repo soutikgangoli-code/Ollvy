@@ -26,7 +26,7 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Ollvy - Company Registration, GST, Compliance Services in India',
+  title: 'Company Registration & GST Services in India | Ollvy',
   description: 'Register your company, get GST, trademark, FSSAI, and handle compliance - with vetted CAs on Ollvy. Fixed prices. Tracked delivery. India\'s most organised compliance platform.',
   keywords: 'company registration india, llp registration, gst registration, trademark registration india, ca services india, compliance services india, business registration india',
   robots: 'index, follow',
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     siteName: 'Ollvy',
     images: [
       {
-        url: '/logo.png',
+        url: 'https://ollvy.com/logo.png',
         width: 1200,
         height: 630,
         alt: 'Ollvy - Company Registration & Compliance Services India',
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Ollvy - Company Registration & Compliance, Sorted',
     description: 'Fixed-price compliance services with vetted CAs. LLP, Pvt Ltd, GST, Trademark, FSSAI and more.',
-    images: ['/logo.png'],
+    images: ['https://ollvy.com/logo.png'],
   },
 }
 

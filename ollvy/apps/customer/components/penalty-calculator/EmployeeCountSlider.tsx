@@ -16,18 +16,20 @@ interface EmployeeCountSliderProps {
 const MARKS = [1, 5, 10, 20, 50, 100, 250, 500, 1000, 5000, 10000]
 
 function sliderToValue(sliderPos: number, maxValue: number): number {
-  if (sliderPos === 0) return 1
+  if (sliderPos === 0 || maxValue <= 1) return 1
   const minLog = Math.log(1)
   const maxLog = Math.log(maxValue)
   const scale = (maxLog - minLog) / 100
+  if (!Number.isFinite(scale) || scale === 0) return 1
   return Math.max(1, Math.round(Math.exp(minLog + scale * sliderPos)))
 }
 
 function valueToSlider(value: number, maxValue: number): number {
-  if (value <= 1) return 0
+  if (value <= 1 || maxValue <= 1) return 0
   const minLog = Math.log(1)
   const maxLog = Math.log(maxValue)
   const scale = (maxLog - minLog) / 100
+  if (!Number.isFinite(scale) || scale === 0) return 0
   return Math.round((Math.log(value) - minLog) / scale)
 }
 

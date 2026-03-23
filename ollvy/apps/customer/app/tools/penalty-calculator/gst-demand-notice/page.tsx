@@ -27,6 +27,7 @@ import {
   WarningBanner,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 type DefaultType = 'tax_not_paid' | 'short_paid' | 'wrong_itc' | 'excess_refund'
 type NoticeStage = 'scn' | 'order_passed' | 'appeal_filed'
@@ -209,13 +210,13 @@ function GSTDemandNoticeCalculator() {
     searchParams.get('fraud') === 'true'
   )
   const [demandAmount, setDemandAmount] = useState(
-    parseInt(searchParams.get('amount') || '100000', 10)
+    safeParseInt(searchParams.get('amount'), 100000)
   )
   const [noticeStage, setNoticeStage] = useState<NoticeStage>(
     (searchParams.get('stage') as NoticeStage) || 'scn'
   )
   const [daysSinceNotice, setDaysSinceNotice] = useState(
-    parseInt(searchParams.get('days') || '30', 10)
+    safeParseInt(searchParams.get('days'), 30)
   )
 
   // Calculate penalty

@@ -14,6 +14,18 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://ollvy.com/join',
   },
+  openGraph: {
+    title: 'Join Ollvy as a Professional | CAs, CSs, Lawyers',
+    description: 'Join Ollvy as a verified CA, Company Secretary, or Lawyer. Get matched with clients automatically. Weekly payouts.',
+    url: 'https://ollvy.com/join',
+    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Join Ollvy as a Professional | CAs, CSs, Lawyers',
+    description: 'Join Ollvy as a verified CA, CS, or Lawyer. Get matched with clients automatically. Weekly payouts.',
+    images: ['https://ollvy.com/logo.png'],
+  },
 }
 
 const verifications = [

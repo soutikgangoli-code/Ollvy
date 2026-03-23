@@ -40,9 +40,29 @@ const documentTools = [
     href: '/tools/documents/partnership',
   },
   {
+    title: 'Documents for Sole Proprietorship',
+    description: 'Documents required for sole proprietorship registration and compliance',
+    href: '/tools/documents/sole-proprietor',
+  },
+  {
     title: 'Documents for GST Registration',
     description: 'Complete document checklist for GST registration as a sole proprietor or business',
     href: '/tools/documents/gst-registration',
+  },
+  {
+    title: 'Documents for Individual ITR Filing',
+    description: 'Documents needed to file individual income tax return in India',
+    href: '/tools/documents/individual-itr',
+  },
+  {
+    title: 'Documents for Business ITR Filing',
+    description: 'Documents required for business income tax return filing',
+    href: '/tools/documents/business-itr',
+  },
+  {
+    title: 'Documents for Trademark Registration',
+    description: 'Complete document checklist for trademark registration in India',
+    href: '/tools/documents/trademark',
   },
 ]
 
@@ -51,6 +71,11 @@ const penaltyTools = [
     title: 'GST Late Filing Penalty Calculator',
     description: 'Calculate penalties and interest for delayed GST return filing (GSTR-3B, GSTR-1)',
     href: '/tools/penalty-calculator/gst-late-filing',
+  },
+  {
+    title: 'GST Demand Notice Calculator',
+    description: 'Calculate interest and penalties on GST demand notices under Section 73/74',
+    href: '/tools/penalty-calculator/gst-demand-notice',
   },
   {
     title: 'ITR Late Filing Penalty Calculator',
@@ -71,6 +96,26 @@ const penaltyTools = [
     title: 'TDS Late Filing Penalty Calculator',
     description: 'Calculate penalties for delayed TDS return filing and late TDS payment',
     href: '/tools/penalty-calculator/tds-late-filing',
+  },
+  {
+    title: 'Professional Tax Penalty Calculator',
+    description: 'Calculate penalties for delayed professional tax registration and payment',
+    href: '/tools/penalty-calculator/professional-tax-penalty',
+  },
+  {
+    title: 'PF/ESIC Penalty Calculator',
+    description: 'Calculate penalties for delayed PF and ESIC contributions and returns',
+    href: '/tools/penalty-calculator/pf-esic-penalty',
+  },
+  {
+    title: 'Shops & Establishment Penalty Calculator',
+    description: 'Calculate penalties for Shops & Establishment Act non-compliance',
+    href: '/tools/penalty-calculator/shops-establishment-penalty',
+  },
+  {
+    title: 'Startup DPIIT Compliance Calculator',
+    description: 'Calculate penalties for DPIIT-recognized startup compliance lapses',
+    href: '/tools/penalty-calculator/startup-dpiit-compliance',
   },
 ]
 

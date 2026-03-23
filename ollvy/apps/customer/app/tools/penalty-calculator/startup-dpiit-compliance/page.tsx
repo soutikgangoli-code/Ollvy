@@ -20,6 +20,7 @@ import {
   ResultsPanel,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 type ComplianceType = 'fc_gpr' | 'fc_trs' | 'esop' | 'angel_tax'
 
@@ -138,10 +139,10 @@ function StartupDPIITComplianceCalculator() {
     return types.filter(t => ['fc_gpr', 'fc_trs', 'esop', 'angel_tax'].includes(t))
   })
   const [foreignInvestmentAmount, setForeignInvestmentAmount] = useState(
-    parseInt(searchParams.get('amount') || '5000000', 10)
+    safeParseInt(searchParams.get('amount'), 5000000)
   )
   const [monthsLate, setMonthsLate] = useState(
-    parseInt(searchParams.get('months') || '6', 10)
+    safeParseInt(searchParams.get('months'), 6)
   )
   const [isDPIITRecognised, setIsDPIITRecognised] = useState(
     searchParams.get('dpiit') !== 'false'

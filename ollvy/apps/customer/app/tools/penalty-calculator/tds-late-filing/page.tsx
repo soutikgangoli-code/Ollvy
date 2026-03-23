@@ -27,6 +27,7 @@ import {
   WarningBanner,
   InfoBanner,
 } from '@/components/penalty-calculator'
+import { safeParseInt } from '@/lib/parse-url-params'
 
 type ReturnType = '24Q' | '26Q' | '27Q' | '27EQ'
 type Quarter = 'Q1' | 'Q2' | 'Q3' | 'Q4'
@@ -146,16 +147,16 @@ function TDSLatePenaltyCalculator() {
     (searchParams.get('quarter') as Quarter) || 'Q1'
   )
   const [tdsAmount, setTdsAmount] = useState(
-    parseInt(searchParams.get('tds_amount') || '50000', 10)
+    safeParseInt(searchParams.get('tds_amount'), 50000)
   )
   const [depositStatus, setDepositStatus] = useState<DepositStatus>(
     (searchParams.get('deposit_status') as DepositStatus) || 'ON_TIME'
   )
   const [daysLateReturn, setDaysLateReturn] = useState(
-    parseInt(searchParams.get('days_return') || '30', 10)
+    safeParseInt(searchParams.get('days_return'), 30)
   )
   const [daysLateDeposit, setDaysLateDeposit] = useState(
-    parseInt(searchParams.get('days_deposit') || '30', 10)
+    safeParseInt(searchParams.get('days_deposit'), 30)
   )
 
   // Calculate penalty

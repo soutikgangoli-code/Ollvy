@@ -1,10 +1,23 @@
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Ollvy',
-  description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, and protect your personal information.',
+  description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
   alternates: {
     canonical: 'https://ollvy.com/privacy',
+  },
+  openGraph: {
+    title: 'Privacy Policy | Ollvy',
+    description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
+    url: 'https://ollvy.com/privacy',
+    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy | Ollvy',
+    description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
+    images: ['https://ollvy.com/logo.png'],
   },
 }
 
@@ -38,7 +51,10 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold text-foreground mb-4">3. Information Sharing</h2>
           <p className="text-muted-foreground leading-relaxed">
             We share your information with third parties only as necessary to provide our services,
-            including government portals (GST, MCA, FSSAI, etc.) for filing purposes, and vetted CAs
+            including government portals (for{' '}
+            <Link href="/services/gst-registration" className="text-foreground underline hover:no-underline">GST</Link>,{' '}
+            <Link href="/services/pvt-ltd-incorporation" className="text-foreground underline hover:no-underline">MCA</Link>,{' '}
+            <Link href="/services/fssai-license" className="text-foreground underline hover:no-underline">FSSAI</Link>, etc.) for filing purposes, and vetted CAs
             and lawyers who handle your compliance work. We do not sell your personal information.
           </p>
         </section>
