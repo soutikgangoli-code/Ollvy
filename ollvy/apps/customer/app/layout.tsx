@@ -31,6 +31,11 @@ export const metadata: Metadata = {
   keywords: 'company registration india, llp registration, gst registration, trademark registration india, ca services india, compliance services india, business registration india',
   robots: 'index, follow',
   metadataBase: new URL('https://ollvy.com'),
+  icons: {
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
+  },
   alternates: {
     canonical: 'https://ollvy.com',
   },
