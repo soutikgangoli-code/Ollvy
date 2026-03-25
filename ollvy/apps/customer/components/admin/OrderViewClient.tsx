@@ -891,6 +891,33 @@ function RoundCard({
   const fromCustomerDocs = round.order_work_documents?.filter(d => d.direction === 'from_customer') || []
   const toCustomerDocs = round.order_work_documents?.filter(d => d.direction === 'to_customer') || []
 
+  // Find linked document pairs (to_customer doc with linked_request_id -> from_customer doc)
+  // Backend convention: to_customer.linked_request_id points to from_customer.id
+  const linkedPairs = useMemo(() => {
+    const pairs: Array<{
+      downloadDoc: OrderWorkDocument
+      uploadDoc: OrderWorkDocument
+    }> = []
+    const usedIds = new Set<string>()
+
+    toCustomerDocs.forEach(downloadDoc => {
+      if (downloadDoc.linked_request_id) {
+        const uploadDoc = fromCustomerDocs.find(d => d.id === downloadDoc.linked_request_id)
+        if (uploadDoc) {
+          pairs.push({ downloadDoc, uploadDoc })
+          usedIds.add(downloadDoc.id)
+          usedIds.add(uploadDoc.id)
+        }
+      }
+    })
+
+    return { pairs, usedIds }
+  }, [fromCustomerDocs, toCustomerDocs])
+
+  // Standalone documents (not part of a linked pair)
+  const standaloneFromCustomer = fromCustomerDocs.filter(d => !linkedPairs.usedIds.has(d.id))
+  const standaloneToCustomer = toCustomerDocs.filter(d => !linkedPairs.usedIds.has(d.id))
+
   // Check if round can be completed
   const allQuestionsAnswered = questions.every(q => q.answered_at)
   const allDocsProcessed = fromCustomerDocs.every(d =>
@@ -992,24 +1019,41 @@ function RoundCard({
           </div>
         )}
 
-        {/* From Customer Docs */}
-        {fromCustomerDocs.length > 0 && (
+        {/* Linked Document Pairs (For Signing: Download + Upload in one card) */}
+        {linkedPairs.pairs.length > 0 && (
+          <div>
+            <h4 className="text-sm font-medium mb-3">Linked Documents (For Signing)</h4>
+            <div className="space-y-3">
+              {linkedPairs.pairs.map(({ downloadDoc, uploadDoc }) => (
+                <AdminLinkedDocumentCard
+                  key={downloadDoc.id}
+                  downloadDoc={downloadDoc}
+                  uploadDoc={uploadDoc}
+                  orderId={orderId}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Standalone From Customer Docs */}
+        {standaloneFromCustomer.length > 0 && (
           <div>
             <h4 className="text-sm font-medium mb-3">Documents from Customer</h4>
             <div className="space-y-3">
-              {fromCustomerDocs.map(doc => (
+              {standaloneFromCustomer.map(doc => (
                 <WorkDocumentCard key={doc.id} doc={doc} orderId={orderId} direction="from_customer" />
               ))}
             </div>
           </div>
         )}
 
-        {/* To Customer Docs */}
-        {toCustomerDocs.length > 0 && (
+        {/* Standalone To Customer Docs */}
+        {standaloneToCustomer.length > 0 && (
           <div>
             <h4 className="text-sm font-medium mb-3">Documents to Customer</h4>
             <div className="space-y-3">
-              {toCustomerDocs.map(doc => (
+              {standaloneToCustomer.map(doc => (
                 <WorkDocumentCard key={doc.id} doc={doc} orderId={orderId} direction="to_customer" />
               ))}
             </div>
@@ -1435,6 +1479,339 @@ function WorkDocumentCard({ doc, orderId, direction }: { doc: OrderWorkDocument 
   )
 }
 
+// Admin Linked Document Card (Download + Upload in one card - for signing workflow)
+function AdminLinkedDocumentCard({
+  downloadDoc,
+  uploadDoc,
+  orderId,
+}: {
+  downloadDoc: OrderWorkDocument & { internal_note?: string; internal_note_at?: string }
+  uploadDoc: OrderWorkDocument & { internal_note?: string; internal_note_at?: string }
+  orderId: string
+}) {
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
+  const [verifyDialogOpen, setVerifyDialogOpen] = useState(false)
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
+  const [skipDialogOpen, setSkipDialogOpen] = useState(false)
+  const [selectedReason, setSelectedReason] = useState<string>('')
+  const [skipReason, setSkipReason] = useState('')
+  const [internalNote, setInternalNote] = useState('')
+
+  const isUploaded = uploadDoc.status === 'uploaded' || uploadDoc.status === 'verified'
+  const isVerified = uploadDoc.status === 'verified'
+  const isRejected = uploadDoc.status === 'rejected'
+  const isSkipped = !!uploadDoc.skipped_at
+
+  const handleVerify = async () => {
+    setLoading(true)
+    try {
+      await verifyWorkDocument(uploadDoc.id, orderId, internalNote.trim() || undefined)
+      toast({ title: 'Document verified' })
+      setVerifyDialogOpen(false)
+      setInternalNote('')
+    } catch (err) {
+      toast({ title: 'Error', variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleReject = async () => {
+    if (!selectedReason) return
+    setLoading(true)
+    try {
+      await rejectWorkDocument(uploadDoc.id, orderId, selectedReason, internalNote.trim() || undefined)
+      toast({ title: 'Document rejected' })
+      setRejectDialogOpen(false)
+      setInternalNote('')
+    } catch (err) {
+      toast({ title: 'Error', variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSkip = async () => {
+    if (!skipReason.trim()) return
+    setLoading(true)
+    try {
+      await skipWorkDocument(uploadDoc.id, orderId, skipReason.trim())
+      toast({ title: 'Document skipped' })
+      setSkipDialogOpen(false)
+    } catch (err) {
+      toast({ title: 'Error', variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className={`border rounded-lg overflow-hidden ${
+      isVerified
+        ? 'border-green-500/50 bg-green-500/5'
+        : isRejected
+        ? 'border-destructive bg-destructive/5'
+        : isSkipped
+        ? 'border-muted bg-muted/30'
+        : 'border-border'
+    }`}>
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-border/50 bg-muted/30">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium">{downloadDoc.document_label}</p>
+            <Badge variant="secondary" className="text-xs">For Signing</Badge>
+            {isVerified && <Badge className="text-xs bg-green-600">Verified</Badge>}
+            {isRejected && <Badge variant="destructive" className="text-xs">Rejected</Badge>}
+            {isSkipped && <Badge variant="outline" className="text-xs">Skipped</Badge>}
+          </div>
+        </div>
+        {downloadDoc.description && (
+          <p className="text-xs text-muted-foreground mt-1">{downloadDoc.description}</p>
+        )}
+      </div>
+
+      {/* Rejection reason banner */}
+      {isRejected && uploadDoc.rejection_reason && (
+        <div className="px-4 py-2 bg-destructive/10">
+          <p className="text-sm text-destructive">{getRejectionLabel(uploadDoc.rejection_reason)}</p>
+        </div>
+      )}
+
+      {/* Split Content: Sent to Customer | Received from Customer */}
+      <div className="grid grid-cols-2 divide-x divide-border/50">
+        {/* Left: Document sent to customer */}
+        <div className="p-4">
+          <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Sent to Customer</p>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+              <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{downloadDoc.file_name || 'Document'}</p>
+              <p className="text-xs text-muted-foreground">
+                {downloadDoc.uploaded_at ? formatDateTime(downloadDoc.uploaded_at) : ''}
+              </p>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            {downloadDoc.file_url && (
+              <>
+                <Button variant="outline" size="sm" className="flex-1" asChild>
+                  <a href={downloadDoc.file_url} target="_blank" rel="noopener noreferrer">View</a>
+                </Button>
+                <Button variant="outline" size="sm" className="flex-1" asChild>
+                  <a href={downloadDoc.file_url} download>Download</a>
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Right: Document received from customer (signed) */}
+        <div className="p-4">
+          <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wide">Received (Signed)</p>
+          {isUploaded || isRejected ? (
+            <>
+              <div className="flex items-center gap-3 mb-3">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  isVerified ? 'bg-green-500/10' : isRejected ? 'bg-destructive/10' : 'bg-amber-500/10'
+                }`}>
+                  <svg className={`h-5 w-5 ${
+                    isVerified ? 'text-green-600' : isRejected ? 'text-destructive' : 'text-amber-600'
+                  }`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{uploadDoc.file_name || uploadDoc.document_label}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {uploadDoc.uploaded_at ? formatDateTime(uploadDoc.uploaded_at) : 'Uploaded'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-2 flex-wrap">
+                {uploadDoc.file_url && (
+                  <>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={uploadDoc.file_url} target="_blank" rel="noopener noreferrer">View</a>
+                    </Button>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={uploadDoc.file_url} download>Download</a>
+                    </Button>
+                  </>
+                )}
+
+                {uploadDoc.status === 'uploaded' && !isSkipped && (
+                  <>
+                    <Button size="sm" onClick={() => setVerifyDialogOpen(true)} disabled={loading}>
+                      Verify
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => setRejectDialogOpen(true)} disabled={loading}>
+                      Reject
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => setSkipDialogOpen(true)} disabled={loading}>
+                      Skip
+                    </Button>
+                  </>
+                )}
+
+                {isVerified && (
+                  <button
+                    onClick={() => undoVerification(uploadDoc.id, orderId, 'work')}
+                    className="text-xs text-muted-foreground hover:underline"
+                  >
+                    Undo
+                  </button>
+                )}
+
+                {isRejected && (
+                  <button
+                    onClick={() => undoRejection(uploadDoc.id, orderId, 'work')}
+                    className="text-xs text-muted-foreground hover:underline"
+                  >
+                    Undo
+                  </button>
+                )}
+              </div>
+            </>
+          ) : isSkipped ? (
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+                <svg className="h-5 w-5 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Skipped</p>
+                {uploadDoc.skip_reason && (
+                  <p className="text-xs text-muted-foreground/70">{uploadDoc.skip_reason}</p>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3 h-full">
+              <div className="w-10 h-10 rounded-lg bg-muted/50 border-2 border-dashed border-border flex items-center justify-center flex-shrink-0">
+                <svg className="h-5 w-5 text-muted-foreground/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground">Awaiting upload</p>
+                <p className="text-xs text-muted-foreground/70">Customer has not uploaded yet</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Internal notes */}
+      {(downloadDoc.internal_note || uploadDoc.internal_note) && (
+        <div className="px-4 py-2 border-t border-border/50 bg-muted/20">
+          {downloadDoc.internal_note && (
+            <p className="text-xs text-muted-foreground">
+              <span className="font-medium">Sent doc note:</span> {downloadDoc.internal_note}
+            </p>
+          )}
+          {uploadDoc.internal_note && (
+            <p className="text-xs text-muted-foreground mt-1">
+              <span className="font-medium">Upload note:</span> {uploadDoc.internal_note}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Verify Dialog */}
+      <Dialog open={verifyDialogOpen} onOpenChange={setVerifyDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Verify Document</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <p className="text-sm text-muted-foreground">Verify {uploadDoc.document_label}</p>
+            <div>
+              <Label className="text-xs text-muted-foreground">
+                Internal note (optional)
+              </Label>
+              <Textarea
+                value={internalNote}
+                onChange={(e) => setInternalNote(e.target.value)}
+                placeholder="Add context for your team..."
+                rows={2}
+                className="mt-1 text-sm resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setVerifyDialogOpen(false); setInternalNote('') }}>Cancel</Button>
+            <Button onClick={handleVerify} disabled={loading}>Verify</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reject Dialog */}
+      <Dialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reject Document</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <Select value={selectedReason} onValueChange={setSelectedReason}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select reason" />
+              </SelectTrigger>
+              <SelectContent>
+                {REJECTION_REASONS.map(r => (
+                  <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div>
+              <Label className="text-xs text-muted-foreground">
+                Internal note (optional)
+              </Label>
+              <Textarea
+                value={internalNote}
+                onChange={(e) => setInternalNote(e.target.value)}
+                placeholder="Add context for your team..."
+                rows={2}
+                className="mt-1 text-sm resize-none"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setRejectDialogOpen(false); setInternalNote('') }}>Cancel</Button>
+            <Button onClick={handleReject} disabled={loading || !selectedReason}>Reject</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Skip Dialog */}
+      <Dialog open={skipDialogOpen} onOpenChange={setSkipDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Skip Document</DialogTitle>
+          </DialogHeader>
+          <Textarea
+            placeholder="Reason for skipping..."
+            value={skipReason}
+            onChange={(e) => setSkipReason(e.target.value)}
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSkipDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSkip} disabled={loading || !skipReason.trim()}>Skip</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  )
+}
+
 // Add Round Dialog
 function AddRoundDialog({
   open,
@@ -1757,6 +2134,7 @@ function QuickUploadDialog({
   const [uploadTag, setUploadTag] = useState<string>('')
   const [uploadLabel, setUploadLabel] = useState('')
   const [uploadDescription, setUploadDescription] = useState('')
+  const [signedUploadLabel, setSignedUploadLabel] = useState('') // For "for_signing" - label for customer's signed upload
   const [stagedFile, setStagedFile] = useState<{ fileUrl: string; fileName: string } | null>(null)
   const [selectedRoundId, setSelectedRoundId] = useState<string>('')
   const [notifyUser, setNotifyUser] = useState(true)
@@ -1790,12 +2168,20 @@ function QuickUploadDialog({
       return
     }
 
+    // For signing documents, require the signed upload label
+    if (uploadTag === 'for_signing' && !signedUploadLabel.trim()) {
+      toast({ title: 'Please provide a label for the signed document upload', variant: 'destructive' })
+      return
+    }
+
     setLoading(true)
     try {
       // If no round selected, create a new round for this upload
       if (!selectedRoundId) {
         const formData = {
-          title: `Document: ${uploadLabel.trim()}`,
+          title: uploadTag === 'for_signing'
+            ? `Sign: ${uploadLabel.trim()}`
+            : `Document: ${uploadLabel.trim()}`,
           questions: [],
           docRequests: [],
           adminUpload: {
@@ -1804,6 +2190,7 @@ function QuickUploadDialog({
             description: uploadDescription.trim() || undefined,
             fileUrl: stagedFile.fileUrl,
             fileName: stagedFile.fileName,
+            signLabel: uploadTag === 'for_signing' ? signedUploadLabel.trim() : undefined,
           },
           notificationMessage: notifyUser ? getNotificationMessage(uploadTag) : undefined,
           isVisibleToUser: true,
@@ -1818,7 +2205,8 @@ function QuickUploadDialog({
           stagedFile.fileName,
           uploadTag,
           uploadLabel.trim(),
-          uploadDescription.trim() || null
+          uploadDescription.trim() || null,
+          uploadTag === 'for_signing' ? signedUploadLabel.trim() : undefined
         )
       }
 
@@ -1836,6 +2224,7 @@ function QuickUploadDialog({
     setUploadTag('')
     setUploadLabel('')
     setUploadDescription('')
+    setSignedUploadLabel('')
     setStagedFile(null)
     setSelectedRoundId('')
     setNotifyUser(true)
@@ -1907,6 +2296,21 @@ function QuickUploadDialog({
             />
           </div>
 
+          {/* For Signing: Customer upload label */}
+          {uploadTag === 'for_signing' && (
+            <div className="space-y-2 p-3 bg-muted rounded-lg">
+              <Label>Signed Document Upload Label *</Label>
+              <Input
+                placeholder="e.g., Signed MOA, Stamped Agreement"
+                value={signedUploadLabel}
+                onChange={(e) => setSignedUploadLabel(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                This creates a document request for the customer to upload the signed version back.
+              </p>
+            </div>
+          )}
+
           {/* Add to existing round or create new */}
           {existingRounds.length > 0 && (
             <div className="space-y-2">
@@ -1940,7 +2344,7 @@ function QuickUploadDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button
             onClick={handleSubmit}
-            disabled={loading || !stagedFile || !uploadTag || !uploadLabel.trim()}
+            disabled={loading || !stagedFile || !uploadTag || !uploadLabel.trim() || (uploadTag === 'for_signing' && !signedUploadLabel.trim())}
           >
             {loading ? 'Uploading...' : 'Upload'}
           </Button>

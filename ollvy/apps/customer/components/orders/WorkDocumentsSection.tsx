@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -26,6 +26,8 @@ import {
   FolderOpen,
   ArrowDownToLine,
   ArrowUpFromLine,
+  Eye,
+  RefreshCw,
 } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 
@@ -45,7 +47,6 @@ export function WorkDocumentsSection({
   activeStageKey,
 }: WorkDocumentsSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState<'deliverables' | 'requests'>('deliverables')
   const [uploadingDocId, setUploadingDocId] = useState<string | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
 
@@ -58,8 +59,35 @@ export function WorkDocumentsSection({
   const deliverables = filteredDocuments.filter(d => d.direction === 'to_customer')
   const requests = filteredDocuments.filter(d => d.direction === 'from_customer')
 
+  // Find linked document pairs (for_signing: to_customer doc links to from_customer upload request)
+  // Backend convention: to_customer.linked_request_id points to from_customer.id
+  const linkedPairs = useMemo(() => {
+    const pairs: Array<{
+      downloadDoc: OrderWorkDocument
+      uploadDoc: OrderWorkDocument
+    }> = []
+    const usedIds = new Set<string>()
+
+    deliverables.forEach(downloadDoc => {
+      if (downloadDoc.linked_request_id) {
+        const uploadDoc = requests.find(d => d.id === downloadDoc.linked_request_id)
+        if (uploadDoc) {
+          pairs.push({ downloadDoc, uploadDoc })
+          usedIds.add(downloadDoc.id)
+          usedIds.add(uploadDoc.id)
+        }
+      }
+    })
+
+    return { pairs, usedIds }
+  }, [deliverables, requests])
+
+  // Standalone documents (not part of a linked pair)
+  const standaloneDeliverables = deliverables.filter(d => !linkedPairs.usedIds.has(d.id))
+  const standaloneRequests = requests.filter(d => !linkedPairs.usedIds.has(d.id))
+
   // Calculate stats
-  const pendingRequests = requests.filter(r => r.status === 'pending')
+  const pendingRequests = requests.filter(r => r.status === 'pending' || r.status === 'rejected')
   const uploadedRequests = requests.filter(r => r.status === 'uploaded' || r.status === 'verified')
 
   const handleDownload = async (doc: OrderWorkDocument) => {
@@ -198,77 +226,52 @@ export function WorkDocumentsSection({
             </DialogTitle>
           </DialogHeader>
 
-          {/* Tabs */}
-          <div className="flex gap-2 border-b border-border pb-2">
-            <button
-              onClick={() => setActiveTab('deliverables')}
-              className={cn(
-                'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-                activeTab === 'deliverables'
-                  ? 'bg-muted text-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
-              )}
-            >
-              <ArrowDownToLine className="h-4 w-4" />
-              Deliverables
-              {deliverables.length > 0 && (
-                <Badge variant="secondary" className="text-xs">
-                  {deliverables.length}
-                </Badge>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('requests')}
-              className={cn(
-                'flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-                activeTab === 'requests'
-                  ? 'bg-muted text-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
-              )}
-            >
-              <ArrowUpFromLine className="h-4 w-4" />
-              Requested
-              {pendingRequests.length > 0 && (
-                <Badge variant="destructive" className="text-xs">
-                  {pendingRequests.length}
-                </Badge>
-              )}
-            </button>
-          </div>
-
           {/* Content */}
-          <div className="flex-1 overflow-y-auto py-4 space-y-3">
-            {activeTab === 'deliverables' && (
-              deliverables.length === 0 ? (
-                <div className="text-center py-12">
-                  <ArrowDownToLine className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-                  <p className="text-muted-foreground">No deliverables yet</p>
-                  <p className="text-sm text-muted-foreground/70">
-                    Documents from your CA will appear here
+          <div className="flex-1 overflow-y-auto py-4 space-y-4">
+            {/* Linked Documents (Download + Upload in one card) */}
+            {linkedPairs.pairs.length > 0 && (
+              <div className="space-y-3">
+                {linkedPairs.pairs.map(({ downloadDoc, uploadDoc }) => (
+                  <LinkedDocumentCard
+                    key={downloadDoc.id}
+                    downloadDoc={downloadDoc}
+                    uploadDoc={uploadDoc}
+                    onDownload={handleDownload}
+                    onUpload={(file) => handleUpload(uploadDoc.id, file)}
+                    isUploading={uploadingDocId === uploadDoc.id}
+                    uploadProgress={uploadingDocId === uploadDoc.id ? uploadProgress : 0}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Standalone Deliverables */}
+            {standaloneDeliverables.length > 0 && (
+              <div className="space-y-3">
+                {linkedPairs.pairs.length > 0 && (
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                    Other Documents
                   </p>
-                </div>
-              ) : (
-                deliverables.map(doc => (
+                )}
+                {standaloneDeliverables.map(doc => (
                   <DeliverableCard
                     key={doc.id}
                     document={doc}
                     onDownload={handleDownload}
                   />
-                ))
-              )
+                ))}
+              </div>
             )}
 
-            {activeTab === 'requests' && (
-              requests.length === 0 ? (
-                <div className="text-center py-12">
-                  <ArrowUpFromLine className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-                  <p className="text-muted-foreground">No document requests</p>
-                  <p className="text-sm text-muted-foreground/70">
-                    Additional document requests will appear here
+            {/* Standalone Requests */}
+            {standaloneRequests.length > 0 && (
+              <div className="space-y-3">
+                {(linkedPairs.pairs.length > 0 || standaloneDeliverables.length > 0) && (
+                  <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">
+                    Requested From You
                   </p>
-                </div>
-              ) : (
-                requests.map(doc => (
+                )}
+                {standaloneRequests.map(doc => (
                   <RequestCard
                     key={doc.id}
                     document={doc}
@@ -276,8 +279,19 @@ export function WorkDocumentsSection({
                     uploadProgress={uploadingDocId === doc.id ? uploadProgress : 0}
                     onUpload={(file) => handleUpload(doc.id, file)}
                   />
-                ))
-              )
+                ))}
+              </div>
+            )}
+
+            {/* Empty State */}
+            {linkedPairs.pairs.length === 0 && standaloneDeliverables.length === 0 && standaloneRequests.length === 0 && (
+              <div className="text-center py-12">
+                <FolderOpen className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
+                <p className="text-muted-foreground">No documents yet</p>
+                <p className="text-sm text-muted-foreground/70">
+                  Documents will appear here as work progresses
+                </p>
+              </div>
             )}
           </div>
         </DialogContent>
@@ -286,7 +300,241 @@ export function WorkDocumentsSection({
   )
 }
 
-// Deliverable Card Component
+// Linked Document Card (Download + Upload in one card)
+function LinkedDocumentCard({
+  downloadDoc,
+  uploadDoc,
+  onDownload,
+  onUpload,
+  isUploading,
+  uploadProgress,
+}: {
+  downloadDoc: OrderWorkDocument
+  uploadDoc: OrderWorkDocument
+  onDownload: (doc: OrderWorkDocument) => void
+  onUpload: (file: File) => void
+  isUploading: boolean
+  uploadProgress: number
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isDragging, setIsDragging] = useState(false)
+
+  const isUploaded = uploadDoc.status === 'uploaded' || uploadDoc.status === 'verified'
+  const isVerified = uploadDoc.status === 'verified'
+  const isRejected = uploadDoc.status === 'rejected'
+
+  const handleFileSelect = (file: File) => {
+    if (!file) return
+    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg']
+    if (!allowedTypes.includes(file.type)) {
+      alert('Please upload a PDF or image file (JPG, PNG)')
+      return
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      alert('File size must be less than 10MB')
+      return
+    }
+    onUpload(file)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    const file = e.dataTransfer.files[0]
+    if (file) handleFileSelect(file)
+  }
+
+  return (
+    <div
+      className={cn(
+        'border rounded-xl transition-all overflow-hidden',
+        isVerified
+          ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5'
+          : isRejected
+          ? 'border-destructive bg-destructive/5'
+          : isUploaded
+          ? 'border-amber-500/50 bg-amber-500/5'
+          : 'border-border'
+      )}
+    >
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf,.jpg,.jpeg,.png"
+        onChange={(e) => {
+          const file = e.target.files?.[0]
+          if (file) handleFileSelect(file)
+          e.target.value = ''
+        }}
+        className="hidden"
+      />
+
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-border/50 bg-muted/30">
+        <div className="flex items-center gap-2">
+          <div
+            className={cn(
+              'w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0',
+              isVerified
+                ? 'bg-[hsl(var(--ollvy-green))]/20'
+                : isRejected
+                ? 'bg-destructive/20'
+                : isUploaded
+                ? 'bg-amber-500/20'
+                : 'bg-muted'
+            )}
+          >
+            {isVerified ? (
+              <CheckCircle2 className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
+            ) : isRejected ? (
+              <AlertCircle className="h-4 w-4 text-destructive" />
+            ) : isUploaded ? (
+              <FileText className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+            ) : (
+              <FileText className="h-4 w-4 text-muted-foreground" />
+            )}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-medium text-sm truncate">{downloadDoc.document_label}</span>
+              {downloadDoc.tag === 'for_signing' && (
+                <Badge variant="secondary" className="text-xs flex-shrink-0">For Signing</Badge>
+              )}
+              {isVerified && (
+                <span className="text-xs text-[hsl(var(--ollvy-green))] font-medium flex-shrink-0">Verified</span>
+              )}
+            </div>
+            {downloadDoc.description && (
+              <p className="text-xs text-muted-foreground truncate">{downloadDoc.description}</p>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Rejection reason */}
+      {isRejected && uploadDoc.rejection_reason && (
+        <div className="px-4 py-2 bg-destructive/10">
+          <p className="text-sm text-destructive">{uploadDoc.rejection_reason}</p>
+        </div>
+      )}
+
+      {/* Split Content: Download | Upload */}
+      <div className="grid grid-cols-2 divide-x divide-border/50">
+        {/* Left: Download Section */}
+        <div className="p-4">
+          <p className="text-xs text-muted-foreground mb-3">Download to sign</p>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
+              <FileText className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{downloadDoc.file_name || 'Document'}</p>
+              <p className="text-xs text-muted-foreground">
+                {downloadDoc.uploaded_at ? formatDate(downloadDoc.uploaded_at) : ''}
+              </p>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onDownload(downloadDoc)}
+            disabled={!downloadDoc.file_url}
+            className="gap-1.5 w-full"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Download
+          </Button>
+        </div>
+
+        {/* Right: Upload Section */}
+        <div
+          className="p-4"
+          onDrop={!isUploaded ? handleDrop : undefined}
+          onDragOver={!isUploaded ? (e) => { e.preventDefault(); setIsDragging(true) } : undefined}
+          onDragLeave={!isUploaded ? () => setIsDragging(false) : undefined}
+        >
+          <p className="text-xs text-muted-foreground mb-3">Upload signed version</p>
+          {isUploaded ? (
+            <div className="flex items-center gap-3 mb-3">
+              <div className={cn(
+                'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0',
+                isVerified ? 'bg-[hsl(var(--ollvy-green))]/10' : 'bg-amber-500/10'
+              )}>
+                {isVerified ? (
+                  <CheckCircle2 className="h-5 w-5 text-[hsl(var(--ollvy-green))]" />
+                ) : (
+                  <FileText className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{uploadDoc.file_name || 'Uploaded'}</p>
+                <p className="text-xs text-muted-foreground">
+                  {isVerified ? 'Verified' : 'Under review'}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className={cn(
+                'border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all min-h-[80px]',
+                isDragging
+                  ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/10'
+                  : 'border-border hover:border-muted-foreground/50 hover:bg-muted/50',
+                isUploading && 'pointer-events-none opacity-70'
+              )}
+            >
+              {isUploading ? (
+                <div className="space-y-2 text-center">
+                  <Loader2 className="h-5 w-5 text-muted-foreground mx-auto animate-spin" />
+                  <p className="text-xs text-muted-foreground">Uploading...</p>
+                </div>
+              ) : (
+                <>
+                  <Upload className="h-5 w-5 text-muted-foreground mb-1" />
+                  <p className="text-xs text-muted-foreground">
+                    {isDragging ? 'Drop file here' : 'Drop or click'}
+                  </p>
+                </>
+              )}
+            </div>
+          )}
+          {isUploaded && (
+            <div className="flex gap-2">
+              {uploadDoc.file_url && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="gap-1.5 flex-1"
+                  asChild
+                >
+                  <a href={uploadDoc.file_url} target="_blank" rel="noopener noreferrer">
+                    <Eye className="h-3.5 w-3.5" />
+                    View
+                  </a>
+                </Button>
+              )}
+              {!isVerified && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading}
+                  className="gap-1.5 flex-1"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Replace
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Deliverable Card Component (standalone, no linked upload)
 function DeliverableCard({
   document,
   onDownload,

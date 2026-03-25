@@ -179,7 +179,7 @@ export interface QuoteRequest {
 export interface ChatMessage {
   id: string
   conversation_id: string
-  sender_id: string
+  sender_id: string | null
   sender_type: 'user' | 'professional' | 'system'
   content: string
   message_type: 'text' | 'file' | 'system'
