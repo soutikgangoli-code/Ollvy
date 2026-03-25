@@ -1204,7 +1204,7 @@ export default function OrderDetailPage() {
                 <div className="h-[400px]">
                   <ChatWindow
                     conversationId={order.chat_conversation_id}
-                    professionalName={(order.professionals as { display_name?: string; full_name?: string })?.display_name || (order.professionals as { full_name?: string })?.full_name || 'Your CA'}
+                    professionalName={(order.professional as { display_name?: string; full_name?: string })?.display_name || (order.professional as { full_name?: string })?.full_name || 'Your CA'}
                   />
                 </div>
               </CardContent>

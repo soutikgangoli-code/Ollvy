@@ -332,7 +332,7 @@ export function BookingPanel({
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
             <a
-              href={`https://wa.me/919876543210?text=Hi, I have a question about ${encodeURIComponent(service.name)}`}
+              href={`https://wa.me/917042100461?text=Hi, I have a question about ${encodeURIComponent(service.name)}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -341,7 +341,7 @@ export function BookingPanel({
             </a>
           </Button>
           <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
-            <a href="tel:+919876543210">
+            <a href="tel:+917042100461">
               <Phone size={13} />
               Call
             </a>

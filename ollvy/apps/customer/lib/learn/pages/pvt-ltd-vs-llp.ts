@@ -101,7 +101,7 @@ export const pvtLtdVsLlp: LearnPageConfig = {
         { col1: 'DPIIT / Startup India', col2: 'Eligible', col3: 'Eligible' },
         { col1: 'Compliance cost (annual)', col2: 'Higher - audit, annual return, ITR', col3: 'Lower - no mandatory audit at early stage' },
         { col1: 'Credibility with banks/clients', col2: 'Higher - established norm for companies', col3: 'Accepted but less common outside professional services' },
-        { col1: 'Incorporation cost (Ollvy)', col2: '₹24,999 (includes ₹15,000 MCA)', col3: '₹13,999 (includes ₹5,000 MCA)' },
+        { col1: 'Incorporation cost (Ollvy)', col2: '₹24,999 (includes ₹15,000 MCA)', col3: '₹12,999 (includes ₹5,000 MCA)' },
       ],
     },
     {

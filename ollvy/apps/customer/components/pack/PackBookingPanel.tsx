@@ -92,7 +92,7 @@ export function PackBookingPanel({
         </a>
         <div className="flex gap-3 mt-3">
           <a
-            href="https://wa.me/919999999999?text=Hi, I have a question about the Cloud Kitchen Setup pack"
+            href="https://wa.me/917042100461?text=Hi, I have a question about the Cloud Kitchen Setup pack"
             target="_blank"
             className="flex-1 border border-border rounded-lg h-10 flex items-center justify-center gap-2 text-xs text-muted-foreground hover:border-foreground/20 transition-all"
           >
@@ -100,7 +100,7 @@ export function PackBookingPanel({
             WhatsApp
           </a>
           <a
-            href="tel:+919999999999"
+            href="tel:+917042100461"
             className="flex-1 border border-border rounded-lg h-10 flex items-center justify-center gap-2 text-xs text-muted-foreground hover:border-foreground/20 transition-all"
           >
             <Phone size={14} />

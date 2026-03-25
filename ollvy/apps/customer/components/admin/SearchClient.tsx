@@ -1,8 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -10,37 +9,20 @@ import { Input } from '@/components/ui/input'
 import { formatPaisa, formatDate } from '@/lib/utils'
 
 interface SearchResult {
+  result_type: 'order' | 'user'
   id: string
-  order_number: string
-  status: string
-  total_paisa_snapshot: number
-  paid_at: string
-  service_name: string
-  user_name: string
-  user_phone: string
-  professional_name?: string
-  assigned_admin_id?: string
+  primary_text: string
+  secondary_text: string
+  tertiary_text: string
+  status: string | null
+  amount_paisa: number | null
+  created_at: string
 }
 
 interface SearchClientProps {
   results: SearchResult[]
   query: string
-  statusFilter: string | null
-  pendingFilter: string | null
 }
-
-const STATUS_TABS = [
-  { label: 'All', value: null },
-  { label: 'Active', value: 'in_progress' },
-  { label: 'Completed', value: 'completed' },
-  { label: 'Cancelled', value: 'cancelled' },
-]
-
-const PENDING_TABS = [
-  { label: 'All', value: null },
-  { label: 'Pending on us', value: 'pending_admin' },
-  { label: 'Pending on user', value: 'pending_user' },
-]
 
 const STATUS_BADGE_VARIANTS: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   pending_assignment: 'secondary',
@@ -51,42 +33,35 @@ const STATUS_BADGE_VARIANTS: Record<string, 'default' | 'secondary' | 'destructi
   cancelled: 'destructive',
 }
 
-export function SearchClient({ results, query, statusFilter, pendingFilter }: SearchClientProps) {
+export function SearchClient({ results, query }: SearchClientProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const [searchQuery, setSearchQuery] = useState(query)
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     const params = new URLSearchParams()
     if (searchQuery.trim()) params.set('q', searchQuery.trim())
-    if (statusFilter) params.set('status', statusFilter)
-    if (pendingFilter) params.set('pending', pendingFilter)
     router.push(`/admin/search?${params.toString()}`)
   }
 
-  const handleStatusChange = (status: string | null) => {
-    const params = new URLSearchParams()
-    if (query) params.set('q', query)
-    if (status) params.set('status', status)
-    if (pendingFilter) params.set('pending', pendingFilter)
-    router.push(`/admin/search?${params.toString()}`)
+  const handleResultClick = (result: SearchResult) => {
+    if (result.result_type === 'order') {
+      router.push(`/admin/orders/${result.id}`)
+    } else {
+      router.push(`/admin/users/${result.id}`)
+    }
   }
 
-  const handlePendingChange = (pending: string | null) => {
-    const params = new URLSearchParams()
-    if (query) params.set('q', query)
-    if (statusFilter) params.set('status', statusFilter)
-    if (pending) params.set('pending', pending)
-    router.push(`/admin/search?${params.toString()}`)
-  }
+  // Count by type
+  const orderCount = results.filter(r => r.result_type === 'order').length
+  const userCount = results.filter(r => r.result_type === 'user').length
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Search</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Search across orders, users, and services
+          Search across orders and users
         </p>
       </div>
 
@@ -96,49 +71,21 @@ export function SearchClient({ results, query, statusFilter, pendingFilter }: Se
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by order number, user name, phone, or service..."
+          placeholder="Search by order number, user name, phone, email, or service..."
           className="max-w-lg"
         />
         <Button type="submit">Search</Button>
       </form>
 
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-4">
-        {/* Status filter */}
-        <div className="flex items-center gap-1">
-          {STATUS_TABS.map(tab => (
-            <Button
-              key={tab.label}
-              variant={statusFilter === tab.value ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handleStatusChange(tab.value)}
-            >
-              {tab.label}
-            </Button>
-          ))}
-        </div>
-
-        <div className="h-6 w-px bg-border" />
-
-        {/* Pending filter */}
-        <div className="flex items-center gap-1">
-          {PENDING_TABS.map(tab => (
-            <Button
-              key={tab.label}
-              variant={pendingFilter === tab.value ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => handlePendingChange(tab.value)}
-            >
-              {tab.label}
-            </Button>
-          ))}
-        </div>
-      </div>
-
       {/* Results count */}
       {query && (
         <p className="text-sm text-muted-foreground">
           {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"
+          {results.length > 0 && (
+            <span className="ml-2">
+              ({orderCount} order{orderCount !== 1 ? 's' : ''}, {userCount} user{userCount !== 1 ? 's' : ''})
+            </span>
+          )}
         </p>
       )}
 
@@ -155,44 +102,61 @@ export function SearchClient({ results, query, statusFilter, pendingFilter }: Se
         <CardContent>
           {results.length === 0 ? (
             <p className="text-sm text-muted-foreground py-8 text-center">
-              {query ? 'No results found' : 'Enter a search query to find orders'}
+              {query ? 'No results found' : 'Enter a search query to find orders and users'}
             </p>
           ) : (
             <div className="divide-y divide-border">
               {results.map(result => (
                 <div
-                  key={result.id}
-                  className="py-4 flex items-center justify-between gap-4"
+                  key={`${result.result_type}-${result.id}`}
+                  className="py-4 flex items-center justify-between gap-4 cursor-pointer hover:bg-muted/50 transition-colors -mx-4 px-4"
+                  onClick={() => handleResultClick(result)}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-mono text-sm font-medium">
-                        {result.order_number}
-                      </span>
-                      <Badge variant={STATUS_BADGE_VARIANTS[result.status] || 'outline'}>
-                        {result.status.replace('_', ' ')}
+                      <Badge variant={result.result_type === 'order' ? 'default' : 'secondary'}>
+                        {result.result_type === 'order' ? 'Order' : 'User'}
                       </Badge>
+                      <span className="font-mono text-sm font-medium">
+                        {result.primary_text}
+                      </span>
+                      {result.status && (
+                        <Badge variant={STATUS_BADGE_VARIANTS[result.status] || 'outline'}>
+                          {result.status.replace('_', ' ')}
+                        </Badge>
+                      )}
                     </div>
                     <div className="text-sm text-muted-foreground truncate">
-                      {result.service_name}
+                      {result.secondary_text}
                     </div>
-                    <div className="text-sm text-muted-foreground truncate">
-                      {result.user_name || 'Unknown'} - {result.user_phone}
-                    </div>
+                    {result.tertiary_text && (
+                      <div className="text-sm text-muted-foreground truncate">
+                        {result.tertiary_text}
+                      </div>
+                    )}
                   </div>
                   <div className="text-right shrink-0">
-                    <div className="font-medium">
-                      {formatPaisa(result.total_paisa_snapshot)}
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      {formatDate(result.paid_at)}
-                    </div>
+                    {result.amount_paisa && (
+                      <div className="font-medium">
+                        {formatPaisa(result.amount_paisa)}
+                      </div>
+                    )}
+                    {result.created_at && (
+                      <div className="text-sm text-muted-foreground">
+                        {formatDate(result.created_at)}
+                      </div>
+                    )}
                   </div>
-                  <Link href={`/admin/orders/${result.id}`}>
-                    <Button variant="outline" size="sm">
-                      Open
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleResultClick(result)
+                    }}
+                  >
+                    Open
+                  </Button>
                 </div>
               ))}
             </div>

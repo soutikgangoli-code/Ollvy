@@ -197,7 +197,7 @@ export function IncorporationUnlocks() {
                 LLP registration.
               </p>
               <Button className="mt-4" asChild>
-                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Start with LLP Incorporation - ₹13,999</Link>
+                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=incorporation_unlocks">Start with LLP Incorporation - ₹12,999</Link>
               </Button>
             </div>
           </TabsContent>

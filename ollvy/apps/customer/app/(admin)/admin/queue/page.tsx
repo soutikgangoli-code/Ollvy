@@ -16,10 +16,13 @@ interface QueueOrder {
   total_paisa_snapshot: number
   service_name: string
   user_name: string
+  user_phone: string
   days_active: number
   bucket: Bucket
   expected_completion_date?: string
   assigned_admin_id?: string
+  sla_overdue_hours?: number
+  is_paid: boolean
 }
 
 export default async function AdminQueuePage() {
@@ -41,7 +44,7 @@ export default async function AdminQueuePage() {
       expected_completion_date,
       assigned_admin_id,
       service_packages (name),
-      users (business_name)
+      users (business_name, phone)
     `)
     .not('status', 'in', '("completed","cancelled")')
     .order('paid_at', { ascending: false })
@@ -58,9 +61,10 @@ export default async function AdminQueuePage() {
 
   let roundsData: { order_id: string; status: string }[] = []
   let workDocsData: { order_id: string; status: string; direction: string; tag: string | null }[] = []
+  let questionnaireData: { order_id: string; question_key: string; response_value: string }[] = []
 
   if (orderIds.length > 0) {
-    const [roundsRes, workDocsRes] = await Promise.all([
+    const [roundsRes, workDocsRes, questionnaireRes] = await Promise.all([
       supabaseServer
         .from('order_rounds')
         .select('order_id, status')
@@ -68,21 +72,57 @@ export default async function AdminQueuePage() {
       supabaseServer
         .from('order_work_documents')
         .select('order_id, status, direction, tag')
+        .in('order_id', orderIds),
+      supabaseServer
+        .from('order_questionnaire_responses')
+        .select('order_id, question_key, response_value')
         .in('order_id', orderIds)
+        .in('question_key', ['company_name', 'proposed_company_name', 'business_name', 'llp_name'])
     ])
     roundsData = roundsRes.data || []
     workDocsData = workDocsRes.data || []
+    questionnaireData = questionnaireRes.data || []
   }
 
   // Calculate buckets client-side
   const orders: QueueOrder[] = (ordersRaw || []).map(order => {
     const orderRounds = roundsData.filter(r => r.order_id === order.id)
     const orderWorkDocs = workDocsData.filter(d => d.order_id === order.id)
+    const orderQuestionnaire = questionnaireData.filter(q => q.order_id === order.id)
 
-    // Calculate days_active
-    const paidDate = new Date(order.paid_at)
+    // Handle both single object and array cases for joins
+    const servicePackage = Array.isArray(order.service_packages)
+      ? order.service_packages[0]
+      : order.service_packages
+    const user = Array.isArray(order.users)
+      ? order.users[0]
+      : order.users
+
+    // Calculate days_active - validate date first
+    const paidDate = order.paid_at ? new Date(order.paid_at) : null
     const now = new Date()
-    const daysActive = Math.floor((now.getTime() - paidDate.getTime()) / (1000 * 60 * 60 * 24))
+    const isValidDate = paidDate && !isNaN(paidDate.getTime()) && paidDate.getFullYear() > 2000
+    const daysActive = isValidDate
+      ? Math.floor((now.getTime() - paidDate.getTime()) / (1000 * 60 * 60 * 24))
+      : 0
+
+    // Calculate SLA overdue in hours
+    let slaOverdueHours: number | undefined
+    if (order.expected_completion_date) {
+      const dueDate = new Date(order.expected_completion_date)
+      if (now > dueDate) {
+        slaOverdueHours = Math.floor((now.getTime() - dueDate.getTime()) / (1000 * 60 * 60))
+      }
+    }
+
+    // Get company name from questionnaire or user's business_name, fallback to phone
+    const companyNameFromQ = orderQuestionnaire.find(q =>
+      ['company_name', 'proposed_company_name', 'business_name', 'llp_name'].includes(q.question_key)
+    )?.response_value
+    const userName = user?.business_name || companyNameFromQ || user?.phone || 'Unknown'
+
+    // Check if order is paid (valid paid_at date)
+    const isPaid = isValidDate === true
 
     // Calculate bucket
     let bucket: Bucket = 'other'
@@ -109,18 +149,21 @@ export default async function AdminQueuePage() {
       status: order.status,
       paid_at: order.paid_at,
       total_paisa_snapshot: order.total_paisa_snapshot,
-      service_name: order.service_packages?.name || 'Unknown Service',
-      user_name: order.users?.business_name || 'Unknown User',
+      service_name: servicePackage?.name || 'Unknown Service',
+      user_name: userName,
+      user_phone: user?.phone || '',
       days_active: daysActive,
       bucket,
       expected_completion_date: order.expected_completion_date,
       assigned_admin_id: order.assigned_admin_id,
+      sla_overdue_hours: slaOverdueHours,
+      is_paid: isPaid,
     }
   })
 
   // Fetch admin users for bulk assignment (super_admin only)
   let adminUsers: Array<{ id: string; name: string; email: string; activeOrderCount: number }> = []
-  if (isSuper) {
+  if (isSuper && supabaseServer) {
     const { data: admins } = await supabaseServer
       .from('admin_users')
       .select('id, name, email, is_active')
@@ -131,7 +174,7 @@ export default async function AdminQueuePage() {
       // Get counts for each admin
       adminUsers = await Promise.all(
         admins.map(async (admin) => {
-          const { count } = await supabaseServer
+          const { count } = await supabaseServer!
             .from('orders')
             .select('id', { count: 'exact', head: true })
             .eq('assigned_admin_id', admin.id)

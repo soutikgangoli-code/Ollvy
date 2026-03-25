@@ -236,7 +236,7 @@ export default function TDSLatePenaltyPage() {
           <p className="text-muted-foreground leading-relaxed mt-4">
             Note: TDS deducted in March can be deposited by 30 April (not 7 April). This gives
             additional time for year-end salary TDS adjustments. Need help with TDS compliance?{' '}
-            <Link href="/services/tds-filing" className="text-emerald-600 hover:underline">
+            <Link href="/services/tds-monthly-compliance" className="text-emerald-600 hover:underline">
               Ollvy can file your TDS returns - starting Rs.999 per quarter
             </Link>.
           </p>

@@ -198,7 +198,7 @@ export default function ITRLatePenaltyPage() {
             Note that in a belated return, you cannot carry forward certain losses (business
             losses, speculation losses) to future years - this benefit is only available if
             you file on time. Need help filing?{' '}
-            <Link href="/services/itr-filing" className="text-emerald-600 hover:underline">
+            <Link href="/services/business-itr" className="text-emerald-600 hover:underline">
               Ollvy can file your ITR - starting Rs.999
             </Link>.
           </p>

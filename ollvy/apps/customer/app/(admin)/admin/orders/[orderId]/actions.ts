@@ -442,11 +442,16 @@ export async function createAdminNote(orderId: string, content: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
 
-  await supabaseServer.from('order_admin_notes').insert({
+  const { error } = await supabaseServer.from('order_admin_notes').insert({
     order_id: orderId,
     admin_id: adminUser.id,
     content,
   })
+
+  if (error) {
+    console.error('Failed to create admin note:', error)
+    throw new Error(`Failed to save note: ${error.message}`)
+  }
 
   await logActivity({
     orderId,
@@ -987,4 +992,81 @@ export async function updateRoundDeadline(roundId: string, orderId: string, newD
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Admin file upload to storage (uses service role to bypass RLS)
+export async function adminUploadFile(formData: FormData): Promise<{ publicUrl: string; fileName: string }> {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  const file = formData.get('file') as File
+  const orderId = formData.get('orderId') as string
+
+  if (!file || !orderId) {
+    throw new Error('File and orderId are required')
+  }
+
+  const ext = file.name.split('.').pop()
+  const path = `${orderId}/${crypto.randomUUID()}/${Date.now()}.${ext}`
+
+  // Convert File to ArrayBuffer for server-side upload
+  const arrayBuffer = await file.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+
+  const { error: uploadError } = await supabaseServer.storage
+    .from('work-documents')
+    .upload(path, buffer, {
+      contentType: file.type,
+      upsert: true,
+    })
+
+  if (uploadError) {
+    throw new Error(`Upload failed: ${uploadError.message}`)
+  }
+
+  const { data: { publicUrl } } = supabaseServer.storage
+    .from('work-documents')
+    .getPublicUrl(path)
+
+  return { publicUrl, fileName: file.name }
+}
+
+// Generate signed URLs for admin file access (bypasses RLS)
+export async function adminGetSignedUrls(
+  files: Array<{ url: string; bucket: 'order-documents' | 'work-documents' }>
+): Promise<Array<{ originalUrl: string; signedUrl: string | null }>> {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  const results = await Promise.all(
+    files.map(async ({ url, bucket }) => {
+      try {
+        // Extract path from URL
+        // URL format: https://xxx.supabase.co/storage/v1/object/public/bucket/path
+        const urlObj = new URL(url)
+        const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/public\/[^/]+\/(.+)/)
+        if (!pathMatch) {
+          return { originalUrl: url, signedUrl: null }
+        }
+        const filePath = decodeURIComponent(pathMatch[1])
+
+        // Create signed URL (valid for 1 hour)
+        const { data, error } = await supabaseServer!.storage
+          .from(bucket)
+          .createSignedUrl(filePath, 3600)
+
+        if (error || !data?.signedUrl) {
+          console.error('Failed to create signed URL:', error)
+          return { originalUrl: url, signedUrl: null }
+        }
+
+        return { originalUrl: url, signedUrl: data.signedUrl }
+      } catch (err) {
+        console.error('Error processing URL:', url, err)
+        return { originalUrl: url, signedUrl: null }
+      }
+    })
+  )
+
+  return results
 }

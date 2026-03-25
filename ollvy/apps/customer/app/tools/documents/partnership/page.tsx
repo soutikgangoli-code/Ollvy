@@ -97,7 +97,7 @@ export default function PartnershipDocumentsPage() {
         ctaTitle="Ready to create your partnership?"
         ctaDescription="Get started with Ollvy. We draft your partnership deed, handle stamp paper, and complete firm registration if needed."
         ctaButtonText="Start Partnership Registration"
-        ctaButtonHref="/services/partnership-registration?utm_source=tools&utm_medium=documents&utm_content=partnership"
+        ctaButtonHref="/services?utm_source=tools&utm_medium=documents&utm_content=partnership"
       />
     </>
   )

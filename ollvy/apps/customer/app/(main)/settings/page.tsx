@@ -62,7 +62,7 @@ export default function SettingsPage() {
           icon: Phone,
           label: 'Contact Support',
           description: 'Get help from our team',
-          href: 'tel:+919999999999',
+          href: 'tel:+917042100461',
           external: true,
         },
         {

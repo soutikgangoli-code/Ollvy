@@ -16,6 +16,12 @@ const NAV_LINKS = [
   { label: 'Orders', href: '/admin/orders' },
   { label: 'Users', href: '/admin/users' },
   { label: 'Analytics', href: '/admin/analytics' },
+  { label: 'Reports', href: '/admin/reports' },
+]
+
+const SUPER_ADMIN_LINKS = [
+  { label: 'Chats', href: '/admin/chats' },
+  { label: 'Team', href: '/admin/team' },
 ]
 
 export function AdminNav({ adminName, isSuperAdmin }: AdminNavProps) {
@@ -37,7 +43,7 @@ export function AdminNav({ adminName, isSuperAdmin }: AdminNavProps) {
   }
 
   const links = isSuperAdmin
-    ? [...NAV_LINKS, { label: 'Team', href: '/admin/team' }]
+    ? [...NAV_LINKS, ...SUPER_ADMIN_LINKS]
     : NAV_LINKS
 
   return (

@@ -39,14 +39,19 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
 
-  const formattedOrders = (orders || []).map(order => ({
-    id: order.id,
-    order_number: order.order_number,
-    status: order.status,
-    paid_at: order.paid_at,
-    total_paisa_snapshot: order.total_paisa_snapshot,
-    service_name: order.service_packages?.name || 'Unknown Service',
-  }))
+  const formattedOrders = (orders || []).map(order => {
+    const servicePackage = Array.isArray(order.service_packages)
+      ? order.service_packages[0]
+      : order.service_packages
+    return {
+      id: order.id,
+      order_number: order.order_number,
+      status: order.status,
+      paid_at: order.paid_at,
+      total_paisa_snapshot: order.total_paisa_snapshot,
+      service_name: servicePackage?.name || 'Unknown Service',
+    }
+  })
 
   return <UserDetailClient user={user} orders={formattedOrders} />
 }

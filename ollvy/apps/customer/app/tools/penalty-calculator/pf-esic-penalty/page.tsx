@@ -205,7 +205,7 @@ export default function PFESICPenaltyPage() {
           <p className="text-muted-foreground leading-relaxed mt-4">
             Missing any of these dates can result in penalties. For payroll compliance support,
             consider{' '}
-            <Link href="/services/payroll-compliance" className="text-emerald-600 hover:underline">
+            <Link href="/services/payroll-management" className="text-emerald-600 hover:underline">
               Ollvy&apos;s payroll compliance service
             </Link>.
           </p>

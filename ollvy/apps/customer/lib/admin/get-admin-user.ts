@@ -1,6 +1,7 @@
 import { supabaseServer } from '@/lib/supabase-server'
 import { createServerSupabase } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
+import { cache } from 'react'
 
 export interface AdminUser {
   id: string
@@ -11,7 +12,8 @@ export interface AdminUser {
   is_active: boolean
 }
 
-export async function getAdminUser(): Promise<AdminUser> {
+// Use React cache to dedupe requests within a single render cycle
+export const getAdminUser = cache(async (): Promise<AdminUser> => {
   const supabase = await createServerSupabase()
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) redirect('/admin/login')
@@ -25,4 +27,4 @@ export async function getAdminUser(): Promise<AdminUser> {
 
   if (!adminUser?.is_active) redirect('/admin/login')
   return adminUser as AdminUser
-}
+})

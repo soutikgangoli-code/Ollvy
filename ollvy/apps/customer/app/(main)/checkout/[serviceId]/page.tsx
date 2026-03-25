@@ -1097,7 +1097,7 @@ function OrderSummarySidebar({
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
             <a
-              href={`https://wa.me/919876543210?text=Hi, I have a question about ${encodeURIComponent(serviceName)}`}
+              href={`https://wa.me/917042100461?text=Hi, I have a question about ${encodeURIComponent(serviceName)}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -1106,7 +1106,7 @@ function OrderSummarySidebar({
             </a>
           </Button>
           <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
-            <a href="tel:+919876543210">
+            <a href="tel:+917042100461">
               <Phone className="h-3.5 w-3.5" />
               Call
             </a>

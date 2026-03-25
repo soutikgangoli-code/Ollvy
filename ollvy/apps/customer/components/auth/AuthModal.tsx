@@ -169,7 +169,7 @@ export function AuthModal() {
                   <Input
                     ref={phoneInputRef}
                     type="tel"
-                    placeholder="9876543210"
+                    placeholder="7042100461"
                     value={phone}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, '').slice(0, 10)

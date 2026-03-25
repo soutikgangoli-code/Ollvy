@@ -375,7 +375,7 @@ export function DocumentUploadWizard({
         <p className="text-sm text-muted-foreground">
           Need help with documents?{' '}
           <a
-            href="https://wa.me/919876543210?text=Hi, I need help uploading documents"
+            href="https://wa.me/917042100461?text=Hi, I need help uploading documents"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline font-medium"

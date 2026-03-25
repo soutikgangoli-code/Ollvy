@@ -162,9 +162,9 @@ export default function GSTDemandNoticePage() {
             <li>If you disagree, provide detailed grounds of objection with evidence</li>
           </ol>
           <p className="text-muted-foreground leading-relaxed mt-4">
-            Need help responding to a GST notice?{' '}
-            <Link href="/services/gst-notice-response" className="text-emerald-600 hover:underline">
-              Ollvy can help you draft and file your response
+            Need help responding to a GST notice? Ollvy can help you draft and file your response.{' '}
+            <Link href="/services" className="text-emerald-600 hover:underline">
+              Browse our services
             </Link>.
           </p>
         </section>

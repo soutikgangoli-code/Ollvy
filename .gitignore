@@ -3,3 +3,9 @@
 !.env.example
 !.env.*.example
 .DS_Store
+
+# Razorpay key exports (local secrets — never commit)
+Razorpay keys.csv
+Razorpay test keys.csv
+rzp-key.csv
+rzp-test Keys.csv

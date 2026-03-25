@@ -22,15 +22,24 @@ export default async function AdminOrdersPage() {
     `)
     .order('paid_at', { ascending: false })
 
-  const formattedOrders = (orders || []).map(order => ({
-    id: order.id,
-    order_number: order.order_number,
-    status: order.status,
-    paid_at: order.paid_at,
-    total_paisa_snapshot: order.total_paisa_snapshot,
-    service_name: order.service_packages?.name || 'Unknown Service',
-    user_name: order.users?.business_name || 'Unknown User',
-  }))
+  const formattedOrders = (orders || []).map(order => {
+    // Handle both single object and array cases for joins
+    const servicePackage = Array.isArray(order.service_packages)
+      ? order.service_packages[0]
+      : order.service_packages
+    const user = Array.isArray(order.users)
+      ? order.users[0]
+      : order.users
+    return {
+      id: order.id,
+      order_number: order.order_number,
+      status: order.status,
+      paid_at: order.paid_at,
+      total_paisa_snapshot: order.total_paisa_snapshot,
+      service_name: servicePackage?.name || 'Unknown Service',
+      user_name: user?.business_name || 'Unknown User',
+    }
+  })
 
   return <OrdersListClient orders={formattedOrders} />
 }

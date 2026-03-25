@@ -128,7 +128,7 @@ export default function ShopsEstablishmentPenaltyPage() {
             Beyond monetary penalties, non-registration can result in closure notices from
             the labour inspector, inability to obtain other business licenses, issues with
             GST registration, and difficulties in opening bank accounts.{' '}
-            <Link href="/services/shops-establishment-registration" className="text-emerald-600 hover:underline">
+            <Link href="/services" className="text-emerald-600 hover:underline">
               Get your S&amp;E registration done on Ollvy
             </Link>.
           </p>

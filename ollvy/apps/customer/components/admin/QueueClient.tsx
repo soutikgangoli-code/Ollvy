@@ -1,14 +1,21 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
+import { Switch } from '@/components/ui/switch'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Calendar } from '@/components/ui/calendar'
+import { CalendarIcon } from 'lucide-react'
+import { format } from 'date-fns'
 import { formatPaisa, formatDate } from '@/lib/utils'
+import type { DateRange } from 'react-day-picker'
 import { useToast } from '@/lib/hooks/use-toast'
 import { bulkAssignOrders } from '@/app/(admin)/admin/queue/actions'
 import type { AdminUser } from '@/lib/admin/get-admin-user'
@@ -23,10 +30,13 @@ interface QueueOrder {
   total_paisa_snapshot: number
   service_name: string
   user_name: string
+  user_phone: string
   days_active: number
   bucket: Bucket
   expected_completion_date?: string
   assigned_admin_id?: string
+  sla_overdue_hours?: number
+  is_paid: boolean
 }
 
 interface AdminUserWithCount {
@@ -64,10 +74,51 @@ const BUCKET_ORDER: Bucket[] = [
   'other',
 ]
 
+// SLA thresholds in hours
+const SLA_ASSIGNMENT_HOURS = 4 // Must be assigned within 4 hours of payment
+const SLA_RESPONSE_HOURS = 24 // Assigned person must respond within 24 hours
+
+// Quick date range presets
+const DATE_PRESETS = [
+  { label: 'Today', getValue: () => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    return { from: today, to: new Date() }
+  }},
+  { label: 'Last 7 days', getValue: () => {
+    const to = new Date()
+    const from = new Date()
+    from.setDate(from.getDate() - 7)
+    from.setHours(0, 0, 0, 0)
+    return { from, to }
+  }},
+  { label: 'Last 30 days', getValue: () => {
+    const to = new Date()
+    const from = new Date()
+    from.setDate(from.getDate() - 30)
+    from.setHours(0, 0, 0, 0)
+    return { from, to }
+  }},
+  { label: 'Last 3 months', getValue: () => {
+    const to = new Date()
+    const from = new Date()
+    from.setMonth(from.getMonth() - 3)
+    from.setHours(0, 0, 0, 0)
+    return { from, to }
+  }},
+]
+
 export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientProps) {
+  const router = useRouter()
   const { toast } = useToast()
   const [selectedBucket, setSelectedBucket] = useState<Bucket | 'all'>('all')
   const [searchQuery, setSearchQuery] = useState('')
+  const [hideUnpaid, setHideUnpaid] = useState(true) // Hide test/unpaid orders by default
+  const [selectedServiceType, setSelectedServiceType] = useState<string>('all')
+  const [selectedBucketFilter, setSelectedBucketFilter] = useState<Bucket | 'all'>('all')
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
+  const [filterDropdownOpen, setFilterDropdownOpen] = useState(false)
+  const [datePickerOpen, setDatePickerOpen] = useState(false)
   const [selectedAdmin, setSelectedAdmin] = useState<AdminUserWithCount | null>(null)
   const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(false)
@@ -75,7 +126,96 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
 
   const isSuperAdmin = adminUser.role === 'super_admin'
 
-  // Calculate bucket counts
+  // Get unique service types from orders (dynamic)
+  const serviceTypes = useMemo(() => {
+    const types = new Set<string>()
+    orders.forEach(order => {
+      if (order.service_name) types.add(order.service_name)
+    })
+    return Array.from(types).sort()
+  }, [orders])
+
+  // Helper to calculate SLA breach status
+  const getSlaBreachTags = (order: QueueOrder): { type: 'not_assigned' | 'no_response'; label: string }[] => {
+    const tags: { type: 'not_assigned' | 'no_response'; label: string }[] = []
+
+    if (!order.is_paid || !order.paid_at) return tags
+
+    const paidDate = new Date(order.paid_at)
+    if (paidDate.getFullYear() < 2000) return tags // Invalid date
+
+    const now = new Date()
+    const hoursSincePaid = (now.getTime() - paidDate.getTime()) / (1000 * 60 * 60)
+
+    // SLA: Not Assigned - order not assigned within threshold
+    if (!order.assigned_admin_id && hoursSincePaid > SLA_ASSIGNMENT_HOURS) {
+      tags.push({ type: 'not_assigned', label: 'SLA: Not Assigned' })
+    }
+
+    // SLA: No Response - assigned but still in needs_assignment bucket after threshold
+    if (order.assigned_admin_id && order.bucket === 'needs_assignment' && hoursSincePaid > SLA_RESPONSE_HOURS) {
+      tags.push({ type: 'no_response', label: 'SLA: No Response' })
+    }
+
+    return tags
+  }
+
+  // Filter orders based on all criteria
+  const visibleOrders = useMemo(() => {
+    let result = orders
+
+    // Filter by paid status
+    if (hideUnpaid) {
+      result = result.filter(order => order.is_paid)
+    }
+
+    // Filter by service type
+    if (selectedServiceType !== 'all') {
+      result = result.filter(order => order.service_name === selectedServiceType)
+    }
+
+    // Filter by bucket/status
+    if (selectedBucketFilter !== 'all') {
+      result = result.filter(order => order.bucket === selectedBucketFilter)
+    }
+
+    // Filter by date range
+    if (dateRange?.from) {
+      result = result.filter(order => {
+        if (!order.paid_at) return false
+        const paidDate = new Date(order.paid_at)
+        if (dateRange.from && paidDate < dateRange.from) return false
+        if (dateRange.to) {
+          const endOfDay = new Date(dateRange.to)
+          endOfDay.setHours(23, 59, 59, 999)
+          if (paidDate > endOfDay) return false
+        }
+        return true
+      })
+    }
+
+    return result
+  }, [orders, hideUnpaid, selectedServiceType, selectedBucketFilter, dateRange])
+
+  // Count active filters
+  const activeFilterCount = useMemo(() => {
+    let count = 0
+    if (hideUnpaid) count++
+    if (selectedServiceType !== 'all') count++
+    if (selectedBucketFilter !== 'all') count++
+    if (dateRange?.from) count++
+    return count
+  }, [hideUnpaid, selectedServiceType, selectedBucketFilter, dateRange])
+
+  // Reset all filters
+  const resetFilters = () => {
+    setHideUnpaid(true)
+    setSelectedServiceType('all')
+    setSelectedBucketFilter('all')
+    setDateRange(undefined)
+  }
+
+  // Calculate bucket counts based on visible orders
   const bucketCounts = useMemo(() => {
     const counts: Record<Bucket, number> = {
       needs_assignment: 0,
@@ -87,15 +227,15 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
       ready_to_deliver: 0,
       other: 0,
     }
-    orders.forEach(order => {
+    visibleOrders.forEach(order => {
       counts[order.bucket]++
     })
     return counts
-  }, [orders])
+  }, [visibleOrders])
 
   // Filter orders based on selected bucket and search
   const filteredOrders = useMemo(() => {
-    let result = orders
+    let result = visibleOrders
 
     if (selectedBucket !== 'all') {
       result = result.filter(order => order.bucket === selectedBucket)
@@ -115,7 +255,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
       return result.sort((a, b) => new Date(b.paid_at).getTime() - new Date(a.paid_at).getTime())
     }
     return result.sort((a, b) => b.days_active - a.days_active)
-  }, [orders, selectedBucket, searchQuery])
+  }, [visibleOrders, selectedBucket, searchQuery])
 
   const handleSelectAdmin = (admin: AdminUserWithCount) => {
     setSelectedAdmin(admin)
@@ -179,7 +319,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
       <div>
         <h1 className="text-2xl font-semibold text-foreground">Work Queue</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          {orders.length} active orders
+          {visibleOrders.length} active orders{hideUnpaid && orders.length > visibleOrders.length && ` (${orders.length - visibleOrders.length} test hidden)`}
         </p>
       </div>
 
@@ -205,13 +345,13 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
         })}
       </div>
 
-      {/* All Active button + Bulk Assign */}
-      <div className="flex items-center gap-4">
+      {/* All Active button + Filters + Bulk Assign */}
+      <div className="flex items-center gap-4 flex-wrap">
         <Button
           variant={selectedBucket === 'all' ? 'default' : 'outline'}
           onClick={() => setSelectedBucket('all')}
         >
-          All Active ({orders.length})
+          All Active ({visibleOrders.length})
         </Button>
         <Input
           placeholder="Search by order number, user, or service..."
@@ -219,6 +359,117 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
           onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-sm"
         />
+
+        {/* Filter Dropdown */}
+        <Popover open={filterDropdownOpen} onOpenChange={setFilterDropdownOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="outline" className="gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+              Filters
+              {activeFilterCount > 0 && (
+                <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                  {activeFilterCount}
+                </Badge>
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-[340px] p-4" align="start">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h4 className="font-medium text-sm">Filters</h4>
+                {activeFilterCount > 0 && (
+                  <Button variant="ghost" size="sm" className="h-auto p-0 text-xs text-muted-foreground" onClick={resetFilters}>
+                    Reset all
+                  </Button>
+                )}
+              </div>
+
+              {/* Test Orders Toggle */}
+              <div className="space-y-2">
+                <label className="text-sm text-muted-foreground">Test Orders</label>
+                <div className="flex items-center gap-2">
+                  <Switch
+                    id="hide-unpaid-filter"
+                    checked={hideUnpaid}
+                    onCheckedChange={setHideUnpaid}
+                  />
+                  <label htmlFor="hide-unpaid-filter" className="text-sm cursor-pointer">
+                    Hide test/unpaid orders
+                  </label>
+                </div>
+              </div>
+
+              {/* Service Type Filter */}
+              <div className="space-y-2">
+                <label className="text-sm text-muted-foreground">Service Type</label>
+                <Select value={selectedServiceType} onValueChange={setSelectedServiceType}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="All services" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All services</SelectItem>
+                    {serviceTypes.map(type => (
+                      <SelectItem key={type} value={type}>{type}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Status/Bucket Filter */}
+              <div className="space-y-2">
+                <label className="text-sm text-muted-foreground">Status</label>
+                <Select value={selectedBucketFilter} onValueChange={(v) => setSelectedBucketFilter(v as Bucket | 'all')}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="All statuses" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All statuses</SelectItem>
+                    {BUCKET_ORDER.map(bucket => (
+                      <SelectItem key={bucket} value={bucket}>
+                        {BUCKET_CONFIG[bucket].label} ({bucketCounts[bucket]})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Date Filter */}
+              <div className="space-y-2">
+                <label className="text-sm text-muted-foreground">Date Range</label>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal"
+                  onClick={() => setDatePickerOpen(true)}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {dateRange?.from ? (
+                    dateRange.to ? (
+                      <>
+                        {format(dateRange.from, "MMM d")} - {format(dateRange.to, "MMM d, yyyy")}
+                      </>
+                    ) : (
+                      format(dateRange.from, "MMM d, yyyy")
+                    )
+                  ) : (
+                    <span className="text-muted-foreground">All time</span>
+                  )}
+                </Button>
+              </div>
+
+              {/* Active Filters Summary */}
+              {activeFilterCount > 0 && (
+                <div className="pt-2 border-t">
+                  <p className="text-xs text-muted-foreground">
+                    Showing {visibleOrders.length} of {orders.length} orders
+                  </p>
+                </div>
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
+
         {isSuperAdmin && adminUsers.length > 0 && (
           <Popover open={assignDropdownOpen} onOpenChange={setAssignDropdownOpen}>
             <PopoverTrigger asChild>
@@ -287,50 +538,95 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
               {filteredOrders.map(order => (
                 <div
                   key={order.id}
-                  className="py-4 flex items-center justify-between gap-4"
+                  className="py-4 flex items-center justify-between gap-4 cursor-pointer hover:bg-muted/50 transition-colors -mx-4 px-4"
+                  onClick={() => router.push(`/admin/orders/${order.id}`)}
                 >
                   {/* Checkbox for bulk assignment */}
                   {selectedAdmin && (
                     <Checkbox
                       checked={selectedOrderIds.has(order.id)}
                       onCheckedChange={() => handleToggleOrder(order.id)}
+                      onClick={(e) => e.stopPropagation()}
                     />
                   )}
 
+                  {/* Left: Order info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="font-mono text-sm font-medium">
                         {order.order_number}
                       </span>
                       <Badge variant={BUCKET_CONFIG[order.bucket].badgeVariant}>
                         {BUCKET_CONFIG[order.bucket].label}
                       </Badge>
+                      {/* SLA Breach Tags */}
+                      {getSlaBreachTags(order).map(tag => (
+                        <Badge key={tag.type} variant="destructive" className="bg-red-600 text-white">
+                          {tag.label}
+                        </Badge>
+                      ))}
+                      {/* SLA overdue tag */}
+                      {order.sla_overdue_hours !== undefined && order.sla_overdue_hours > 0 && (
+                        <Badge variant="destructive" className="bg-red-600 text-white">
+                          SLA: {order.sla_overdue_hours >= 24
+                            ? `${Math.floor(order.sla_overdue_hours / 24)}d ${order.sla_overdue_hours % 24}h Overdue`
+                            : `${order.sla_overdue_hours}h Overdue`}
+                        </Badge>
+                      )}
                     </div>
                     <div className="text-sm text-muted-foreground truncate">
                       {order.service_name}
                     </div>
                     <div className="text-sm text-muted-foreground truncate">
                       {order.user_name}
+                      {order.user_phone && order.user_name !== order.user_phone && (
+                        <span className="ml-2 text-xs">({order.user_phone})</span>
+                      )}
                     </div>
                   </div>
+
+                  {/* Center: Dates */}
+                  <div className="hidden sm:flex flex-col items-center gap-1 px-4 min-w-[160px]">
+                    <div className="text-xs text-muted-foreground text-center">
+                      {order.paid_at && new Date(order.paid_at).getFullYear() > 2000 ? (
+                        <>
+                          <span className="font-medium text-foreground">Paid:</span>{' '}
+                          {format(new Date(order.paid_at), "d MMM yyyy, h:mm a")}
+                        </>
+                      ) : (
+                        <span className="text-amber-600 dark:text-amber-400 font-medium">Unpaid</span>
+                      )}
+                    </div>
+                    {order.expected_completion_date && (
+                      <div className="text-xs text-muted-foreground text-center">
+                        <span className="font-medium text-foreground">Due:</span>{' '}
+                        {format(new Date(order.expected_completion_date), "d MMM yyyy")}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right: Amount */}
                   <div className="text-right shrink-0">
                     <div className="font-medium">
                       {formatPaisa(order.total_paisa_snapshot)}
                     </div>
-                    <div className={`text-sm ${order.days_active > 3 ? 'text-red-600 font-medium' : 'text-muted-foreground'}`}>
-                      {order.days_active} days
+                    {/* Show dates on mobile only */}
+                    <div className="sm:hidden text-xs text-muted-foreground">
+                      {order.paid_at && new Date(order.paid_at).getFullYear() > 2000
+                        ? format(new Date(order.paid_at), "d MMM, h:mm a")
+                        : 'Unpaid'}
                     </div>
-                    {order.expected_completion_date && (
-                      <div className={`text-xs ${isOverdue(order.expected_completion_date) ? 'text-red-500 font-medium' : 'text-muted-foreground'}`}>
-                        Due: {formatDate(order.expected_completion_date)}
-                      </div>
-                    )}
                   </div>
-                  <Link href={`/admin/orders/${order.id}`}>
-                    <Button variant="outline" size="sm">
-                      Open
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      router.push(`/admin/orders/${order.id}`)
+                    }}
+                  >
+                    Open
+                  </Button>
                 </div>
               ))}
             </div>
@@ -355,6 +651,68 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
           </div>
         </div>
       )}
+
+      {/* Date Range Picker Dialog */}
+      <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+        <DialogContent className="max-w-fit p-0">
+          <DialogHeader className="px-6 pt-6 pb-2">
+            <DialogTitle>Select Date Range</DialogTitle>
+          </DialogHeader>
+          <div className="px-6 pb-2">
+            <div className="flex flex-wrap gap-2">
+              {DATE_PRESETS.map(preset => (
+                <Button
+                  key={preset.label}
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setDateRange(preset.getValue())
+                    setDatePickerOpen(false)
+                  }}
+                >
+                  {preset.label}
+                </Button>
+              ))}
+              {dateRange?.from && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground"
+                  onClick={() => {
+                    setDateRange(undefined)
+                  }}
+                >
+                  Clear
+                </Button>
+              )}
+            </div>
+          </div>
+          <div className="px-6 pb-6">
+            <Calendar
+              mode="range"
+              selected={dateRange}
+              onSelect={setDateRange}
+              numberOfMonths={2}
+              disabled={{ after: new Date() }}
+              className="rounded-md border"
+            />
+          </div>
+          <div className="flex justify-between items-center px-6 pb-6">
+            <div className="text-sm text-muted-foreground">
+              {dateRange?.from && dateRange?.to ? (
+                <>Selected: {format(dateRange.from, "MMM d, yyyy")} - {format(dateRange.to, "MMM d, yyyy")}</>
+              ) : dateRange?.from ? (
+                <>Start: {format(dateRange.from, "MMM d, yyyy")} - Select end date</>
+              ) : (
+                'Click a date to start selecting'
+              )}
+            </div>
+            <Button onClick={() => setDatePickerOpen(false)}>
+              Done
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

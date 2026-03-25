@@ -197,7 +197,7 @@ export default function GSTLatePenaltyPage() {
             Outsource your GST compliance to professionals who track deadlines, compile data,
             and file returns on your behalf. This eliminates the risk of missed deadlines and
             ensures accurate filing every month.{' '}
-            <Link href="/services/gst-return-filing" className="text-emerald-600 hover:underline">
+            <Link href="/services/gst-monthly-filing" className="text-emerald-600 hover:underline">
               Learn more about Ollvy&apos;s GST filing service
             </Link>.
           </p>

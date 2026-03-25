@@ -37,7 +37,7 @@ export function ComparisonTool({ config }: {
   const recommendation = result?.headline?.includes('Private Limited')
     ? { slug: 'pvt-ltd-incorporation', name: 'Pvt Ltd Incorporation', price: '₹24,999' }
     : result?.headline?.includes('LLP')
-    ? { slug: 'llp-incorporation', name: 'LLP Incorporation', price: '₹13,999' }
+    ? { slug: 'llp-incorporation', name: 'LLP Incorporation', price: '₹12,999' }
     : null;
 
   return (

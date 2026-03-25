@@ -130,7 +130,7 @@ export default function StartupDPIITCompliancePage() {
             influence the compounding fee include the nature and extent of the contravention,
             whether it was a technical violation or willful non-compliance, the period of delay,
             and the company&apos;s overall compliance history.{' '}
-            <Link href="/services/startup-compliance" className="text-emerald-600 hover:underline">
+            <Link href="/services" className="text-emerald-600 hover:underline">
               Get FEMA compliance support from Ollvy
             </Link>.
           </p>

@@ -41,6 +41,8 @@ import {
   deleteWorkDocument,
   createRound,
   cancelOrderWithReason,
+  adminUploadFile,
+  adminGetSignedUrls,
 } from '@/app/(admin)/admin/orders/[orderId]/actions'
 import type { AdminUser } from '@/lib/admin/get-admin-user'
 import type { OrderRound, OrderWorkDocument, OrderDocument, OrderAdminNote } from '@/lib/types'
@@ -62,7 +64,7 @@ interface OrderViewClientProps {
     display_order: number
   }>
   adminNotes: Array<OrderAdminNote & { admin_users?: { name: string } }>
-  professionals: Array<{ id: string; full_name: string; display_name?: string; email: string; profession_type: string }>
+  professionals: Array<{ id: string; full_name: string; display_name?: string; email: string; professional_type: string }>
   adminNamesMap: Record<string, string>
   assignedAdmin: { id: string; name: string; email: string } | null
 }
@@ -123,6 +125,7 @@ export function OrderViewClient({
 
   // Note state
   const [newNote, setNewNote] = useState('')
+  const [quickUploadOpen, setQuickUploadOpen] = useState(false)
 
   // Check if final output exists
   const hasFinalOutput = rounds.some(r =>
@@ -286,23 +289,23 @@ export function OrderViewClient({
       const JSZip = (await import('jszip')).default
       const zip = new JSZip()
 
-      // Collect all documents with file URLs
-      const allDocs: Array<{ url: string; name: string; folder: string }> = []
+      // Collect all documents with file URLs and their bucket info
+      const allDocs: Array<{ url: string; name: string; folder: string; bucket: 'order-documents' | 'work-documents' }> = []
 
-      // Initial documents
+      // Initial documents (order-documents bucket)
       initialDocs.forEach(doc => {
         if (doc.file_url && doc.file_name) {
-          allDocs.push({ url: doc.file_url, name: doc.file_name, folder: '00-Initial' })
+          allDocs.push({ url: doc.file_url, name: doc.file_name, folder: '00-Initial', bucket: 'order-documents' })
         }
       })
 
-      // Work documents from rounds
+      // Work documents from rounds (work-documents bucket)
       rounds.forEach(round => {
         const folder = `R${round.round_number}-${round.title.replace(/[^a-zA-Z0-9]/g, '_')}`
         round.order_work_documents?.forEach(doc => {
           if (doc.file_url && doc.file_name) {
             const prefix = doc.direction === 'to_customer' ? 'to-user' : 'from-user'
-            allDocs.push({ url: doc.file_url, name: `${prefix}-${doc.file_name}`, folder })
+            allDocs.push({ url: doc.file_url, name: `${prefix}-${doc.file_name}`, folder, bucket: 'work-documents' })
           }
         })
       })
@@ -313,10 +316,27 @@ export function OrderViewClient({
         return
       }
 
-      // Fetch and add all files to zip
+      // Get signed URLs for admin access (bypasses RLS on private buckets)
+      const signedUrlResults = await adminGetSignedUrls(
+        allDocs.map(d => ({ url: d.url, bucket: d.bucket }))
+      )
+      const signedUrlMap = new Map(
+        signedUrlResults.map(r => [r.originalUrl, r.signedUrl])
+      )
+
+      // Fetch and add all files to zip using signed URLs
       for (const doc of allDocs) {
         try {
-          const response = await fetch(doc.url)
+          const signedUrl = signedUrlMap.get(doc.url)
+          if (!signedUrl) {
+            console.error(`No signed URL for ${doc.name}`)
+            continue
+          }
+          const response = await fetch(signedUrl)
+          if (!response.ok) {
+            console.error(`Failed to fetch ${doc.name}: ${response.status}`)
+            continue
+          }
           const blob = await response.blob()
           zip.folder(doc.folder)?.file(doc.name, blob)
         } catch (e) {
@@ -507,9 +527,68 @@ export function OrderViewClient({
           </div>
         )}
 
-        {/* Process Timeline Stepper */}
+        {/* Questionnaire & Initial Documents - Always visible */}
+        <Card id="questionnaire-section">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center justify-between">
+              <span>Questionnaire & Initial Documents</span>
+              <Badge variant="outline">Customer Submission</Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Questionnaire Answers */}
+            <div>
+              <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                Questionnaire Answers
+                <Badge variant="secondary" className="font-normal text-xs">
+                  {mergedAnswers.filter(q => q.response_value != null).length}/{mergedAnswers.length} answered
+                </Badge>
+              </h4>
+              {mergedAnswers.length > 0 ? (
+                <div className="space-y-2">
+                  {mergedAnswers.map(q => (
+                    <div key={q.question_key} className="flex justify-between py-2 border-b border-border last:border-0">
+                      <span className="text-sm text-muted-foreground">{q.question_label}</span>
+                      <span className={`text-sm font-medium ${q.response_value == null ? 'text-amber-600 dark:text-amber-400' : ''}`}>
+                        {renderResponseValue(q.response_value, q.question_type, q.options)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground italic">
+                  No questionnaire configured for this service.
+                </p>
+              )}
+            </div>
+
+            {/* Initial Documents */}
+            <div>
+              <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
+                Initial Documents
+                <Badge variant="secondary" className="font-normal text-xs">
+                  {initialDocs.filter(d => d.verified_at).length}/{initialDocs.length} verified
+                </Badge>
+              </h4>
+              {initialDocs.length > 0 ? (
+                <div className="space-y-3">
+                  {initialDocs.map(doc => (
+                    <InitialDocumentCard key={doc.id} doc={doc} orderId={order.id} />
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground italic">
+                  No initial documents required for this service.
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Process Timeline Stepper - Only show rounds after Round 0 */}
         <div className="flex items-center gap-2 flex-wrap">
-          {rounds.map(round => (
+          <span className="text-sm font-medium text-muted-foreground">Rounds:</span>
+          {rounds.filter(r => r.round_number > 0).map(round => (
             <a
               key={round.id}
               href={`#round-${round.round_number}`}
@@ -527,17 +606,18 @@ export function OrderViewClient({
           <Button variant="outline" size="sm" onClick={() => setAddRoundOpen(true)}>
             + Add Round
           </Button>
+          <Button variant="outline" size="sm" onClick={() => setQuickUploadOpen(true)}>
+            Upload Document
+          </Button>
         </div>
 
-        {/* Rounds */}
-        {rounds.map(round => (
+        {/* Rounds - Only show rounds after Round 0 */}
+        {rounds.filter(r => r.round_number > 0).map(round => (
           <RoundCard
             key={round.id}
             round={round}
             orderId={order.id}
             adminNamesMap={adminNamesMap}
-            initialDocs={round.round_number === 0 ? initialDocs : undefined}
-            mergedAnswers={round.round_number === 0 ? mergedAnswers : undefined}
           />
         ))}
 
@@ -661,7 +741,7 @@ export function OrderViewClient({
               <SelectContent>
                 {professionals.map(p => (
                   <SelectItem key={p.id} value={p.id}>
-                    {p.full_name} - {p.profession_type}
+                    {p.full_name} - {p.professional_type}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -720,6 +800,14 @@ export function OrderViewClient({
         onOpenChange={setAddRoundOpen}
         orderId={order.id}
         initialDocs={initialDocs}
+        rounds={rounds}
+      />
+
+      {/* Quick Upload Dialog */}
+      <QuickUploadDialog
+        open={quickUploadOpen}
+        onOpenChange={setQuickUploadOpen}
+        orderId={order.id}
         rounds={rounds}
       />
 
@@ -784,25 +872,15 @@ export function OrderViewClient({
   )
 }
 
-// Round Card Component
+// Round Card Component (for rounds 1+)
 function RoundCard({
   round,
   orderId,
   adminNamesMap,
-  initialDocs,
-  mergedAnswers,
 }: {
   round: OrderRound
   orderId: string
   adminNamesMap: Record<string, string>
-  initialDocs?: OrderDocument[]
-  mergedAnswers?: Array<{
-    question_key: string
-    question_label: string
-    question_type: string
-    options?: Array<{ value: string; label: string }>
-    response_value: any
-  }>
 }) {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -818,7 +896,7 @@ function RoundCard({
   const allDocsProcessed = fromCustomerDocs.every(d =>
     d.status === 'verified' || d.skipped_at
   )
-  const canComplete = allQuestionsAnswered && allDocsProcessed && round.status !== 'completed'
+  const canComplete = allQuestionsAnswered && allDocsProcessed && round.status !== 'completed' && round.round_number > 0
 
   const handleTitleSave = async () => {
     if (titleValue.trim() === round.title) {
@@ -849,8 +927,6 @@ function RoundCard({
     }
   }
 
-  const isRound0 = round.round_number === 0
-
   return (
     <Card id={`round-${round.round_number}`} className="scroll-mt-4">
       <CardHeader className="pb-3">
@@ -868,7 +944,7 @@ function RoundCard({
             ) : (
               <CardTitle
                 className="cursor-pointer hover:text-muted-foreground"
-                onClick={() => !isRound0 && setEditingTitle(true)}
+                onClick={() => setEditingTitle(true)}
               >
                 Round {round.round_number}: {round.title}
               </CardTitle>
@@ -881,7 +957,7 @@ function RoundCard({
               {round.status.replace('_', ' ')}
             </Badge>
           </div>
-          {canComplete && !isRound0 && (
+          {canComplete && (
             <Button size="sm" onClick={handleMarkComplete} disabled={loading}>
               Mark Round Complete
             </Button>
@@ -894,37 +970,8 @@ function RoundCard({
         )}
       </CardHeader>
       <CardContent className="space-y-6">
-        {/* Round 0: Questionnaire Answers */}
-        {isRound0 && mergedAnswers && (
-          <div>
-            <h4 className="text-sm font-medium mb-3">Questionnaire Answers</h4>
-            <div className="space-y-2">
-              {mergedAnswers.map(q => (
-                <div key={q.question_key} className="flex justify-between py-2 border-b border-border last:border-0">
-                  <span className="text-sm text-muted-foreground">{q.question_label}</span>
-                  <span className="text-sm font-medium">
-                    {renderResponseValue(q.response_value, q.question_type, q.options)}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Round 0: Initial Documents */}
-        {isRound0 && initialDocs && (
-          <div>
-            <h4 className="text-sm font-medium mb-3">Initial Documents</h4>
-            <div className="space-y-3">
-              {initialDocs.map(doc => (
-                <InitialDocumentCard key={doc.id} doc={doc} orderId={orderId} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Round 1+: Questions */}
-        {!isRound0 && questions.length > 0 && (
+        {/* Questions */}
+        {questions.length > 0 && (
           <div>
             <h4 className="text-sm font-medium mb-3">Questions</h4>
             <div className="space-y-3">
@@ -945,8 +992,8 @@ function RoundCard({
           </div>
         )}
 
-        {/* Round 1+: From Customer Docs */}
-        {!isRound0 && fromCustomerDocs.length > 0 && (
+        {/* From Customer Docs */}
+        {fromCustomerDocs.length > 0 && (
           <div>
             <h4 className="text-sm font-medium mb-3">Documents from Customer</h4>
             <div className="space-y-3">
@@ -957,8 +1004,8 @@ function RoundCard({
           </div>
         )}
 
-        {/* Round 1+: To Customer Docs */}
-        {!isRound0 && toCustomerDocs.length > 0 && (
+        {/* To Customer Docs */}
+        {toCustomerDocs.length > 0 && (
           <div>
             <h4 className="text-sm font-medium mb-3">Documents to Customer</h4>
             <div className="space-y-3">
@@ -1453,13 +1500,14 @@ function AddRoundDialog({
 
     setLoading(true)
     try {
-      const supabase = getClient()
-      const ext = file.name.split('.').pop()
-      const path = `${orderId}/${crypto.randomUUID()}/${Date.now()}.${ext}`
-      await supabase.storage.from('work-documents').upload(path, file, { upsert: true })
-      const { data: { publicUrl } } = supabase.storage.from('work-documents').getPublicUrl(path)
-      setStagedFile({ fileUrl: publicUrl, fileName: file.name })
-      if (!uploadLabel) setUploadLabel(file.name)
+      // Use server action to upload via service role (bypasses RLS)
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('orderId', orderId)
+
+      const { publicUrl, fileName } = await adminUploadFile(formData)
+      setStagedFile({ fileUrl: publicUrl, fileName })
+      if (!uploadLabel) setUploadLabel(fileName)
     } catch (err) {
       toast({ title: 'Upload failed', variant: 'destructive' })
     } finally {
@@ -1685,6 +1733,216 @@ function AddRoundDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSubmit} disabled={loading || !title.trim()}>
             Create Round
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// Quick Upload Dialog - simpler way to upload a document without creating a full round
+function QuickUploadDialog({
+  open,
+  onOpenChange,
+  orderId,
+  rounds,
+}: {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  orderId: string
+  rounds: OrderRound[]
+}) {
+  const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
+  const [uploadTag, setUploadTag] = useState<string>('')
+  const [uploadLabel, setUploadLabel] = useState('')
+  const [uploadDescription, setUploadDescription] = useState('')
+  const [stagedFile, setStagedFile] = useState<{ fileUrl: string; fileName: string } | null>(null)
+  const [selectedRoundId, setSelectedRoundId] = useState<string>('')
+  const [notifyUser, setNotifyUser] = useState(true)
+
+  // Get existing rounds (excluding Round 0)
+  const existingRounds = rounds.filter(r => r.round_number > 0)
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setLoading(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('orderId', orderId)
+
+      const { publicUrl, fileName } = await adminUploadFile(formData)
+      setStagedFile({ fileUrl: publicUrl, fileName })
+      if (!uploadLabel) setUploadLabel(fileName)
+    } catch (err) {
+      toast({ title: 'Upload failed', variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSubmit = async () => {
+    if (!stagedFile || !uploadTag || !uploadLabel.trim()) {
+      toast({ title: 'Please fill in all required fields', variant: 'destructive' })
+      return
+    }
+
+    setLoading(true)
+    try {
+      // If no round selected, create a new round for this upload
+      if (!selectedRoundId) {
+        const formData = {
+          title: `Document: ${uploadLabel.trim()}`,
+          questions: [],
+          docRequests: [],
+          adminUpload: {
+            tag: uploadTag,
+            label: uploadLabel.trim(),
+            description: uploadDescription.trim() || undefined,
+            fileUrl: stagedFile.fileUrl,
+            fileName: stagedFile.fileName,
+          },
+          notificationMessage: notifyUser ? getNotificationMessage(uploadTag) : undefined,
+          isVisibleToUser: true,
+        }
+        await createRound(orderId, formData)
+      } else {
+        // Upload to existing round
+        await uploadAdminDocument(
+          orderId,
+          selectedRoundId,
+          stagedFile.fileUrl,
+          stagedFile.fileName,
+          uploadTag,
+          uploadLabel.trim(),
+          uploadDescription.trim() || null
+        )
+      }
+
+      toast({ title: 'Document uploaded successfully' })
+      onOpenChange(false)
+      resetForm()
+    } catch (err) {
+      toast({ title: 'Error uploading document', variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const resetForm = () => {
+    setUploadTag('')
+    setUploadLabel('')
+    setUploadDescription('')
+    setStagedFile(null)
+    setSelectedRoundId('')
+    setNotifyUser(true)
+  }
+
+  const getNotificationMessage = (tag: string) => {
+    switch (tag) {
+      case 'for_signing':
+        return 'We have shared a document for your signature. Please check your order.'
+      case 'government_processing':
+        return 'Your application has been submitted to the government. We will update you on progress.'
+      case 'final_output':
+        return 'Your final document is ready! Please download it from your order page.'
+      default:
+        return 'A new document has been added to your order.'
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) resetForm() }}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Upload Document</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          {/* File Upload */}
+          <div className="space-y-2">
+            <Label>Select File *</Label>
+            <input type="file" onChange={handleFileUpload} className="text-sm w-full" />
+            {stagedFile && (
+              <p className="text-xs text-green-600">Uploaded: {stagedFile.fileName}</p>
+            )}
+          </div>
+
+          {/* Tag */}
+          <div className="space-y-2">
+            <Label>Document Type *</Label>
+            <Select value={uploadTag} onValueChange={setUploadTag}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="for_signing">For Signing (customer needs to sign)</SelectItem>
+                <SelectItem value="government_processing">Government Processing (submitted to govt)</SelectItem>
+                <SelectItem value="final_output">Final Output (deliverable)</SelectItem>
+                <SelectItem value="informational">Informational (for reference)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Label */}
+          <div className="space-y-2">
+            <Label>Document Label *</Label>
+            <Input
+              placeholder="e.g., Certificate of Incorporation"
+              value={uploadLabel}
+              onChange={(e) => setUploadLabel(e.target.value)}
+            />
+          </div>
+
+          {/* Description */}
+          <div className="space-y-2">
+            <Label>Description (optional)</Label>
+            <Input
+              placeholder="Additional details about this document"
+              value={uploadDescription}
+              onChange={(e) => setUploadDescription(e.target.value)}
+            />
+          </div>
+
+          {/* Add to existing round or create new */}
+          {existingRounds.length > 0 && (
+            <div className="space-y-2">
+              <Label>Add to Round (optional)</Label>
+              <Select value={selectedRoundId} onValueChange={setSelectedRoundId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Create new round" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Create new round</SelectItem>
+                  {existingRounds.map(round => (
+                    <SelectItem key={round.id} value={round.id}>
+                      Round {round.round_number}: {round.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Notify user */}
+          {!selectedRoundId && (
+            <div className="flex items-center gap-2">
+              <Switch checked={notifyUser} onCheckedChange={setNotifyUser} />
+              <Label>Notify user about this document</Label>
+            </div>
+          )}
+        </div>
+
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={loading || !stagedFile || !uploadTag || !uploadLabel.trim()}
+          >
+            {loading ? 'Uploading...' : 'Upload'}
           </Button>
         </DialogFooter>
       </DialogContent>

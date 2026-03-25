@@ -346,7 +346,7 @@ export default function PaymentSuccessPage() {
           </Button>
         </Link>
         <a
-          href={`https://wa.me/919876543210?text=Hi, I just booked ${encodeURIComponent(order.service_package?.name || 'a service')}. Order: ${order.order_number}`}
+          href={`https://wa.me/917042100461?text=Hi, I just booked ${encodeURIComponent(order.service_package?.name || 'a service')}. Order: ${order.order_number}`}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1"

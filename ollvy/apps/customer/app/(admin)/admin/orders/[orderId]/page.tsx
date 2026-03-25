@@ -21,12 +21,17 @@ export default async function AdminOrderPage({ params }: PageProps) {
       *,
       service_packages (id, name, slug, sla_working_days),
       users (id, business_name, phone, email),
-      professionals (id, full_name, display_name, email, profession_type)
+      professionals (id, full_name, display_name, email, professional_type)
     `)
     .eq('id', orderId)
     .single()
 
   if (orderError || !order) {
+    console.error('Admin order fetch failed:', JSON.stringify({
+      orderError,
+      orderId,
+      hasSupabase: !!supabaseServer
+    }, null, 2))
     notFound()
   }
 
@@ -54,7 +59,7 @@ export default async function AdminOrderPage({ params }: PageProps) {
         id, order_id, round_id, direction, document_label, description, tag,
         status, file_url, file_name, uploaded_at, uploaded_by_type,
         verified_at, rejection_reason, skipped_at, skip_reason,
-        linked_request_id
+        linked_request_id, created_at, updated_at
       )
     `)
     .eq('order_id', orderId)
@@ -81,16 +86,20 @@ export default async function AdminOrderPage({ params }: PageProps) {
     .order('display_order', { ascending: true })
 
   // Fetch admin notes
-  const { data: adminNotes } = await supabaseServer
+  const { data: adminNotes, error: notesError } = await supabaseServer
     .from('order_admin_notes')
     .select('*, admin_users(name)')
     .eq('order_id', orderId)
     .order('created_at', { ascending: false })
 
+  if (notesError) {
+    console.error('Admin notes fetch failed:', notesError)
+  }
+
   // Fetch available professionals for assignment
   const { data: professionals } = await supabaseServer
     .from('professionals')
-    .select('id, full_name, display_name, email, profession_type')
+    .select('id, full_name, display_name, email, professional_type')
     .eq('status', 'approved')
     .order('full_name')
 

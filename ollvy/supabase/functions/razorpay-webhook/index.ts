@@ -5,14 +5,12 @@
 // - Verify Razorpay webhook signature using RAZORPAY_WEBHOOK_SECRET
 // - Check processed_webhook_events for idempotency before doing anything
 // - Insert into processed_webhook_events immediately after signature check
-// - Handle payment.captured event only (other events: log and return 200)
-// - On payment.captured:
-//   - Update order status to 'paid'
-//   - Call auto-assign-professional
-//   - Create chat conversation
-//   - Call generate-invoice
-//   - Call generate-engagement-letter
-//   - Send FCM push to user
+// - Handle these events:
+//   - payment.captured: Update order, assign professional, create chat, invoice, engagement letter
+//   - payment.failed: Notify customer to retry payment
+//   - refund.created/processed/failed: Track refund status, notify customer
+//   - payment.dispute.created: Alert admin immediately (chargebacks)
+//   - settlement.processed: Log for accounting
 // - Deploy with: npx supabase functions deploy razorpay-webhook --no-verify-jwt
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
@@ -87,20 +85,32 @@ serve(async (req) => {
     const payload = JSON.parse(body);
     const eventType = payload.event;
 
-    // CRITICAL: Use payment entity ID as idempotency key, NOT event type
-    // If we used event type, two different payments with same event type would collide
-    // and the second payment would be silently dropped
-    const paymentId = payload.payload?.payment?.entity?.id;
-    if (!paymentId && eventType === 'payment.captured') {
-      console.error('Missing payment.entity.id in payment.captured event');
+    // CRITICAL: Use entity ID as idempotency key based on event type
+    // Each event type has a different entity structure
+    let entityId: string | null = null;
+
+    if (eventType.startsWith('payment.')) {
+      entityId = payload.payload?.payment?.entity?.id;
+    } else if (eventType.startsWith('refund.')) {
+      entityId = payload.payload?.refund?.entity?.id;
+    } else if (eventType === 'payment.dispute.created') {
+      entityId = payload.payload?.dispute?.entity?.id;
+    } else if (eventType === 'settlement.processed') {
+      entityId = payload.payload?.settlement?.entity?.id;
+    }
+
+    if (!entityId) {
+      console.error(`Missing entity ID in ${eventType} event`);
       return new Response(
-        JSON.stringify({ ok: false, error: 'Invalid payload: missing payment ID' }),
+        JSON.stringify({ ok: false, error: `Invalid payload: missing entity ID for ${eventType}` }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
       );
     }
-    const eventId = paymentId || `${eventType}_${payload.payload?.payment?.entity?.order_id || Date.now()}`;
 
-    console.log(`Received webhook event: ${eventType}, Payment ID: ${paymentId}, Idempotency Key: ${eventId}`);
+    // Combine event type with entity ID for unique idempotency key
+    const eventId = `${eventType}_${entityId}`;
+
+    console.log(`Received webhook event: ${eventType}, Entity ID: ${entityId}, Idempotency Key: ${eventId}`);
 
     // Idempotency check - check processed_webhook_events
     const { data: existing } = await supabase
@@ -127,9 +137,19 @@ serve(async (req) => {
       processed_at: new Date().toISOString(),
     });
 
-    // Only handle payment.captured
-    if (eventType !== 'payment.captured') {
-      console.log(`Event ${eventType} is not payment.captured, acknowledging and skipping`);
+    // Route to appropriate handler based on event type
+    const handledEvents = [
+      'payment.captured',
+      'payment.failed',
+      'refund.created',
+      'refund.processed',
+      'refund.failed',
+      'payment.dispute.created',
+      'settlement.processed',
+    ];
+
+    if (!handledEvents.includes(eventType)) {
+      console.log(`Event ${eventType} not in handled list, acknowledging and skipping`);
       return new Response(
         JSON.stringify({ ok: true, event_type: eventType, skipped: true }),
         {
@@ -139,6 +159,243 @@ serve(async (req) => {
       );
     }
 
+    // =========================================================================
+    // PAYMENT FAILED - Notify customer to retry
+    // =========================================================================
+    if (eventType === 'payment.failed') {
+      const payment = payload.payload?.payment?.entity;
+      if (!payment) {
+        console.error('No payment entity in payment.failed payload');
+        return new Response(
+          JSON.stringify({ ok: false, error: 'Invalid payload' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        );
+      }
+
+      const razorpayOrderId = payment.order_id;
+      const errorCode = payment.error_code;
+      const errorDescription = payment.error_description;
+
+      console.log(`Payment failed for order ${razorpayOrderId}: ${errorCode} - ${errorDescription}`);
+
+      // Find the order
+      const { data: order } = await supabase
+        .from('orders')
+        .select('id, user_id, service_packages!inner(name)')
+        .eq('razorpay_order_id', razorpayOrderId)
+        .single();
+
+      if (order) {
+        // Notify customer
+        await supabase.from('notifications').insert({
+          user_id: order.user_id,
+          type: 'payment_failed',
+          title: 'Payment Failed',
+          body: `Your payment for ${order.service_packages.name} could not be processed. Please try again.`,
+          metadata: { error_code: errorCode, order_id: order.id },
+        });
+
+        console.log(`Notification sent to user for failed payment on order ${order.id}`);
+      }
+
+      return new Response(
+        JSON.stringify({ ok: true, event_type: eventType, order_id: order?.id }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+    }
+
+    // =========================================================================
+    // REFUND EVENTS - Track refund status
+    // =========================================================================
+    if (eventType.startsWith('refund.')) {
+      const refund = payload.payload?.refund?.entity;
+      if (!refund) {
+        console.error('No refund entity in refund payload');
+        return new Response(
+          JSON.stringify({ ok: false, error: 'Invalid payload' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        );
+      }
+
+      const razorpayRefundId = refund.id;
+      const razorpayPaymentId = refund.payment_id;
+      const amountPaisa = refund.amount;
+      const speed = refund.speed;
+      const status = eventType === 'refund.created' ? 'created'
+        : eventType === 'refund.processed' ? 'processed'
+        : 'failed';
+
+      console.log(`Refund ${status}: ${razorpayRefundId} for payment ${razorpayPaymentId}, amount: ${amountPaisa}`);
+
+      // Find the order by payment ID
+      const { data: order } = await supabase
+        .from('orders')
+        .select('id, user_id, service_packages!inner(name)')
+        .eq('razorpay_payment_id', razorpayPaymentId)
+        .single();
+
+      // Upsert refund record
+      const refundData: Record<string, unknown> = {
+        razorpay_refund_id: razorpayRefundId,
+        razorpay_payment_id: razorpayPaymentId,
+        amount_paisa: amountPaisa,
+        status,
+        speed,
+        order_id: order?.id || null,
+        user_id: order?.user_id || null,
+      };
+
+      if (status === 'processed') {
+        refundData.processed_at = new Date().toISOString();
+      } else if (status === 'failed') {
+        refundData.failed_at = new Date().toISOString();
+        refundData.failure_reason = refund.failure_reason || 'Unknown';
+      }
+
+      await supabase
+        .from('refunds')
+        .upsert(refundData, { onConflict: 'razorpay_refund_id' });
+
+      // Notify customer
+      if (order) {
+        if (status === 'processed') {
+          await supabase.from('notifications').insert({
+            user_id: order.user_id,
+            type: 'refund_processed',
+            title: 'Refund Processed',
+            body: `Your refund of ₹${(amountPaisa / 100).toLocaleString('en-IN')} for ${order.service_packages.name} has been processed. It will reflect in your account within 5-7 business days.`,
+            metadata: { refund_id: razorpayRefundId, order_id: order.id },
+          });
+        } else if (status === 'failed') {
+          // Notify admin for failed refunds
+          await supabase.from('notifications').insert({
+            user_id: order.user_id,
+            type: 'refund_failed',
+            title: 'Refund Issue',
+            body: `There was an issue processing your refund for ${order.service_packages.name}. Our team has been notified and will contact you shortly.`,
+            metadata: { refund_id: razorpayRefundId, order_id: order.id },
+          });
+        }
+      }
+
+      return new Response(
+        JSON.stringify({ ok: true, event_type: eventType, refund_id: razorpayRefundId }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+    }
+
+    // =========================================================================
+    // PAYMENT DISPUTE - Alert admin immediately (chargebacks are critical)
+    // =========================================================================
+    if (eventType === 'payment.dispute.created') {
+      const dispute = payload.payload?.dispute?.entity;
+      if (!dispute) {
+        console.error('No dispute entity in dispute payload');
+        return new Response(
+          JSON.stringify({ ok: false, error: 'Invalid payload' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        );
+      }
+
+      const razorpayDisputeId = dispute.id;
+      const razorpayPaymentId = dispute.payment_id;
+      const amountPaisa = dispute.amount;
+      const reasonCode = dispute.reason_code;
+      const reasonDescription = dispute.reason_description || dispute.reason_code;
+      const phase = dispute.phase;
+      const respondBy = dispute.respond_by ? new Date(dispute.respond_by * 1000).toISOString() : null;
+
+      console.log(`DISPUTE CREATED: ${razorpayDisputeId} for payment ${razorpayPaymentId}, amount: ${amountPaisa}, reason: ${reasonCode}`);
+
+      // Find the order by payment ID
+      const { data: order } = await supabase
+        .from('orders')
+        .select('id, user_id')
+        .eq('razorpay_payment_id', razorpayPaymentId)
+        .single();
+
+      // Insert dispute record
+      await supabase.from('payment_disputes').insert({
+        razorpay_dispute_id: razorpayDisputeId,
+        razorpay_payment_id: razorpayPaymentId,
+        amount_paisa: amountPaisa,
+        reason_code: reasonCode,
+        reason_description: reasonDescription,
+        phase,
+        status: 'open',
+        respond_by: respondBy,
+        order_id: order?.id || null,
+        user_id: order?.user_id || null,
+      });
+
+      // CRITICAL: Notify all admins about the dispute
+      const { data: admins } = await supabase
+        .from('admin_users')
+        .select('id')
+        .eq('is_active', true);
+
+      if (admins && admins.length > 0) {
+        const adminNotifications = admins.map(admin => ({
+          user_id: admin.id,
+          type: 'dispute_created',
+          title: 'URGENT: Payment Dispute Created',
+          body: `A chargeback of ₹${(amountPaisa / 100).toLocaleString('en-IN')} has been raised. Reason: ${reasonDescription}. Respond by: ${respondBy ? new Date(respondBy).toLocaleDateString('en-IN') : 'ASAP'}`,
+          metadata: { dispute_id: razorpayDisputeId, order_id: order?.id, respond_by: respondBy },
+        }));
+
+        await supabase.from('notifications').insert(adminNotifications);
+      }
+
+      console.log(`Dispute ${razorpayDisputeId} recorded and admins notified`);
+
+      return new Response(
+        JSON.stringify({ ok: true, event_type: eventType, dispute_id: razorpayDisputeId }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+    }
+
+    // =========================================================================
+    // SETTLEMENT PROCESSED - Log for accounting
+    // =========================================================================
+    if (eventType === 'settlement.processed') {
+      const settlement = payload.payload?.settlement?.entity;
+      if (!settlement) {
+        console.error('No settlement entity in settlement payload');
+        return new Response(
+          JSON.stringify({ ok: false, error: 'Invalid payload' }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
+        );
+      }
+
+      const razorpaySettlementId = settlement.id;
+      const amountPaisa = settlement.amount;
+      const feesPaisa = settlement.fees || 0;
+      const taxPaisa = settlement.tax || 0;
+      const utr = settlement.utr;
+      const settledAt = settlement.created_at ? new Date(settlement.created_at * 1000).toISOString() : new Date().toISOString();
+
+      console.log(`Settlement processed: ${razorpaySettlementId}, amount: ${amountPaisa}, UTR: ${utr}`);
+
+      // Insert settlement record
+      await supabase.from('settlements').insert({
+        razorpay_settlement_id: razorpaySettlementId,
+        amount_paisa: amountPaisa,
+        fees_paisa: feesPaisa,
+        tax_paisa: taxPaisa,
+        utr,
+        status: 'processed',
+        settled_at: settledAt,
+      });
+
+      return new Response(
+        JSON.stringify({ ok: true, event_type: eventType, settlement_id: razorpaySettlementId }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
+      );
+    }
+
+    // =========================================================================
+    // PAYMENT CAPTURED - Main order flow (existing logic)
+    // =========================================================================
     // Extract payment and order info
     const payment = payload.payload?.payment?.entity;
     if (!payment) {

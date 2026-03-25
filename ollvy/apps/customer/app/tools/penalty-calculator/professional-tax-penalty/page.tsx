@@ -217,7 +217,7 @@ export default function ProfessionalTaxPenaltyPage() {
           <p className="text-muted-foreground leading-relaxed mt-4">
             After registration, you must file monthly/quarterly returns and pay PT by the
             due date. Need help with PT registration?{' '}
-            <Link href="/services/payroll-compliance" className="text-emerald-600 hover:underline">
+            <Link href="/services/payroll-management" className="text-emerald-600 hover:underline">
               Ollvy can handle your PT compliance
             </Link>.
           </p>

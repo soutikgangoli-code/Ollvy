@@ -47,6 +47,9 @@ export default function AdminLoginPage() {
         return
       }
 
+      // Update last_login_at for this admin user
+      await supabase.rpc('update_admin_last_login')
+
       // The layout will handle the admin check, just redirect
       router.push('/admin/queue')
     } catch (err) {
