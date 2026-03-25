@@ -40,26 +40,24 @@ export default async function AdminChatsPage() {
   let messageStats: Record<string, { count: number; lastMessageAt: string | null }> = {}
 
   if (conversationIds.length > 0) {
-    // Get message counts
-    const { data: messageCounts } = await supabaseServer
-      .from('chat_messages')
-      .select('conversation_id')
-      .in('conversation_id', conversationIds)
-
-    // Get last message dates
-    const { data: lastMessages } = await supabaseServer
+    // Single query to get all messages with timestamps
+    const { data: allMessages } = await supabaseServer
       .from('chat_messages')
       .select('conversation_id, created_at')
       .in('conversation_id', conversationIds)
       .order('created_at', { ascending: false })
 
-    // Build stats map
-    for (const convId of conversationIds) {
-      const count = (messageCounts || []).filter(m => m.conversation_id === convId).length
-      const lastMsg = (lastMessages || []).find(m => m.conversation_id === convId)
-      messageStats[convId] = {
-        count,
-        lastMessageAt: lastMsg?.created_at || null,
+    // Build stats map in single pass - O(n) instead of O(n^2)
+    for (const msg of allMessages || []) {
+      const existing = messageStats[msg.conversation_id]
+      if (existing) {
+        existing.count += 1
+        // First message in sorted order is the latest
+      } else {
+        messageStats[msg.conversation_id] = {
+          count: 1,
+          lastMessageAt: msg.created_at,
+        }
       }
     }
   }

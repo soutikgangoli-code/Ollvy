@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatPaisa, formatDate } from '@/lib/utils'
+import { usePersistedState } from '@/lib/hooks/use-persisted-state'
 
 interface Order {
   id: string
@@ -56,7 +57,8 @@ export function ReportsClient({
   summaryMonth,
   revenueByUser,
 }: ReportsClientProps) {
-  const [dateFilter, setDateFilter] = useState<DateFilter>('month')
+  // Persisted filter state - survives page navigation
+  const [dateFilter, setDateFilter] = usePersistedState<DateFilter>('admin-reports-date-filter', 'month')
 
   const currentSummary = useMemo(() => {
     switch (dateFilter) {

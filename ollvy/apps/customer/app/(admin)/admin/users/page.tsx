@@ -9,20 +9,22 @@ export default async function AdminUsersPage() {
   const adminUser = await getAdminUser()
   if (!supabaseServer) redirect('/admin/login')
 
-  // Fetch users with order count
+  // Fetch users with pagination (limit for performance)
   const { data: users } = await supabaseServer
     .from('users')
     .select('id, business_name, phone, business_type, created_at')
     .order('created_at', { ascending: false })
+    .limit(500)
 
-  // Get order counts per user
+  // Get order counts per user using single aggregated query
   const userIds = (users || []).map(u => u.id)
   let orderCounts: Record<string, number> = {}
 
   if (userIds.length > 0) {
+    // Fetch only user_id for counting - minimal data transfer
     const { data: ordersData } = await supabaseServer
       .from('orders')
-      .select('user_id')
+      .select('user_id', { count: 'exact' })
       .in('user_id', userIds)
 
     if (ordersData) {

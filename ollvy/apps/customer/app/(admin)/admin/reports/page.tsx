@@ -15,7 +15,10 @@ export default async function AdminReportsPage() {
   const weekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7).toISOString()
   const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
 
-  // Fetch all paid orders with user info
+  // Default to last 90 days for performance
+  const ninetyDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 90).toISOString()
+
+  // Fetch paid orders with user info (limited to recent orders for performance)
   const { data: orders, error } = await supabaseServer
     .from('orders')
     .select(`
@@ -30,7 +33,9 @@ export default async function AdminReportsPage() {
     `)
     .not('paid_at', 'is', null)
     .neq('status', 'cancelled')
+    .gte('paid_at', ninetyDaysAgo)
     .order('paid_at', { ascending: false })
+    .limit(1000)
 
   if (error) {
     console.error('Error fetching orders:', error)

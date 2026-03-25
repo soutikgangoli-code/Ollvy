@@ -171,17 +171,18 @@ export default async function AdminQueuePage() {
       .order('name')
 
     if (admins) {
-      // Get counts for each admin
-      adminUsers = await Promise.all(
-        admins.map(async (admin) => {
-          const { count } = await supabaseServer!
-            .from('orders')
-            .select('id', { count: 'exact', head: true })
-            .eq('assigned_admin_id', admin.id)
-            .not('status', 'in', '(completed,cancelled)')
-          return { ...admin, activeOrderCount: count ?? 0 }
-        })
-      )
+      // Compute counts from already-fetched orders (no N+1 queries)
+      const adminOrderCounts: Record<string, number> = {}
+      for (const order of ordersRaw || []) {
+        if (order.assigned_admin_id) {
+          adminOrderCounts[order.assigned_admin_id] = (adminOrderCounts[order.assigned_admin_id] || 0) + 1
+        }
+      }
+
+      adminUsers = admins.map(admin => ({
+        ...admin,
+        activeOrderCount: adminOrderCounts[admin.id] || 0,
+      }))
       adminUsers.sort((a, b) => a.activeOrderCount - b.activeOrderCount)
     }
   }

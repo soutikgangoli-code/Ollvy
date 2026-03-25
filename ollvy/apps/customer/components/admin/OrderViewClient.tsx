@@ -552,7 +552,7 @@ export function OrderViewClient({
           </div>
         )}
 
-        {/* Questionnaire & Initial Documents - Always visible */}
+        {/* Questionnaire & Initial Documents - Collapsible sections */}
         <Card id="questionnaire-section">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center justify-between">
@@ -560,53 +560,63 @@ export function OrderViewClient({
               <Badge variant="outline">Customer Submission</Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Questionnaire Answers */}
-            <div>
-              <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
-                Questionnaire Answers
-                <Badge variant="secondary" className="font-normal text-xs">
-                  {mergedAnswers.filter(q => q.response_value != null).length}/{mergedAnswers.length} answered
-                </Badge>
-              </h4>
-              {mergedAnswers.length > 0 ? (
-                <div className="space-y-2">
-                  {mergedAnswers.map(q => (
-                    <div key={q.question_key} className="flex justify-between py-2 border-b border-border last:border-0">
-                      <span className="text-sm text-muted-foreground">{q.question_label}</span>
-                      <span className={`text-sm font-medium ${q.response_value == null ? 'text-amber-600 dark:text-amber-400' : ''}`}>
-                        {renderResponseValue(q.response_value, q.question_type, q.options)}
-                      </span>
+          <CardContent className="pt-0">
+            <Accordion type="multiple" className="space-y-2">
+              {/* Questionnaire Answers - Collapsed by default */}
+              <AccordionItem value="questionnaire" className="border rounded-lg px-4">
+                <AccordionTrigger className="py-3 hover:no-underline">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">Questionnaire Answers</span>
+                    <Badge variant="secondary" className="font-normal text-xs">
+                      {mergedAnswers.filter(q => q.response_value != null).length}/{mergedAnswers.length} answered
+                    </Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-4">
+                  {mergedAnswers.length > 0 ? (
+                    <div className="space-y-2">
+                      {mergedAnswers.map(q => (
+                        <div key={q.question_key} className="flex justify-between py-2 border-b border-border last:border-0">
+                          <span className="text-sm text-muted-foreground">{q.question_label}</span>
+                          <span className={`text-sm font-medium ${q.response_value == null ? 'text-amber-600 dark:text-amber-400' : ''}`}>
+                            {renderResponseValue(q.response_value, q.question_type, q.options)}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground italic">
-                  No questionnaire configured for this service.
-                </p>
-              )}
-            </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic">
+                      No questionnaire configured for this service.
+                    </p>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
 
-            {/* Initial Documents */}
-            <div>
-              <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
-                Initial Documents
-                <Badge variant="secondary" className="font-normal text-xs">
-                  {initialDocs.filter(d => d.verified_at).length}/{initialDocs.length} verified
-                </Badge>
-              </h4>
-              {initialDocs.length > 0 ? (
-                <div className="space-y-3">
-                  {initialDocs.map(doc => (
-                    <InitialDocumentCard key={doc.id} doc={doc} orderId={order.id} />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground italic">
-                  No initial documents required for this service.
-                </p>
-              )}
-            </div>
+              {/* Initial Documents - Collapsed by default */}
+              <AccordionItem value="documents" className="border rounded-lg px-4">
+                <AccordionTrigger className="py-3 hover:no-underline">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium">Initial Documents</span>
+                    <Badge variant="secondary" className="font-normal text-xs">
+                      {initialDocs.filter(d => d.verified_at).length}/{initialDocs.length} verified
+                    </Badge>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-4">
+                  {initialDocs.length > 0 ? (
+                    <div className="space-y-3">
+                      {initialDocs.map(doc => (
+                        <InitialDocumentCard key={doc.id} doc={doc} orderId={order.id} />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic">
+                      No initial documents required for this service.
+                    </p>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           </CardContent>
         </Card>
 

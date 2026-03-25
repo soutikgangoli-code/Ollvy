@@ -17,6 +17,7 @@ import { format } from 'date-fns'
 import { formatPaisa, formatDate } from '@/lib/utils'
 import type { DateRange } from 'react-day-picker'
 import { useToast } from '@/lib/hooks/use-toast'
+import { usePersistedState, usePersistedSet } from '@/lib/hooks/use-persisted-state'
 import { bulkAssignOrders } from '@/app/(admin)/admin/queue/actions'
 import type { AdminUser } from '@/lib/admin/get-admin-user'
 
@@ -136,19 +137,23 @@ const DATE_PRESETS = [
 export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const [selectedBucket, setSelectedBucket] = useState<Bucket | 'all'>('all')
+
+  // Persisted filter states - survive page navigation
+  const [selectedBucket, setSelectedBucket] = usePersistedState<Bucket | 'all'>('admin-queue-bucket', 'all')
+  const [hideUnpaid, setHideUnpaid] = usePersistedState('admin-queue-hide-unpaid', true)
+  const [selectedServiceType, setSelectedServiceType] = usePersistedState<string>('admin-queue-service-type', 'all')
+  const [selectedBucketFilter, setSelectedBucketFilter] = usePersistedState<Bucket | 'all'>('admin-queue-bucket-filter', 'all')
+  const [dateRange, setDateRange] = usePersistedState<DateRange | undefined>('admin-queue-date-range', undefined)
+  const [assignedToFilter, setAssignedToFilter] = usePersistedSet<string>('admin-queue-assigned-to')
+
+  // Non-persisted UI states
   const [searchQuery, setSearchQuery] = useState('')
-  const [hideUnpaid, setHideUnpaid] = useState(true) // Hide test/unpaid orders by default
-  const [selectedServiceType, setSelectedServiceType] = useState<string>('all')
-  const [selectedBucketFilter, setSelectedBucketFilter] = useState<Bucket | 'all'>('all')
-  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [filterDropdownOpen, setFilterDropdownOpen] = useState(false)
   const [datePickerOpen, setDatePickerOpen] = useState(false)
   const [selectedAdmin, setSelectedAdmin] = useState<AdminUserWithCount | null>(null)
   const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(false)
   const [assignDropdownOpen, setAssignDropdownOpen] = useState(false)
-  const [assignedToFilter, setAssignedToFilter] = useState<Set<string>>(new Set()) // empty = all, 'unassigned' or admin_ids
   const [assignedToDropdownOpen, setAssignedToDropdownOpen] = useState(false)
 
   const isSuperAdmin = adminUser.role === 'super_admin'

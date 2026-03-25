@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { formatPaisa, formatDate } from '@/lib/utils'
+import { usePersistedState } from '@/lib/hooks/use-persisted-state'
 
 interface Order {
   id: string
@@ -25,7 +26,8 @@ interface OrdersListClientProps {
 type FilterTab = 'all' | 'active' | 'needs_attention' | 'completed' | 'cancelled'
 
 export function OrdersListClient({ orders }: OrdersListClientProps) {
-  const [activeTab, setActiveTab] = useState<FilterTab>('all')
+  // Persisted filter state - survives page navigation
+  const [activeTab, setActiveTab] = usePersistedState<FilterTab>('admin-orders-tab', 'all')
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredOrders = useMemo(() => {
