@@ -1,6 +1,12 @@
 import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
+import { DocumentPageIntro } from '@/components/tools/DocumentPageIntro'
+import { DocumentSteps } from '@/components/tools/DocumentSteps'
+import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
+import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
+import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { gstDocuments } from '@/lib/data/document-checklists'
+import { gstRegistrationContent } from '@/lib/tools/document-content'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -16,47 +22,23 @@ const breadcrumbJsonLd = {
 const howToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to Gather Documents for GST Registration',
-  description: 'Step-by-step guide to collecting all documents required for GST registration in India',
-  totalTime: 'P1D',
+  name: 'How to Register for GST in India',
+  description: 'Complete guide to GST registration process, documents required, and step-by-step instructions',
+  totalTime: 'P7D',
   estimatedCost: {
     '@type': 'MonetaryAmount',
     currency: 'INR',
-    value: '0',
+    value: '999',
   },
-  step: [
-    {
-      '@type': 'HowToStep',
-      position: 1,
-      name: 'Gather Identity Documents',
-      text: 'Collect PAN card and Aadhaar card of the proprietor or all partners/directors depending on business type.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 2,
-      name: 'Prepare Business Registration Proof',
-      text: 'For companies and LLPs, keep the Certificate of Incorporation ready. For partnerships, keep the partnership deed.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 3,
-      name: 'Arrange Principal Place of Business Proof',
-      text: 'Collect rent agreement or property ownership documents along with a recent electricity bill for the business address.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 4,
-      name: 'Get NOC from Property Owner',
-      text: 'Obtain a No Objection Certificate from the landlord or property owner consenting to GST registration at the premises.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 5,
-      name: 'Bank Account Details',
-      text: 'Keep a cancelled cheque or bank statement showing account holder name, account number, and IFSC code.',
-    },
-  ],
+  step: gstRegistrationContent.steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.title,
+    text: step.description,
+  })),
 }
+
+const faqJsonLd = generateFAQSchema(gstRegistrationContent)
 
 export const metadata: Metadata = {
   title: 'Documents Required for GST Registration in India | Ollvy',
@@ -90,6 +72,26 @@ export default function GSTDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+      {/* Educational intro content */}
+      <DocumentPageIntro content={gstRegistrationContent} />
+
+      {/* Step-by-step process */}
+      <DocumentSteps content={gstRegistrationContent} />
+
+      {/* Document checklist header */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Click on any document to see detailed requirements and how to obtain it
+        </p>
+      </div>
+
+      {/* Document checklist */}
       <DocumentChecklistContent
         categories={gstDocuments}
         pageTitle="GST Registration"
@@ -99,6 +101,15 @@ export default function GSTDocumentsPage() {
         ctaButtonText="Start GST Registration"
         ctaButtonHref="/services/gst-registration?utm_source=tools&utm_medium=documents&utm_content=gst"
       />
+
+      {/* FAQ section */}
+      <DocumentFAQSection content={gstRegistrationContent} />
+
+      {/* Common mistakes */}
+      <DocumentCommonMistakes content={gstRegistrationContent} />
+
+      {/* Next steps */}
+      <DocumentNextSteps content={gstRegistrationContent} />
     </>
   )
 }

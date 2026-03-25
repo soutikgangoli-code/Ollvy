@@ -1,6 +1,12 @@
 import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
+import { DocumentPageIntro } from '@/components/tools/DocumentPageIntro'
+import { DocumentSteps } from '@/components/tools/DocumentSteps'
+import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
+import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
+import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { trademarkDocuments } from '@/lib/data/document-checklists'
+import { trademarkContent } from '@/lib/tools/document-content'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -16,65 +22,41 @@ const breadcrumbJsonLd = {
 const howToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to Gather Documents for Trademark Registration',
-  description: 'Step-by-step guide to collecting all documents required for trademark registration in India',
-  totalTime: 'P1D',
+  name: 'How to Register a Trademark in India',
+  description: 'Complete guide to trademark registration process, documents required, and step-by-step instructions',
+  totalTime: 'P540D',
   estimatedCost: {
     '@type': 'MonetaryAmount',
     currency: 'INR',
-    value: '0',
+    value: '4999',
   },
-  step: [
-    {
-      '@type': 'HowToStep',
-      position: 1,
-      name: 'Prepare Your Logo or Brand Name',
-      text: 'Create a high-resolution image of your logo or wordmark in JPEG format. The image should be clear and on a white background.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 2,
-      name: 'Gather Identity Documents',
-      text: 'Collect PAN card and Aadhaar of the applicant. For companies, provide Certificate of Incorporation.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 3,
-      name: 'Determine Trademark Classes',
-      text: 'Identify which trademark classes apply to your goods or services. Ollvy can help you select the right classes.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 4,
-      name: 'Prepare Business Proof',
-      text: 'Collect business registration documents - GST certificate, Udyam registration, or incorporation certificate.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 5,
-      name: 'Sign Authorization Form',
-      text: 'Sign Form TM-48 authorizing your trademark attorney to file on your behalf - Ollvy provides this form.',
-    },
-  ],
+  step: trademarkContent.steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.title,
+    text: step.description,
+  })),
 }
 
+const faqJsonLd = generateFAQSchema(trademarkContent)
+
 export const metadata: Metadata = {
-  title: 'Documents Required for Trademark Registration India 2025 | Ollvy',
-  description: 'Complete trademark registration document checklist: Form TM-A, TM-48, logo, identity proof, business entity documents. Class selection and fee guide included.',
-  keywords: ['trademark documents', 'trademark registration documents india', 'brand registration documents', 'TM application documents'],
+  title: 'How to Register Trademark - Documents & Process | Ollvy',
+  description: 'Complete guide to trademark registration in India. Step-by-step process, classes, TM vs R symbol, opposition, documents required, costs, and FAQs.',
+  keywords: ['trademark registration', 'how to register trademark in India', 'trademark registration process', 'trademark classes', 'brand registration', 'logo trademark'],
   alternates: {
     canonical: 'https://ollvy.com/tools/documents/trademark',
   },
   openGraph: {
-    title: 'Documents Required for Trademark Registration India | Ollvy',
-    description: 'Complete trademark registration document checklist for Indian businesses.',
+    title: 'How to Register Trademark in India | Ollvy',
+    description: 'Complete guide to trademark registration - process, classes, costs, and timeline.',
     url: 'https://ollvy.com/tools/documents/trademark',
     images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Documents Required for Trademark Registration | Ollvy',
-    description: 'Complete trademark registration document checklist for India.',
+    title: 'How to Register Trademark in India | Ollvy',
+    description: 'Complete guide to trademark registration in India.',
     images: ['https://ollvy.com/logo.png'],
   },
 }
@@ -90,6 +72,26 @@ export default function TrademarkDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+      {/* Educational intro content */}
+      <DocumentPageIntro content={trademarkContent} />
+
+      {/* Step-by-step process */}
+      <DocumentSteps content={trademarkContent} />
+
+      {/* Document checklist header */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Click on any document to see detailed requirements and how to obtain it
+        </p>
+      </div>
+
+      {/* Document checklist */}
       <DocumentChecklistContent
         categories={trademarkDocuments}
         pageTitle="Trademark Registration"
@@ -99,6 +101,15 @@ export default function TrademarkDocumentsPage() {
         ctaButtonText="Register Trademark"
         ctaButtonHref="/services/trademark-registration?utm_source=tools&utm_medium=documents&utm_content=trademark"
       />
+
+      {/* FAQ section */}
+      <DocumentFAQSection content={trademarkContent} />
+
+      {/* Common mistakes */}
+      <DocumentCommonMistakes content={trademarkContent} />
+
+      {/* Next steps */}
+      <DocumentNextSteps content={trademarkContent} />
     </>
   )
 }

@@ -1,6 +1,12 @@
 import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
+import { DocumentPageIntro } from '@/components/tools/DocumentPageIntro'
+import { DocumentSteps } from '@/components/tools/DocumentSteps'
+import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
+import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
+import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { partnershipDocuments } from '@/lib/data/document-checklists'
+import { partnershipContent } from '@/lib/tools/document-content'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -16,65 +22,41 @@ const breadcrumbJsonLd = {
 const howToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to Gather Documents for Partnership Firm Registration',
-  description: 'Step-by-step guide to collecting all documents required for Partnership Firm registration in India',
-  totalTime: 'P2D',
+  name: 'How to Register a Partnership Firm in India',
+  description: 'Complete guide to partnership firm registration process, documents required, and step-by-step instructions',
+  totalTime: 'P15D',
   estimatedCost: {
     '@type': 'MonetaryAmount',
     currency: 'INR',
-    value: '0',
+    value: '2999',
   },
-  step: [
-    {
-      '@type': 'HowToStep',
-      position: 1,
-      name: 'Gather Partner Identity Documents',
-      text: 'Collect PAN card, Aadhaar card, and passport-size photograph for all partners (minimum 2 partners required).',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 2,
-      name: 'Prepare Address Proof',
-      text: 'Collect residential address proof for each partner - bank statement, utility bill, or Aadhaar card.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 3,
-      name: 'Draft Partnership Deed',
-      text: 'Prepare the partnership deed detailing profit sharing ratio, capital contribution, roles and responsibilities - Ollvy can draft this for you.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 4,
-      name: 'Arrange Stamp Paper',
-      text: 'Purchase non-judicial stamp paper of appropriate value as per your state (ranges from Rs 100 to Rs 500).',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 5,
-      name: 'Prepare Business Place Proof',
-      text: 'Obtain rent agreement or ownership proof for the principal place of business along with utility bill.',
-    },
-  ],
+  step: partnershipContent.steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.title,
+    text: step.description,
+  })),
 }
 
+const faqJsonLd = generateFAQSchema(partnershipContent)
+
 export const metadata: Metadata = {
-  title: 'Documents Required for Partnership Firm Registration in India | Ollvy',
-  description: 'Complete checklist of documents needed to register a Partnership Firm in India. Partner identity proof, partnership deed, stamp paper, and firm registration requirements.',
-  keywords: ['partnership firm documents', 'partnership deed documents', 'partnership registration india', 'partnership firm registration documents'],
+  title: 'How to Register Partnership Firm - Documents & Process | Ollvy',
+  description: 'Complete guide to partnership firm registration in India. Step-by-step process, partnership deed, required documents, costs, timeline, and FAQs answered.',
+  keywords: ['partnership firm registration', 'how to register partnership firm', 'partnership deed', 'partnership registration process', 'partnership firm documents'],
   alternates: {
     canonical: 'https://ollvy.com/tools/documents/partnership',
   },
   openGraph: {
-    title: 'Documents Required for Partnership Firm Registration in India | Ollvy',
-    description: 'Complete checklist of documents needed to register a Partnership Firm in India.',
+    title: 'How to Register Partnership Firm in India | Ollvy',
+    description: 'Complete guide to partnership firm registration - process, documents, costs, and timeline.',
     url: 'https://ollvy.com/tools/documents/partnership',
     images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Documents Required for Partnership Firm Registration | Ollvy',
-    description: 'Complete checklist of documents needed to register a Partnership Firm in India.',
+    title: 'How to Register Partnership Firm | Ollvy',
+    description: 'Complete guide to partnership firm registration in India.',
     images: ['https://ollvy.com/logo.png'],
   },
 }
@@ -90,6 +72,26 @@ export default function PartnershipDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+      {/* Educational intro content */}
+      <DocumentPageIntro content={partnershipContent} />
+
+      {/* Step-by-step process */}
+      <DocumentSteps content={partnershipContent} />
+
+      {/* Document checklist header */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Click on any document to see detailed requirements and how to obtain it
+        </p>
+      </div>
+
+      {/* Document checklist */}
       <DocumentChecklistContent
         categories={partnershipDocuments}
         pageTitle="Partnership Firm Registration"
@@ -99,6 +101,15 @@ export default function PartnershipDocumentsPage() {
         ctaButtonText="Start Partnership Registration"
         ctaButtonHref="/services?utm_source=tools&utm_medium=documents&utm_content=partnership"
       />
+
+      {/* FAQ section */}
+      <DocumentFAQSection content={partnershipContent} />
+
+      {/* Common mistakes */}
+      <DocumentCommonMistakes content={partnershipContent} />
+
+      {/* Next steps */}
+      <DocumentNextSteps content={partnershipContent} />
     </>
   )
 }

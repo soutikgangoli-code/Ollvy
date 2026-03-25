@@ -1,6 +1,12 @@
 import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
+import { DocumentPageIntro } from '@/components/tools/DocumentPageIntro'
+import { DocumentSteps } from '@/components/tools/DocumentSteps'
+import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
+import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
+import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { llpDocuments } from '@/lib/data/document-checklists'
+import { llpContent } from '@/lib/tools/document-content'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -16,65 +22,41 @@ const breadcrumbJsonLd = {
 const howToJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'How to Gather Documents for LLP Registration',
-  description: 'Step-by-step guide to collecting all documents required for Limited Liability Partnership registration in India',
-  totalTime: 'P3D',
+  name: 'How to Register an LLP in India',
+  description: 'Complete guide to LLP registration process, documents required, and step-by-step instructions',
+  totalTime: 'P15D',
   estimatedCost: {
     '@type': 'MonetaryAmount',
     currency: 'INR',
-    value: '0',
+    value: '4999',
   },
-  step: [
-    {
-      '@type': 'HowToStep',
-      position: 1,
-      name: 'Gather Partner Identity Documents',
-      text: 'Collect PAN card, Aadhaar card, passport-size photograph, and specimen signature for all designated partners (minimum 2 partners required).',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 2,
-      name: 'Prepare Address Proof for Partners',
-      text: 'Collect address proof (bank statement, utility bill, or Aadhaar) for each partner showing current residential address.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 3,
-      name: 'Arrange Registered Office Proof',
-      text: 'Obtain rent agreement or ownership proof for the registered office, along with a utility bill not older than 2 months.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 4,
-      name: 'Get NOC from Property Owner',
-      text: 'Obtain a No Objection Certificate from the property owner allowing use of the premises as LLP registered office.',
-    },
-    {
-      '@type': 'HowToStep',
-      position: 5,
-      name: 'Apply for Digital Signature Certificate',
-      text: 'Apply for DSC and DPIN for all designated partners - Ollvy handles this as part of the registration process.',
-    },
-  ],
+  step: llpContent.steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.title,
+    text: step.description,
+  })),
 }
 
+const faqJsonLd = generateFAQSchema(llpContent)
+
 export const metadata: Metadata = {
-  title: 'Documents Required for LLP Registration in India | Ollvy',
-  description: 'Complete checklist of documents needed to register an LLP (Limited Liability Partnership) in India. Partner PAN, Aadhaar, DPIN, DSC, LLP Agreement requirements.',
-  keywords: ['LLP registration documents', 'LLP incorporation documents india', 'designated partner documents', 'DPIN documents', 'LLP agreement'],
+  title: 'How to Register LLP in India - Documents & Process | Ollvy',
+  description: 'Complete guide to LLP registration in India. Step-by-step process, required documents checklist, LLP Agreement, DPIN, costs, timeline, and FAQs answered.',
+  keywords: ['LLP registration', 'how to register LLP in India', 'LLP registration process', 'LLP documents', 'DPIN', 'LLP Agreement', 'FiLLiP form'],
   alternates: {
     canonical: 'https://ollvy.com/tools/documents/llp',
   },
   openGraph: {
-    title: 'Documents Required for LLP Registration in India | Ollvy',
-    description: 'Complete checklist of documents needed to register an LLP in India.',
+    title: 'How to Register LLP in India | Ollvy',
+    description: 'Complete guide to LLP registration - process, documents, costs, and timeline.',
     url: 'https://ollvy.com/tools/documents/llp',
     images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Documents Required for LLP Registration | Ollvy',
-    description: 'Complete checklist of documents needed to register an LLP in India.',
+    title: 'How to Register LLP in India | Ollvy',
+    description: 'Complete guide to LLP registration in India.',
     images: ['https://ollvy.com/logo.png'],
   },
 }
@@ -90,6 +72,26 @@ export default function LLPDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+
+      {/* Educational intro content */}
+      <DocumentPageIntro content={llpContent} />
+
+      {/* Step-by-step process */}
+      <DocumentSteps content={llpContent} />
+
+      {/* Document checklist header */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Click on any document to see detailed requirements and how to obtain it
+        </p>
+      </div>
+
+      {/* Document checklist */}
       <DocumentChecklistContent
         categories={llpDocuments}
         pageTitle="LLP Registration"
@@ -99,6 +101,15 @@ export default function LLPDocumentsPage() {
         ctaButtonText="Start LLP Registration"
         ctaButtonHref="/services/llp-incorporation?utm_source=tools&utm_medium=documents&utm_content=llp"
       />
+
+      {/* FAQ section */}
+      <DocumentFAQSection content={llpContent} />
+
+      {/* Common mistakes */}
+      <DocumentCommonMistakes content={llpContent} />
+
+      {/* Next steps */}
+      <DocumentNextSteps content={llpContent} />
     </>
   )
 }
