@@ -21,6 +21,7 @@ import {
 } from 'lucide-react'
 import { getCompletionEstimate } from '@/lib/dates'
 import { cn } from '@/lib/utils'
+import { getWhatsAppLink } from '@/lib/constants'
 
 interface OrderData {
   id: string
@@ -68,7 +69,7 @@ export default function PaymentSuccessPage() {
     return () => clearTimeout(timer)
   }, [orderId, user])
 
-  const fetchOrder = async () => {
+  const fetchOrder = async (retryCount = 0) => {
     if (!orderId) return
 
     try {
@@ -97,7 +98,15 @@ export default function PaymentSuccessPage() {
         .eq('id', orderId)
         .single()
 
-      if (orderError) throw orderError
+      if (orderError) {
+        // Retry up to 3 times with 1 second delay (handles RLS race condition after payment)
+        if (retryCount < 3) {
+          console.log(`Order not found, retrying... (attempt ${retryCount + 1})`)
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          return fetchOrder(retryCount + 1)
+        }
+        throw orderError
+      }
 
       const servicePackage = (orderData.service_package as unknown) as { id: string; name: string; slug: string; sla_working_days: number; workflow_stages: unknown[]; has_govt_processing?: boolean; completion_max_days?: number | null; completion_range_text?: string | null }
 
@@ -346,7 +355,7 @@ export default function PaymentSuccessPage() {
           </Button>
         </Link>
         <a
-          href={`https://wa.me/917042100461?text=Hi, I just booked ${encodeURIComponent(order.service_package?.name || 'a service')}. Order: ${order.order_number}`}
+          href={getWhatsAppLink(`Hi, I just booked ${order.service_package?.name || 'a service'}. Order: ${order.order_number}`)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1"

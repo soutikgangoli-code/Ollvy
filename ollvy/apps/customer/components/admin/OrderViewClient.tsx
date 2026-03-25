@@ -324,35 +324,60 @@ export function OrderViewClient({
         signedUrlResults.map(r => [r.originalUrl, r.signedUrl])
       )
 
+      // Issue #9: Track failed downloads
+      const failedDownloads: string[] = []
+      let successCount = 0
+
       // Fetch and add all files to zip using signed URLs
       for (const doc of allDocs) {
         try {
           const signedUrl = signedUrlMap.get(doc.url)
           if (!signedUrl) {
             console.error(`No signed URL for ${doc.name}`)
+            failedDownloads.push(doc.name)
             continue
           }
           const response = await fetch(signedUrl)
           if (!response.ok) {
             console.error(`Failed to fetch ${doc.name}: ${response.status}`)
+            failedDownloads.push(doc.name)
             continue
           }
           const blob = await response.blob()
           zip.folder(doc.folder)?.file(doc.name, blob)
+          successCount++
         } catch (e) {
           console.error(`Failed to fetch ${doc.name}:`, e)
+          failedDownloads.push(doc.name)
         }
       }
 
-      // Generate and download
-      const content = await zip.generateAsync({ type: 'blob' })
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(content)
-      link.download = `${order.order_number}-documents.zip`
-      link.click()
-      URL.revokeObjectURL(link.href)
+      // Generate and download (even if some files failed)
+      if (successCount > 0) {
+        const content = await zip.generateAsync({ type: 'blob' })
+        const link = document.createElement('a')
+        link.href = URL.createObjectURL(content)
+        link.download = `${order.order_number}-documents.zip`
+        link.click()
+        URL.revokeObjectURL(link.href)
+      }
 
-      toast({ title: `Downloaded ${allDocs.length} documents` })
+      // Issue #9: Show appropriate feedback based on results
+      if (failedDownloads.length === 0) {
+        toast({ title: `Downloaded ${successCount} documents` })
+      } else if (successCount === 0) {
+        toast({
+          title: 'Download failed',
+          description: `Failed to download all ${failedDownloads.length} documents. Please try again.`,
+          variant: 'destructive',
+        })
+      } else {
+        toast({
+          title: `Downloaded ${successCount} of ${allDocs.length} documents`,
+          description: `${failedDownloads.length} file(s) failed: ${failedDownloads.slice(0, 3).join(', ')}${failedDownloads.length > 3 ? '...' : ''}`,
+          variant: 'destructive',
+        })
+      }
     } catch (err) {
       toast({ title: 'Failed to download', variant: 'destructive' })
     } finally {

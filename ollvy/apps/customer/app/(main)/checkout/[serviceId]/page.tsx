@@ -14,6 +14,8 @@ import { getPreCursorAnswers, clearPreCursorAnswers } from '@/lib/pre-cursor'
 import type { ServicePackage, ServiceAddon, ServiceVariant } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { getCompletionEstimate } from '@/lib/dates'
+import { useToast } from '@/lib/hooks/use-toast'
+import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
 
 import {
   CheckoutStepper,
@@ -35,6 +37,51 @@ interface PriceBreakdown {
   total: number
 }
 
+// Session storage helpers for checkout persistence
+const CHECKOUT_STATE_KEY = 'ollvy_checkout_state'
+
+interface CheckoutState {
+  serviceId: string
+  variant: string | null
+  addons: string[]
+  promoCode: string
+  timestamp: number
+}
+
+function saveCheckoutState(state: CheckoutState) {
+  if (typeof window === 'undefined') return
+  try {
+    sessionStorage.setItem(CHECKOUT_STATE_KEY, JSON.stringify(state))
+  } catch (e) {
+    // sessionStorage might be full or disabled
+  }
+}
+
+function getCheckoutState(serviceId: string): CheckoutState | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const stored = sessionStorage.getItem(CHECKOUT_STATE_KEY)
+    if (!stored) return null
+    const state = JSON.parse(stored) as CheckoutState
+    // Only use if it's for the same service and less than 1 hour old
+    if (state.serviceId === serviceId && Date.now() - state.timestamp < 3600000) {
+      return state
+    }
+    return null
+  } catch (e) {
+    return null
+  }
+}
+
+function clearCheckoutState() {
+  if (typeof window === 'undefined') return
+  try {
+    sessionStorage.removeItem(CHECKOUT_STATE_KEY)
+  } catch (e) {
+    // ignore
+  }
+}
+
 function formatPrice(paisa: number): string {
   return '\u20B9' + Math.ceil(paisa / 100).toLocaleString('en-IN')
 }
@@ -45,6 +92,7 @@ export default function CheckoutPage() {
   const searchParams = useSearchParams()
   const serviceId = params.serviceId as string
   const { user, session, isHydrated, openAuthModal, isAuthModalOpen } = useAuthStore()
+  const { toast } = useToast()
 
   const [service, setService] = useState<ServicePackage | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -109,38 +157,64 @@ export default function CheckoutPage() {
     }
   }, [service])
 
-  // Initialize variant and addons from URL params or service defaults after service loads
+  // Initialize variant and addons from sessionStorage, URL params, or service defaults
   useEffect(() => {
     if (!service) return
 
-    // Initialize variant from URL or default
+    // Check sessionStorage first for persisted state
+    const savedState = getCheckoutState(service.id)
+
+    // Initialize variant
     if (service.variants && service.variants.length > 0) {
-      const urlVariant = variantFromUrl
-      if (urlVariant && service.variants.some(v => v.id === urlVariant)) {
-        setSelectedVariant(urlVariant)
+      // Priority: sessionStorage > URL params > service default
+      let variant: string | null = null
+
+      if (savedState?.variant && service.variants.some(v => v.id === savedState.variant)) {
+        variant = savedState.variant
+      } else if (variantFromUrl && service.variants.some(v => v.id === variantFromUrl)) {
+        variant = variantFromUrl
       } else {
-        // Use first variant as default
-        setSelectedVariant(service.variants[0].id)
+        variant = service.variants[0].id
       }
+      setSelectedVariant(variant)
     }
 
-    // Initialize addons from URL params or service defaults
+    // Initialize addons
     if (service.addons && service.addons.length > 0) {
-      if (addonsFromUrl) {
+      let addonIds: string[] = []
+
+      if (savedState?.addons && savedState.addons.length > 0) {
+        // Use saved addons (filter to valid ones)
+        addonIds = savedState.addons.filter(id => service.addons?.some(a => a.id === id))
+      } else if (addonsFromUrl) {
         // Use addons from URL
-        const urlAddonIds = addonsFromUrl.split(',').filter(id =>
-          service.addons?.some(a => a.id === id)
-        )
-        setSelectedAddonIds(urlAddonIds)
+        addonIds = addonsFromUrl.split(',').filter(id => service.addons?.some(a => a.id === id))
       } else {
         // Use default selections from service config (defaultSelected or required)
-        const defaultIds = service.addons
+        addonIds = service.addons
           .filter(addon => addon.defaultSelected || addon.required)
           .map(addon => addon.id)
-        setSelectedAddonIds(defaultIds)
       }
+      setSelectedAddonIds(addonIds)
+    }
+
+    // Restore promo code if saved
+    if (savedState?.promoCode) {
+      setPromoCode(savedState.promoCode)
     }
   }, [service, variantFromUrl, addonsFromUrl])
+
+  // Save checkout state whenever selections change
+  useEffect(() => {
+    if (!service) return
+    saveCheckoutState({
+      serviceId: service.id,
+      variant: selectedVariant,
+      addons: selectedAddonIds,
+      promoCode: promoCode,
+      timestamp: Date.now(),
+    })
+  }, [service, selectedVariant, selectedAddonIds, promoCode])
 
   const fetchService = async () => {
     if (!serviceId) return
@@ -409,6 +483,7 @@ export default function CheckoutPage() {
         }
         clearPreCursorAnswers()
         clearAllAttributionData()
+        clearCheckoutState()
         setSuccessModal({
           isOpen: true,
           orderId: data.order_id,
@@ -440,6 +515,7 @@ export default function CheckoutPage() {
           }
           clearPreCursorAnswers()
           clearAllAttributionData()
+          clearCheckoutState()
           setSuccessModal({
             isOpen: true,
             orderId: data.order_id,
@@ -450,8 +526,18 @@ export default function CheckoutPage() {
         theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.9)' },
       }
 
-      // @ts-ignore
-      const razorpay = new window.Razorpay(options)
+      // Check Razorpay script loaded
+      if (typeof window === 'undefined' || !(window as any).Razorpay) {
+        toast({
+          title: 'Payment service unavailable',
+          description: 'Please refresh the page and try again.',
+          variant: 'destructive',
+        })
+        setIsProcessing(false)
+        return
+      }
+
+      const razorpay = new (window as any).Razorpay(options)
       razorpay.open()
     } catch (err: any) {
       console.error('Checkout error:', err)
@@ -1097,7 +1183,7 @@ function OrderSummarySidebar({
         <div className="flex gap-2">
           <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
             <a
-              href={`https://wa.me/917042100461?text=Hi, I have a question about ${encodeURIComponent(serviceName)}`}
+              href={getWhatsAppLink(`Hi, I have a question about ${serviceName}`)}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -1106,7 +1192,7 @@ function OrderSummarySidebar({
             </a>
           </Button>
           <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
-            <a href="tel:+917042100461">
+            <a href={getPhoneLink()}>
               <Phone className="h-3.5 w-3.5" />
               Call
             </a>

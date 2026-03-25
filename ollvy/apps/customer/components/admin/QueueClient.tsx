@@ -78,6 +78,31 @@ const BUCKET_ORDER: Bucket[] = [
 const SLA_ASSIGNMENT_HOURS = 4 // Must be assigned within 4 hours of payment
 const SLA_RESPONSE_HOURS = 24 // Assigned person must respond within 24 hours
 
+// Issue #4: Waitlist escalation thresholds in days
+const ESCALATION_WARNING_DAYS = 1 // 24 hours
+const ESCALATION_URGENT_DAYS = 2 // 48 hours
+const ESCALATION_CRITICAL_DAYS = 3 // 72 hours
+
+// Helper to get escalation status for waitlisted orders
+type EscalationLevel = 'warning' | 'urgent' | 'critical' | null
+const getEscalationStatus = (order: QueueOrder): { level: EscalationLevel; label: string; daysWaiting: number } | null => {
+  // Only show escalation for needs_assignment bucket
+  if (order.bucket !== 'needs_assignment') return null
+  if (!order.is_paid || !order.paid_at) return null
+
+  const daysWaiting = order.days_active
+
+  if (daysWaiting >= ESCALATION_CRITICAL_DAYS) {
+    return { level: 'critical', label: `CRITICAL: ${daysWaiting}d waiting`, daysWaiting }
+  } else if (daysWaiting >= ESCALATION_URGENT_DAYS) {
+    return { level: 'urgent', label: `URGENT: ${daysWaiting}d waiting`, daysWaiting }
+  } else if (daysWaiting >= ESCALATION_WARNING_DAYS) {
+    return { level: 'warning', label: `${daysWaiting}d waiting`, daysWaiting }
+  }
+
+  return null
+}
+
 // Quick date range presets
 const DATE_PRESETS = [
   { label: 'Today', getValue: () => {
@@ -123,6 +148,8 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
   const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(false)
   const [assignDropdownOpen, setAssignDropdownOpen] = useState(false)
+  const [assignedToFilter, setAssignedToFilter] = useState<Set<string>>(new Set()) // empty = all, 'unassigned' or admin_ids
+  const [assignedToDropdownOpen, setAssignedToDropdownOpen] = useState(false)
 
   const isSuperAdmin = adminUser.role === 'super_admin'
 
@@ -194,8 +221,17 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
       })
     }
 
+    // Filter by assigned admin (multi-select)
+    if (assignedToFilter.size > 0) {
+      result = result.filter(order => {
+        if (assignedToFilter.has('unassigned') && !order.assigned_admin_id) return true
+        if (order.assigned_admin_id && assignedToFilter.has(order.assigned_admin_id)) return true
+        return false
+      })
+    }
+
     return result
-  }, [orders, hideUnpaid, selectedServiceType, selectedBucketFilter, dateRange])
+  }, [orders, hideUnpaid, selectedServiceType, selectedBucketFilter, dateRange, assignedToFilter])
 
   // Count active filters
   const activeFilterCount = useMemo(() => {
@@ -204,8 +240,9 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
     if (selectedServiceType !== 'all') count++
     if (selectedBucketFilter !== 'all') count++
     if (dateRange?.from) count++
+    if (assignedToFilter.size > 0) count++
     return count
-  }, [hideUnpaid, selectedServiceType, selectedBucketFilter, dateRange])
+  }, [hideUnpaid, selectedServiceType, selectedBucketFilter, dateRange, assignedToFilter])
 
   // Reset all filters
   const resetFilters = () => {
@@ -213,6 +250,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
     setSelectedServiceType('all')
     setSelectedBucketFilter('all')
     setDateRange(undefined)
+    setAssignedToFilter(new Set())
   }
 
   // Calculate bucket counts based on visible orders
@@ -350,6 +388,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
         <Button
           variant={selectedBucket === 'all' ? 'default' : 'outline'}
           onClick={() => setSelectedBucket('all')}
+          className="min-w-[140px]"
         >
           All Active ({visibleOrders.length})
         </Button>
@@ -470,6 +509,94 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
           </PopoverContent>
         </Popover>
 
+        {/* Assigned To Filter (Multi-select) */}
+        {isSuperAdmin && adminUsers.length > 0 && (
+          <Popover open={assignedToDropdownOpen} onOpenChange={setAssignedToDropdownOpen}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                {assignedToFilter.size === 0
+                  ? 'Assigned To'
+                  : assignedToFilter.size === 1
+                  ? assignedToFilter.has('unassigned')
+                    ? 'Unassigned'
+                    : adminUsers.find(a => assignedToFilter.has(a.id))?.name || 'Assigned To'
+                  : `${assignedToFilter.size} selected`}
+                {assignedToFilter.size > 0 && (
+                  <Badge variant="secondary" className="ml-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                    {assignedToFilter.size}
+                  </Badge>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-72 p-2" align="start">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between px-2 py-1">
+                  <p className="text-xs text-muted-foreground">
+                    Filter by assigned team member
+                  </p>
+                  {assignedToFilter.size > 0 && (
+                    <button
+                      onClick={() => setAssignedToFilter(new Set())}
+                      className="text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <label
+                  className={`w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-muted cursor-pointer ${assignedToFilter.has('unassigned') ? 'bg-muted' : ''}`}
+                >
+                  <Checkbox
+                    checked={assignedToFilter.has('unassigned')}
+                    onCheckedChange={(checked) => {
+                      setAssignedToFilter(prev => {
+                        const next = new Set(prev)
+                        if (checked) next.add('unassigned')
+                        else next.delete('unassigned')
+                        return next
+                      })
+                    }}
+                  />
+                  <span className="text-sm font-medium flex-1">Unassigned</span>
+                  <span className="text-xs text-muted-foreground">
+                    {orders.filter(o => !o.assigned_admin_id && (hideUnpaid ? o.is_paid : true)).length}
+                  </span>
+                </label>
+                <div className="border-t my-1" />
+                {adminUsers.map(admin => (
+                  <label
+                    key={admin.id}
+                    className={`w-full flex items-center gap-2 px-2 py-2 rounded hover:bg-muted cursor-pointer ${assignedToFilter.has(admin.id) ? 'bg-muted' : ''}`}
+                  >
+                    <Checkbox
+                      checked={assignedToFilter.has(admin.id)}
+                      onCheckedChange={(checked) => {
+                        setAssignedToFilter(prev => {
+                          const next = new Set(prev)
+                          if (checked) next.add(admin.id)
+                          else next.delete(admin.id)
+                          return next
+                        })
+                      }}
+                    />
+                    <span className="text-sm font-medium flex-1">{admin.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {admin.activeOrderCount} active
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
+
+        {/* Bulk Assign */}
         {isSuperAdmin && adminUsers.length > 0 && (
           <Popover open={assignDropdownOpen} onOpenChange={setAssignDropdownOpen}>
             <PopoverTrigger asChild>
@@ -573,6 +700,25 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
                             : `${order.sla_overdue_hours}h Overdue`}
                         </Badge>
                       )}
+                      {/* Issue #4: Waitlist Escalation Badge */}
+                      {(() => {
+                        const escalation = getEscalationStatus(order)
+                        if (!escalation) return null
+                        return (
+                          <Badge
+                            variant="outline"
+                            className={
+                              escalation.level === 'critical'
+                                ? 'bg-red-100 border-red-500 text-red-700 dark:bg-red-950 dark:border-red-500 dark:text-red-300'
+                                : escalation.level === 'urgent'
+                                ? 'bg-orange-100 border-orange-500 text-orange-700 dark:bg-orange-950 dark:border-orange-500 dark:text-orange-300'
+                                : 'bg-amber-100 border-amber-500 text-amber-700 dark:bg-amber-950 dark:border-amber-500 dark:text-amber-300'
+                            }
+                          >
+                            {escalation.label}
+                          </Badge>
+                        )
+                      })()}
                     </div>
                     <div className="text-sm text-muted-foreground truncate">
                       {order.service_name}

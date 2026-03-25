@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Send, Paperclip, X, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useToast } from '@/lib/hooks/use-toast'
 
 interface ChatInputProps {
   onSend: (message: string) => Promise<void>
@@ -17,6 +18,7 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const { toast } = useToast()
 
   const handleSend = async () => {
     if ((!message.trim() && !selectedFile) || isSending || disabled) return
@@ -35,6 +37,11 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
       }
     } catch (error) {
       console.error('Failed to send message:', error)
+      toast({
+        title: 'Message not sent',
+        description: 'Please try again.',
+        variant: 'destructive',
+      })
     } finally {
       setIsSending(false)
       inputRef.current?.focus()

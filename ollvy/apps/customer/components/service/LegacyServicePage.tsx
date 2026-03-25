@@ -32,6 +32,7 @@ import {
   Phone,
   MessageCircle,
 } from 'lucide-react'
+import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
 
 // Map icon names to Lucide components
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -656,7 +657,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
                         <a
-                          href={`https://wa.me/917042100461?text=Hi, I have a question about ${encodeURIComponent(service.name)}`}
+                          href={getWhatsAppLink(`Hi, I have a question about ${service.name}`)}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -665,7 +666,7 @@ export function LegacyServicePage({ slug }: LegacyServicePageProps) {
                         </a>
                       </Button>
                       <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
-                        <a href="tel:+917042100461">
+                        <a href={getPhoneLink()}>
                           <Phone size={13} />
                           Call
                         </a>

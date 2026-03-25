@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/dialog'
 import { getClient } from '@/lib/supabase'
 import { cn, formatDate } from '@/lib/utils'
+import { useToast } from '@/lib/hooks/use-toast'
 import type { OrderWorkDocument } from '@/lib/types'
 import {
   FileText,
@@ -31,6 +32,11 @@ import {
 } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 
+interface UploadError {
+  docId: string
+  message: string
+}
+
 interface WorkDocumentsSectionProps {
   orderId: string
   workDocuments: OrderWorkDocument[]
@@ -46,9 +52,13 @@ export function WorkDocumentsSection({
   hasProfessional,
   activeStageKey,
 }: WorkDocumentsSectionProps) {
+  const { toast } = useToast()
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [uploadingDocId, setUploadingDocId] = useState<string | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
+  const [uploadError, setUploadError] = useState<UploadError | null>(null)
+  // Lock to prevent race conditions - only one upload at a time
+  const isAnyUploadingRef = useRef(false)
 
   // Filter documents by stage if activeStageKey is provided
   const filteredDocuments = activeStageKey
@@ -98,23 +108,38 @@ export function WorkDocumentsSection({
   }
 
   const handleUpload = useCallback(async (docId: string, file: File) => {
+    // Prevent race conditions - only one upload at a time
+    if (isAnyUploadingRef.current) {
+      toast({
+        title: 'Upload in progress',
+        description: 'Please wait for the current upload to complete',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    isAnyUploadingRef.current = true
     setUploadingDocId(docId)
     setUploadProgress(0)
+    setUploadError(null)
+
+    let storageFilePath: string | null = null
 
     try {
       const supabase = getClient()
       const fileExt = file.name.split('.').pop()
       const fileName = `${orderId}/${docId}/${Date.now()}.${fileExt}`
+      storageFilePath = fileName
 
       // Upload to storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { data: uploadData, error: storageError } = await supabase.storage
         .from('work-documents')
         .upload(fileName, file, {
           cacheControl: '3600',
           upsert: true,
         })
 
-      if (uploadError) throw uploadError
+      if (storageError) throw storageError
 
       // Get public URL
       const { data: urlData } = supabase.storage
@@ -133,17 +158,42 @@ export function WorkDocumentsSection({
         })
         .eq('id', docId)
 
-      if (updateError) throw updateError
+      if (updateError) {
+        // DB update failed - attempt to clean up the orphaned storage file
+        try {
+          await supabase.storage.from('work-documents').remove([fileName])
+        } catch (cleanupErr) {
+          console.error('Failed to cleanup orphaned file:', cleanupErr)
+        }
+        throw updateError
+      }
 
       setUploadProgress(100)
+      toast({
+        title: 'Upload successful',
+        description: 'Your document has been uploaded',
+      })
+      // Only refresh data if DB update succeeded
       onDocumentsUpdated()
     } catch (err) {
       console.error('Upload failed:', err)
+      const errorMessage = err instanceof Error ? err.message : 'Upload failed. Please try again.'
+      setUploadError({ docId, message: errorMessage })
+      toast({
+        title: 'Upload failed',
+        description: errorMessage,
+        variant: 'destructive',
+      })
     } finally {
+      isAnyUploadingRef.current = false
       setUploadingDocId(null)
       setUploadProgress(0)
     }
-  }, [orderId, onDocumentsUpdated])
+  }, [orderId, onDocumentsUpdated, toast])
+
+  const clearUploadError = useCallback(() => {
+    setUploadError(null)
+  }, [])
 
   // Don't show section if no professional assigned yet
   if (!hasProfessional) {
@@ -240,6 +290,10 @@ export function WorkDocumentsSection({
                     onUpload={(file) => handleUpload(uploadDoc.id, file)}
                     isUploading={uploadingDocId === uploadDoc.id}
                     uploadProgress={uploadingDocId === uploadDoc.id ? uploadProgress : 0}
+                    hasError={uploadError?.docId === uploadDoc.id}
+                    errorMessage={uploadError?.docId === uploadDoc.id ? uploadError.message : undefined}
+                    onClearError={clearUploadError}
+                    isAnyUploading={uploadingDocId !== null}
                   />
                 ))}
               </div>
@@ -278,6 +332,10 @@ export function WorkDocumentsSection({
                     isUploading={uploadingDocId === doc.id}
                     uploadProgress={uploadingDocId === doc.id ? uploadProgress : 0}
                     onUpload={(file) => handleUpload(doc.id, file)}
+                    hasError={uploadError?.docId === doc.id}
+                    errorMessage={uploadError?.docId === doc.id ? uploadError.message : undefined}
+                    onClearError={clearUploadError}
+                    isAnyUploading={uploadingDocId !== null}
                   />
                 ))}
               </div>
@@ -308,6 +366,10 @@ function LinkedDocumentCard({
   onUpload,
   isUploading,
   uploadProgress,
+  hasError,
+  errorMessage,
+  onClearError,
+  isAnyUploading,
 }: {
   downloadDoc: OrderWorkDocument
   uploadDoc: OrderWorkDocument
@@ -315,6 +377,10 @@ function LinkedDocumentCard({
   onUpload: (file: File) => void
   isUploading: boolean
   uploadProgress: number
+  hasError?: boolean
+  errorMessage?: string
+  onClearError?: () => void
+  isAnyUploading?: boolean
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
@@ -449,11 +515,35 @@ function LinkedDocumentCard({
         {/* Right: Upload Section */}
         <div
           className="p-4"
-          onDrop={!isUploaded ? handleDrop : undefined}
-          onDragOver={!isUploaded ? (e) => { e.preventDefault(); setIsDragging(true) } : undefined}
-          onDragLeave={!isUploaded ? () => setIsDragging(false) : undefined}
+          onDrop={!isUploaded && !isAnyUploading ? handleDrop : undefined}
+          onDragOver={!isUploaded && !isAnyUploading ? (e) => { e.preventDefault(); setIsDragging(true) } : undefined}
+          onDragLeave={!isUploaded && !isAnyUploading ? () => setIsDragging(false) : undefined}
         >
           <p className="text-xs text-muted-foreground mb-3">Upload signed version</p>
+          {/* Error state with retry */}
+          {hasError && (
+            <div className="mb-3 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-destructive font-medium">Upload failed</p>
+                  <p className="text-xs text-destructive/80 mt-0.5">{errorMessage}</p>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-2 w-full gap-1.5"
+                onClick={() => {
+                  onClearError?.()
+                  fileInputRef.current?.click()
+                }}
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                Try Again
+              </Button>
+            </div>
+          )}
           {isUploaded ? (
             <div className="flex items-center gap-3 mb-3">
               <div className={cn(
@@ -473,21 +563,26 @@ function LinkedDocumentCard({
                 </p>
               </div>
             </div>
-          ) : (
+          ) : !hasError && (
             <div
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => !isAnyUploading && fileInputRef.current?.click()}
               className={cn(
                 'border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition-all min-h-[80px]',
                 isDragging
                   ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/10'
                   : 'border-border hover:border-muted-foreground/50 hover:bg-muted/50',
-                isUploading && 'pointer-events-none opacity-70'
+                (isUploading || isAnyUploading) && 'pointer-events-none opacity-70'
               )}
             >
               {isUploading ? (
                 <div className="space-y-2 text-center">
                   <Loader2 className="h-5 w-5 text-muted-foreground mx-auto animate-spin" />
                   <p className="text-xs text-muted-foreground">Uploading...</p>
+                </div>
+              ) : isAnyUploading ? (
+                <div className="space-y-2 text-center">
+                  <Clock className="h-5 w-5 text-muted-foreground mx-auto" />
+                  <p className="text-xs text-muted-foreground">Please wait...</p>
                 </div>
               ) : (
                 <>
@@ -576,22 +671,31 @@ function RequestCard({
   isUploading,
   uploadProgress,
   onUpload,
+  hasError,
+  errorMessage,
+  onClearError,
+  isAnyUploading,
 }: {
   document: OrderWorkDocument
   isUploading: boolean
   uploadProgress: number
   onUpload: (file: File) => void
+  hasError?: boolean
+  errorMessage?: string
+  onClearError?: () => void
+  isAnyUploading?: boolean
 }) {
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
+    if (acceptedFiles.length > 0 && !isAnyUploading) {
+      onClearError?.()
       onUpload(acceptedFiles[0])
     }
-  }, [onUpload])
+  }, [onUpload, isAnyUploading, onClearError])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     maxFiles: 1,
-    disabled: isUploading || document.status === 'verified',
+    disabled: isUploading || isAnyUploading || document.status === 'verified',
   })
 
   const statusConfig = {
@@ -667,35 +771,66 @@ function RequestCard({
       {/* Upload Area */}
       {(document.status === 'pending' || document.status === 'rejected') && (
         <div className="p-4 pt-0">
-          <div
-            {...getRootProps()}
-            className={cn(
-              'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
-              isDragActive
-                ? 'border-primary bg-primary/5'
-                : 'border-border hover:border-primary/50 hover:bg-muted/50',
-              isUploading && 'pointer-events-none opacity-70'
-            )}
-          >
-            <input {...getInputProps()} />
-            {isUploading ? (
-              <div className="space-y-3">
-                <Loader2 className="h-8 w-8 text-muted-foreground mx-auto animate-spin" />
-                <p className="text-sm text-muted-foreground">Uploading...</p>
-                <Progress value={uploadProgress} className="h-1.5 max-w-xs mx-auto" />
+          {/* Error state with retry */}
+          {hasError && (
+            <div className="mb-3 p-3 rounded-lg bg-destructive/10 border border-destructive/30">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 text-destructive flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-destructive font-medium">Upload failed</p>
+                  <p className="text-xs text-destructive/80 mt-0.5">{errorMessage}</p>
+                </div>
               </div>
-            ) : (
-              <>
-                <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                <p className="text-sm font-medium text-foreground">
-                  {isDragActive ? 'Drop file here' : 'Drop file or click to upload'}
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  PDF, JPG, PNG up to 10MB
-                </p>
-              </>
-            )}
-          </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-2 w-full gap-1.5"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  onClearError?.()
+                }}
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                Try Again
+              </Button>
+            </div>
+          )}
+          {!hasError && (
+            <div
+              {...getRootProps()}
+              className={cn(
+                'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
+                isDragActive
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50 hover:bg-muted/50',
+                (isUploading || isAnyUploading) && 'pointer-events-none opacity-70'
+              )}
+            >
+              <input {...getInputProps()} />
+              {isUploading ? (
+                <div className="space-y-3">
+                  <Loader2 className="h-8 w-8 text-muted-foreground mx-auto animate-spin" />
+                  <p className="text-sm text-muted-foreground">Uploading...</p>
+                  <Progress value={uploadProgress} className="h-1.5 max-w-xs mx-auto" />
+                </div>
+              ) : isAnyUploading ? (
+                <div className="space-y-3">
+                  <Clock className="h-8 w-8 text-muted-foreground mx-auto" />
+                  <p className="text-sm text-muted-foreground">Please wait for other upload...</p>
+                </div>
+              ) : (
+                <>
+                  <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                  <p className="text-sm font-medium text-foreground">
+                    {isDragActive ? 'Drop file here' : 'Drop file or click to upload'}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    PDF, JPG, PNG up to 10MB
+                  </p>
+                </>
+              )}
+            </div>
+          )}
         </div>
       )}
 

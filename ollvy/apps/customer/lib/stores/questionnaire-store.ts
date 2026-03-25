@@ -199,14 +199,18 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         // Sort steps by step number
         steps.sort((a, b) => a.stepNumber - b.stepNumber)
 
-        // Determine current step - find first step with unanswered questions
-        // A step is "incomplete" if it has any required question without a response
-        // or any question without a response (for better UX, start where user left off)
+        // Determine current step - find first step with unanswered REQUIRED questions
+        // Only mark step as incomplete if a REQUIRED question has no response
         let currentStep = 1
         for (const step of steps) {
-          const hasUnansweredQuestions = step.questions.some(q => {
+          const hasUnansweredRequiredQuestions = step.questions.some(q => {
+            // Only check required questions
+            if (!q.validation?.required) {
+              return false
+            }
+
             const response = responses[q.question_key]
-            // Check if this question has no meaningful response
+            // Check if this required question has no meaningful response
             if (response === undefined || response === null || response === '') {
               return true
             }
@@ -217,7 +221,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
             return false
           })
 
-          if (hasUnansweredQuestions) {
+          if (hasUnansweredRequiredQuestions) {
             currentStep = step.stepNumber
             break
           }

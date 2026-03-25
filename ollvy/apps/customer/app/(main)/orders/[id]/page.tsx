@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/collapsible'
 import { OrderStatusBadge } from '@/components/orders/OrderStatusBadge'
 import { DocumentPreview } from '@/components/documents'
-import { getClient } from '@/lib/supabase'
+import { getClient, getEdgeFunctionUrl } from '@/lib/supabase'
 import { formatPaisa, formatDate, cn } from '@/lib/utils'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
@@ -89,6 +89,7 @@ export default function OrderDetailPage() {
   const [documents, setDocuments] = useState<OrderDocument[]>([])
   const [workDocuments, setWorkDocuments] = useState<OrderWorkDocument[]>([])
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>([])
+  const [invoiceId, setInvoiceId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -106,6 +107,54 @@ export default function OrderDetailPage() {
   useEffect(() => {
     if (orderId && isHydrated) {
       fetchOrder()
+    }
+  }, [orderId, isHydrated])
+
+  // Real-time subscription for document updates (Issue #6)
+  useEffect(() => {
+    if (!orderId || !isHydrated) return
+
+    const supabase = getClient()
+
+    // Subscribe to order_documents changes
+    const docsChannel = supabase
+      .channel(`order-docs-${orderId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'order_documents',
+          filter: `order_id=eq.${orderId}`,
+        },
+        () => {
+          // Refresh documents when any change happens
+          fetchOrder()
+        }
+      )
+      .subscribe()
+
+    // Subscribe to order_work_documents changes
+    const workDocsChannel = supabase
+      .channel(`order-work-docs-${orderId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'order_work_documents',
+          filter: `order_id=eq.${orderId}`,
+        },
+        () => {
+          // Refresh work documents when any change happens
+          fetchOrder()
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(docsChannel)
+      supabase.removeChannel(workDocsChannel)
     }
   }, [orderId, isHydrated])
 
@@ -191,6 +240,17 @@ export default function OrderDetailPage() {
 
           setQuestionnaireResponses(formattedResponses)
         }
+      }
+
+      // Fetch invoice for this order
+      const { data: invoiceData } = await supabase
+        .from('invoices')
+        .select('id')
+        .eq('order_id', orderId)
+        .single()
+
+      if (invoiceData) {
+        setInvoiceId(invoiceData.id)
       }
     } catch (err) {
       console.error('Failed to fetch order:', err)
@@ -355,8 +415,31 @@ export default function OrderDetailPage() {
     return currentStage?.stage_key || null
   }, [order?.service_package?.workflow_stages, completedStagesCount])
 
-  const handleDownloadInvoice = () => {
-    console.log('Download invoice')
+  const handleDownloadInvoice = async () => {
+    if (!invoiceId) return
+
+    try {
+      const supabase = getClient()
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session) return
+
+      const response = await fetch(getEdgeFunctionUrl('get-invoice-url'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ invoiceId }),
+      })
+
+      const { url } = await response.json()
+      if (url) {
+        window.open(url, '_blank')
+      }
+    } catch (err) {
+      console.error('Failed to download invoice:', err)
+    }
   }
 
   const handleDownloadEngagementLetter = () => {

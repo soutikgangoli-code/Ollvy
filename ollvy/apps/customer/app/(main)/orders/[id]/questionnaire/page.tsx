@@ -9,6 +9,7 @@ import { QuestionnaireWizard } from '@/components/questionnaire'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { ArrowLeft, ClipboardList, HelpCircle, MessageCircle } from 'lucide-react'
+import { getWhatsAppLink } from '@/lib/constants'
 
 interface OrderData {
   id: string
@@ -161,7 +162,7 @@ export default function QuestionnairePage() {
               If you're unsure about any question, our team is here to help.
             </p>
             <a
-              href={`https://wa.me/917042100461?text=Hi, I need help with setup for order ${order.order_number}`}
+              href={getWhatsAppLink(`Hi, I need help with setup for order ${order.order_number}`)}
               target="_blank"
               rel="noopener noreferrer"
             >

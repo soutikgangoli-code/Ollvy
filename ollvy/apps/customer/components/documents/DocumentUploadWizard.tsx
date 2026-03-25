@@ -5,6 +5,8 @@ import { useDropzone } from 'react-dropzone'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
+import { useToast } from '@/lib/hooks/use-toast'
+import { getWhatsAppLink } from '@/lib/constants'
 import {
   Upload,
   CheckCircle2,
@@ -61,6 +63,7 @@ export function DocumentUploadWizard({
   const [uploadedInSession, setUploadedInSession] = useState<Set<string>>(new Set())
   const [showCompletion, setShowCompletion] = useState(false)
   const hasInitialized = useRef(false)
+  const { toast } = useToast()
 
   // Update index when documents load/change (only on first meaningful load)
   useEffect(() => {
@@ -84,9 +87,22 @@ export function DocumentUploadWizard({
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     if (acceptedFiles.length === 0 || !currentDoc) return
 
+    const file = acceptedFiles[0]
+
+    // File size validation (20MB max)
+    const maxSizeBytes = 20 * 1024 * 1024
+    if (file.size > maxSizeBytes) {
+      toast({
+        title: 'File too large',
+        description: 'Maximum file size is 20MB.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setIsUploading(true)
     try {
-      await onUpload(currentDoc.document_key, acceptedFiles[0])
+      await onUpload(currentDoc.document_key, file)
       setUploadedInSession(prev => new Set(prev).add(currentDoc.document_key))
 
       // Auto-advance after short delay
@@ -99,17 +115,28 @@ export function DocumentUploadWizard({
       }, 800)
     } catch (error) {
       console.error('Upload failed:', error)
+      toast({
+        title: 'Upload failed',
+        description: 'Please try again or contact support.',
+        variant: 'destructive',
+      })
     } finally {
       setIsUploading(false)
     }
-  }, [currentDoc, currentIndex, totalDocs, onUpload])
+  }, [currentDoc, currentIndex, totalDocs, onUpload, toast])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
     accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.webp'],
+      'image/*': ['.png', '.jpg', '.jpeg', '.webp', '.heic', '.heif'],
       'application/pdf': ['.pdf'],
+      'application/msword': ['.doc'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'application/vnd.ms-excel': ['.xls'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'application/zip': ['.zip'],
+      'application/x-zip-compressed': ['.zip'],
     },
   })
 
@@ -312,7 +339,7 @@ export function DocumentUploadWizard({
                   Drag & drop or click to upload
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  PNG, JPG, or PDF up to 10MB
+                  PNG, JPG, PDF, DOC, DOCX, XLS, XLSX, or ZIP up to 20MB
                 </p>
               </>
             )}
@@ -375,7 +402,7 @@ export function DocumentUploadWizard({
         <p className="text-sm text-muted-foreground">
           Need help with documents?{' '}
           <a
-            href="https://wa.me/917042100461?text=Hi, I need help uploading documents"
+            href={getWhatsAppLink('Hi, I need help uploading documents')}
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline font-medium"

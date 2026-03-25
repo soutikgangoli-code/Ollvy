@@ -73,8 +73,9 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
       )
       .subscribe()
 
-    // Cleanup
+    // Cleanup - unsubscribe before removing channel to prevent memory leak
     return () => {
+      channel.unsubscribe()
       supabase.removeChannel(channel)
     }
   }, [conversationId])

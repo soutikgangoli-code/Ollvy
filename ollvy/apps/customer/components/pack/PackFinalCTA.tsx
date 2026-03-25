@@ -1,5 +1,6 @@
 import { CheckCircle, Check, MessageCircle } from 'lucide-react'
 import { formatPaisa } from '@/lib/data/packs'
+import { getWhatsAppLink } from '@/lib/constants'
 
 export function PackFinalCTA({
   total,
@@ -40,7 +41,7 @@ export function PackFinalCTA({
             Book Now →
           </a>
           <a
-            href="https://wa.me/917042100461?text=Hi, I have a question about the Cloud Kitchen Setup pack"
+            href={getWhatsAppLink('Hi, I have a question about the Cloud Kitchen Setup pack')}
             target="_blank"
             className="border border-border rounded-lg h-12 px-8 text-sm text-muted-foreground flex items-center justify-center gap-2 hover:border-foreground/20 transition-all"
           >

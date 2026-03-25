@@ -8,8 +8,8 @@ export const metadata = { robots: 'noindex, nofollow' }
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createServerSupabase()
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) redirect('/admin/login')
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/admin/login')
 
   // supabaseServer is a direct export that can be null at build time
   if (!supabaseServer) redirect('/admin/login')
@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const { data: adminUser } = await supabaseServer
     .from('admin_users')
     .select('id, name, email, role, is_active')  // role required for super_admin checks
-    .eq('auth_user_id', session.user.id)
+    .eq('auth_user_id', user.id)
     .single()
 
   if (!adminUser?.is_active) redirect('/admin/login')

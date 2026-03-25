@@ -5,6 +5,7 @@ import { ArrowRight, Loader2, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { getWhatsAppLink } from '@/lib/constants'
 
 interface LineItem {
   label: string
@@ -206,7 +207,7 @@ export function CheckoutOrderSummary({
         <div className="text-center pt-2">
           <p className="text-sm text-muted-foreground">Have questions before paying?</p>
           <a
-            href="https://wa.me/917042100461?text=Hi, I have a question about checkout"
+            href={getWhatsAppLink('Hi, I have a question about checkout')}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-[#25D366]"

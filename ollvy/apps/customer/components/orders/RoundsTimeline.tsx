@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
@@ -256,6 +256,8 @@ function RoundQuestionsSection({
   const supabase = getClient()
   const [loading, setLoading] = useState(false)
   const [answers, setAnswers] = useState<Record<string, string>>({})
+  // Ref to prevent double submissions from rapid clicks
+  const submitInFlightRef = useRef(false)
 
   const unansweredQuestions = questions.filter(q => !q.answered_at)
   const answeredQuestions = questions.filter(q => q.answered_at)
@@ -265,9 +267,14 @@ function RoundQuestionsSection({
   }
 
   const handleSubmit = async () => {
+    // Prevent double submission
+    if (submitInFlightRef.current) return
+    submitInFlightRef.current = true
+
     const allFilled = unansweredQuestions.every(q => answers[q.id]?.trim())
     if (!allFilled) {
       toast({ title: 'Please answer all questions', variant: 'destructive' })
+      submitInFlightRef.current = false
       return
     }
 
@@ -287,6 +294,7 @@ function RoundQuestionsSection({
       window.location.reload()
     } catch (err) {
       toast({ title: 'Error submitting answers', variant: 'destructive' })
+      submitInFlightRef.current = false
     } finally {
       setLoading(false)
     }
@@ -348,12 +356,18 @@ function RoundDocumentsSection({
   const supabase = getClient()
   const [loading, setLoading] = useState(false)
   const [stagedFiles, setStagedFiles] = useState<Record<string, File>>({})
+  // Ref to prevent double submissions from rapid clicks
+  const submitInFlightRef = useRef(false)
 
   const handleFileStage = (docId: string, file: File) => {
     setStagedFiles(prev => ({ ...prev, [docId]: file }))
   }
 
   const handleSubmitDocs = async () => {
+    // Prevent double submission
+    if (submitInFlightRef.current) return
+    submitInFlightRef.current = true
+
     setLoading(true)
     try {
       for (const [docId, file] of Object.entries(stagedFiles)) {
@@ -374,6 +388,7 @@ function RoundDocumentsSection({
       window.location.reload()
     } catch (err) {
       toast({ title: 'Error uploading documents', variant: 'destructive' })
+      submitInFlightRef.current = false
     } finally {
       setLoading(false)
     }

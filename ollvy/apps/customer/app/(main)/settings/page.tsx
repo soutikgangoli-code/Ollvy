@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { getPhoneLink, SUPPORT_PHONE } from '@/lib/constants'
 import {
   Settings,
   User,
@@ -62,7 +63,7 @@ export default function SettingsPage() {
           icon: Phone,
           label: 'Contact Support',
           description: 'Get help from our team',
-          href: 'tel:+917042100461',
+          href: getPhoneLink(),
           external: true,
         },
         {
