@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { AuthModal } from '@/components/auth'
+import { StructuredData } from '@/components/seo/StructuredData'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -76,6 +77,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <StructuredData />
+      </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
         <ThemeProvider
           attribute="class"

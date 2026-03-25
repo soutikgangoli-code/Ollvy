@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getServiceBySlugFromDB, getAllServiceSlugs, getServiceReviews, getRelatedServicesBySlugs } from '@/lib/data/services'
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
+import { ServiceStructuredData } from '@/components/seo/ServiceStructuredData'
 
 /**
  * Service Detail Page - Server Component
@@ -73,12 +74,23 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     getRelatedServicesBySlugs(service.relatedSlugs),
   ])
 
+  // Get price in rupees
+  const basePrice = pricing?.ollvyFee || service.ollvyFee || 0
+
   return (
-    <UnifiedServicePage
-      service={service}
-      pricing={pricing}
-      reviews={reviews}
-      relatedServices={relatedServices}
-    />
+    <>
+      <ServiceStructuredData
+        serviceName={service.name}
+        serviceSlug={slug}
+        description={service.seoDescription || service.tagline}
+        price={basePrice}
+      />
+      <UnifiedServicePage
+        service={service}
+        pricing={pricing}
+        reviews={reviews}
+        relatedServices={relatedServices}
+      />
+    </>
   )
 }
