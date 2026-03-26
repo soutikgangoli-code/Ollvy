@@ -16,7 +16,7 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
       </div>
 
       {/* Stats - Timeline & Cost */}
-      <div className="flex items-center gap-8">
+      <div className="flex items-stretch gap-8">
         <div>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-2">
             <Clock className="h-3 w-3" />
@@ -24,13 +24,19 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
           </p>
           <p className="font-mono text-lg font-semibold text-foreground">{content.intro.timeline}</p>
         </div>
-        <div className="h-10 w-px bg-border/50" />
+        <div className="w-px bg-border/50" />
         <div>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-2">
             <IndianRupee className="h-3 w-3" />
             Cost
           </p>
-          <p className="font-mono text-lg font-semibold text-foreground">{content.intro.cost}</p>
+          <div className="space-y-0.5">
+            {content.intro.cost.split('|').map((part, index) => (
+              <p key={index} className="font-mono text-sm text-foreground">
+                {part.trim()}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
 
