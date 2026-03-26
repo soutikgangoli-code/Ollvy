@@ -89,10 +89,16 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
           {content.intro.whoNeeds.map((item, index) => (
             <div
               key={index}
-              className="py-2 px-3 rounded-lg border border-border/50 bg-card hover:border-border hover:bg-muted/50 transition-all flex items-center gap-3"
+              className="p-3 rounded-xl border border-border/50 bg-card hover:border-border hover:bg-muted/50 transition-all"
             >
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <p className="text-sm text-muted-foreground">{item}</p>
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-lg bg-muted border border-border/50 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div className="flex-1 min-w-0 pt-1.5">
+                  <p className="text-sm text-muted-foreground">{item}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
