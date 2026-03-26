@@ -5,7 +5,30 @@ interface DocumentPageIntroProps {
   content: DocumentPageContent
 }
 
+// Parse timeline string like "7-15 working days" or "18-36 months for full registration | TM symbol..."
+function parseTimeline(timeline: string) {
+  // Split by pipe first for multiple parts
+  const parts = timeline.split('|').map(p => p.trim())
+  const mainPart = parts[0]
+
+  // Extract number/range and unit from main part
+  // Matches patterns like "7-15 working days", "1-3 days", "18-36 months"
+  const match = mainPart.match(/^([\d-]+)\s*(.+)$/)
+
+  if (match) {
+    return {
+      number: match[1],
+      unit: match[2],
+      note: parts.length > 1 ? parts.slice(1).join(' | ') : null
+    }
+  }
+
+  return { number: null, unit: mainPart, note: parts.length > 1 ? parts.slice(1).join(' | ') : null }
+}
+
 export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
+  const timeline = parseTimeline(content.intro.timeline)
+
   return (
     <div className="mb-12 space-y-10">
       {/* Main description */}
@@ -22,7 +45,19 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
             <Clock className="h-3 w-3" />
             Timeline
           </p>
-          <p className="font-mono text-lg font-semibold text-foreground">{content.intro.timeline}</p>
+          <div>
+            {timeline.number ? (
+              <>
+                <p className="font-mono text-2xl font-semibold text-foreground">{timeline.number}</p>
+                <p className="font-mono text-xs text-muted-foreground">{timeline.unit}</p>
+              </>
+            ) : (
+              <p className="font-mono text-sm text-foreground">{timeline.unit}</p>
+            )}
+            {timeline.note && (
+              <p className="font-mono text-xs text-muted-foreground mt-1">{timeline.note}</p>
+            )}
+          </div>
         </div>
         <div className="w-px bg-border/50" />
         <div>
