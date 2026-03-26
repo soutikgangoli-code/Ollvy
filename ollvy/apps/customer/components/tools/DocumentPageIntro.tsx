@@ -39,33 +39,32 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
       </div>
 
       {/* Stats - Timeline & Cost */}
-      <div className="flex items-stretch gap-8">
-        <div>
-          <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-2">
+      <div className="grid grid-cols-2 border border-border rounded-xl overflow-hidden">
+        <div className="p-6 border-r border-border">
+          <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
             <Clock className="h-3 w-3" />
             Timeline
           </p>
           <div>
             {timeline.number ? (
               <>
-                <p className="font-mono text-2xl font-semibold text-foreground">{timeline.number}</p>
-                <p className="font-mono text-xs text-muted-foreground">{timeline.unit}</p>
+                <p className="font-mono text-3xl font-semibold text-foreground">{timeline.number}</p>
+                <p className="font-mono text-sm text-muted-foreground mt-1">{timeline.unit}</p>
               </>
             ) : (
               <p className="font-mono text-sm text-foreground">{timeline.unit}</p>
             )}
             {timeline.note && (
-              <p className="font-mono text-xs text-muted-foreground mt-1">{timeline.note}</p>
+              <p className="font-mono text-xs text-muted-foreground mt-2">{timeline.note}</p>
             )}
           </div>
         </div>
-        <div className="w-px bg-border/50" />
-        <div>
-          <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-2">
+        <div className="p-6">
+          <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
             <IndianRupee className="h-3 w-3" />
             Cost
           </p>
-          <div className="space-y-0.5">
+          <div className="space-y-1">
             {content.intro.cost.split('|').map((part, index) => (
               <p key={index} className="font-mono text-sm text-foreground">
                 {part.trim()}
