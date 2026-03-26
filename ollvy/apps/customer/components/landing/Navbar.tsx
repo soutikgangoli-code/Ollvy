@@ -33,7 +33,19 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 
 const navLinks = [
   { href: '/services', label: 'Services', sectionId: null },
-  { href: '/learn', label: 'Learn', sectionId: null },
+  { href: '/guides', label: 'Guides', sectionId: null },
+]
+
+// Popular services for crawler-friendly static links (always in DOM)
+const popularServiceLinks = [
+  { href: '/services/private-limited-company-registration', label: 'Private Limited Company Registration' },
+  { href: '/services/gst-registration', label: 'GST Registration' },
+  { href: '/services/trademark-registration', label: 'Trademark Registration' },
+  { href: '/services/fssai-license', label: 'FSSAI License' },
+  { href: '/services/llp-registration', label: 'LLP Registration' },
+  { href: '/services/msme-udyam', label: 'MSME Udyam Registration' },
+  { href: '/services/business-itr', label: 'Business ITR Filing' },
+  { href: '/services/gst-monthly-filing', label: 'GST Monthly Filing' },
 ]
 
 const toolsItems = [
@@ -634,6 +646,15 @@ export function Navbar() {
           }
         }
       `}</style>
+
+      {/* Crawler-friendly service links (sr-only but in DOM for SEO) */}
+      <nav aria-label="Popular services" className="sr-only">
+        {popularServiceLinks.map((link) => (
+          <Link key={link.href} href={link.href}>
+            {link.label}
+          </Link>
+        ))}
+      </nav>
     </>
   )
 }

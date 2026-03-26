@@ -84,6 +84,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         serviceSlug={slug}
         description={service.seoDescription || service.tagline}
         price={basePrice}
+        govtFee={service.govtFee}
+        category={service.category}
+        avgRating={service.avgRating}
+        totalRatings={service.totalRatings}
+        faqs={service.faqs}
       />
       <UnifiedServicePage
         service={service}

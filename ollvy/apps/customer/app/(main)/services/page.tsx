@@ -1,132 +1,102 @@
-'use client'
-
-import { useState, useEffect, useCallback, Suspense } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
-import { SearchBar } from '@/components/services/SearchBar'
-import { FilterChips } from '@/components/services/FilterChips'
-import { ServiceGrid } from '@/components/services/ServiceGrid'
-import { getClient } from '@/lib/supabase'
+import { Metadata } from 'next'
+import { Suspense } from 'react'
+import { ServicesClient } from './services-client'
+import { supabaseServer } from '@/lib/supabase-server'
 import { SERVICES } from '@/lib/services'
 import type { ServicePackage } from '@/lib/types'
 import { Skeleton } from '@/components/ui/skeleton'
 
-// These match actual situation_tags in the database (plus special filters)
-const CATEGORY_FILTERS = [
-  { id: 'just_starting_out', label: 'Starting Out' },
-  { id: 'filing_taxes', label: 'Tax Filing' },
-  { id: 'taking_payments', label: 'GST & Payments' },
-  { id: 'have_investors', label: 'Investors' },
-  { id: 'importing_exporting', label: 'Import/Export' },
-  { id: 'bundles', label: 'Bundles' },
-  { id: 'cloud_kitchen', label: 'Cloud Kitchen' },
-]
+// ISR: revalidate every hour to keep content fresh
+export const revalidate = 3600
 
-// Special filters that don't use situation_tags
-const SPECIAL_FILTERS = ['bundles', 'cloud_kitchen']
+export const metadata: Metadata = {
+  title: 'All Services - Business Compliance & Registration | Ollvy',
+  description:
+    'Browse all compliance services: GST registration, Pvt Ltd incorporation, ITR filing, trademark registration, and more. Fixed pricing, fast delivery, expert support.',
+  keywords: [
+    'business registration services India',
+    'GST registration service',
+    'company incorporation India',
+    'ITR filing service',
+    'trademark registration India',
+    'compliance services for startups',
+  ],
+  alternates: {
+    canonical: 'https://www.ollvy.com/services',
+  },
+  openGraph: {
+    title: 'All Services - Business Compliance & Registration | Ollvy',
+    description:
+      'Browse all compliance services: GST registration, Pvt Ltd incorporation, ITR filing, trademark registration, and more.',
+    url: 'https://www.ollvy.com/services',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'All Services - Business Compliance | Ollvy',
+    description: 'Browse all compliance services: GST, company registration, ITR filing, and more.',
+    images: ['https://www.ollvy.com/logo.png'],
+  },
+}
 
 // Convert static services to ServicePackage format for fallback
-const STATIC_SERVICES: ServicePackage[] = SERVICES.map((s, index) => ({
-  id: s.slug,
-  slug: s.slug,
-  name: s.name,
-  short_description: s.tagline,
-  long_description: s.tagline,
-  order_type: s.isRetainer ? 'recurring' : 'one_time',
-  billing_cycle: s.isRetainer ? 'monthly' : 'one_time',
-  price_base_paisa: s.ollvyFee * 100,
-  price_govt_fees_paisa: (s.govtFee ?? 0) * 100,
-  price_gst_rate: 18,
-  price_varies_by_state: false,
-  sla_working_days: s.slaDays,
-  situation_tags: [],
-  workflow_stages: [],
-  urgency_score: 50,
-  avg_rating: 4.7,
-  rating_count: 50,
-  display_order: index,
-  is_active: true,
-  scope_included: s.whatsIncluded.map(w => w.title),
-  scope_excluded: [],
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
-}))
+function getStaticServices(): ServicePackage[] {
+  return SERVICES.map((s, index) => ({
+    id: s.slug,
+    slug: s.slug,
+    name: s.name,
+    short_description: s.tagline,
+    long_description: s.tagline,
+    order_type: s.isRetainer ? 'recurring' : 'one_time',
+    billing_cycle: s.isRetainer ? 'monthly' : 'one_time',
+    price_base_paisa: s.ollvyFee * 100,
+    price_govt_fees_paisa: (s.govtFee ?? 0) * 100,
+    price_gst_rate: 18,
+    price_varies_by_state: false,
+    sla_working_days: s.slaDays,
+    situation_tags: [],
+    workflow_stages: [],
+    urgency_score: 50,
+    avg_rating: 4.7,
+    rating_count: 50,
+    display_order: index,
+    is_active: true,
+    scope_included: s.whatsIncluded.map((w) => w.title),
+    scope_excluded: [],
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }))
+}
 
-function ServicesContent() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
+// Fetch services from database (server-side)
+async function fetchServices(): Promise<ServicePackage[]> {
+  // If no server client available (build time without service role key), use static data
+  if (!supabaseServer) {
+    return getStaticServices()
+  }
 
-  const [services, setServices] = useState<ServicePackage[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
-  const [selectedFilters, setSelectedFilters] = useState<string[]>(
-    searchParams.get('filter')?.split(',').filter(Boolean) || []
-  )
+  try {
+    const { data, error } = await supabaseServer
+      .from('service_packages')
+      .select('*')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true })
 
-  const fetchServices = useCallback(async () => {
-    setIsLoading(true)
-
-    try {
-      const supabase = getClient()
-
-      let query = supabase
-        .from('service_packages')
-        .select('*')
-        .eq('is_active', true)
-        .order('display_order', { ascending: true })
-
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,short_description.ilike.%${searchQuery}%`)
-      }
-
-      // Separate special filters from situation_tag filters
-      const tagFilters = selectedFilters.filter(f => !SPECIAL_FILTERS.includes(f))
-
-      if (tagFilters.length > 0) {
-        query = query.overlaps('situation_tags', tagFilters)
-      }
-
-      // Handle special filters
-      if (selectedFilters.includes('bundles')) {
-        query = query.eq('is_bundle', true)
-      }
-      if (selectedFilters.includes('cloud_kitchen')) {
-        query = query.ilike('name', '%cloud kitchen%')
-      }
-
-      const { data, error } = await query
-
-      if (error) {
-        console.error('Error fetching services:', error)
-        // Fall back to static services only on actual errors
-        setServices(filterStaticServices(STATIC_SERVICES, searchQuery, selectedFilters))
-      } else {
-        // Use DB results even if empty (0 results is a valid search outcome)
-        setServices(data || [])
-      }
-    } catch (err) {
-      console.error('Failed to fetch services:', err)
-      // Fall back to static services on error
-      setServices(filterStaticServices(STATIC_SERVICES, searchQuery, selectedFilters))
-    } finally {
-      setIsLoading(false)
+    if (error) {
+      console.error('Error fetching services:', error)
+      return getStaticServices()
     }
-  }, [searchQuery, selectedFilters])
 
-  useEffect(() => {
-    fetchServices()
-  }, [fetchServices])
+    return data || getStaticServices()
+  } catch (err) {
+    console.error('Failed to fetch services:', err)
+    return getStaticServices()
+  }
+}
 
-  useEffect(() => {
-    const params = new URLSearchParams()
-    if (searchQuery) params.set('q', searchQuery)
-    if (selectedFilters.length > 0) params.set('filter', selectedFilters.join(','))
-
-    const newUrl = params.toString() ? `?${params.toString()}` : '/services'
-    router.replace(newUrl, { scroll: false })
-  }, [searchQuery, selectedFilters, router])
-
-  // JSON-LD structured data for services listing
-  const servicesJsonLd = {
+// Generate JSON-LD schema for search engines
+function generateServicesSchema(services: ServicePackage[]) {
+  return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     name: 'Business Compliance Services',
@@ -140,69 +110,16 @@ function ServicesContent() {
       url: `https://www.ollvy.com/services/${service.slug}`,
     })),
   }
-
-  return (
-    <div className="container py-12">
-      {/* JSON-LD Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
-      />
-
-      {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl font-semibold text-foreground">All Services</h1>
-      </div>
-
-      {/* Search & Filters */}
-      <div className="space-y-6 mb-10">
-        <SearchBar
-          value={searchQuery}
-          onChange={setSearchQuery}
-          placeholder="Search for GST filing, company registration..."
-        />
-        <FilterChips
-          filters={CATEGORY_FILTERS}
-          selected={selectedFilters}
-          onChange={setSelectedFilters}
-        />
-      </div>
-
-      {/* Results count */}
-      <div className="mb-6">
-        {!isLoading && (
-          <p className="text-sm text-muted-foreground">
-            {services.length} service{services.length !== 1 ? 's' : ''} found
-          </p>
-        )}
-      </div>
-
-      <ServiceGrid services={services} isLoading={isLoading} />
-    </div>
-  )
 }
 
-// Filter static services by search query and tags
-function filterStaticServices(
-  services: ServicePackage[],
-  query: string,
-  tags: string[]
-): ServicePackage[] {
-  let filtered = services
-
-  if (query) {
-    const lowerQuery = query.toLowerCase()
-    filtered = filtered.filter(
-      s =>
-        s.name.toLowerCase().includes(lowerQuery) ||
-        s.short_description?.toLowerCase().includes(lowerQuery)
-    )
-  }
-
-  // Tags filter not applicable for static services (no tags defined)
-  // Could be extended later if needed
-
-  return filtered
+// Breadcrumb schema
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://www.ollvy.com/services' },
+  ],
 }
 
 function ServicesLoadingSkeleton() {
@@ -229,10 +146,27 @@ function ServicesLoadingSkeleton() {
   )
 }
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  // Fetch services server-side for SEO
+  const services = await fetchServices()
+  const servicesSchema = generateServicesSchema(services)
+
   return (
-    <Suspense fallback={<ServicesLoadingSkeleton />}>
-      <ServicesContent />
-    </Suspense>
+    <>
+      {/* JSON-LD Schemas - rendered server-side for crawlers */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
+      />
+
+      {/* Client component for interactive search/filter with initial services */}
+      <Suspense fallback={<ServicesLoadingSkeleton />}>
+        <ServicesClient initialServices={services} />
+      </Suspense>
+    </>
   )
 }

@@ -114,6 +114,8 @@ export default function PrivateLimitedDocumentsPage() {
         ctaDescription="Get started with Ollvy. We handle DSC, DIN, name approval, and all MCA filings. Most companies are incorporated within 7-10 days."
         ctaButtonText="Start Company Registration"
         ctaButtonHref="/services/pvt-ltd-incorporation?utm_source=tools&utm_medium=documents&utm_content=pvt_ltd"
+        penaltyCalcHref="/tools/penalty-calculator/mca-annual-filing"
+        penaltyCalcText="Calculate MCA filing penalty"
       />
 
       {/* FAQ section */}

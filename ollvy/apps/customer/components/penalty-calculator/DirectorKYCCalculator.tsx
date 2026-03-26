@@ -105,6 +105,8 @@ function DirectorKYCCalculatorInner() {
           ctaText="File DIR-3 KYC"
           ctaHref="/services/director-kyc"
           showCta={totalPenalty > 0}
+          docChecklistHref="/tools/documents/private-limited-company"
+          docChecklistText="Company compliance documents"
         >
           {/* Additional Risk Warning */}
           <InfoBanner

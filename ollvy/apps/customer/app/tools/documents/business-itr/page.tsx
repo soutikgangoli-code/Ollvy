@@ -114,6 +114,8 @@ export default function BusinessITRDocumentsPage() {
         ctaDescription="Ollvy handles complete business ITR filing - from audit coordination to return filing. CA assigned within 24 hours."
         ctaButtonText="File Business ITR"
         ctaButtonHref="/services/business-itr?utm_source=tools&utm_medium=documents&utm_content=business_itr"
+        penaltyCalcHref="/tools/penalty-calculator/itr-late-filing"
+        penaltyCalcText="Calculate ITR late filing penalty"
       />
 
       {/* FAQ section */}

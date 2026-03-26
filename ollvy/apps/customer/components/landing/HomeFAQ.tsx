@@ -16,7 +16,7 @@ const FAQ_DATA = [
       <>
         <p className="mb-4">
           Both LLP (Limited Liability Partnership) and Private Limited Company are popular legal structures for Indian businesses, but they serve different needs. Here is the complete breakdown. For a detailed comparison, see our{' '}
-          <Link href="/learn/pvt-ltd-vs-llp" className="text-primary underline hover:no-underline">Pvt Ltd vs LLP guide</Link>.
+          <Link href="/guides/pvt-ltd-vs-llp" className="text-primary underline hover:no-underline">Pvt Ltd vs LLP guide</Link>.
         </p>
         <p className="mb-4">
           <strong>Liability protection:</strong> Both structures offer limited liability - your personal assets are protected if the business faces losses or legal claims. This is the primary reason founders choose either structure over a sole proprietorship or traditional partnership.
@@ -270,7 +270,7 @@ const FAQ_DATA = [
         <p className="mb-4">
           <strong>How long does GST registration take?</strong> Typically 5-7 working days from the date of application, assuming no officer queries. If a query is raised, it can extend to 10-15 working days. Our CA handles all officer queries as part of the{' '}
           <Link href="/services/gst-registration" className="text-primary underline hover:no-underline">GST Registration</Link> service. For a step-by-step walkthrough, see our{' '}
-          <Link href="/learn/how-to-register-gst-india" className="text-primary underline hover:no-underline">complete GST registration guide</Link>.
+          <Link href="/guides/do-i-need-gst-registration" className="text-primary underline hover:no-underline">complete GST registration guide</Link>.
         </p>
         <p>
           <strong>Penalty for not registering when mandatory:</strong> 10% of the tax due (minimum Rs 10,000), or 100% of the tax due if non-registration is deemed fraudulent.
@@ -393,7 +393,7 @@ const FAQ_DATA = [
       <>
         <p className="mb-4">
           FSSAI compliance comes in three tiers depending on the size and nature of your food business. Choosing the wrong tier is one of the most common mistakes food entrepreneurs make. Read our{' '}
-          <Link href="/learn/do-i-need-fssai-license" className="text-primary underline hover:no-underline">FSSAI guide</Link> to understand which tier applies to you.
+          <Link href="/guides/do-i-need-fssai-license" className="text-primary underline hover:no-underline">FSSAI guide</Link> to understand which tier applies to you.
         </p>
         <div className="overflow-x-auto mb-4 rounded-lg border border-border/50">
           <table className="w-full text-sm">

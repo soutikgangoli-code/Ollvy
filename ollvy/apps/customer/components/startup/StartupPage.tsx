@@ -279,7 +279,7 @@ export function StartupPage() {
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/learn/startup-india-dpiit-recognition">
+              <Link href="/guides/should-i-get-dpiit-startup-recognition">
                 Full guide to DPIIT →
               </Link>
             </Button>

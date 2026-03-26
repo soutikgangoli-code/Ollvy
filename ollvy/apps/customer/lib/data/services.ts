@@ -462,20 +462,21 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
 // Fallback slugs for static generation when Supabase is unavailable
 const FALLBACK_SERVICE_SLUGS = [
   'pvt-ltd-incorporation',
-  'llp-registration',
-  'opc-registration',
+  'llp-incorporation',
   'gst-registration',
-  'msme-registration',
+  'msme-udyam',
   'trademark-registration',
-  'fssai-registration',
-  'iec-registration',
+  'fssai-license',
   'cloud-kitchen-setup',
-  // New services
+  'gst-monthly-filing',
+  'business-itr',
+  'mca-annual-filing',
   'gst-cancellation',
   'gst-revocation',
   'company-name-change',
   'din-reactivation',
   'tds-monthly-compliance',
+  'director-kyc',
 ]
 
 /**

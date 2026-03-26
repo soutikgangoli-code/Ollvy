@@ -125,11 +125,11 @@ export function Footer() {
           <FooterColumn
             title="Guides"
             links={[
-              { label: 'Do I Need GST?', href: '/learn/do-i-need-gst-registration' },
-              { label: 'Pvt Ltd vs LLP', href: '/learn/pvt-ltd-vs-llp' },
-              { label: 'Which ITR Form?', href: '/learn/which-itr-form-should-i-use' },
-              { label: 'DPIIT Recognition', href: '/learn/should-i-get-dpiit-startup-recognition' },
-              { label: 'All Guides', href: '/learn' },
+              { label: 'Do I Need GST?', href: '/guides/do-i-need-gst-registration' },
+              { label: 'Pvt Ltd vs LLP', href: '/guides/pvt-ltd-vs-llp' },
+              { label: 'Which ITR Form?', href: '/guides/which-itr-form-should-i-use' },
+              { label: 'DPIIT Recognition', href: '/guides/should-i-get-dpiit-startup-recognition' },
+              { label: 'All Guides', href: '/guides' },
             ]}
           />
 
@@ -137,11 +137,11 @@ export function Footer() {
           <FooterColumn
             title="Notice Help"
             links={[
-              { label: 'GST DRC-01 Notice', href: '/learn/gst-drc-01-notice' },
-              { label: 'GST ASMT-10 Notice', href: '/learn/gst-asmt-10-notice' },
-              { label: 'IT 143(1) Intimation', href: '/learn/income-tax-143-1-intimation' },
-              { label: 'IT 148/148A Notice', href: '/learn/income-tax-148-148a-reopening' },
-              { label: 'TDS Short Deduction', href: '/learn/tds-short-deduction-notice' },
+              { label: 'GST DRC-01 Notice', href: '/guides/gst-drc-01-notice' },
+              { label: 'GST ASMT-10 Notice', href: '/guides/gst-asmt-10-notice' },
+              { label: 'IT 143(1) Intimation', href: '/guides/income-tax-143-1-intimation' },
+              { label: 'IT 148/148A Notice', href: '/guides/income-tax-148-148a-reopening' },
+              { label: 'TDS Short Deduction', href: '/guides/tds-short-deduction-notice' },
             ]}
           />
 

@@ -101,7 +101,7 @@ export function StructuredData() {
         position: 6,
         name: 'Guides',
         description: 'Free guides to Indian business compliance',
-        url: 'https://www.ollvy.com/learn',
+        url: 'https://www.ollvy.com/guides',
       },
       {
         '@type': 'SiteNavigationElement',

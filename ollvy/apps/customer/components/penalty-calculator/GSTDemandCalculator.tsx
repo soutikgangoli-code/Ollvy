@@ -350,6 +350,8 @@ function GSTDemandCalculatorInner() {
           ctaText="Get GST Notice Help"
           ctaHref="/services/gst-notice-response"
           showCta={result.currentTotal > 0}
+          docChecklistHref="/tools/documents/gst-registration"
+          docChecklistText="GST compliance documents"
         >
           {/* Tax Demand Principal */}
           <InfoBanner

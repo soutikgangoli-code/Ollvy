@@ -150,7 +150,7 @@ export const trademarkRegistration: ServiceConfig = {
     '✓ Certificate received',
   ],
 
-  relatedSlugs: ['pvt-ltd-incorporation', 'msme-registration'],
+  relatedSlugs: ['pvt-ltd-incorporation', 'msme-udyam'],
 
   faqs: [
     {
@@ -199,20 +199,8 @@ export const trademarkRegistration: ServiceConfig = {
   ],
 
   unlocks: [
-    {
-      name: 'Trademark Renewal',
-      explanation: 'Due every 10 years. File 6 months before expiry.',
-      price: '₹4,999 + govt fee',
-      type: 'required',
-      slug: 'trademark-renewal',
-    },
-    {
-      name: 'Copyright Registration',
-      explanation: 'Protect creative works - code, designs, content.',
-      price: '₹5,999',
-      type: 'beneficial',
-      slug: 'copyright-registration',
-    },
+    // Note: trademark-renewal and copyright-registration services not yet available
+    // Unlock items commented out until services are added
   ],
 
   showCompletionStats: false,

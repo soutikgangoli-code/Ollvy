@@ -5,7 +5,7 @@ import { DocumentSteps } from '@/components/tools/DocumentSteps'
 import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
-import { gstDocuments } from '@/lib/data/document-checklists'
+import { soleProprietorDocuments } from '@/lib/data/document-checklists'
 import { soleProprietorContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
 
@@ -42,7 +42,7 @@ const howToJsonLd = {
 const faqJsonLd = generateFAQSchema(soleProprietorContent)
 
 const documentListJsonLd = generateDocumentListSchema(
-  gstDocuments,
+  soleProprietorDocuments,
   'Sole Proprietorship Registration',
   'https://www.ollvy.com/tools/documents/sole-proprietor'
 )
@@ -107,7 +107,7 @@ export default function SoleProprietorDocumentsPage() {
 
       {/* Document checklist */}
       <DocumentChecklistContent
-        categories={gstDocuments}
+        categories={soleProprietorDocuments}
         pageTitle="Sole Proprietorship Registration"
         pageSubtitle="Complete list of documents required to register a Sole Proprietorship in India"
         ctaTitle="Ready to register your business?"

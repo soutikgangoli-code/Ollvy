@@ -159,7 +159,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     '✓ No surprises',
   ],
 
-  relatedSlugs: ['gst-registration', 'gst-annual-return', 'business-itr'],
+  relatedSlugs: ['gst-registration', 'business-itr', 'tds-monthly-compliance'],
 
   faqs: [
     {
@@ -203,20 +203,8 @@ export const gstMonthlyFiling: ServiceConfig = {
   ],
 
   unlocks: [
-    {
-      name: 'GSTR-9 Annual Return',
-      explanation: 'Annual reconciliation. Due Dec 31 every year. Separate service.',
-      price: '₹4,999',
-      type: 'required',
-      slug: 'gst-annual-return',
-    },
-    {
-      name: 'GST Notice Response',
-      explanation: 'If you receive a demand notice or Section 61 mismatch, we respond.',
-      price: 'From ₹2,999/notice',
-      type: 'beneficial',
-      slug: 'gst-notice-response',
-    },
+    // Note: gst-annual-return and gst-notice-response services not yet available
+    // Unlock items commented out until services are added
   ],
 
   showCompletionStats: false,

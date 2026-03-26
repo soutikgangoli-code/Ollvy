@@ -6,6 +6,19 @@ import { getAllPackSlugs, getPackBySlug } from '@/lib/data/packs'
 export const metadata: Metadata = {
   title: 'Service Packs | Ollvy',
   description: 'Bundle multiple compliance services and save. FSSAI, GST, Shop & Establishment - all filed simultaneously.',
+  alternates: { canonical: 'https://www.ollvy.com/packs' },
+  openGraph: {
+    title: 'Service Packs | Ollvy',
+    description: 'Bundle multiple compliance services and save. FSSAI, GST, Shop & Establishment - all filed simultaneously.',
+    url: 'https://www.ollvy.com/packs',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Service Packs | Ollvy',
+    description: 'Bundle multiple compliance services and save. FSSAI, GST, Shop & Establishment - all filed simultaneously.',
+    images: ['https://www.ollvy.com/logo.png'],
+  },
 }
 
 export default async function PacksIndexPage() {

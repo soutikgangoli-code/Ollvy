@@ -261,6 +261,30 @@ Good news: the late fee structure was rationalised in 2023 with turnover-based c
       question: 'How do I file a GST return after the deadline?',
       answer: 'Log in to gst.gov.in, navigate to Returns, and open the relevant period\'s return. The system automatically calculates the late fee based on how many days you\'re late. Pay the computed late fee from your Electronic Cash Ledger, then submit. There\'s no separate late filing application - it\'s all handled within the normal return flow.',
     },
+    {
+      question: 'How do I check if I have pending GST penalties online?',
+      answer: 'Log in to the GST portal at gst.gov.in, go to Services > Ledgers > Electronic Liability Register. This shows all outstanding demands, penalties, and interest. You can also check the Cash Ledger and Credit Ledger for any negative balances.',
+    },
+    {
+      question: 'Can I pay GST late filing penalties in installments?',
+      answer: 'No, GST late fees must be paid in full before you can file your return. The portal blocks return filing until all late fees are cleared. However, for large demand notices (DRC-01), you can request payment in installments under Section 80.',
+    },
+    {
+      question: 'If I have multiple overdue GST returns, should I file them in order?',
+      answer: 'Yes, GST returns must be filed in chronological order. You cannot file GSTR-3B for March if January and February are pending. Each return calculates late fees based on its due date, so file oldest returns first.',
+    },
+    {
+      question: 'Does GST late filing affect my compliance rating?',
+      answer: 'Yes. GSTN calculates a compliance rating based on timely filing, tax payment, and other factors. Poor compliance rating can affect your Input Tax Credit availability and may trigger scrutiny from GST officers.',
+    },
+    {
+      question: 'Are there any GST amnesty schemes for late filing penalties?',
+      answer: 'The government occasionally announces amnesty schemes that waive or reduce late fees for specific periods. The most recent was in 2023. Check the CBIC website for current schemes. Filing under an amnesty scheme still requires paying the full tax and interest, but late fees may be waived.',
+    },
+    {
+      question: 'What if my GSTIN is suspended for non-filing - can I still pay late fees?',
+      answer: 'Yes, but you must first file all pending returns with late fees to lift the suspension. If cancelled by officer, you need to apply for revocation (REG-21) within 90 days. Penalties during suspension period still apply.',
+    },
   ],
   relatedPenalties: [
     { title: 'GST Demand Notice Penalty', slug: 'gst-demand-notice', description: 'Section 73 and 74 penalties for unpaid or short-paid GST found during audit or scrutiny.' },
@@ -463,6 +487,30 @@ Beyond the flat fee, late filing can also trigger interest on unpaid tax under S
       question: 'How do I file ITR after the 31 July deadline?',
       answer: 'File a belated return under Section 139(4) by 31 December 2025 for AY 2025-26. Log in to incometax.gov.in, select the assessment year, choose the correct ITR form, pay the Section 234F fee (Rs. 5,000 or Rs. 1,000) and any outstanding tax via Challan 280, enter the challan details, and submit. E-verify within 30 days of filing.',
     },
+    {
+      question: 'How do I check my pending income tax penalties on the portal?',
+      answer: 'Log in to incometax.gov.in, go to Pending Actions > Response to Outstanding Demand. This shows all pending demands including Section 234F late fees, Section 234A/B/C interest, and other penalties.',
+    },
+    {
+      question: 'Can I pay ITR late filing penalty in installments?',
+      answer: 'The Section 234F late fee (Rs. 1,000-5,000) must be paid with the return filing. For larger Section 234A/B/C interest amounts, you can request installment payments under Section 220(3) by writing to the Assessing Officer.',
+    },
+    {
+      question: 'If I have multiple years of ITR pending, which year should I file first?',
+      answer: 'File the oldest year first. Each year is assessed independently, but loss carry-forward requires sequential filing. Late filing for earlier years may also limit deductions (like Section 80C) in those years.',
+    },
+    {
+      question: 'Does ITR late filing affect my loan or visa applications?',
+      answer: 'Yes. Banks require 2-3 years of ITRs for loans. Late filing stamps on ITRs may raise questions. For visa applications, some consulates specifically look for timely filing. ITR acknowledgments show filing date, which is visible to anyone you share them with.',
+    },
+    {
+      question: 'What happens to carry-forward losses if I file ITR late?',
+      answer: 'Losses cannot be carried forward if ITR is filed after the due date. This applies to business losses, capital losses, and speculation losses. The only exception is house property loss, which can be carried forward even with late filing.',
+    },
+    {
+      question: 'Is there a way to get Section 234F late fee waived for genuine hardship?',
+      answer: 'No, Section 234F late fee is automatic and cannot be waived - it is a fee, not a penalty. However, Section 234A/B/C interest can sometimes be reduced or waived by the Assessing Officer under Section 220(2A) if you demonstrate genuine inability to pay.',
+    },
   ],
   relatedPenalties: [
     { title: 'GST Late Filing Penalty', slug: 'gst-late-filing', description: 'Section 47 CGST Act late fees for GSTR-1, GSTR-3B, and GSTR-9 filed after due dates.' },
@@ -659,6 +707,30 @@ On top of that, Section 271H gives the Assessing Officer discretion to levy an a
     {
       question: 'How do I file a TDS return after the due date?',
       answer: 'First, pay the Section 234E late fee via challan (using the TDS/TCS challan, not a regular income tax challan). Then log in to TRACES or use TDS return filing software (like NSDL RPU) to prepare the return file. Upload it on the TRACES portal under "Upload TDS". The portal will verify the Section 234E fee has been paid before accepting the return. File corrections using Form 26A if PAN-based errors are flagged after filing.',
+    },
+    {
+      question: 'How do I check my TDS late filing status on TRACES?',
+      answer: 'Log in to TRACES at tdscpc.gov.in, go to Statements > Statement Status. This shows all filed and pending TDS returns with late fee details. You can also check the Challan Status Enquiry for deposit details.',
+    },
+    {
+      question: 'Can Section 234E late filing fee be paid in installments?',
+      answer: 'No, Section 234E fee is calculated at Rs. 200/day and must be paid in full before filing the TDS return. The fee is capped at the TDS amount due in the return, so it cannot exceed what you owed to deposit.',
+    },
+    {
+      question: 'What happens if I filed TDS return but deposited TDS late?',
+      answer: 'Two separate consequences: Section 234E for late return filing (Rs. 200/day) AND Section 201(1A) interest for late deposit (1% to 1.5% per month). These are calculated independently. Late deposit interest is separate from late filing fee.',
+    },
+    {
+      question: 'Can I correct a TDS return after filing to reduce penalties?',
+      answer: 'You can file a correction return to fix errors (wrong PAN, wrong amount), but this does not reduce late fees already charged. Section 234E late fee is calculated from original due date regardless of correction filings.',
+    },
+    {
+      question: 'Will TDS non-compliance trigger an income tax scrutiny?',
+      answer: 'Yes. Section 40(a)(ia) disallows 30% of expenses where TDS was not deducted. This reduces your business profits and increases tax liability. During assessment, officers cross-check TRACES data with your ITR, triggering scrutiny notices.',
+    },
+    {
+      question: 'What if my vendor paid tax themselves - do I still face TDS penalties?',
+      answer: 'Yes. Your obligation to deduct TDS is independent of whether the vendor paid tax on their income. However, under certain conditions, you may claim relief using Form 26A if you can prove the vendor included the income in their ITR.',
     },
   ],
   relatedPenalties: [
@@ -865,6 +937,30 @@ For companies, AOC-4 (financial statements) is due within 30 days of the AGM and
     {
       question: 'How do I file MCA annual returns after the due date?',
       answer: 'Log in to the MCA V3 portal at efiling.mca.gov.in. Navigate to the relevant form (AOC-4 or MGT-7). The portal automatically calculates and displays the additional fee based on the current date. Pay the additional fee via online payment during the filing process. The system accepts the payment and allows filing without any separate application. Make sure the director\'s DIN is active and DSC is valid before starting.',
+    },
+    {
+      question: 'How do I check pending MCA penalties on the portal?',
+      answer: 'Log in to mca.gov.in, go to MCA Services > Company Services > View Company/LLP Master Data. Enter your CIN/LLPIN to see compliance status. Alternatively, check the SRN status of your last filing to see if additional fees were charged.',
+    },
+    {
+      question: 'Can I pay MCA additional fees in installments?',
+      answer: 'No, MCA additional fees must be paid in full at the time of filing. The fee is calculated automatically by the portal (Rs. 100/day per form). For very large amounts, some companies file STK-2 (strike-off) and then revive the company with a fresh start under the CFSS scheme.',
+    },
+    {
+      question: 'What happens if only one form (AOC-4 or MGT-7) is filed late?',
+      answer: 'Each form is penalized separately. AOC-4 has its own Rs. 100/day fee, and MGT-7 has its own Rs. 100/day fee. Filing one does not affect the penalty on the other. Both must be filed to be compliant.',
+    },
+    {
+      question: 'Does MCA non-compliance affect director DIN status?',
+      answer: 'Yes. After 3 consecutive years of non-filing, directors face disqualification under Section 164(2). This deactivates DIN for 5 years and affects all directorships held by that person - not just the defaulting company.',
+    },
+    {
+      question: 'Is there an MCA amnesty scheme for late filing penalties?',
+      answer: 'MCA periodically announces Company Fresh Start Schemes (CFSS) and LLP Settlement Schemes that waive additional fees for filing pending returns. The last major scheme was in 2020-2021. Check MCA website for current schemes.',
+    },
+    {
+      question: 'What if the auditor has not completed the audit - can I still file on time?',
+      answer: 'No. AOC-4 requires audited financial statements. You cannot file provisional or unaudited accounts. If your auditor delays, the company and directors bear the penalty. Consider changing auditors if delays are recurring.',
     },
   ],
   relatedPenalties: [
@@ -1073,6 +1169,30 @@ Pay late and you'll face interest under Section 7Q of the EPF Act at 12% per ann
       question: 'How do I pay overdue EPF contributions with interest and damages?',
       answer: 'Log in to the EPFO Unified Portal (unifiedportal-emp.epfindia.gov.in). Generate an EPF challan for the overdue months. Pay the challan amount (your calculated overdue contributions). Contact your regional EPFO office for a Section 7Q interest demand letter, pay the interest, and respond to any Section 14B damages notice. The EPFO inspector may visit for defaults exceeding 2 months.',
     },
+    {
+      question: 'How do I check pending PF/ESIC dues and damages?',
+      answer: 'For PF: Log in to unifiedportal-epfo.epfindia.gov.in, check the Establishment Dashboard for compliance status. For ESIC: Log in to esic.in, go to Employer Portal > View Contribution History. Both portals show outstanding amounts.',
+    },
+    {
+      question: 'Can PF damages under Section 14B be paid in installments?',
+      answer: 'Yes, but only with Regional PF Commissioner approval. You must file an application explaining hardship and propose a payment schedule. Interest continues to accrue during the installment period.',
+    },
+    {
+      question: 'What is the difference between PF interest, damages, and penalty?',
+      answer: 'Interest is under Section 7Q (12% p.a. on late deposits). Damages are under Section 14B (5% to 25% depending on delay period). Penalty is under Section 14 (up to Rs. 25,000 for non-compliance). All three can apply simultaneously.',
+    },
+    {
+      question: 'What happens to employee PF if employer does not deposit?',
+      answer: 'Employee share is always credited to their PF account as it is their salary. Employer share and interest become dues against the establishment. EPFO can attach bank accounts and assets to recover. Criminal prosecution under Section 406 IPC is also possible.',
+    },
+    {
+      question: 'Can I voluntarily register for PF before reaching 20 employees?',
+      answer: 'Yes. Under Section 1(4), you can voluntarily register with employee consent. Once registered, you cannot de-register even if employee count drops below 20. This is often done to attract better employees or for government contract eligibility.',
+    },
+    {
+      question: 'Does PF/ESIC non-compliance affect company credit rating?',
+      answer: 'Not directly, but it creates contingent liabilities on your balance sheet. Banks may ask for EPFO compliance certificates before sanctioning loans. Unpaid PF dues are a first-charge liability and can affect company valuation during M&A due diligence.',
+    },
   ],
   relatedPenalties: [
     { title: 'Professional Tax Penalty', slug: 'professional-tax-penalty', description: 'State-wise interest and penalty for late professional tax payment on employee salaries.' },
@@ -1256,6 +1376,26 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
     {
       question: 'How do I file DIR-3 KYC after the 30 September deadline?',
       answer: 'Log in to the MCA V3 portal at efiling.mca.gov.in. Go to e-Filing and select DIR-3 KYC or DIR-3 KYC-Web. The portal will show a message that the Rs. 5,000 late fee is applicable. Pay the fee via the integrated payment gateway. After successful payment, complete the form with OTP (KYC-Web) or DSC (full KYC form). Verify your DIN status is restored to Active within 24-48 hours.',
+    },
+    {
+      question: 'How do I check if my DIN is active or deactivated?',
+      answer: 'Go to mca.gov.in > MCA Services > Check Director DIN Status. Enter your DIN to see current status. Active means compliant. Deactivated means DIR-3 KYC is pending. Disqualified means Section 164 action - different from deactivation.',
+    },
+    {
+      question: 'Can I file DIR-3 KYC after my DIN is deactivated?',
+      answer: 'Yes. Filing DIR-3 KYC with the Rs. 5,000 late fee reactivates your DIN within 24-48 hours. The deactivation is lifted automatically once MCA processes the form. No separate reactivation application is needed.',
+    },
+    {
+      question: 'If I have multiple DINs (by mistake), which one needs KYC?',
+      answer: 'You should not have multiple DINs - this is a compliance issue. Surrender duplicate DINs using Form DIR-5. KYC must be filed for each active DIN you hold. Having multiple active DINs may attract MCA scrutiny.',
+    },
+    {
+      question: 'What if I resigned from all companies - do I still need DIR-3 KYC?',
+      answer: 'Yes. DIN is a lifetime identifier regardless of active directorships. Even if you have resigned from all companies, you must file annual KYC. The only way to stop KYC requirement is to surrender DIN using Form DIR-5.',
+    },
+    {
+      question: 'Does DIN deactivation affect my existing directorships?',
+      answer: 'Yes. You cannot sign any MCA forms with a deactivated DIN. This blocks the company from filing returns if you are the sole signatory director. Your name still appears in company records, but you cannot perform statutory functions.',
     },
   ],
   relatedPenalties: [
@@ -1461,6 +1601,30 @@ The penalty difference is massive. Under Section 74 (fraud), penalty can hit 100
       question: 'How do I respond to a GST demand notice?',
       answer: 'Log in to gst.gov.in. Go to Services > User Services > View Notices and Orders. Download the notice (ASMT-10 or DRC-01). Prepare a written reply with supporting documents - purchase invoices, bank statements, GSTR-2B reconciliation, and legal arguments for your position. File the reply through the GST portal within the specified deadline. If paying via DRC-03, generate the DRC-03 challan before filing the reply.',
     },
+    {
+      question: 'How do I check pending GST demand notices online?',
+      answer: 'Log in to gst.gov.in, go to Services > User Services > View Notices and Orders. This shows all notices including ASMT-10 (scrutiny), DRC-01 (demand), and REG-17 (cancellation). You can also check under Dashboard > Pending Actions.',
+    },
+    {
+      question: 'Can I pay GST demand amount in installments?',
+      answer: 'Yes. Under Section 80, you can apply for payment in monthly installments (up to 24 months) if you cannot pay the full amount at once. Apply using Form GST DRC-20 with reasons. The officer may approve or reject based on your financial situation.',
+    },
+    {
+      question: 'What is the difference between DRC-01 and DRC-01A notices?',
+      answer: 'DRC-01 is a formal show-cause notice requiring response within 30 days. DRC-01A is a pre-notice intimation giving you a chance to pay voluntarily before DRC-01 is issued. Paying during DRC-01A stage attracts lower penalty (typically 10-15%).',
+    },
+    {
+      question: 'Can I appeal a GST demand order - what is the process?',
+      answer: 'Yes. File an appeal to the Appellate Authority within 3 months of the order using Form GST APL-01. You must pre-deposit 10% of disputed tax (25% for second appeal to Tribunal). The appeal does not automatically stay recovery - you may need to request a stay separately.',
+    },
+    {
+      question: 'What happens to ITC claims if GST demand is raised against my supplier?',
+      answer: 'Your ITC is not automatically reversed, but if your supplier does not pay the demanded tax, you may receive DRC-01B notice for ITC mismatch. You must then either reverse the ITC or provide proof that your supplier has paid. This is why supplier due diligence matters.',
+    },
+    {
+      question: 'Is GST demand notice different from GST audit?',
+      answer: 'Yes. GST audit (ASMT-13) is a broader review of records and compliance. Demand notices (Section 73/74) are issued when specific tax shortfall is identified. An audit may or may not result in a demand notice, depending on findings.',
+    },
   ],
   relatedPenalties: [
     { title: 'GST Late Filing Penalty', slug: 'gst-late-filing', description: 'Section 47 late fees for delayed GSTR-1, GSTR-3B, and GSTR-9 filing.' },
@@ -1660,6 +1824,30 @@ As an employer, you need a Professional Tax Registration Certificate (PTRC) to d
       question: 'How do I pay professional tax after missing the due date?',
       answer: 'Log in to your state\'s PT portal - e.g., mahagst.maharashtra.gov.in for Maharashtra or pt.kar.nic.in for Karnataka. Generate a challan for the overdue period including the tax amount, applicable penalty, and interest. Pay via the online portal. File the corresponding PT return after payment. Some states allow bank challan payment if the online portal doesn\'t support late payment directly.',
     },
+    {
+      question: 'How do I check pending professional tax dues online?',
+      answer: 'Log in to your state\'s PT portal (varies by state - Maharashtra uses mahagst.maharashtra.gov.in, Karnataka uses pt.kar.nic.in). Check Payment Status or Dues section. Many states also send SMS alerts for pending dues.',
+    },
+    {
+      question: 'Can professional tax penalties be paid in installments?',
+      answer: 'Most states do not allow installment payment for PT arrears. The full amount including tax, interest, and penalty must be paid together. However, you can negotiate with the state PT authority in case of extreme hardship.',
+    },
+    {
+      question: 'What is the difference between PTRC and PTEC?',
+      answer: 'PTRC (Professional Tax Registration Certificate) is for employers to deduct PT from employee salaries. PTEC (Professional Tax Enrollment Certificate) is for the business owner\'s own PT liability. Most businesses need both - PTRC for employees and PTEC for the proprietor/partners/directors.',
+    },
+    {
+      question: 'Do freelancers and consultants need to pay professional tax?',
+      answer: 'Yes, if they work in a state that levies PT and their income exceeds the exemption threshold. Freelancers need PTEC registration in their state. The maximum PT is Rs. 2,500 per year in most states. States like Delhi, UP, Rajasthan do not have professional tax.',
+    },
+    {
+      question: 'What happens if professional tax is deducted but not deposited?',
+      answer: 'This is treated seriously by state authorities. You face higher penalties (often double the normal rate), interest on the deducted amount, and potential prosecution under state PT laws. Some states classify this as misappropriation of employee funds.',
+    },
+    {
+      question: 'Does professional tax apply to directors of private limited companies?',
+      answer: 'Yes. Directors receiving salary or remuneration are subject to PT deduction by the company (via PTRC). Directors not receiving salary may still need individual PTEC if they have other professional income in the state.',
+    },
   ],
   relatedPenalties: [
     { title: 'PF and ESIC Penalty', slug: 'pf-esic-penalty', description: 'Interest and damages for delayed EPF and ESIC contribution payments.' },
@@ -1856,6 +2044,30 @@ Penalties for non-registration, late registration, or working condition violatio
     {
       question: 'How do I register under the Shop Act after missing the 30-day deadline?',
       answer: 'Most states allow late registration with payment of a penalty. In Maharashtra, visit mahashop.maharashtra.gov.in and apply online - the system processes late applications with the applicable penalty. In Delhi, apply at the SDM office with the penalty payment and an explanation letter. In Karnataka, apply online at labour.karnataka.gov.in. The authority will inspect or verify the premises before granting late registration.',
+    },
+    {
+      question: 'How do I check if my Shop Act registration is valid?',
+      answer: 'In states with online portals (Maharashtra, Karnataka, Gujarat), log in to the state labour portal and check your registration status. In other states, check the physical certificate for validity dates or contact the local Labour Inspector office.',
+    },
+    {
+      question: 'Can Shop Act penalty be paid in installments?',
+      answer: 'Generally no. Shop Act penalties are typically one-time fees that must be paid in full when registering late or renewing after expiry. The penalty amount is usually fixed based on the period of delay.',
+    },
+    {
+      question: 'What inspections can happen for Shop Act non-compliance?',
+      answer: 'Labour inspectors can visit unannounced to check registration, working hours, employee records, leave registers, and working conditions. Non-compliance can result in immediate notice, penalty proceedings, and in repeat cases, prosecution. Banks and landlords may also request Shop Act certificate during KYC.',
+    },
+    {
+      question: 'Do e-commerce and online businesses need Shop Act registration?',
+      answer: 'Yes, if they have a physical office or warehouse with employees in the state. The business being online does not exempt you from Shop Act. Registration is based on where employees work, not where customers are located.',
+    },
+    {
+      question: 'What is the difference between Shop Act and Factory Act registration?',
+      answer: 'Shop Act covers commercial establishments like offices, shops, restaurants, and service providers. Factory Act covers manufacturing units with 10+ workers (with power) or 20+ workers (without power). Manufacturing businesses may need Factory Act registration instead of or in addition to Shop Act.',
+    },
+    {
+      question: 'Does Shop Act registration affect minimum wage compliance?',
+      answer: 'Yes. Registered establishments are expected to comply with state minimum wage laws, which are enforced by the same Labour Department. During Shop Act inspections, labour officers often also verify minimum wage compliance and employee benefit provisions.',
     },
   ],
   relatedPenalties: [
@@ -2056,6 +2268,30 @@ Unlike other penalty calculators, DPIIT compliance doesn't have a per-day penalt
     {
       question: 'How do I apply for DPIIT startup recognition?',
       answer: 'Visit startupindia.gov.in and log in or register. Go to Recognition and start the application. You\'ll need to provide incorporation documents, a description of your business innovation, and certify that your entity meets the eligibility criteria (age, turnover, entity type). Recognition is typically granted within 2-5 working days. There\'s no government fee. After recognition, download your certificate and DPIIT number, and separately file for IMB approval for Section 80-IAC if you wish to claim the tax holiday.',
+    },
+    {
+      question: 'How do I check my DPIIT recognition status?',
+      answer: 'Log in to startupindia.gov.in with your registered email. Go to Dashboard > My Recognitions. This shows your recognition certificate, DPIIT number, and validity. You can also download your certificate from here.',
+    },
+    {
+      question: 'What compliance is needed to maintain DPIIT recognition?',
+      answer: 'Keep your MCA filings current (AOC-4, MGT-7), file ITR on time, maintain turnover below Rs. 100 crore, ensure the entity remains less than 10 years old, and do not restructure into a non-eligible entity type. Any material misrepresentation in the original application can also trigger revocation.',
+    },
+    {
+      question: 'Can a company lose DPIIT recognition after crossing 10 years?',
+      answer: 'Yes. Once your company is more than 10 years old from incorporation, it ceases to be a "startup" under DPIIT definition. Recognition expires automatically. However, tax benefits already claimed in eligible years are not reversed merely due to aging out.',
+    },
+    {
+      question: 'What happens to Section 80-IAC benefits if turnover crosses Rs. 100 crore?',
+      answer: 'Once annual turnover exceeds Rs. 100 crore, the startup loses DPIIT eligibility from that year onwards. Any remaining Section 80-IAC benefit years are forfeited. Benefits already claimed in years when turnover was under Rs. 100 crore are not reversed.',
+    },
+    {
+      question: 'Can LLPs get DPIIT recognition and Section 80-IAC benefits?',
+      answer: 'LLPs are eligible for DPIIT recognition. However, Section 80-IAC tax holiday is only available to Private Limited Companies and LLPs. The angel tax exemption under Section 56(2)(viib) does not apply to LLPs as they do not issue shares.',
+    },
+    {
+      question: 'How long does IMB approval take for Section 80-IAC?',
+      answer: 'IMB review typically takes 30-60 days after application. The board meets periodically to review applications. Approval is not automatic - many applications are rejected for insufficient innovation evidence. Having DPIIT recognition significantly strengthens your IMB application.',
     },
   ],
   relatedPenalties: [

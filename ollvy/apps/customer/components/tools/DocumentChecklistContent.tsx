@@ -45,6 +45,8 @@ interface DocumentChecklistContentProps {
   ctaButtonHref: string
   pageTitle?: string
   pageSubtitle?: string
+  penaltyCalcHref?: string
+  penaltyCalcText?: string
 }
 
 // Document Detail Panel - shown on the right side
@@ -167,6 +169,8 @@ export function DocumentChecklistContent({
   ctaButtonHref,
   pageTitle = 'Documents Required',
   pageSubtitle,
+  penaltyCalcHref,
+  penaltyCalcText,
 }: DocumentChecklistContentProps) {
   const detailPanelRef = useRef<HTMLDivElement>(null)
 
@@ -382,6 +386,17 @@ export function DocumentChecklistContent({
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
+        {penaltyCalcHref && (
+          <p className="mt-4">
+            <Link
+              href={`${penaltyCalcHref}?utm_source=tools&utm_medium=documents`}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+            >
+              {penaltyCalcText || 'Calculate late filing penalty'}
+              <ChevronRight size={12} />
+            </Link>
+          </p>
+        )}
       </div>
     </>
   )

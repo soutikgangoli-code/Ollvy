@@ -134,7 +134,7 @@ export const businessItr: ServiceConfig = {
     '✓ No surprises',
   ],
 
-  relatedSlugs: ['director-kyc', 'mca-annual-filing', 'gst-annual-return'],
+  relatedSlugs: ['director-kyc', 'mca-annual-filing', 'gst-monthly-filing'],
 
   faqs: [
     {
@@ -178,20 +178,8 @@ export const businessItr: ServiceConfig = {
   ],
 
   unlocks: [
-    {
-      name: 'Tax Audit (if required)',
-      explanation: 'Required above ₹1Cr turnover. Must be done before ITR filing.',
-      price: 'From ₹24,999',
-      type: 'required',
-      slug: 'tax-audit',
-    },
-    {
-      name: 'Advance Tax Planning',
-      explanation: 'Pay tax quarterly to avoid interest. We calculate instalments.',
-      price: '₹4,999/quarter',
-      type: 'beneficial',
-      slug: 'advance-tax',
-    },
+    // Note: tax-audit and advance-tax services not yet available
+    // Unlock items commented out until services are added
   ],
 
   showCompletionStats: false,

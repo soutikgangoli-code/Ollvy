@@ -283,7 +283,7 @@ function TDSCalculatorInner() {
           dueDate={QUARTER_DUE_DATES[quarter].dueDate}
           statute="Section 234E, 271H, 201(1A) - Income Tax Act 1961"
           ctaText="File TDS Return"
-          ctaHref="/services/tds-filing"
+          ctaHref="/services/tds-monthly-compliance"
           showCta={result.total > 0}
         >
           {/* Section 271H Advisory */}

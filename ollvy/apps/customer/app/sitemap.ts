@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getAllServiceSlugs } from '@/lib/data/services'
-import { LEARN_PAGES } from '@/lib/learn/pages'
+import { LEARN_PAGES } from '@/lib/guides/pages'
 
 /**
  * Sitemap for Ollvy - per SEO mandate
@@ -83,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
-      url: `${BASE_URL}/learn`,
+      url: `${BASE_URL}/guides`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -170,7 +170,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Learn pages
   const learnRoutes: MetadataRoute.Sitemap = learnSlugs.map((slug) => ({
-    url: `${BASE_URL}/learn/${slug}`,
+    url: `${BASE_URL}/guides/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.75,

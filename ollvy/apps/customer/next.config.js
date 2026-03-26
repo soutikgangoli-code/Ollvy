@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  trailingSlash: false,
   transpilePackages: ['@ollvy/shared'],
   images: {
     remotePatterns: [
@@ -18,21 +19,21 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      // Learn to Guides redirects (URL restructure)
+      {
+        source: '/learn',
+        destination: '/guides',
+        permanent: true,
+      },
+      {
+        source: '/learn/:slug',
+        destination: '/guides/:slug',
+        permanent: true,
+      },
       // Old learn pages redirected to tools
       {
         source: '/learn/gst-filing-penalty',
         destination: '/tools/penalty-calculator/gst-late-filing',
-        permanent: true,
-      },
-      // Old learn page slugs redirected to new slugs
-      {
-        source: '/learn/how-to-register-gst-india',
-        destination: '/learn/do-i-need-gst-registration',
-        permanent: true,
-      },
-      {
-        source: '/learn/startup-india-dpiit-recognition',
-        destination: '/learn/should-i-get-dpiit-startup-recognition',
         permanent: true,
       },
     ];

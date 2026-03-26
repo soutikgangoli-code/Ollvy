@@ -114,6 +114,8 @@ export default function LLPDocumentsPage() {
         ctaDescription="Get started with Ollvy. We handle DSC, DPIN, name approval, LLP Agreement drafting, and all MCA filings."
         ctaButtonText="Start LLP Registration"
         ctaButtonHref="/services/llp-incorporation?utm_source=tools&utm_medium=documents&utm_content=llp"
+        penaltyCalcHref="/tools/penalty-calculator/mca-annual-filing"
+        penaltyCalcText="Calculate MCA filing penalty"
       />
 
       {/* FAQ section */}

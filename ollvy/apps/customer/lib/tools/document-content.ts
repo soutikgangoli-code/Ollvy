@@ -135,9 +135,8 @@ The entire process happens online at gst.gov.in - no paper forms, no office visi
   ],
   nextSteps: [
     { title: 'GST Monthly Filing (GSTR-3B)', href: '/services/gst-monthly-filing' },
-    { title: 'GST Quarterly Return (GSTR-1)', href: '/services/gst-quarterly-return' },
-    { title: 'GST Annual Return (GSTR-9)', href: '/services/gst-annual-return' },
-    { title: 'Business Current Account', href: '/services/current-account' },
+    { title: 'Business ITR Filing', href: '/services/business-itr' },
+    { title: 'MSME/Udyam Registration', href: '/services/msme-udyam' },
   ],
 }
 
@@ -544,7 +543,7 @@ The upside: minimal compliance, easy to start. The downside: you bear unlimited 
   nextSteps: [
     { title: 'GST Registration', href: '/tools/documents/gst-registration' },
     { title: 'ITR Filing (Individual / Proprietor)', href: '/tools/documents/individual-itr' },
-    { title: 'Udyam MSME Registration', href: '/services/udyam-registration' },
+    { title: 'Udyam MSME Registration', href: '/services/msme-udyam' },
     { title: 'Shop and Establishment Licence', href: '/services/shop-establishment' },
   ],
 }
@@ -646,9 +645,8 @@ The Income Tax Department has made filing pretty straightforward through their e
     'Not reporting freelance income because it came in cash or without TDS',
   ],
   nextSteps: [
-    { title: 'Tax Planning and Investment Advisory', href: '/services/tax-planning' },
-    { title: 'Form 16 Verification', href: '/services/form-16' },
-    { title: 'ITR for Business Owners', href: '/tools/documents/business-itr' },
+    { title: 'Business ITR Filing', href: '/services/business-itr' },
+    { title: 'ITR Documents for Business', href: '/tools/documents/business-itr' },
     { title: 'GST Registration (for Freelancers)', href: '/tools/documents/gst-registration' },
   ],
 }
@@ -749,10 +747,9 @@ For FY 2025-26, a tax audit by a Chartered Accountant is mandatory if your busin
     'Treating capital expenditure as revenue expenditure (or vice versa) incorrectly',
   ],
   nextSteps: [
-    { title: 'Tax Audit (Section 44AB)', href: '/services/tax-audit' },
-    { title: 'GST Annual Return (GSTR-9)', href: '/services/gst-annual-return' },
+    { title: 'GST Monthly Filing', href: '/services/gst-monthly-filing' },
     { title: 'MCA Annual Filing (for Companies)', href: '/services/mca-annual-filing' },
-    { title: 'Advance Tax Planning', href: '/services/tax-planning' },
+    { title: 'TDS Monthly Compliance', href: '/services/tds-monthly-compliance' },
   ],
 }
 
@@ -852,10 +849,9 @@ Your registration protects you for 10 years from the date of application, and yo
     'Filing only the word mark or only the logo when you should file both for complete protection',
   ],
   nextSteps: [
-    { title: 'Copyright Registration', href: '/services/copyright-registration' },
     { title: 'Private Limited Company Registration', href: '/tools/documents/private-limited-company' },
     { title: 'GST Registration', href: '/tools/documents/gst-registration' },
-    { title: 'Brand Monitoring and Watch Service', href: '/services/trademark-watch' },
+    { title: 'MSME/Udyam Registration', href: '/services/msme-udyam' },
   ],
 }
 

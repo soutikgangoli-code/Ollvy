@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import Link from 'next/link'
-import { Download, ArrowRight } from 'lucide-react'
+import { Download, ArrowRight, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { StatutoryRef } from './StatutoryRef'
 import { cn } from '@/lib/utils'
@@ -27,6 +27,8 @@ interface ResultsPanelProps {
   className?: string
   children?: React.ReactNode
   maxPenalty?: number
+  docChecklistHref?: string
+  docChecklistText?: string
 }
 
 function formatCurrency(amount: number): string {
@@ -65,6 +67,8 @@ export function ResultsPanel({
   className,
   children,
   maxPenalty,
+  docChecklistHref,
+  docChecklistText,
 }: ResultsPanelProps) {
   const todayDate = useMemo(() => {
     return new Intl.DateTimeFormat('en-IN', {
@@ -190,6 +194,16 @@ export function ResultsPanel({
           <Download className="h-3.5 w-3.5 mr-2" />
           Download PDF
         </Button>
+
+        {docChecklistHref && (
+          <Link
+            href={`${docChecklistHref}?utm_source=tools&utm_medium=penalty_calc`}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center justify-center gap-1 w-full mt-2"
+          >
+            {docChecklistText || 'See documents needed'}
+            <ChevronRight size={12} />
+          </Link>
+        )}
       </div>
 
       {/* Disclaimer */}

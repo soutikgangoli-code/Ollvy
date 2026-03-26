@@ -353,6 +353,8 @@ function ITRCalculatorInner() {
           ctaText="File ITR Now"
           ctaHref="/services/itr-filing"
           showCta={result.total > 0}
+          docChecklistHref="/tools/documents/business-itr"
+          docChecklistText="ITR filing documents"
         >
           {/* Section 234C Advisory */}
           <InfoBanner

@@ -286,6 +286,8 @@ function MCACalculatorInner() {
           ctaText="File MCA Returns"
           ctaHref="/services/mca-annual-filing"
           showCta={totalPenalty > 0}
+          docChecklistHref={entityType === 'llp' ? '/tools/documents/llp' : '/tools/documents/private-limited-company'}
+          docChecklistText={entityType === 'llp' ? 'LLP filing documents' : 'Company filing documents'}
         >
           {/* Warning: days > 30 */}
           {daysLate > 30 && (

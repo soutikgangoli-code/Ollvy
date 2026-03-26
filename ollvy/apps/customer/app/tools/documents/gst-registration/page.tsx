@@ -48,22 +48,22 @@ const documentListJsonLd = generateDocumentListSchema(
 )
 
 export const metadata: Metadata = {
-  title: 'Documents Required for GST Registration in India | Ollvy',
-  description: 'Complete checklist of documents needed for GST registration in India. PAN, Aadhaar, address proof, bank statement requirements for sole proprietors and businesses.',
-  keywords: ['GST registration documents', 'GST documents list', 'documents for GST number', 'GST registration requirements india'],
+  title: 'How to Register for GST - Documents & Process | Ollvy',
+  description: 'Complete checklist of documents needed for GST registration in India 2025-26. PAN, Aadhaar, address proof, bank statement requirements. Step-by-step process for sole proprietors and companies.',
+  keywords: ['GST registration documents', 'GST documents list', 'documents for GST number', 'GST registration requirements india', 'how to register for GST', 'GSTIN documents 2025'],
   alternates: {
     canonical: 'https://www.ollvy.com/tools/documents/gst-registration',
   },
   openGraph: {
-    title: 'Documents Required for GST Registration in India | Ollvy',
-    description: 'Complete checklist of documents needed for GST registration in India.',
+    title: 'How to Register for GST - Documents & Process | Ollvy',
+    description: 'Complete checklist of documents needed for GST registration in India. Step-by-step process for proprietors and businesses.',
     url: 'https://www.ollvy.com/tools/documents/gst-registration',
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Documents Required for GST Registration | Ollvy',
-    description: 'Complete checklist of documents needed for GST registration in India.',
+    title: 'How to Register for GST - Documents & Process | Ollvy',
+    description: 'Complete checklist of documents needed for GST registration in India. Step-by-step process for proprietors and businesses.',
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
@@ -114,6 +114,8 @@ export default function GSTDocumentsPage() {
         ctaDescription="Get started with Ollvy. We handle the entire GST registration process - from document verification to ARN tracking to GSTIN delivery."
         ctaButtonText="Start GST Registration"
         ctaButtonHref="/services/gst-registration?utm_source=tools&utm_medium=documents&utm_content=gst"
+        penaltyCalcHref="/tools/penalty-calculator/gst-late-filing"
+        penaltyCalcText="Calculate GST late filing penalty"
       />
 
       {/* FAQ section */}
