@@ -39,8 +39,8 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
       </div>
 
       {/* Stats - Timeline & Cost */}
-      <div className="grid grid-cols-[30%_70%] border border-border rounded-xl overflow-hidden">
-        <div className="p-6 border-r border-border">
+      <div className="grid grid-cols-[35%_65%]">
+        <div>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
             <Clock className="h-3 w-3" />
             Timeline
@@ -59,7 +59,7 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
             )}
           </div>
         </div>
-        <div className="p-6">
+        <div>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
             <IndianRupee className="h-3 w-3" />
             Cost
@@ -76,7 +76,7 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
 
       {/* Who needs this */}
       <div>
-        <div className="mb-4">
+        <div className="mb-3">
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-[10px] text-muted-foreground">01</span>
             <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
@@ -85,20 +85,14 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {content.intro.whoNeeds.map((item, index) => (
             <div
               key={index}
-              className="p-4 rounded-xl border border-border/50 bg-card hover:border-border hover:bg-muted/50 transition-all"
+              className="py-2 px-3 rounded-lg border border-border/50 bg-card hover:border-border hover:bg-muted/50 transition-all flex items-center gap-3"
             >
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-lg bg-muted border border-border/50 flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                </div>
-                <div className="flex-1 min-w-0 pt-2.5">
-                  <p className="text-sm text-muted-foreground">{item}</p>
-                </div>
-              </div>
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <p className="text-sm text-muted-foreground">{item}</p>
             </div>
           ))}
         </div>
