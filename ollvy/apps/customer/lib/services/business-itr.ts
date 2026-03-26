@@ -21,7 +21,7 @@ export const businessItr: ServiceConfig = {
   seoTitle: 'Business ITR Filing 2025 | ITR-6, ITR-5 | ₹11,999 | Ollvy',
   seoDescription:
     'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31. Fixed price ₹11,999. Verified CA assigned within 24 hours. Includes P&L review and depreciation.',
-  canonicalUrl: 'https://ollvy.com/services/business-itr',
+  canonicalUrl: 'https://www.ollvy.com/services/business-itr',
 
   processSteps: [
     {

@@ -5,19 +5,19 @@ export const metadata: Metadata = {
   title: 'Refund Policy | Ollvy',
   description: 'Refund policy for Ollvy compliance services. Understand our refund process, eligibility criteria, and timelines for GST registration, company incorporation, and other services.',
   alternates: {
-    canonical: 'https://ollvy.com/refunds',
+    canonical: 'https://www.ollvy.com/refunds',
   },
   openGraph: {
     title: 'Refund Policy | Ollvy',
     description: 'Refund policy for Ollvy compliance services. Understand our refund process, eligibility criteria, and timelines for GST registration, company incorporation, and other services.',
-    url: 'https://ollvy.com/refunds',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/refunds',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Refund Policy | Ollvy',
     description: 'Refund policy for Ollvy compliance services. Understand our refund process, eligibility criteria, and timelines for GST registration, company incorporation, and other services.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 

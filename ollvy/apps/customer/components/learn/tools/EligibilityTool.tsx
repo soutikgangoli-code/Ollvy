@@ -2,9 +2,48 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle, XCircle, Info } from 'lucide-react';
 import { LearnToolConfig, EligibilityQuestion, EligibilityResult } from '@/lib/learn/pages';
 import { ServiceConfig } from '@/lib/services';
+import Link from 'next/link';
+
+// Get result styling based on type
+function getResultStyle(type: EligibilityResult['type']) {
+  switch (type) {
+    case 'eligible':
+    case 'mandatory':
+      return {
+        bg: 'bg-[hsl(var(--ollvy-green))]/5 border border-[hsl(var(--ollvy-green))]/20',
+        icon: CheckCircle,
+        iconColor: 'text-[hsl(var(--ollvy-green))]',
+        showCta: true,
+      };
+    case 'recommended':
+    case 'optional':
+      return {
+        bg: 'bg-[hsl(var(--ollvy-amber))]/5 border border-[hsl(var(--ollvy-amber))]/20',
+        icon: Info,
+        iconColor: 'text-[hsl(var(--ollvy-amber))]',
+        showCta: true,
+      };
+    case 'not_required':
+    case 'ineligible':
+      return {
+        bg: 'bg-muted/40 border border-border',
+        icon: XCircle,
+        iconColor: 'text-muted-foreground',
+        showCta: false,
+      };
+    case 'conditional':
+    default:
+      return {
+        bg: 'bg-[hsl(var(--ollvy-amber))]/5 border border-[hsl(var(--ollvy-amber))]/20',
+        icon: AlertCircle,
+        iconColor: 'text-[hsl(var(--ollvy-amber))]',
+        showCta: true,
+      };
+  }
+}
 
 export function EligibilityTool({ config, ctaService }: {
   config: LearnToolConfig;
@@ -31,9 +70,12 @@ export function EligibilityTool({ config, ctaService }: {
     if (step < questions.length - 1) {
       setStep(prev => prev + 1);
     } else {
-      setResult(evaluateAnswers(questions, newAnswers));
+      setResult(evaluateAnswers(questions, newAnswers, config.defaultResult));
     }
   };
+
+  const resultStyle = result ? getResultStyle(result.type) : null;
+  const Icon = resultStyle?.icon;
 
   return (
     <div className="border border-border rounded-xl bg-card overflow-hidden">
@@ -77,27 +119,20 @@ export function EligibilityTool({ config, ctaService }: {
         <div className="p-6">
           <div className={cn(
             "flex items-start gap-3 rounded-lg p-4 mb-5",
-            result.type === 'eligible'
-              ? "bg-[hsl(var(--ollvy-green))]/5 border border-[hsl(var(--ollvy-green))]/20"
-              : result.type === 'ineligible'
-              ? "bg-muted/40 border border-border"
-              : "bg-[hsl(var(--ollvy-amber))]/5 border border-[hsl(var(--ollvy-amber))]/20"
+            resultStyle?.bg
           )}>
-            {result.type === 'eligible'
-              ? <CheckCircle size={16} className="text-[hsl(var(--ollvy-green))] mt-0.5 shrink-0" />
-              : <AlertCircle size={16} className="text-[hsl(var(--ollvy-amber))] mt-0.5 shrink-0" />
-            }
+            {Icon && <Icon size={16} className={cn(resultStyle?.iconColor, "mt-0.5 shrink-0")} />}
             <div>
               <p className="text-sm font-semibold text-foreground">{result.headline}</p>
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{result.body}</p>
             </div>
           </div>
 
-          {result.type === 'eligible' && (
+          {resultStyle?.showCta && (
             <Button className="w-full" asChild>
-              <a href={`/services/${ctaService.slug}?utm_source=learn_tool&utm_medium=eligibility_result`}>
-                {result.ctaLabel ?? `Book ${ctaService.shortName} - ₹${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`}
-              </a>
+              <Link href={result.ctaHref ?? `/checkout/${ctaService.slug}?utm_source=learn_tool&utm_medium=eligibility_result`}>
+                {result.ctaLabel ?? `Get ${ctaService.shortName} - Rs. ${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`}
+              </Link>
             </Button>
           )}
 
@@ -117,15 +152,16 @@ export function EligibilityTool({ config, ctaService }: {
 // These are pure functions - no side effects
 function evaluateAnswers(
   questions: EligibilityQuestion[],
-  answers: Record<number, string>
+  answers: Record<number, string>,
+  defaultResult?: EligibilityResult
 ): EligibilityResult {
   // Each question has an `evaluator` function that returns a result or null
   for (const [i, q] of questions.entries()) {
     const result = q.evaluator?.(answers[i], answers);
     if (result) return result;
   }
-  // Default
-  return {
+  // Use provided default or fallback
+  return defaultResult ?? {
     type: 'conditional',
     headline: 'It depends on your situation.',
     body: 'WhatsApp us with your specific details and we\'ll tell you in 2 minutes.',

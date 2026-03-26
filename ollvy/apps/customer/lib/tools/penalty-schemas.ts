@@ -36,10 +36,10 @@ export function generateBreadcrumbSchema(slug: string, title: string) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
-      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-      { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
-      { '@type': 'ListItem', position: 4, name: title, item: `https://ollvy.com/tools/penalty-calculator/${slug}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.ollvy.com' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+      { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.ollvy.com/tools/penalty-calculator' },
+      { '@type': 'ListItem', position: 4, name: title, item: `https://www.ollvy.com/tools/penalty-calculator/${slug}` },
     ],
   }
 }

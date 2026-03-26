@@ -42,7 +42,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-12 bg-background">
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-8">
           {/* Column 1: Brand */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <OllvyWordmark />
@@ -107,24 +107,45 @@ export function Footer() {
             ]}
           />
 
-          {/* Column 4: Products */}
+          {/* Column 4: Services */}
           <FooterColumn
-            title="Products"
+            title="Services"
             links={[
-              { label: 'Services', href: '/#services' },
-              { label: 'Compliance Calendar', href: '/#compliance-calendar' },
+              { label: 'Pvt Ltd Registration', href: '/services/pvt-ltd-incorporation' },
+              { label: 'LLP Registration', href: '/services/llp-incorporation' },
+              { label: 'GST Registration', href: '/services/gst-registration' },
+              { label: 'Trademark Registration', href: '/services/trademark-registration' },
+              { label: 'Business ITR Filing', href: '/services/business-itr' },
+              { label: 'Annual Compliance', href: '/services/mca-annual-filing' },
+              { label: 'All Services', href: '/services' },
             ]}
           />
 
-          {/* Column 5: Company */}
+          {/* Column 5: Guides */}
           <FooterColumn
-            title="Company"
+            title="Guides"
             links={[
-              { label: 'Contact', href: 'mailto:support@ollvy.com' },
+              { label: 'Do I Need GST?', href: '/learn/do-i-need-gst-registration' },
+              { label: 'Pvt Ltd vs LLP', href: '/learn/pvt-ltd-vs-llp' },
+              { label: 'Which ITR Form?', href: '/learn/which-itr-form-should-i-use' },
+              { label: 'DPIIT Recognition', href: '/learn/should-i-get-dpiit-startup-recognition' },
+              { label: 'All Guides', href: '/learn' },
             ]}
           />
 
-          {/* Column 6: Legal */}
+          {/* Column 6: Notices */}
+          <FooterColumn
+            title="Notice Help"
+            links={[
+              { label: 'GST DRC-01 Notice', href: '/learn/gst-drc-01-notice' },
+              { label: 'GST ASMT-10 Notice', href: '/learn/gst-asmt-10-notice' },
+              { label: 'IT 143(1) Intimation', href: '/learn/income-tax-143-1-intimation' },
+              { label: 'IT 148/148A Notice', href: '/learn/income-tax-148-148a-reopening' },
+              { label: 'TDS Short Deduction', href: '/learn/tds-short-deduction-notice' },
+            ]}
+          />
+
+          {/* Column 7: Legal */}
           <FooterColumn
             title="Legal"
             links={[
@@ -132,6 +153,7 @@ export function Footer() {
               { label: 'Terms of Service', href: '/terms' },
               { label: 'Cancellation Policy', href: '/cancellation' },
               { label: 'Refund Policy', href: '/refunds' },
+              { label: 'Contact', href: 'mailto:support@ollvy.com' },
             ]}
           />
         </div>

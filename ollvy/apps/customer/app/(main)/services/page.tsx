@@ -131,13 +131,13 @@ function ServicesContent() {
     '@type': 'ItemList',
     name: 'Business Compliance Services',
     description: 'Fixed-price compliance packages for Indian SMEs',
-    url: 'https://ollvy.com/services',
+    url: 'https://www.ollvy.com/services',
     numberOfItems: services.length,
     itemListElement: services.map((service, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       name: service.name,
-      url: `https://ollvy.com/services/${service.slug}`,
+      url: `https://www.ollvy.com/services/${service.slug}`,
     })),
   }
 

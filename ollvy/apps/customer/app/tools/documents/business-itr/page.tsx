@@ -7,15 +7,16 @@ import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistake
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { businessITRDocuments } from '@/lib/data/document-checklists'
 import { businessItrContent } from '@/lib/tools/document-content'
+import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://ollvy.com' },
-    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://ollvy.com/tools/documents' },
-    { '@type': 'ListItem', position: 4, name: 'Business ITR Documents', item: 'https://ollvy.com/tools/documents/business-itr' },
+    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://www.ollvy.com/tools/documents' },
+    { '@type': 'ListItem', position: 4, name: 'Business ITR Documents', item: 'https://www.ollvy.com/tools/documents/business-itr' },
   ],
 }
 
@@ -40,24 +41,30 @@ const howToJsonLd = {
 
 const faqJsonLd = generateFAQSchema(businessItrContent)
 
+const documentListJsonLd = generateDocumentListSchema(
+  businessITRDocuments,
+  'Business ITR Filing',
+  'https://www.ollvy.com/tools/documents/business-itr'
+)
+
 export const metadata: Metadata = {
   title: 'How to File Business ITR - Documents & Process | Ollvy',
   description: 'Complete guide to business ITR filing in India. ITR-3, ITR-4, tax audit, presumptive taxation, P&L, balance sheet, documents required, and FAQs.',
   keywords: ['business ITR filing', 'how to file ITR-3', 'ITR-4 filing', 'tax audit', 'presumptive taxation 44AD', 'business income tax return', 'freelancer ITR'],
   alternates: {
-    canonical: 'https://ollvy.com/tools/documents/business-itr',
+    canonical: 'https://www.ollvy.com/tools/documents/business-itr',
   },
   openGraph: {
     title: 'How to File Business ITR in India | Ollvy',
     description: 'Complete guide to business income tax return filing - process, audit, and documents.',
-    url: 'https://ollvy.com/tools/documents/business-itr',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/tools/documents/business-itr',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'How to File Business ITR | Ollvy',
     description: 'Complete guide to business income tax return filing in India.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
@@ -76,6 +83,10 @@ export default function BusinessITRDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
+      />
 
       {/* Educational intro content */}
       <DocumentPageIntro content={businessItrContent} />
@@ -85,8 +96,11 @@ export default function BusinessITRDocumentsPage() {
 
       {/* Document checklist header */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-[10px] text-muted-foreground">03</span>
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1 ml-7">
           Click on any document to see detailed requirements and how to obtain it
         </p>
       </div>

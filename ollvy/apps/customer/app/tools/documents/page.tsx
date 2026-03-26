@@ -7,19 +7,19 @@ export const metadata: Metadata = {
   title: 'Document Checklists for Business Registration & Compliance | Ollvy',
   description: 'Complete document checklists for registering Private Limited Company, LLP, Partnership Firm, GST, ITR filing, and Trademark in India. Know exactly what you need.',
   alternates: {
-    canonical: 'https://ollvy.com/tools/documents',
+    canonical: 'https://www.ollvy.com/tools/documents',
   },
   openGraph: {
     title: 'Document Checklists for Business Registration & Compliance | Ollvy',
     description: 'Complete document checklists for registering Private Limited Company, LLP, Partnership Firm, GST, ITR filing, and Trademark in India.',
-    url: 'https://ollvy.com/tools/documents',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/tools/documents',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Document Checklists for Business Registration | Ollvy',
     description: 'Complete document checklists for registering Pvt Ltd, LLP, Partnership, GST, ITR, and Trademark in India.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 

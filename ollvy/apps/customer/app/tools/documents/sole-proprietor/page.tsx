@@ -7,15 +7,16 @@ import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistake
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { gstDocuments } from '@/lib/data/document-checklists'
 import { soleProprietorContent } from '@/lib/tools/document-content'
+import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://ollvy.com' },
-    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://ollvy.com/tools/documents' },
-    { '@type': 'ListItem', position: 4, name: 'Sole Proprietorship Documents', item: 'https://ollvy.com/tools/documents/sole-proprietor' },
+    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://www.ollvy.com/tools/documents' },
+    { '@type': 'ListItem', position: 4, name: 'Sole Proprietorship Documents', item: 'https://www.ollvy.com/tools/documents/sole-proprietor' },
   ],
 }
 
@@ -40,24 +41,30 @@ const howToJsonLd = {
 
 const faqJsonLd = generateFAQSchema(soleProprietorContent)
 
+const documentListJsonLd = generateDocumentListSchema(
+  gstDocuments,
+  'Sole Proprietorship Registration',
+  'https://www.ollvy.com/tools/documents/sole-proprietor'
+)
+
 export const metadata: Metadata = {
   title: 'How to Register Sole Proprietorship - Documents & Process | Ollvy',
   description: 'Complete guide to sole proprietorship registration in India. Step-by-step process, GST registration, Udyam, Shop Act, required documents, and FAQs answered.',
   keywords: ['sole proprietorship registration', 'how to register proprietorship', 'sole proprietorship documents', 'proprietorship GST registration', 'Udyam registration'],
   alternates: {
-    canonical: 'https://ollvy.com/tools/documents/sole-proprietor',
+    canonical: 'https://www.ollvy.com/tools/documents/sole-proprietor',
   },
   openGraph: {
     title: 'How to Register Sole Proprietorship in India | Ollvy',
     description: 'Complete guide to sole proprietorship registration - process, documents, and requirements.',
-    url: 'https://ollvy.com/tools/documents/sole-proprietor',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/tools/documents/sole-proprietor',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'How to Register Sole Proprietorship | Ollvy',
     description: 'Complete guide to sole proprietorship registration in India.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
@@ -76,6 +83,10 @@ export default function SoleProprietorDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
+      />
 
       {/* Educational intro content */}
       <DocumentPageIntro content={soleProprietorContent} />
@@ -85,8 +96,11 @@ export default function SoleProprietorDocumentsPage() {
 
       {/* Document checklist header */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-[10px] text-muted-foreground">03</span>
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1 ml-7">
           Click on any document to see detailed requirements and how to obtain it
         </p>
       </div>

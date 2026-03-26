@@ -7,19 +7,19 @@ export const metadata: Metadata = {
   title: 'Free Business Tools | Ollvy',
   description: 'Free tools to help Indian businesses - Document checklists for company registration and penalty calculators for compliance deadlines.',
   alternates: {
-    canonical: 'https://ollvy.com/tools',
+    canonical: 'https://www.ollvy.com/tools',
   },
   openGraph: {
     title: 'Free Business Tools | Ollvy',
     description: 'Free tools to help Indian businesses - Document checklists and penalty calculators.',
-    url: 'https://ollvy.com/tools',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/tools',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Business Tools | Ollvy',
     description: 'Free tools to help Indian businesses - Document checklists and penalty calculators.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
@@ -125,7 +125,7 @@ const toolsJsonLd = {
   '@type': 'WebPage',
   name: 'Free Business Tools',
   description: 'Free tools to help Indian businesses - Document checklists for company registration and penalty calculators for compliance deadlines.',
-  url: 'https://ollvy.com/tools',
+  url: 'https://www.ollvy.com/tools',
   mainEntity: {
     '@type': 'ItemList',
     name: 'Business Tools Collection',
@@ -135,7 +135,7 @@ const toolsJsonLd = {
       position: i + 1,
       name: tool.title,
       description: tool.description,
-      url: `https://ollvy.com${tool.href}`,
+      url: `https://www.ollvy.com${tool.href}`,
     })),
   },
 }

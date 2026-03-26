@@ -24,7 +24,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
   seoTitle: 'Private Limited Company Registration Online India | ₹24,999 | Ollvy',
   seoDescription:
     'Register your Private Limited Company in India. Includes name reservation, DSC, DIN, MOA/AOA, and CIN. Fixed price ₹24,999 (₹9,999 Ollvy + ₹15,000 MCA). CA assigned within 4 hours.',
-  canonicalUrl: 'https://ollvy.com/services/pvt-ltd-incorporation',
+  canonicalUrl: 'https://www.ollvy.com/services/pvt-ltd-incorporation',
 
   processSteps: [
     {

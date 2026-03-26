@@ -7,58 +7,61 @@ interface DocumentPageIntroProps {
 
 export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
   return (
-    <div className="mb-12 space-y-8">
+    <div className="mb-12 space-y-10">
       {/* Main description */}
-      <div className="prose prose-sm max-w-none text-muted-foreground">
+      <div className="text-sm text-muted-foreground leading-relaxed space-y-4">
         {content.intro.description.split('\n\n').map((paragraph, index) => (
-          <p key={index} className="leading-relaxed">
-            {paragraph}
-          </p>
+          <p key={index}>{paragraph}</p>
         ))}
       </div>
 
-      {/* Info cards */}
-      <div className="grid sm:grid-cols-2 gap-4">
-        {/* Timeline */}
-        <div className="p-4 rounded-xl border border-border bg-card">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-              <Clock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-              Timeline
-            </span>
-          </div>
-          <p className="text-lg font-semibold text-foreground">{content.intro.timeline}</p>
+      {/* Stats - Timeline & Cost */}
+      <div className="flex items-center gap-8">
+        <div>
+          <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-2">
+            <Clock className="h-3 w-3" />
+            Timeline
+          </p>
+          <p className="font-mono text-lg font-semibold text-foreground">{content.intro.timeline}</p>
         </div>
-
-        {/* Cost */}
-        <div className="p-4 rounded-xl border border-border bg-card">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-              <IndianRupee className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-              Cost
-            </span>
-          </div>
-          <p className="text-lg font-semibold text-foreground">{content.intro.cost}</p>
+        <div className="h-10 w-px bg-border/50" />
+        <div>
+          <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-1 flex items-center gap-2">
+            <IndianRupee className="h-3 w-3" />
+            Cost
+          </p>
+          <p className="font-mono text-lg font-semibold text-foreground">{content.intro.cost}</p>
         </div>
       </div>
 
       {/* Who needs this */}
-      <div className="p-6 rounded-xl border border-border bg-card">
-        <h2 className="text-lg font-semibold text-foreground mb-4">
-          Who needs {content.slug.includes('itr') ? 'to file' : 'this'}?
-        </h2>
-        <ul className="space-y-3">
+      <div>
+        <div className="mb-4">
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-[10px] text-muted-foreground">01</span>
+            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+              Who needs {content.slug.includes('itr') ? 'to file' : 'this'}?
+            </h2>
+          </div>
+        </div>
+
+        <div className="space-y-2">
           {content.intro.whoNeeds.map((item, index) => (
-            <li key={index} className="flex items-start gap-3">
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
-              <span className="text-sm text-muted-foreground">{item}</span>
-            </li>
+            <div
+              key={index}
+              className="p-4 rounded-xl border border-border/50 bg-card hover:border-border hover:bg-muted/50 transition-all"
+            >
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-muted border border-border/50 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <div className="flex-1 min-w-0 pt-2.5">
+                  <p className="text-sm text-muted-foreground">{item}</p>
+                </div>
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   )

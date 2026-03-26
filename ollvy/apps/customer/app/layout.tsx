@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   description: 'Register your company, get GST, trademark, FSSAI, and handle compliance - with vetted CAs on Ollvy. Fixed prices. Tracked delivery. India\'s most organised compliance platform.',
   keywords: 'company registration india, llp registration, gst registration, trademark registration india, ca services india, compliance services india, business registration india',
   robots: 'index, follow',
-  metadataBase: new URL('https://ollvy.com'),
+  metadataBase: new URL('https://www.ollvy.com'),
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -44,16 +44,16 @@ export const metadata: Metadata = {
   },
   manifest: '/site.webmanifest',
   alternates: {
-    canonical: 'https://ollvy.com',
+    canonical: 'https://www.ollvy.com',
   },
   openGraph: {
     title: 'Ollvy - Company Registration & Compliance, Sorted',
     description: 'Fixed-price compliance services with vetted CAs. LLP, Pvt Ltd, GST, Trademark, FSSAI and more. Track every step in-app.',
-    url: 'https://ollvy.com',
+    url: 'https://www.ollvy.com',
     siteName: 'Ollvy',
     images: [
       {
-        url: 'https://ollvy.com/logo.png',
+        url: 'https://www.ollvy.com/logo.png',
         width: 1200,
         height: 630,
         alt: 'Ollvy - Company Registration & Compliance Services India',
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Ollvy - Company Registration & Compliance, Sorted',
     description: 'Fixed-price compliance services with vetted CAs. LLP, Pvt Ltd, GST, Trademark, FSSAI and more.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 

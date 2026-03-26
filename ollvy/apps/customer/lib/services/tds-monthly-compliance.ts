@@ -23,7 +23,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   seoTitle: 'TDS Filing Monthly Service | TDS Return & Challan | ₹1,999/mo | Ollvy',
   seoDescription:
     'Monthly TDS compliance service. TDS calculation, challan deposit, and quarterly return filing. Fixed ₹1,999/month. CA assigned permanently.',
-  canonicalUrl: 'https://ollvy.com/services/tds-monthly-compliance',
+  canonicalUrl: 'https://www.ollvy.com/services/tds-monthly-compliance',
 
   processSteps: [
     {

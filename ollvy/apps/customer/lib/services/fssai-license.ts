@@ -24,7 +24,7 @@ export const fssaiLicense: ServiceConfig = {
   seoTitle: 'FSSAI License Online India | Registration & State License | ₹6,999 | Ollvy',
   seoDescription:
     'Get your FSSAI license in 10 working days. Covers Registration, State, or Central License based on your turnover. Fixed price ₹6,999 (₹4,999 Ollvy + ₹2,000 govt fee).',
-  canonicalUrl: 'https://ollvy.com/services/fssai-license',
+  canonicalUrl: 'https://www.ollvy.com/services/fssai-license',
 
   processSteps: [
     {

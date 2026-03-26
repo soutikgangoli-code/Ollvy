@@ -8,19 +8,19 @@ export const metadata: Metadata = {
   description:
     'Ollvy Pro subscription for compliance tracking and reminders. Monthly retainer packages for GST filing, payroll, and TDS compliance. Fixed pricing, no surprises.',
   alternates: {
-    canonical: 'https://ollvy.com/pricing',
+    canonical: 'https://www.ollvy.com/pricing',
   },
   openGraph: {
     title: 'Pricing - Ollvy Pro & Monthly Retainers | Ollvy',
     description: 'Ollvy Pro subscription for compliance tracking and reminders. Monthly retainer packages for GST filing, payroll, and TDS compliance.',
-    url: 'https://ollvy.com/pricing',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/pricing',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Pricing - Ollvy Pro & Monthly Retainers | Ollvy',
     description: 'Ollvy Pro subscription and monthly retainer packages. Fixed pricing, no surprises.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 

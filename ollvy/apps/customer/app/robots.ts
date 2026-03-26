@@ -26,6 +26,6 @@ export default function robots(): MetadataRoute.Robots {
         '/upgrade',
       ],
     },
-    sitemap: 'https://ollvy.com/sitemap.xml',
+    sitemap: 'https://www.ollvy.com/sitemap.xml',
   }
 }

@@ -7,15 +7,16 @@ import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistake
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { gstDocuments } from '@/lib/data/document-checklists'
 import { gstRegistrationContent } from '@/lib/tools/document-content'
+import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://ollvy.com' },
-    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://ollvy.com/tools/documents' },
-    { '@type': 'ListItem', position: 4, name: 'GST Documents', item: 'https://ollvy.com/tools/documents/gst-registration' },
+    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://www.ollvy.com/tools/documents' },
+    { '@type': 'ListItem', position: 4, name: 'GST Documents', item: 'https://www.ollvy.com/tools/documents/gst-registration' },
   ],
 }
 
@@ -40,24 +41,30 @@ const howToJsonLd = {
 
 const faqJsonLd = generateFAQSchema(gstRegistrationContent)
 
+const documentListJsonLd = generateDocumentListSchema(
+  gstDocuments,
+  'GST Registration',
+  'https://www.ollvy.com/tools/documents/gst-registration'
+)
+
 export const metadata: Metadata = {
   title: 'Documents Required for GST Registration in India | Ollvy',
   description: 'Complete checklist of documents needed for GST registration in India. PAN, Aadhaar, address proof, bank statement requirements for sole proprietors and businesses.',
   keywords: ['GST registration documents', 'GST documents list', 'documents for GST number', 'GST registration requirements india'],
   alternates: {
-    canonical: 'https://ollvy.com/tools/documents/gst-registration',
+    canonical: 'https://www.ollvy.com/tools/documents/gst-registration',
   },
   openGraph: {
     title: 'Documents Required for GST Registration in India | Ollvy',
     description: 'Complete checklist of documents needed for GST registration in India.',
-    url: 'https://ollvy.com/tools/documents/gst-registration',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/tools/documents/gst-registration',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Documents Required for GST Registration | Ollvy',
     description: 'Complete checklist of documents needed for GST registration in India.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
@@ -76,6 +83,10 @@ export default function GSTDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
+      />
 
       {/* Educational intro content */}
       <DocumentPageIntro content={gstRegistrationContent} />
@@ -85,8 +96,11 @@ export default function GSTDocumentsPage() {
 
       {/* Document checklist header */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-[10px] text-muted-foreground">03</span>
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1 ml-7">
           Click on any document to see detailed requirements and how to obtain it
         </p>
       </div>

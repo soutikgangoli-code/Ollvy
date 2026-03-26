@@ -919,17 +919,17 @@ export function generateBreadcrumbSchema(content: DocumentPageContent, label: st
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://ollvy.com' },
-      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-      { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://ollvy.com/tools/documents' },
-      { '@type': 'ListItem', position: 4, name: label, item: `https://ollvy.com${content.seo.canonical}` },
+      { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+      { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://www.ollvy.com/tools/documents' },
+      { '@type': 'ListItem', position: 4, name: label, item: `https://www.ollvy.com${content.seo.canonical}` },
     ],
   }
 }
 
 // Generate Next.js Metadata object from content
 export function generatePageMetadata(content: DocumentPageContent) {
-  const baseUrl = 'https://ollvy.com'
+  const baseUrl = 'https://www.ollvy.com'
   const fullUrl = `${baseUrl}${content.seo.canonical}`
 
   return {

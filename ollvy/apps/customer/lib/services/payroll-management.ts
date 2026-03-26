@@ -22,7 +22,7 @@ export const payrollManagement: ServiceConfig = {
   seoTitle: 'Payroll Services for Startups | Salary, TDS, PF, ESI | ₹2,999/mo | Ollvy',
   seoDescription:
     'Full payroll service for startups. Salary processing, TDS, PF, ESI compliance. Fixed ₹2,999/month for up to 10 employees. Dedicated payroll specialist.',
-  canonicalUrl: 'https://ollvy.com/services/payroll-management',
+  canonicalUrl: 'https://www.ollvy.com/services/payroll-management',
 
   processSteps: [
     {

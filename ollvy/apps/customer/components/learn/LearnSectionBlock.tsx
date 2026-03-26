@@ -107,12 +107,23 @@ function ProcessStepper({ steps }: { steps: ProcessStepItem[] }) {
 export function LearnSectionBlock({ section }: { section: LearnSection }) {
   const faqs = section.componentProps?.faqs as FaqItem[] | undefined;
   const steps = section.componentProps?.steps as ProcessStepItem[] | undefined;
+  const bullets = section.bullets || section.list;
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-foreground mb-4">
-        {section.heading}
-      </h2>
+      {/* Section header - with optional number */}
+      {section.number ? (
+        <div className="flex items-baseline gap-3 mb-4">
+          <span className="font-mono text-[10px] text-muted-foreground">{section.number}</span>
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+            {section.heading}
+          </h2>
+        </div>
+      ) : (
+        <h2 className="text-xl font-semibold text-foreground mb-4">
+          {section.heading}
+        </h2>
+      )}
 
       {section.body && (
         <div className="prose prose-sm prose-invert max-w-none text-muted-foreground leading-relaxed">
@@ -154,9 +165,9 @@ export function LearnSectionBlock({ section }: { section: LearnSection }) {
         <DataTable table={section.table} />
       )}
 
-      {section.list && section.list.length > 0 && (
+      {bullets && bullets.length > 0 && (
         <ul className="mt-4 space-y-2">
-          {section.list.map((item, i) => (
+          {bullets.map((item, i) => (
             <li key={i} className="flex gap-3 text-sm text-muted-foreground">
               <span className="text-muted-foreground mt-1.5">•</span>
               <span>{item}</span>

@@ -46,6 +46,26 @@ export function LearnPage({ page, ctaService, secondaryService }: {
           </div>
         ))}
 
+        {/* FAQs */}
+        {page.faqs && page.faqs.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-baseline gap-3 mb-4">
+              <span className="font-mono text-[10px] text-muted-foreground">FAQ</span>
+              <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+                Frequently Asked Questions
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {page.faqs.map((faq, i) => (
+                <div key={i} className="border border-border rounded-lg p-4">
+                  <p className="text-sm font-semibold text-foreground mb-2">{faq.q}</p>
+                  <p className="text-sm text-muted-foreground">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Service CTA */}
         <LearnServiceCTA
           primary={ctaService}

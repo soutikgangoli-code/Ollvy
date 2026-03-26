@@ -72,7 +72,7 @@ export default async function PackDetailPage({ params }: PageProps) {
     '@type': 'Service',
     name: pack.name,
     description: pack.seoDescription,
-    provider: { '@type': 'Organization', name: 'Ollvy', url: 'https://ollvy.com' },
+    provider: { '@type': 'Organization', name: 'Ollvy', url: 'https://www.ollvy.com' },
     areaServed: 'IN',
     offers: {
       '@type': 'Offer',
@@ -100,8 +100,8 @@ export default async function PackDetailPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
-      { '@type': 'ListItem', position: 2, name: 'Packs', item: 'https://ollvy.com/packs' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.ollvy.com' },
+      { '@type': 'ListItem', position: 2, name: 'Packs', item: 'https://www.ollvy.com/packs' },
       { '@type': 'ListItem', position: 3, name: pack.name, item: pack.canonicalUrl },
     ],
   }

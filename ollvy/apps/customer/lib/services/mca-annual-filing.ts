@@ -24,7 +24,7 @@ export const mcaAnnualFiling: ServiceConfig = {
   seoTitle: 'MCA Annual Filing Online | AOC-4 & MGT-7 | ₹7,599 | Ollvy',
   seoDescription:
     'File your MCA annual return (AOC-4 + MGT-7) on time. Due within 30/60 days of AGM. Fixed price ₹7,599 (₹6,999 Ollvy + ₹600 MCA). CS assigned same day.',
-  canonicalUrl: 'https://ollvy.com/services/mca-annual-filing',
+  canonicalUrl: 'https://www.ollvy.com/services/mca-annual-filing',
 
   processSteps: [
     {

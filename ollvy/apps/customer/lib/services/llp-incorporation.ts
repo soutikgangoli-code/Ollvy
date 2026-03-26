@@ -24,7 +24,7 @@ export const llpIncorporation: ServiceConfig = {
   seoTitle: 'LLP Registration Online India | ₹12,999 | Ollvy',
   seoDescription:
     'Register your Limited Liability Partnership in India. Includes DPIN, DSC, name reservation, and LLP Agreement. Fixed price ₹12,999 (₹7,999 Ollvy + ₹5,000 MCA).',
-  canonicalUrl: 'https://ollvy.com/services/llp-incorporation',
+  canonicalUrl: 'https://www.ollvy.com/services/llp-incorporation',
 
   processSteps: [
     {

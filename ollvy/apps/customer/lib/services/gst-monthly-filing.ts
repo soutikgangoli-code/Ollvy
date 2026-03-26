@@ -34,7 +34,7 @@ export const gstMonthlyFiling: ServiceConfig = {
   seoTitle: 'GST Monthly Filing Service | GSTR-1 & GSTR-3B | From ₹2,999/month | Ollvy',
   seoDescription:
     'Monthly GST filing handled by verified CA. GSTR-1 by 11th, GSTR-3B by 20th. Fixed price from ₹2,999/month. Monthly report included. Cancel anytime.',
-  canonicalUrl: 'https://ollvy.com/services/gst-monthly-filing',
+  canonicalUrl: 'https://www.ollvy.com/services/gst-monthly-filing',
 
   processSteps: [
     {

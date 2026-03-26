@@ -23,7 +23,7 @@ export const dinReactivation: ServiceConfig = {
   seoTitle: 'DIN Reactivation India | DIR-3 KYC Late Filing | ₹1,999 | Ollvy',
   seoDescription:
     'DIN deactivated? File DIR-3 KYC with late fee and reactivate your DIN in 3 working days. Fixed price ₹1,999. CS assigned within 2 hours.',
-  canonicalUrl: 'https://ollvy.com/services/din-reactivation',
+  canonicalUrl: 'https://www.ollvy.com/services/din-reactivation',
 
   processSteps: [
     {

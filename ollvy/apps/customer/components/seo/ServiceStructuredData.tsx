@@ -24,19 +24,19 @@ export function ServiceStructuredData({
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://ollvy.com',
+        item: 'https://www.ollvy.com',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Services',
-        item: 'https://ollvy.com/services',
+        item: 'https://www.ollvy.com/services',
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: serviceName,
-        item: `https://ollvy.com/services/${serviceSlug}`,
+        item: `https://www.ollvy.com/services/${serviceSlug}`,
       },
     ],
   }
@@ -46,11 +46,11 @@ export function ServiceStructuredData({
     '@type': 'Service',
     name: serviceName,
     description: description,
-    url: `https://ollvy.com/services/${serviceSlug}`,
+    url: `https://www.ollvy.com/services/${serviceSlug}`,
     provider: {
       '@type': 'Organization',
       name: 'Ollvy',
-      url: 'https://ollvy.com',
+      url: 'https://www.ollvy.com',
     },
     areaServed: {
       '@type': 'Country',

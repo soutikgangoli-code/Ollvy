@@ -62,7 +62,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
     provider: {
       '@type': 'Organization',
       name: 'Ollvy Technologies Private Limited',
-      url: 'https://ollvy.com',
+      url: 'https://www.ollvy.com',
     },
     offers: {
       '@type': 'Offer',

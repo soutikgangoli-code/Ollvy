@@ -7,15 +7,16 @@ import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistake
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { trademarkDocuments } from '@/lib/data/document-checklists'
 import { trademarkContent } from '@/lib/tools/document-content'
+import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://ollvy.com' },
-    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://ollvy.com/tools/documents' },
-    { '@type': 'ListItem', position: 4, name: 'Trademark Documents', item: 'https://ollvy.com/tools/documents/trademark' },
+    { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+    { '@type': 'ListItem', position: 3, name: 'Document Checklists', item: 'https://www.ollvy.com/tools/documents' },
+    { '@type': 'ListItem', position: 4, name: 'Trademark Documents', item: 'https://www.ollvy.com/tools/documents/trademark' },
   ],
 }
 
@@ -40,24 +41,30 @@ const howToJsonLd = {
 
 const faqJsonLd = generateFAQSchema(trademarkContent)
 
+const documentListJsonLd = generateDocumentListSchema(
+  trademarkDocuments,
+  'Trademark Registration',
+  'https://www.ollvy.com/tools/documents/trademark'
+)
+
 export const metadata: Metadata = {
   title: 'How to Register Trademark - Documents & Process | Ollvy',
   description: 'Complete guide to trademark registration in India. Step-by-step process, classes, TM vs R symbol, opposition, documents required, costs, and FAQs.',
   keywords: ['trademark registration', 'how to register trademark in India', 'trademark registration process', 'trademark classes', 'brand registration', 'logo trademark'],
   alternates: {
-    canonical: 'https://ollvy.com/tools/documents/trademark',
+    canonical: 'https://www.ollvy.com/tools/documents/trademark',
   },
   openGraph: {
     title: 'How to Register Trademark in India | Ollvy',
     description: 'Complete guide to trademark registration - process, classes, costs, and timeline.',
-    url: 'https://ollvy.com/tools/documents/trademark',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/tools/documents/trademark',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'How to Register Trademark in India | Ollvy',
     description: 'Complete guide to trademark registration in India.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
@@ -76,6 +83,10 @@ export default function TrademarkDocumentsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
+      />
 
       {/* Educational intro content */}
       <DocumentPageIntro content={trademarkContent} />
@@ -85,8 +96,11 @@ export default function TrademarkDocumentsPage() {
 
       {/* Document checklist header */}
       <div className="mb-6">
-        <h2 className="text-lg font-semibold text-foreground">Documents required</h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-[10px] text-muted-foreground">03</span>
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1 ml-7">
           Click on any document to see detailed requirements and how to obtain it
         </p>
       </div>

@@ -23,7 +23,7 @@ export const companyNameChange: ServiceConfig = {
   seoTitle: 'Company Name Change MCA India | Pvt Ltd Name Change | ₹4,999 | Ollvy',
   seoDescription:
     'Change your company name on MCA in 20 working days. Board resolution, RUN application, INC-24 filing, new Certificate of Incorporation. Fixed price ₹4,999.',
-  canonicalUrl: 'https://ollvy.com/services/company-name-change',
+  canonicalUrl: 'https://www.ollvy.com/services/company-name-change',
 
   processSteps: [
     {

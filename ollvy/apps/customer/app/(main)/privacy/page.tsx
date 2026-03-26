@@ -5,19 +5,19 @@ export const metadata: Metadata = {
   title: 'Privacy Policy | Ollvy',
   description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
   alternates: {
-    canonical: 'https://ollvy.com/privacy',
+    canonical: 'https://www.ollvy.com/privacy',
   },
   openGraph: {
     title: 'Privacy Policy | Ollvy',
     description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
-    url: 'https://ollvy.com/privacy',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/privacy',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Privacy Policy | Ollvy',
     description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 

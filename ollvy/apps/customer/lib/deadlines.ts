@@ -51,7 +51,7 @@ export const DEADLINES: DeadlineConfig[] = [
     seoTitle: 'Business ITR Filing 2025 - File Before Oct 31 | Ollvy',
     seoDescription:
       'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31, 2025. Fixed price ₹11,999. Verified CA assigned within 24 hours.',
-    canonicalUrl: 'https://ollvy.com/itr-2025',
+    canonicalUrl: 'https://www.ollvy.com/itr-2025',
     documentTab: 'individual_itr',
     documentHeading: "Documents you'll need to file ITR-6 / ITR-5",
     risks: [
@@ -106,7 +106,7 @@ export const DEADLINES: DeadlineConfig[] = [
     seoTitle: 'GSTR-9 Annual Return 2025 - File Before Dec 31 | Ollvy',
     seoDescription:
       'File your GSTR-9 annual return for FY 2024-25 before December 31. Fixed price ₹4,999. CA assigned same day.',
-    canonicalUrl: 'https://ollvy.com/gst-annual-2025',
+    canonicalUrl: 'https://www.ollvy.com/gst-annual-2025',
     documentTab: 'pvt_ltd',
     documentHeading: 'What your CA will ask for to file GSTR-9',
     risks: [
@@ -157,7 +157,7 @@ export const DEADLINES: DeadlineConfig[] = [
     seoTitle: 'Director KYC 2025 - DIR-3 KYC Filing Before Sep 30 | Ollvy',
     seoDescription:
       'File DIR-3 KYC before Sep 30, 2025. Avoid DIN deactivation and ₹5,000/day penalty. Fixed price ₹1,499 per director.',
-    canonicalUrl: 'https://ollvy.com/director-kyc-2025',
+    canonicalUrl: 'https://www.ollvy.com/director-kyc-2025',
     documentTab: 'pvt_ltd',
     documentHeading: "Two documents. That's it. This one is simple.",
     risks: [

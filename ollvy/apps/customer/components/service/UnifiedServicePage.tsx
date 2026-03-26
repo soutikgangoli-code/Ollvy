@@ -444,7 +444,7 @@ export function UnifiedServicePage({
     provider: {
       '@type': 'Organization',
       name: 'Ollvy Technologies Private Limited',
-      url: 'https://ollvy.com',
+      url: 'https://www.ollvy.com',
     },
     areaServed: {
       '@type': 'Country',

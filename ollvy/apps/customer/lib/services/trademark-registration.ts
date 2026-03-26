@@ -24,7 +24,7 @@ export const trademarkRegistration: ServiceConfig = {
   seoTitle: 'Trademark Registration India | ₹12,499 | 10-Year Protection | Ollvy',
   seoDescription:
     'Register your trademark in India. Application filed within 7 days. ₹7,999 Ollvy fee + ₹4,500 govt fee. Trademark search included. 10-year nationwide protection.',
-  canonicalUrl: 'https://ollvy.com/services/trademark-registration',
+  canonicalUrl: 'https://www.ollvy.com/services/trademark-registration',
 
   processSteps: [
     {

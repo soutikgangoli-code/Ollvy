@@ -3,143 +3,225 @@ import { LearnPageConfig } from '../pages';
 
 export const pvtLtdVsLlp: LearnPageConfig = {
   slug: 'pvt-ltd-vs-llp',
-  title: 'Private Limited Company vs LLP - Which Is Right for Your Business?',
-  seoTitle: 'Pvt Ltd vs LLP India (2025) - Comparison, Tax, Compliance, and When to Choose Each',
-  seoDescription: 'Compare Private Limited Company and LLP for Indian businesses. Tax rates, compliance costs, funding eligibility, and liability. With decision tool.',
-  canonicalUrl: 'https://ollvy.com/learn/pvt-ltd-vs-llp',
+  title: 'Pvt Ltd vs LLP - Which Should I Choose?',
+  seoTitle: 'Pvt Ltd vs LLP in India 2025: Which is Right for You? | Ollvy',
+  seoDescription: 'Compare Private Limited Company vs LLP for your Indian business. Analyze tax, compliance, funding, liability, and cost to make the right choice in 2025.',
+  canonicalUrl: 'https://www.ollvy.com/learn/pvt-ltd-vs-llp',
   lastReviewed: 'March 2025',
   category: 'Incorporation',
   ctaServiceSlug: 'pvt-ltd-incorporation',
   ctaSecondarySlug: 'llp-incorporation',
-  relatedServiceSlugs: ['pvt-ltd-incorporation', 'llp-incorporation', 'startup-india-dpiit'],
-  relatedLearnSlugs: ['startup-india-dpiit-recognition', 'how-to-register-gst-india'],
+  relatedServiceSlugs: ['pvt-ltd-incorporation', 'llp-incorporation'],
+  relatedLearnSlugs: ['do-i-need-gst-registration', 'should-i-get-dpiit-startup-recognition', 'is-msme-registration-worth-it'],
 
   tool: {
     type: 'comparison',
-    title: 'Which entity type is right for your business?',
-    compareA: 'pvt-ltd',
-    compareB: 'llp',
+    title: 'Which Structure Suits Your Business?',
     questions: [
       {
-        text: 'Do you plan to raise equity investment (angels, VCs) in the next 3 years?',
+        text: 'Do you plan to raise money from external investors - angels, VCs, or institutions?',
         options: [
-          { value: 'yes', label: 'Yes - fundraising is part of the plan' },
-          { value: 'maybe', label: 'Maybe - not ruled out' },
-          { value: 'no', label: 'No - bootstrapped or debt-only' },
+          { value: 'yes_funding', label: 'Yes, within the next 2 years' },
+          { value: 'maybe', label: 'Possibly, in 3-5 years' },
+          { value: 'no_funding', label: 'No - self-funded or debt only' },
         ],
-        evaluator: (answer) => {
-          if (answer === 'yes') return {
-            type: 'eligible', headline: 'Choose Private Limited Company.',
-            body: 'Equity investment requires issuing shares. LLPs don\'t have shares - they have profit-sharing ratios. Most angels and VCs will not invest in an LLP. Converting an LLP to a Pvt Ltd after raising is complicated and expensive. Choose Pvt Ltd from the start.',
-          };
+        earlyExit: (answer) => {
+          if (answer === 'yes_funding') {
+            return {
+              type: 'eligible',
+              headline: 'Choose Private Limited Company.',
+              body: 'Investors need to receive shares. An LLP cannot issue equity. ESOPs are also not possible in an LLP. This one factor settles it.',
+              ctaLabel: 'Register Pvt Ltd',
+              ctaHref: '/checkout/pvt-ltd-incorporation',
+            };
+          }
           return null;
         },
       },
       {
-        text: 'Are the founders providing professional services - consulting, accounting, law, architecture?',
+        text: 'How many people will own the business?',
         options: [
-          { value: 'yes', label: 'Yes - professional services is our primary business' },
-          { value: 'no', label: 'No - we\'re a product or non-professional service company' },
+          { value: 'one', label: 'Just me' },
+          { value: 'two_to_five', label: '2 to 5 founders' },
+          { value: 'six_plus', label: '6 or more owners' },
+        ],
+        earlyExit: (answer) => {
+          if (answer === 'one') {
+            return {
+              type: 'eligible',
+              headline: 'Choose Private Limited Company.',
+              body: 'LLPs require a minimum of 2 designated partners. A solo founder cannot incorporate an LLP. Choose Pvt Ltd - you can be the sole director and shareholder.',
+              ctaLabel: 'Register Pvt Ltd',
+              ctaHref: '/checkout/pvt-ltd-incorporation',
+            };
+          }
+          return null;
+        },
+      },
+      {
+        text: 'What kind of business is this?',
+        options: [
+          { value: 'tech_startup', label: 'A tech startup or product company' },
+          { value: 'services_professional', label: 'Professional services - consulting, design, legal, or a CA firm' },
+          { value: 'trading_manufacturing', label: 'Trading or manufacturing' },
+          { value: 'real_estate_investment', label: 'Real estate, investment holding, or passive income' },
         ],
         evaluator: (answer, allAnswers) => {
-          if (answer === 'yes' && allAnswers[0] === 'no') return {
-            type: 'eligible', headline: 'LLP is likely the right choice.',
-            body: 'Professional services firms (CA firms, law firms, consulting practices, architectural firms) traditionally use LLPs. The profit-sharing structure is simpler than salary + dividend. Compliance burden is lower. No mandatory statutory audit until turnover crosses ₹40L or contribution exceeds ₹25L.',
-          };
+          if (answer === 'tech_startup') {
+            return {
+              type: 'eligible',
+              headline: 'Choose Private Limited Company.',
+              body: 'ESOPs, investor onboarding, and DPIIT startup recognition all require a company structure.',
+              ctaLabel: 'Register Pvt Ltd',
+              ctaHref: '/checkout/pvt-ltd-incorporation',
+            };
+          }
+          if (answer === 'services_professional' && allAnswers[0] === 'no_funding') {
+            return {
+              type: 'eligible',
+              headline: 'LLP is likely the right choice.',
+              body: 'CA firms and law firms are required by their professional bodies to use LLP; others benefit from lower compliance burden.',
+              ctaLabel: 'Register LLP',
+              ctaHref: '/checkout/llp-incorporation',
+            };
+          }
+          if (answer === 'real_estate_investment') {
+            return {
+              type: 'eligible',
+              headline: 'LLP is likely the right choice.',
+              body: 'Lower compliance and pass-through taxation is more efficient for real estate and investment holding.',
+              ctaLabel: 'Register LLP',
+              ctaHref: '/checkout/llp-incorporation',
+            };
+          }
           return null;
         },
       },
       {
-        text: 'How many founders / partners?',
+        text: 'How important is keeping your annual compliance costs low?',
         options: [
-          { value: 'one', label: '1 founder (solo)' },
-          { value: 'two_four', label: '2-4 founders' },
-          { value: 'five_plus', label: '5+ partners' },
+          { value: 'very_important', label: 'Very important - every rupee counts' },
+          { value: 'somewhat', label: 'Somewhat - moderate is fine' },
+          { value: 'not_important', label: 'Not a priority - I want the strongest structure' },
         ],
         evaluator: (answer) => {
-          if (answer === 'one') return {
-            type: 'eligible', headline: 'Choose Private Limited Company.',
-            body: 'LLPs require a minimum of 2 designated partners. A solo founder cannot incorporate an LLP. Choose Pvt Ltd - you can be the sole director and shareholder.',
-          };
+          if (answer === 'very_important') {
+            return {
+              type: 'eligible',
+              headline: 'LLP may be the better fit.',
+              body: 'Annual compliance typically costs Rs. 8,000-15,000 vs Rs. 25,000-50,000 for Pvt Ltd; no mandatory audit below Rs. 40 lakh.',
+              ctaLabel: 'Register LLP',
+              ctaHref: '/checkout/llp-incorporation',
+            };
+          }
+          if (answer === 'not_important') {
+            return {
+              type: 'eligible',
+              headline: 'Choose Private Limited Company.',
+              body: 'Pvt Ltd gives you better optionality for team incentives and future exits.',
+              ctaLabel: 'Register Pvt Ltd',
+              ctaHref: '/checkout/pvt-ltd-incorporation',
+            };
+          }
           return null;
-        },
-      },
-      {
-        text: 'What is your expected annual revenue in Year 1?',
-        options: [
-          { value: 'below_25l', label: 'Below ₹25 lakh' },
-          { value: '25l_1cr', label: '₹25 lakh-₹1 crore' },
-          { value: 'above_1cr', label: 'Above ₹1 crore' },
-        ],
-        evaluator: (answer, allAnswers) => {
-          if (answer === 'above_1cr' || allAnswers[1] === 'no') return {
-            type: 'eligible',
-            headline: 'Private Limited Company is the safer default.',
-            body: 'At this revenue level, or for a product/non-professional services business, Pvt Ltd gives you better credibility with enterprise clients, easier compliance with major platforms (Amazon, Razorpay require Pvt Ltd for certain features), and a cleaner path to growth.',
-          };
-          return {
-            type: 'conditional',
-            headline: 'Either can work - but Pvt Ltd is the default for a reason.',
-            body: 'At early stage with modest revenue expectations and a professional services model, an LLP is cheaper to maintain (no mandatory audit, lower compliance). But if there\'s any chance of raising money or bringing in external investors, start with Pvt Ltd.',
-          };
         },
       },
     ],
+    defaultResult: {
+      type: 'optional',
+      headline: 'Both options work for you - here is how to decide',
+      body: 'Your situation fits either structure. Here is the simplest tiebreaker: if there is even a small chance you will want to raise equity funding, bring in investors, or offer ESOPs to employees in the next 5 years, go with Pvt Ltd. If you are building something stable and profitable where you want to keep compliance light, choose LLP.',
+    },
   },
 
   sections: [
     {
-      heading: 'The decision in one table',
-      body: 'Most of the time, the decision is simple. Choose Pvt Ltd unless you have a specific reason not to.',
-      table: [
-        { col1: 'Factor', col2: 'Private Limited', col3: 'LLP' },
-        { col1: 'Equity investment', col2: 'Can issue shares to investors', col3: 'Cannot issue equity shares' },
-        { col1: 'Minimum founders', col2: '1 director, 1 shareholder (can be same person)', col3: '2 designated partners (minimum)' },
-        { col1: 'Corporate tax rate', col2: '22% (existing) / 15% (new mfg)', col3: '30% on profits + surcharge' },
-        { col1: 'Dividend distribution', col2: 'After tax - dividend to shareholders', col3: 'Profit share - not taxed again after firm-level tax' },
-        { col1: 'Statutory audit', col2: 'Mandatory regardless of turnover', col3: 'Only if turnover > ₹40L or contribution > ₹25L' },
-        { col1: 'DPIIT / Startup India', col2: 'Eligible', col3: 'Eligible' },
-        { col1: 'Compliance cost (annual)', col2: 'Higher - audit, annual return, ITR', col3: 'Lower - no mandatory audit at early stage' },
-        { col1: 'Credibility with banks/clients', col2: 'Higher - established norm for companies', col3: 'Accepted but less common outside professional services' },
-        { col1: 'Incorporation cost (Ollvy)', col2: '₹24,999 (includes ₹15,000 MCA)', col3: '₹12,999 (includes ₹5,000 MCA)' },
+      number: '01',
+      heading: 'WHAT IS ACTUALLY DIFFERENT BETWEEN THE TWO',
+      body: "Here is what often gets lost in these comparisons: both a Private Limited Company and an LLP protect your personal assets. If your business fails or gets sued, your house, savings, and personal accounts are not at risk in either structure. That is the limited liability part, and it applies to both.\n\nThe difference is in everything else - how ownership works, how much you spend on compliance every year, and most importantly, what your options are as the business grows.",
+      note: 'Source: Companies Act 2013; Limited Liability Partnership Act 2008',
+    },
+    {
+      number: '02',
+      heading: 'CHOOSE PVT LTD IF ANY OF THESE ARE TRUE',
+      body: '',
+      bullets: [
+        'You want to raise money from investors - they receive shares in your company. An LLP cannot issue shares or convertible instruments. End of story.',
+        'You want to give your team ESOPs - equity ownership for employees is only possible in a company structure',
+        'You are building something that could be acquired or listed someday - clean cap tables and share registers matter for this',
+        'You want DPIIT Startup Recognition and the 3-year tax holiday under Section 80-IAC - only companies (not LLPs) qualify',
+        'You have multiple founders with different equity stakes and want a clean, legally enforceable cap table',
+        'Your enterprise clients or government contracts expect to work with a company',
+      ],
+      note: 'Source: Companies Act 2013; DPIIT Startup India eligibility criteria',
+    },
+    {
+      number: '03',
+      heading: 'CHOOSE LLP IF ANY OF THESE ARE TRUE',
+      body: '',
+      bullets: [
+        'You are a professional services firm - CA firms, law firms, architecture practices, and consulting businesses often find LLP a natural fit, and some professional bodies actually require it',
+        'You want to keep annual compliance costs low - typically Rs. 8,000-15,000 per year with an LLP versus Rs. 25,000-50,000 for a Pvt Ltd',
+        'Your turnover is below Rs. 40 lakh and contribution below Rs. 25 lakh - you do not need a mandatory statutory audit with an LLP',
+        'You want flexible profit-sharing - partners can split profits in any ratio they agree on, regardless of capital contributed. In a Pvt Ltd, dividends must follow shareholding percentage.',
+        "You are holding investments or property - LLP's pass-through taxation and lower compliance make it more efficient for this purpose",
+      ],
+      note: 'Source: LLP Act 2008; Income Tax Act 1961',
+    },
+    {
+      number: '04',
+      heading: 'THE ANNUAL COMPLIANCE COST DIFFERENCE IS REAL',
+      body: 'This is not a small gap. Here is what annual compliance typically looks like:',
+      bullets: [
+        'LLP: File Form 8 (accounts) and Form 11 (annual return) - roughly Rs. 8,000 to Rs. 15,000 per year with a CA. Audit only needed if turnover crosses Rs. 40 lakh.',
+        'Pvt Ltd: File AOC-4 (financials) and MGT-7 (annual return), hold minimum 4 board meetings per year, get a mandatory statutory audit done regardless of size - typically Rs. 25,000 to Rs. 60,000 per year. Each director also needs to complete DIR-3 KYC annually.',
+        'Closing an LLP is also significantly simpler and faster than closing a Pvt Ltd - worth thinking about if you are still validating your idea.',
       ],
     },
     {
-      heading: 'When LLP is genuinely the better choice',
-      body: `LLP is not a second-class entity. It's the right choice in specific situations:
-
-**1. Professional services partnership**: CA firms, law firms, architecture practices, and consulting partnerships traditionally use LLPs. The structure maps well to how professional services firms operate - partners draw profit shares, not salaries. No mandatory audit if below the threshold. The regulated profession bodies (ICAI, Bar Council) have specific rules about LLP formation for their members.
-
-**2. Real estate holding**: LLP is commonly used for real estate holding and investment structures because of the flexibility in profit-sharing ratios and the absence of dividend distribution tax complications.
-
-**3. Joint ventures between established companies**: Two companies forming a JV for a specific project sometimes use LLP because it offers contractual flexibility that Pvt Ltd doesn't.
-
-**4. When compliance cost matters more than optics**: A solo professional or small team earning ₹30-50L annually doing B2B consulting may genuinely prefer LLP's lower compliance cost - no mandatory audit saves ₹40,000-₹80,000 per year.
-
-In all other situations - product businesses, startups, D2C, SaaS, marketplaces, e-commerce - start with Pvt Ltd.`,
+      number: '05',
+      heading: 'WHAT ABOUT TAX?',
+      body: 'This is where it gets a bit nuanced.',
+      bullets: [
+        'LLP profits are taxed at a flat 30% rate at the entity level. Partners do not pay tax again on their share of the profit (it is exempt in their hands). But there is a 12% surcharge if profit crosses Rs. 1 crore.',
+        "Pvt Ltd profits are taxed at 22% under the new tax regime (Section 115BAA). However, when the company distributes dividends to shareholders, those dividends are taxed again in the shareholder's hands at their personal income tax rate.",
+        'In practice, which one is more efficient depends on your profit levels and how much you plan to draw out versus retain in the business. A CA can run the numbers for your specific situation.',
+      ],
     },
     {
-      heading: 'The tax difference - it\'s not what most articles say',
-      body: `The common claim is "LLP has lower tax." This is partly true and partly misleading.
+      number: '06',
+      heading: 'THE ONE QUESTION THAT DECIDES MOST CASES',
+      body: 'Do you want equity investors within the next 3 years?',
+      bullets: [
+        'YES - Go with Pvt Ltd, right from day one. Converting later is possible but costs time and money.',
+        'NO + professional services - LLP is the better fit. Lower cost, simpler structure.',
+        'NO + tech product or consumer brand - Pvt Ltd gives you better optionality for team incentives and future exits.',
+        'NO + trading or manufacturing with simple partner split - Either works; choose LLP to keep costs low.',
+        'NO + investment or holding vehicle - LLP is more efficient here.',
+      ],
+    },
+  ],
 
-**Corporate tax**:
-- Pvt Ltd: 22% of net profit (under the new tax regime, applicable to domestic companies)
-- LLP: 30% of net profit + surcharge and cess
-
-On pure corporate tax, Pvt Ltd is lower.
-
-**But the distribution matters**:
-- Pvt Ltd profit distributed to founders: First pay 22% corporate tax, then founders pay dividend tax (typically 30% + surcharge if high income). Double taxation.
-- LLP profit distributed to partners: Pay 30% at the firm level. Partner's share is NOT taxed again.
-
-**Effective rate comparison** (for founder-operated businesses that take all profit out):
-- Pvt Ltd: ~22% corporate + ~30% dividend (on remaining 78%) = effectively ~43%
-- LLP: 30% flat, no further tax on partner share = 30%
-
-This makes LLP more tax-efficient for founder-operated businesses that distribute all profits annually. But for businesses that retain earnings and reinvest - or that plan to raise money and use salary + ESOP instead of dividends - Pvt Ltd is better.
-
-The right answer depends entirely on your specific situation. Ask a CA.`,
-      note: 'Tax rates as per Finance Act 2023. Surcharge and cess apply in addition. Individual circumstances vary significantly.',
+  faqs: [
+    {
+      q: 'Can I convert an LLP to a Pvt Ltd later if I want to raise funding?',
+      a: 'Yes, you can convert - it is allowed under Section 366 of the Companies Act, 2013. But it involves multiple MCA filings, stamp duty, and often a valuation exercise. It typically takes 3-6 months and costs Rs. 50,000 to Rs. 1.5 lakh. If funding is even a possibility within 3 years, it is almost always cheaper and simpler to just start as a Pvt Ltd.',
+    },
+    {
+      q: 'Do I need a minimum amount of capital to start?',
+      a: 'No. Both a Pvt Ltd and an LLP can be incorporated with as little as Re. 1 as initial capital. In practice, most Pvt Ltd companies start with Rs. 1 lakh paid-up capital, but there is no legal minimum.',
+    },
+    {
+      q: 'Can a foreign national be a director or partner?',
+      a: 'In a Pvt Ltd, a foreigner can be a director - but at least one director must have stayed in India for 182 days or more in the previous calendar year. In an LLP, a foreign national can be a designated partner, but there are FEMA (foreign exchange) regulations that apply to the investment.',
+    },
+    {
+      q: 'Which is easier to shut down if things do not work out?',
+      a: 'LLP, by a significant margin. If an LLP has been inactive for a year and has no outstanding liabilities, you can close it using a simplified strike-off process (Form 24). Closing a Pvt Ltd - whether through voluntary winding up or strike-off under Section 248 - involves more paperwork and takes longer.',
+    },
+    {
+      q: 'Does an LLP need to hold board meetings like a Pvt Ltd?',
+      a: 'No. LLPs have no requirement for formal board meetings or general meetings. Partners can make decisions informally, as agreed in the LLP Agreement. This is a genuine compliance relief if you want to keep things simple.',
     },
   ],
 };

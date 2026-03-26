@@ -35,8 +35,8 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Ollvy',
-  url: 'https://ollvy.com',
-  logo: 'https://ollvy.com/logo.png',
+  url: 'https://www.ollvy.com',
+  logo: 'https://www.ollvy.com/logo.png',
   description: "India's compliance platform - company registration, GST, trademark, FSSAI and more with vetted CAs.",
   address: {
     '@type': 'PostalAddress',

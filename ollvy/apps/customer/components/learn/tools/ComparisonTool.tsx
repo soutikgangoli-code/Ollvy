@@ -2,9 +2,31 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { LearnToolConfig, EligibilityQuestion, EligibilityResult } from '@/lib/learn/pages';
 import Link from 'next/link';
+
+// Get result styling based on type
+function getResultStyle(type: EligibilityResult['type']) {
+  switch (type) {
+    case 'eligible':
+    case 'mandatory':
+      return {
+        bg: 'bg-[hsl(var(--ollvy-green))]/5 border border-[hsl(var(--ollvy-green))]/20',
+        icon: CheckCircle,
+        iconColor: 'text-[hsl(var(--ollvy-green))]',
+      };
+    case 'recommended':
+    case 'optional':
+    case 'conditional':
+    default:
+      return {
+        bg: 'bg-[hsl(var(--ollvy-amber))]/5 border border-[hsl(var(--ollvy-amber))]/20',
+        icon: Info,
+        iconColor: 'text-[hsl(var(--ollvy-amber))]',
+      };
+  }
+}
 
 export function ComparisonTool({ config }: {
   config: LearnToolConfig;
@@ -30,15 +52,19 @@ export function ComparisonTool({ config }: {
     if (step < questions.length - 1) {
       setStep(prev => prev + 1);
     } else {
-      setResult(evaluateAnswers(questions, newAnswers));
+      setResult(evaluateAnswers(questions, newAnswers, config.defaultResult));
     }
   };
 
+  // Determine recommendation based on result headline
   const recommendation = result?.headline?.includes('Private Limited')
-    ? { slug: 'pvt-ltd-incorporation', name: 'Pvt Ltd Incorporation', price: '₹24,999' }
+    ? { slug: 'pvt-ltd-incorporation', name: 'Pvt Ltd Incorporation', price: 'Rs. 24,999' }
     : result?.headline?.includes('LLP')
-    ? { slug: 'llp-incorporation', name: 'LLP Incorporation', price: '₹12,999' }
+    ? { slug: 'llp-incorporation', name: 'LLP Incorporation', price: 'Rs. 12,999' }
     : null;
+
+  const resultStyle = result ? getResultStyle(result.type) : null;
+  const Icon = resultStyle?.icon;
 
   return (
     <div className="border border-border rounded-xl bg-card overflow-hidden">
@@ -82,24 +108,19 @@ export function ComparisonTool({ config }: {
         <div className="p-6">
           <div className={cn(
             "flex items-start gap-3 rounded-lg p-4 mb-5",
-            result.type === 'eligible'
-              ? "bg-[hsl(var(--ollvy-green))]/5 border border-[hsl(var(--ollvy-green))]/20"
-              : "bg-[hsl(var(--ollvy-amber))]/5 border border-[hsl(var(--ollvy-amber))]/20"
+            resultStyle?.bg
           )}>
-            {result.type === 'eligible'
-              ? <CheckCircle size={16} className="text-[hsl(var(--ollvy-green))] mt-0.5 shrink-0" />
-              : <AlertCircle size={16} className="text-[hsl(var(--ollvy-amber))] mt-0.5 shrink-0" />
-            }
+            {Icon && <Icon size={16} className={cn(resultStyle?.iconColor, "mt-0.5 shrink-0")} />}
             <div>
               <p className="text-sm font-semibold text-foreground">{result.headline}</p>
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{result.body}</p>
             </div>
           </div>
 
-          {recommendation && result.type === 'eligible' && (
+          {recommendation && (result.type === 'eligible' || result.type === 'mandatory' || result.type === 'recommended') && (
             <Button className="w-full" asChild>
-              <Link href={`/services/${recommendation.slug}?utm_source=learn_tool&utm_medium=comparison_result`}>
-                Book {recommendation.name} - {recommendation.price}
+              <Link href={result.ctaHref ?? `/checkout/${recommendation.slug}?utm_source=learn_tool&utm_medium=comparison_result`}>
+                {result.ctaLabel ?? `Book ${recommendation.name} - ${recommendation.price}`}
               </Link>
             </Button>
           )}
@@ -118,16 +139,17 @@ export function ComparisonTool({ config }: {
 
 function evaluateAnswers(
   questions: EligibilityQuestion[],
-  answers: Record<number, string>
+  answers: Record<number, string>,
+  defaultResult?: EligibilityResult
 ): EligibilityResult {
   for (const [i, q] of questions.entries()) {
     const result = q.evaluator?.(answers[i], answers);
     if (result) return result;
   }
-  return {
+  return defaultResult ?? {
     type: 'conditional',
     headline: 'Either can work for your situation.',
-    body: 'Both Pvt Ltd and LLP are viable options. Consider consulting with a CA to understand the specific tax implications for your business model.',
+    body: 'Both options are viable. Consider consulting with a CA to understand the specific implications for your business model.',
   };
 }
 

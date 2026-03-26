@@ -392,7 +392,7 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     // SEO
     seoTitle: pkg.seo_title ?? `${pkg.name} | Ollvy`,
     seoDescription: pkg.seo_description ?? pkg.short_description ?? '',
-    canonicalUrl: pkg.canonical_url ?? `https://ollvy.com/services/${pkg.slug}`,
+    canonicalUrl: pkg.canonical_url ?? `https://www.ollvy.com/services/${pkg.slug}`,
 
     // Rating
     avgRating,

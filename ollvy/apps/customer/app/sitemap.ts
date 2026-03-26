@@ -14,7 +14,7 @@ import { LEARN_PAGES } from '@/lib/learn/pages'
  * Excludes: /admin, /pro, /api/*, /order/*, /profile, /dashboard
  */
 
-const BASE_URL = 'https://ollvy.com'
+const BASE_URL = 'https://www.ollvy.com'
 
 // Document checklist slugs (static routes)
 const DOCUMENT_CHECKLIST_SLUGS = [

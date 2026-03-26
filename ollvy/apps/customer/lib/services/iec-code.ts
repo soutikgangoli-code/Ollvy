@@ -24,7 +24,7 @@ export const iecCode: ServiceConfig = {
   seoTitle: 'IEC Code Registration Online India | Import Export Code | ₹4,499 | Ollvy',
   seoDescription:
     'Get your Import Export Code (IEC) in 5 working days. Required for all imports and exports. Fixed price ₹4,499 (₹3,999 Ollvy + ₹500 govt fee). CA assigned same day.',
-  canonicalUrl: 'https://ollvy.com/services/iec-code',
+  canonicalUrl: 'https://www.ollvy.com/services/iec-code',
 
   processSteps: [
     {

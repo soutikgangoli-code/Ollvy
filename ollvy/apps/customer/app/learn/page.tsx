@@ -6,22 +6,25 @@ import { LEARN_PAGES, LearnCategory } from '@/lib/learn/pages';
 export const metadata: Metadata = {
   title: 'Business Compliance Guides - GST, Incorporation, Startup India | Ollvy',
   description: 'Free guides to Indian business compliance. GST registration, Pvt Ltd vs LLP, DPIIT recognition, FSSAI licensing, and more. With interactive tools and calculators.',
-  alternates: { canonical: 'https://ollvy.com/learn' },
+  alternates: { canonical: 'https://www.ollvy.com/learn' },
   openGraph: {
     title: 'Business Compliance Guides | Ollvy',
     description: 'Free guides to Indian business compliance. GST, incorporation, licensing, and startup registration explained.',
-    url: 'https://ollvy.com/learn',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/learn',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Business Compliance Guides | Ollvy',
     description: 'Free guides to Indian business compliance. GST, incorporation, licensing, and startup registration explained.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 };
 
-const CATEGORY_ORDER: LearnCategory[] = ['GST', 'Incorporation', 'Startup', 'Licensing', 'Tax', 'Compliance', 'Payroll'];
+const CATEGORY_ORDER: LearnCategory[] = [
+  'GST', 'Incorporation', 'Startup', 'Licensing', 'Tax', 'Compliance', 'Payroll', 'Registration',
+  'GST Notice', 'Income Tax Notice', 'TDS Notice', 'ROC Notice',
+];
 
 const CATEGORY_LABELS: Record<LearnCategory, string> = {
   GST: 'GST',
@@ -31,6 +34,11 @@ const CATEGORY_LABELS: Record<LearnCategory, string> = {
   Tax: 'Tax',
   Compliance: 'Compliance',
   Payroll: 'Payroll',
+  Registration: 'Registration',
+  'GST Notice': 'GST Notices',
+  'Income Tax Notice': 'Income Tax Notices',
+  'TDS Notice': 'TDS Notices',
+  'ROC Notice': 'ROC Notices',
 };
 
 export default function LearnIndexPage() {
@@ -43,17 +51,54 @@ export default function LearnIndexPage() {
     return acc;
   }, {} as Record<LearnCategory, typeof LEARN_PAGES>);
 
+  // JSON-LD: CollectionPage schema
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Business Compliance Guides',
+    description: 'Free guides to Indian business compliance. GST registration, Pvt Ltd vs LLP, DPIIT recognition, FSSAI licensing, and more.',
+    url: 'https://www.ollvy.com/learn',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: LEARN_PAGES.map((page, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: page.title,
+        url: page.canonicalUrl,
+        description: page.seoDescription,
+      })),
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Ollvy',
+      url: 'https://www.ollvy.com',
+    },
+  };
+
+  // JSON-LD: BreadcrumbList schema
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
+      { '@type': 'ListItem', position: 2, name: 'Guides', item: 'https://www.ollvy.com/learn' },
+    ],
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <div className="min-h-screen bg-background">
       {/* Hero */}
       <section className="border-b border-border">
         <div className="max-w-[900px] mx-auto px-6 py-16">
-          <p className="text-xs text-muted-foreground mb-3">
-            <Link href="/" className="hover:text-foreground transition-colors">Ollvy</Link>
-            <span className="mx-1.5">→</span>
-            <span>Guides</span>
-          </p>
-
           <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight">
             Business Compliance Guides
           </h1>
@@ -118,6 +163,7 @@ export default function LearnIndexPage() {
           </p>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

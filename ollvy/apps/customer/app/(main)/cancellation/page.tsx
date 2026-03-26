@@ -4,19 +4,19 @@ export const metadata: Metadata = {
   title: 'Cancellation Policy | Ollvy',
   description: 'Cancellation policy for Ollvy compliance services. Learn about our order cancellation terms, timelines, and conditions for GST, company registration, and other services.',
   alternates: {
-    canonical: 'https://ollvy.com/cancellation',
+    canonical: 'https://www.ollvy.com/cancellation',
   },
   openGraph: {
     title: 'Cancellation Policy | Ollvy',
     description: 'Cancellation policy for Ollvy compliance services. Learn about our order cancellation terms, timelines, and conditions for GST, company registration, and other services.',
-    url: 'https://ollvy.com/cancellation',
-    images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+    url: 'https://www.ollvy.com/cancellation',
+    images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Cancellation Policy | Ollvy',
     description: 'Cancellation policy for Ollvy compliance services. Learn about our order cancellation terms, timelines, and conditions for GST, company registration, and other services.',
-    images: ['https://ollvy.com/logo.png'],
+    images: ['https://www.ollvy.com/logo.png'],
   },
 }
 

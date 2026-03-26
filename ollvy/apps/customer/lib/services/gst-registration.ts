@@ -21,7 +21,7 @@ export const gstRegistration: ServiceConfig = {
   seoTitle: 'GST Registration Online India - GSTIN in 7 Days | ₹8,999 | Ollvy',
   seoDescription:
     'Get your GSTIN in 7 working days. No government fee. Fixed price ₹8,999. CA assigned same day. ARN shared within 24 hours of filing.',
-  canonicalUrl: 'https://ollvy.com/services/gst-registration',
+  canonicalUrl: 'https://www.ollvy.com/services/gst-registration',
 
   processSteps: [
     {

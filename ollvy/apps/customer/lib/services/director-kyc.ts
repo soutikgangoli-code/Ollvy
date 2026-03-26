@@ -21,7 +21,7 @@ export const directorKyc: ServiceConfig = {
   seoTitle: 'Director KYC 2025 | DIR-3 KYC Filing | ₹1,499 | Ollvy',
   seoDescription:
     'File DIR-3 KYC before Sep 30. Avoid DIN deactivation and ₹5,000/day penalty. Fixed price ₹1,499 per director. Filed within 2 working days.',
-  canonicalUrl: 'https://ollvy.com/services/director-kyc',
+  canonicalUrl: 'https://www.ollvy.com/services/director-kyc',
 
   processSteps: [
     {

@@ -55,10 +55,10 @@ export default function PenaltyCalculatorLayout({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
             itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://ollvy.com' },
-              { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://ollvy.com/tools' },
-              { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://ollvy.com/tools/penalty-calculator' },
-              currentCalc && { '@type': 'ListItem', position: 4, name: currentCalc.label, item: `https://ollvy.com${currentCalc.href}` },
+              { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.ollvy.com' },
+              { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+              { '@type': 'ListItem', position: 3, name: 'Penalty Calculator', item: 'https://www.ollvy.com/tools/penalty-calculator' },
+              currentCalc && { '@type': 'ListItem', position: 4, name: currentCalc.label, item: `https://www.ollvy.com${currentCalc.href}` },
             ].filter(Boolean),
           }),
         }}

@@ -516,7 +516,7 @@ export const cloudKitchenPack: CloudKitchenPack = {
 
   seoTitle: 'FSSAI License + GST Registration for Cloud Kitchens India | Ollvy',
   seoDescription: 'Get FSSAI, GST, Shop & Establishment, and Trade License filed simultaneously for your cloud kitchen. Guaranteed FSSAI application in 24 hours. List on Swiggy and Zomato in 30-45 days. ₹33,599 total.',
-  canonicalUrl: 'https://ollvy.com/packs/cloud-kitchen-setup',
-  metaImageUrl: 'https://ollvy.com/og/cloud-kitchen-setup.jpg',
+  canonicalUrl: 'https://www.ollvy.com/packs/cloud-kitchen-setup',
+  metaImageUrl: 'https://www.ollvy.com/og/cloud-kitchen-setup.jpg',
   relatedPackSlugs: [],
 }

@@ -62,13 +62,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: `https://ollvy.in/${serviceSlug}/${citySlug}`,
       siteName: 'Ollvy',
       type: 'website',
-      images: [{ url: 'https://ollvy.com/logo.png', width: 1200, height: 630 }],
+      images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ['https://ollvy.com/logo.png'],
+      images: ['https://www.ollvy.com/logo.png'],
     },
   }
 }
