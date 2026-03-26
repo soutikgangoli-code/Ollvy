@@ -91,13 +91,10 @@ export default function SoleProprietorDocumentsPage() {
       {/* Educational intro content */}
       <DocumentPageIntro content={soleProprietorContent} />
 
-      {/* Step-by-step process */}
-      <DocumentSteps content={soleProprietorContent} />
-
       {/* Document checklist header */}
       <div className="mb-6">
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">03</span>
+          <span className="font-mono text-[10px] text-muted-foreground">02</span>
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
         </div>
         <p className="text-xs text-muted-foreground mt-1 ml-7">
@@ -115,6 +112,9 @@ export default function SoleProprietorDocumentsPage() {
         ctaButtonText="Start GST Registration"
         ctaButtonHref="/services/gst-registration?utm_source=tools&utm_medium=documents&utm_content=sole_prop"
       />
+
+      {/* Step-by-step process */}
+      <DocumentSteps content={soleProprietorContent} />
 
       {/* FAQ section */}
       <DocumentFAQSection content={soleProprietorContent} />

@@ -91,13 +91,10 @@ export default function PrivateLimitedDocumentsPage() {
       {/* Educational intro content */}
       <DocumentPageIntro content={privateLimitedContent} />
 
-      {/* Step-by-step process */}
-      <DocumentSteps content={privateLimitedContent} />
-
       {/* Document checklist header */}
       <div className="mb-6">
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">03</span>
+          <span className="font-mono text-[10px] text-muted-foreground">02</span>
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
         </div>
         <p className="text-xs text-muted-foreground mt-1 ml-7">
@@ -117,6 +114,9 @@ export default function PrivateLimitedDocumentsPage() {
         penaltyCalcHref="/tools/penalty-calculator/mca-annual-filing"
         penaltyCalcText="Calculate MCA filing penalty"
       />
+
+      {/* Step-by-step process */}
+      <DocumentSteps content={privateLimitedContent} />
 
       {/* FAQ section */}
       <DocumentFAQSection content={privateLimitedContent} />

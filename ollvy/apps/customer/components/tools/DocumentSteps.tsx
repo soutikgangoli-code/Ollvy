@@ -10,7 +10,7 @@ export function DocumentSteps({ content }: DocumentStepsProps) {
       {/* Section header */}
       <div className="mb-4">
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">02</span>
+          <span className="font-mono text-[10px] text-muted-foreground">03</span>
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Step-by-step process
           </h2>
