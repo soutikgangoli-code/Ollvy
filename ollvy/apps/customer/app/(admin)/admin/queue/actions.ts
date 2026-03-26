@@ -61,33 +61,3 @@ export async function bulkAssignOrders(
   return { success: true, count: orderIds.length }
 }
 
-export async function getAdminUsersWithCounts() {
-  const adminUser = await getAdminUser()
-  if (!supabaseServer) throw new Error('Service client unavailable')
-
-  // Fetch active admin users
-  const { data: adminUsers } = await supabaseServer
-    .from('admin_users')
-    .select('id, name, email, is_active')
-    .eq('is_active', true)
-    .order('name')
-
-  if (!adminUsers) return []
-
-  // For each admin user, count their active orders
-  const adminWithCounts = await Promise.all(
-    adminUsers.map(async (admin) => {
-      const { count } = await supabaseServer!
-        .from('orders')
-        .select('id', { count: 'exact', head: true })
-        .eq('assigned_admin_id', admin.id)
-        .not('status', 'in', '(completed,cancelled)')
-      return { ...admin, activeOrderCount: count ?? 0 }
-    })
-  )
-
-  // Sort by active order count ascending (lightest workload first)
-  adminWithCounts.sort((a, b) => a.activeOrderCount - b.activeOrderCount)
-
-  return adminWithCounts
-}

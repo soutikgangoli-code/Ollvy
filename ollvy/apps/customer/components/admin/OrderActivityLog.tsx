@@ -6,19 +6,28 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { Button } from '@/components/ui/button'
 import type { OrderActivityLog as ActivityLogEntry } from '@/lib/types'
 
-export function OrderActivityLog({ orderId }: { orderId: string }) {
-  const [entries, setEntries] = useState<ActivityLogEntry[]>([])
+interface OrderActivityLogProps {
+  orderId: string
+  initialEntries?: ActivityLogEntry[]
+}
+
+export function OrderActivityLog({ orderId, initialEntries }: OrderActivityLogProps) {
+  const [entries, setEntries] = useState<ActivityLogEntry[]>(initialEntries || [])
   const [expanded, setExpanded] = useState(false)
   const supabase = getClient()
 
   useEffect(() => {
-    supabase
-      .from('order_activity_log')
-      .select('*')
-      .eq('order_id', orderId)
-      .order('created_at', { ascending: false })
-      .then(({ data }) => setEntries((data as ActivityLogEntry[]) || []))
+    // Only fetch if no initial entries were provided (fallback)
+    if (!initialEntries || initialEntries.length === 0) {
+      supabase
+        .from('order_activity_log')
+        .select('*')
+        .eq('order_id', orderId)
+        .order('created_at', { ascending: false })
+        .then(({ data }) => setEntries((data as ActivityLogEntry[]) || []))
+    }
 
+    // Subscribe to realtime updates
     const channel = supabase
       .channel(`activity-${orderId}`)
       .on('postgres_changes', {
@@ -32,7 +41,7 @@ export function OrderActivityLog({ orderId }: { orderId: string }) {
       .subscribe()
 
     return () => { supabase.removeChannel(channel) }
-  }, [orderId, supabase])
+  }, [orderId, supabase, initialEntries])
 
   const preview = entries.slice(0, 5)
   const rest = entries.slice(5)

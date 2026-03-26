@@ -131,16 +131,9 @@ export async function assignProfessional(orderId: string, professionalId: string
 }
 
 // Verify initial document (order_documents)
-export async function verifyInitialDocument(documentId: string, orderId: string, internalNote?: string) {
+export async function verifyInitialDocument(documentId: string, orderId: string, documentLabel: string, internalNote?: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
-
-  // Get document label
-  const { data: doc } = await supabaseServer
-    .from('order_documents')
-    .select('document_label')
-    .eq('id', documentId)
-    .single()
 
   const updateData: Record<string, any> = {
     verified_at: new Date().toISOString(),
@@ -164,24 +157,17 @@ export async function verifyInitialDocument(documentId: string, orderId: string,
     actorType: 'admin',
     actorId: adminUser.id,
     actorName: adminUser.name,
-    description: `Document verified: ${doc?.document_label}`,
-    metadata: { document_label: doc?.document_label, document_id: documentId },
+    description: `Document verified: ${documentLabel}`,
+    metadata: { document_label: documentLabel, document_id: documentId },
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
 // Reject initial document (order_documents)
-export async function rejectInitialDocument(documentId: string, orderId: string, rejectionReason: string, internalNote?: string) {
+export async function rejectInitialDocument(documentId: string, orderId: string, documentLabel: string, rejectionReason: string, internalNote?: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
-
-  // Get document label
-  const { data: doc } = await supabaseServer
-    .from('order_documents')
-    .select('document_label')
-    .eq('id', documentId)
-    .single()
 
   const updateData: Record<string, any> = {
     rejection_reason: rejectionReason,
@@ -205,24 +191,17 @@ export async function rejectInitialDocument(documentId: string, orderId: string,
     actorType: 'admin',
     actorId: adminUser.id,
     actorName: adminUser.name,
-    description: `Document rejected: ${doc?.document_label} - ${rejectionReason}`,
-    metadata: { document_label: doc?.document_label, rejection_reason: rejectionReason, document_id: documentId },
+    description: `Document rejected: ${documentLabel} - ${rejectionReason}`,
+    metadata: { document_label: documentLabel, rejection_reason: rejectionReason, document_id: documentId },
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
 // Verify work document (order_work_documents)
-export async function verifyWorkDocument(documentId: string, orderId: string, internalNote?: string) {
+export async function verifyWorkDocument(documentId: string, orderId: string, documentLabel: string, internalNote?: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
-
-  // Get document label
-  const { data: doc } = await supabaseServer
-    .from('order_work_documents')
-    .select('document_label')
-    .eq('id', documentId)
-    .single()
 
   const updateData: Record<string, any> = {
     status: 'verified',
@@ -247,24 +226,17 @@ export async function verifyWorkDocument(documentId: string, orderId: string, in
     actorType: 'admin',
     actorId: adminUser.id,
     actorName: adminUser.name,
-    description: `Document verified: ${doc?.document_label}`,
-    metadata: { document_label: doc?.document_label, document_id: documentId },
+    description: `Document verified: ${documentLabel}`,
+    metadata: { document_label: documentLabel, document_id: documentId },
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
 // Reject work document (order_work_documents)
-export async function rejectWorkDocument(documentId: string, orderId: string, rejectionReason: string, internalNote?: string) {
+export async function rejectWorkDocument(documentId: string, orderId: string, documentLabel: string, rejectionReason: string, internalNote?: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
-
-  // Get document label
-  const { data: doc } = await supabaseServer
-    .from('order_work_documents')
-    .select('document_label')
-    .eq('id', documentId)
-    .single()
 
   const updateData: Record<string, any> = {
     status: 'rejected',
@@ -289,24 +261,17 @@ export async function rejectWorkDocument(documentId: string, orderId: string, re
     actorType: 'admin',
     actorId: adminUser.id,
     actorName: adminUser.name,
-    description: `Document rejected: ${doc?.document_label} - ${rejectionReason}`,
-    metadata: { document_label: doc?.document_label, rejection_reason: rejectionReason, document_id: documentId },
+    description: `Document rejected: ${documentLabel} - ${rejectionReason}`,
+    metadata: { document_label: documentLabel, rejection_reason: rejectionReason, document_id: documentId },
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
 // Skip work document
-export async function skipWorkDocument(documentId: string, orderId: string, skipReason: string) {
+export async function skipWorkDocument(documentId: string, orderId: string, documentLabel: string, skipReason: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
-
-  // Get document label
-  const { data: doc } = await supabaseServer
-    .from('order_work_documents')
-    .select('document_label')
-    .eq('id', documentId)
-    .single()
 
   await supabaseServer.from('order_work_documents')
     .update({
@@ -321,8 +286,8 @@ export async function skipWorkDocument(documentId: string, orderId: string, skip
     actorType: 'admin',
     actorId: adminUser.id,
     actorName: adminUser.name,
-    description: `Document skipped: ${doc?.document_label} - ${skipReason}`,
-    metadata: { document_label: doc?.document_label, skip_reason: skipReason, document_id: documentId },
+    description: `Document skipped: ${documentLabel} - ${skipReason}`,
+    metadata: { document_label: documentLabel, skip_reason: skipReason, document_id: documentId },
   })
 
   revalidatePath(`/admin/orders/${orderId}`)

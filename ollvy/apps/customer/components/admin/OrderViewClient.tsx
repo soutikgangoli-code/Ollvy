@@ -45,7 +45,7 @@ import {
   adminGetSignedUrls,
 } from '@/app/(admin)/admin/orders/[orderId]/actions'
 import type { AdminUser } from '@/lib/admin/get-admin-user'
-import type { OrderRound, OrderWorkDocument, OrderDocument, OrderAdminNote } from '@/lib/types'
+import type { OrderRound, OrderWorkDocument, OrderDocument, OrderAdminNote, OrderActivityLog as ActivityLogEntry } from '@/lib/types'
 import { AdminChatWindow } from '@/components/chat/AdminChatWindow'
 import { OrderActivityLog } from '@/components/admin/OrderActivityLog'
 
@@ -67,6 +67,7 @@ interface OrderViewClientProps {
   professionals: Array<{ id: string; full_name: string; display_name?: string; email: string; professional_type: string }>
   adminNamesMap: Record<string, string>
   assignedAdmin: { id: string; name: string; email: string } | null
+  initialActivityLog?: ActivityLogEntry[]
 }
 
 const ORDER_STATUSES = [
@@ -107,6 +108,7 @@ export function OrderViewClient({
   professionals,
   adminNamesMap,
   assignedAdmin,
+  initialActivityLog,
 }: OrderViewClientProps) {
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
@@ -733,7 +735,7 @@ export function OrderViewClient({
         </Card>
 
         {/* Activity Log */}
-        <OrderActivityLog orderId={order.id} />
+        <OrderActivityLog orderId={order.id} initialEntries={initialActivityLog} />
       </div>
 
       {/* RIGHT PANEL - 40% Chat */}
@@ -1111,7 +1113,7 @@ function InitialDocumentCard({ doc, orderId }: { doc: OrderDocument & { internal
   const handleVerify = async () => {
     setLoading(true)
     try {
-      await verifyInitialDocument(doc.id, orderId, internalNote.trim() || undefined)
+      await verifyInitialDocument(doc.id, orderId, doc.document_label, internalNote.trim() || undefined)
       toast({ title: 'Document verified' })
       setVerifyDialogOpen(false)
       setInternalNote('')
@@ -1126,7 +1128,7 @@ function InitialDocumentCard({ doc, orderId }: { doc: OrderDocument & { internal
     if (!selectedReason) return
     setLoading(true)
     try {
-      await rejectInitialDocument(doc.id, orderId, selectedReason, internalNote.trim() || undefined)
+      await rejectInitialDocument(doc.id, orderId, doc.document_label, selectedReason, internalNote.trim() || undefined)
       toast({ title: 'Document rejected' })
       setRejectDialogOpen(false)
       setInternalNote('')
@@ -1281,7 +1283,7 @@ function WorkDocumentCard({ doc, orderId, direction }: { doc: OrderWorkDocument 
   const handleVerify = async () => {
     setLoading(true)
     try {
-      await verifyWorkDocument(doc.id, orderId, internalNote.trim() || undefined)
+      await verifyWorkDocument(doc.id, orderId, doc.document_label, internalNote.trim() || undefined)
       toast({ title: 'Document verified' })
       setVerifyDialogOpen(false)
       setInternalNote('')
@@ -1296,7 +1298,7 @@ function WorkDocumentCard({ doc, orderId, direction }: { doc: OrderWorkDocument 
     if (!selectedReason) return
     setLoading(true)
     try {
-      await rejectWorkDocument(doc.id, orderId, selectedReason, internalNote.trim() || undefined)
+      await rejectWorkDocument(doc.id, orderId, doc.document_label, selectedReason, internalNote.trim() || undefined)
       toast({ title: 'Document rejected' })
       setRejectDialogOpen(false)
       setInternalNote('')
@@ -1311,7 +1313,7 @@ function WorkDocumentCard({ doc, orderId, direction }: { doc: OrderWorkDocument 
     if (!skipReason.trim()) return
     setLoading(true)
     try {
-      await skipWorkDocument(doc.id, orderId, skipReason.trim())
+      await skipWorkDocument(doc.id, orderId, doc.document_label, skipReason.trim())
       toast({ title: 'Document skipped' })
       setSkipDialogOpen(false)
     } catch (err) {
@@ -1541,7 +1543,7 @@ function AdminLinkedDocumentCard({
   const handleVerify = async () => {
     setLoading(true)
     try {
-      await verifyWorkDocument(uploadDoc.id, orderId, internalNote.trim() || undefined)
+      await verifyWorkDocument(uploadDoc.id, orderId, uploadDoc.document_label, internalNote.trim() || undefined)
       toast({ title: 'Document verified' })
       setVerifyDialogOpen(false)
       setInternalNote('')
@@ -1556,7 +1558,7 @@ function AdminLinkedDocumentCard({
     if (!selectedReason) return
     setLoading(true)
     try {
-      await rejectWorkDocument(uploadDoc.id, orderId, selectedReason, internalNote.trim() || undefined)
+      await rejectWorkDocument(uploadDoc.id, orderId, uploadDoc.document_label, selectedReason, internalNote.trim() || undefined)
       toast({ title: 'Document rejected' })
       setRejectDialogOpen(false)
       setInternalNote('')
@@ -1571,7 +1573,7 @@ function AdminLinkedDocumentCard({
     if (!skipReason.trim()) return
     setLoading(true)
     try {
-      await skipWorkDocument(uploadDoc.id, orderId, skipReason.trim())
+      await skipWorkDocument(uploadDoc.id, orderId, uploadDoc.document_label, skipReason.trim())
       toast({ title: 'Document skipped' })
       setSkipDialogOpen(false)
     } catch (err) {
