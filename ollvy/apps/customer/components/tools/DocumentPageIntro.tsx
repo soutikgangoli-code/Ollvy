@@ -39,7 +39,7 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
       </div>
 
       {/* Stats - Timeline & Cost */}
-      <div className="grid grid-cols-2 border border-border rounded-xl overflow-hidden">
+      <div className="grid grid-cols-4 border border-border rounded-xl overflow-hidden">
         <div className="p-6 border-r border-border">
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
             <Clock className="h-3 w-3" />
@@ -59,7 +59,7 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
             )}
           </div>
         </div>
-        <div className="p-6">
+        <div className="col-span-3 p-6">
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
             <IndianRupee className="h-3 w-3" />
             Cost
