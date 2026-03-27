@@ -14,8 +14,6 @@ import {
   Clock,
   AlertTriangle,
   Check,
-  Lock,
-  Crown,
   ArrowRight,
   FileText,
   Bell,
@@ -45,7 +43,6 @@ export default function CompliancePage() {
   const [obligations, setObligations] = useState<ComplianceObligation[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const isPro = user?.subscription_tier === 'pro'
   const profileComplete = (user?.profile_completeness_score || 0) >= 60
 
   useEffect(() => {
@@ -76,55 +73,6 @@ export default function CompliancePage() {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  // Gate for non-Pro users
-  if (!isPro) {
-    return (
-      <div className="container py-12 max-w-2xl">
-        <div className="text-center py-16">
-          <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-6">
-            <Lock className="h-10 w-10 text-white/20" />
-          </div>
-          <h1 className="text-2xl font-semibold text-white mb-3">
-            Compliance Calendar
-          </h1>
-          <p className="text-white/50 max-w-md mx-auto mb-8">
-            Track all your compliance deadlines, get reminders before due dates, and book services directly from your calendar.
-          </p>
-          <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 max-w-sm mx-auto mb-8">
-            <div className="flex items-center gap-3 mb-4">
-              <Crown className="h-5 w-5 text-white/60" />
-              <span className="font-medium text-white">Ollvy Pro Feature</span>
-            </div>
-            <ul className="space-y-3 text-sm text-white/50 text-left">
-              <li className="flex items-start gap-2">
-                <Check className="h-4 w-4 text-white/40 mt-0.5" />
-                Compliance deadline tracking
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-4 w-4 text-white/40 mt-0.5" />
-                Automated reminders
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-4 w-4 text-white/40 mt-0.5" />
-                One-click booking
-              </li>
-              <li className="flex items-start gap-2">
-                <Check className="h-4 w-4 text-white/40 mt-0.5" />
-                Business health score
-              </li>
-            </ul>
-          </div>
-          <Link href="/upgrade">
-            <Button size="lg" className="gap-2">
-              <Crown className="h-4 w-4" />
-              Upgrade to Pro
-            </Button>
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   // Gate for incomplete profile
@@ -186,22 +134,16 @@ export default function CompliancePage() {
   return (
     <div className="container py-12 max-w-2xl">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
-            <Calendar className="h-5 w-5 text-white/60" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-semibold text-white">Compliance Calendar</h1>
-            <p className="text-sm text-white/40">
-              {pendingObligations.length} upcoming deadlines
-            </p>
-          </div>
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
+          <Calendar className="h-5 w-5 text-white/60" />
         </div>
-        <Badge className="bg-white/10 text-white gap-1">
-          <Crown className="h-3 w-3" />
-          Pro
-        </Badge>
+        <div>
+          <h1 className="text-2xl font-semibold text-white">Compliance Calendar</h1>
+          <p className="text-sm text-white/40">
+            {pendingObligations.length} upcoming deadlines
+          </p>
+        </div>
       </div>
 
       {/* Obligations List */}

@@ -42,7 +42,7 @@ const PENALTY_CALCULATOR_SLUGS = [
   'startup-dpiit-compliance',
 ]
 
-// Pack slugs (if public) - add slugs here when packs are live
+// Pack slugs - removed, packs are accessed via /services with Bundles filter
 const PACK_SLUGS: string[] = []
 
 // Geo page slugs (if public) - add slugs here when geo pages are live

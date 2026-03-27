@@ -7,8 +7,8 @@ export const dinReactivation: ServiceConfig = {
   category: 'Registrations',
   tagline: 'DIN deactivated? File DIR-3 KYC and restore it within 3 working days.',
 
-  ollvyFee: 1499,
-  govtFee: 500,
+  ollvyFee: 3499,
+  govtFee: 5000,
   govtFeeLabel: 'MCA late filing fee',
   govtFeeNote: 'The ₹500 late fee is charged by MCA for filing DIR-3 KYC after Sep 30. This is the government fee - passed through at cost, no markup.',
 

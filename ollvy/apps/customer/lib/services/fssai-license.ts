@@ -7,7 +7,7 @@ export const fssaiLicense: ServiceConfig = {
   category: 'Licensing',
   tagline: 'Sell food legally. Display the license number on every pack.',
 
-  ollvyFee: 4999,
+  ollvyFee: 7999,
   govtFee: 2000,
   govtFeeLabel: 'FSSAI license fee',
   govtFeeNote:

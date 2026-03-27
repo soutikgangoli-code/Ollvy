@@ -7,7 +7,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
   category: 'Registrations',
   tagline: 'One registration. Every door opens.',
 
-  ollvyFee: 9999,
+  ollvyFee: 24999,
   govtFee: 15000,
   govtFeeLabel: 'MCA stamp duty',
   govtFeeNote:

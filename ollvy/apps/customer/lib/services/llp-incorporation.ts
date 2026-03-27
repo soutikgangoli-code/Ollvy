@@ -7,7 +7,7 @@ export const llpIncorporation: ServiceConfig = {
   category: 'Registrations',
   tagline: 'Limited liability. Flexible structure. Professional services-ready.',
 
-  ollvyFee: 7999,
+  ollvyFee: 19999,
   govtFee: 5000,
   govtFeeLabel: 'MCA filing fees',
   govtFeeNote:

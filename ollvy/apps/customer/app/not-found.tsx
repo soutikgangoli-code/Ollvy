@@ -87,10 +87,10 @@ export default function NotFound() {
             Free Tools
           </Link>
           <Link
-            href="/packs"
+            href="/services?filter=bundles"
             className="text-muted-foreground hover:text-foreground transition-colors"
           >
-            Service Packs
+            Service Bundles
           </Link>
         </div>
       </div>

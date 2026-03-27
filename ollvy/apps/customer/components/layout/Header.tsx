@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, User, LogOut, ShoppingBag, FileText, ChevronDown, Repeat, Bell, Settings, Building2, Search, ArrowLeft } from 'lucide-react'
+import { Menu, X, User, LogOut, ShoppingBag, FileText, ChevronDown, Repeat, Bell, Settings, Search, ArrowLeft } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -170,12 +170,6 @@ export function Header() {
                   <Link href="/compliance" className="flex items-center gap-3">
                     <FileText className="h-4 w-4" />
                     Compliance
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild className="cursor-pointer">
-                  <Link href="/business" className="flex items-center gap-3">
-                    <Building2 className="h-4 w-4" />
-                    My Business
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild className="cursor-pointer">

@@ -7,7 +7,7 @@ export const trademarkRegistration: ServiceConfig = {
   category: 'Legal',
   tagline: 'Protect your brand name. 10-year validity. Nationwide protection.',
 
-  ollvyFee: 7999,
+  ollvyFee: 14999,
   govtFee: 4500,
   govtFeeLabel: 'Govt filing fee',
   govtFeeNote:

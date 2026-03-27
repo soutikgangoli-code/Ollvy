@@ -7,8 +7,8 @@ export const companyNameChange: ServiceConfig = {
   category: 'Registrations',
   tagline: 'Change your company name on MCA. New certificate in 20 working days.',
 
-  ollvyFee: 3999,
-  govtFee: 1000,
+  ollvyFee: 6999,
+  govtFee: 3000,
   govtFeeLabel: 'MCA filing fee',
   govtFeeNote: 'Government fee for RUN application and INC-24 filing. Paid directly to MCA.',
 

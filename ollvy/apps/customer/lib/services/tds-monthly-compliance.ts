@@ -8,7 +8,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   category: 'Monthly Compliance',
   tagline: 'Deduct TDS. Deposit challan. File return. Every month, on time.',
 
-  ollvyFee: 1999,
+  ollvyFee: 3999,
   retainerCycleLabel: 'per month',
   govtFee: undefined,
 

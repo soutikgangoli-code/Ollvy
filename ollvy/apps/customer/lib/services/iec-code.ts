@@ -7,7 +7,7 @@ export const iecCode: ServiceConfig = {
   category: 'Licensing',
   tagline: 'Export from India. Import to India. This is the license.',
 
-  ollvyFee: 3999,
+  ollvyFee: 6999,
   govtFee: 500,
   govtFeeLabel: 'DGFT application fee',
   govtFeeNote:

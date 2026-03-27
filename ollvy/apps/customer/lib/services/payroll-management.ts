@@ -7,7 +7,7 @@ export const payrollManagement: ServiceConfig = {
   category: 'Payroll',
   tagline: 'Salary slips. TDS. PF. ESI. All handled, every month.',
 
-  ollvyFee: 2999,
+  ollvyFee: 5999,
   retainerCycleLabel: 'per month',
   govtFee: undefined,
 

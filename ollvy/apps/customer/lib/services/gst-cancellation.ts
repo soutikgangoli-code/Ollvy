@@ -7,7 +7,7 @@ export const gstCancellation: ServiceConfig = {
   category: 'Tax Filings',
   tagline: 'Close your GST registration cleanly. Pending returns filed. Certificate surrendered.',
 
-  ollvyFee: 1999,
+  ollvyFee: 2999,
   govtFee: undefined,
 
   slaDays: 15,

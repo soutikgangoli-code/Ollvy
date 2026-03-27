@@ -6,7 +6,7 @@ import { format, differenceInDays, isPast } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Clock, AlertTriangle, Check, Calendar, Activity, Zap } from 'lucide-react'
+import { Clock, AlertTriangle, Check } from 'lucide-react'
 import { DeadlineConfig } from '@/lib/deadlines'
 import { getGuaranteedDate } from '@/lib/dates'
 import { Navbar } from '@/components/landing/Navbar'
@@ -254,61 +254,6 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                 </Button>
               </div>
             </Card>
-          </div>
-        </section>
-
-        {/* Ollvy Pro Section */}
-        <section className="bg-background py-24">
-          <div className="container">
-            <p className="text-xs uppercase tracking-widest text-muted-foreground text-center mb-3">
-              NEVER MISS A DEADLINE
-            </p>
-            <h2 className="text-3xl md:text-4xl font-semibold text-foreground text-center">
-              Or let Ollvy Pro remind you before it's due.
-            </h2>
-            <p className="text-base text-muted-foreground text-center max-w-[480px] mx-auto mt-4">
-              ₹833/month. Every deadline tracked. Reminders at 30d, 7d, 1d before. Plus 5% off every service.
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-[900px] mx-auto">
-              {[
-                {
-                  icon: Calendar,
-                  title: 'Compliance calendar',
-                  body: `Get reminded about ${deadline.serviceName} and every other deadline - 30 days, 7 days, 1 day before. Never miss a filing again.`,
-                },
-                {
-                  icon: Activity,
-                  title: 'Business health score',
-                  body: 'A single number that tells you where you stand. Track filings completed, pending, and overdue across all compliances.',
-                },
-                {
-                  icon: Zap,
-                  title: 'Priority + 5% discount',
-                  body: 'Pro orders go to the front of the queue. Plus 5% off every service - pays for itself after 2 bookings.',
-                },
-              ].map((feature, i) => {
-                const Icon = feature.icon
-                return (
-                  <Card key={i} className="border border-border bg-card p-6">
-                    <Icon size={20} className="text-yellow-400" strokeWidth={1.5} />
-                    <h3 className="font-semibold mt-4 text-foreground">{feature.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{feature.body}</p>
-                  </Card>
-                )
-              })}
-            </div>
-
-            <div className="text-center mt-10">
-              <Button size="lg" asChild>
-                <Link href={`/upgrade?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_pro`}>
-                  Start Ollvy Pro - ₹9,990/year
-                </Link>
-              </Button>
-              <p className="text-sm text-muted-foreground mt-2">
-                That's ₹833/month. 14-day money-back guarantee.
-              </p>
-            </div>
           </div>
         </section>
 

@@ -7,7 +7,7 @@ export const directorKyc: ServiceConfig = {
   category: 'Registrations',
   tagline: 'Annual filing. ₹5,000/day penalty if missed. Takes 15 minutes.',
 
-  ollvyFee: 1499,
+  ollvyFee: 3999,
   govtFee: undefined,
 
   slaDays: 2,

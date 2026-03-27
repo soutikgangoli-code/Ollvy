@@ -7,7 +7,7 @@ export const mcaAnnualFiling: ServiceConfig = {
   category: 'Tax Filings',
   tagline: 'AOC-4 and MGT-7. The annual return every Pvt Ltd must file.',
 
-  ollvyFee: 6999,
+  ollvyFee: 14999,
   govtFee: 600,
   govtFeeLabel: 'MCA filing fees',
   govtFeeNote:

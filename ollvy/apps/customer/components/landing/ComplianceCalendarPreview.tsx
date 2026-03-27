@@ -1,10 +1,7 @@
 'use client'
 
-import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Lock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const obligations = [
@@ -35,7 +32,6 @@ const obligations = [
     label: 'Due Oct 31 · 6 months away',
     badgeText: 'Upcoming',
     leftBorderColor: 'border-l-transparent',
-    isProLocked: true,
   },
 ]
 
@@ -54,7 +50,7 @@ export function ComplianceCalendarPreview() {
           <div>
             {/* Section Label */}
             <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3">
-              PRO FEATURE
+              COMPLIANCE CALENDAR
             </p>
 
             {/* Section Heading */}
@@ -70,31 +66,12 @@ export function ComplianceCalendarPreview() {
                 them.
               </p>
               <p>
-                Ollvy Pro tracks all of them for your specific business. You get a reminder 30 days
+                Ollvy tracks all of them for your specific business. You get a reminder 30 days
                 out, 7 days out, and the day before. Not a generic calendar - your obligations.
               </p>
             </div>
 
-            {/* Tier comparison */}
-            <div className="mt-6 border-t border-border pt-6 space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">Free:</span>
-                See all your compliance obligations. No reminders.
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <Badge className="bg-ollvy-gold/10 text-yellow-400 border border-yellow-400/20 text-xs">
-                  Pro
-                </Badge>
-                <span className="text-muted-foreground">
-                  Reminders at 30d / 7d / 1d · Health score · One-tap booking · ₹999/month
-                </span>
-              </div>
-            </div>
 
-            {/* CTA */}
-            <Button variant="outline" className="mt-8" asChild>
-              <Link href="/upgrade">Upgrade to Pro</Link>
-            </Button>
           </div>
 
           {/* Right - Calendar Card */}
@@ -116,12 +93,7 @@ export function ComplianceCalendarPreview() {
                   )}
                 >
                   <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-foreground">{obligation.name}</span>
-                      {obligation.isProLocked && (
-                        <Lock className="h-3 w-3 text-muted-foreground" />
-                      )}
-                    </div>
+                    <span className="text-sm font-medium text-foreground">{obligation.name}</span>
                     <p className="text-xs text-muted-foreground mt-0.5">{obligation.label}</p>
                   </div>
                   <Badge className={cn('text-xs', badgeStyle(obligation.status))}>

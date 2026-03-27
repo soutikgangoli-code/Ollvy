@@ -7,7 +7,7 @@ export const gstRevocation: ServiceConfig = {
   category: 'Tax Filings',
   tagline: 'GST cancelled by officer? We file all pending returns and reverse the cancellation.',
 
-  ollvyFee: 2999,
+  ollvyFee: 4999,
   govtFee: undefined,
 
   slaDays: 30,
