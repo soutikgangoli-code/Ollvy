@@ -4,8 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Phone, Building2, MapPin, Crown, Pencil, Check, X, Loader2, FileText, Mail, CreditCard, Fingerprint } from 'lucide-react'
+import { Phone, Building2, MapPin, Pencil, Check, X, Loader2, FileText, Mail, CreditCard, Fingerprint } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
@@ -61,7 +60,6 @@ interface AccountInfoCardProps {
   aadhaarNumber?: string
   // Registration numbers (auto-filled from orders - read only)
   registrationNumbers?: RegistrationNumbers
-  isProUser: boolean
   avatarInitial: string
   onSave?: (data: {
     businessName: string
@@ -86,7 +84,6 @@ export function AccountInfoCard({
   panNumber,
   aadhaarNumber,
   registrationNumbers,
-  isProUser,
   avatarInitial,
   onSave,
 }: AccountInfoCardProps) {
@@ -376,17 +373,9 @@ export function AccountInfoCard({
             </span>
           </div>
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="font-medium text-foreground truncate">
-                {businessName || 'Your Business'}
-              </h3>
-              {isProUser && (
-                <Badge variant="default" className="gap-1 shrink-0">
-                  <Crown className="h-3 w-3" />
-                  Pro
-                </Badge>
-              )}
-            </div>
+            <h3 className="font-medium text-foreground truncate">
+              {businessName || 'Your Business'}
+            </h3>
             <p className="text-sm text-muted-foreground flex items-center gap-1.5">
               <Phone className="h-3.5 w-3.5" />
               +91 {phone}

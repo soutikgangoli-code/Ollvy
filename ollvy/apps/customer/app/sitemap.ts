@@ -42,9 +42,6 @@ const PENALTY_CALCULATOR_SLUGS = [
   'startup-dpiit-compliance',
 ]
 
-// Pack slugs - removed, packs are accessed via /services with Bundles filter
-const PACK_SLUGS: string[] = []
-
 // Geo page slugs (if public) - add slugs here when geo pages are live
 const GEO_SLUGS: string[] = []
 
@@ -125,12 +122,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     {
-      url: `${BASE_URL}/pricing`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
       url: `${BASE_URL}/startup`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -176,14 +167,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }))
 
-  // Pack pages (if any exist)
-  const packRoutes: MetadataRoute.Sitemap = PACK_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/packs/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.75,
-  }))
-
   // Geo pages (if any exist)
   const geoRoutes: MetadataRoute.Sitemap = GEO_SLUGS.map((slug) => ({
     url: `${BASE_URL}/in/${slug}`,
@@ -207,7 +190,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...penaltyRoutes,
     ...learnRoutes,
     ...deadlineRoutes,
-    ...packRoutes,
     ...geoRoutes,
   ]
 }

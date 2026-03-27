@@ -12,7 +12,6 @@ interface PriceBreakdown {
   govtFees: number
   gst: number
   gstRate: number
-  proDiscount: number
   promoDiscount: number
   addonTotal: number
   total: number
@@ -31,7 +30,6 @@ interface OrderSummaryPanelProps {
   selectedAddons?: Addon[]
   slaDays?: number
   promoCode?: string
-  isProUser?: boolean
   isProcessing: boolean
   canSubmit: boolean
   onSubmit: () => void
@@ -59,7 +57,6 @@ export function OrderSummaryPanel({
   selectedAddons = [],
   slaDays,
   promoCode,
-  isProUser = false,
   isProcessing,
   canSubmit,
   onSubmit,
@@ -159,16 +156,6 @@ export function OrderSummaryPanel({
             <span className="text-muted-foreground">GST (<span className="font-mono">{priceBreakdown.gstRate}%</span>)</span>
             <span className="text-foreground font-mono">{formatPaisa(priceBreakdown.gst)}</span>
           </div>
-
-          {/* Pro Discount */}
-          {priceBreakdown.proDiscount > 0 && (
-            <div className="flex justify-between text-[hsl(var(--ollvy-green))]">
-              <span className="flex items-center gap-1.5">
-                Pro Discount (<span className="font-mono">5%</span>)
-              </span>
-              <span className="font-mono">-{formatPaisa(priceBreakdown.proDiscount)}</span>
-            </div>
-          )}
 
           {/* Promo Discount */}
           {priceBreakdown.promoDiscount > 0 && (

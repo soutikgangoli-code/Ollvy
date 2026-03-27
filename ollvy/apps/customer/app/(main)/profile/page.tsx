@@ -25,7 +25,6 @@ import {
   Copy,
   Check,
   Loader2,
-  Crown,
   Package,
   History,
   ArrowRight,
@@ -603,12 +602,6 @@ function ProfileContent() {
           <h1 className="text-2xl font-semibold text-foreground mb-1">Profile</h1>
           <p className="text-muted-foreground">Manage your account and view orders</p>
         </div>
-        {user.subscription_tier === 'pro' && (
-          <Badge variant="default" className="gap-1.5">
-            <Crown className="h-3 w-3" />
-            Pro
-          </Badge>
-        )}
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -758,7 +751,6 @@ function ProfileContent() {
               ptNumber: user.pt_number,
               trademarkNumber: user.trademark_number,
             }}
-            isProUser={user.subscription_tier === 'pro'}
             avatarInitial={
               user.business_name?.charAt(0) || user.phone?.charAt(0) || 'U'
             }
