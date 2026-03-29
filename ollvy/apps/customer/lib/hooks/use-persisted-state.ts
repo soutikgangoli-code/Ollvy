@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 
 /**
  * A useState hook that persists state to localStorage.
@@ -13,6 +13,10 @@ export function usePersistedState<T>(
   // Initialize with default value (will be replaced by localStorage value on mount)
   const [state, setState] = useState<T>(defaultValue)
   const [isHydrated, setIsHydrated] = useState(false)
+  // Track if we're currently handling a storage event to prevent race conditions
+  const isHandlingStorageEvent = useRef(false)
+  // Track the last value we wrote to prevent echo updates
+  const lastWrittenValue = useRef<string | null>(null)
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -21,6 +25,7 @@ export function usePersistedState<T>(
       if (stored !== null) {
         const parsed = JSON.parse(stored)
         setState(parsed)
+        lastWrittenValue.current = stored
       }
     } catch (e) {
       console.warn(`Failed to load persisted state for key "${key}":`, e)
@@ -31,8 +36,15 @@ export function usePersistedState<T>(
   // Save to localStorage when state changes (after hydration)
   useEffect(() => {
     if (!isHydrated) return
+    // Don't save if we're handling a storage event from another tab
+    if (isHandlingStorageEvent.current) return
     try {
-      localStorage.setItem(key, JSON.stringify(state))
+      const serialized = JSON.stringify(state)
+      // Avoid writing the same value we just read from storage event
+      if (serialized !== lastWrittenValue.current) {
+        localStorage.setItem(key, serialized)
+        lastWrittenValue.current = serialized
+      }
     } catch (e) {
       console.warn(`Failed to save persisted state for key "${key}":`, e)
     }
@@ -42,9 +54,19 @@ export function usePersistedState<T>(
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === key && e.newValue !== null) {
+        // Skip if this is our own write echoing back
+        if (e.newValue === lastWrittenValue.current) return
         try {
-          setState(JSON.parse(e.newValue))
+          isHandlingStorageEvent.current = true
+          const parsed = JSON.parse(e.newValue)
+          setState(parsed)
+          lastWrittenValue.current = e.newValue
+          // Reset flag after state update is processed
+          requestAnimationFrame(() => {
+            isHandlingStorageEvent.current = false
+          })
         } catch (e) {
+          isHandlingStorageEvent.current = false
           // Ignore parse errors
         }
       }

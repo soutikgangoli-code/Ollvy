@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 import { getCompletionEstimate } from '@/lib/dates'
 import { useToast } from '@/lib/hooks/use-toast'
 import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
+import { fetchWithTimeout, TIMEOUTS } from '@/lib/fetch-with-timeout'
 
 import {
   CheckoutStepper,
@@ -378,7 +379,7 @@ export default function CheckoutPage() {
     setPromoError(null)
 
     try {
-      const response = await fetch(
+      const response = await fetchWithTimeout(
         `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/resolve-promo`,
         {
           method: 'POST',
@@ -391,6 +392,7 @@ export default function CheckoutPage() {
             service_id: serviceId,
             user_id: user?.id,
           }),
+          timeout: TIMEOUTS.DEFAULT,
         }
       )
       const data = await response.json()
@@ -435,7 +437,7 @@ export default function CheckoutPage() {
 
       const attribution = getFullAttributionData()
 
-      const response = await fetch(
+      const response = await fetchWithTimeout(
         `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`,
         {
           method: 'POST',
@@ -458,6 +460,7 @@ export default function CheckoutPage() {
             referral_code: attribution.referralCode,
             landing_page: attribution.landingPage,
           }),
+          timeout: TIMEOUTS.PAYMENT,
         }
       )
 

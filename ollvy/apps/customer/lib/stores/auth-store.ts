@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { Session } from '@supabase/supabase-js'
 import { getClient, getEdgeFunctionUrl } from '../supabase'
+import { fetchWithTimeout, TIMEOUTS } from '../fetch-with-timeout'
 
 export interface User {
   id: string
@@ -105,12 +106,13 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     set({ isLoading: true, lastOtpError: null })
 
     try {
-      const response = await fetch(getEdgeFunctionUrl('send-otp'), {
+      const response = await fetchWithTimeout(getEdgeFunctionUrl('send-otp'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ phone }),
+        timeout: TIMEOUTS.OTP,
       })
 
       const data: SendOtpResponse = await response.json()
@@ -141,12 +143,13 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     set({ isLoading: true, lastOtpError: null })
 
     try {
-      const response = await fetch(getEdgeFunctionUrl('verify-otp'), {
+      const response = await fetchWithTimeout(getEdgeFunctionUrl('verify-otp'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ phone, otp: code }),
+        timeout: TIMEOUTS.OTP,
       })
 
       const data: VerifyOtpResponse = await response.json()

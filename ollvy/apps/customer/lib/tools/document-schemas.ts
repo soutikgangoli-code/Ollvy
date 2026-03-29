@@ -5,21 +5,29 @@ export function generateDocumentListSchema(
   pageTitle: string,
   pageUrl: string
 ) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    name: `${pageTitle} - Required Documents`,
-    description: `Complete list of documents required for ${pageTitle}`,
-    url: pageUrl,
-    numberOfItems: categories.reduce((acc, cat) => acc + cat.items.length, 0),
-    itemListElement: categories.flatMap((category, catIndex) =>
-      category.items.map((item, itemIndex) => ({
+  // Validate inputs to prevent invalid schema generation
+  if (!categories || !Array.isArray(categories)) {
+    return null
+  }
+
+  const validCategories = categories.filter(cat => cat && Array.isArray(cat.items))
+  if (validCategories.length === 0) {
+    return null
+  }
+
+  // Calculate running position for items across all categories
+  // This avoids the catIndex * 100 assumption that breaks with >100 items
+  let runningPosition = 0
+  const itemListElement = validCategories.flatMap((category) =>
+    category.items.map((item) => {
+      runningPosition++
+      return {
         '@type': 'ListItem',
-        position: catIndex * 100 + itemIndex + 1,
+        position: runningPosition,
         item: {
           '@type': 'HowToSupply',
-          name: item.name,
-          description: item.note,
+          name: item.name || 'Unnamed Document',
+          description: item.note || '',
           ...(item.whatIsIt && {
             disambiguatingDescription: item.whatIsIt,
           }),
@@ -38,6 +46,7 @@ export function generateDocumentListSchema(
             },
           }),
           ...(item.details &&
+            Array.isArray(item.details) &&
             item.details.length > 0 && {
               itemListElement: item.details.map((detail, i) => ({
                 '@type': 'ListItem',
@@ -46,7 +55,17 @@ export function generateDocumentListSchema(
               })),
             }),
         },
-      }))
-    ),
+      }
+    })
+  )
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${pageTitle} - Required Documents`,
+    description: `Complete list of documents required for ${pageTitle}`,
+    url: pageUrl,
+    numberOfItems: itemListElement.length,
+    itemListElement,
   }
 }

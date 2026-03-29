@@ -96,22 +96,30 @@ export async function assignProfessional(orderId: string, professionalId: string
     assigned_at: new Date().toISOString(),
   })
 
-  // Post system chat message if reassignment
+  // Post system chat message if reassignment (non-critical - don't fail the whole operation)
   if (isReassignment) {
-    const { data: chatOrder } = await supabaseServer
-      .from('orders')
-      .select('chat_conversation_id')
-      .eq('id', orderId)
-      .single()
+    try {
+      const { data: chatOrder } = await supabaseServer
+        .from('orders')
+        .select('chat_conversation_id')
+        .eq('id', orderId)
+        .single()
 
-    if (chatOrder?.chat_conversation_id) {
-      await supabaseServer.from('chat_messages').insert({
-        conversation_id: chatOrder.chat_conversation_id,
-        sender_type: 'system',
-        content: 'Your assigned expert has been updated.',
-        message_type: 'system',
-        sent_at: new Date().toISOString(),
-      })
+      if (chatOrder?.chat_conversation_id) {
+        const { error: chatError } = await supabaseServer.from('chat_messages').insert({
+          conversation_id: chatOrder.chat_conversation_id,
+          sender_type: 'system',
+          content: 'Your assigned expert has been updated.',
+          message_type: 'system',
+          sent_at: new Date().toISOString(),
+        })
+        if (chatError) {
+          console.error('Failed to post reassignment chat message (non-critical):', chatError)
+        }
+      }
+    } catch (chatErr) {
+      // Log but don't fail - chat message is non-critical
+      console.error('Failed to post reassignment notification (non-critical):', chatErr)
     }
   }
 
@@ -590,7 +598,7 @@ export async function uploadAdminDocument(
   if (!supabaseServer) throw new Error('Service client unavailable')
 
   // Insert to_customer document
-  const { data: toCustomerRow } = await supabaseServer
+  const { data: toCustomerRow, error: insertError } = await supabaseServer
     .from('order_work_documents')
     .insert({
       order_id: orderId,
@@ -608,9 +616,14 @@ export async function uploadAdminDocument(
     .select()
     .single()
 
+  if (insertError) {
+    console.error('Failed to insert to_customer document:', insertError)
+    throw new Error(`Failed to upload document: ${insertError.message}`)
+  }
+
   // If for_signing, create linked from_customer row
   if (tag === 'for_signing' && signLabel && toCustomerRow) {
-    const { data: fromCustomerRow } = await supabaseServer
+    const { data: fromCustomerRow, error: fromCustomerError } = await supabaseServer
       .from('order_work_documents')
       .insert({
         order_id: orderId,
@@ -622,7 +635,12 @@ export async function uploadAdminDocument(
       .select()
       .single()
 
-    if (fromCustomerRow) {
+    if (fromCustomerError) {
+      console.error('Failed to create signing request:', fromCustomerError)
+      // Don't throw - the main document was uploaded successfully
+    }
+
+    if (fromCustomerRow && toCustomerRow) {
       await supabaseServer
         .from('order_work_documents')
         .update({ linked_request_id: fromCustomerRow.id })

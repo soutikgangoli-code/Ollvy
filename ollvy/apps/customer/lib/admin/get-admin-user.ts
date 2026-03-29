@@ -12,7 +12,9 @@ export interface AdminUser {
   is_active: boolean
 }
 
-// Use React cache to dedupe requests within a single render cycle
+// Use React cache to dedupe requests within a single render cycle.
+// Note: cache() dedupes within a single request/render tree, not across concurrent requests.
+// For cross-request caching, consider using unstable_cache or external caching (Redis).
 export const getAdminUser = cache(async (): Promise<AdminUser> => {
   const supabase = await createServerSupabase()
   const { data: { session } } = await supabase.auth.getSession()

@@ -14,11 +14,27 @@ export async function bulkAssignOrders(
   if (!supabaseServer) throw new Error('Service client unavailable')
   const now = new Date().toISOString()
 
+  // Step 0: Verify orders exist and get their current assignment state for optimistic locking
+  // This helps detect if another admin is concurrently assigning the same orders
+  const { data: currentOrders, error: fetchError } = await supabaseServer
+    .from('orders')
+    .select('id, assigned_admin_id')
+    .in('id', orderIds)
+
+  if (fetchError) throw new Error(`Failed to fetch orders: ${fetchError.message}`)
+  if (!currentOrders || currentOrders.length !== orderIds.length) {
+    const foundIds = new Set(currentOrders?.map(o => o.id) || [])
+    const missingIds = orderIds.filter(id => !foundIds.has(id))
+    throw new Error(`Some orders not found: ${missingIds.join(', ')}`)
+  }
+
   // Step 1: Batch update all selected orders in one query
-  await supabaseServer
+  const { error: updateError } = await supabaseServer
     .from('orders')
     .update({ assigned_admin_id: assignToAdminId })
     .in('id', orderIds)
+
+  if (updateError) throw new Error(`Failed to update orders: ${updateError.message}`)
 
   // Step 2: Batch close all open assignment history rows in one query
   await supabaseServer

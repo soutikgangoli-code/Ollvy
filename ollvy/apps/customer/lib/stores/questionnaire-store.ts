@@ -177,7 +177,10 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           if (!stepMap.has(stepNum)) {
             stepMap.set(stepNum, [])
           }
-          stepMap.get(stepNum)!.push(q as ServiceQuestion)
+          const stepQuestions = stepMap.get(stepNum)
+          if (stepQuestions) {
+            stepQuestions.push(q as ServiceQuestion)
+          }
         }
 
         // Build steps array with titles
@@ -301,7 +304,10 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           if (!stepMap.has(stepNum)) {
             stepMap.set(stepNum, [])
           }
-          stepMap.get(stepNum)!.push(q as ServiceQuestion)
+          const stepQuestions = stepMap.get(stepNum)
+          if (stepQuestions) {
+            stepQuestions.push(q as ServiceQuestion)
+          }
         }
 
         // Build steps array with titles
@@ -398,26 +404,36 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
       try {
         const supabase = getClient()
 
-        // Upsert each response
-        const upsertPromises = Object.entries(stepResponses).map(([key, value]) => {
-          if (value === undefined || value === '') return Promise.resolve()
+        // Upsert each response - use allSettled to handle partial failures gracefully
+        const upsertPromises = Object.entries(stepResponses)
+          .filter(([, value]) => value !== undefined && value !== '')
+          .map(async ([key, value]) => {
+            try {
+              const result = await supabase
+                .from('order_questionnaire_responses')
+                .upsert(
+                  {
+                    order_id: orderId,
+                    question_key: key,
+                    response_value: value,
+                    updated_at: new Date().toISOString(),
+                  },
+                  {
+                    onConflict: 'order_id,question_key',
+                  }
+                )
+              return { key, status: 'fulfilled' as const, result }
+            } catch (error) {
+              return { key, status: 'rejected' as const, error }
+            }
+          })
 
-          return supabase
-            .from('order_questionnaire_responses')
-            .upsert(
-              {
-                order_id: orderId,
-                question_key: key,
-                response_value: value,
-                updated_at: new Date().toISOString(),
-              },
-              {
-                onConflict: 'order_id,question_key',
-              }
-            )
-        })
-
-        await Promise.all(upsertPromises)
+        const results = await Promise.all(upsertPromises)
+        const failures = results.filter(r => r.status === 'rejected')
+        if (failures.length > 0) {
+          console.error('Some responses failed to save:', failures)
+          // Continue anyway - partial save is better than no save
+        }
 
         // Update order's questionnaire_step
         await supabase

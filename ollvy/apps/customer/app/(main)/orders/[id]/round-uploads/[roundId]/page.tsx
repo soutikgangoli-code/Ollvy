@@ -101,10 +101,22 @@ export default function RoundUploadsPage() {
     return labels[reason] || reason
   }
 
+  // Max file size (50MB)
+  const MAX_FILE_SIZE = 50 * 1024 * 1024
+
   // UploadDropzone requires onUpload: async (file: File) => Promise<void>
   // handleStageFile ONLY stages the file in React state. It does NOT upload yet.
   // The actual upload to Supabase Storage happens in handleSubmit when user taps the CTA.
   const handleStageFile = async (docRequestId: string, file: File): Promise<void> => {
+    // Validate file size (redundant with UploadDropzone but ensures safety)
+    if (file.size > MAX_FILE_SIZE) {
+      toast({
+        title: 'File too large',
+        description: `Maximum file size is 50MB. Your file is ${Math.round(file.size / 1024 / 1024)}MB.`,
+        variant: 'destructive'
+      })
+      return
+    }
     setStaged(prev => ({ ...prev, [docRequestId]: file }))
   }
 
@@ -148,12 +160,45 @@ export default function RoundUploadsPage() {
         .eq('id', docRequestId)
 
       if (updateError) throw new Error(`DB update failed: ${updateError.message}`)
+
+      return { docRequestId, fileName: file.name }
     })
 
     try {
-      await Promise.all(uploadPromises)
-      toast({ title: 'Documents submitted', description: 'Your documents have been submitted for review.' })
-      router.push(`/orders/${orderId}`)
+      // Use allSettled to handle partial failures
+      const results = await Promise.allSettled(uploadPromises)
+      const failures = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected')
+      const successes = results.filter((r): r is PromiseFulfilledResult<{ docRequestId: string; fileName: string }> => r.status === 'fulfilled')
+
+      // Remove successfully uploaded files from staged state
+      if (successes.length > 0) {
+        setStaged(prev => {
+          const next = { ...prev }
+          successes.forEach(s => delete next[s.value.docRequestId])
+          return next
+        })
+      }
+
+      if (failures.length > 0) {
+        const failedCount = failures.length
+        const successCount = successes.length
+        if (successCount > 0) {
+          toast({
+            title: 'Partial upload',
+            variant: 'destructive',
+            description: `${successCount} uploaded, ${failedCount} failed. Please retry failed uploads.`
+          })
+        } else {
+          toast({
+            title: 'Upload failed',
+            variant: 'destructive',
+            description: failures[0].reason?.message || 'Upload failed'
+          })
+        }
+      } else {
+        toast({ title: 'Documents submitted', description: 'Your documents have been submitted for review.' })
+        router.push(`/orders/${orderId}`)
+      }
     } catch (err: any) {
       toast({ title: 'Upload failed', variant: 'destructive', description: err.message })
     } finally {

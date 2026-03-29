@@ -229,9 +229,12 @@ export function DocumentChecklistContent({
     a.href = url
     a.download = `document-checklist-${Date.now()}.txt`
     document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-    URL.revokeObjectURL(url)
+    try {
+      a.click()
+    } finally {
+      document.body.removeChild(a)
+      URL.revokeObjectURL(url)
+    }
   }
 
   return (
@@ -288,11 +291,13 @@ export function DocumentChecklistContent({
               </div>
 
               <div className="space-y-2">
-                {category.items.map((item, index) => {
+                {category.items.map((item) => {
                   const isSelected = selectedDoc?.name === item.name && selectedDoc?.categoryName === category.category
+                  // Use item.name + category as unique key (document names should be unique within a category)
+                  const itemKey = `${category.category}-${item.name}`
                   return (
                     <div
-                      key={index}
+                      key={itemKey}
                       className={cn(
                         'p-4 cursor-pointer transition-all rounded-xl border',
                         isSelected
