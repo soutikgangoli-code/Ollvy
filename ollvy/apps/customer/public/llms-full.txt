@@ -1,0 +1,516 @@
+# Ollvy - Complete Reference
+
+> Ollvy is India's modern company registration and compliance platform. We help entrepreneurs register businesses, obtain necessary licenses, and stay compliant with Indian regulations - all online, with transparent pricing and real-time tracking.
+
+## About Ollvy
+
+Ollvy simplifies business registration and compliance in India. Founded to make entrepreneurship accessible, we handle the paperwork so founders can focus on building their businesses.
+
+### What We Do
+- **Company Registration**: Private Limited, LLP, Partnership, Sole Proprietorship
+- **Tax Registration & Filing**: GST, Income Tax, TDS compliance
+- **Business Licenses**: FSSAI, Trademark, MSME, Shop & Establishment
+- **Ongoing Compliance**: Annual filings, Director KYC, statutory returns
+
+### Why Ollvy
+- Transparent pricing with no hidden fees
+- Real-time order tracking and updates
+- Backed by practicing CAs and CS professionals
+- End-to-end digital process
+- Expert support throughout
+
+### Contact
+- Website: https://www.ollvy.com
+- Email: team@ollvy.com
+
+---
+
+## Services - Complete List
+
+### Company Registration
+
+#### Private Limited Company Registration
+- URL: https://www.ollvy.com/services/pvt-ltd-incorporation
+- Description: Register a Private Limited Company with MCA. Includes DSC for directors, DIN application, name approval, incorporation certificate, PAN & TAN. Ideal for startups seeking investment.
+- Timeline: 7-10 working days
+- Mandatory for: Businesses seeking venture funding, foreign investment, or planning for scale
+
+#### LLP Registration
+- URL: https://www.ollvy.com/services/llp-incorporation
+- Description: Register a Limited Liability Partnership. Combines partnership flexibility with limited liability protection. Includes DPIN, LLP Agreement filing, incorporation certificate.
+- Timeline: 7-10 working days
+- Mandatory for: Professional services firms, consultancies, small businesses wanting limited liability
+
+#### Company Name Change
+- URL: https://www.ollvy.com/services/company-name-change
+- Description: Change your company's registered name with MCA. Includes name availability check, board resolution, shareholder approval, and new incorporation certificate.
+- Timeline: 15-20 working days
+
+---
+
+### Tax Registration
+
+#### GST Registration
+- URL: https://www.ollvy.com/services/gst-registration
+- Description: Get your GSTIN (Goods and Services Tax Identification Number). Required for businesses with turnover above Rs. 40 lakh (goods) or Rs. 20 lakh (services), or for interstate sales.
+- Timeline: 3-7 working days
+- Mandatory for: Businesses above turnover threshold, e-commerce sellers, interstate suppliers
+
+#### GST Cancellation
+- URL: https://www.ollvy.com/services/gst-cancellation
+- Description: Voluntary cancellation of GST registration when business closes or turnover falls below threshold. Includes final return filing.
+- Timeline: 15-30 working days
+
+#### GST Revocation
+- URL: https://www.ollvy.com/services/gst-revocation
+- Description: Revoke a cancelled GST registration. Must be filed within 30 days of cancellation order (extendable to 90 days with appeal).
+- Timeline: 15-30 working days
+
+---
+
+### Tax Filing - Recurring Compliance
+
+#### Business ITR Filing
+- URL: https://www.ollvy.com/services/business-itr
+- Description: Income tax return filing for companies and LLPs. Includes ITR-6 for companies, ITR-5 for LLPs, computation of income, tax audit if required.
+- Timeline: 3-7 working days
+- Due Date: September 30 for audit cases, July 31 for non-audit
+
+#### GST Monthly Filing
+- URL: https://www.ollvy.com/services/gst-monthly-filing
+- Description: Monthly GST compliance - GSTR-1 (outward supplies) by 11th, GSTR-3B (summary return) by 20th. Includes reconciliation and ITC matching.
+- Frequency: Monthly retainer
+- Mandatory for: All GST registered businesses
+
+#### TDS Monthly Compliance
+- URL: https://www.ollvy.com/services/tds-monthly-compliance
+- Description: TDS deduction, payment by 7th, and quarterly return filing. Covers salary TDS, contractor TDS, professional fees TDS.
+- Frequency: Monthly retainer
+- Mandatory for: Companies and businesses making specified payments
+
+---
+
+### Company Compliance - Annual Filings
+
+#### MCA Annual Filing
+- URL: https://www.ollvy.com/services/mca-annual-filing
+- Description: Mandatory annual filings for companies - AOC-4 (financial statements) and MGT-7 (annual return). Due within 60 days of AGM.
+- Timeline: 3-5 working days
+- Mandatory for: All registered companies
+- Penalty: Rs. 100 per day per form for late filing
+
+#### Director KYC
+- URL: https://www.ollvy.com/services/director-kyc
+- Description: Annual DIR-3 KYC for all directors. Due by September 30 each year. Required to keep DIN active.
+- Timeline: 1-2 working days
+- Mandatory for: All directors with DIN
+- Penalty: Rs. 5,000 if filed after due date
+
+#### DIN Reactivation
+- URL: https://www.ollvy.com/services/din-reactivation
+- Description: Reactivate a DIN deactivated due to non-filing of DIR-3 KYC. Includes filing pending KYC and reactivation application.
+- Timeline: 5-7 working days
+
+---
+
+### Business Licenses
+
+#### MSME/Udyam Registration
+- URL: https://www.ollvy.com/services/msme-udyam
+- Description: Get Udyam Registration Certificate for MSME benefits - priority sector lending, lower interest rates, government tender preference.
+- Timeline: 1-2 working days
+- Benefits: Credit guarantee, subsidy schemes, lower interest rates
+
+#### Trademark Registration
+- URL: https://www.ollvy.com/services/trademark-registration
+- Description: Register and protect your brand name, logo, or tagline. 10-year protection, renewable. Includes trademark search, application, and response to examination.
+- Timeline: 12-18 months (TM application filed in 2-3 days)
+- Validity: 10 years, renewable
+
+#### FSSAI License
+- URL: https://www.ollvy.com/services/fssai-license
+- Description: Food Safety License from FSSAI. Basic registration for small businesses, State license for medium, Central for large. Required for all food businesses.
+- Timeline: 7-15 working days
+- Mandatory for: All food businesses - restaurants, manufacturers, importers, e-commerce food sellers
+
+#### Cloud Kitchen Setup
+- URL: https://www.ollvy.com/services/cloud-kitchen-setup
+- Description: Complete compliance bundle for cloud kitchens - FSSAI, GST, Shop & Establishment, Trade License bundled together.
+- Timeline: 15-20 working days
+- Includes: FSSAI + GST + Shop License + Trade License
+
+---
+
+## Guides - Educational Content
+
+### Business Setup Guides
+
+#### Do I Need GST Registration?
+- URL: https://www.ollvy.com/guides/do-i-need-gst-registration
+- Category: Tax
+- Description: Interactive eligibility checker for GST registration. Covers turnover thresholds (Rs. 40L goods, Rs. 20L services), mandatory registration cases (e-commerce, interstate), voluntary registration benefits.
+- Key Points: E-commerce sellers must register from day 1. Interstate sales require registration regardless of turnover. Service providers have lower threshold than goods sellers.
+
+#### Pvt Ltd vs LLP - Which Should You Choose?
+- URL: https://www.ollvy.com/guides/pvt-ltd-vs-llp
+- Category: Incorporation
+- Description: Comprehensive comparison of Private Limited Company vs LLP. Covers compliance burden, taxation, foreign investment rules, funding implications.
+- Key Points: Pvt Ltd better for VC funding. LLP has lower compliance. Both offer limited liability. Pvt Ltd can have ESOPs, LLP cannot.
+
+#### Do I Need to File ITR?
+- URL: https://www.ollvy.com/guides/do-i-need-to-file-itr
+- Category: Tax
+- Description: Guide to mandatory ITR filing rules. Covers income thresholds, foreign assets, high-value transactions that trigger mandatory filing.
+- Key Points: Income above Rs. 2.5L requires ITR. Foreign assets require ITR regardless of income. High-value transactions (Rs. 1Cr+ deposits) trigger mandatory filing.
+
+#### Which ITR Form Should I File?
+- URL: https://www.ollvy.com/guides/which-itr-form-should-i-file
+- Category: Tax
+- Description: Guide to choosing correct ITR form - ITR-1 to ITR-7. Based on income sources, business type, and entity type.
+
+#### Is MSME/Udyam Registration Worth It?
+- URL: https://www.ollvy.com/guides/is-msme-registration-worth-it
+- Category: Registration
+- Description: Benefits and eligibility for MSME registration. Covers credit guarantee scheme, interest subvention, government tender preference.
+- Key Points: Free registration. Priority sector lending. 45-day payment mandate for government contracts. Collateral-free loans up to Rs. 2 crore.
+
+#### DPIIT Startup Recognition
+- URL: https://www.ollvy.com/guides/dpiit-startup-recognition
+- Category: Startup
+- Description: Guide to Startup India recognition. Covers eligibility criteria, tax benefits (Section 80-IAC), angel tax exemption, easier public procurement.
+- Key Points: Company/LLP less than 10 years old. Turnover below Rs. 100 crore. Working on innovation. Get 3-year tax holiday, angel tax exemption.
+
+### Employer Compliance Guides
+
+#### PF Registration
+- URL: https://www.ollvy.com/guides/pf-registration
+- Category: Payroll
+- Description: Provident Fund registration and compliance guide. When mandatory, how to register, monthly compliance, penalties.
+- Key Points: Mandatory if 20+ employees. 12% employer contribution. Monthly payment by 15th. Major penalties for non-compliance.
+
+#### ESI Registration
+- URL: https://www.ollvy.com/guides/esi-registration
+- Category: Payroll
+- Description: ESIC registration and compliance. Covers threshold, contribution rates, hospital benefits, maternity benefits.
+- Key Points: Mandatory if 10+ employees and wages up to Rs. 21,000/month. 0.75% employee + 3.25% employer contribution.
+
+#### Professional Tax
+- URL: https://www.ollvy.com/guides/professional-tax
+- Category: Tax
+- Description: State-wise professional tax guide. Covers registration, slabs, payment, and compliance by state.
+- Key Points: State-specific tax on employment. Maximum Rs. 2,500/year. Employer must deduct and deposit.
+
+#### Shop & Establishment Registration
+- URL: https://www.ollvy.com/guides/shop-establishment-registration
+- Category: Licensing
+- Description: Shop & Establishment Act compliance. State-wise requirements, registration process, renewal.
+- Key Points: Mandatory for all commercial establishments. Regulates working hours, holidays, employment conditions.
+
+#### FSSAI License Requirements
+- URL: https://www.ollvy.com/guides/fssai-license-requirements
+- Category: Licensing
+- Description: Complete guide to FSSAI licensing. Basic vs State vs Central license, eligibility, documents, renewal.
+- Key Points: Basic for turnover under Rs. 12L. State for Rs. 12L-20Cr. Central for Rs. 20Cr+.
+
+---
+
+### GST Notice Guides
+
+#### GST DRC-01 Notice
+- URL: https://www.ollvy.com/guides/gst-drc-01-notice
+- Category: GST Notice
+- Description: How to respond to GST DRC-01 tax demand notice. Covers common causes (ITC mismatch, short payment), response timeline (30 days), appeal process.
+- Severity: Urgent
+- Deadline: 30 days from notice date
+
+#### GST DRC-01A Pre-Notice
+- URL: https://www.ollvy.com/guides/gst-drc-01a-pre-notice
+- Category: GST Notice
+- Description: Responding to DRC-01A intimation before formal demand. Opportunity to pay and avoid penalty.
+- Severity: Serious
+- Deadline: 15 days
+
+#### GST DRC-01B Mismatch
+- URL: https://www.ollvy.com/guides/gst-drc-01b-mismatch
+- Category: GST Notice
+- Description: ITC mismatch notice under DRC-01B. GSTR-3B vs GSTR-2A/2B reconciliation issues.
+- Severity: Serious
+
+#### GST ASMT-10 Notice
+- URL: https://www.ollvy.com/guides/gst-asmt-10-notice
+- Category: GST Notice
+- Description: Scrutiny notice for examining returns. How to respond with documents and clarifications.
+- Severity: Serious
+- Deadline: 30 days
+
+#### GST REG-17 Cancellation Notice
+- URL: https://www.ollvy.com/guides/gst-reg-17-cancellation-notice
+- Category: GST Notice
+- Description: Show cause notice for GST cancellation. How to respond and prevent cancellation.
+- Severity: Urgent
+- Deadline: 7 working days
+
+#### GST REG-31 Suspension
+- URL: https://www.ollvy.com/guides/gst-reg-31-suspension
+- Category: GST Notice
+- Description: GST registration suspension notice. Immediate steps to take, how to get unsuspended.
+- Severity: Urgent
+
+---
+
+### Income Tax Notice Guides
+
+#### Section 143(1) Intimation
+- URL: https://www.ollvy.com/guides/income-tax-143-1-intimation
+- Category: Income Tax Notice
+- Description: Understanding CPC intimation under Section 143(1). Demand, refund, or no-change scenarios.
+- Severity: Moderate
+
+#### Section 143(2) Scrutiny Notice
+- URL: https://www.ollvy.com/guides/income-tax-143-2-scrutiny
+- Category: Income Tax Notice
+- Description: Handling scrutiny assessment. Document preparation, hearing process, assessment order.
+- Severity: Serious
+- Deadline: As per notice (typically 15-30 days)
+
+#### Section 142(1) Notice
+- URL: https://www.ollvy.com/guides/income-tax-142-1-notice
+- Category: Income Tax Notice
+- Description: Inquiry notice for information or documents. How to respond with required details.
+- Severity: Serious
+
+#### Section 148/148A Reopening Notice
+- URL: https://www.ollvy.com/guides/income-tax-148-148a-reopening
+- Category: Income Tax Notice
+- Description: Income escaping assessment notice. How to respond to reopening of past returns.
+- Severity: Urgent
+- Deadline: 30 days to file response
+
+#### Section 139(9) Defective Return
+- URL: https://www.ollvy.com/guides/income-tax-139-9-defective-return
+- Category: Income Tax Notice
+- Description: Correcting defective return notice. Common defects and how to rectify.
+- Severity: Moderate
+- Deadline: 15 days
+
+#### Section 156 Demand Notice
+- URL: https://www.ollvy.com/guides/income-tax-156-demand
+- Category: Income Tax Notice
+- Description: Tax demand notice response. Payment, rectification, or appeal options.
+- Severity: Urgent
+- Deadline: 30 days
+
+#### Section 245 Refund Adjustment
+- URL: https://www.ollvy.com/guides/income-tax-245-refund-adjustment
+- Category: Income Tax Notice
+- Description: Refund adjustment against outstanding demand. How to respond if you disagree.
+- Severity: Moderate
+- Deadline: 30 days
+
+#### Section 271 Penalty Notice
+- URL: https://www.ollvy.com/guides/income-tax-271-penalty
+- Category: Income Tax Notice
+- Description: Various penalty notices - concealment, late filing, non-compliance. Defense strategies.
+- Severity: Serious
+
+#### Section 131 Summons
+- URL: https://www.ollvy.com/guides/income-tax-131-summons
+- Category: Income Tax Notice
+- Description: Summons to appear before tax authority. Preparation and representation guide.
+- Severity: Urgent
+
+#### AIS/SFT Mismatch Notice
+- URL: https://www.ollvy.com/guides/income-tax-ais-sft-notice
+- Category: Income Tax Notice
+- Description: Annual Information Statement mismatch. Responding to high-value transaction queries.
+- Severity: Moderate
+
+---
+
+### TDS Notice Guides
+
+#### TDS Short Deduction Notice
+- URL: https://www.ollvy.com/guides/tds-short-deduction-notice
+- Category: TDS Notice
+- Description: Responding to TDS short deduction demand. Causes, correction, payment process.
+- Severity: Serious
+
+#### TDS 26Q/27Q Mismatch
+- URL: https://www.ollvy.com/guides/tds-26q-27q-mismatch
+- Category: TDS Notice
+- Description: TDS return mismatch with Form 26AS. Reconciliation and correction process.
+- Severity: Moderate
+
+#### TDS 194C/194J Demand
+- URL: https://www.ollvy.com/guides/tds-194c-194j-demand
+- Category: TDS Notice
+- Description: Contractor vs professional TDS rate disputes. How to respond to wrong rate demands.
+- Severity: Serious
+
+---
+
+### ROC/MCA Notice Guides
+
+#### ROC Annual Filing Default Notice
+- URL: https://www.ollvy.com/guides/roc-annual-filing-default-notice
+- Category: ROC Notice
+- Description: Notice for non-filing of AOC-4 or MGT-7. Penalties and rectification process.
+- Severity: Serious
+
+#### DIR-3 KYC/DIN Deactivation
+- URL: https://www.ollvy.com/guides/dir-3-kyc-din-deactivation
+- Category: ROC Notice
+- Description: Director KYC non-compliance and DIN deactivation. Reactivation process.
+- Severity: Urgent
+
+---
+
+## Tools - Free Calculators & Checklists
+
+### Document Checklists
+
+#### Private Limited Company Documents
+- URL: https://www.ollvy.com/tools/documents/private-limited-company
+- Description: Complete document checklist for Pvt Ltd incorporation. PAN, Aadhaar, address proof for directors. Registered office documents. Consent forms.
+- Use Case: Preparing for company registration
+
+#### LLP Documents
+- URL: https://www.ollvy.com/tools/documents/llp
+- Description: Document checklist for LLP registration. Partner documents, registered office proof, LLP Agreement requirements.
+- Use Case: Preparing for LLP registration
+
+#### Partnership Firm Documents
+- URL: https://www.ollvy.com/tools/documents/partnership
+- Description: Documents for partnership deed registration. Partner KYC, address proof, deed requirements.
+- Use Case: Partnership firm setup
+
+#### Sole Proprietor Documents
+- URL: https://www.ollvy.com/tools/documents/sole-proprietor
+- Description: Documents for sole proprietorship setup. Minimal documentation required - PAN, Aadhaar, bank account.
+- Use Case: Starting as sole proprietor
+
+#### GST Registration Documents
+- URL: https://www.ollvy.com/tools/documents/gst-registration
+- Description: Document checklist for GST registration. Business proof, address proof, bank details, photographs, authorization.
+- Use Case: Applying for GSTIN
+
+#### Individual ITR Documents
+- URL: https://www.ollvy.com/tools/documents/individual-itr
+- Description: Documents for personal ITR filing. Form 16, bank statements, investment proofs, capital gains statements.
+- Use Case: Personal tax filing preparation
+
+#### Business ITR Documents
+- URL: https://www.ollvy.com/tools/documents/business-itr
+- Description: Documents for company/LLP ITR. Financial statements, audit report, bank statements, TDS certificates.
+- Use Case: Business tax filing preparation
+
+#### Trademark Documents
+- URL: https://www.ollvy.com/tools/documents/trademark
+- Description: Documents for trademark application. Logo files, proof of use, authorization, business registration.
+- Use Case: Trademark application
+
+---
+
+### Penalty Calculators
+
+#### GST Late Filing Penalty Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/gst-late-filing
+- Description: Calculate penalties for late GSTR-1, GSTR-3B, GSTR-9 filing. Late fee Rs. 50/day (Rs. 20 for nil return). Interest at 18% p.a.
+- Inputs: Return type, due date, filing date, tax liability
+
+#### GST Demand Notice Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/gst-demand-notice
+- Description: Calculate interest and penalty on GST demand notices. Interest at 18% p.a., penalties ranging from 10% to 100%.
+- Inputs: Demand amount, period, type of default
+
+#### ITR Late Filing Penalty Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/itr-late-filing
+- Description: Calculate Section 234F late filing fee. Rs. 1,000 if income below Rs. 5L, Rs. 5,000 if above.
+- Inputs: Income level, due date, filing date
+
+#### TDS Late Filing Penalty Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/tds-late-filing
+- Description: Calculate TDS return late filing fees. Rs. 200/day up to TDS amount. Interest on late payment at 1-1.5% per month.
+- Inputs: Return type, due date, filing date, TDS amount
+
+#### MCA Annual Filing Penalty Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/mca-annual-filing
+- Description: Calculate penalties for late AOC-4 and MGT-7 filing. Rs. 100/day per form, no maximum cap.
+- Inputs: Form type, due date, filing date
+
+#### Director KYC Penalty Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/director-kyc
+- Description: Calculate DIR-3 KYC late filing penalty. Rs. 5,000 if filed after September 30.
+- Inputs: Due date, filing date
+
+#### PF & ESIC Penalty Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/pf-esic-penalty
+- Description: Calculate PF and ESIC late payment penalties. Damages up to 100% of amount due.
+- Inputs: Amount due, due date, payment date
+
+#### Professional Tax Penalty Calculator
+- URL: https://www.ollvy.com/tools/penalty-calculator/professional-tax-penalty
+- Description: Calculate state-wise professional tax late payment penalties.
+- Inputs: State, amount due, period
+
+#### Shops & Establishment Penalty
+- URL: https://www.ollvy.com/tools/penalty-calculator/shops-establishment-penalty
+- Description: State-wise penalty for Shops & Establishment Act non-compliance.
+- Inputs: State, type of violation
+
+#### DPIIT Startup Compliance
+- URL: https://www.ollvy.com/tools/penalty-calculator/startup-dpiit-compliance
+- Description: Check DPIIT startup compliance status and renewal requirements.
+- Inputs: Registration date, current turnover, employee count
+
+---
+
+## Key Information
+
+### Pricing Philosophy
+Ollvy offers transparent, all-inclusive pricing. Our service fees are displayed upfront and include:
+- Professional fees for CA/CS work
+- Government fees (where applicable, shown separately)
+- Document preparation and filing
+- Support until completion
+
+### Timeline Expectations
+Timelines shown are working days and depend on:
+- Government department processing times
+- Completeness of documents provided
+- No queries or objections from authorities
+
+### Support
+- All orders include expert support until completion
+- Dedicated dashboard for tracking
+- WhatsApp and email support
+- Help with government queries and objections
+
+---
+
+## Legal Pages
+
+- [Privacy Policy](https://www.ollvy.com/privacy)
+- [Terms of Service](https://www.ollvy.com/terms)
+- [Cancellation Policy](https://www.ollvy.com/cancellation)
+- [Refund Policy](https://www.ollvy.com/refunds)
+
+---
+
+## For Startups
+
+### Startup Landing Page
+- URL: https://www.ollvy.com/startup
+- Description: Dedicated resources for early-stage startups. Curated service bundles, startup-friendly pricing, guidance on compliance priorities.
+
+### Join Ollvy Network
+- URL: https://www.ollvy.com/join
+- Description: Partner with Ollvy as a CA/CS professional. Join our network of compliance experts.
+
+---
+
+## Deadline Campaigns (2025)
+
+- [Director KYC 2025](https://www.ollvy.com/director-kyc-2025) - DIR-3 KYC due September 30, 2025
+- [ITR 2025](https://www.ollvy.com/itr-2025) - Income tax return deadlines for FY 2024-25
+- [GST Annual 2025](https://www.ollvy.com/gst-annual-2025) - GSTR-9/9C annual return due dates

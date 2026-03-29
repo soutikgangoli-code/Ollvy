@@ -1,0 +1,81 @@
+# Ollvy
+
+> Ollvy is India's modern company registration and compliance platform. We help entrepreneurs register businesses, obtain necessary licenses, and stay compliant with Indian regulations - all online, with transparent pricing and real-time tracking.
+
+## About
+
+Ollvy simplifies business registration and compliance in India. Founded to make entrepreneurship accessible, we handle the paperwork so founders can focus on building. Our platform offers one-time registrations, recurring compliance filings, and expert guidance - all backed by practicing CAs and CS professionals.
+
+- Website: https://www.ollvy.com
+- Support: team@ollvy.com
+
+## Services
+
+### Company Registration
+- [Private Limited Company Registration](https://www.ollvy.com/services/pvt-ltd-incorporation) - Register a Pvt Ltd with DSC, DIN, incorporation certificate
+- [LLP Registration](https://www.ollvy.com/services/llp-incorporation) - Limited Liability Partnership with LLP Agreement
+- [Company Name Change](https://www.ollvy.com/services/company-name-change) - Change your company's registered name with MCA
+
+### Tax Registration
+- [GST Registration](https://www.ollvy.com/services/gst-registration) - Get your GSTIN in 3-7 days
+- [GST Cancellation](https://www.ollvy.com/services/gst-cancellation) - Voluntary GST cancellation
+- [GST Revocation](https://www.ollvy.com/services/gst-revocation) - Revoke cancelled GST registration
+
+### Tax Filing
+- [Business ITR Filing](https://www.ollvy.com/services/business-itr) - Company and LLP income tax returns
+- [GST Monthly Filing](https://www.ollvy.com/services/gst-monthly-filing) - GSTR-1, GSTR-3B monthly compliance
+- [TDS Monthly Compliance](https://www.ollvy.com/services/tds-monthly-compliance) - TDS return filing and payment
+
+### Company Compliance
+- [MCA Annual Filing](https://www.ollvy.com/services/mca-annual-filing) - AOC-4, MGT-7 annual returns
+- [Director KYC](https://www.ollvy.com/services/director-kyc) - DIR-3 KYC for directors
+- [DIN Reactivation](https://www.ollvy.com/services/din-reactivation) - Reactivate deactivated DIN
+
+### Business Licenses
+- [MSME/Udyam Registration](https://www.ollvy.com/services/msme-udyam) - MSME certificate for benefits
+- [Trademark Registration](https://www.ollvy.com/services/trademark-registration) - Protect your brand name and logo
+- [FSSAI License](https://www.ollvy.com/services/fssai-license) - Food business license
+- [Cloud Kitchen Setup](https://www.ollvy.com/services/cloud-kitchen-setup) - Complete cloud kitchen compliance bundle
+
+## Guides
+
+Educational content to help founders understand Indian business compliance:
+
+- [Do I Need GST Registration?](https://www.ollvy.com/guides/do-i-need-gst-registration) - GST eligibility checker
+- [Pvt Ltd vs LLP](https://www.ollvy.com/guides/pvt-ltd-vs-llp) - Compare business structures
+- [Do I Need to File ITR?](https://www.ollvy.com/guides/do-i-need-to-file-itr) - Income tax filing guide
+- [Is MSME Registration Worth It?](https://www.ollvy.com/guides/is-msme-registration-worth-it) - MSME benefits explained
+- [DPIIT Startup Recognition](https://www.ollvy.com/guides/dpiit-startup-recognition) - Startup India benefits
+- [PF Registration](https://www.ollvy.com/guides/pf-registration) - EPF compliance for employers
+- [ESI Registration](https://www.ollvy.com/guides/esi-registration) - ESIC compliance guide
+- [Professional Tax](https://www.ollvy.com/guides/professional-tax) - State-wise PT guide
+
+### GST Notices
+- [GST DRC-01 Notice](https://www.ollvy.com/guides/gst-drc-01-notice) - Tax demand response guide
+- [GST REG-17 Cancellation](https://www.ollvy.com/guides/gst-reg-17-cancellation-notice) - Cancellation notice response
+
+### Income Tax Notices
+- [Section 143(1) Intimation](https://www.ollvy.com/guides/income-tax-143-1-intimation) - Processing intimation
+- [Section 143(2) Scrutiny](https://www.ollvy.com/guides/income-tax-143-2-scrutiny) - Scrutiny assessment
+- [Section 156 Demand](https://www.ollvy.com/guides/income-tax-156-demand) - Tax demand notice
+
+## Tools
+
+Free calculators and checklists for Indian business compliance:
+
+### Document Checklists
+- [Private Limited Company Documents](https://www.ollvy.com/tools/documents/private-limited-company)
+- [LLP Documents](https://www.ollvy.com/tools/documents/llp)
+- [GST Registration Documents](https://www.ollvy.com/tools/documents/gst-registration)
+- [Trademark Documents](https://www.ollvy.com/tools/documents/trademark)
+
+### Penalty Calculators
+- [GST Late Filing Penalty](https://www.ollvy.com/tools/penalty-calculator/gst-late-filing)
+- [ITR Late Filing Penalty](https://www.ollvy.com/tools/penalty-calculator/itr-late-filing)
+- [TDS Late Filing Penalty](https://www.ollvy.com/tools/penalty-calculator/tds-late-filing)
+- [MCA Annual Filing Penalty](https://www.ollvy.com/tools/penalty-calculator/mca-annual-filing)
+- [Director KYC Penalty](https://www.ollvy.com/tools/penalty-calculator/director-kyc)
+
+## Optional
+
+- [Full documentation](https://www.ollvy.com/llms-full.txt)
