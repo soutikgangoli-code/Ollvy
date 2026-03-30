@@ -174,8 +174,14 @@ html {
   background: rgba(0, 0, 0, 0.2);
 }
 
-/* Smooth transitions */
-* {
+/* Smooth transitions for interactive elements */
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex]:not([tabindex="-1"]) {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -236,3 +242,4 @@ html {
   animation: card-expand 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
+

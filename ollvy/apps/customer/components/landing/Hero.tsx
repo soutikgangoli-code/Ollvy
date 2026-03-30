@@ -9,12 +9,33 @@ import { cn } from '@/lib/utils'
 function FloatingCards() {
   const [activeIndex, setActiveIndex] = useState(0)
 
-  // Cycle through cards every 10 seconds
+  // Cycle through cards every 10 seconds, pause when tab is inactive
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % 3)
-    }, 10000)
-    return () => clearInterval(interval)
+    let interval: NodeJS.Timeout | null = null
+
+    const startInterval = () => {
+      if (interval) clearInterval(interval)
+      interval = setInterval(() => {
+        setActiveIndex((prev) => (prev + 1) % 3)
+      }, 10000)
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (interval) clearInterval(interval)
+        interval = null
+      } else {
+        startInterval()
+      }
+    }
+
+    startInterval()
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      if (interval) clearInterval(interval)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [])
 
   return (

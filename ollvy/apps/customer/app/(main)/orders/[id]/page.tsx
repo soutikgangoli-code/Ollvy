@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -1360,10 +1361,13 @@ export default function OrderDetailPage() {
                 {/* Document Preview */}
                 <div className="relative bg-muted/20 rounded-lg overflow-hidden min-h-[300px] flex items-center justify-center">
                   {isImage && currentDoc.file_url ? (
-                    <img
+                    <Image
                       src={currentDoc.file_url}
                       alt={currentDoc.document_label}
+                      width={600}
+                      height={400}
                       className="max-h-[400px] w-auto object-contain"
+                      unoptimized
                     />
                   ) : (
                     <div className="text-center p-8">

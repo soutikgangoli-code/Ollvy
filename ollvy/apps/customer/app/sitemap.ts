@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { getAllServiceSlugs } from '@/lib/data/services'
 import { LEARN_PAGES } from '@/lib/guides/pages'
+import { GEO_ENABLED_SERVICES, CITIES } from '@/lib/geo'
 
 /**
  * Sitemap for Ollvy - per SEO mandate
@@ -42,8 +43,7 @@ const PENALTY_CALCULATOR_SLUGS = [
   'startup-dpiit-compliance',
 ]
 
-// Geo page slugs (if public) - add slugs here when geo pages are live
-const GEO_SLUGS: string[] = []
+// Geo pages are now dynamically generated from GEO_ENABLED_SERVICES and CITIES
 
 // Deadline campaign pages
 const DEADLINE_SLUGS = [
@@ -167,13 +167,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.75,
   }))
 
-  // Geo pages (if any exist)
-  const geoRoutes: MetadataRoute.Sitemap = GEO_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/in/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.65,
-  }))
+  // Geo pages - all service/city combinations
+  const geoRoutes: MetadataRoute.Sitemap = GEO_ENABLED_SERVICES.flatMap((service) =>
+    CITIES.map((city) => ({
+      url: `${BASE_URL}/${service}/${city.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    }))
+  )
 
   // Deadline campaign pages
   const deadlineRoutes: MetadataRoute.Sitemap = DEADLINE_SLUGS.map((slug) => ({

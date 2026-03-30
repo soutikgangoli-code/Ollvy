@@ -54,12 +54,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title,
     description,
     alternates: {
-      canonical: `https://ollvy.in/${serviceSlug}/${citySlug}`,
+      canonical: `https://www.ollvy.com/${serviceSlug}/${citySlug}`,
     },
     openGraph: {
       title,
       description,
-      url: `https://ollvy.in/${serviceSlug}/${citySlug}`,
+      url: `https://www.ollvy.com/${serviceSlug}/${citySlug}`,
       siteName: 'Ollvy',
       type: 'website',
       images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
@@ -110,37 +110,85 @@ export default async function GeoPage({ params }: PageProps) {
     getRelatedServicesBySlugs(service.relatedSlugs),
   ])
 
+  // Build LocalBusiness schema for local SEO
+  const localBusinessSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    '@id': `https://www.ollvy.com/${serviceSlug}/${citySlug}#localbusiness`,
+    name: `Ollvy - ${service.name} in ${city.name}`,
+    description: `Professional ${service.name.toLowerCase()} services in ${city.name}, ${city.state}. Verified CAs. Fixed prices. ${service.slaDays} working days delivery.`,
+    url: `https://www.ollvy.com/${serviceSlug}/${citySlug}`,
+    telephone: '+91-XXXXXXXXXX',
+    priceRange: `₹${adjustedService.ollvyFee.toLocaleString('en-IN')}`,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: city.name,
+      addressRegion: city.state,
+      addressCountry: 'IN',
+    },
+    areaServed: {
+      '@type': 'City',
+      name: city.name,
+    },
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: `${service.name} Services`,
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: service.name,
+            description: service.tagline,
+          },
+          price: adjustedService.ollvyFee.toString(),
+          priceCurrency: 'INR',
+        },
+      ],
+    },
+  }
+
+  // Service schema for detailed service info
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: `${service.name} in ${city.name}`,
+    provider: {
+      '@type': 'Organization',
+      name: 'Ollvy Technologies Private Limited',
+      url: 'https://www.ollvy.com',
+    },
+    areaServed: {
+      '@type': 'City',
+      name: city.name,
+      containedInPlace: {
+        '@type': 'State',
+        name: city.state,
+      },
+    },
+    offers: {
+      '@type': 'Offer',
+      price: adjustedService.ollvyFee.toString(),
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+    },
+    description: service.tagline,
+  }
+
   return (
     <>
-      {/* JSON-LD Structured Data per §17 */}
+      {/* LocalBusiness Schema for local SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Service',
-            name: `${service.name} in ${city.name}`,
-            provider: {
-              '@type': 'Organization',
-              name: 'Ollvy Technologies Private Limited',
-              url: 'https://ollvy.in',
-            },
-            areaServed: {
-              '@type': 'City',
-              name: city.name,
-              containedInPlace: {
-                '@type': 'State',
-                name: city.state,
-              },
-            },
-            offers: {
-              '@type': 'Offer',
-              price: adjustedService.ollvyFee.toString(),
-              priceCurrency: 'INR',
-              availability: 'https://schema.org/InStock',
-            },
-            description: service.tagline,
-          }),
+          __html: JSON.stringify(localBusinessSchema),
+        }}
+      />
+      {/* Service Schema for service details */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(serviceSchema),
         }}
       />
       <UnifiedServicePage
