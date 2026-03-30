@@ -76,6 +76,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Preconnect to Supabase for faster API calls */}
+        <link rel="preconnect" href="https://wsuleaypyjazcmmntcru.supabase.co" />
+        <link rel="dns-prefetch" href="https://wsuleaypyjazcmmntcru.supabase.co" />
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>

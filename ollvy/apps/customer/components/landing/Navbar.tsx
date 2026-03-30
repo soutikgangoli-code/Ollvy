@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, Loader2, User, LogOut, ShoppingBag, Repeat, X } from 'lucide-react'
+import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, User, LogOut, ShoppingBag, Repeat, X } from 'lucide-react'
 import {
   Sheet,
   SheetContent,
@@ -26,10 +26,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { getClient } from '@/lib/supabase'
-import type { ServicePackage } from '@/lib/types'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import type { NavbarServiceData } from '@/lib/data/services'
+
+interface NavbarProps {
+  services?: NavbarServiceData[]
+}
 
 const navLinks = [
   { href: '/services', label: 'Services', sectionId: null },
@@ -37,15 +40,16 @@ const navLinks = [
 ]
 
 // Popular services for crawler-friendly static links (always in DOM)
+// IMPORTANT: These must match actual database slugs to avoid 404s
 const popularServiceLinks = [
-  { href: '/services/private-limited-company-registration', label: 'Private Limited Company Registration' },
+  { href: '/services/pvt-ltd-incorporation', label: 'Private Limited Company Registration' },
   { href: '/services/gst-registration', label: 'GST Registration' },
   { href: '/services/trademark-registration', label: 'Trademark Registration' },
-  { href: '/services/fssai-license', label: 'FSSAI License' },
-  { href: '/services/llp-registration', label: 'LLP Registration' },
-  { href: '/services/msme-udyam', label: 'MSME Udyam Registration' },
+  { href: '/services/llp-incorporation', label: 'LLP Registration' },
+  { href: '/services/msme-registration', label: 'MSME Udyam Registration' },
   { href: '/services/business-itr', label: 'Business ITR Filing' },
-  { href: '/services/gst-monthly-filing', label: 'GST Monthly Filing' },
+  { href: '/services/gst-monthly-50l', label: 'GST Monthly Filing' },
+  { href: '/services/cloud-kitchen-setup', label: 'Cloud Kitchen Setup' },
 ]
 
 const toolsItems = [
@@ -92,15 +96,15 @@ function useActiveSection(sectionIds: (string | null)[]) {
   return activeSection
 }
 
-export function Navbar() {
+export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
   const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [services, setServices] = useState<ServicePackage[]>([])
-  const [isLoadingServices, setIsLoadingServices] = useState(false)
+  // Use pre-fetched services from server (no client-side Supabase fetch needed)
+  const services = prefetchedServices
   const activeSection = useActiveSection(navLinks.map((l) => l.sectionId))
   const { user, openAuthModal, logout } = useAuthStore()
 
@@ -108,37 +112,6 @@ export function Navbar() {
     await logout()
     window.location.href = '/'
   }
-
-  // Fetch active services from Supabase
-  const fetchServices = useCallback(async () => {
-    setIsLoadingServices(true)
-    try {
-      const supabase = getClient()
-      const { data, error } = await supabase
-        .from('service_packages')
-        .select('*')
-        .eq('is_active', true)
-        .order('display_order', { ascending: true })
-
-      if (error) {
-        console.error('Error fetching services:', error)
-        return
-      }
-
-      setServices(data || [])
-    } catch (err) {
-      console.error('Failed to fetch services:', err)
-    } finally {
-      setIsLoadingServices(false)
-    }
-  }, [])
-
-  // Fetch services when search dialog opens (desktop or mobile)
-  useEffect(() => {
-    if ((searchOpen || mobileSearchOpen) && services.length === 0) {
-      fetchServices()
-    }
-  }, [searchOpen, mobileSearchOpen, services.length, fetchServices])
 
   // Filter services based on search query
   const filteredServices = useMemo(() => {
@@ -517,12 +490,7 @@ export function Navbar() {
               </div>
             </DialogHeader>
             <div className="max-h-[60vh] overflow-y-auto">
-              {isLoadingServices ? (
-                <div className="px-4 py-8 flex items-center justify-center text-muted-foreground">
-                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                  Loading services...
-                </div>
-              ) : filteredServices.length === 0 ? (
+              {filteredServices.length === 0 ? (
                 <div className="px-4 py-8 text-center text-muted-foreground">
                   {searchQuery ? `No services found for "${searchQuery}"` : 'No active services found'}
                 </div>
@@ -582,22 +550,12 @@ export function Navbar() {
 
           {/* Search Results */}
           <div className="relative flex-1 overflow-y-auto bg-card">
-            {isLoadingServices ? (
-              <div className="px-4 py-12 flex flex-col items-center justify-center text-muted-foreground">
-                <Loader2 className="h-6 w-6 animate-spin mb-2" />
-                <span className="text-sm">Loading services...</span>
-              </div>
-            ) : filteredServices.length === 0 && searchQuery ? (
+            {filteredServices.length === 0 ? (
               <div className="px-4 py-12 text-center">
                 <Search className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
                 <p className="text-muted-foreground">
-                  No services found for "{searchQuery}"
+                  {searchQuery ? `No services found for "${searchQuery}"` : 'No active services found'}
                 </p>
-              </div>
-            ) : filteredServices.length === 0 ? (
-              <div className="px-4 py-12 text-center">
-                <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-muted-foreground" />
-                <p className="text-muted-foreground">Loading services...</p>
               </div>
             ) : (
               <div className="py-2">

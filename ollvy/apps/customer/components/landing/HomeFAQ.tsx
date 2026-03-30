@@ -8,6 +8,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
+// Show all FAQs on homepage
+
 const FAQ_DATA = [
   {
     id: 'q1',
@@ -479,33 +481,79 @@ const FAQ_DATA = [
   },
 ]
 
+// Homepage FAQ - shows all questions
 export function HomeFAQ() {
   return (
-    <section id="faqs" className="bg-background pt-24 pb-12">
+    <section id="faqs" className="bg-background py-28">
       <div className="container max-w-4xl">
         {/* Section Heading */}
-        <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center mb-12">
-          Frequently asked questions
-        </h2>
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
+            Frequently asked questions
+          </h2>
+        </div>
+
+        <Accordion type="single" collapsible className="w-full space-y-3">
+          {FAQ_DATA.map((faq, index) => (
+            <AccordionItem
+              key={faq.id}
+              value={faq.id}
+              className="rounded-2xl border border-border/50 bg-card overflow-hidden px-0 data-[state=open]:bg-muted/20 transition-all duration-300 data-[state=open]:shadow-sm"
+            >
+              <AccordionTrigger className="text-left hover:no-underline py-5 px-6 hover:bg-muted/30 transition-all duration-300 [&[data-state=open]]:border-b [&[data-state=open]]:border-border/30">
+                <div className="flex items-start gap-4 pr-4">
+                  <span className="font-mono text-xs text-muted-foreground mt-1 shrink-0">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="text-base md:text-lg font-medium text-foreground">
+                    {faq.question}
+                  </h3>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="text-sm text-foreground/90 leading-relaxed px-6 pb-6 pt-4 ml-10">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </div>
+    </section>
+  )
+}
+
+// Full FAQ component for /faq page - exports all questions
+export function FullFAQ() {
+  return (
+    <section id="faqs" className="bg-background py-28">
+      <div className="container max-w-4xl">
+        {/* Section Heading */}
+        <div className="text-center mb-14">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
+            Frequently asked questions
+          </h2>
+          <p className="text-lg text-muted-foreground mt-4">
+            Everything you need to know about compliance in India
+          </p>
+        </div>
 
         <Accordion type="multiple" className="w-full space-y-3">
           {FAQ_DATA.map((faq, index) => (
             <AccordionItem
               key={faq.id}
               value={faq.id}
-              className="rounded-lg border border-border/50 bg-card overflow-hidden px-0 data-[state=open]:bg-muted/20"
+              className="rounded-2xl border border-border/50 bg-card overflow-hidden px-0 data-[state=open]:bg-muted/20 transition-all duration-300 data-[state=open]:shadow-sm"
             >
-              <AccordionTrigger className="text-left hover:no-underline py-5 px-5 hover:bg-muted/30 transition-colors [&[data-state=open]]:border-b [&[data-state=open]]:border-border/30">
+              <AccordionTrigger className="text-left hover:no-underline py-5 px-6 hover:bg-muted/30 transition-all duration-300 [&[data-state=open]]:border-b [&[data-state=open]]:border-border/30">
                 <div className="flex items-start gap-4 pr-4">
-                  <span className="font-mono text-[10px] text-muted-foreground mt-1.5 shrink-0">
+                  <span className="font-mono text-xs text-muted-foreground mt-1 shrink-0">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  <h3 className="text-sm md:text-base font-medium text-foreground">
+                  <h3 className="text-base md:text-lg font-medium text-foreground">
                     {faq.question}
                   </h3>
                 </div>
               </AccordionTrigger>
-              <AccordionContent forceMount className="text-sm text-foreground/90 leading-relaxed px-5 pb-5 pt-4 ml-9">
+              <AccordionContent forceMount className="text-sm text-foreground/90 leading-relaxed px-6 pb-6 pt-4 ml-10">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

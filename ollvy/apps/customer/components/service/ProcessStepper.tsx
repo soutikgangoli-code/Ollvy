@@ -13,7 +13,6 @@ import {
 } from 'lucide-react'
 import { DBProcessStep } from '@/lib/data/services'
 import { Button } from '@/components/ui/button'
-import { motion, AnimatePresence } from 'framer-motion'
 
 const STEP_ICONS = {
   checklist: ClipboardList,
@@ -70,61 +69,55 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
       </div>
 
       {/* Step content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.2 }}
-          className="p-8 min-h-[280px] flex flex-col"
-        >
-          {/* Step icon */}
-          <div
-            className={cn(
-              'w-10 h-10 rounded-xl flex items-center justify-center mb-5',
-              step.isCompletion
-                ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
-                : 'bg-muted text-muted-foreground'
-            )}
-          >
-            <Icon size={18} />
-          </div>
-
-          {/* Title + timeline */}
-          <div className="flex items-start justify-between gap-4 mb-3">
-            <h3 className="text-lg font-semibold text-foreground leading-snug">
-              {step.title}
-            </h3>
-            <span className="shrink-0 text-xs text-muted-foreground border border-border rounded-full px-2.5 py-1 font-mono">
-              {step.timeline}
-            </span>
-          </div>
-
-          {/* Body */}
-          <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-            {step.body}
-          </p>
-
-          {/* Milestone */}
-          {step.milestone && (
-            <div className="mt-4 flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-2.5">
-              <div
-                className={cn(
-                  'w-1.5 h-1.5 rounded-full shrink-0',
-                  step.isCompletion
-                    ? 'bg-[hsl(var(--ollvy-green))]'
-                    : 'bg-muted-foreground'
-                )}
-              />
-              <p className="text-xs text-muted-foreground">
-                {step.isCompletion ? '✓ ' : ''}
-                {step.milestone}
-              </p>
-            </div>
+      <div
+        key={active}
+        className="p-8 min-h-[280px] flex flex-col"
+      >
+        {/* Step icon */}
+        <div
+          className={cn(
+            'w-10 h-10 rounded-xl flex items-center justify-center mb-5',
+            step.isCompletion
+              ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
+              : 'bg-muted text-muted-foreground'
           )}
-        </motion.div>
-      </AnimatePresence>
+        >
+          <Icon size={18} />
+        </div>
+
+        {/* Title + timeline */}
+        <div className="flex items-start justify-between gap-4 mb-3">
+          <h3 className="text-lg font-semibold text-foreground leading-snug">
+            {step.title}
+          </h3>
+          <span className="shrink-0 text-xs text-muted-foreground border border-border rounded-full px-2.5 py-1 font-mono">
+            {step.timeline}
+          </span>
+        </div>
+
+        {/* Body */}
+        <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+          {step.body}
+        </p>
+
+        {/* Milestone */}
+        {step.milestone && (
+          <div className="mt-4 flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-2.5">
+            <div
+              className={cn(
+                'w-1.5 h-1.5 rounded-full shrink-0',
+                step.isCompletion
+                  ? 'bg-[hsl(var(--ollvy-green))]'
+                  : 'bg-muted-foreground'
+              )}
+            />
+            <p className="text-xs text-muted-foreground">
+              {step.isCompletion ? '✓ ' : ''}
+              {step.milestone}
+            </p>
+          </div>
+        )}
+      </div>
 
       {/* Navigation */}
       <div className="flex justify-between px-8 pb-6">

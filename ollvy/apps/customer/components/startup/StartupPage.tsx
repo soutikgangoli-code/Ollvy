@@ -8,8 +8,18 @@ import { cn } from '@/lib/utils';
 import { SERVICE_CONFIGS } from '@/lib/services';
 import { getGuaranteedDate } from '@/lib/dates';
 
-// The startup compliance stack - ordered by dependency
-// locked: can only be booked after prerequisites
+/**
+ * Startup Compliance Stack - ordered by dependency
+ * locked: can only be booked after prerequisites
+ *
+ * IMPORTANT: Slug naming conventions (database slugs):
+ * - DPIIT/Startup India registration: 'startup-india' (NOT 'startup-india-dpiit')
+ * - MSME/Udyam registration: 'msme-registration' (NOT 'msme-udyam')
+ * - GST monthly filing: 'gst-monthly-50l' (NOT 'gst-monthly-filing')
+ *
+ * These slugs must match the 'slug' column in the service_packages database table.
+ * See FALLBACK_SERVICE_SLUGS in lib/data/services.ts for the canonical list.
+ */
 const STARTUP_STACK = [
   {
     stage: 1,
@@ -22,13 +32,13 @@ const STARTUP_STACK = [
         prerequisite: null,
       },
       {
-        slug: 'startup-india-dpiit',
+        slug: 'startup-india',
         note: 'Apply 5 days after CIN is issued.',
         prerequisite: 'pvt-ltd-incorporation',
         prereqNote: 'Requires CIN from incorporation',
       },
       {
-        slug: 'msme-udyam',
+        slug: 'msme-registration',
         note: 'Apply same week as DPIIT. Different registration, different benefits.',
         prerequisite: 'pvt-ltd-incorporation',
         prereqNote: 'Requires CIN',
@@ -274,7 +284,7 @@ export function StartupPage() {
 
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Button asChild>
-              <Link href="/services/startup-india-dpiit?utm_source=startup_page&utm_medium=dpiit_section">
+              <Link href="/services/startup-india?utm_source=startup_page&utm_medium=dpiit_section">
                 Apply for DPIIT Recognition - ₹4,999
               </Link>
             </Button>
@@ -368,7 +378,7 @@ export function StartupPage() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/services/startup-india-dpiit?utm_source=startup_page&utm_medium=footer_cta">
+              <Link href="/services/startup-india?utm_source=startup_page&utm_medium=footer_cta">
                 Already incorporated? Get DPIIT →
               </Link>
             </Button>

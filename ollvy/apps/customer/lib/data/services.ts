@@ -459,16 +459,98 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
   }
 }
 
+// Popular service data for homepage
+export interface PopularServiceData {
+  slug: string
+  name: string
+  description: string
+  ollvyFee: number
+  govtFee: number
+  slaDays: number
+  isRetainer: boolean
+}
+
+/**
+ * Fetch popular services for homepage
+ * Returns first 6 active services ordered by display_order from database
+ */
+export async function getPopularServices(): Promise<PopularServiceData[]> {
+  if (!supabaseServer) {
+    console.warn('[services] Supabase not configured for popular services')
+    return []
+  }
+
+  try {
+    const { data, error } = await supabaseServer
+      .from('service_packages')
+      .select(`
+        slug,
+        name,
+        short_description,
+        price_base_paisa,
+        price_govt_fees_paisa,
+        sla_working_days,
+        billing_cycle
+      `)
+      .eq('is_active', true)
+      .order('display_order', { ascending: true })
+      .limit(6)
+
+    if (error) {
+      console.error('Error fetching popular services:', error)
+      return []
+    }
+
+    if (!data || data.length === 0) {
+      console.warn('[services] No services returned from database')
+      return []
+    }
+
+    return data.map(pkg => ({
+      slug: pkg.slug,
+      name: pkg.name,
+      description: pkg.short_description ?? '',
+      ollvyFee: pkg.price_base_paisa / 100,
+      govtFee: pkg.price_govt_fees_paisa / 100,
+      slaDays: pkg.sla_working_days,
+      isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
+    }))
+  } catch (err) {
+    console.error('Failed to fetch popular services:', err)
+    return []
+  }
+}
+
 // Fallback slugs for static generation when Supabase is unavailable
+// IMPORTANT: These must match the actual slugs in the database to avoid 404s
+/**
+ * Fallback service slugs for static generation when Supabase is unavailable.
+ * These MUST match the actual 'slug' column values in the service_packages table.
+ *
+ * SLUG NAMING CONVENTIONS (common name -> database slug):
+ * ┌─────────────────────────────┬─────────────────────────┐
+ * │ Common/Alternative Name     │ Actual Database Slug    │
+ * ├─────────────────────────────┼─────────────────────────┤
+ * │ DPIIT, Startup India DPIIT  │ startup-india           │
+ * │ MSME, Udyam, MSME Udyam     │ msme-registration       │
+ * │ GST Monthly Filing          │ gst-monthly-50l         │
+ * │ Director KYC                │ director-kyc            │
+ * │ FSSAI License               │ fssai-license           │
+ * │ IEC Code                    │ iec-code                │
+ * └─────────────────────────────┴─────────────────────────┘
+ *
+ * When referencing services in code, ALWAYS use the database slug from this list.
+ * Do NOT invent slugs like 'startup-india-dpiit' or 'msme-udyam'.
+ */
 const FALLBACK_SERVICE_SLUGS = [
   'pvt-ltd-incorporation',
   'llp-incorporation',
   'gst-registration',
-  'msme-udyam',
+  'msme-registration',        // NOT 'msme-udyam'
+  'startup-india',            // NOT 'startup-india-dpiit'
   'trademark-registration',
-  'fssai-license',
   'cloud-kitchen-setup',
-  'gst-monthly-filing',
+  'gst-monthly-50l',          // NOT 'gst-monthly-filing'
   'business-itr',
   'mca-annual-filing',
   'gst-cancellation',
@@ -476,7 +558,6 @@ const FALLBACK_SERVICE_SLUGS = [
   'company-name-change',
   'din-reactivation',
   'tds-monthly-compliance',
-  'director-kyc',
 ]
 
 /**
@@ -663,4 +744,44 @@ export async function getUserComplianceObligations(userId: string) {
   }
 
   return data ?? []
+}
+
+/**
+ * Minimal service data for Navbar search
+ * Pre-fetched on the server to avoid client-side Supabase SDK
+ */
+export interface NavbarServiceData {
+  slug: string
+  name: string
+  short_description: string | null
+  order_type: 'one_time' | 'recurring'
+}
+
+/**
+ * Fetch services for Navbar search (server-side)
+ * Lightweight query - only fields needed for search
+ */
+export async function getNavbarServices(): Promise<NavbarServiceData[]> {
+  if (!supabaseServer) {
+    console.warn('[services] Supabase service role not configured')
+    return []
+  }
+
+  const { data, error } = await supabaseServer
+    .from('service_packages')
+    .select('slug, name, short_description, billing_cycle')
+    .eq('is_active', true)
+    .order('display_order', { ascending: true })
+
+  if (error) {
+    console.error('Error fetching navbar services:', error)
+    return []
+  }
+
+  return (data || []).map(pkg => ({
+    slug: pkg.slug,
+    name: pkg.name,
+    short_description: pkg.short_description,
+    order_type: pkg.billing_cycle === 'one_time' ? 'one_time' : 'recurring' as const,
+  }))
 }

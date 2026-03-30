@@ -76,15 +76,15 @@ export function ServiceCard({ service }: ServiceCardProps) {
   ].includes(service.slug)
 
   return (
-    <Link href={`/services/${service.slug}`} className="group block h-full">
-      <div className="h-full rounded-xl border border-border/60 bg-card hover:border-border hover:bg-muted/30 transition-all duration-200 overflow-hidden flex flex-col">
+    <Link href={`/services/${service.slug}`} prefetch={true} className="block h-full">
+      <div className="h-full rounded-xl border border-border/60 bg-card hover:bg-muted/30 transition-colors duration-150 overflow-hidden flex flex-col">
         {/* Category Header */}
         <div className="px-5 pt-5 pb-0">
           <div className="flex items-center justify-between">
             <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
               {service.is_bundle ? 'Bundle' : categoryLabel}
             </span>
-            <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/40 group-hover:text-muted-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+            <ArrowUpRight className="h-3.5 w-3.5 text-muted-foreground/60" />
           </div>
         </div>
 

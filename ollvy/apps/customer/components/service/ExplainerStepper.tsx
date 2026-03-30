@@ -5,7 +5,6 @@ import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DBServiceExplainerStep } from '@/lib/data/services'
 import { Button } from '@/components/ui/button'
-import { motion, AnimatePresence } from 'framer-motion'
 
 interface ExplainerStepperProps {
   serviceName: string
@@ -85,20 +84,14 @@ export function ExplainerStepper({ serviceName, steps }: ExplainerStepperProps) 
       </div>
 
       {/* Step content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.2 }}
-          className="p-6 min-h-[120px] flex flex-col"
-        >
-          <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-            {step.body}
-          </p>
-        </motion.div>
-      </AnimatePresence>
+      <div
+        key={active}
+        className="p-6 min-h-[120px] flex flex-col"
+      >
+        <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+          {step.body}
+        </p>
+      </div>
 
       {/* Navigation - hide on last step */}
       {active < steps.length - 1 && (

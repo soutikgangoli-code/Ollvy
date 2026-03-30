@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/landing/Navbar'
+import { NavbarServer } from '@/components/landing/NavbarServer'
 import { Footer } from '@/components/landing/Footer'
 
 export default function LearnLayout({
@@ -8,7 +8,7 @@ export default function LearnLayout({
 }) {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <NavbarServer />
       <main className="pt-16">
         {children}
       </main>

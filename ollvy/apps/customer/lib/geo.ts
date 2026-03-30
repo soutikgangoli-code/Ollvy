@@ -19,13 +19,11 @@ export const CITIES: CityConfig[] = [
   { slug: 'nagpur', name: 'Nagpur', state: 'Maharashtra' },
   // Karnataka
   { slug: 'bangalore', name: 'Bangalore', state: 'Karnataka' },
-  { slug: 'bengaluru', name: 'Bengaluru', state: 'Karnataka' },
   // Tamil Nadu
   { slug: 'chennai', name: 'Chennai', state: 'Tamil Nadu' },
   { slug: 'coimbatore', name: 'Coimbatore', state: 'Tamil Nadu' },
   // Delhi NCR
   { slug: 'delhi', name: 'Delhi', state: 'Delhi' },
-  { slug: 'new-delhi', name: 'New Delhi', state: 'Delhi' },
   { slug: 'gurgaon', name: 'Gurgaon', state: 'Haryana' },
   { slug: 'noida', name: 'Noida', state: 'Uttar Pradesh' },
   // Gujarat

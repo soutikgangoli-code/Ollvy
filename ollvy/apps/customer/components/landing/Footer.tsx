@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { Linkedin, Twitter } from 'lucide-react'
 
@@ -114,9 +112,17 @@ export function Footer() {
               { label: 'Pvt Ltd Registration', href: '/services/pvt-ltd-incorporation' },
               { label: 'LLP Registration', href: '/services/llp-incorporation' },
               { label: 'GST Registration', href: '/services/gst-registration' },
+              { label: 'GST Monthly Filing', href: '/services/gst-monthly-50l' },
+              { label: 'GST Cancellation', href: '/services/gst-cancellation' },
+              { label: 'GST Revocation', href: '/services/gst-revocation' },
               { label: 'Trademark Registration', href: '/services/trademark-registration' },
+              { label: 'MSME Registration', href: '/services/msme-registration' },
+              { label: 'Cloud Kitchen Setup', href: '/services/cloud-kitchen-setup' },
               { label: 'Business ITR Filing', href: '/services/business-itr' },
               { label: 'Annual Compliance', href: '/services/mca-annual-filing' },
+              { label: 'Company Name Change', href: '/services/company-name-change' },
+              { label: 'DIN Reactivation', href: '/services/din-reactivation' },
+              { label: 'TDS Compliance', href: '/services/tds-monthly-compliance' },
               { label: 'All Services', href: '/services' },
             ]}
           />

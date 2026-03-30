@@ -1,8 +1,19 @@
 /**
- * Service Configuration Library
+ * Service Configuration Library (LEGACY - Static Configs)
  *
  * Per spec §18 - Service Detail Pages
- * Each service has a comprehensive config that powers the service detail page.
+ *
+ * ⚠️  IMPORTANT: This file contains STATIC service configs for backwards compatibility.
+ * The PRIMARY source of truth for services is the DATABASE (service_packages table).
+ *
+ * To check what services exist:
+ * - Database slugs: See FALLBACK_SERVICE_SLUGS in lib/data/services.ts
+ * - Database fetch: Use getServiceBySlugFromDB() from lib/data/services.ts
+ *
+ * Common slug mistakes to avoid:
+ * - 'startup-india-dpiit' -> correct: 'startup-india'
+ * - 'msme-udyam' -> correct: 'msme-registration'
+ * - 'gst-monthly-filing' -> correct: 'gst-monthly-50l'
  */
 
 import { ReactNode } from 'react'

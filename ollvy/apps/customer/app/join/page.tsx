@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Navbar } from '@/components/landing/Navbar'
+import { NavbarServer } from '@/components/landing/NavbarServer'
 import { Footer } from '@/components/landing/Footer'
 import { CheckCircle, Clock, IndianRupee, Shield, Users } from 'lucide-react'
 
@@ -90,7 +90,7 @@ const benefits = [
 export default function JoinPage() {
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <NavbarServer />
 
       <main className="pt-16">
         {/* Hero */}

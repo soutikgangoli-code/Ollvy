@@ -86,7 +86,7 @@ export function LearnServiceCTA({ primary, secondary }: {
             File SPICe+ directly on MCA21 →
           </a>
         )}
-        {primary.slug === 'startup-india-dpiit' && (
+        {primary.slug === 'startup-india' && (
           <a href="https://www.startupindia.gov.in/content/sih/en/startupgov/startup-recognition-page.html"
             target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
             Apply directly on Startup India portal →

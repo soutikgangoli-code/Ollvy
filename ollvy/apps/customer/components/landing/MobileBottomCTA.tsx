@@ -10,12 +10,16 @@ export function MobileBottomCTA() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const howItWorksSection = document.getElementById('how-it-works')
-      if (!howItWorksSection) return
+      const productShowcase = document.getElementById('product-showcase')
+      if (!productShowcase) {
+        // Fallback: show after scrolling past half the viewport
+        setIsVisible(window.scrollY > window.innerHeight * 0.5)
+        return
+      }
 
-      const rect = howItWorksSection.getBoundingClientRect()
-      // Show the bar once the HowItWorks section header scrolls past the top of viewport
-      setIsVisible(rect.top < 100)
+      const rect = productShowcase.getBoundingClientRect()
+      // Show the bar once the ProductShowcase section starts entering viewport
+      setIsVisible(rect.top < window.innerHeight * 0.8)
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
