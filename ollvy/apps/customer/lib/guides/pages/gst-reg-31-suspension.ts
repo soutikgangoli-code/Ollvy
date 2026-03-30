@@ -10,8 +10,8 @@ export const gstReg31Suspension: LearnPageConfig = {
   lastReviewed: 'March 2025',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-revocation',
-  ctaSecondarySlug: 'gst-monthly-filing',
-  relatedServiceSlugs: ['gst-revocation', 'gst-monthly-filing'],
+  ctaSecondarySlug: 'gst-monthly',
+  relatedServiceSlugs: ['gst-revocation', 'gst-monthly'],
   relatedLearnSlugs: ['gst-reg-17-cancellation-notice', 'gst-asmt-10-notice'],
   relatedTools: {
     penaltyCalculators: ['gst-late-filing'],

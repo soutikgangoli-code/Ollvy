@@ -9,9 +9,9 @@ export const gstDrc01bMismatch: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/gst-drc-01b-mismatch',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
-  ctaServiceSlug: 'gst-monthly-filing',
+  ctaServiceSlug: 'gst-monthly',
   ctaSecondarySlug: 'gst-registration',
-  relatedServiceSlugs: ['gst-monthly-filing', 'gst-registration'],
+  relatedServiceSlugs: ['gst-monthly', 'gst-registration'],
   relatedLearnSlugs: ['gst-drc-01-notice', 'gst-asmt-10-notice', 'gst-gstr2b-itc-mismatch'],
   relatedTools: {
     penaltyCalculators: ['gst-late-filing', 'gst-demand-notice'],

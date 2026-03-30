@@ -314,7 +314,7 @@ function GSTCalculatorInner() {
           dueDate={getDueDate(returnType, filingFrequency)}
           statute={result.statute}
           ctaText="File GST Returns"
-          ctaHref="/services/gst-monthly-filing"
+          ctaHref="/services/gst-monthly"
           showCta={result.total > 0}
           docChecklistHref="/tools/documents/gst-registration"
           docChecklistText="GST registration documents"

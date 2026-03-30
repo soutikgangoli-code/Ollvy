@@ -15,7 +15,7 @@ import { getGuaranteedDate } from '@/lib/dates';
  * IMPORTANT: Slug naming conventions (database slugs):
  * - DPIIT/Startup India registration: 'startup-india' (NOT 'startup-india-dpiit')
  * - MSME/Udyam registration: 'msme-registration' (NOT 'msme-udyam')
- * - GST monthly filing: 'gst-monthly-50l' (NOT 'gst-monthly-filing')
+ * - GST monthly filing: 'gst-monthly' (NOT 'gst-monthly-filing' or 'gst-monthly-50l')
  *
  * These slugs must match the 'slug' column in the service_packages database table.
  * See FALLBACK_SERVICE_SLUGS in lib/data/services.ts for the canonical list.
@@ -74,7 +74,7 @@ const STARTUP_STACK = [
     tagline: 'Month 2 onwards',
     services: [
       {
-        slug: 'gst-monthly-filing',
+        slug: 'gst-monthly',
         note: 'GSTR-1 and GSTR-3B. Due 11th and 20th every month. One CA handles both.',
         prerequisite: 'gst-registration',
         prereqNote: 'Requires active GSTIN',

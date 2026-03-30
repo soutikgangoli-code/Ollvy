@@ -38,7 +38,7 @@ export const ESIC_DEFAULT_PENALTY = 5000 // ₹5,000 per default
 
 // Service slugs (for linking to service pages)
 export const SERVICE_SLUGS = {
-  gst: 'gst-monthly-50l',
+  gst: 'gst-monthly',
   mca: 'mca-annual-filing',
   directorKyc: 'director-kyc',
   itr: 'business-itr',

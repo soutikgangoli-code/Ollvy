@@ -150,7 +150,7 @@ export const trademarkRegistration: ServiceConfig = {
     '✓ Certificate received',
   ],
 
-  relatedSlugs: ['pvt-ltd-incorporation', 'msme-udyam'],
+  relatedSlugs: ['pvt-ltd-incorporation', 'msme-registration'],
 
   faqs: [
     {

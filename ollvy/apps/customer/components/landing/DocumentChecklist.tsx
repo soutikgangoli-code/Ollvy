@@ -68,7 +68,7 @@ const SERVICE_DOCUMENT_DATA: Record<string, DocumentCategory[]> = {
   // These services use related document sets as fallback
   'mca-annual-filing': pvtLtdDocuments, // Company docs needed for MCA filing
   'director-kyc': pvtLtdDocuments, // Director docs for KYC
-  'gst-monthly-filing': gstDocuments, // GST docs for monthly compliance
+  'gst-monthly': gstDocuments, // GST docs for monthly compliance
   'gst-annual-return': gstDocuments,
   'tds-monthly-compliance': businessITRDocuments,
   'payroll-management': businessITRDocuments,

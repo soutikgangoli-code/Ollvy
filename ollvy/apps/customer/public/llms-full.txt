@@ -77,7 +77,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - Due Date: September 30 for audit cases, July 31 for non-audit
 
 #### GST Monthly Filing
-- URL: https://www.ollvy.com/services/gst-monthly-filing
+- URL: https://www.ollvy.com/services/gst-monthly
 - Description: Monthly GST compliance - GSTR-1 (outward supplies) by 11th, GSTR-3B (summary return) by 20th. Includes reconciliation and ITC matching.
 - Frequency: Monthly retainer
 - Mandatory for: All GST registered businesses
@@ -116,7 +116,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 ### Business Licenses
 
 #### MSME/Udyam Registration
-- URL: https://www.ollvy.com/services/msme-udyam
+- URL: https://www.ollvy.com/services/msme-registration
 - Description: Get Udyam Registration Certificate for MSME benefits - priority sector lending, lower interest rates, government tender preference.
 - Timeline: 1-2 working days
 - Benefits: Credit guarantee, subsidy schemes, lower interest rates

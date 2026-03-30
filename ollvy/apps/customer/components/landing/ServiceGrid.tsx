@@ -55,7 +55,7 @@ const MVP_SERVICES: ServiceCardProps[] = [
     totalRatings: 243,
   },
   {
-    slug: 'gst-monthly-filing',
+    slug: 'gst-monthly',
     name: 'GST Monthly Filing',
     description:
       "GSTR-1 filed by the 11th. GSTR-3B filed by the 20th. Every month. Acknowledgements saved. Monthly report sent. You don't think about it.",

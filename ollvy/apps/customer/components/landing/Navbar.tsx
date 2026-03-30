@@ -48,7 +48,7 @@ const popularServiceLinks = [
   { href: '/services/llp-incorporation', label: 'LLP Registration' },
   { href: '/services/msme-registration', label: 'MSME Udyam Registration' },
   { href: '/services/business-itr', label: 'Business ITR Filing' },
-  { href: '/services/gst-monthly-50l', label: 'GST Monthly Filing' },
+  { href: '/services/gst-monthly', label: 'GST Monthly Filing' },
   { href: '/services/cloud-kitchen-setup', label: 'Cloud Kitchen Setup' },
 ]
 

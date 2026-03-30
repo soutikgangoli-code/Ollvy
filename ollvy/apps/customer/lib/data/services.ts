@@ -533,7 +533,7 @@ export async function getPopularServices(): Promise<PopularServiceData[]> {
  * ├─────────────────────────────┼─────────────────────────┤
  * │ DPIIT, Startup India DPIIT  │ startup-india           │
  * │ MSME, Udyam, MSME Udyam     │ msme-registration       │
- * │ GST Monthly Filing          │ gst-monthly-50l         │
+ * │ GST Monthly Filing          │ gst-monthly             │
  * │ Director KYC                │ director-kyc            │
  * │ FSSAI License               │ fssai-license           │
  * │ IEC Code                    │ iec-code                │
@@ -550,7 +550,7 @@ const FALLBACK_SERVICE_SLUGS = [
   'startup-india',            // NOT 'startup-india-dpiit'
   'trademark-registration',
   'cloud-kitchen-setup',
-  'gst-monthly-50l',          // NOT 'gst-monthly-filing'
+  'gst-monthly',              // NOT 'gst-monthly-filing' or 'gst-monthly-50l'
   'business-itr',
   'mca-annual-filing',
   'gst-cancellation',

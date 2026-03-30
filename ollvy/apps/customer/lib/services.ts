@@ -13,7 +13,7 @@
  * Common slug mistakes to avoid:
  * - 'startup-india-dpiit' -> correct: 'startup-india'
  * - 'msme-udyam' -> correct: 'msme-registration'
- * - 'gst-monthly-filing' -> correct: 'gst-monthly-50l'
+ * - 'gst-monthly-filing' or 'gst-monthly-50l' -> correct: 'gst-monthly'
  */
 
 import { ReactNode } from 'react'

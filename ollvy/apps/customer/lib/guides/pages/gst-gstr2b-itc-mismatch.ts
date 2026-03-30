@@ -9,9 +9,9 @@ export const gstGstr2bItcMismatch: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/gst-gstr2b-itc-mismatch',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
-  ctaServiceSlug: 'gst-monthly-filing',
+  ctaServiceSlug: 'gst-monthly',
   ctaSecondarySlug: 'gst-registration',
-  relatedServiceSlugs: ['gst-monthly-filing', 'gst-registration'],
+  relatedServiceSlugs: ['gst-monthly', 'gst-registration'],
   relatedLearnSlugs: ['gst-asmt-10-notice', 'gst-drc-01-notice', 'gst-drc-01b-mismatch'],
   relatedTools: {
     penaltyCalculators: ['gst-late-filing', 'gst-demand-notice'],

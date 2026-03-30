@@ -153,7 +153,7 @@ export const gstRegistration: ServiceConfig = {
     '✓ Officer query handled',
   ],
 
-  relatedSlugs: ['gst-monthly-filing', 'pvt-ltd-incorporation', 'business-itr'],
+  relatedSlugs: ['gst-monthly', 'pvt-ltd-incorporation', 'business-itr'],
 
   faqs: [
     {
@@ -207,7 +207,7 @@ export const gstRegistration: ServiceConfig = {
       explanation: 'GSTR-1 by 11th, GSTR-3B by 20th. Every month. Mandatory.',
       price: 'From ₹2,999/month',
       type: 'required',
-      slug: 'gst-monthly-filing',
+      slug: 'gst-monthly',
     },
     {
       name: 'GSTR-9 Annual Return',

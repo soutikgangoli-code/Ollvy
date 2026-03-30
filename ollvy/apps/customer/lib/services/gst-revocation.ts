@@ -135,7 +135,7 @@ export const gstRevocation: ServiceConfig = {
     '✓ Moved fast on deadline',
   ],
 
-  relatedSlugs: ['gst-registration', 'gst-cancellation', 'gst-monthly-filing'],
+  relatedSlugs: ['gst-registration', 'gst-cancellation', 'gst-monthly'],
 
   faqs: [
     {
@@ -189,7 +189,7 @@ export const gstRevocation: ServiceConfig = {
       explanation: 'Once GSTIN is restored, monthly returns are mandatory again.',
       price: 'From ₹2,999/month',
       type: 'required',
-      slug: 'gst-monthly-filing',
+      slug: 'gst-monthly',
     },
   ],
 

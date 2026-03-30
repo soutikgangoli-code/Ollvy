@@ -141,7 +141,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
     '✓ No surprises',
   ],
 
-  relatedSlugs: ['gst-monthly-filing', 'payroll-management', 'business-itr'],
+  relatedSlugs: ['gst-monthly', 'payroll-management', 'business-itr'],
 
   faqs: [
     {

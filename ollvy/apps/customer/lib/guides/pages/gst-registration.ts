@@ -10,7 +10,7 @@ export const gstRegistration: LearnPageConfig = {
   lastReviewed: 'March 2025',
   category: 'Tax',
   ctaServiceSlug: 'gst-registration',
-  relatedServiceSlugs: ['gst-registration', 'gst-monthly-filing'],
+  relatedServiceSlugs: ['gst-registration', 'gst-monthly'],
   relatedLearnSlugs: ['pvt-ltd-vs-llp', 'do-i-need-to-file-itr', 'is-msme-registration-worth-it'],
   relatedTools: {
     penaltyCalculators: ['gst-late-filing', 'gst-demand-notice'],

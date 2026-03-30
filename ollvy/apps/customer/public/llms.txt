@@ -23,7 +23,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 
 ### Tax Filing
 - [Business ITR Filing](https://www.ollvy.com/services/business-itr) - Company and LLP income tax returns
-- [GST Monthly Filing](https://www.ollvy.com/services/gst-monthly-filing) - GSTR-1, GSTR-3B monthly compliance
+- [GST Monthly Filing](https://www.ollvy.com/services/gst-monthly) - GSTR-1, GSTR-3B monthly compliance
 - [TDS Monthly Compliance](https://www.ollvy.com/services/tds-monthly-compliance) - TDS return filing and payment
 
 ### Company Compliance
@@ -32,7 +32,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - [DIN Reactivation](https://www.ollvy.com/services/din-reactivation) - Reactivate deactivated DIN
 
 ### Business Licenses
-- [MSME/Udyam Registration](https://www.ollvy.com/services/msme-udyam) - MSME certificate for benefits
+- [MSME/Udyam Registration](https://www.ollvy.com/services/msme-registration) - MSME certificate for benefits
 - [Trademark Registration](https://www.ollvy.com/services/trademark-registration) - Protect your brand name and logo
 - [FSSAI License](https://www.ollvy.com/services/fssai-license) - Food business license
 - [Cloud Kitchen Setup](https://www.ollvy.com/services/cloud-kitchen-setup) - Complete cloud kitchen compliance bundle

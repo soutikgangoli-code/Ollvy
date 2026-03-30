@@ -4,7 +4,7 @@ import { LearnPageConfig } from '../pages';
 export const rocAnnualFilingDefaultNotice: LearnPageConfig = {
   slug: 'roc-annual-filing-default-notice',
   title: 'ROC / MCA Show Cause Notice for Annual Filing Default',
-  seoTitle: 'ROC Annual Filing Default Notice 2025: Director Disqualification Risk | Ollvy',
+  seoTitle: 'ROC Annual Filing Default Notice 2025 | Ollvy',
   seoDescription: 'Got an ROC or MCA show cause notice for not filing annual returns? Understand the director disqualification risk, penalties, and how to regularise before it is too late.',
   canonicalUrl: 'https://www.ollvy.com/guides/roc-annual-filing-default-notice',
   lastReviewed: 'March 2025',

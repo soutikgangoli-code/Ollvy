@@ -134,9 +134,9 @@ The entire process happens online at gst.gov.in - no paper forms, no office visi
     'Not responding to officer queries within 7 working days - automatic rejection',
   ],
   nextSteps: [
-    { title: 'GST Monthly Filing (GSTR-3B)', href: '/services/gst-monthly-filing' },
+    { title: 'GST Monthly Filing (GSTR-3B)', href: '/services/gst-monthly' },
     { title: 'Business ITR Filing', href: '/services/business-itr' },
-    { title: 'MSME/Udyam Registration', href: '/services/msme-udyam' },
+    { title: 'MSME/Udyam Registration', href: '/services/msme-registration' },
   ],
 }
 
@@ -543,7 +543,7 @@ The upside: minimal compliance, easy to start. The downside: you bear unlimited 
   nextSteps: [
     { title: 'GST Registration', href: '/tools/documents/gst-registration' },
     { title: 'ITR Filing (Individual / Proprietor)', href: '/tools/documents/individual-itr' },
-    { title: 'Udyam MSME Registration', href: '/services/msme-udyam' },
+    { title: 'Udyam MSME Registration', href: '/services/msme-registration' },
     { title: 'Shop and Establishment Licence', href: '/services/shop-establishment' },
   ],
 }
@@ -747,7 +747,7 @@ For FY 2025-26, a tax audit by a Chartered Accountant is mandatory if your busin
     'Treating capital expenditure as revenue expenditure (or vice versa) incorrectly',
   ],
   nextSteps: [
-    { title: 'GST Monthly Filing', href: '/services/gst-monthly-filing' },
+    { title: 'GST Monthly Filing', href: '/services/gst-monthly' },
     { title: 'MCA Annual Filing (for Companies)', href: '/services/mca-annual-filing' },
     { title: 'TDS Monthly Compliance', href: '/services/tds-monthly-compliance' },
   ],
@@ -851,7 +851,7 @@ Your registration protects you for 10 years from the date of application, and yo
   nextSteps: [
     { title: 'Private Limited Company Registration', href: '/tools/documents/private-limited-company' },
     { title: 'GST Registration', href: '/tools/documents/gst-registration' },
-    { title: 'MSME/Udyam Registration', href: '/services/msme-udyam' },
+    { title: 'MSME/Udyam Registration', href: '/services/msme-registration' },
   ],
 }
 

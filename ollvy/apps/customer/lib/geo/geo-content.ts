@@ -175,7 +175,7 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
     ],
   },
 
-  'msme-udyam__delhi': {
+  'msme-registration__delhi': {
     jurisdictionNote: `MSME (Udyam) registration is done through the central Udyam portal (udyamregistration.gov.in). There's no state-specific registration process. Your Udyam certificate shows your business address state, but the registration itself is federal.`,
     citySpecificNotes: [
       `Delhi-based MSMEs can access several state-specific benefits in addition to central MSME schemes. The Delhi government offers additional subsidies for technology adoption and skill development.`,

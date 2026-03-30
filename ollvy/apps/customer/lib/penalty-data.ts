@@ -19,7 +19,7 @@ export interface PenaltyData {
 export const PENALTY_TABLE: readonly PenaltyData[] = [
   {
     service: 'GST Monthly Filing',
-    slug: 'gst-monthly-filing',
+    slug: 'gst-monthly',
     penaltyPerDay: 100, // ₹100/day per return (CGST+SGST combined = ₹200/day)
     interestRate: 0.18, // 18% annual on outstanding tax
     statute: 'CGST Act 2017, Section 47',

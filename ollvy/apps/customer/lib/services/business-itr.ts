@@ -134,7 +134,7 @@ export const businessItr: ServiceConfig = {
     '✓ No surprises',
   ],
 
-  relatedSlugs: ['director-kyc', 'mca-annual-filing', 'gst-monthly-filing'],
+  relatedSlugs: ['director-kyc', 'mca-annual-filing', 'gst-monthly'],
 
   faqs: [
     {

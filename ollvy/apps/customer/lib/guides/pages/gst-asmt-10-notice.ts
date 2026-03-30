@@ -9,8 +9,8 @@ export const gstAsmt10Notice: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/gst-asmt-10-notice',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
-  ctaServiceSlug: 'gst-monthly-filing',
-  relatedServiceSlugs: ['gst-monthly-filing', 'gst-registration'],
+  ctaServiceSlug: 'gst-monthly',
+  relatedServiceSlugs: ['gst-monthly', 'gst-registration'],
   relatedLearnSlugs: ['gst-drc-01-notice', 'gst-drc-01a-pre-notice', 'gst-asmt-14-best-judgment'],
   relatedTools: {
     penaltyCalculators: ['gst-late-filing', 'gst-demand-notice'],

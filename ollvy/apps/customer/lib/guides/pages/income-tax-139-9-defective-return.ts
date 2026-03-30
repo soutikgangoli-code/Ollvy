@@ -10,7 +10,7 @@ export const incomeTax1399DefectiveReturn: LearnPageConfig = {
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
-  relatedServiceSlugs: ['itr-filing', 'itr-notice-response'],
+  relatedServiceSlugs: ['business-itr', 'mca-annual-filing', 'director-kyc'],
   relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-142-1-notice', 'income-tax-143-2-scrutiny'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],

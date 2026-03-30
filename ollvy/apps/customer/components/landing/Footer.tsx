@@ -124,7 +124,7 @@ export function Footer() {
               { label: 'Pvt Ltd Registration', href: '/services/pvt-ltd-incorporation' },
               { label: 'LLP Registration', href: '/services/llp-incorporation' },
               { label: 'GST Registration', href: '/services/gst-registration' },
-              { label: 'GST Monthly Filing', href: '/services/gst-monthly-50l' },
+              { label: 'GST Monthly Filing', href: '/services/gst-monthly' },
               { label: 'GST Cancellation', href: '/services/gst-cancellation' },
               { label: 'GST Revocation', href: '/services/gst-revocation' },
               { label: 'Trademark Registration', href: '/services/trademark-registration' },

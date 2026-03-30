@@ -7,6 +7,6 @@ export const LAST_REVIEWED: Record<string, string> = {
   'gst-registration': 'March 2025',
   'director-kyc': 'March 2025',
   'business-itr': 'March 2025',
-  'gst-monthly-filing': 'March 2025',
+  'gst-monthly': 'March 2025',
   'trademark-registration': 'March 2025',
 }

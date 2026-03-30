@@ -40,7 +40,7 @@ const DUE_DATES: Record<string, string> = {
   'director-kyc': '2025-09-30',
   'mca-annual-filing': '2025-10-30', // 30 days after AGM (assumed Sep 30)
   'tds-monthly-compliance': '2025-04-07', // 7th of following month
-  'gst-monthly-filing': '2025-04-20', // 20th of following month
+  'gst-monthly': '2025-04-20', // 20th of following month
   'pf-compliance': '2025-04-15', // 15th of following month
   'esic-compliance': '2025-04-15', // 15th of following month
 }
@@ -117,7 +117,7 @@ function calculateGstPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null 
   return {
     slug: 'gst',
     serviceName: 'GST Monthly Filing',
-    dueDate: DUE_DATES['gst-monthly-filing'],
+    dueDate: DUE_DATES['gst-monthly'],
     daysLate: inputs.daysLate,
     penaltyAmount,
     interestAmount,

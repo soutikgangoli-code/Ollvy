@@ -89,7 +89,7 @@ export const DEADLINES: DeadlineConfig[] = [
   },
   {
     slug: 'gst-annual-2025',
-    serviceSlug: 'gst-monthly-filing',
+    serviceSlug: 'gst-monthly',
     serviceName: 'GST Annual Return (GSTR-9)',
     eventLabel: 'FY 2024-25 Annual Return',
     dueDate: '2025-12-31',
