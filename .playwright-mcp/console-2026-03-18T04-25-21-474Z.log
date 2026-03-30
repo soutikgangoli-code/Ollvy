@@ -1,8 +1,0 @@
-[    1354ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/favicon.ico:0
-[   24055ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/services/fssai-annual-return:0
-[   24305ms] [WARNING] No default component was found for a parallel route rendered on this page. Falling back to nearest NotFound boundary.
-Learn more: https://nextjs.org/docs/app/building-your-application/routing/parallel-routes#defaultjs
-
- @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/shared/lib/utils/warn-once.js:15
-[   56698ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0
-[   56711ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/functions/v1/get-public-profile:0

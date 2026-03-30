@@ -1,1 +1,0 @@
-[   72891ms] [WARNING] Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element: JSHandle@node @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.18_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/components/layout-router.js:109

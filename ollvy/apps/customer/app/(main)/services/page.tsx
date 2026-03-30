@@ -158,42 +158,12 @@ export default async function ServicesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
       />
-      {/* H1 and intro content outside Suspense for SEO crawlers */}
-      <div className="container pt-12 pb-8">
+      {/* H1 outside Suspense for SEO crawlers */}
+      <div className="container pt-12 pb-6">
         <h1 className="text-3xl font-semibold text-foreground">All Services</h1>
-        <p className="text-muted-foreground mt-2 max-w-2xl">
-          Fixed-price compliance packages for startups and SMEs. Company registration, GST filing,
-          trademark protection, tax returns, and ongoing compliance - all handled by our team of
-          chartered accountants and company secretaries.
+        <p className="text-muted-foreground mt-2">
+          Fixed-price compliance packages with transparent pricing.
         </p>
-
-        {/* SEO content - service categories overview */}
-        <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
-            <h2 className="text-sm font-semibold text-foreground">Company Registration</h2>
-            <p className="text-xs text-muted-foreground mt-1">
-              Private Limited, LLP, OPC incorporation with MCA filing, DSC, DIN, and PAN/TAN registration included.
-            </p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
-            <h2 className="text-sm font-semibold text-foreground">GST Services</h2>
-            <p className="text-xs text-muted-foreground mt-1">
-              GST registration, monthly GSTR-1 and GSTR-3B filing, annual returns, and GST cancellation or revocation.
-            </p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
-            <h2 className="text-sm font-semibold text-foreground">Tax Filing</h2>
-            <p className="text-xs text-muted-foreground mt-1">
-              Business ITR filing for companies, LLPs, and partnerships. TDS returns, tax audit coordination, and advance tax.
-            </p>
-          </div>
-          <div className="p-4 rounded-lg bg-muted/30 border border-border/50">
-            <h2 className="text-sm font-semibold text-foreground">Trademark & Licensing</h2>
-            <p className="text-xs text-muted-foreground mt-1">
-              Trademark registration, FSSAI food license, IEC for import/export, and MSME Udyam registration.
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Client component for interactive search/filter with initial services */}
