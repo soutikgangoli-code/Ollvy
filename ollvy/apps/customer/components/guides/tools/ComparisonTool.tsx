@@ -119,7 +119,7 @@ export function ComparisonTool({ config }: {
 
           {recommendation && (result.type === 'eligible' || result.type === 'mandatory' || result.type === 'recommended') && (
             <Button className="w-full" asChild>
-              <Link href={result.ctaHref ?? `/checkout/${recommendation.slug}?utm_source=guides_tool&utm_medium=comparison_result`}>
+              <Link href={result.ctaHref ?? `/checkout/${recommendation.slug}`}>
                 {result.ctaLabel ?? `Book ${recommendation.name} - ${recommendation.price}`}
               </Link>
             </Button>

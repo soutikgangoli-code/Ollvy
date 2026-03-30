@@ -193,7 +193,7 @@ export const trademarkRegistration: ServiceConfig = {
     },
     {
       name: 'Trade Marks Act, 1999',
-      url: 'https://ipindia.gov.in/writereaddata/Portal/IPOAct/1_34_1_trade-marks-act-1999.pdf',
+      url: 'https://www.indiacode.nic.in/bitstream/123456789/15427/1/the_trade_marks_act,_1999.pdf',
       description: 'Section 18: Application requirements. Section 25: Duration of registration.',
     },
   ],

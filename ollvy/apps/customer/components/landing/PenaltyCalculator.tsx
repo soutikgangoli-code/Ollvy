@@ -400,7 +400,7 @@ export function PenaltyCalculator() {
                 first month isn't already behind.
               </p>
               <Button className="mt-4" asChild>
-                <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=penalty_calc">
+                <Link href="/services">
                   Incorporate correctly from day one
                 </Link>
               </Button>
@@ -524,7 +524,7 @@ export function PenaltyCalculator() {
 
                         <Button size="sm" variant="outline" className="gap-1" asChild>
                           <Link
-                            href={`/services/${penalty.serviceSlug}?utm_source=penalty_calc&utm_medium=landing`}
+                            href={`/services/${penalty.serviceSlug}`}
                           >
                             Fix This
                             <ChevronRight className="h-3 w-3" />
@@ -553,7 +553,7 @@ export function PenaltyCalculator() {
                     </div>
                   </div>
                   <Button asChild>
-                    <Link href="/services?utm_source=penalty_calc&utm_medium=landing&utm_content=summary">
+                    <Link href="/services">
                       View All Services
                     </Link>
                   </Button>

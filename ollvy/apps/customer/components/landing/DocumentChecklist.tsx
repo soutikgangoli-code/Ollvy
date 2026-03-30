@@ -560,7 +560,7 @@ export function DocumentChecklist({
                   </div>
                 </div>
                 <Button variant="outline" size="sm" asChild>
-                  <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=document_checklist">Book this service</Link>
+                  <Link href="/services">Book this service</Link>
                 </Button>
               </div>
             </div>

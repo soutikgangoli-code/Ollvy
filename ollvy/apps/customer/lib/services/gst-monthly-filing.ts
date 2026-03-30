@@ -192,12 +192,12 @@ export const gstMonthlyFiling: ServiceConfig = {
   reviewSources: [
     {
       name: 'GST Portal',
-      url: 'https://www.gst.gov.in',
+      url: 'https://cbic-gst.gov.in',
       description: 'Official GSTN portal for filing GSTR-1, GSTR-3B, and checking GSTR-2B',
     },
     {
       name: 'CGST Act, 2017',
-      url: 'https://www.cbic.gov.in/htdocs-cbec/gst/cgst-act.pdf',
+      url: 'https://cbic-gst.gov.in/gst-acts.html',
       description: 'Section 37: GSTR-1 requirements. Section 39: GSTR-3B requirements.',
     },
   ],

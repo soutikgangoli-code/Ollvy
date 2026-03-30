@@ -57,7 +57,7 @@ export function LearnInternalLinks({ learnSlugs, serviceSlugs }: {
             {relatedServices.map((service) => (
               <Link
                 key={service!.slug}
-                href={`/services/${service!.slug}?utm_source=guides&utm_medium=related_services`}
+                href={`/services/${service!.slug}`}
                 className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-foreground/30 hover:bg-muted/20 transition-colors group"
               >
                 <div>

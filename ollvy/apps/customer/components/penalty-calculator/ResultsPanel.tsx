@@ -178,7 +178,7 @@ export function ResultsPanel({
       <div className="px-6 py-4 border-t border-border/30 space-y-2">
         {showCta && total > 0 && (
           <Button className="w-full h-12" asChild>
-            <Link href={`${ctaHref}?utm_source=tools&utm_medium=penalty_calc`}>
+            <Link href={ctaHref}>
               {ctaText}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Link>
@@ -197,7 +197,7 @@ export function ResultsPanel({
 
         {docChecklistHref && (
           <Link
-            href={`${docChecklistHref}?utm_source=tools&utm_medium=penalty_calc`}
+            href={docChecklistHref}
             className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center justify-center gap-1 w-full mt-2"
           >
             {docChecklistText || 'See documents needed'}

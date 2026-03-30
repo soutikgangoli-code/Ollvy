@@ -127,18 +127,14 @@ export function BookingPanel({
     : priceVariesByQuestionnaire
     ? `/checkout/${checkoutId}/eligibility`
     : `/checkout/${checkoutId}`
-  const urlParams = new URLSearchParams({
-    utm_source: 'service_page',
-    utm_medium: 'booking_panel',
-    utm_content: service.slug,
-  })
+  const urlParams = new URLSearchParams()
   if (service.variants && selectedVariant) {
     urlParams.set('variant', selectedVariant)
   }
   if (service.addons && selectedAddonIds.length > 0) {
     urlParams.set('addons', selectedAddonIds.join(','))
   }
-  const ctaUrl = `${baseCheckoutUrl}?${urlParams.toString()}`
+  const ctaUrl = urlParams.toString() ? `${baseCheckoutUrl}?${urlParams.toString()}` : baseCheckoutUrl
 
   return (
     <Card className="border border-border bg-card p-6 w-full">

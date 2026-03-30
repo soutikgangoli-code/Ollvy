@@ -6,12 +6,21 @@ interface FooterLink {
   href: string
 }
 
-function FooterColumn({ title, links }: { title: string; links: FooterLink[] }) {
+function FooterColumn({ title, links, titleHref }: { title: string; links: FooterLink[]; titleHref?: string }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-4">
-        {title}
-      </p>
+      {titleHref ? (
+        <Link
+          href={titleHref}
+          className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-4 block hover:text-foreground transition-colors"
+        >
+          {title}
+        </Link>
+      ) : (
+        <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-4">
+          {title}
+        </p>
+      )}
       <ul className="space-y-2.5">
         {links.map((link) => (
           <li key={link.href}>
@@ -76,6 +85,7 @@ export function Footer() {
           {/* Column 2: Tools - Penalty Calculators */}
           <FooterColumn
             title="Calculators"
+            titleHref="/tools/penalty-calculator"
             links={[
               { label: 'GST Late Filing', href: '/tools/penalty-calculator/gst-late-filing' },
               { label: 'GST Demand Notice', href: '/tools/penalty-calculator/gst-demand-notice' },
@@ -93,6 +103,7 @@ export function Footer() {
           {/* Column 3: Document Checklists */}
           <FooterColumn
             title="Checklists"
+            titleHref="/tools/documents"
             links={[
               { label: 'Pvt Ltd Documents', href: '/tools/documents/private-limited-company' },
               { label: 'LLP Documents', href: '/tools/documents/llp' },
@@ -108,6 +119,7 @@ export function Footer() {
           {/* Column 4: Services */}
           <FooterColumn
             title="Services"
+            titleHref="/services"
             links={[
               { label: 'Pvt Ltd Registration', href: '/services/pvt-ltd-incorporation' },
               { label: 'LLP Registration', href: '/services/llp-incorporation' },
@@ -130,6 +142,7 @@ export function Footer() {
           {/* Column 5: Guides */}
           <FooterColumn
             title="Guides"
+            titleHref="/guides"
             links={[
               { label: 'Do I Need GST?', href: '/guides/do-i-need-gst-registration' },
               { label: 'Pvt Ltd vs LLP', href: '/guides/pvt-ltd-vs-llp' },
@@ -142,6 +155,7 @@ export function Footer() {
           {/* Column 6: Notices */}
           <FooterColumn
             title="Notice Help"
+            titleHref="/guides"
             links={[
               { label: 'GST DRC-01 Notice', href: '/guides/gst-drc-01-notice' },
               { label: 'GST ASMT-10 Notice', href: '/guides/gst-asmt-10-notice' },

@@ -1,13 +1,13 @@
 import { Metadata } from 'next'
 import { NavbarServer } from '@/components/landing/NavbarServer'
-import { HeroV2 } from '@/components/landing/HeroV2'
+import { Hero } from '@/components/landing/Hero'
 import { SocialProofBar } from '@/components/landing/SocialProofBar'
 import { FearRelief } from '@/components/landing/FearRelief'
 import { ProductShowcase } from '@/components/landing/ProductShowcase'
 import { SingleTestimonial } from '@/components/landing/SingleTestimonial'
 import { ServicesSimplified } from '@/components/landing/ServicesSimplified'
 import { HomeFAQ } from '@/components/landing/HomeFAQ'
-import { FinalCTAV2 } from '@/components/landing/FinalCTAV2'
+import { FinalCTA } from '@/components/landing/FinalCTA'
 import { Footer } from '@/components/landing/Footer'
 import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
 import { getPopularServices } from '@/lib/data/services'
@@ -62,7 +62,7 @@ export default async function LandingPage() {
       {/* Main content with padding for fixed navbar */}
       <main className="pt-16">
         {/* Section 1 - Hero: Bold claim + product screenshot */}
-        <HeroV2 />
+        <Hero />
 
         {/* Section 2 - Social Proof Bar: Founder avatars + rating */}
         <SocialProofBar />
@@ -83,7 +83,7 @@ export default async function LandingPage() {
         <HomeFAQ />
 
         {/* Section 8 - Final CTA: Strong close */}
-        <FinalCTAV2 />
+        <FinalCTA />
       </main>
 
       {/* Footer */}

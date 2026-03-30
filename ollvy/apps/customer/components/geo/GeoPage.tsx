@@ -102,7 +102,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
               </div>
 
               <Button className="w-full mt-6" asChild>
-                <Link href={`/services/${service.slug}?utm_source=geo_page&utm_medium=service_card&utm_content=${city.slug}`}>
+                <Link href={`/services/${service.slug}`}>
                   Book Now - ₹{totalFee.toLocaleString('en-IN')}
                 </Link>
               </Button>
@@ -233,7 +233,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
                 </div>
 
                 <Button className="w-full mt-6" size="lg" asChild>
-                  <Link href={`/services/${service.slug}?utm_source=geo_page&utm_medium=sticky_panel&utm_content=${city.slug}`}>
+                  <Link href={`/services/${service.slug}`}>
                     Book Now →
                   </Link>
                 </Button>
@@ -258,7 +258,7 @@ export function GeoPage({ service, city, geoContent, dbPricing }: GeoPageProps) 
       {/* Mobile sticky CTA */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-background border-t border-border">
         <Button className="w-full" size="lg" asChild>
-          <Link href={`/services/${service.slug}?utm_source=geo_page&utm_medium=mobile_sticky&utm_content=${city.slug}`}>
+          <Link href={`/services/${service.slug}`}>
             Book Now - ₹{totalFee.toLocaleString('en-IN')}
           </Link>
         </Button>

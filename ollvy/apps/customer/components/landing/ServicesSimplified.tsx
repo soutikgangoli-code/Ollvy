@@ -41,7 +41,7 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
             <p className="text-lg text-muted-foreground mt-3">Fixed prices. Clear timelines. No surprises.</p>
           </div>
           <Button variant="outline" className="rounded-xl h-11 px-6" asChild>
-            <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=services_simplified" prefetch={true}>
+            <Link href="/services" prefetch={true}>
               View all 20+ services
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -58,7 +58,7 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
             return (
               <Link
                 key={i}
-                href={`/services/${service.slug}?utm_source=homepage&utm_medium=landing&utm_content=services_simplified`}
+                href={`/services/${service.slug}`}
                 prefetch={true}
                 className="p-6 rounded-2xl border border-border bg-card shadow-sm hover:bg-muted/30 transition-colors duration-200 group flex flex-col"
               >

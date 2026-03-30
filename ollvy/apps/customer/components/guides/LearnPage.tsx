@@ -115,7 +115,7 @@ function RelatedToolsSection({ relatedTools }: { relatedTools?: LearnPageConfig[
         {penaltyCalcs.map((tool) => (
           <Link
             key={tool!.slug}
-            href={`/tools/penalty-calculator/${tool!.slug}?utm_source=guides&utm_medium=related_tools`}
+            href={`/tools/penalty-calculator/${tool!.slug}`}
             className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-foreground/30 hover:bg-muted/20 transition-colors group"
           >
             <div>
@@ -132,7 +132,7 @@ function RelatedToolsSection({ relatedTools }: { relatedTools?: LearnPageConfig[
         {docChecklists.map((tool) => (
           <Link
             key={tool!.slug}
-            href={`/tools/documents/${tool!.slug}?utm_source=guides&utm_medium=related_tools`}
+            href={`/tools/documents/${tool!.slug}`}
             className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-foreground/30 hover:bg-muted/20 transition-colors group"
           >
             <div>

@@ -180,7 +180,7 @@ export const companyNameChange: ServiceConfig = {
     },
     {
       name: 'Companies Act, 2013',
-      url: 'https://www.mca.gov.in/Ministry/pdf/CompaniesAct2013.pdf',
+      url: 'https://www.indiacode.nic.in/bitstream/123456789/2114/1/A2013-18.pdf',
       description: 'Section 13: Alteration of Memorandum of Association',
     },
   ],

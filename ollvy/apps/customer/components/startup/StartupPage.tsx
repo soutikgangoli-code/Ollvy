@@ -148,7 +148,7 @@ export function StartupPage() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
             <Button size="lg" asChild>
-              <Link href="/services/pvt-ltd-incorporation?utm_source=startup_page&utm_medium=hero">
+              <Link href="/services/pvt-ltd-incorporation">
                 Incorporate now - ₹24,999
               </Link>
             </Button>
@@ -284,7 +284,7 @@ export function StartupPage() {
 
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Button asChild>
-              <Link href="/services/startup-india?utm_source=startup_page&utm_medium=dpiit_section">
+              <Link href="/services/startup-india">
                 Apply for DPIIT Recognition - ₹4,999
               </Link>
             </Button>
@@ -373,12 +373,12 @@ export function StartupPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button size="lg" asChild>
-              <Link href="/services/pvt-ltd-incorporation?utm_source=startup_page&utm_medium=footer_cta">
+              <Link href="/services/pvt-ltd-incorporation">
                 Incorporate now - ₹24,999
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild>
-              <Link href="/services/startup-india?utm_source=startup_page&utm_medium=footer_cta">
+              <Link href="/services/startup-india">
                 Already incorporated? Get DPIIT →
               </Link>
             </Button>
@@ -491,7 +491,7 @@ function StartupServiceRow({ svc, completed, prereqCompleted, onToggle }: {
 
           {!completed && !isLocked && (
             <Button size="sm" variant="outline" className="mt-3 gap-1.5 h-7 text-xs" asChild>
-              <Link href={`/services/${svc.slug}?utm_source=startup_page&utm_medium=stack`}>
+              <Link href={`/services/${svc.slug}`}>
                 Book this service <ChevronRight size={11} />
               </Link>
             </Button>

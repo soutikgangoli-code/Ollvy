@@ -110,7 +110,7 @@ export default function TrademarkDocumentsPage() {
         ctaTitle="Ready to protect your brand?"
         ctaDescription="Ollvy handles complete trademark registration - from search to filing to monitoring. Protect your brand with experienced IP attorneys."
         ctaButtonText="Register Trademark"
-        ctaButtonHref="/services/trademark-registration?utm_source=tools&utm_medium=documents&utm_content=trademark"
+        ctaButtonHref="/services/trademark-registration"
       />
 
       {/* Step-by-step process */}

@@ -110,7 +110,7 @@ export default function SoleProprietorDocumentsPage() {
         ctaTitle="Ready to register your business?"
         ctaDescription="Get started with Ollvy. We handle GST registration, Shop Act license, and all compliance for sole proprietors."
         ctaButtonText="Start GST Registration"
-        ctaButtonHref="/services/gst-registration?utm_source=tools&utm_medium=documents&utm_content=sole_prop"
+        ctaButtonHref="/services/gst-registration"
       />
 
       {/* Step-by-step process */}

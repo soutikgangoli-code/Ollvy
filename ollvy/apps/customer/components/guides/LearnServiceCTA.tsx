@@ -42,7 +42,7 @@ export function LearnServiceCTA({ primary, secondary }: {
           </div>
           <Button size="lg" asChild>
             <Link
-              href={`/services/${primary.slug}?utm_source=guides&utm_medium=cta&utm_content=${primary.slug}`}
+              href={`/services/${primary.slug}`}
             >
               Book Now →
             </Link>
@@ -62,7 +62,7 @@ export function LearnServiceCTA({ primary, secondary }: {
                 </p>
               </div>
               <Button variant="outline" size="sm" asChild>
-                <Link href={`/services/${secondary.slug}?utm_source=guides&utm_medium=cta_secondary&utm_content=${secondary.slug}`}>
+                <Link href={`/services/${secondary.slug}`}>
                   View →
                 </Link>
               </Button>

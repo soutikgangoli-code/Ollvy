@@ -110,7 +110,7 @@ export default function GSTDocumentsPage() {
         ctaTitle="Ready to get your GST number?"
         ctaDescription="Get started with Ollvy. We handle the entire GST registration process - from document verification to ARN tracking to GSTIN delivery."
         ctaButtonText="Start GST Registration"
-        ctaButtonHref="/services/gst-registration?utm_source=tools&utm_medium=documents&utm_content=gst"
+        ctaButtonHref="/services/gst-registration"
         penaltyCalcHref="/tools/penalty-calculator/gst-late-filing"
         penaltyCalcText="Calculate GST late filing penalty"
       />

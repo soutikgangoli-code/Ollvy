@@ -117,10 +117,10 @@ export function ReferFounder() {
             </p>
             <div className="mt-4 space-y-2">
               <Button className="w-full" asChild>
-                <Link href="/login?utm_source=homepage&utm_medium=landing&utm_content=refer">Sign In</Link>
+                <Link href="/login">Sign In</Link>
               </Button>
               <Button variant="outline" className="w-full" asChild>
-                <Link href="/login?utm_source=homepage&utm_medium=landing&utm_content=refer">Create Account</Link>
+                <Link href="/login">Create Account</Link>
               </Button>
             </div>
           </DialogContent>

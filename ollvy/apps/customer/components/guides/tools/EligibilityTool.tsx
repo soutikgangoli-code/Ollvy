@@ -130,7 +130,7 @@ export function EligibilityTool({ config, ctaService }: {
 
           {resultStyle?.showCta && (
             <Button className="w-full" asChild>
-              <Link href={result.ctaHref ?? `/checkout/${ctaService.slug}?utm_source=guides_tool&utm_medium=eligibility_result`}>
+              <Link href={result.ctaHref ?? `/checkout/${ctaService.slug}`}>
                 {result.ctaLabel ?? `Get ${ctaService.shortName} - Rs. ${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`}
               </Link>
             </Button>

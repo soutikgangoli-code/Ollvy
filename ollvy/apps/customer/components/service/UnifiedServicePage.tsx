@@ -336,19 +336,15 @@ export function UnifiedServicePage({
 
   // Build base checkout/eligibility URL
   // Always go through eligibility first - it handles redirect to checkout if no questions
-  const getCtaUrl = (utmMedium: string, includeVariant = false) => {
+  const getCtaUrl = (includeVariant = false) => {
     const serviceId = service.id || service.slug
     const baseUrl = service.priceVariesByState
       ? `/quote/request/${serviceId}`
       : `/checkout/${serviceId}/eligibility`
-    const params = new URLSearchParams({
-      utm_source: 'service_page',
-      utm_medium: utmMedium,
-    })
     if (includeVariant && service.variants && selectedVariant) {
-      params.set('variant', selectedVariant)
+      return `${baseUrl}?variant=${selectedVariant}`
     }
-    return `${baseUrl}?${params.toString()}`
+    return baseUrl
   }
 
   // Scroll to section
@@ -532,7 +528,7 @@ export function UnifiedServicePage({
 
             {/* Right: CTA */}
             <Button size="sm" asChild>
-              <a href={getCtaUrl('sticky_header')}>
+              <a href={getCtaUrl()}>
                 {ctaLabel}
               </a>
             </Button>
@@ -599,7 +595,7 @@ export function UnifiedServicePage({
                 )}
 
                 <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild>
-                  <a href={getCtaUrl('hero')}>
+                  <a href={getCtaUrl()}>
                     {ctaLabel}
                   </a>
                 </Button>
@@ -1238,7 +1234,7 @@ export function UnifiedServicePage({
                 Fixed price. Verified CA. Done within {service.slaDays} working days.
               </p>
               <Button size="lg" className="mt-8" asChild>
-                <a href={getCtaUrl('final_cta')}>
+                <a href={getCtaUrl()}>
                   {ctaLabel}
                 </a>
               </Button>
@@ -1258,7 +1254,7 @@ export function UnifiedServicePage({
           </p>
         </div>
         <Button size="lg" className="flex-1 ml-4" asChild>
-          <a href={getCtaUrl('mobile_bar', true)}>
+          <a href={getCtaUrl(true)}>
             {ctaLabel}
           </a>
         </Button>

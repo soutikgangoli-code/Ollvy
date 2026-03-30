@@ -185,12 +185,12 @@ export const llpIncorporation: ServiceConfig = {
   reviewSources: [
     {
       name: 'MCA - LLP Portal',
-      url: 'https://llp.mca.gov.in',
+      url: 'https://www.mca.gov.in/content/mca/global/en/mca/llp-e-filling.html',
       description: 'Ministry of Corporate Affairs - LLP registration and filings',
     },
     {
       name: 'LLP Act, 2008',
-      url: 'https://www.mca.gov.in/Ministry/actsbills/pdf/LLP_Act_2008_15jan2009.pdf',
+      url: 'https://www.indiacode.nic.in/bitstream/123456789/2023/1/A2009-06.pdf',
       description: 'Full text of the Limited Liability Partnership Act',
     },
   ],

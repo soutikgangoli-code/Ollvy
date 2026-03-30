@@ -173,7 +173,7 @@ export const gstRevocation: ServiceConfig = {
   reviewSources: [
     {
       name: 'GST Portal',
-      url: 'https://www.gst.gov.in',
+      url: 'https://cbic-gst.gov.in',
       description: 'Form REG-21 revocation filing and status tracking',
     },
     {

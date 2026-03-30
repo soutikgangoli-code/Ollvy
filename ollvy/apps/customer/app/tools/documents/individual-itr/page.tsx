@@ -110,7 +110,7 @@ export default function IndividualITRDocumentsPage() {
         ctaTitle="Ready to file your ITR?"
         ctaDescription="Just share your documents with us. Ollvy's CAs review everything, maximize your deductions, and file your return correctly."
         ctaButtonText="File My ITR"
-        ctaButtonHref="/services/business-itr?utm_source=tools&utm_medium=documents&utm_content=individual_itr"
+        ctaButtonHref="/services/business-itr"
         penaltyCalcHref="/tools/penalty-calculator/itr-late-filing"
         penaltyCalcText="Calculate ITR late filing penalty"
       />

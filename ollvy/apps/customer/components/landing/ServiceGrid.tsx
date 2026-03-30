@@ -275,8 +275,8 @@ export function ServiceGrid({ services }: ServiceGridProps) {
               <Link
                 key={service.name}
                 href={service.slug
-                  ? `/services/${service.slug}?utm_source=homepage&utm_medium=landing&utm_content=service_grid`
-                  : `/services?utm_source=homepage&utm_medium=landing&utm_content=service_grid`
+                  ? `/services/${service.slug}`
+                  : `/services`
                 }
                 className="flex-shrink-0 w-[260px] md:w-[calc(25%-12px)] snap-start h-[200px]"
               >
@@ -289,7 +289,7 @@ export function ServiceGrid({ services }: ServiceGridProps) {
         {/* Show More Button */}
         <div className="text-center mt-8">
           <Button asChild className="px-8">
-            <Link href="/services?utm_source=homepage&utm_medium=landing&utm_content=show_more">
+            <Link href="/services">
               View all services
             </Link>
           </Button>

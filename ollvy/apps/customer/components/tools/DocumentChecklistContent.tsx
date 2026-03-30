@@ -397,7 +397,7 @@ export function DocumentChecklistContent({
         {penaltyCalcHref && (
           <p className="mt-4">
             <Link
-              href={`${penaltyCalcHref}?utm_source=tools&utm_medium=documents`}
+              href={penaltyCalcHref}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
             >
               {penaltyCalcText || 'Calculate late filing penalty'}

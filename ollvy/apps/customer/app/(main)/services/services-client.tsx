@@ -109,15 +109,7 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
   }, [searchQuery, selectedFilters, router])
 
   return (
-    <div className="container py-12">
-      {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-3xl font-semibold text-foreground">All Services</h1>
-        <p className="text-muted-foreground mt-2">
-          Fixed-price compliance packages for startups and SMEs
-        </p>
-      </div>
-
+    <div className="container pb-12">
       {/* Search & Filters */}
       <div className="space-y-6 mb-10">
         <SearchBar

@@ -411,7 +411,7 @@ export function PenaltyCalculatorTool({
                 The clock starts when you register. Getting set up right from day one means your first month isn't already behind.
               </p>
               <Button className="mt-4" asChild>
-                <Link href="/services?utm_source=tools&utm_medium=penalty_calc">
+                <Link href="/services">
                   Incorporate with Ollvy
                 </Link>
               </Button>
@@ -497,7 +497,7 @@ export function PenaltyCalculatorTool({
 
               {/* CTA */}
               <Button className="w-full" asChild>
-                <Link href={`${ctaHref}?utm_source=tools&utm_medium=penalty_calc`}>
+                <Link href={ctaHref}>
                   {ctaText}
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Link>
@@ -544,7 +544,7 @@ export function PenaltyCalculatorTool({
           Ollvy handles your compliance from start to finish. Stop penalty accrual today.
         </p>
         <Button className="mt-6" size="lg" asChild>
-          <Link href={`${ctaHref}?utm_source=tools&utm_medium=penalty_calc&utm_content=cta`}>
+          <Link href={ctaHref}>
             {ctaText}
           </Link>
         </Button>

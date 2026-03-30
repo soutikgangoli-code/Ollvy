@@ -144,7 +144,7 @@ export function DeadlineTracker({ config, ctaService }: {
 
         <div className="mt-4">
           <Button className="w-full" asChild>
-            <a href={`/services/${ctaService.slug}?utm_source=guides_tool&utm_medium=deadline_tracker`}>
+            <a href={`/services/${ctaService.slug}`}>
               {isPastDue
                 ? 'File now - stop the penalty'
                 : `Book ${ctaService.shortName} - ₹${(ctaService.ollvyFee + (ctaService.govtFee ?? 0)).toLocaleString('en-IN')}`

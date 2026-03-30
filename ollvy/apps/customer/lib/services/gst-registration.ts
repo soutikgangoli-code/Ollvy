@@ -191,12 +191,12 @@ export const gstRegistration: ServiceConfig = {
   reviewSources: [
     {
       name: 'GST Portal',
-      url: 'https://www.gst.gov.in',
-      description: 'Official GSTN portal - registration, filing, and taxpayer search',
+      url: 'https://cbic-gst.gov.in',
+      description: 'Official CBIC GST portal - acts, rules, and notifications',
     },
     {
       name: 'CGST Act, 2017',
-      url: 'https://www.cbic.gov.in/htdocs-cbec/gst/cgst-act.pdf',
+      url: 'https://cbic-gst.gov.in/gst-acts.html',
       description: 'Section 22: Registration thresholds. Section 25: Registration procedure.',
     },
   ],

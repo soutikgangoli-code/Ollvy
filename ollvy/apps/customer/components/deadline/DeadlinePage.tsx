@@ -139,7 +139,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
 
             {/* CTA button */}
             <Button size="lg" className="mt-8 w-full max-w-[320px]" asChild>
-              <Link href={`/services/${deadline.serviceSlug}?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_hero`}>Start Filing Now</Link>
+              <Link href={`/services/${deadline.serviceSlug}`}>Start Filing Now</Link>
             </Button>
 
             {/* Urgency line */}
@@ -197,7 +197,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
               </div>
 
               <Button className="w-full mt-6" asChild>
-                <Link href={`/services/${deadline.serviceSlug}?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_card`}>
+                <Link href={`/services/${deadline.serviceSlug}`}>
                   Book This Service - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
                 </Link>
               </Button>
@@ -248,7 +248,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                   Fixed price ₹{deadline.ollvyFee.toLocaleString('en-IN')}. Verified CA assigned within 24 hours. Done in {deadline.slaDays} working days.
                 </p>
                 <Button className="mt-4" size="lg" asChild>
-                  <Link href={`/services/${deadline.serviceSlug}?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_penalty_cta`}>
+                  <Link href={`/services/${deadline.serviceSlug}`}>
                     Book {deadline.serviceName} - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
                   </Link>
                 </Button>
@@ -340,7 +340,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
               Fixed price. Verified CA. Done within {deadline.slaDays} working days.
             </p>
             <Button size="lg" className="mt-8" asChild>
-              <Link href={`/services/${deadline.serviceSlug}?utm_source=deadline_page&utm_medium=landing&utm_content=${deadline.slug}_final_cta`}>
+              <Link href={`/services/${deadline.serviceSlug}`}>
                 Start Filing - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
               </Link>
             </Button>
