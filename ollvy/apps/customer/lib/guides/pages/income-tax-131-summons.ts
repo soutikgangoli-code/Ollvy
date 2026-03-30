@@ -9,7 +9,7 @@ export const incomeTax131Summons: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-131-summons',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
+  ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['itr-notice-response'],
   relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-271-penalty'],
   relatedTools: {

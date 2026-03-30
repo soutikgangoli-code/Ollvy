@@ -9,8 +9,8 @@ export const incomeTax245RefundAdjustment: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-245-refund-adjustment',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
-  ctaSecondarySlug: 'itr-rectification',
+  ctaServiceSlug: 'business-itr',
+  ctaSecondarySlug: undefined,
   relatedServiceSlugs: ['itr-notice-response', 'itr-rectification'],
   relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-156-demand', 'income-tax-143-2-scrutiny'],
   relatedTools: {

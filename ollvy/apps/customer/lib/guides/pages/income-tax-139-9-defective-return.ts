@@ -9,7 +9,7 @@ export const incomeTax1399DefectiveReturn: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-139-9-defective-return',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-filing',
+  ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['itr-filing', 'itr-notice-response'],
   relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-142-1-notice', 'income-tax-143-2-scrutiny'],
   relatedTools: {

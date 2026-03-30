@@ -36,6 +36,17 @@ const nextConfig = {
         destination: '/tools/penalty-calculator/gst-late-filing',
         permanent: true,
       },
+      // Services that don't exist yet - redirect to related services
+      {
+        source: '/services/llp-annual-filing',
+        destination: '/services/mca-annual-filing',
+        permanent: false, // temporary until LLP annual filing service is created
+      },
+      {
+        source: '/services/trademark-renewal',
+        destination: '/services/trademark-registration',
+        permanent: false, // temporary until trademark renewal service is created
+      },
     ];
   },
 }

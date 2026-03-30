@@ -9,7 +9,7 @@ export const incomeTax156Demand: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-156-demand',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
+  ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['itr-notice-response', 'itr-rectification'],
   relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-143-2-scrutiny', 'income-tax-245-refund-adjustment'],
   relatedTools: {

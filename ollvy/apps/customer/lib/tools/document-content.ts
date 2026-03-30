@@ -339,7 +339,7 @@ Registration happens online through the MCA portal using the FiLLiP form. Compar
   ],
   nextSteps: [
     { title: 'GST Registration for LLP', href: '/services/gst-registration' },
-    { title: 'LLP Annual Filing (Form 8 & 11)', href: '/services/llp-annual-filing' },
+    { title: 'MCA Annual Filing (AOC-4 & MGT-7)', href: '/services/mca-annual-filing' },
     { title: 'Income Tax Return for LLP', href: '/tools/documents/business-itr' },
     { title: 'Trademark Registration', href: '/tools/documents/trademark' },
   ],

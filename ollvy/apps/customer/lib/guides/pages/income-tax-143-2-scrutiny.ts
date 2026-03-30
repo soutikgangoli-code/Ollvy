@@ -9,7 +9,7 @@ export const incomeTax1432Scrutiny: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-143-2-scrutiny',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
+  ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['itr-notice-response', 'itr-filing'],
   relatedLearnSlugs: ['income-tax-142-1-notice', 'income-tax-148-148a-reopening', 'income-tax-156-demand'],
   relatedTools: {

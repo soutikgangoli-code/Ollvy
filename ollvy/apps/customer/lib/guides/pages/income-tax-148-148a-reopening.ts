@@ -9,9 +9,9 @@ export const incomeTax148148aReopening: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-148-148a-reopening',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
-  ctaSecondarySlug: 'itr-filing',
-  relatedServiceSlugs: ['itr-notice-response', 'itr-filing'],
+  ctaServiceSlug: 'business-itr',
+  ctaSecondarySlug: undefined,
+  relatedServiceSlugs: ['business-itr'],
   relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-142-1-notice', 'income-tax-ais-sft-notice'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],

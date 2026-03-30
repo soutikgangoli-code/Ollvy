@@ -9,8 +9,8 @@ export const incomeTaxAisSftNotice: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-ais-sft-notice',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
-  ctaSecondarySlug: 'itr-filing',
+  ctaServiceSlug: 'business-itr',
+  ctaSecondarySlug: undefined,
   relatedServiceSlugs: ['itr-notice-response', 'itr-filing'],
   relatedLearnSlugs: ['income-tax-148-148a-reopening', 'income-tax-143-2-scrutiny', 'income-tax-142-1-notice'],
   relatedTools: {

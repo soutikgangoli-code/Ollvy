@@ -105,25 +105,9 @@ export function StructuredData() {
     ],
   }
 
-  // Professional Service schema
-  const professionalServiceSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'ProfessionalService',
-    name: 'Ollvy',
-    image: 'https://www.ollvy.com/android-chrome-512x512.png',
-    url: 'https://www.ollvy.com',
-    description: 'Professional CA services for company registration, GST, trademark, and compliance in India.',
-    priceRange: '$$',
-    areaServed: 'India',
-    serviceType: [
-      'Company Registration',
-      'GST Registration',
-      'Trademark Registration',
-      'FSSAI License',
-      'Compliance Services',
-      'LLP Registration',
-    ],
-  }
+  // Note: ProfessionalService/LocalBusiness schema removed from global layout
+  // Service pages have their own Service schemas, geo pages have LocalBusiness schemas
+  // Adding LocalBusiness globally causes warnings on tools, guides, and legal pages
 
   return (
     <>
@@ -138,10 +122,6 @@ export function StructuredData() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavigationSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceSchema) }}
       />
     </>
   )

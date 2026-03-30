@@ -9,9 +9,9 @@ export const incomeTax1431Intimation: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-143-1-intimation',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
-  ctaSecondarySlug: 'itr-rectification',
-  relatedServiceSlugs: ['itr-notice-response', 'itr-rectification', 'itr-filing'],
+  ctaServiceSlug: 'business-itr',
+  ctaSecondarySlug: undefined,
+  relatedServiceSlugs: ['business-itr'],
   relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-245-refund-adjustment'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],

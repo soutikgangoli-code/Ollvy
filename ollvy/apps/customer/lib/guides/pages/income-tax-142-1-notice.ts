@@ -9,7 +9,7 @@ export const incomeTax1421Notice: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-142-1-notice',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
+  ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['itr-notice-response', 'itr-filing'],
   relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-271-penalty'],
   relatedTools: {

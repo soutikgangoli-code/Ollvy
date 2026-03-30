@@ -9,7 +9,7 @@ export const incomeTax271Penalty: LearnPageConfig = {
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-271-penalty',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
-  ctaServiceSlug: 'itr-notice-response',
+  ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['itr-notice-response'],
   relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-142-1-notice', 'income-tax-131-summons'],
   relatedTools: {
