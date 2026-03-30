@@ -12,6 +12,19 @@ export const metadata: Metadata = deadline
       alternates: {
         canonical: deadline.canonicalUrl,
       },
+      openGraph: {
+        title: deadline.seoTitle,
+        description: deadline.seoDescription,
+        url: deadline.canonicalUrl,
+        siteName: 'Ollvy',
+        images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: deadline.seoTitle,
+        description: deadline.seoDescription,
+        images: ['https://www.ollvy.com/logo.png'],
+      },
     }
   : {}
 

@@ -119,6 +119,16 @@ const penaltyTools = [
   },
 ]
 
+// BreadcrumbList JSON-LD schema
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+  ],
+}
+
 // WebPage + ItemList JSON-LD schema
 const toolsJsonLd = {
   '@context': 'https://schema.org',
@@ -143,6 +153,10 @@ const toolsJsonLd = {
 export default function ToolsPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(toolsJsonLd) }}

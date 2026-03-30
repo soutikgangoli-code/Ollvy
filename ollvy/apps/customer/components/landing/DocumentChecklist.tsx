@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
@@ -238,10 +239,12 @@ function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose:
         {/* Sample Image */}
         {doc.sampleImage && (
           <div className="rounded-lg border border-border overflow-hidden bg-muted/30">
-            <img
+            <Image
               src={doc.sampleImage}
               alt={`Sample ${doc.name}`}
-              className="w-full h-auto max-h-40 object-contain"
+              width={400}
+              height={160}
+              className="w-full h-auto object-contain"
             />
             <p className="text-[10px] text-center text-muted-foreground py-1.5 border-t border-border">
               Sample document for reference

@@ -110,6 +110,18 @@ export default async function GeoPage({ params }: PageProps) {
     getRelatedServicesBySlugs(service.relatedSlugs),
   ])
 
+  // Build BreadcrumbList schema for navigation hierarchy
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.ollvy.com' },
+      { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://www.ollvy.com/services' },
+      { '@type': 'ListItem', position: 3, name: service.name, item: `https://www.ollvy.com/services/${serviceSlug}` },
+      { '@type': 'ListItem', position: 4, name: `${service.name} in ${city.name}`, item: `https://www.ollvy.com/${serviceSlug}/${citySlug}` },
+    ],
+  }
+
   // Build LocalBusiness schema for local SEO
   const localBusinessSchema = {
     '@context': 'https://schema.org',
@@ -118,7 +130,7 @@ export default async function GeoPage({ params }: PageProps) {
     name: `Ollvy - ${service.name} in ${city.name}`,
     description: `Professional ${service.name.toLowerCase()} services in ${city.name}, ${city.state}. Verified CAs. Fixed prices. ${service.slaDays} working days delivery.`,
     url: `https://www.ollvy.com/${serviceSlug}/${citySlug}`,
-    telephone: '+91-XXXXXXXXXX',
+    telephone: '+91-7042100461',
     priceRange: `₹${adjustedService.ollvyFee.toLocaleString('en-IN')}`,
     address: {
       '@type': 'PostalAddress',
@@ -177,6 +189,13 @@ export default async function GeoPage({ params }: PageProps) {
 
   return (
     <>
+      {/* BreadcrumbList Schema for navigation hierarchy */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       {/* LocalBusiness Schema for local SEO */}
       <script
         type="application/ld+json"

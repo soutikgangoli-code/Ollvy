@@ -7,6 +7,48 @@ import { NavbarServer } from '@/components/landing/NavbarServer'
 import { Footer } from '@/components/landing/Footer'
 import { CheckCircle, Clock, IndianRupee, Shield, Users } from 'lucide-react'
 
+// JobPosting schema for professional recruitment
+const jobPostingSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: 'Chartered Accountant / Company Secretary / Lawyer',
+  description: 'Join Ollvy as a verified professional. Get matched with clients automatically based on your city and service expertise. Weekly payouts. No rate negotiations. Handle compliance work for Indian businesses.',
+  datePosted: '2025-01-01',
+  validThrough: '2026-12-31',
+  employmentType: 'CONTRACTOR',
+  hiringOrganization: {
+    '@type': 'Organization',
+    name: 'Ollvy Technologies Private Limited',
+    sameAs: 'https://www.ollvy.com',
+    logo: 'https://www.ollvy.com/logo.png',
+  },
+  jobLocation: {
+    '@type': 'Place',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'IN',
+    },
+  },
+  jobLocationType: 'TELECOMMUTE',
+  applicantLocationRequirements: {
+    '@type': 'Country',
+    name: 'India',
+  },
+  responsibilities: 'Handle GST filings, ITR filings, company incorporations, and other compliance services for Ollvy clients.',
+  qualifications: 'ICAI membership for CAs, ICSI membership for Company Secretaries, Bar Council enrollment for Lawyers.',
+  skills: 'Tax compliance, Company law, GST, Income Tax, Corporate filings',
+};
+
+// BreadcrumbList schema
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.ollvy.com' },
+    { '@type': 'ListItem', position: 2, name: 'Join', item: 'https://www.ollvy.com/join' },
+  ],
+};
+
 export const metadata: Metadata = {
   title: 'Join Ollvy as a Professional | CAs, CSs, Lawyers',
   description:
@@ -89,8 +131,17 @@ const benefits = [
 
 export default function JoinPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <NavbarServer />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingSchema) }}
+      />
+      <div className="min-h-screen bg-background">
+        <NavbarServer />
 
       <main className="pt-16">
         {/* Hero */}
@@ -248,7 +299,8 @@ export default function JoinPage() {
         </section>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   )
 }

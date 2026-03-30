@@ -2,6 +2,7 @@
 
 import { useState, useRef, ReactNode } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import {
   CheckCircle2,
@@ -96,10 +97,12 @@ function DocumentDetailPanel({ doc, onClose }: { doc: SelectedDocument; onClose:
         {/* Sample Image */}
         {doc.sampleImage && (
           <div className="rounded-lg border border-border overflow-hidden bg-muted">
-            <img
+            <Image
               src={doc.sampleImage}
               alt={`Sample ${doc.name}`}
-              className="w-full h-auto max-h-40 object-contain"
+              width={400}
+              height={160}
+              className="w-full h-auto object-contain"
             />
             <p className="font-mono text-[10px] text-center text-muted-foreground py-2 border-t border-border">
               Sample document for reference

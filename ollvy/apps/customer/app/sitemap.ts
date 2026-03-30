@@ -77,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/tools`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.5,
     },
     {
       url: `${BASE_URL}/guides`,
@@ -89,13 +89,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/tools/documents`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.75,
+      priority: 0.4,
     },
     {
       url: `${BASE_URL}/tools/penalty-calculator`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.75,
+      priority: 0.4,
     },
     {
       url: `${BASE_URL}/privacy`,
@@ -143,20 +143,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.85,
   }))
 
-  // Document checklist pages
+  // Document checklist pages - individual tools should rank
   const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_SLUGS.map((slug) => ({
     url: `${BASE_URL}/tools/documents/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }))
 
-  // Penalty calculator pages
+  // Penalty calculator pages - individual tools should rank
   const penaltyRoutes: MetadataRoute.Sitemap = PENALTY_CALCULATOR_SLUGS.map((slug) => ({
     url: `${BASE_URL}/tools/penalty-calculator/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }))
 
   // Learn pages
