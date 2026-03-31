@@ -16,6 +16,9 @@ export function MainLayout({ children }: MainLayoutProps) {
   useEffect(() => {
     const supabase = getClient()
 
+    // Log immediately to verify hash is present
+    console.log('MainLayout mounted, hash:', window.location.hash ? 'present (' + window.location.hash.length + ' chars)' : 'empty')
+
     // Check for tokens in URL hash (implicit flow)
     const handleHashTokens = async () => {
       const hash = window.location.hash

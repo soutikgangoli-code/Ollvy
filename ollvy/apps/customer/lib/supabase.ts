@@ -7,7 +7,7 @@ export function createClient() {
     {
       auth: {
         flowType: 'implicit',
-        detectSessionInUrl: true,
+        detectSessionInUrl: false, // We handle hash tokens manually in MainLayout
         persistSession: true,
         autoRefreshToken: true,
       },
