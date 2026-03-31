@@ -484,7 +484,7 @@ const FAQ_DATA = [
 // Homepage FAQ - shows all questions
 export function HomeFAQ() {
   return (
-    <section id="faqs" className="bg-background py-28">
+    <section id="faqs" className="bg-background py-16 md:py-28">
       <div className="container max-w-4xl">
         {/* Section Heading */}
         <div className="text-center mb-14">

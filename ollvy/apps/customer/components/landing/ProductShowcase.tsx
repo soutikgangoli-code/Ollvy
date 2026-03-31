@@ -291,7 +291,7 @@ const FEATURES = [
 
 export function ProductShowcase() {
   return (
-    <section id="product-showcase" className="py-28 bg-muted/30 border-y border-border">
+    <section id="product-showcase" className="py-16 md:py-28 bg-background">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">

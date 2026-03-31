@@ -67,17 +67,17 @@ export default async function LandingPage() {
         {/* Section 2 - Social Proof Bar: Founder avatars + rating */}
         <SocialProofBar />
 
-        {/* Section 3 - Fear -> Relief: Penalty costs vs Ollvy peace */}
+        {/* Section 3 - Services: Simplified grid (moved up) */}
+        <ServicesSimplified services={popularServices} />
+
+        {/* Section 4 - Fear -> Relief: Penalty costs vs Ollvy peace */}
         <FearRelief />
 
-        {/* Section 4 - Product Showcase: Dashboard screenshots */}
+        {/* Section 5 - Product Showcase: Dashboard screenshots */}
         <ProductShowcase />
 
-        {/* Section 5 - Single Testimonial: One powerful story */}
+        {/* Section 6 - Single Testimonial: One powerful story */}
         <SingleTestimonial />
-
-        {/* Section 6 - Services: Simplified grid */}
-        <ServicesSimplified services={popularServices} />
 
         {/* Section 7 - FAQ: Key questions */}
         <HomeFAQ />

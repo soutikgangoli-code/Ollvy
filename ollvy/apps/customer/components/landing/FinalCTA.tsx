@@ -6,9 +6,7 @@ import { ArrowRight } from 'lucide-react'
 
 export function FinalCTA() {
   return (
-    <section className="py-28 bg-background relative overflow-hidden">
-      {/* Subtle gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/30 to-transparent pointer-events-none" />
+    <section className="py-16 md:py-28 bg-background relative overflow-hidden">
 
       <div className="container max-w-3xl text-center relative">
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight leading-[1.15]">

@@ -31,7 +31,7 @@ interface ServicesSimplifiedProps {
 
 export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
   return (
-    <section className="py-28 bg-muted/30 border-y border-border">
+    <section className="py-16 md:py-28 bg-background">
       <div className="container">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
           <div>

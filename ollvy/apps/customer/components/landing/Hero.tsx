@@ -89,7 +89,7 @@ function DashboardMockup() {
 
 export function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex items-center bg-background pt-24 pb-16">
+    <section className="relative min-h-[60vh] md:min-h-[80vh] lg:min-h-[90vh] flex items-center bg-background pt-12 md:pt-24 pb-12 md:pb-16">
       <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Bold claim */}
