@@ -16,29 +16,59 @@ export function MainLayout({ children }: MainLayoutProps) {
   useEffect(() => {
     const supabase = getClient()
 
-    // Check for session from URL hash (implicit flow) or cookies
-    const initSession = async () => {
-      // This will detect tokens in URL fragment for implicit flow
-      const { data: { session }, error } = await supabase.auth.getSession()
+    // Check for tokens in URL hash (implicit flow)
+    const handleHashTokens = async () => {
+      const hash = window.location.hash
+      if (hash && hash.includes('access_token')) {
+        console.log('Found tokens in URL hash, processing...')
 
-      if (error) {
-        console.error('Session error:', error)
-        return
-      }
+        // Parse the hash
+        const params = new URLSearchParams(hash.substring(1))
+        const accessToken = params.get('access_token')
+        const refreshToken = params.get('refresh_token')
 
-      if (session) {
-        const { data: userData } = await supabase
-          .from('users')
-          .select('*')
-          .eq('auth_user_id', session.user.id)
-          .single()
+        if (accessToken && refreshToken) {
+          // Set the session manually
+          const { data, error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          })
 
-        setSession(session)
-        setUser(userData || null)
+          if (error) {
+            console.error('Error setting session:', error)
+          } else if (data.session) {
+            console.log('Session set successfully')
+            // Clear the hash from URL
+            window.history.replaceState(null, '', window.location.pathname)
+
+            // Fetch user data
+            const { data: userData } = await supabase
+              .from('users')
+              .select('*')
+              .eq('auth_user_id', data.session.user.id)
+              .single()
+
+            setSession(data.session)
+            setUser(userData || null)
+          }
+        }
+      } else {
+        // No hash, check for existing session
+        const { data: { session } } = await supabase.auth.getSession()
+        if (session) {
+          const { data: userData } = await supabase
+            .from('users')
+            .select('*')
+            .eq('auth_user_id', session.user.id)
+            .single()
+
+          setSession(session)
+          setUser(userData || null)
+        }
       }
     }
 
-    initSession()
+    handleHashTokens()
 
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
