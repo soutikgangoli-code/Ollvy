@@ -17,6 +17,7 @@ import { getCompletionEstimate } from '@/lib/dates'
 import { useToast } from '@/lib/hooks/use-toast'
 import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
 import { fetchWithTimeout, TIMEOUTS } from '@/lib/fetch-with-timeout'
+import { useGTM, paisaToRupees } from '@/lib/hooks/useGTM'
 
 import {
   CheckoutStepper,
@@ -94,8 +95,10 @@ export default function CheckoutPage() {
   const serviceId = params.serviceId as string
   const { user, session, isHydrated, openAuthModal, isAuthModalOpen } = useAuthStore()
   const { toast } = useToast()
+  const { trackBeginCheckout, trackAddPaymentInfo } = useGTM()
 
   const [service, setService] = useState<ServicePackage | null>(null)
+  const [hasTrackedCheckout, setHasTrackedCheckout] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -216,6 +219,26 @@ export default function CheckoutPage() {
       timestamp: Date.now(),
     })
   }, [service, selectedVariant, selectedAddonIds, promoCode])
+
+  // Track begin_checkout in GTM when service is loaded
+  useEffect(() => {
+    if (!service || hasTrackedCheckout) return
+
+    trackBeginCheckout({
+      value: paisaToRupees(service.price_base_paisa + (service.price_govt_fees_paisa || 0)),
+      currency: 'INR',
+      items: [
+        {
+          item_id: service.id,
+          item_name: service.name,
+          item_category: 'Services',
+          price: paisaToRupees(service.price_base_paisa + (service.price_govt_fees_paisa || 0)),
+          quantity: 1,
+        },
+      ],
+    })
+    setHasTrackedCheckout(true)
+  }, [service, hasTrackedCheckout, trackBeginCheckout])
 
   const fetchService = async () => {
     if (!serviceId) return
@@ -495,6 +518,22 @@ export default function CheckoutPage() {
         return
       }
 
+      // Track add_payment_info in GTM
+      trackAddPaymentInfo({
+        value: paisaToRupees(priceBreakdown.total),
+        currency: 'INR',
+        payment_type: 'Razorpay',
+        items: [
+          {
+            item_id: service.id,
+            item_name: service.name,
+            item_category: 'Services',
+            price: paisaToRupees(priceBreakdown.total),
+            quantity: 1,
+          },
+        ],
+      })
+
       // Production: Open Razorpay payment modal
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -525,7 +564,10 @@ export default function CheckoutPage() {
             orderNumber: data.order_number,
           })
         },
-        prefill: { contact: user.phone },
+        prefill: {
+          contact: user.phone || undefined,
+          email: user.email || undefined,
+        },
         theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.9)' },
       }
 

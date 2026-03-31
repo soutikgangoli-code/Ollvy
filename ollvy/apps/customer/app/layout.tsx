@@ -6,6 +6,7 @@ import { UTMProvider } from '@/components/providers/UTMProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { AuthModal } from '@/components/auth'
 import { StructuredData } from '@/components/seo/StructuredData'
+import { GTMProvider, GTMNoScript } from '@/components/analytics/GTMProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -85,6 +86,8 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
+        <GTMNoScript />
+        <GTMProvider />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

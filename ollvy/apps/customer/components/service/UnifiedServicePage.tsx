@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/accordion'
 import { getCompletionEstimate } from '@/lib/dates'
 import { cn } from '@/lib/utils'
+import { useGTM } from '@/lib/hooks/useGTM'
 import {
   CheckCircle,
   Star,
@@ -264,6 +265,26 @@ export function UnifiedServicePage({
 
   // Explainer stepper open state
   const [explainerOpen, setExplainerOpen] = useState(false)
+
+  // GTM tracking
+  const { trackViewService } = useGTM()
+  const [hasTrackedView, setHasTrackedView] = useState(false)
+
+  // Track view_item in GTM when service page loads
+  useEffect(() => {
+    if (service && !hasTrackedView) {
+      const priceInPaisa = (pricing?.ollvyFee ?? service.ollvyFee ?? 0) * 100 +
+                          (pricing?.govtFee ?? service.govtFee ?? 0) * 100
+      trackViewService({
+        id: service.id,
+        name: service.name,
+        slug: service.slug,
+        category: service.category,
+        price: priceInPaisa,
+      })
+      setHasTrackedView(true)
+    }
+  }, [service, pricing, hasTrackedView, trackViewService])
 
   // Refs for smooth underline indicator
   const heroNavRef = useRef<HTMLDivElement>(null)
