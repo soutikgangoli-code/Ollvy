@@ -255,9 +255,18 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-foreground rounded-full">
-                  <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
-                    <User className="h-4 w-4" />
-                  </div>
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt=""
+                      className="w-7 h-7 rounded-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
+                      <User className="h-4 w-4" />
+                    </div>
+                  )}
                   <span className="max-w-[100px] truncate text-sm">
                     {user.business_name || user.phone || user.email?.split('@')[0]}
                   </span>
@@ -423,9 +432,18 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
                   >
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
-                      <User className="h-4 w-4 text-muted-foreground" />
-                    </div>
+                    {user.avatar_url ? (
+                      <img
+                        src={user.avatar_url}
+                        alt=""
+                        className="w-8 h-8 rounded-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
+                        <User className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                    )}
                     <div>
                       <p className="font-mono text-sm text-foreground">Profile</p>
                       <p className="font-mono text-[10px] text-muted-foreground truncate max-w-[180px]">

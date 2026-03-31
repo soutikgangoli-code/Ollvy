@@ -47,6 +47,9 @@ export async function GET(request: Request) {
       if (!existingUser) {
         // Create new user row with Google OAuth data
         // Phone is null - will be collected post-payment in questionnaire
+        const avatarUrl = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture
+        const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name
+
         const { error: insertError } = await supabase
           .from('users')
           .insert({
@@ -54,6 +57,8 @@ export async function GET(request: Request) {
             email: session.user.email,
             phone: null, // Will be collected post-payment
             auth_provider: 'google',
+            avatar_url: avatarUrl,
+            business_name: fullName, // Use Google name as initial business name
             // Generate referral code
             referral_code: `OLV${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
           })
