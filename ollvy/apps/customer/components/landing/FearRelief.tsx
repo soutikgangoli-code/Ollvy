@@ -1,4 +1,4 @@
-import { Shield, Clock, FileText, MessageSquare, Calendar, XCircle } from 'lucide-react'
+import { Shield, Clock, FileText, MessageSquare, Calendar, XCircle, Check } from 'lucide-react'
 
 const PENALTIES = [
   { penalty: '₹10,000+', desc: 'Late GST filing' },
@@ -16,64 +16,84 @@ const BENEFITS = [
 
 export function FearRelief() {
   return (
-    <section className="py-16 md:py-28 bg-background">
-      <div className="container">
-        <div className="grid grid-cols-2 gap-3 md:gap-8 lg:gap-16">
+    <section className="py-20 md:py-32 bg-background overflow-hidden">
+      <div className="container max-w-6xl">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
           {/* The Fear Side */}
-          <div className="p-4 md:p-8">
-            <div className="inline-flex items-center gap-1.5 md:gap-2 mb-3 md:mb-5">
-              <XCircle className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
-              <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">
-                Without Ollvy
-              </span>
-            </div>
-
-            <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-foreground mb-4 md:mb-6 tracking-tight leading-tight">
-              Compliance nightmares are expensive.
-            </h2>
-
-            <div className="space-y-2 md:space-y-3">
-              {PENALTIES.map((item, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl md:rounded-2xl p-3 md:p-4 border border-border"
-                >
-                  <span className="font-mono text-sm md:text-lg font-bold text-red-600 dark:text-red-400 tracking-tight block">
-                    {item.penalty}
-                  </span>
-                  <p className="text-[11px] md:text-sm text-muted-foreground mt-0.5">{item.desc}</p>
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent dark:from-red-500/10 rounded-3xl" />
+            <div className="relative p-6 md:p-10 rounded-3xl border border-red-200/50 dark:border-red-500/20 bg-card/50">
+              <div className="inline-flex items-center gap-2 mb-6">
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20">
+                  <XCircle className="h-3 w-3 text-red-600 dark:text-red-400" />
                 </div>
-              ))}
+                <span className="text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">
+                  Without Ollvy
+                </span>
+              </div>
+
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-8 tracking-tight leading-[1.15]">
+                Compliance nightmares are expensive.
+              </h2>
+
+              <div className="space-y-3">
+                {PENALTIES.map((item, i) => (
+                  <div
+                    key={i}
+                    className="group relative rounded-2xl p-4 md:p-5 bg-background border border-border hover:border-red-200 dark:hover:border-red-500/30 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="font-mono text-lg md:text-xl font-bold text-red-600 dark:text-red-400 tracking-tight block">
+                          {item.penalty}
+                        </span>
+                        <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* The Relief Side */}
-          <div className="p-4 md:p-8">
-            <div className="inline-flex items-center gap-1.5 md:gap-2 mb-3 md:mb-5">
-              <Shield className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
-              <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                With Ollvy
-              </span>
-            </div>
-
-            <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-foreground mb-4 md:mb-6 tracking-tight leading-tight">
-              Zero penalties. Zero surprises.
-            </h2>
-
-            <div className="space-y-2 md:space-y-3">
-              {BENEFITS.map((item, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl md:rounded-2xl p-3 md:p-4 border border-border"
-                >
-                  <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
-                      <item.icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-foreground" />
-                    </div>
-                    <p className="font-medium text-xs md:text-sm text-foreground">{item.title}</p>
-                  </div>
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-transparent dark:from-violet-500/10 rounded-3xl" />
+            <div className="relative p-6 md:p-10 rounded-3xl border border-violet-200/50 dark:border-violet-500/20 bg-card/50">
+              <div className="inline-flex items-center gap-2 mb-6">
+                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-violet-100 dark:bg-violet-500/20">
+                  <Shield className="h-3 w-3 text-violet-600 dark:text-violet-400" />
                 </div>
-              ))}
+                <span className="text-xs font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">
+                  With Ollvy
+                </span>
+              </div>
+
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-8 tracking-tight leading-[1.15]">
+                Zero penalties. Zero surprises.
+              </h2>
+
+              <div className="space-y-3">
+                {BENEFITS.map((item, i) => (
+                  <div
+                    key={i}
+                    className="group relative rounded-2xl p-4 md:p-5 bg-background border border-border hover:border-violet-200 dark:hover:border-violet-500/30 transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-500/20 flex items-center justify-center shrink-0">
+                        <item.icon className="h-5 w-5 text-violet-600 dark:text-violet-400" />
+                      </div>
+                      <p className="font-medium text-base text-foreground">{item.title}</p>
+                      <div className="ml-auto w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
