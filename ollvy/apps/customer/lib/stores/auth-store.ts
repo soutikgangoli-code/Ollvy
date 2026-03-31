@@ -6,7 +6,7 @@ import { fetchWithTimeout, TIMEOUTS } from '../fetch-with-timeout'
 export interface User {
   id: string
   auth_user_id: string
-  phone: string
+  phone: string | null // Now nullable - collected post-payment for Google OAuth users
   email?: string
   business_name?: string
   business_type?: 'sole_proprietorship' | 'partnership' | 'pvt_ltd' | 'llp' | 'opc' | 'not_registered'
@@ -36,24 +36,28 @@ export interface User {
   referral_code: string
   referral_credit_paisa: number
   referral_credit_balance_paisa?: number
+  auth_provider?: 'phone' | 'google'
   created_at: string
 }
 
-interface SendOtpResponse {
-  sent?: boolean
-  error?: string
-  retryAfter?: number
-  remainingAttempts?: number
-  message?: string
-}
-
-interface VerifyOtpResponse {
-  session?: Session
-  user?: User
-  isNewUser?: boolean
-  error?: string
-  message?: string
-}
+// ============================================================================
+// OTP Types (preserved for future use)
+// ============================================================================
+// interface SendOtpResponse {
+//   sent?: boolean
+//   error?: string
+//   retryAfter?: number
+//   remainingAttempts?: number
+//   message?: string
+// }
+//
+// interface VerifyOtpResponse {
+//   session?: Session
+//   user?: User
+//   isNewUser?: boolean
+//   error?: string
+//   message?: string
+// }
 
 interface AuthState {
   session: Session | null
@@ -61,18 +65,22 @@ interface AuthState {
   isLoading: boolean
   isHydrated: boolean // True after first session check completes
   isNewUser: boolean
+  // OTP state (preserved for future use)
   lastOtpError: string | null
   retryAfter: number | null
   remainingAttempts: number | null
   // Modal state
   isAuthModalOpen: boolean
-  authModalStep: 'phone' | 'otp'
+  authModalStep: 'phone' | 'otp' | 'google' // Added 'google' step
   authModalPhone: string | null
 }
 
 interface AuthActions {
-  sendOtp: (phone: string) => Promise<SendOtpResponse>
-  verifyOtp: (phone: string, code: string) => Promise<VerifyOtpResponse>
+  // Google OAuth
+  signInWithGoogle: () => Promise<void>
+  // OTP methods (preserved for future use - currently commented out in implementation)
+  // sendOtp: (phone: string) => Promise<SendOtpResponse>
+  // verifyOtp: (phone: string, code: string) => Promise<VerifyOtpResponse>
   logout: () => Promise<void>
   refreshSession: () => Promise<void>
   setSession: (session: Session | null) => void
@@ -82,8 +90,10 @@ interface AuthActions {
   // Modal actions
   openAuthModal: () => void
   closeAuthModal: () => void
-  setAuthModalStep: (step: 'phone' | 'otp') => void
+  setAuthModalStep: (step: 'phone' | 'otp' | 'google') => void
   setAuthModalPhone: (phone: string | null) => void
+  // Phone update (for questionnaire)
+  updateUserPhone: (phone: string) => Promise<boolean>
 }
 
 export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
@@ -98,93 +108,126 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   remainingAttempts: null,
   // Modal state
   isAuthModalOpen: false,
-  authModalStep: 'phone',
+  authModalStep: 'google', // Default to Google sign-in
   authModalPhone: null,
 
-  // Actions
-  sendOtp: async (phone: string) => {
-    set({ isLoading: true, lastOtpError: null })
+  // Google OAuth Sign In
+  signInWithGoogle: async () => {
+    set({ isLoading: true })
 
     try {
-      const response = await fetchWithTimeout(getEdgeFunctionUrl('send-otp'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ phone }),
-        timeout: TIMEOUTS.OTP,
-      })
-
-      const data: SendOtpResponse = await response.json()
-
-      if (!response.ok || data.error) {
-        set({
-          isLoading: false,
-          lastOtpError: data.error || 'Failed to send OTP',
-          retryAfter: data.retryAfter || null,
-        })
-        return data
-      }
-
-      set({
-        isLoading: false,
-        remainingAttempts: data.remainingAttempts || null,
-      })
-
-      return data
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Network error'
-      set({ isLoading: false, lastOtpError: errorMessage })
-      return { error: errorMessage }
-    }
-  },
-
-  verifyOtp: async (phone: string, code: string) => {
-    set({ isLoading: true, lastOtpError: null })
-
-    try {
-      const response = await fetchWithTimeout(getEdgeFunctionUrl('verify-otp'), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ phone, otp: code }),
-        timeout: TIMEOUTS.OTP,
-      })
-
-      const data: VerifyOtpResponse = await response.json()
-
-      if (!response.ok || data.error) {
-        set({
-          isLoading: false,
-          lastOtpError: data.error || 'Failed to verify OTP',
-        })
-        return data
-      }
-
-      // Set session in Supabase client
       const supabase = getClient()
-      if (data.session) {
-        await supabase.auth.setSession({
-          access_token: data.session.access_token,
-          refresh_token: data.session.refresh_token,
-        })
-      }
 
-      set({
-        session: data.session || null,
-        user: data.user || null,
-        isNewUser: data.isNewUser || false,
-        isLoading: false,
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
       })
 
-      return data
+      if (error) {
+        console.error('Google sign-in error:', error)
+        set({ isLoading: false, lastOtpError: error.message })
+      }
+      // Note: On success, the page will redirect to Google OAuth
+      // isLoading stays true until redirect
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Network error'
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sign in with Google'
+      console.error('Google sign-in error:', error)
       set({ isLoading: false, lastOtpError: errorMessage })
-      return { error: errorMessage }
     }
   },
+
+  // ============================================================================
+  // OTP Methods (preserved for future use)
+  // ============================================================================
+  // sendOtp: async (phone: string) => {
+  //   set({ isLoading: true, lastOtpError: null })
+  //
+  //   try {
+  //     const response = await fetchWithTimeout(getEdgeFunctionUrl('send-otp'), {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ phone }),
+  //       timeout: TIMEOUTS.OTP,
+  //     })
+  //
+  //     const data: SendOtpResponse = await response.json()
+  //
+  //     if (!response.ok || data.error) {
+  //       set({
+  //         isLoading: false,
+  //         lastOtpError: data.error || 'Failed to send OTP',
+  //         retryAfter: data.retryAfter || null,
+  //       })
+  //       return data
+  //     }
+  //
+  //     set({
+  //       isLoading: false,
+  //       remainingAttempts: data.remainingAttempts || null,
+  //     })
+  //
+  //     return data
+  //   } catch (error) {
+  //     const errorMessage = error instanceof Error ? error.message : 'Network error'
+  //     set({ isLoading: false, lastOtpError: errorMessage })
+  //     return { error: errorMessage }
+  //   }
+  // },
+  //
+  // verifyOtp: async (phone: string, code: string) => {
+  //   set({ isLoading: true, lastOtpError: null })
+  //
+  //   try {
+  //     const response = await fetchWithTimeout(getEdgeFunctionUrl('verify-otp'), {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ phone, otp: code }),
+  //       timeout: TIMEOUTS.OTP,
+  //     })
+  //
+  //     const data: VerifyOtpResponse = await response.json()
+  //
+  //     if (!response.ok || data.error) {
+  //       set({
+  //         isLoading: false,
+  //         lastOtpError: data.error || 'Failed to verify OTP',
+  //       })
+  //       return data
+  //     }
+  //
+  //     // Set session in Supabase client
+  //     const supabase = getClient()
+  //     if (data.session) {
+  //       await supabase.auth.setSession({
+  //         access_token: data.session.access_token,
+  //         refresh_token: data.session.refresh_token,
+  //       })
+  //     }
+  //
+  //     set({
+  //       session: data.session || null,
+  //       user: data.user || null,
+  //       isNewUser: data.isNewUser || false,
+  //       isLoading: false,
+  //     })
+  //
+  //     return data
+  //   } catch (error) {
+  //     const errorMessage = error instanceof Error ? error.message : 'Network error'
+  //     set({ isLoading: false, lastOtpError: errorMessage })
+  //     return { error: errorMessage }
+  //   }
+  // },
 
   logout: async () => {
     set({ isLoading: true })
@@ -246,8 +289,35 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   setIsNewUser: (isNew) => set({ isNewUser: isNew }),
   clearOtpError: () => set({ lastOtpError: null, retryAfter: null }),
   // Modal actions
-  openAuthModal: () => set({ isAuthModalOpen: true, authModalStep: 'phone', authModalPhone: null, lastOtpError: null }),
-  closeAuthModal: () => set({ isAuthModalOpen: false, authModalStep: 'phone', authModalPhone: null, lastOtpError: null }),
+  openAuthModal: () => set({ isAuthModalOpen: true, authModalStep: 'google', authModalPhone: null, lastOtpError: null }),
+  closeAuthModal: () => set({ isAuthModalOpen: false, authModalStep: 'google', authModalPhone: null, lastOtpError: null }),
   setAuthModalStep: (step) => set({ authModalStep: step }),
   setAuthModalPhone: (phone) => set({ authModalPhone: phone }),
+
+  // Update user's phone number (called from questionnaire)
+  updateUserPhone: async (phone: string) => {
+    const { user } = get()
+    if (!user) return false
+
+    try {
+      const supabase = getClient()
+
+      const { error } = await supabase
+        .from('users')
+        .update({ phone })
+        .eq('id', user.id)
+
+      if (error) {
+        console.error('Error updating phone:', error)
+        return false
+      }
+
+      // Update local state
+      set({ user: { ...user, phone } })
+      return true
+    } catch (error) {
+      console.error('Error updating phone:', error)
+      return false
+    }
+  },
 }))
