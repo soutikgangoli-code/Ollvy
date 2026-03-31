@@ -3,6 +3,7 @@ import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
+import { AuthProvider } from '@/components/providers/AuthProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { AuthModal } from '@/components/auth'
 import { StructuredData } from '@/components/seo/StructuredData'
@@ -94,9 +95,11 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <UTMProvider>
-            {children}
-          </UTMProvider>
+          <AuthProvider>
+            <UTMProvider>
+              {children}
+            </UTMProvider>
+          </AuthProvider>
           <AuthModal />
           <Toaster />
         </ThemeProvider>
