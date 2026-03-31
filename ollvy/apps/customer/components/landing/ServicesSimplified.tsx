@@ -33,22 +33,14 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
   return (
     <section className="py-16 md:py-28 bg-background">
       <div className="container">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14">
-          <div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
-              Popular services
-            </h2>
-            <p className="text-lg text-muted-foreground mt-3">Fixed prices. Clear timelines. No surprises.</p>
-          </div>
-          <Button variant="outline" className="rounded-xl h-11 px-6" asChild>
-            <Link href="/services" prefetch={true}>
-              View all 20+ services
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+        <div className="mb-8 md:mb-14">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
+            Popular services
+          </h2>
+          <p className="text-lg text-muted-foreground mt-3">Fixed prices. Clear timelines. No surprises.</p>
         </div>
 
-        {/* Service cards */}
+        {/* Service cards - show first 4 on mobile, all on desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service, i) => {
             const totalPrice = service.ollvyFee + service.govtFee
@@ -60,7 +52,7 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                 key={i}
                 href={`/services/${service.slug}`}
                 prefetch={true}
-                className="p-6 rounded-2xl border border-border bg-card shadow-sm hover:bg-muted/30 transition-colors duration-200 group flex flex-col"
+                className={`p-6 rounded-2xl border border-border bg-card shadow-sm hover:bg-muted/30 transition-colors duration-200 group flex flex-col ${i >= 4 ? 'hidden md:flex' : ''}`}
               >
                 {/* Row 1: Name + Tag */}
                 <div className="flex items-start justify-between gap-3 mb-2 min-h-[28px]">
@@ -102,6 +94,16 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
               </Link>
             )
           })}
+        </div>
+
+        {/* View all button at the bottom */}
+        <div className="text-center mt-8">
+          <Button variant="outline" className="rounded-xl h-11 px-6" asChild>
+            <Link href="/services" prefetch={true}>
+              View all services
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>
