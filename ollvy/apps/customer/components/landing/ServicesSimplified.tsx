@@ -54,9 +54,9 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                 prefetch={true}
                 className={`p-6 rounded-2xl border border-border bg-card shadow-sm hover:bg-muted/30 transition-colors duration-200 group flex flex-col ${i >= 4 ? 'hidden md:flex' : ''}`}
               >
-                {/* Row 1: Name + Tag */}
-                <div className="flex items-start justify-between gap-3 mb-2 min-h-[28px]">
-                  <h3 className="font-semibold text-lg text-foreground leading-tight">{service.name}</h3>
+                {/* Row 1: Name + Tag - fixed height for 2 lines */}
+                <div className="flex items-start justify-between gap-3 mb-1">
+                  <h3 className="font-semibold text-lg text-foreground leading-tight line-clamp-2 min-h-[3.5rem]">{service.name}</h3>
                   {tag && (
                     <span className="text-xs px-2 py-1 rounded-md bg-foreground/5 text-muted-foreground font-medium shrink-0 backdrop-blur-sm">
                       {tag}
@@ -64,11 +64,11 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                   )}
                 </div>
 
-                {/* Row 2: Description */}
-                <p className="text-sm text-muted-foreground mb-4 min-h-[40px]">{service.description}</p>
+                {/* Row 2: Description - fixed height */}
+                <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-[2.5rem]">{service.description}</p>
 
-                {/* Row 3: Price */}
-                <div className="flex items-baseline gap-2 mb-1">
+                {/* Row 3: Price - always at same position */}
+                <div className="flex items-baseline gap-2 mb-1 mt-auto">
                   <span className="font-mono text-2xl font-bold text-foreground">
                     ₹{totalPrice.toLocaleString('en-IN')}
                   </span>
@@ -77,8 +77,8 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                   </span>
                 </div>
 
-                {/* Row 4: Guaranteed date */}
-                <div className="min-h-[20px]">
+                {/* Row 4: Guaranteed date - fixed height */}
+                <div className="h-5">
                   {guaranteedDate && (
                     <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
                       Guaranteed by {guaranteedDate}
@@ -90,7 +90,7 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                 </div>
 
                 {/* Arrow */}
-                <ArrowRight className="mt-auto pt-4 h-4 w-4 text-muted-foreground" />
+                <ArrowRight className="pt-4 h-4 w-4 text-muted-foreground" />
               </Link>
             )
           })}
