@@ -30,7 +30,13 @@ export async function GET(request: NextRequest) {
         },
         setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
           cookiesToSet.forEach(({ name, value, options }) => {
-            response.cookies.set(name, value, options as Record<string, unknown>)
+            response.cookies.set(name, value, {
+              ...options,
+              domain: '.ollvy.com',
+              path: '/',
+              sameSite: 'lax',
+              secure: true,
+            } as Record<string, unknown>)
           })
         },
       },
