@@ -5,15 +5,14 @@ import type { NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/'
+  const nextParam = searchParams.get('next')
   const origin = request.nextUrl.origin
+  const next = nextParam && nextParam.startsWith('/') && !nextParam.startsWith('//') ? nextParam : '/'
 
-  // For implicit flow, tokens come in the URL fragment (handled client-side)
-  // This route handles the PKCE flow with authorization code
   if (!code) {
-    // No code means either implicit flow (fragment) or error
-    // Redirect to home and let client-side handle fragment tokens
-    return NextResponse.redirect(`${origin}${next}`)
+    return NextResponse.redirect(
+      `${origin}/auth/error?message=${encodeURIComponent('Missing OAuth authorization code')}`
+    )
   }
 
   const redirectUrl = `${origin}${next}`

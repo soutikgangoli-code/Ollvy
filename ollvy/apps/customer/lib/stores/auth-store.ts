@@ -96,6 +96,17 @@ interface AuthActions {
   updateUserPhone: (phone: string) => Promise<boolean>
 }
 
+function getOAuthRedirectUrl(): string {
+  const configuredAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim()
+
+  if (configuredAppUrl) {
+    const baseUrl = configuredAppUrl.replace(/\/+$/, '')
+    return `${baseUrl}/auth/callback`
+  }
+
+  return `${window.location.origin}/auth/callback`
+}
+
 export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   // State
   session: null,
@@ -121,7 +132,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: getOAuthRedirectUrl(),
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',

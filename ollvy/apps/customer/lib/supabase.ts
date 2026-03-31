@@ -6,8 +6,8 @@ export function createClient() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       auth: {
-        flowType: 'implicit',
-        detectSessionInUrl: false, // We handle hash tokens manually in MainLayout
+        flowType: 'pkce',
+        detectSessionInUrl: false, // Session is established via /auth/callback exchange
         persistSession: true,
         autoRefreshToken: true,
       },
