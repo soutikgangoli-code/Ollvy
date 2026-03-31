@@ -22,7 +22,7 @@ export function FearRelief() {
           {/* The Fear Side */}
           <div className="p-4 md:p-8">
             <div className="inline-flex items-center gap-1.5 md:gap-2 mb-3 md:mb-5">
-              <XCircle className="h-3.5 w-3.5 md:h-4 md:w-4 text-red-500" />
+              <XCircle className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
               <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">
                 Without Ollvy
               </span>
@@ -50,7 +50,7 @@ export function FearRelief() {
           {/* The Relief Side */}
           <div className="p-4 md:p-8">
             <div className="inline-flex items-center gap-1.5 md:gap-2 mb-3 md:mb-5">
-              <Shield className="h-3.5 w-3.5 md:h-4 md:w-4 text-emerald-500" />
+              <Shield className="h-3.5 w-3.5 md:h-4 md:w-4 text-muted-foreground" />
               <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 With Ollvy
               </span>
@@ -67,8 +67,8 @@ export function FearRelief() {
                   className="rounded-xl md:rounded-2xl p-3 md:p-4 border border-border"
                 >
                   <div className="flex items-center gap-2 md:gap-3">
-                    <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center shrink-0">
-                      <item.icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-emerald-600 dark:text-emerald-400" />
+                    <div className="w-6 h-6 md:w-8 md:h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                      <item.icon className="h-3.5 w-3.5 md:h-4 md:w-4 text-foreground" />
                     </div>
                     <p className="font-medium text-xs md:text-sm text-foreground">{item.title}</p>
                   </div>
