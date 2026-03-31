@@ -10,6 +10,10 @@ export async function GET(request: Request) {
   if (code) {
     const cookieStore = await cookies()
 
+    // Create response first - we'll set cookies on this response
+    const redirectUrl = new URL(next, origin)
+    const response = NextResponse.redirect(redirectUrl)
+
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -19,16 +23,25 @@ export async function GET(request: Request) {
             return cookieStore.get(name)?.value
           },
           set(name: string, value: string, options: CookieOptions) {
-            cookieStore.set({ name, value, ...options })
+            // Set cookie on the response object
+            response.cookies.set({
+              name,
+              value,
+              ...options,
+            })
           },
           remove(name: string, options: CookieOptions) {
-            cookieStore.delete({ name, ...options })
+            response.cookies.set({
+              name,
+              value: '',
+              ...options,
+            })
           },
         },
       }
     )
 
-    // Exchange code for session
+    // Exchange code for session - this will set cookies via the handlers above
     const { data: { session }, error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
 
     if (sessionError) {
@@ -46,7 +59,6 @@ export async function GET(request: Request) {
 
       if (!existingUser) {
         // Create new user row with Google OAuth data
-        // Phone is null - will be collected post-payment in questionnaire
         const avatarUrl = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture
         const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name
 
@@ -55,25 +67,22 @@ export async function GET(request: Request) {
           .insert({
             auth_user_id: session.user.id,
             email: session.user.email,
-            phone: null, // Will be collected post-payment
+            phone: null,
             auth_provider: 'google',
             avatar_url: avatarUrl,
-            business_name: fullName, // Use Google name as initial business name
-            // Generate referral code
+            business_name: fullName,
             referral_code: `OLV${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
           })
 
         if (insertError) {
           console.error('Error creating user:', insertError)
-          // Don't fail the login - user can still use the app
-          // The user row will be created when they first make a purchase
         }
       }
 
-      return NextResponse.redirect(`${origin}${next}`)
+      // Return the response with cookies set
+      return response
     }
   }
 
-  // Something went wrong, redirect to home
   return NextResponse.redirect(`${origin}/`)
 }
