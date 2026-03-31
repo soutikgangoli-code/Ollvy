@@ -42,11 +42,13 @@ export function MainLayout({ children }: MainLayoutProps) {
             window.history.replaceState(null, '', window.location.pathname)
 
             // Fetch or create user data
-            let { data: userData } = await supabase
+            let { data: userData, error: fetchError } = await supabase
               .from('users')
               .select('*')
               .eq('auth_user_id', data.session.user.id)
               .single()
+
+            console.log('User fetch result:', { userData: userData?.id, fetchError: fetchError?.message })
 
             // Create user if doesn't exist (new OAuth user via implicit flow)
             if (!userData) {
@@ -54,7 +56,9 @@ export function MainLayout({ children }: MainLayoutProps) {
               const avatarUrl = authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture
               const fullName = authUser.user_metadata?.full_name || authUser.user_metadata?.name
 
-              const { data: newUser } = await supabase
+              console.log('Creating new user for:', authUser.email)
+
+              const { data: newUser, error: insertError } = await supabase
                 .from('users')
                 .insert({
                   auth_user_id: authUser.id,
@@ -68,8 +72,12 @@ export function MainLayout({ children }: MainLayoutProps) {
                 .select()
                 .single()
 
-              userData = newUser
-              console.log('Created new user:', userData?.id)
+              if (insertError) {
+                console.error('Error creating user:', insertError)
+              } else {
+                userData = newUser
+                console.log('Created new user:', userData?.id)
+              }
             }
 
             setSession(data.session)
