@@ -41,12 +41,36 @@ export function MainLayout({ children }: MainLayoutProps) {
             // Clear the hash from URL
             window.history.replaceState(null, '', window.location.pathname)
 
-            // Fetch user data
-            const { data: userData } = await supabase
+            // Fetch or create user data
+            let { data: userData } = await supabase
               .from('users')
               .select('*')
               .eq('auth_user_id', data.session.user.id)
               .single()
+
+            // Create user if doesn't exist (new OAuth user via implicit flow)
+            if (!userData) {
+              const authUser = data.session.user
+              const avatarUrl = authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture
+              const fullName = authUser.user_metadata?.full_name || authUser.user_metadata?.name
+
+              const { data: newUser } = await supabase
+                .from('users')
+                .insert({
+                  auth_user_id: authUser.id,
+                  email: authUser.email,
+                  phone: null,
+                  auth_provider: 'google',
+                  avatar_url: avatarUrl,
+                  business_name: fullName,
+                  referral_code: `OLV${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+                })
+                .select()
+                .single()
+
+              userData = newUser
+              console.log('Created new user:', userData?.id)
+            }
 
             setSession(data.session)
             setUser(userData || null)
@@ -76,11 +100,35 @@ export function MainLayout({ children }: MainLayoutProps) {
         console.log('Auth event:', event)
 
         if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') && session) {
-          const { data: userData } = await supabase
+          let { data: userData } = await supabase
             .from('users')
             .select('*')
             .eq('auth_user_id', session.user.id)
             .single()
+
+          // Create user if doesn't exist (new OAuth user)
+          if (!userData && event === 'SIGNED_IN') {
+            const authUser = session.user
+            const avatarUrl = authUser.user_metadata?.avatar_url || authUser.user_metadata?.picture
+            const fullName = authUser.user_metadata?.full_name || authUser.user_metadata?.name
+
+            const { data: newUser } = await supabase
+              .from('users')
+              .insert({
+                auth_user_id: authUser.id,
+                email: authUser.email,
+                phone: null,
+                auth_provider: 'google',
+                avatar_url: avatarUrl,
+                business_name: fullName,
+                referral_code: `OLV${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+              })
+              .select()
+              .single()
+
+            userData = newUser
+            console.log('Created new user via auth event:', userData?.id)
+          }
 
           setSession(session)
           setUser(userData || null)
