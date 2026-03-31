@@ -402,7 +402,7 @@ export function OrderViewClient({
             <div className="space-y-1">
               <h1 className="text-xl font-semibold">{order.service_packages?.name}</h1>
               <p className="text-sm text-muted-foreground">
-                {order.users?.business_name} - {order.users?.phone}
+                {order.users?.business_name} - {order.users?.email || order.users?.phone || 'No contact'}
               </p>
               <p className="font-mono text-sm">{order.order_number}</p>
             </div>

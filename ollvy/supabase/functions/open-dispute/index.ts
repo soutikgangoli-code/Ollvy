@@ -213,7 +213,7 @@ serve(async (req) => {
       await supabase.from('admin_notifications').insert({
         type: 'dispute_abuse_warning',
         title: 'Possible Dispute Abuse',
-        body: `User ${userData?.phone || userId} has raised 3+ disputes this month. Review account.`,
+        body: `User ${userData?.email || userData?.phone || userId} has raised 3+ disputes this month. Review account.`,
         related_id: userId,
         related_type: 'user',
       });
@@ -228,14 +228,14 @@ serve(async (req) => {
         // Get user FCM token to check same-device pattern
         const { data: userData } = await supabase
           .from('users')
-          .select('phone, fcm_token')
+          .select('phone, email, fcm_token')
           .eq('id', userId)
           .single();
 
         await supabase.from('admin_notifications').insert({
           type: 'possible_refund_gaming',
           title: 'Possible Refund Gaming',
-          body: `Dispute raised within 2 hours of order completion. Order ${order.order_number}. User: ${userData?.phone || userId}`,
+          body: `Dispute raised within 2 hours of order completion. Order ${order.order_number}. User: ${userData?.email || userData?.phone || userId}`,
           related_id: order_id,
           related_type: 'order',
         });

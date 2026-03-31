@@ -31,6 +31,7 @@ interface QueueOrder {
   total_paisa_snapshot: number
   service_name: string
   user_name: string
+  user_email: string
   user_phone: string
   days_active: number
   bucket: Bucket
@@ -730,7 +731,10 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
                     </div>
                     <div className="text-sm text-muted-foreground truncate">
                       {order.user_name}
-                      {order.user_phone && order.user_name !== order.user_phone && (
+                      {order.user_email && order.user_name !== order.user_email && (
+                        <span className="ml-2 text-xs">({order.user_email})</span>
+                      )}
+                      {order.user_phone && !order.user_email && order.user_name !== order.user_phone && (
                         <span className="ml-2 text-xs">({order.user_phone})</span>
                       )}
                     </div>

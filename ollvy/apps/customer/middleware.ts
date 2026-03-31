@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 // Routes that don't require authentication
-const PUBLIC_ROUTES = ['/', '/login', '/verify']
+const PUBLIC_ROUTES = ['/', '/login', '/verify', '/auth/callback', '/auth/error']
 
 // Routes that require authentication (server-side redirect to /login)
 // Note: /checkout and /quote use modal-based auth on client side, not server redirect

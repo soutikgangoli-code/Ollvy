@@ -33,17 +33,69 @@ import {
   RISK_LEVEL_HIGH_MAX,
 } from './constants'
 
-// Due dates for current financial year (from deadlines.ts)
-const DUE_DATES: Record<string, string> = {
-  'business-itr': '2025-10-31',
-  'gst-annual-return': '2025-12-31',
-  'director-kyc': '2025-09-30',
-  'mca-annual-filing': '2025-10-30', // 30 days after AGM (assumed Sep 30)
-  'tds-monthly-compliance': '2025-04-07', // 7th of following month
-  'gst-monthly': '2025-04-20', // 20th of following month
-  'pf-compliance': '2025-04-15', // 15th of following month
-  'esic-compliance': '2025-04-15', // 15th of following month
+/**
+ * Get the current Indian financial year (April to March)
+ * Returns the calendar year in which the financial year starts
+ * e.g., FY 2025-26 returns 2025
+ */
+function getCurrentFinancialYear(): number {
+  const now = new Date()
+  const currentMonth = now.getMonth() // 0-11
+  const currentYear = now.getFullYear()
+
+  // Financial year starts in April (month 3)
+  // If we're in Jan-Mar, we're still in the previous FY
+  return currentMonth < 3 ? currentYear - 1 : currentYear
 }
+
+/**
+ * Get due dates for the current financial year
+ * Dynamically calculates dates based on FY instead of hardcoding
+ */
+function getDueDates(): Record<string, string> {
+  const fy = getCurrentFinancialYear()
+  const nextYear = fy + 1
+
+  return {
+    // Annual compliances - due in the same calendar year as FY start
+    'business-itr': `${fy}-10-31`, // October 31 of FY start year
+    'gst-annual-return': `${fy}-12-31`, // December 31 of FY start year
+    'director-kyc': `${fy}-09-30`, // September 30 of FY start year
+    'mca-annual-filing': `${fy}-10-30`, // 30 days after AGM (assumed Sep 30)
+
+    // Monthly compliances - use next month's date relative to current date
+    // These are rolling dates, shown as example for the first month of FY
+    'tds-monthly-compliance': getNextMonthlyDueDate(7), // 7th of following month
+    'gst-monthly': getNextMonthlyDueDate(20), // 20th of following month
+    'pf-compliance': getNextMonthlyDueDate(15), // 15th of following month
+    'esic-compliance': getNextMonthlyDueDate(15), // 15th of following month
+  }
+}
+
+/**
+ * Get the next monthly due date for a compliance with a specific day
+ */
+function getNextMonthlyDueDate(dayOfMonth: number): string {
+  const now = new Date()
+  let year = now.getFullYear()
+  let month = now.getMonth() + 1 // Next month
+
+  // If we're past the due date this month, use next month
+  if (now.getDate() >= dayOfMonth) {
+    month++
+  }
+
+  // Handle year rollover
+  if (month > 12) {
+    month = 1
+    year++
+  }
+
+  return `${year}-${String(month).padStart(2, '0')}-${String(dayOfMonth).padStart(2, '0')}`
+}
+
+// Get due dates dynamically
+const DUE_DATES = getDueDates()
 
 /**
  * Available compliance options based on business profile

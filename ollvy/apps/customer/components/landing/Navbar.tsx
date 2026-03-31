@@ -259,7 +259,7 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
                     <User className="h-4 w-4" />
                   </div>
                   <span className="max-w-[100px] truncate text-sm">
-                    {user.business_name || user.phone}
+                    {user.business_name || user.phone || user.email?.split('@')[0]}
                   </span>
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
@@ -429,7 +429,7 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
                     <div>
                       <p className="font-mono text-sm text-foreground">Profile</p>
                       <p className="font-mono text-[10px] text-muted-foreground truncate max-w-[180px]">
-                        {user.business_name || user.phone}
+                        {user.business_name || user.phone || user.email}
                       </p>
                     </div>
                   </Link>

@@ -752,7 +752,7 @@ function ProfileContent() {
               trademarkNumber: user.trademark_number,
             }}
             avatarInitial={
-              user.business_name?.charAt(0) || user.phone?.charAt(0) || 'U'
+              user.business_name?.charAt(0) || user.email?.charAt(0) || user.phone?.charAt(0) || 'U'
             }
             onSave={async (data) => {
               const supabase = getClient()

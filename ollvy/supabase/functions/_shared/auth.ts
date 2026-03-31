@@ -146,8 +146,21 @@ export async function verifyAdmin(req: Request): Promise<AdminAuthResult> {
   const token = authHeader.replace('Bearer ', '');
   const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-  // Test mode: allow service role key to act as super_admin
+  // Service role key grants super_admin access
+  // SECURITY: This should only be used for internal system operations
+  // In production, consider alerting on unexpected service role usage
   if (serviceRoleKey && token === serviceRoleKey) {
+    // Log service role usage for audit trail
+    const endpoint = req.url || 'unknown';
+    const timestamp = new Date().toISOString();
+
+    // Async audit logging - don't block the request
+    logServiceRoleUsage(endpoint, timestamp).catch(err =>
+      console.error('Failed to log service role usage:', err)
+    );
+
+    console.warn(`[AUDIT] Service role key used at ${timestamp} for endpoint: ${endpoint}`);
+
     return {
       success: true,
       userId: 'service-role',
@@ -231,15 +244,87 @@ export function verifyCron(req: Request): AuthResult {
 /**
  * Verify webhook signature (for Razorpay webhooks)
  * For: Webhook endpoints
+ *
+ * SECURITY: Implements HMAC-SHA256 verification as required by Razorpay.
+ * @see https://razorpay.com/docs/webhooks/validate-test/
  */
-export function verifyWebhookSignature(req: Request, body: string, secret: string): boolean {
+export async function verifyWebhookSignature(req: Request, body: string, secret: string): Promise<boolean> {
   const signature = req.headers.get('X-Razorpay-Signature');
 
   if (!signature) {
+    console.error('Webhook verification failed: Missing X-Razorpay-Signature header');
     return false;
   }
 
-  // In production, implement HMAC SHA256 verification
-  // For stub: return true
-  return true;
+  if (!secret) {
+    console.error('Webhook verification failed: Missing webhook secret');
+    return false;
+  }
+
+  try {
+    const encoder = new TextEncoder();
+
+    // Import the secret as an HMAC key
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+
+    // Compute the HMAC signature
+    const signatureBuffer = await crypto.subtle.sign('HMAC', key, encoder.encode(body));
+
+    // Convert to hex string
+    const computedSignature = Array.from(new Uint8Array(signatureBuffer))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+    // Constant-time comparison to prevent timing attacks
+    if (computedSignature.length !== signature.length) {
+      console.error('Webhook verification failed: Signature length mismatch');
+      return false;
+    }
+
+    let result = 0;
+    for (let i = 0; i < computedSignature.length; i++) {
+      result |= computedSignature.charCodeAt(i) ^ signature.charCodeAt(i);
+    }
+
+    const isValid = result === 0;
+    if (!isValid) {
+      console.error('Webhook verification failed: Signature mismatch');
+    }
+    return isValid;
+  } catch (error) {
+    console.error('Webhook signature verification error:', error);
+    return false;
+  }
+}
+
+/**
+ * Log service role key usage for audit trail
+ * SECURITY: Tracks when service role key is used for admin authentication
+ */
+async function logServiceRoleUsage(endpoint: string, timestamp: string): Promise<void> {
+  try {
+    const supabase = getSupabaseAdmin();
+
+    await supabase.from('admin_audit_log').insert({
+      admin_user_id: null, // System/service role
+      action: 'service_role_auth',
+      target_type: 'system',
+      target_id: null,
+      notes: `Service role key used for admin authentication`,
+      payload: {
+        endpoint,
+        timestamp,
+        source: 'verifyAdmin',
+      },
+    });
+  } catch (error) {
+    // Log but don't throw - audit logging should not block the request
+    console.error('Failed to write service role audit log:', error);
+  }
 }

@@ -16,6 +16,7 @@ interface QueueOrder {
   total_paisa_snapshot: number
   service_name: string
   user_name: string
+  user_email: string
   user_phone: string
   days_active: number
   bucket: Bucket
@@ -44,7 +45,7 @@ export default async function AdminQueuePage() {
       expected_completion_date,
       assigned_admin_id,
       service_packages (name),
-      users (business_name, phone)
+      users (business_name, email, phone)
     `)
     .not('status', 'in', '("completed","cancelled")')
     .order('paid_at', { ascending: false })
@@ -151,6 +152,7 @@ export default async function AdminQueuePage() {
       total_paisa_snapshot: order.total_paisa_snapshot,
       service_name: servicePackage?.name || 'Unknown Service',
       user_name: userName,
+      user_email: user?.email || '',
       user_phone: user?.phone || '',
       days_active: daysActive,
       bucket,

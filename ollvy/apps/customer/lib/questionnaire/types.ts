@@ -141,6 +141,7 @@ export const STEP_TITLES: Record<string, Record<number, { title: string; descrip
 
 // Default step titles for services without custom titles
 export const DEFAULT_STEP_TITLES: Record<number, { title: string; description: string }> = {
+  0: { title: 'Contact Details', description: 'How can we reach you?' },
   1: { title: 'Basic Information', description: 'Tell us about your business' },
   2: { title: 'Details', description: 'Additional information needed' },
   3: { title: 'Review', description: 'Review and confirm your information' },

@@ -18,7 +18,7 @@ interface Order {
 interface User {
   id: string
   business_name?: string
-  phone: string
+  phone: string | null
   email?: string
   business_type?: string
   gstin?: string
@@ -58,14 +58,16 @@ export function UserDetailClient({ user, orders }: UserDetailClientProps) {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div>
-              <p className="text-xs text-muted-foreground">Phone</p>
-              <p className="text-sm font-medium">{user.phone}</p>
-            </div>
             {user.email && (
               <div>
                 <p className="text-xs text-muted-foreground">Email</p>
                 <p className="text-sm font-medium">{user.email}</p>
+              </div>
+            )}
+            {user.phone && (
+              <div>
+                <p className="text-xs text-muted-foreground">Phone</p>
+                <p className="text-sm font-medium">+91 {user.phone}</p>
               </div>
             )}
             {user.business_type && (

@@ -366,9 +366,24 @@ serve(async (req) => {
 
     // Calculate total
     // Floor: order cannot go below govt_fees + GST
-    const subtotalBeforeFloor = adjustedBasePaisa - promoDiscountPaisa - referralCreditUsed;
-    const floor = govtFeesPaisa; // Govt fees (GST is charged on base)
-    const subtotal = Math.max(subtotalBeforeFloor, 0);
+    // SECURITY FIX: Include GST in floor calculation to prevent free services
+    const floor = govtFeesPaisa + gst.total;
+
+    // Cap total discounts to ensure base price covers at least the floor
+    const maxDiscount = Math.max(0, adjustedBasePaisa);
+    const totalDiscounts = promoDiscountPaisa + referralCreditUsed;
+    const cappedDiscounts = Math.min(totalDiscounts, maxDiscount);
+
+    // Recalculate if discounts were capped
+    let actualPromoDiscount = promoDiscountPaisa;
+    let actualReferralCredit = referralCreditUsed;
+    if (cappedDiscounts < totalDiscounts) {
+      // Promo takes priority, then referral credit
+      actualPromoDiscount = Math.min(promoDiscountPaisa, maxDiscount);
+      actualReferralCredit = Math.min(referralCreditUsed, maxDiscount - actualPromoDiscount);
+    }
+
+    const subtotal = Math.max(adjustedBasePaisa - actualPromoDiscount - actualReferralCredit, 0);
     const totalPaisa = subtotal + govtFeesPaisa + gst.total;
 
     // Razorpay requires amount in paise (which we already have)
@@ -437,12 +452,12 @@ serve(async (req) => {
         price_govt_fees_paisa_snapshot: govtFeesPaisa,
         price_gst_paisa_snapshot: gst.total,
         pro_discount_paisa_snapshot: proDiscountPaisa,
-        promo_discount_paisa_snapshot: promoDiscountPaisa,
+        promo_discount_paisa_snapshot: actualPromoDiscount,
         total_paisa_snapshot: totalPaisa,
         promo_code_used: promoCodeUsed,
         price_source: priceSource,
         razorpay_order_id: razorpayOrder.id,
-        referral_credit_used_paisa: referralCreditUsed,
+        referral_credit_used_paisa: actualReferralCredit,
         // variant_id and engagement_agreed_at require migration 20260320000000
         variant_id: variant_id || null,
         engagement_agreed_at: engagement_agreed ? new Date().toISOString() : null,
@@ -461,14 +476,37 @@ serve(async (req) => {
       );
     }
 
-    // If referral credit used, deduct from user balance
-    if (referralCreditUsed > 0) {
-      await supabase
-        .from('users')
-        .update({
-          referral_credit_balance_paisa: user.referral_credit_balance_paisa - referralCreditUsed,
-        })
-        .eq('id', userId);
+    // If referral credit used, deduct from user balance using atomic function
+    // This prevents race condition where concurrent orders could overdraft balance
+    if (actualReferralCredit > 0) {
+      const { data: deductResult, error: deductError } = await supabase.rpc(
+        'deduct_referral_credit_atomic',
+        {
+          p_user_id: userId,
+          p_requested_amount: actualReferralCredit,
+          p_max_applicable: actualReferralCredit,
+        }
+      );
+
+      if (deductError) {
+        console.error('Failed to deduct referral credit:', deductError);
+        // Continue without credit - order is already created
+      } else if (deductResult && deductResult[0]) {
+        const result = deductResult[0];
+        if (!result.success) {
+          console.error('Referral credit deduction failed:', result.error_message);
+        } else if (result.amount_deducted !== actualReferralCredit) {
+          // Race condition detected - less credit was available than expected
+          console.warn(
+            `Race condition: Expected to deduct ${actualReferralCredit}, actual: ${result.amount_deducted}`
+          );
+          // Update the order with actual amount deducted
+          await supabase
+            .from('orders')
+            .update({ referral_credit_used_paisa: result.amount_deducted })
+            .eq('id', order.id);
+        }
+      }
     }
 
     // Insert order_addons if any addons were selected
@@ -520,8 +558,8 @@ serve(async (req) => {
         price_breakdown: {
           base: basePricePaisa,
           pro_discount: proDiscountPaisa,
-          promo_discount: promoDiscountPaisa,
-          referral_credit: referralCreditUsed,
+          promo_discount: actualPromoDiscount,
+          referral_credit: actualReferralCredit,
           govt_fees: govtFeesPaisa,
           gst: gst.total,
           cgst: gst.cgst,

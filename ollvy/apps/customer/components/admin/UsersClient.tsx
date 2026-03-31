@@ -10,7 +10,8 @@ import { formatDate } from '@/lib/utils'
 interface User {
   id: string
   business_name: string
-  phone: string
+  phone: string | null
+  email?: string
   business_type?: string
   created_at: string
   order_count: number
@@ -29,7 +30,8 @@ export function UsersClient({ users }: UsersClientProps) {
     const query = searchQuery.toLowerCase()
     return users.filter(u =>
       u.business_name.toLowerCase().includes(query) ||
-      u.phone.includes(query) ||
+      u.phone?.includes(query) ||
+      u.email?.toLowerCase().includes(query) ||
       (u.business_type?.toLowerCase().includes(query))
     )
   }, [users, searchQuery])
@@ -44,7 +46,7 @@ export function UsersClient({ users }: UsersClientProps) {
           </p>
         </div>
         <Input
-          placeholder="Search by name, phone, or type..."
+          placeholder="Search by name, email, phone, or type..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-sm"
@@ -74,7 +76,10 @@ export function UsersClient({ users }: UsersClientProps) {
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-medium truncate">{user.business_name}</p>
-                    <p className="text-sm text-muted-foreground">{user.phone}</p>
+                    <p className="text-sm text-muted-foreground">{user.email || user.phone || 'No contact'}</p>
+                    {user.phone && user.email && (
+                      <p className="text-xs text-muted-foreground">+91 {user.phone}</p>
+                    )}
                     {user.business_type && (
                       <p className="text-xs text-muted-foreground">{user.business_type}</p>
                     )}

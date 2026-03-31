@@ -12,7 +12,7 @@ export default async function AdminUsersPage() {
   // Fetch users with pagination (limit for performance)
   const { data: users } = await supabaseServer
     .from('users')
-    .select('id, business_name, phone, business_type, created_at')
+    .select('id, business_name, phone, email, business_type, created_at')
     .order('created_at', { ascending: false })
     .limit(500)
 
@@ -39,6 +39,7 @@ export default async function AdminUsersPage() {
     id: user.id,
     business_name: user.business_name || 'No name',
     phone: user.phone,
+    email: user.email,
     business_type: user.business_type,
     created_at: user.created_at,
     order_count: orderCounts[user.id] || 0,

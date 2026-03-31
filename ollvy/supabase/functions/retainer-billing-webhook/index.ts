@@ -85,16 +85,22 @@ serve(async (req) => {
     const paymentId = payload.payload?.payment?.entity?.id;
 
     // CRITICAL: Use payment ID as idempotency key for payment events
-    // For non-payment events (paused, resumed, cancelled), use subscription_id + event type
-    // NEVER use just event type - two different subscriptions with same event would collide
+    // For non-payment events (paused, resumed, cancelled), include timestamp to allow retries
+    // SECURITY FIX: Include created_at timestamp for non-payment events to prevent
+    // treating legitimate retried events as duplicates
     let eventId: string;
+    const eventTimestamp = payload.created_at || Math.floor(Date.now() / 1000);
+
     if (paymentId) {
       // Payment events: use the unique payment ID
       eventId = paymentId;
     } else if (subscriptionId) {
-      // Non-payment events: combine subscription ID with event type
-      // This allows same subscription to have different event types processed
-      eventId = `${subscriptionId}_${event}`;
+      // Non-payment events: combine subscription ID + event type + timestamp
+      // This ensures:
+      // 1. Same subscription can have different event types processed
+      // 2. Retried events with same timestamp are deduplicated
+      // 3. New events (e.g., multiple pauses over time) are processed
+      eventId = `${subscriptionId}_${event}_${eventTimestamp}`;
     } else {
       console.error('Missing both payment ID and subscription ID in webhook payload');
       return new Response(
@@ -159,7 +165,12 @@ serve(async (req) => {
     switch (event) {
       case 'subscription.charged': {
         // Payment successful - create child order
-        const billingPeriod = new Date().toISOString().substring(0, 7); // YYYY-MM
+        // SECURITY FIX: Use payment event timestamp for billing period, not system time
+        // This ensures delayed webhooks are recorded in the correct month
+        const paymentTimestamp = paymentEntity?.created_at
+          ? new Date(paymentEntity.created_at * 1000) // Razorpay uses Unix timestamp
+          : new Date();
+        const billingPeriod = paymentTimestamp.toISOString().substring(0, 7); // YYYY-MM
         const amountPaisa = paymentEntity?.amount || retainer.monthly_price_paisa;
 
         // Update retainer status if in onboarding
@@ -247,12 +258,15 @@ serve(async (req) => {
           .update({ status: 'payment_failed' })
           .eq('id', retainer.id);
 
-        // Create billing event
+        // Create billing event with correct billing period from payment timestamp
+        const failedPaymentTimestamp = paymentEntity?.created_at
+          ? new Date(paymentEntity.created_at * 1000)
+          : new Date();
         await supabase.from('retainer_billing_events').insert({
           retainer_subscription_id: retainer.id,
           razorpay_payment_id: paymentEntity?.id,
           event_type: 'subscription.payment_failed',
-          billing_period: new Date().toISOString().substring(0, 7),
+          billing_period: failedPaymentTimestamp.toISOString().substring(0, 7),
           status: 'failed',
         });
 

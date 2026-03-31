@@ -200,31 +200,45 @@ export async function autoAssignProfessional(
       return { ok: true, status: 'waitlisted' };
     }
 
-    // Assign professional to order
-    const now = new Date().toISOString();
+    // Use atomic assignment to prevent race condition
+    // where concurrent orders could exceed max_concurrent_orders
+    const { data: assignResult, error: assignError } = await supabase.rpc(
+      'assign_professional_atomic',
+      {
+        p_order_id: order_id,
+        p_professional_id: professional.id,
+        p_expected_status: 'pending_assignment',
+      }
+    );
 
-    // Update order with professional
-    const { error: updateOrderError } = await supabase
-      .from('orders')
-      .update({
-        professional_id: professional.id,
-        status: 'assigned',
-        assigned_at: now,
-      })
-      .eq('id', order_id);
-
-    if (updateOrderError) {
-      throw new Error(`Failed to update order: ${updateOrderError.message}`);
+    if (assignError) {
+      console.error('Atomic assignment error:', assignError);
+      throw new Error(`Failed to assign professional: ${assignError.message}`);
     }
 
-    // Update professional's last_assigned_at
-    await supabase
-      .from('professionals')
-      .update({ last_assigned_at: now })
-      .eq('id', professional.id);
+    const atomicResult = assignResult?.[0];
+    if (!atomicResult?.success) {
+      // Assignment failed (likely capacity issue or status changed)
+      console.log(`Atomic assignment failed: ${atomicResult?.error_message}`);
 
-    // Increment current_active_orders
-    await supabase.rpc('increment_active_orders', { pro_id: professional.id });
+      // Try next professional or waitlist
+      // For now, if atomic assignment fails, treat as no available professional
+      console.log(`Professional ${professional.id} assignment failed, adding order to waitlist`);
+
+      await supabase
+        .from('orders')
+        .update({ status: 'waitlisted' })
+        .eq('id', order_id);
+
+      await supabase.from('order_waitlist').insert({
+        order_id,
+        estimated_assignment_hours: 24,
+      });
+
+      return { ok: true, status: 'waitlisted' };
+    }
+
+    // Assignment was successful
 
     // Get order details for notifications
     const { data: order } = await supabase

@@ -115,13 +115,15 @@ export default function SettingsPage() {
           <CardContent className="p-5">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-full bg-white/10 flex items-center justify-center text-white text-xl font-medium">
-                {user.business_name?.charAt(0) || user.phone?.slice(-2)}
+                {user.business_name?.charAt(0) || user.email?.charAt(0) || user.phone?.slice(-2) || 'U'}
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-white">
                   {user.business_name || 'Your Business'}
                 </h3>
-                <p className="text-sm text-white/40">+91 {user.phone}</p>
+                <p className="text-sm text-white/40">
+                  {user.email || (user.phone ? `+91 ${user.phone}` : 'No contact')}
+                </p>
               </div>
               <Link href="/profile">
                 <Button variant="outline" size="sm">

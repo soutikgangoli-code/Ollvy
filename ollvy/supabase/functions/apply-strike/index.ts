@@ -37,44 +37,43 @@ export async function applyStrike(
   try {
     const { professional_id, order_id, sla_alert_id, reason } = input;
 
-    // Get current professional data
+    // Use atomic strike increment to prevent race condition
+    // where concurrent SLA violations could lose strike increments
+    const { data: strikeResult, error: strikeError } = await supabase.rpc(
+      'apply_strike_atomic',
+      {
+        p_professional_id: professional_id,
+        p_order_id: order_id,
+        p_sla_alert_id: sla_alert_id,
+        p_reason: reason,
+      }
+    );
+
+    if (strikeError) {
+      return { ok: false, error: `Failed to apply strike: ${strikeError.message}` };
+    }
+
+    const atomicResult = strikeResult?.[0];
+    if (!atomicResult?.success) {
+      return { ok: false, error: atomicResult?.error_message || 'Failed to apply strike' };
+    }
+
+    const newStrikeCount = atomicResult.new_strike_count;
+
+    // Fetch professional data for notifications (name, fcm_token, etc.)
     const { data: professional, error: fetchError } = await supabase
       .from('professionals')
-      .select('id, name, strike_count, status, fcm_token, web_push_subscription')
+      .select('id, name, status, fcm_token, web_push_subscription')
       .eq('id', professional_id)
       .single();
 
     if (fetchError || !professional) {
-      return { ok: false, error: 'Professional not found' };
+      // Strike was applied but we can't send notifications
+      console.error('Could not fetch professional for notifications:', fetchError);
+      return { ok: true, strike_count: newStrikeCount, suspended: atomicResult.should_suspend };
     }
 
-    // Increment strike count
-    const newStrikeCount = (professional.strike_count || 0) + 1;
-
-    // Update professional's strike count
-    const { error: updateError } = await supabase
-      .from('professionals')
-      .update({ strike_count: newStrikeCount })
-      .eq('id', professional_id);
-
-    if (updateError) {
-      return { ok: false, error: `Failed to update strike count: ${updateError.message}` };
-    }
-
-    // Write to admin audit log
-    await supabase.from('admin_audit_log').insert({
-      admin_user_id: null, // System action
-      action: 'apply_strike',
-      target_type: 'professional',
-      target_id: professional_id,
-      notes: reason,
-      payload: {
-        order_id,
-        sla_alert_id,
-        old_strike_count: professional.strike_count || 0,
-        new_strike_count: newStrikeCount,
-      },
-    });
+    // Note: Audit log is written by the atomic function
 
     // Send push notification to professional
     await supabase.from('notifications').insert({

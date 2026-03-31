@@ -156,6 +156,13 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           .select('question_key, response_value')
           .eq('order_id', orderId)
 
+        // Fetch the user's data to check if they already have a phone number
+        const { data: userData } = await supabase
+          .from('users')
+          .select('phone')
+          .eq('auth_user_id', currentSession.user.id)
+          .single()
+
         // Build responses object and separate pre-payment responses
         const responses: QuestionnaireFormValues = {}
         const prePaymentResponses: QuestionnaireFormValues = {}
@@ -168,6 +175,11 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
               responses[r.question_key] = value
             }
           }
+        }
+
+        // Pre-fill phone number if user already has one (from Google OAuth + previous orders)
+        if (userData?.phone && !responses['user_phone_number']) {
+          responses['user_phone_number'] = userData.phone
         }
 
         // Group questions by step
@@ -403,6 +415,25 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
 
       try {
         const supabase = getClient()
+
+        // Special handling for phone number question - also update users table
+        const phoneNumber = stepResponses['user_phone_number']
+        if (phoneNumber && typeof phoneNumber === 'string') {
+          // Get the current user
+          const { data: { session } } = await supabase.auth.getSession()
+          if (session) {
+            // Update the user's phone number in the users table
+            const { error: phoneError } = await supabase
+              .from('users')
+              .update({ phone: phoneNumber })
+              .eq('auth_user_id', session.user.id)
+
+            if (phoneError) {
+              console.error('Failed to update user phone:', phoneError)
+              // Don't fail the whole save - continue with questionnaire responses
+            }
+          }
+        }
 
         // Upsert each response - use allSettled to handle partial failures gracefully
         const upsertPromises = Object.entries(stepResponses)

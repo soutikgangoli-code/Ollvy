@@ -32,8 +32,35 @@ serve(async (req) => {
 
     const supabase = getSupabaseAdmin();
     const now = new Date();
+    const today = now.toISOString().split('T')[0]; // YYYY-MM-DD
     let nudgesSent = 0;
     let usersReverted = 0;
+
+    // Idempotency check - prevent duplicate runs on the same day
+    // This handles cron retries that could send duplicate notifications
+    const idempotencyKey = `grace_period_check_${today}`;
+    const { error: idempotencyError } = await supabase
+      .from('processed_webhook_events')
+      .insert({
+        razorpay_event_id: idempotencyKey,
+        event_type: 'cron_grace_period_check',
+      });
+
+    if (idempotencyError) {
+      // Already processed today
+      console.log(`Grace period check already ran today (${today}), skipping`);
+      return new Response(
+        JSON.stringify({
+          ok: true,
+          message: 'Already processed today',
+          processed_at: today,
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        }
+      );
+    }
 
     // Find users in grace period (trial ended but not yet subscribed)
     const { data: graceUsers, error: fetchError } = await supabase

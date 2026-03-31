@@ -142,7 +142,7 @@ export function Header() {
                     <User className="h-4 w-4" />
                   </div>
                   <span className="max-w-[100px] truncate text-sm">
-                    {user.business_name || user.phone}
+                    {user.business_name || user.email?.split('@')[0] || user.phone}
                   </span>
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>

@@ -50,7 +50,7 @@ interface RegistrationNumbers {
 
 interface AccountInfoCardProps {
   businessName?: string
-  phone: string
+  phone: string | null
   email?: string
   businessType?: BusinessType
   state?: string
@@ -377,8 +377,19 @@ export function AccountInfoCard({
               {businessName || 'Your Business'}
             </h3>
             <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-              <Phone className="h-3.5 w-3.5" />
-              +91 {phone}
+              {phone ? (
+                <>
+                  <Phone className="h-3.5 w-3.5" />
+                  +91 {phone}
+                </>
+              ) : email ? (
+                <>
+                  <Mail className="h-3.5 w-3.5" />
+                  {email}
+                </>
+              ) : (
+                <span className="text-muted-foreground/60">No contact info</span>
+              )}
             </p>
           </div>
         </div>
