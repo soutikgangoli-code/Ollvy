@@ -8,8 +8,12 @@ export async function GET(request: NextRequest) {
   const next = searchParams.get('next') ?? '/'
   const origin = request.nextUrl.origin
 
+  // For implicit flow, tokens come in the URL fragment (handled client-side)
+  // This route handles the PKCE flow with authorization code
   if (!code) {
-    return NextResponse.redirect(`${origin}/?error=no_code`)
+    // No code means either implicit flow (fragment) or error
+    // Redirect to home and let client-side handle fragment tokens
+    return NextResponse.redirect(`${origin}${next}`)
   }
 
   const redirectUrl = `${origin}${next}`
@@ -40,7 +44,6 @@ export async function GET(request: NextRequest) {
   }
 
   if (data.session) {
-    // Check/create user in our database
     const { data: existingUser } = await supabase
       .from('users')
       .select('id')
