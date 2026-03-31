@@ -1,21 +1,9 @@
 import { createBrowserClient } from '@supabase/ssr'
 
 export function createClient() {
-  // Determine cookie domain based on environment
-  const isProduction = typeof window !== 'undefined' &&
-    window.location.hostname.includes('ollvy.com')
-
   return createBrowserClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    isProduction ? {
-      cookieOptions: {
-        domain: '.ollvy.com',
-        path: '/',
-        sameSite: 'lax',
-        secure: true,
-      },
-    } : undefined
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
 }
 
