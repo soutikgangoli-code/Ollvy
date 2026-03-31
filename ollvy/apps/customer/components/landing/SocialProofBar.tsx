@@ -2,9 +2,9 @@ import { Star } from 'lucide-react'
 
 export function SocialProofBar() {
   return (
-    <section className="py-14 border-y border-border bg-muted/30">
+    <section className="py-10">
       <div className="container">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 px-8 py-5 rounded-2xl border border-border/50 bg-muted/40 backdrop-blur-sm">
           <p className="text-base text-muted-foreground">
             Trusted by <span className="text-foreground font-semibold">100+ businesses</span> across India
           </p>
