@@ -14,15 +14,38 @@ export function MainLayout({ children }: MainLayoutProps) {
   const { refreshSession, setSession, setUser } = useAuthStore()
 
   useEffect(() => {
-    // Initial session check
-    refreshSession()
-
-    // Listen for auth state changes (handles OAuth redirects, sign out, etc.)
     const supabase = getClient()
+
+    // Check for session from URL hash (implicit flow) or cookies
+    const initSession = async () => {
+      // This will detect tokens in URL fragment for implicit flow
+      const { data: { session }, error } = await supabase.auth.getSession()
+
+      if (error) {
+        console.error('Session error:', error)
+        return
+      }
+
+      if (session) {
+        const { data: userData } = await supabase
+          .from('users')
+          .select('*')
+          .eq('auth_user_id', session.user.id)
+          .single()
+
+        setSession(session)
+        setUser(userData || null)
+      }
+    }
+
+    initSession()
+
+    // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          // Fetch user data and update store
+        console.log('Auth event:', event)
+
+        if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') && session) {
           const { data: userData } = await supabase
             .from('users')
             .select('*')
@@ -41,7 +64,7 @@ export function MainLayout({ children }: MainLayoutProps) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [refreshSession, setSession, setUser])
+  }, [setSession, setUser])
 
   return (
     <div className="flex min-h-screen flex-col">
