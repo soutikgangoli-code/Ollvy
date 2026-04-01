@@ -177,14 +177,22 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           }
         }
 
-        // Pre-fill phone number if user already has one (from Google OAuth + previous orders)
-        if (userData?.phone && !responses['user_phone_number']) {
-          responses['user_phone_number'] = userData.phone
+        // If user already has phone, skip the phone question entirely
+        // (phone is captured from Razorpay payment or previous orders)
+        let filteredQuestions = questionsData || []
+        if (userData?.phone) {
+          filteredQuestions = filteredQuestions.filter(q => q.question_key !== 'user_phone_number')
+        } else if (!responses['user_phone_number']) {
+          // Pre-fill phone number if user has one but we didn't filter
+          // (This case shouldn't happen now, but keeping for safety)
+          if (userData?.phone) {
+            responses['user_phone_number'] = userData.phone
+          }
         }
 
         // Group questions by step
         const stepMap = new Map<number, ServiceQuestion[]>()
-        for (const q of questionsData || []) {
+        for (const q of filteredQuestions) {
           const stepNum = q.step_number
           if (!stepMap.has(stepNum)) {
             stepMap.set(stepNum, [])

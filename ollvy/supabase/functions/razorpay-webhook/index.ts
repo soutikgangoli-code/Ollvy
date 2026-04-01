@@ -469,6 +469,31 @@ serve(async (req) => {
       throw new Error('Failed to update order status');
     }
 
+    // 1.5 Capture phone from Razorpay payment and save to user profile if not set
+    const paymentContact = payment.contact;
+    if (paymentContact) {
+      // Fetch current user phone
+      const { data: currentUser } = await supabase
+        .from('users')
+        .select('phone')
+        .eq('id', order.user_id)
+        .single();
+
+      // Update phone if user doesn't have one
+      if (!currentUser?.phone) {
+        const { error: phoneError } = await supabase
+          .from('users')
+          .update({ phone: paymentContact })
+          .eq('id', order.user_id);
+
+        if (phoneError) {
+          console.error('Failed to update user phone:', phoneError);
+        } else {
+          console.log(`Updated user ${order.user_id} phone from Razorpay: ${paymentContact}`);
+        }
+      }
+    }
+
     // 2. Create chat conversation for this order
     const { data: chatConversation, error: chatError } = await supabase
       .from('chat_conversations')

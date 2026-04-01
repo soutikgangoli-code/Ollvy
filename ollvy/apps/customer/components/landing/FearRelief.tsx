@@ -18,6 +18,9 @@ export function FearRelief() {
   return (
     <section className="py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
       <div className="container max-w-6xl">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center text-foreground mb-8 md:mb-12">
+          Why Ollvy?
+        </h2>
         <div className="grid grid-cols-2 gap-3 md:gap-6 lg:gap-12">
           {/* The Fear Side */}
           <div className="rounded-2xl md:rounded-3xl border border-border bg-card shadow-xl shadow-foreground/5 p-4 md:p-8 lg:p-10 flex flex-col">
