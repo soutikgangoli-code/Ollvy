@@ -1,7 +1,7 @@
 -- =============================================================================
 -- Migration: Fix order-documents bucket configuration
 -- Updates allowed MIME types to match what the UI accepts
--- Also recreates RLS policies to ensure they work correctly
+-- Also recreates RLS policies using storage.foldername() pattern for reliability
 -- =============================================================================
 
 -- =============================================================================
@@ -51,7 +51,9 @@ ON CONFLICT (id) DO UPDATE SET
 
 -- =============================================================================
 -- 2. Recreate RLS policies for order-documents bucket
--- Uses simpler path checking that's more reliable
+-- Uses storage.foldername() pattern (same as work-documents which works reliably)
+-- Path format: orders/{order_id}/documents/filename
+-- foldername(name)[1] = 'orders', foldername(name)[2] = order_id
 -- =============================================================================
 
 -- Drop existing policies first
@@ -62,18 +64,16 @@ DROP POLICY IF EXISTS "order_documents_user_delete" ON storage.objects;
 DROP POLICY IF EXISTS "order_documents_professional_insert" ON storage.objects;
 
 -- Users can upload to their own order documents
--- Uses path pattern: orders/{order_id}/...
 CREATE POLICY "order_documents_user_insert" ON storage.objects
   FOR INSERT
   TO authenticated
   WITH CHECK (
     bucket_id = 'order-documents' AND
-    -- Extract order_id from path: orders/{order_id}/documents/...
-    EXISTS (
-      SELECT 1 FROM orders o
+    (storage.foldername(name))[1] = 'orders' AND
+    (storage.foldername(name))[2] IN (
+      SELECT o.id::text FROM orders o
       JOIN users u ON o.user_id = u.id
       WHERE u.auth_user_id = auth.uid()
-      AND name LIKE 'orders/' || o.id::text || '/%'
     )
   );
 
@@ -83,21 +83,20 @@ CREATE POLICY "order_documents_user_read" ON storage.objects
   TO authenticated
   USING (
     bucket_id = 'order-documents' AND
+    (storage.foldername(name))[1] = 'orders' AND
     (
       -- User's own order documents
-      EXISTS (
-        SELECT 1 FROM orders o
+      (storage.foldername(name))[2] IN (
+        SELECT o.id::text FROM orders o
         JOIN users u ON o.user_id = u.id
         WHERE u.auth_user_id = auth.uid()
-        AND name LIKE 'orders/' || o.id::text || '/%'
       )
       OR
       -- Professionals can read documents for their assigned orders
-      EXISTS (
-        SELECT 1 FROM orders o
+      (storage.foldername(name))[2] IN (
+        SELECT o.id::text FROM orders o
         JOIN professionals p ON o.professional_id = p.id
         WHERE p.auth_user_id = auth.uid()
-        AND name LIKE 'orders/' || o.id::text || '/%'
       )
     )
   );
@@ -108,11 +107,11 @@ CREATE POLICY "order_documents_user_update" ON storage.objects
   TO authenticated
   USING (
     bucket_id = 'order-documents' AND
-    EXISTS (
-      SELECT 1 FROM orders o
+    (storage.foldername(name))[1] = 'orders' AND
+    (storage.foldername(name))[2] IN (
+      SELECT o.id::text FROM orders o
       JOIN users u ON o.user_id = u.id
       WHERE u.auth_user_id = auth.uid()
-      AND name LIKE 'orders/' || o.id::text || '/%'
     )
   );
 
@@ -122,11 +121,11 @@ CREATE POLICY "order_documents_user_delete" ON storage.objects
   TO authenticated
   USING (
     bucket_id = 'order-documents' AND
-    EXISTS (
-      SELECT 1 FROM orders o
+    (storage.foldername(name))[1] = 'orders' AND
+    (storage.foldername(name))[2] IN (
+      SELECT o.id::text FROM orders o
       JOIN users u ON o.user_id = u.id
       WHERE u.auth_user_id = auth.uid()
-      AND name LIKE 'orders/' || o.id::text || '/%'
     )
   );
 
@@ -136,10 +135,10 @@ CREATE POLICY "order_documents_professional_insert" ON storage.objects
   TO authenticated
   WITH CHECK (
     bucket_id = 'order-documents' AND
-    EXISTS (
-      SELECT 1 FROM orders o
+    (storage.foldername(name))[1] = 'orders' AND
+    (storage.foldername(name))[2] IN (
+      SELECT o.id::text FROM orders o
       JOIN professionals p ON o.professional_id = p.id
       WHERE p.auth_user_id = auth.uid()
-      AND name LIKE 'orders/' || o.id::text || '/%'
     )
   );
