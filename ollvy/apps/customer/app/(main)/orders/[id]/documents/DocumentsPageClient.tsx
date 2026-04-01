@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { getClient } from '@/lib/supabase'
+import { getSignedUrl } from '@/lib/storage'
 import { DocumentUploadWizard, DocumentPreview } from '@/components/documents'
 import { ArrowLeft } from 'lucide-react'
 
@@ -80,17 +81,16 @@ export function DocumentsPageClient({ order, initialDocuments }: DocumentsPageCl
 
     if (uploadError) throw uploadError
 
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('order-documents')
-      .getPublicUrl(filePath)
+    // Store the file path (not URL) - we'll generate signed URLs on demand
+    // Format: bucket-name/path for easy retrieval
+    const storagePath = `order-documents/${filePath}`
 
     // Update document record using RPC
     const { data: updateResult, error: updateError } = await supabase
       .rpc('update_order_document', {
         p_order_id: order.id,
         p_document_key: documentKey,
-        p_file_url: urlData.publicUrl,
+        p_file_url: storagePath,
         p_file_name: file.name,
       })
 
@@ -104,11 +104,20 @@ export function DocumentsPageClient({ order, initialDocuments }: DocumentsPageCl
     await fetchDocuments()
   }
 
-  const handlePreview = (documentKey: string, fileUrl: string) => {
+  const handlePreview = async (documentKey: string, storagePath: string) => {
     const doc = documents.find(d => d.document_key === documentKey)
+
+    // Generate signed URL for private bucket access
+    const signedUrl = await getSignedUrl(storagePath)
+
+    if (!signedUrl) {
+      console.error('Failed to generate signed URL')
+      return
+    }
+
     setPreviewDoc({
       label: doc?.document_label || 'Document',
-      url: fileUrl,
+      url: signedUrl,
       name: doc?.file_name,
     })
   }
