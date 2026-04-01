@@ -25,9 +25,10 @@ import type { ServiceQuestion } from '@/lib/questionnaire/types'
 
 interface QuestionFieldProps {
   question: ServiceQuestion
+  mode?: 'pre_payment' | 'post_payment'
 }
 
-export function QuestionField({ question }: QuestionFieldProps) {
+export function QuestionField({ question, mode = 'post_payment' }: QuestionFieldProps) {
   const {
     control,
     formState: { errors },
@@ -35,16 +36,19 @@ export function QuestionField({ question }: QuestionFieldProps) {
 
   const error = errors[question.question_key]
 
+  // In post_payment mode, use muted colors for hints/warnings instead of red
+  const isPostPayment = mode === 'post_payment'
+
   return (
     <div className="space-y-2">
       {/* Label with optional help tooltip */}
       <div className="flex items-center gap-2">
         <Label
           htmlFor={question.question_key}
-          className={cn(error && 'text-destructive')}
+          className={cn(error && !isPostPayment && 'text-destructive')}
         >
           {question.question_label}
-          {question.validation?.required && (
+          {question.validation?.required && !isPostPayment && (
             <span className="text-muted-foreground ml-1">*</span>
           )}
         </Label>
@@ -65,9 +69,12 @@ export function QuestionField({ question }: QuestionFieldProps) {
       {/* Field based on question type */}
       {renderField(question, control)}
 
-      {/* Error message */}
+      {/* Error/hint message - muted in post_payment mode, red in pre_payment */}
       {error && (
-        <p className="text-sm text-destructive">
+        <p className={cn(
+          "text-sm",
+          isPostPayment ? "text-muted-foreground" : "text-destructive"
+        )}>
           {error.message as string}
         </p>
       )}

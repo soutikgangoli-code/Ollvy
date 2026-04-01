@@ -81,10 +81,11 @@ export function QuestionnaireWizard({
   }, [steps, currentStep])
 
   // Create dynamic schema for current step
+  // In post_payment mode, all fields are optional
   const stepSchema = useMemo(() => {
     if (!currentStepData) return null
-    return createStepSchema(currentStepData.questions)
-  }, [currentStepData])
+    return createStepSchema(currentStepData.questions, mode)
+  }, [currentStepData, mode])
 
   // Initialize form with current step's schema
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -347,7 +348,7 @@ export function QuestionnaireWizard({
               {/* Questions */}
               <div className="space-y-6">
                 {visibleQuestions.map((question) => (
-                  <QuestionField key={question.id} question={question} />
+                  <QuestionField key={question.id} question={question} mode={mode} />
                 ))}
               </div>
 

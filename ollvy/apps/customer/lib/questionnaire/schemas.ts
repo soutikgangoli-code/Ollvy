@@ -159,17 +159,18 @@ function createFileSchema(validation: QuestionValidation, required: boolean): z.
 
 // Create a schema for an entire step (multiple questions)
 // Questions with depends_on are made optional in the schema since they may be hidden
-export function createStepSchema(questions: ServiceQuestion[]): z.ZodObject<Record<string, z.ZodTypeAny>> {
+// In post_payment mode, all fields are optional (user can save progress without completing everything)
+export function createStepSchema(
+  questions: ServiceQuestion[],
+  mode: 'pre_payment' | 'post_payment' = 'post_payment'
+): z.ZodObject<Record<string, z.ZodTypeAny>> {
   const shape: Record<string, z.ZodTypeAny> = {}
 
-  // Production mode: All required fields are enforced
-  const TESTING_MODE = false
-
   for (const question of questions) {
-    // If question has depends_on, make it optional in schema
-    // It will be validated based on visibility at runtime
-    // In testing mode, all fields are optional
-    const forceOptional = TESTING_MODE || !!question.depends_on
+    // In post_payment mode, all fields are optional
+    // In pre_payment mode, respect the database validation settings
+    // Questions with depends_on are always optional (validated at runtime based on visibility)
+    const forceOptional = mode === 'post_payment' || !!question.depends_on
     shape[question.question_key] = createQuestionSchema(question, forceOptional)
   }
 
