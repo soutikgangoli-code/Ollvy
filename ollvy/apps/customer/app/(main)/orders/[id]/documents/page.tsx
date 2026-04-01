@@ -70,31 +70,18 @@ export default function DocumentsUploadPage() {
     try {
       const supabase = getClient()
 
-      // Get current session first
-      const { data: { session: currentSession } } = await supabase.auth.getSession()
+      // Fetch order and documents in PARALLEL
+      const [orderResult, docsResult] = await Promise.all([
+        supabase.rpc('get_user_order', { p_order_id: orderId }),
+        supabase.rpc('initialize_order_documents', { p_order_id: orderId })
+      ])
 
-      if (!currentSession) {
-        console.error('No session found')
-        setIsLoading(false)
-        return
+      if (orderResult.error) {
+        console.error('Order fetch error:', orderResult.error)
+        throw orderResult.error
       }
 
-      // Explicitly set the session to ensure auth headers are included
-      await supabase.auth.setSession({
-        access_token: currentSession.access_token,
-        refresh_token: currentSession.refresh_token,
-      })
-
-      // Use RPC function for reliable order fetching (bypasses RLS chain issues)
-      const { data: orderData, error: orderError } = await supabase
-        .rpc('get_user_order', { p_order_id: orderId })
-
-      if (orderError) {
-        console.error('Order fetch error:', orderError)
-        throw orderError
-      }
-
-      // RPC returns null if order doesn't exist or user doesn't own it
+      const orderData = orderResult.data
       if (!orderData) {
         console.error('Order not found or access denied')
         setIsLoading(false)
@@ -113,7 +100,6 @@ export default function DocumentsUploadPage() {
           .eq('is_active', true)
 
         if (questionCount && questionCount > 0) {
-          // Redirect to questionnaire
           router.push(`/orders/${orderId}/questionnaire`)
           return
         }
@@ -126,17 +112,12 @@ export default function DocumentsUploadPage() {
         service_package: servicePackage,
       })
 
-      // Use RPC to initialize and fetch documents (creates from templates if needed)
-      const { data: docsData, error: docsError } = await supabase
-        .rpc('initialize_order_documents', { p_order_id: orderId })
-
-      if (docsError) {
-        console.error('Documents fetch error:', docsError)
-        throw docsError
+      if (docsResult.error) {
+        console.error('Documents fetch error:', docsResult.error)
+        throw docsResult.error
       }
 
-      // RPC returns array of documents with template info merged
-      setDocuments(docsData || [])
+      setDocuments(docsResult.data || [])
     } catch (err) {
       console.error('Failed to fetch order:', err)
     } finally {

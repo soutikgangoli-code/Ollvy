@@ -40,37 +40,38 @@ export default function RoundUploadsPage() {
 
   useEffect(() => {
     async function load() {
-      const { data: round, error: roundError } = await supabase
-        .from('order_rounds')
-        .select('id, title, status, is_visible_to_user, order_id')
-        .eq('id', roundId)
-        .eq('order_id', orderId)
-        .eq('is_visible_to_user', true)
-        .single()
+      // Fetch round and documents in PARALLEL
+      const [roundResult, docsResult] = await Promise.all([
+        supabase
+          .from('order_rounds')
+          .select('id, title, status, is_visible_to_user, order_id')
+          .eq('id', roundId)
+          .eq('order_id', orderId)
+          .eq('is_visible_to_user', true)
+          .single(),
+        supabase
+          .from('order_work_documents')
+          .select('*')
+          .eq('round_id', roundId)
+          .eq('direction', 'from_customer')
+          .order('created_at', { ascending: true })
+      ])
 
-      if (roundError || !round) {
+      if (roundResult.error || !roundResult.data) {
         toast({ title: 'Error', variant: 'destructive', description: 'Round not found.' })
         router.push(`/orders/${orderId}`)
         return
       }
 
-      setRoundTitle(round.title)
+      setRoundTitle(roundResult.data.title)
 
-      // Load from_customer document requests for this round
-      const { data: docs, error: docsError } = await supabase
-        .from('order_work_documents')
-        .select('*')
-        .eq('round_id', roundId)
-        .eq('direction', 'from_customer')
-        .order('created_at', { ascending: true })
-
-      if (docsError || !docs) {
+      if (docsResult.error || !docsResult.data) {
         toast({ title: 'Error', variant: 'destructive', description: 'Could not load document requests.' })
         router.push(`/orders/${orderId}`)
         return
       }
 
-      setDocRequests(docs)
+      setDocRequests(docsResult.data)
       setLoading(false)
     }
     load()
