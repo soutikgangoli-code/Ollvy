@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import Script from 'next/script'
 import { ArrowLeft, Loader2, ArrowRight, Check, X, ChevronDown, CheckCircle, Phone, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -137,11 +138,10 @@ export default function CheckoutPage() {
   // Pre-cursor answers from eligibility page (stored in sessionStorage)
   const [preCursorAnswers, setPreCursorAnswers] = useState<Record<string, unknown>>({})
 
-  // Fetch service data regardless of auth status (public data)
+  // Fetch service data immediately (public data - doesn't need auth hydration)
   useEffect(() => {
-    if (!isHydrated) return
     fetchService()
-  }, [serviceId, isHydrated])
+  }, [serviceId])
 
   // Open auth modal once on initial load if user is not logged in
   useEffect(() => {
@@ -616,24 +616,7 @@ export default function CheckoutPage() {
     }))
   }, [service?.addons])
 
-  const canSubmit = priceBreakdown && priceBreakdown.total > 0
-
-  // Show loading state while waiting for hydration
-  if (!isHydrated) {
-    return (
-      <div className="container py-12 max-w-6xl">
-        <Skeleton className="h-8 w-32 mb-8" />
-        <div className="grid lg:grid-cols-[1fr_380px] gap-8">
-          <div className="space-y-6">
-            <Skeleton className="h-24 rounded-lg" />
-            <Skeleton className="h-48 rounded-lg" />
-            <Skeleton className="h-64 rounded-lg" />
-          </div>
-          <Skeleton className="h-[500px] rounded-lg" />
-        </div>
-      </div>
-    )
-  }
+  const canSubmit = priceBreakdown && priceBreakdown.total > 0 && isHydrated
 
   // Error state (only after loading completes)
   if (!isLoading && (error || !service)) {
@@ -843,8 +826,11 @@ export default function CheckoutPage() {
         </div>
       )}
 
-      {/* Razorpay Script */}
-      <script src="https://checkout.razorpay.com/v1/checkout.js" async />
+      {/* Razorpay Script - preload for faster payment */}
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="beforeInteractive"
+      />
 
       {/* Success Modal */}
       {successModal && service && (
