@@ -268,7 +268,7 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
                     </div>
                   )}
                   <span className="max-w-[100px] truncate text-sm">
-                    {user.business_name || user.phone || user.email?.split('@')[0]}
+                    {user.business_name?.split(' ')[0] || user.phone || user.email?.split('@')[0]}
                   </span>
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>

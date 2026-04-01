@@ -107,6 +107,9 @@ function getOAuthRedirectUrl(): string {
   return `${window.location.origin}/auth/callback`
 }
 
+// Deduplication guard to prevent concurrent refreshSession calls
+let _isRefreshingSession = false
+
 export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   // State
   session: null,
@@ -259,19 +262,31 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   },
 
   refreshSession: async () => {
+    // Dedupe concurrent calls
+    if (_isRefreshingSession) {
+      console.log('[auth-store] refreshSession already running, skipping')
+      return
+    }
+
+    _isRefreshingSession = true
     set({ isLoading: true })
+    console.log('[auth-store] refreshSession starting')
 
     try {
       const supabase = getClient()
       const { data: { session } } = await supabase.auth.getSession()
+      console.log('[auth-store] getSession result:', session ? 'has session' : 'no session')
 
       if (session) {
         // Fetch user data from our users table
+        // User creation happens server-side in /auth/callback route
         const { data: userData } = await supabase
           .from('users')
           .select('*')
           .eq('auth_user_id', session.user.id)
           .single()
+
+        console.log('[auth-store] User data:', userData?.id || 'not found')
 
         set({
           session,
@@ -290,8 +305,10 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
         })
       }
     } catch (error) {
-      console.error('Refresh session error:', error)
+      console.error('[auth-store] refreshSession error:', error)
       set({ isLoading: false, isHydrated: true })
+    } finally {
+      _isRefreshingSession = false
     }
   },
 
