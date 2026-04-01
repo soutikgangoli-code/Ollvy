@@ -94,17 +94,12 @@ export function Hero() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Bold claim */}
           <div className="max-w-[600px]">
-            {/* Visible H1 with keywords for SEO */}
-            <h1 className="text-sm font-medium text-primary mb-4 tracking-wide uppercase">
-              Company Registration, GST & Business Compliance Services in India
-            </h1>
-
-            {/* The bold headline - Mercury style with larger desktop text */}
-            <p className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-[1.08] tracking-tight" role="heading" aria-level={2}>
+            {/* The bold headline as H1 for SEO */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground leading-[1.08] tracking-tight">
               Never miss a<br />
               <span className="text-muted-foreground">compliance deadline</span><br />
               again.
-            </p>
+            </h1>
 
             {/* The big stat - prominent with subtle glow */}
             <div className="mt-8 flex items-center gap-4">

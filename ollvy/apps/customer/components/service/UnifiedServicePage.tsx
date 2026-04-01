@@ -3,16 +3,27 @@
 import { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react'
 import Link from 'next/link'
 import Script from 'next/script'
+import dynamic from 'next/dynamic'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { BookingPanel } from './BookingPanel'
 import { ProcessStepper } from './ProcessStepper'
 import { ExplainerStepper } from './ExplainerStepper'
 import { ServiceRisks } from './ServiceRisks'
 import { ProfilePersonas } from './ProfilePersonas'
-import { RelatedServices } from './RelatedServices'
-import { HowWeReviewed } from './HowWeReviewed'
 import { CompletionStats } from './CompletionStats'
-import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
+import { Skeleton } from '@/components/ui/skeleton'
+
+// Lazy load below-fold sections to improve LCP
+const RelatedServices = dynamic(() => import('./RelatedServices').then(mod => ({ default: mod.RelatedServices })), {
+  loading: () => <Skeleton className="h-40 w-full rounded-xl" />,
+})
+const HowWeReviewed = dynamic(() => import('./HowWeReviewed').then(mod => ({ default: mod.HowWeReviewed })), {
+  loading: () => <Skeleton className="h-32 w-full rounded-xl" />,
+})
+const DocumentChecklist = dynamic(
+  () => import('@/components/landing/DocumentChecklist').then(mod => ({ default: mod.DocumentChecklist })),
+  { loading: () => <Skeleton className="h-48 w-full rounded-xl" /> }
+)
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'

@@ -1,16 +1,25 @@
 import { Metadata } from 'next'
+import dynamic from 'next/dynamic'
 import { NavbarServer } from '@/components/landing/NavbarServer'
 import { Hero } from '@/components/landing/Hero'
 import { SocialProofBar } from '@/components/landing/SocialProofBar'
 import { FearRelief } from '@/components/landing/FearRelief'
-import { ProductShowcase } from '@/components/landing/ProductShowcase'
 import { SingleTestimonial } from '@/components/landing/SingleTestimonial'
 import { ServicesSimplified } from '@/components/landing/ServicesSimplified'
-import { HomeFAQ } from '@/components/landing/HomeFAQ'
 import { FinalCTA } from '@/components/landing/FinalCTA'
 import { Footer } from '@/components/landing/Footer'
 import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
 import { getPopularServices } from '@/lib/data/services'
+
+// Lazy load below-fold components for better LCP
+const ProductShowcase = dynamic(
+  () => import('@/components/landing/ProductShowcase').then(m => ({ default: m.ProductShowcase })),
+  { loading: () => <div className="h-96" /> }
+)
+const HomeFAQ = dynamic(
+  () => import('@/components/landing/HomeFAQ').then(m => ({ default: m.HomeFAQ })),
+  { loading: () => <div className="h-64" /> }
+)
 
 /**
  * Homepage - Mercury-Inspired Redesign
