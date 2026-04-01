@@ -73,11 +73,12 @@ interface AuthState {
   isAuthModalOpen: boolean
   authModalStep: 'phone' | 'otp' | 'google' // Added 'google' step
   authModalPhone: string | null
+  returnUrl: string | null // URL to return to after sign-in
 }
 
 interface AuthActions {
   // Google OAuth
-  signInWithGoogle: () => Promise<void>
+  signInWithGoogle: (returnUrl?: string) => Promise<void>
   // OTP methods (preserved for future use - currently commented out in implementation)
   // sendOtp: (phone: string) => Promise<SendOtpResponse>
   // verifyOtp: (phone: string, code: string) => Promise<VerifyOtpResponse>
@@ -88,7 +89,7 @@ interface AuthActions {
   setIsNewUser: (isNew: boolean) => void
   clearOtpError: () => void
   // Modal actions
-  openAuthModal: () => void
+  openAuthModal: (returnUrl?: string) => void
   closeAuthModal: () => void
   setAuthModalStep: (step: 'phone' | 'otp' | 'google') => void
   setAuthModalPhone: (phone: string | null) => void
@@ -124,18 +125,25 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   isAuthModalOpen: false,
   authModalStep: 'google', // Default to Google sign-in
   authModalPhone: null,
+  returnUrl: null,
 
   // Google OAuth Sign In
-  signInWithGoogle: async () => {
+  signInWithGoogle: async (returnUrl?: string) => {
     set({ isLoading: true })
 
     try {
       const supabase = getClient()
 
+      // Build redirect URL with next parameter if returnUrl provided
+      let redirectTo = getOAuthRedirectUrl()
+      if (returnUrl) {
+        redirectTo = `${redirectTo}?next=${encodeURIComponent(returnUrl)}`
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: getOAuthRedirectUrl(),
+          redirectTo,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -317,8 +325,14 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   setIsNewUser: (isNew) => set({ isNewUser: isNew }),
   clearOtpError: () => set({ lastOtpError: null, retryAfter: null }),
   // Modal actions
-  openAuthModal: () => set({ isAuthModalOpen: true, authModalStep: 'google', authModalPhone: null, lastOtpError: null }),
-  closeAuthModal: () => set({ isAuthModalOpen: false, authModalStep: 'google', authModalPhone: null, lastOtpError: null }),
+  openAuthModal: (returnUrl?: string) => set({
+    isAuthModalOpen: true,
+    authModalStep: 'google',
+    authModalPhone: null,
+    lastOtpError: null,
+    returnUrl: returnUrl ?? (typeof window !== 'undefined' ? window.location.pathname + window.location.search : null),
+  }),
+  closeAuthModal: () => set({ isAuthModalOpen: false, authModalStep: 'google', authModalPhone: null, lastOtpError: null, returnUrl: null }),
   setAuthModalStep: (step) => set({ authModalStep: step }),
   setAuthModalPhone: (phone) => set({ authModalPhone: phone }),
 
