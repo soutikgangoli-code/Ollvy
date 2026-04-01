@@ -16,84 +16,68 @@ const BENEFITS = [
 
 export function FearRelief() {
   return (
-    <section className="py-20 md:py-32 bg-background overflow-hidden">
+    <section className="py-12 md:py-24 lg:py-32 bg-background overflow-hidden">
       <div className="container max-w-6xl">
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
+        <div className="grid grid-cols-2 gap-3 md:gap-6 lg:gap-12">
           {/* The Fear Side */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent dark:from-red-500/10 rounded-3xl" />
-            <div className="relative p-6 md:p-10 rounded-3xl border border-red-200/50 dark:border-red-500/20 bg-card/50">
-              <div className="inline-flex items-center gap-2 mb-6">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-red-100 dark:bg-red-500/20">
-                  <XCircle className="h-3 w-3 text-red-600 dark:text-red-400" />
+          <div className="rounded-2xl md:rounded-3xl border border-border bg-card shadow-xl shadow-foreground/5 p-4 md:p-8 lg:p-10 flex flex-col">
+            <div className="inline-flex items-center gap-1.5 md:gap-2 mb-3 md:mb-6">
+              <div className="flex items-center justify-center w-4 h-4 md:w-5 md:h-5 rounded-full bg-red-100 dark:bg-red-500/20">
+                <XCircle className="h-2.5 w-2.5 md:h-3 md:w-3 text-red-600 dark:text-red-400" />
+              </div>
+              <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">
+                Without Ollvy
+              </span>
+            </div>
+
+            <h2 className="text-sm md:text-2xl lg:text-3xl font-bold text-foreground mb-4 md:mb-8 tracking-tight leading-[1.15]">
+              Compliance nightmares are expensive.
+            </h2>
+
+            <div className="space-y-2 md:space-y-3 flex-1">
+              {PENALTIES.map((item, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg md:rounded-2xl p-2.5 md:p-4 bg-background border border-border"
+                >
+                  <p className="text-xs md:text-base text-foreground">
+                    <span className="font-bold text-red-600 dark:text-red-400">{item.penalty}</span>
+                    <span className="text-muted-foreground"> - {item.desc}</span>
+                  </p>
                 </div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-red-600 dark:text-red-400">
-                  Without Ollvy
-                </span>
-              </div>
-
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-8 tracking-tight leading-[1.15]">
-                Compliance nightmares are expensive.
-              </h2>
-
-              <div className="space-y-3">
-                {PENALTIES.map((item, i) => (
-                  <div
-                    key={i}
-                    className="group relative rounded-2xl p-4 md:p-5 bg-background border border-border hover:border-red-200 dark:hover:border-red-500/30 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="font-mono text-lg md:text-xl font-bold text-red-600 dark:text-red-400 tracking-tight block">
-                          {item.penalty}
-                        </span>
-                        <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
-                      </div>
-                      <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <XCircle className="h-4 w-4 text-red-600 dark:text-red-400" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
 
           {/* The Relief Side */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent dark:from-emerald-500/10 rounded-3xl" />
-            <div className="relative p-6 md:p-10 rounded-3xl border border-emerald-200/50 dark:border-emerald-500/20 bg-card/50">
-              <div className="inline-flex items-center gap-2 mb-6">
-                <div className="flex items-center justify-center w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-500/20">
-                  <Shield className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
-                </div>
-                <span className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                  With Ollvy
-                </span>
+          <div className="rounded-2xl md:rounded-3xl border border-border bg-card shadow-xl shadow-foreground/5 p-4 md:p-8 lg:p-10 flex flex-col">
+            <div className="inline-flex items-center gap-1.5 md:gap-2 mb-3 md:mb-6">
+              <div className="flex items-center justify-center w-4 h-4 md:w-5 md:h-5 rounded-full bg-emerald-100 dark:bg-emerald-500/20">
+                <Shield className="h-2.5 w-2.5 md:h-3 md:w-3 text-emerald-600 dark:text-emerald-400" />
               </div>
+              <span className="text-[10px] md:text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                With Ollvy
+              </span>
+            </div>
 
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-8 tracking-tight leading-[1.15]">
-                Zero penalties. Zero surprises.
-              </h2>
+            <h2 className="text-sm md:text-2xl lg:text-3xl font-bold text-foreground mb-4 md:mb-8 tracking-tight leading-[1.15]">
+              Zero penalties. Zero surprises.
+            </h2>
 
-              <div className="space-y-3">
-                {BENEFITS.map((item, i) => (
-                  <div
-                    key={i}
-                    className="group relative rounded-2xl p-4 md:p-5 bg-background border border-border hover:border-emerald-200 dark:hover:border-emerald-500/30 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
-                        <item.icon className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-                      </div>
-                      <p className="font-medium text-base text-foreground">{item.title}</p>
-                      <div className="ml-auto w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                      </div>
+            <div className="space-y-2 md:space-y-3 flex-1">
+              {BENEFITS.map((item, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg md:rounded-2xl p-2.5 md:p-4 bg-background border border-border"
+                >
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="w-5 h-5 md:w-8 md:h-8 rounded-md md:rounded-lg bg-emerald-100 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
+                      <item.icon className="h-3 w-3 md:h-4 md:w-4 text-emerald-600 dark:text-emerald-400" />
                     </div>
+                    <p className="text-xs md:text-base text-foreground">{item.title}</p>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -15,6 +15,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { createRetainerOrders } from '../create-retainer-orders/index.ts';
+import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 
 const encoder = new TextEncoder();
 
@@ -56,11 +57,14 @@ serve(async (req) => {
     const payload = JSON.parse(rawBody);
     
     const signature = req.headers.get('X-Razorpay-Signature');
-    const webhookSecret = Deno.env.get('RAZORPAY_SUBSCRIPTION_WEBHOOK_SECRET');
-    const environment = Deno.env.get('ENVIRONMENT') || 'development';
+    const environment = getEnvironment();
+    const isDevelopment = environment === 'development';
+    const webhookSecret = isDevelopment
+      ? Deno.env.get('RAZORPAY_SUBSCRIPTION_WEBHOOK_SECRET')
+      : getRequiredEnv('RAZORPAY_SUBSCRIPTION_WEBHOOK_SECRET');
 
     // Verify signature (skip in development)
-    if (environment !== 'development') {
+    if (!isDevelopment) {
       if (!signature || !webhookSecret) {
         console.error('Missing signature or webhook secret');
         return new Response(

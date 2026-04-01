@@ -18,6 +18,7 @@ import { corsHeaders } from '../_shared/cors.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { crypto } from 'https://deno.land/std@0.177.0/crypto/mod.ts';
 import { autoAssignProfessional } from '../auto-assign-professional/index.ts';
+import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 
 // Verify Razorpay webhook signature using HMAC SHA256
 async function verifyRazorpaySignature(body: string, signature: string, secret: string): Promise<boolean> {
@@ -61,8 +62,12 @@ serve(async (req) => {
   try {
     const body = await req.text();
     const signature = req.headers.get('X-Razorpay-Signature') || '';
-    const webhookSecret = Deno.env.get('RAZORPAY_WEBHOOK_SECRET') || '';
-    const isTestMode = !webhookSecret || signature === 'test';
+    const environment = getEnvironment();
+    const isDevelopment = environment === 'development';
+    const webhookSecret = isDevelopment
+      ? Deno.env.get('RAZORPAY_WEBHOOK_SECRET') || ''
+      : getRequiredEnv('RAZORPAY_WEBHOOK_SECRET');
+    const isTestMode = isDevelopment && (!webhookSecret || signature === 'test');
 
     // Verify webhook signature (skip in test mode)
     if (!isTestMode) {

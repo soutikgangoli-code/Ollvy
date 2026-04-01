@@ -13,6 +13,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { verifyUser } from '../_shared/auth.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
+import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 
 interface CreateSubscriptionBody {
   service_package_id: string;
@@ -146,17 +147,6 @@ serve(async (req) => {
     const razorpayKeyId = Deno.env.get('RAZORPAY_KEY_ID');
     const razorpayKeySecret = Deno.env.get('RAZORPAY_KEY_SECRET');
 
-    if (!razorpayKeyId || !razorpayKeySecret) {
-      console.error('Missing Razorpay credentials');
-      return new Response(
-        JSON.stringify({ ok: false, error: 'Payment configuration error' }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 500,
-        }
-      );
-    }
-
     // Razorpay Subscription creation data
     const razorpaySubData: any = {
       plan_id: `plan_${service.slug}_${billing_cycle}`,
@@ -175,7 +165,7 @@ serve(async (req) => {
     }
 
     let razorpaySubscription: any;
-    const environment = Deno.env.get('ENVIRONMENT') || 'development';
+    const environment = getEnvironment();
 
     if (environment === 'development') {
       // Simulate Razorpay subscription creation
@@ -187,10 +177,23 @@ serve(async (req) => {
         current_end: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60),
       };
     } else {
+      if (!razorpayKeyId || !razorpayKeySecret) {
+        // Keep existing error response shape for client compatibility.
+        console.error('Missing Razorpay credentials');
+        return new Response(
+          JSON.stringify({ ok: false, error: 'Payment configuration error' }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 500,
+          }
+        );
+      }
+      const liveKeyId = getRequiredEnv('RAZORPAY_KEY_ID');
+      const liveKeySecret = getRequiredEnv('RAZORPAY_KEY_SECRET');
       const razorpayResponse = await fetch('https://api.razorpay.com/v1/subscriptions', {
         method: 'POST',
         headers: {
-          'Authorization': `Basic ${btoa(`${razorpayKeyId}:${razorpayKeySecret}`)}`,
+          'Authorization': `Basic ${btoa(`${liveKeyId}:${liveKeySecret}`)}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(razorpaySubData),

@@ -17,6 +17,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { verifyUser } from '../_shared/auth.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
+import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 
 interface CreateOrderBody {
   service_package_id?: string;
@@ -390,9 +391,11 @@ serve(async (req) => {
     const razorpayAmountPaise = totalPaisa;
 
     // Create Razorpay order
+    const environment = getEnvironment();
+    const isDevelopment = environment === 'development';
     const razorpayKeyId = Deno.env.get('RAZORPAY_KEY_ID');
     const razorpayKeySecret = Deno.env.get('RAZORPAY_KEY_SECRET');
-    const isTestMode = !razorpayKeyId || !razorpayKeySecret;
+    const isTestMode = isDevelopment && (!razorpayKeyId || !razorpayKeySecret);
 
     let razorpayOrder: { id: string };
 
@@ -403,8 +406,11 @@ serve(async (req) => {
         id: `order_test_${Date.now()}_${Math.random().toString(36).substring(7)}`,
       };
     } else {
+      // Production/staging must always have valid Razorpay credentials.
+      const liveKeyId = getRequiredEnv('RAZORPAY_KEY_ID');
+      const liveKeySecret = getRequiredEnv('RAZORPAY_KEY_SECRET');
       // Production: Create Razorpay order via API
-      const razorpayAuth = btoa(`${razorpayKeyId}:${razorpayKeySecret}`);
+      const razorpayAuth = btoa(`${liveKeyId}:${liveKeySecret}`);
       const razorpayResponse = await fetch('https://api.razorpay.com/v1/orders', {
         method: 'POST',
         headers: {

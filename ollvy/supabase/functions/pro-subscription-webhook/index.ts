@@ -7,7 +7,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
-import { createHmac } from 'https://deno.land/std@0.168.0/crypto/mod.ts';
+import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 
 async function verifyRazorpaySignature(body: string, signature: string, secret: string): Promise<boolean> {
   try {
@@ -37,10 +37,22 @@ serve(async (req) => {
   try {
     const signature = req.headers.get('X-Razorpay-Signature');
     const rawBody = await req.text();
-    const webhookSecret = Deno.env.get('RAZORPAY_PRO_WEBHOOK_SECRET');
+    const isDevelopment = getEnvironment() === 'development';
+    const webhookSecret = isDevelopment
+      ? Deno.env.get('RAZORPAY_PRO_WEBHOOK_SECRET')
+      : getRequiredEnv('RAZORPAY_PRO_WEBHOOK_SECRET');
 
-    // Verify signature in production
-    if (webhookSecret && signature) {
+    // Verify signature in non-development environments.
+    if (!isDevelopment) {
+      if (!signature) {
+        return new Response(
+          JSON.stringify({ ok: false, error: 'Missing signature' }),
+          {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 401,
+          }
+        );
+      }
       const isValid = await verifyRazorpaySignature(rawBody, signature, webhookSecret);
       if (!isValid) {
         return new Response(
