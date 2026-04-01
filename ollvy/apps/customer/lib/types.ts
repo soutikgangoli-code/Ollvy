@@ -186,6 +186,7 @@ export interface ChatMessage {
   file_path?: string
   file_name?: string
   file_size?: number
+  file_url?: string
   read_at?: string
   created_at: string
 }
