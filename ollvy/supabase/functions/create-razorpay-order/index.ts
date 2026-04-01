@@ -145,33 +145,31 @@ serve(async (req) => {
       );
     }
 
-    let user: User;
+    // Fetch user data
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id, state, city, subscription_tier, referral_credit_balance_paisa')
+      .eq('id', userId)
+      .single();
+
+    if (userError || !user) {
+      return new Response(
+        JSON.stringify({ ok: false, error: 'User not found' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 404,
+        }
+      );
+    }
+
     let servicePackage: ServicePackage;
     let basePricePaisa: number;
     let govtFeesPaisa: number;
     let priceSource = 'base';
     let quoteId: string | null = null;
 
-    // Handle quote flow (sequential - needs quote data first to get service_package_id)
+    // Handle quote flow
     if (quote_request_id) {
-      // Fetch user data first
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('id, state, city, subscription_tier, referral_credit_balance_paisa')
-        .eq('id', userId)
-        .single();
-
-      if (userError || !userData) {
-        return new Response(
-          JSON.stringify({ ok: false, error: 'User not found' }),
-          {
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-            status: 404,
-          }
-        );
-      }
-      user = userData;
-
       const { data: quote, error: quoteError } = await supabase
         .from('quote_requests')
         .select('id, service_package_id, confirmed_price_paisa, confirmed_govt_fees_paisa, status, expires_at')
@@ -235,32 +233,14 @@ serve(async (req) => {
       quoteId = quote.id;
 
     } else {
-      // Direct service purchase - parallelize user and service queries
-      const [userResult, serviceResult] = await Promise.all([
-        supabase
-          .from('users')
-          .select('id, state, city, subscription_tier, referral_credit_balance_paisa')
-          .eq('id', userId)
-          .single(),
-        supabase
-          .from('service_packages')
-          .select('*')
-          .eq('id', service_package_id)
-          .single(),
-      ]);
+      // Direct service purchase
+      const { data: pkg, error: pkgError } = await supabase
+        .from('service_packages')
+        .select('*')
+        .eq('id', service_package_id)
+        .single();
 
-      if (userResult.error || !userResult.data) {
-        return new Response(
-          JSON.stringify({ ok: false, error: 'User not found' }),
-          {
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-            status: 404,
-          }
-        );
-      }
-      user = userResult.data;
-
-      if (serviceResult.error || !serviceResult.data) {
+      if (pkgError || !pkg) {
         return new Response(
           JSON.stringify({ ok: false, error: 'Service not found' }),
           {
@@ -269,8 +249,6 @@ serve(async (req) => {
           }
         );
       }
-
-      const pkg = serviceResult.data;
 
       if (!pkg.is_active) {
         return new Response(

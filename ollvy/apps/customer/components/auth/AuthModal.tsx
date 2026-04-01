@@ -18,11 +18,10 @@ export function AuthModal() {
     signInWithGoogle,
     isLoading,
     lastOtpError,
-    returnUrl,
   } = useAuthStore()
 
   const handleGoogleSignIn = async () => {
-    await signInWithGoogle(returnUrl || undefined)
+    await signInWithGoogle()
   }
 
   return (
