@@ -12,7 +12,7 @@ import { useQuestionnaireStore } from '@/lib/stores/questionnaire-store'
 import { createStepSchema } from '@/lib/questionnaire/schemas'
 import type { QuestionnaireFormValues } from '@/lib/questionnaire/types'
 import { shouldShowQuestion } from '@/lib/questionnaire/types'
-import { ArrowLeft, ArrowRight, Loader2, CheckCircle, Sparkles, Info } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Loader2, CheckCircle, Sparkles, Info, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface QuestionnaireWizardProps {
@@ -132,6 +132,54 @@ export function QuestionnaireWizard({
     )
   }, [currentStepData, allResponses])
 
+  // Calculate completion stats for post_payment mode
+  const completionStats = useMemo(() => {
+    if (mode !== 'post_payment' || steps.length === 0) {
+      return { totalQuestions: 0, answeredQuestions: 0, firstIncompleteStep: 1 }
+    }
+
+    let totalQuestions = 0
+    let answeredQuestions = 0
+    let firstIncompleteStep = 1
+    let foundIncomplete = false
+
+    for (const step of steps) {
+      for (const q of step.questions) {
+        // Only count visible questions (check depends_on)
+        if (!shouldShowQuestion(q, responses)) continue
+
+        totalQuestions++
+        const answer = responses[q.question_key]
+        const hasAnswer = answer !== undefined && answer !== null && answer !== '' &&
+          !(Array.isArray(answer) && answer.length === 0)
+
+        if (hasAnswer) {
+          answeredQuestions++
+        } else if (!foundIncomplete) {
+          firstIncompleteStep = step.stepNumber
+          foundIncomplete = true
+        }
+      }
+    }
+
+    return { totalQuestions, answeredQuestions, firstIncompleteStep }
+  }, [mode, steps, responses])
+
+  // Check if current step has all visible questions answered
+  const isCurrentStepComplete = useMemo(() => {
+    if (!visibleQuestions.length) return true
+
+    // Combine saved responses with current form values
+    const currentFormValues = methods.getValues()
+    const combinedResponses = { ...responses, ...currentFormValues }
+
+    return visibleQuestions.every((q) => {
+      const answer = combinedResponses[q.question_key]
+      return answer !== undefined && answer !== null && answer !== '' &&
+        !(Array.isArray(answer) && answer.length === 0)
+    })
+  }, [visibleQuestions, responses, methods])
+
   // Handle form submission for current step
   const onSubmit = async (data: QuestionnaireFormValues) => {
     const isLastStep = currentStep === totalSteps
@@ -231,21 +279,61 @@ export function QuestionnaireWizard({
     )
   }
 
-  // Already completed
+  // Already completed - check if all questions are answered
   if (isCompleted) {
+    const { totalQuestions, answeredQuestions, firstIncompleteStep } = completionStats
+    const hasIncompleteAnswers = answeredQuestions < totalQuestions
+    const incompleteCount = totalQuestions - answeredQuestions
+
+    // Handle edit mode with navigation to first incomplete step
+    const handleEditAnswers = async () => {
+      await enableEditMode()
+      // Navigate to first incomplete step if there are incomplete answers
+      if (hasIncompleteAnswers) {
+        const store = useQuestionnaireStore.getState()
+        store.goToStep(firstIncompleteStep)
+      }
+    }
+
+    if (hasIncompleteAnswers) {
+      // Show incomplete state with amber/warning styling
+      return (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-4">
+            <AlertCircle className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+          </div>
+          <h2 className="text-xl font-semibold text-foreground mb-2">
+            {incompleteCount} {incompleteCount === 1 ? 'Question' : 'Questions'} Remaining
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            Complete the remaining questions to help us process your order faster.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button onClick={handleEditAnswers}>
+              Complete Now
+            </Button>
+            <Button variant="outline" onClick={() => router.push(`/orders/${orderId}/documents`)}>
+              Continue to Documents
+            </Button>
+          </div>
+        </div>
+      )
+    }
+
+    // All questions answered - show green success state
     return (
       <div className="rounded-xl border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-8 text-center">
         <div className="w-16 h-16 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center mx-auto mb-4">
           <CheckCircle className="h-8 w-8 text-[hsl(var(--ollvy-green))]" />
         </div>
         <h2 className="text-xl font-semibold text-foreground mb-2">
-          Already Submitted
+          All Done
         </h2>
         <p className="text-muted-foreground mb-6">
-          You've already completed the setup for this order.
+          You've completed all the questions for this order.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button variant="outline" onClick={enableEditMode}>
+          <Button variant="outline" onClick={handleEditAnswers}>
             Edit Answers
           </Button>
           <Button onClick={() => router.push(`/orders/${orderId}/documents`)}>
@@ -385,7 +473,8 @@ export function QuestionnaireWizard({
                     )
                   ) : (
                     <>
-                      Next
+                      {/* In post_payment mode: Skip if empty, Next if filled */}
+                      {mode === 'post_payment' && !isCurrentStepComplete ? 'Skip' : 'Next'}
                       <ArrowRight className="h-4 w-4" />
                     </>
                   )}
