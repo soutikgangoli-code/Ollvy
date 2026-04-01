@@ -9,17 +9,33 @@ export function StructuredData() {
     alternateName: 'Ollvy India',
     url: 'https://www.ollvy.com',
     logo: 'https://www.ollvy.com/android-chrome-512x512.png',
+    image: 'https://www.ollvy.com/android-chrome-512x512.png',
     description: 'Company registration, GST, trademark, and compliance services in India with vetted CAs. Fixed prices. Tracked delivery.',
     foundingDate: '2024',
     sameAs: [
       'https://twitter.com/ollvy',
       'https://linkedin.com/company/ollvy',
     ],
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'customer service',
-      availableLanguage: ['English', 'Hindi'],
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'IN',
+      addressLocality: 'Mumbai',
+      addressRegion: 'Maharashtra',
     },
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        contactType: 'customer service',
+        availableLanguage: ['English', 'Hindi'],
+        areaServed: 'IN',
+      },
+      {
+        '@type': 'ContactPoint',
+        contactType: 'sales',
+        availableLanguage: ['English', 'Hindi'],
+        areaServed: 'IN',
+      },
+    ],
     areaServed: {
       '@type': 'Country',
       name: 'India',
@@ -28,6 +44,16 @@ export function StructuredData() {
       '@type': 'Country',
       name: 'India',
     },
+    knowsAbout: [
+      'Company Registration',
+      'GST Registration',
+      'Trademark Registration',
+      'LLP Registration',
+      'FSSAI License',
+      'Business Compliance',
+      'Tax Filing',
+      'MCA Annual Filing',
+    ],
   }
 
   const websiteSchema = {
