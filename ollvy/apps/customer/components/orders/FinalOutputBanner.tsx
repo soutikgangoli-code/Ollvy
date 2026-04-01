@@ -1,10 +1,4 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { getClient } from '@/lib/supabase'
-
-interface FinalOutputBannerProps {
-  orderId: string
-}
 
 interface FinalDoc {
   file_url: string
@@ -12,22 +6,11 @@ interface FinalDoc {
   description?: string
 }
 
-export function FinalOutputBanner({ orderId }: FinalOutputBannerProps) {
-  const [finalDoc, setFinalDoc] = useState<FinalDoc | null>(null)
-  const supabase = getClient()
+interface FinalOutputBannerProps {
+  finalDoc?: FinalDoc | null
+}
 
-  useEffect(() => {
-    supabase
-      .from('order_work_documents')
-      .select('file_url, file_name, description')
-      .eq('order_id', orderId)
-      .eq('tag', 'final_output')
-      .eq('direction', 'to_customer')
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => setFinalDoc(data))
-  }, [orderId])
-
+export function FinalOutputBanner({ finalDoc }: FinalOutputBannerProps) {
   if (!finalDoc) return null
 
   return (

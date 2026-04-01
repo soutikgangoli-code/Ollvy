@@ -98,6 +98,7 @@ export default function OrderDetailPage() {
   const [workDocuments, setWorkDocuments] = useState<OrderWorkDocument[]>([])
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>([])
   const [invoiceId, setInvoiceId] = useState<string | null>(null)
+  const [roundNotification, setRoundNotification] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -191,7 +192,8 @@ export default function OrderDetailPage() {
         workDocsResult,
         responsesResult,
         questionsResult,
-        invoiceResult
+        invoiceResult,
+        notificationResult
       ] = await Promise.all([
         // Stage history
         supabase
@@ -225,7 +227,16 @@ export default function OrderDetailPage() {
           .from('invoices')
           .select('id')
           .eq('order_id', orderId)
-          .single()
+          .single(),
+        // Round notification (for RoundNotificationBanner)
+        supabase
+          .from('round_notifications')
+          .select('*')
+          .eq('order_id', orderId)
+          .eq('is_dismissed', false)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
       ])
 
       setStageHistory(historyResult.data || [])
@@ -250,6 +261,9 @@ export default function OrderDetailPage() {
       if (invoiceResult.data) {
         setInvoiceId(invoiceResult.data.id)
       }
+
+      // Set round notification
+      setRoundNotification(notificationResult.data)
     } catch (err) {
       console.error('Failed to fetch order:', err)
       setError('Order not found')
@@ -534,10 +548,12 @@ export default function OrderDetailPage() {
       </Link>
 
       {/* Final Output Banner - absolute top */}
-      <FinalOutputBanner orderId={orderId} />
+      <FinalOutputBanner
+        finalDoc={workDocuments.find(d => d.tag === 'final_output' && d.direction === 'to_customer')}
+      />
 
       {/* Round Notification Banner */}
-      <RoundNotificationBanner orderId={orderId} />
+      <RoundNotificationBanner orderId={orderId} initialNotification={roundNotification} />
 
       {/* Notification Banner - Pending Work Documents */}
       {pendingWorkDocs.length > 0 && (

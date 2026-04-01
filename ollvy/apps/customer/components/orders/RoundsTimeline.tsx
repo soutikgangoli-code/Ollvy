@@ -46,39 +46,41 @@ export function RoundsTimeline({ orderId, servicePackageId }: RoundsTimelineProp
   useEffect(() => {
     if (!user?.id) return
 
-    // Fetch all visible rounds with their questions and doc requests
-    supabase
-      .from('order_rounds')
-      .select(`
-        id, order_id, round_number, title, status, created_at, completed_at,
-        round_question_requests (id, question_text, answer_text, answered_at, position),
-        order_work_documents (
-          id, direction, document_label, description, tag, status,
-          file_url, file_name, uploaded_at, rejection_reason, linked_request_id
-        )
-      `)
-      .eq('order_id', orderId)
-      .eq('is_visible_to_user', true)
-      .order('round_number', { ascending: true })
-      .then(({ data }) => setRounds((data as OrderRound[]) || []))
-
-    // Fetch Round 0 data separately (initial docs and questionnaire answers)
+    // Fetch all data in parallel for better performance
     Promise.all([
+      // Fetch all visible rounds with their questions and doc requests
+      supabase
+        .from('order_rounds')
+        .select(`
+          id, order_id, round_number, title, status, created_at, completed_at,
+          round_question_requests (id, question_text, answer_text, answered_at, position),
+          order_work_documents (
+            id, direction, document_label, description, tag, status,
+            file_url, file_name, uploaded_at, rejection_reason, linked_request_id
+          )
+        `)
+        .eq('order_id', orderId)
+        .eq('is_visible_to_user', true)
+        .order('round_number', { ascending: true }),
+      // Questionnaire responses
       supabase
         .from('order_questionnaire_responses')
         .select('question_key, response_value')
         .eq('order_id', orderId),
+      // Service questionnaires (questions with labels)
       supabase
         .from('service_questionnaires')
         .select('question_key, question_label, question_type, options, display_order')
         .eq('service_package_id', servicePackageId)
         .order('display_order', { ascending: true }),
+      // Initial documents
       supabase
         .from('order_documents')
         .select('id, document_label, file_url, file_name, verified_at, rejection_reason, stage_key')
         .eq('order_id', orderId)
         .eq('stage_key', 'doc_collection'),
-    ]).then(([answersRes, questionsRes, docsRes]) => {
+    ]).then(([roundsRes, answersRes, questionsRes, docsRes]) => {
+      setRounds((roundsRes.data as OrderRound[]) || [])
       setRound0Data({
         answers: answersRes.data || [],
         questions: questionsRes.data || [],

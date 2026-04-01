@@ -64,6 +64,12 @@ export function DocumentsPageClient({ order, initialDocuments }: DocumentsPageCl
   const handleUpload = async (documentKey: string, file: File) => {
     const supabase = getClient()
 
+    // Verify auth session exists before upload
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      throw new Error('Not authenticated - please sign in again')
+    }
+
     // Upload to storage
     const fileExt = file.name.split('.').pop()
     const filePath = `orders/${order.id}/documents/${documentKey}.${fileExt}`

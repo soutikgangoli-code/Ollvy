@@ -5,10 +5,11 @@ import type { RoundNotification } from '@/lib/types'
 
 interface RoundNotificationBannerProps {
   orderId: string
+  initialNotification?: RoundNotification | null
 }
 
-export function RoundNotificationBanner({ orderId }: RoundNotificationBannerProps) {
-  const [notification, setNotification] = useState<RoundNotification | null>(null)
+export function RoundNotificationBanner({ orderId, initialNotification }: RoundNotificationBannerProps) {
+  const [notification, setNotification] = useState<RoundNotification | null>(initialNotification || null)
   const supabase = getClient()
 
   const fetchNotification = async () => {
@@ -24,7 +25,11 @@ export function RoundNotificationBanner({ orderId }: RoundNotificationBannerProp
   }
 
   useEffect(() => {
-    fetchNotification()
+    // Only fetch if no initial notification was provided
+    if (!initialNotification) {
+      fetchNotification()
+    }
+    // Subscribe to real-time updates for new notifications
     const channel = supabase
       .channel(`round-notif-${orderId}`)
       .on('postgres_changes', {
@@ -35,7 +40,7 @@ export function RoundNotificationBanner({ orderId }: RoundNotificationBannerProp
       }, fetchNotification)
       .subscribe()
     return () => { supabase.removeChannel(channel) }
-  }, [orderId])
+  }, [orderId, initialNotification])
 
   if (!notification) return null
 
