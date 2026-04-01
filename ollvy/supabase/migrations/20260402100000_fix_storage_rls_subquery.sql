@@ -8,7 +8,7 @@
 -- 1. Create helper function that bypasses RLS to check order ownership
 -- =============================================================================
 
-CREATE OR REPLACE FUNCTION storage.user_owns_order(order_id_text text)
+CREATE OR REPLACE FUNCTION public.user_owns_order(order_id_text text)
 RETURNS boolean
 LANGUAGE sql
 SECURITY DEFINER
@@ -23,13 +23,13 @@ AS $$
 $$;
 
 -- Grant execute to authenticated users
-GRANT EXECUTE ON FUNCTION storage.user_owns_order(text) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.user_owns_order(text) TO authenticated;
 
 -- =============================================================================
 -- 2. Create helper function for professional access
 -- =============================================================================
 
-CREATE OR REPLACE FUNCTION storage.professional_has_order(order_id_text text)
+CREATE OR REPLACE FUNCTION public.professional_has_order(order_id_text text)
 RETURNS boolean
 LANGUAGE sql
 SECURITY DEFINER
@@ -43,7 +43,7 @@ AS $$
   )
 $$;
 
-GRANT EXECUTE ON FUNCTION storage.professional_has_order(text) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.professional_has_order(text) TO authenticated;
 
 -- =============================================================================
 -- 3. Recreate order-documents policies using helper functions
@@ -63,7 +63,7 @@ CREATE POLICY "order_documents_user_insert" ON storage.objects
   WITH CHECK (
     bucket_id = 'order-documents' AND
     (storage.foldername(name))[1] = 'orders' AND
-    storage.user_owns_order((storage.foldername(name))[2])
+    public.user_owns_order((storage.foldername(name))[2])
   );
 
 -- Users can read their own order documents (or professionals for assigned orders)
@@ -74,9 +74,9 @@ CREATE POLICY "order_documents_user_read" ON storage.objects
     bucket_id = 'order-documents' AND
     (storage.foldername(name))[1] = 'orders' AND
     (
-      storage.user_owns_order((storage.foldername(name))[2])
+      public.user_owns_order((storage.foldername(name))[2])
       OR
-      storage.professional_has_order((storage.foldername(name))[2])
+      public.professional_has_order((storage.foldername(name))[2])
     )
   );
 
@@ -87,7 +87,7 @@ CREATE POLICY "order_documents_user_update" ON storage.objects
   USING (
     bucket_id = 'order-documents' AND
     (storage.foldername(name))[1] = 'orders' AND
-    storage.user_owns_order((storage.foldername(name))[2])
+    public.user_owns_order((storage.foldername(name))[2])
   );
 
 -- Users can delete their own order documents
@@ -97,7 +97,7 @@ CREATE POLICY "order_documents_user_delete" ON storage.objects
   USING (
     bucket_id = 'order-documents' AND
     (storage.foldername(name))[1] = 'orders' AND
-    storage.user_owns_order((storage.foldername(name))[2])
+    public.user_owns_order((storage.foldername(name))[2])
   );
 
 -- Professionals can upload documents for their assigned orders
@@ -107,5 +107,5 @@ CREATE POLICY "order_documents_professional_insert" ON storage.objects
   WITH CHECK (
     bucket_id = 'order-documents' AND
     (storage.foldername(name))[1] = 'orders' AND
-    storage.professional_has_order((storage.foldername(name))[2])
+    public.professional_has_order((storage.foldername(name))[2])
   );
