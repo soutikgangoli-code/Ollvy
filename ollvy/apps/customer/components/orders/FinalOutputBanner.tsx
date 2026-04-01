@@ -1,8 +1,8 @@
 'use client'
 
 interface FinalDoc {
-  file_url: string
-  file_name: string
+  file_url?: string
+  file_name?: string
   description?: string
 }
 
@@ -11,7 +11,8 @@ interface FinalOutputBannerProps {
 }
 
 export function FinalOutputBanner({ finalDoc }: FinalOutputBannerProps) {
-  if (!finalDoc) return null
+  // Only show banner if document exists AND has a file_url (meaning it was uploaded)
+  if (!finalDoc || !finalDoc.file_url) return null
 
   return (
     <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-300 dark:border-emerald-800 rounded-lg p-5 mb-4">
