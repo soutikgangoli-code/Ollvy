@@ -172,19 +172,8 @@ export default function OrderDetailPage() {
 
     try {
       const supabase = getClient()
-      const { data: { session: currentSession } } = await supabase.auth.getSession()
 
-      if (!currentSession) {
-        setError('Please log in to view this order')
-        setIsLoading(false)
-        return
-      }
-
-      await supabase.auth.setSession({
-        access_token: currentSession.access_token,
-        refresh_token: currentSession.refresh_token,
-      })
-
+      // First fetch the order (needed to get service_package_id for subsequent queries)
       const { data: orderData, error: orderError } = await supabase
         .rpc('get_user_order', { p_order_id: orderId })
 
@@ -193,72 +182,73 @@ export default function OrderDetailPage() {
 
       setOrder(orderData)
 
-      const { data: historyData } = await supabase
-        .from('order_stage_history')
-        .select('*')
-        .eq('order_id', orderId)
-        .order('created_at', { ascending: true })
-
-      setStageHistory(historyData || [])
-
-      // Fetch documents
-      const { data: docsData } = await supabase
-        .rpc('initialize_order_documents', { p_order_id: orderId })
-
-      setDocuments(docsData || [])
-
-      // Fetch work documents (deliverables and requests)
-      // Filter out round-scoped docs (round_id IS NULL) - those show in RoundsTimeline
-      const { data: workDocsData } = await supabase
-        .from('order_work_documents')
-        .select('*')
-        .eq('order_id', orderId)
-        .is('round_id', null)
-        .order('created_at', { ascending: false })
-
-      setWorkDocuments(workDocsData || [])
-
-      // Fetch questionnaire responses with labels
       const servicePackage = orderData.service_package as { id: string }
-      if (servicePackage?.id) {
-        const { data: responsesData } = await supabase
-          .from('order_questionnaire_responses')
-          .select(`
-            question_key,
-            response_value
-          `)
+
+      // Fetch all other data in PARALLEL
+      const [
+        historyResult,
+        docsResult,
+        workDocsResult,
+        responsesResult,
+        questionsResult,
+        invoiceResult
+      ] = await Promise.all([
+        // Stage history
+        supabase
+          .from('order_stage_history')
+          .select('*')
           .eq('order_id', orderId)
+          .order('created_at', { ascending: true }),
+        // Documents
+        supabase.rpc('initialize_order_documents', { p_order_id: orderId }),
+        // Work documents
+        supabase
+          .from('order_work_documents')
+          .select('*')
+          .eq('order_id', orderId)
+          .is('round_id', null)
+          .order('created_at', { ascending: false }),
+        // Questionnaire responses
+        supabase
+          .from('order_questionnaire_responses')
+          .select('question_key, response_value')
+          .eq('order_id', orderId),
+        // Question labels (only if we have a service package)
+        servicePackage?.id
+          ? supabase
+              .from('service_questionnaires')
+              .select('question_key, question_label')
+              .eq('service_package_id', servicePackage.id)
+          : Promise.resolve({ data: null, error: null }),
+        // Invoice
+        supabase
+          .from('invoices')
+          .select('id')
+          .eq('order_id', orderId)
+          .single()
+      ])
 
-        if (responsesData && responsesData.length > 0) {
-          // Get question labels from service_questionnaires
-          const { data: questionsData } = await supabase
-            .from('service_questionnaires')
-            .select('question_key, question_label')
-            .eq('service_package_id', servicePackage.id)
+      setStageHistory(historyResult.data || [])
+      setDocuments(docsResult.data || [])
+      setWorkDocuments(workDocsResult.data || [])
 
-          const questionLabels = new Map(
-            questionsData?.map(q => [q.question_key, q.question_label]) || []
-          )
+      // Process questionnaire responses with labels
+      if (responsesResult.data && responsesResult.data.length > 0) {
+        const questionLabels = new Map(
+          questionsResult.data?.map(q => [q.question_key, q.question_label]) || []
+        )
 
-          const formattedResponses = responsesData.map(r => ({
-            question_key: r.question_key,
-            question_label: questionLabels.get(r.question_key) || r.question_key,
-            response_value: r.response_value,
-          }))
+        const formattedResponses = responsesResult.data.map(r => ({
+          question_key: r.question_key,
+          question_label: questionLabels.get(r.question_key) || r.question_key,
+          response_value: r.response_value,
+        }))
 
-          setQuestionnaireResponses(formattedResponses)
-        }
+        setQuestionnaireResponses(formattedResponses)
       }
 
-      // Fetch invoice for this order
-      const { data: invoiceData } = await supabase
-        .from('invoices')
-        .select('id')
-        .eq('order_id', orderId)
-        .single()
-
-      if (invoiceData) {
-        setInvoiceId(invoiceData.id)
+      if (invoiceResult.data) {
+        setInvoiceId(invoiceResult.data.id)
       }
     } catch (err) {
       console.error('Failed to fetch order:', err)

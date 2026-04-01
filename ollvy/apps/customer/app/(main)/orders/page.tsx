@@ -37,37 +37,26 @@ export default function OrdersPage() {
     try {
       const supabase = getClient()
 
-      // Ensure we have the current session
-      const { data: { session } } = await supabase.auth.getSession()
-      if (session) {
-        await supabase.auth.setSession({
-          access_token: session.access_token,
-          refresh_token: session.refresh_token,
-        })
-      }
-
-      // Use RPC function to bypass RLS chain issues
-      const { data: activeData, error: activeError } = await supabase
-        .rpc('get_user_orders', {
+      // Fetch both active and completed orders in PARALLEL
+      const [activeResult, completedResult] = await Promise.all([
+        supabase.rpc('get_user_orders', {
           p_statuses: ['pending_assignment', 'waitlisted', 'in_progress']
-        })
-
-      if (activeError) {
-        console.error('[Orders Page] Error fetching active orders:', activeError)
-      }
-
-      const { data: completedData, error: completedError } = await supabase
-        .rpc('get_user_orders', {
+        }),
+        supabase.rpc('get_user_orders', {
           p_statuses: ['completed', 'cancelled', 'disputed']
         })
+      ])
 
-      if (completedError) {
-        console.error('[Orders Page] Error fetching completed orders:', completedError)
+      if (activeResult.error) {
+        console.error('[Orders Page] Error fetching active orders:', activeResult.error)
+      }
+      if (completedResult.error) {
+        console.error('[Orders Page] Error fetching completed orders:', completedResult.error)
       }
 
       // RPC returns JSON array
-      const active = Array.isArray(activeData) ? activeData : []
-      const completed = Array.isArray(completedData) ? completedData.slice(0, 20) : []
+      const active = Array.isArray(activeResult.data) ? activeResult.data : []
+      const completed = Array.isArray(completedResult.data) ? completedResult.data.slice(0, 20) : []
 
       setActiveOrders(active as Order[])
       setCompletedOrders(completed as Order[])

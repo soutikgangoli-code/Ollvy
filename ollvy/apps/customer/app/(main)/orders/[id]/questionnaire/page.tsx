@@ -50,21 +50,6 @@ export default function QuestionnairePage() {
     try {
       const supabase = getClient()
 
-      // Get current session first
-      const { data: { session: currentSession } } = await supabase.auth.getSession()
-
-      if (!currentSession) {
-        setError('Please log in to view this order')
-        setIsLoading(false)
-        return
-      }
-
-      // Explicitly set the session to ensure auth headers are included
-      await supabase.auth.setSession({
-        access_token: currentSession.access_token,
-        refresh_token: currentSession.refresh_token,
-      })
-
       // Use RPC function for reliable order fetching (bypasses RLS chain issues)
       const { data: orderData, error: fetchError } = await supabase
         .rpc('get_user_order', { p_order_id: orderId })

@@ -91,12 +91,6 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           throw new Error('Not authenticated')
         }
 
-        // Explicitly set the session to ensure auth headers are included
-        await supabase.auth.setSession({
-          access_token: currentSession.access_token,
-          refresh_token: currentSession.refresh_token,
-        })
-
         // Use RPC function for reliable order fetching (bypasses RLS chain issues)
         const { data: orderData, error: orderError } = await supabase
           .rpc('get_user_order', { p_order_id: orderId })
@@ -125,43 +119,49 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           return
         }
 
-        // Fetch post-payment questions for this service (excludes pre-payment questions)
-        const { data: questionsData, error: questionsError } = await supabase
-          .from('service_questionnaires')
-          .select('*')
-          .eq('service_package_id', servicePackage.id)
-          .eq('is_active', true)
-          .eq('is_pre_payment', false)
-          .order('step_number', { ascending: true })
-          .order('display_order', { ascending: true })
+        // Fetch all data in PARALLEL for better performance
+        const [questionsResult, prePaymentQuestionsResult, responsesResult, userResult] = await Promise.all([
+          // Post-payment questions
+          supabase
+            .from('service_questionnaires')
+            .select('*')
+            .eq('service_package_id', servicePackage.id)
+            .eq('is_active', true)
+            .eq('is_pre_payment', false)
+            .order('step_number', { ascending: true })
+            .order('display_order', { ascending: true }),
+          // Pre-payment questions (for summary card)
+          supabase
+            .from('service_questionnaires')
+            .select('*')
+            .eq('service_package_id', servicePackage.id)
+            .eq('is_active', true)
+            .eq('is_pre_payment', true)
+            .order('display_order', { ascending: true }),
+          // Existing responses
+          supabase
+            .from('order_questionnaire_responses')
+            .select('question_key, response_value')
+            .eq('order_id', orderId),
+          // User's phone number
+          supabase
+            .from('users')
+            .select('phone')
+            .eq('auth_user_id', currentSession.user.id)
+            .single()
+        ])
 
+        const questionsData = questionsResult.data
+        const questionsError = questionsResult.error
         if (questionsError) throw questionsError
 
-        // Also fetch pre-payment questions (for display in summary card)
-        const { data: prePaymentQuestionsData } = await supabase
-          .from('service_questionnaires')
-          .select('*')
-          .eq('service_package_id', servicePackage.id)
-          .eq('is_active', true)
-          .eq('is_pre_payment', true)
-          .order('display_order', { ascending: true })
-
+        const prePaymentQuestionsData = prePaymentQuestionsResult.data
         const prePaymentQuestionKeys = new Set(
           (prePaymentQuestionsData || []).map(q => q.question_key)
         )
 
-        // Fetch existing responses
-        const { data: responsesData } = await supabase
-          .from('order_questionnaire_responses')
-          .select('question_key, response_value')
-          .eq('order_id', orderId)
-
-        // Fetch the user's data to check if they already have a phone number
-        const { data: userData } = await supabase
-          .from('users')
-          .select('phone')
-          .eq('auth_user_id', currentSession.user.id)
-          .single()
+        const responsesData = responsesResult.data
+        const userData = userResult.data
 
         // Build responses object and separate pre-payment responses
         const responses: QuestionnaireFormValues = {}
