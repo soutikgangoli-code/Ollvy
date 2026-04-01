@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -95,6 +95,54 @@ function renderResponseValue(
     return options.find(o => o.value === String(responseValue))?.label ?? String(responseValue)
   }
   return String(responseValue)
+}
+
+// Helper component for viewing/downloading files with signed URLs
+function DocumentViewButton({
+  fileUrl,
+  bucket,
+  label = 'View',
+  download = false,
+  fileName,
+}: {
+  fileUrl: string
+  bucket: 'order-documents' | 'work-documents'
+  label?: string
+  download?: boolean
+  fileName?: string
+}) {
+  const [loading, setLoading] = useState(false)
+
+  const handleClick = async () => {
+    setLoading(true)
+    try {
+      const results = await adminGetSignedUrls([{ url: fileUrl, bucket }])
+      const result = results[0]
+      if (result?.signedUrl) {
+        if (download && fileName) {
+          const link = document.createElement('a')
+          link.href = result.signedUrl
+          link.download = fileName
+          link.target = '_blank'
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        } else {
+          window.open(result.signedUrl, '_blank')
+        }
+      }
+    } catch (error) {
+      console.error('Failed to get signed URL:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Button variant="ghost" size="sm" onClick={handleClick} disabled={loading}>
+      {loading ? 'Loading...' : label}
+    </Button>
+  )
 }
 
 export function OrderViewClient({
@@ -1169,9 +1217,11 @@ function InitialDocumentCard({ doc, orderId }: { doc: OrderDocument & { internal
         </div>
         <div className="flex gap-2">
           {doc.file_url && (
-            <Button variant="ghost" size="sm" asChild>
-              <a href={doc.file_url} target="_blank" rel="noopener noreferrer">View</a>
-            </Button>
+            <DocumentViewButton
+              fileUrl={doc.file_url}
+              bucket="order-documents"
+              label="View"
+            />
           )}
           {status === 'uploaded' && (
             <>
@@ -1382,12 +1432,18 @@ function WorkDocumentCard({ doc, orderId, direction }: { doc: OrderWorkDocument 
         <div className="flex gap-2">
           {doc.file_url && (
             <>
-              <Button variant="ghost" size="sm" asChild>
-                <a href={doc.file_url} target="_blank" rel="noopener noreferrer">View</a>
-              </Button>
-              <Button variant="ghost" size="sm" asChild>
-                <a href={doc.file_url} download>Download</a>
-              </Button>
+              <DocumentViewButton
+                fileUrl={doc.file_url}
+                bucket="work-documents"
+                label="View"
+              />
+              <DocumentViewButton
+                fileUrl={doc.file_url}
+                bucket="work-documents"
+                label="Download"
+                download
+                fileName={doc.file_name || doc.document_label}
+              />
             </>
           )}
 
@@ -1646,12 +1702,18 @@ function AdminLinkedDocumentCard({
           <div className="flex gap-2">
             {downloadDoc.file_url && (
               <>
-                <Button variant="outline" size="sm" className="flex-1" asChild>
-                  <a href={downloadDoc.file_url} target="_blank" rel="noopener noreferrer">View</a>
-                </Button>
-                <Button variant="outline" size="sm" className="flex-1" asChild>
-                  <a href={downloadDoc.file_url} download>Download</a>
-                </Button>
+                <DocumentViewButton
+                  fileUrl={downloadDoc.file_url}
+                  bucket="work-documents"
+                  label="View"
+                />
+                <DocumentViewButton
+                  fileUrl={downloadDoc.file_url}
+                  bucket="work-documents"
+                  label="Download"
+                  download
+                  fileName={downloadDoc.file_name || downloadDoc.document_label}
+                />
               </>
             )}
           </div>
@@ -1684,12 +1746,18 @@ function AdminLinkedDocumentCard({
               <div className="flex gap-2 flex-wrap">
                 {uploadDoc.file_url && (
                   <>
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={uploadDoc.file_url} target="_blank" rel="noopener noreferrer">View</a>
-                    </Button>
-                    <Button variant="outline" size="sm" asChild>
-                      <a href={uploadDoc.file_url} download>Download</a>
-                    </Button>
+                    <DocumentViewButton
+                      fileUrl={uploadDoc.file_url}
+                      bucket="work-documents"
+                      label="View"
+                    />
+                    <DocumentViewButton
+                      fileUrl={uploadDoc.file_url}
+                      bucket="work-documents"
+                      label="Download"
+                      download
+                      fileName={uploadDoc.file_name || uploadDoc.document_label}
+                    />
                   </>
                 )}
 
@@ -1928,8 +1996,8 @@ function AddRoundDialog({
       formData.append('file', file)
       formData.append('orderId', orderId)
 
-      const { publicUrl, fileName } = await adminUploadFile(formData)
-      setStagedFile({ fileUrl: publicUrl, fileName })
+      const { storagePath, fileName } = await adminUploadFile(formData)
+      setStagedFile({ fileUrl: storagePath, fileName })
       if (!uploadLabel) setUploadLabel(fileName)
     } catch (err) {
       toast({ title: 'Upload failed', variant: 'destructive' })
@@ -2198,8 +2266,8 @@ function QuickUploadDialog({
       formData.append('file', file)
       formData.append('orderId', orderId)
 
-      const { publicUrl, fileName } = await adminUploadFile(formData)
-      setStagedFile({ fileUrl: publicUrl, fileName })
+      const { storagePath, fileName } = await adminUploadFile(formData)
+      setStagedFile({ fileUrl: storagePath, fileName })
       if (!uploadLabel) setUploadLabel(fileName)
     } catch (err) {
       toast({ title: 'Upload failed', variant: 'destructive' })

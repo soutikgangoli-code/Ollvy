@@ -1,8 +1,10 @@
 'use client'
 
+import { useState } from 'react'
 import { cn, formatTime } from '@/lib/utils'
 import type { ChatMessage } from '@/lib/types'
-import { FileText, Download } from 'lucide-react'
+import { FileText, Download, Loader2 } from 'lucide-react'
+import { downloadFile } from '@/lib/storage'
 
 interface MessageBubbleProps {
   message: ChatMessage
@@ -10,9 +12,29 @@ interface MessageBubbleProps {
 }
 
 export function MessageBubble({ message, professionalName }: MessageBubbleProps) {
+  const [downloading, setDownloading] = useState(false)
   const isUser = message.sender_type === 'user'
   const isSystem = message.sender_type === 'system'
   const isProfessional = message.sender_type === 'professional'
+
+  // Handle file download with signed URL
+  const handleDownload = async () => {
+    // Prefer file_path (storage path), fall back to file_url (legacy public URL)
+    const fileRef = message.file_path
+      ? `documents/${message.file_path}`
+      : message.file_url
+
+    if (!fileRef) return
+
+    setDownloading(true)
+    try {
+      await downloadFile(fileRef, message.file_name || 'download')
+    } catch (error) {
+      console.error('Download failed:', error)
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   // System messages
   if (isSystem) {
@@ -53,11 +75,16 @@ export function MessageBubble({ message, professionalName }: MessageBubbleProps)
               )}
             </div>
             <button
-              onClick={() => message.file_url && window.open(message.file_url, '_blank')}
-              className="p-2 hover:bg-muted rounded-lg transition-colors"
+              onClick={handleDownload}
+              disabled={downloading}
+              className="p-2 hover:bg-muted rounded-lg transition-colors disabled:opacity-50"
               title="Download file"
             >
-              <Download className="h-4 w-4 text-muted-foreground" />
+              {downloading ? (
+                <Loader2 className="h-4 w-4 text-muted-foreground animate-spin" />
+              ) : (
+                <Download className="h-4 w-4 text-muted-foreground" />
+              )}
             </button>
           </div>
           <p className="text-[10px] text-muted-foreground/70 mt-2 text-right">

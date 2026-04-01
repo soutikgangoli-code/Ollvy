@@ -57,13 +57,4 @@ BEGIN
 
   RETURN QUERY SELECT TRUE, v_amount_to_deduct, v_new_balance, NULL::TEXT;
 END;
-$$;
-
--- Grant execute permission
-GRANT EXECUTE ON FUNCTION deduct_referral_credit_atomic(UUID, BIGINT, BIGINT) TO service_role;
-
--- Add comment for documentation
-COMMENT ON FUNCTION deduct_referral_credit_atomic IS
-'Atomically deducts referral credit from user balance with FOR UPDATE locking.
-Prevents race condition where concurrent orders could overdraft the balance.
-Returns success status, amount actually deducted, new balance, and error message if any.';
+$$

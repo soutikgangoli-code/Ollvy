@@ -14,6 +14,7 @@ import {
 import { getClient } from '@/lib/supabase'
 import { cn, formatDate } from '@/lib/utils'
 import { useToast } from '@/lib/hooks/use-toast'
+import { downloadFile, getSignedUrl } from '@/lib/storage'
 import type { OrderWorkDocument } from '@/lib/types'
 import {
   FileText,
@@ -100,11 +101,24 @@ export function WorkDocumentsSection({
   const pendingRequests = requests.filter(r => r.status === 'pending' || r.status === 'rejected')
   const uploadedRequests = requests.filter(r => r.status === 'uploaded' || r.status === 'verified')
 
+  const [downloadingId, setDownloadingId] = useState<string | null>(null)
+
   const handleDownload = async (doc: OrderWorkDocument) => {
     if (!doc.file_url) return
 
-    // Open in new tab for download
-    window.open(doc.file_url, '_blank')
+    setDownloadingId(doc.id)
+    try {
+      await downloadFile(doc.file_url, doc.file_name || doc.document_label)
+    } catch (error) {
+      console.error('Download failed:', error)
+      toast({
+        title: 'Download failed',
+        description: 'Could not download the file. Please try again.',
+        variant: 'destructive',
+      })
+    } finally {
+      setDownloadingId(null)
+    }
   }
 
   const handleUpload = useCallback(async (docId: string, file: File) => {
@@ -141,16 +155,15 @@ export function WorkDocumentsSection({
 
       if (storageError) throw storageError
 
-      // Get public URL
-      const { data: urlData } = supabase.storage
-        .from('work-documents')
-        .getPublicUrl(fileName)
+      // Store the storage path (not public URL) for signed URL generation later
+      // Format: bucket/path - the storage helper will parse this
+      const storagePath = `work-documents/${fileName}`
 
       // Update the work document record
       const { error: updateError } = await supabase
         .from('order_work_documents')
         .update({
-          file_url: urlData.publicUrl,
+          file_url: storagePath,
           file_name: file.name,
           status: 'uploaded',
           uploaded_at: new Date().toISOString(),
@@ -597,17 +610,7 @@ function LinkedDocumentCard({
           {isUploaded && (
             <div className="flex gap-2">
               {uploadDoc.file_url && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="gap-1.5 flex-1"
-                  asChild
-                >
-                  <a href={uploadDoc.file_url} target="_blank" rel="noopener noreferrer">
-                    <Eye className="h-3.5 w-3.5" />
-                    View
-                  </a>
-                </Button>
+                <ViewButton fileUrl={uploadDoc.file_url} />
               )}
               {!isVerified && (
                 <Button
@@ -840,17 +843,78 @@ function RequestCard({
           <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
             <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
             <span className="text-sm text-foreground truncate flex-1">{document.file_name || 'Document'}</span>
-            <a
-              href={document.file_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-xs text-primary hover:underline flex-shrink-0"
-            >
-              View
-            </a>
+            <ViewLink fileUrl={document.file_url} />
           </div>
         </div>
       )}
     </div>
+  )
+}
+
+// ViewLink component for opening files with signed URLs (inline text style)
+function ViewLink({ fileUrl, className }: { fileUrl: string; className?: string }) {
+  const [loading, setLoading] = useState(false)
+
+  const handleView = async () => {
+    setLoading(true)
+    try {
+      const signedUrl = await getSignedUrl(fileUrl)
+      if (signedUrl) {
+        window.open(signedUrl, '_blank')
+      }
+    } catch (error) {
+      console.error('Failed to get signed URL:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleView}
+      disabled={loading}
+      className={cn(
+        'text-xs text-primary hover:underline flex-shrink-0 disabled:opacity-50',
+        className
+      )}
+    >
+      {loading ? 'Loading...' : 'View'}
+    </button>
+  )
+}
+
+// ViewButton component for opening files with signed URLs (button style)
+function ViewButton({ fileUrl }: { fileUrl: string }) {
+  const [loading, setLoading] = useState(false)
+
+  const handleView = async () => {
+    setLoading(true)
+    try {
+      const signedUrl = await getSignedUrl(fileUrl)
+      if (signedUrl) {
+        window.open(signedUrl, '_blank')
+      }
+    } catch (error) {
+      console.error('Failed to get signed URL:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Button
+      size="sm"
+      variant="outline"
+      className="gap-1.5 flex-1"
+      onClick={handleView}
+      disabled={loading}
+    >
+      {loading ? (
+        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+      ) : (
+        <Eye className="h-3.5 w-3.5" />
+      )}
+      {loading ? 'Loading...' : 'View'}
+    </Button>
   )
 }

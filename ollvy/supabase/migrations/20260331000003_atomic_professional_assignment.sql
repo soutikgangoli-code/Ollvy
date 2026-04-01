@@ -109,14 +109,4 @@ BEGIN
 
   RETURN QUERY SELECT TRUE, TRUE, v_current_active + 1, v_max_concurrent, NULL::TEXT;
 END;
-$$;
-
--- Grant execute permission
-GRANT EXECUTE ON FUNCTION assign_professional_atomic(UUID, UUID, TEXT) TO service_role;
-
--- Add comment for documentation
-COMMENT ON FUNCTION assign_professional_atomic IS
-'Atomically assigns a professional to an order with capacity validation.
-Uses FOR UPDATE locking to prevent race condition where concurrent orders
-could exceed max_concurrent_orders.
-Returns success status, current/max orders, and error message if any.';
+$$

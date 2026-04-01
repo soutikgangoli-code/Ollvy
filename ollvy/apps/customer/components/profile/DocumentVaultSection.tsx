@@ -12,8 +12,10 @@ import {
   ArrowRight,
   ChevronDown,
   ChevronUp,
+  Loader2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { getSignedUrl, downloadFile } from '@/lib/storage'
 
 interface DocumentGroup {
   orderId: string
@@ -39,6 +41,32 @@ export function DocumentVaultSection({
 }: DocumentVaultSectionProps) {
   const [expandedGroups, setExpandedGroups] = useState<string[]>([])
   const [showAll, setShowAll] = useState(false)
+  const [loadingDoc, setLoadingDoc] = useState<string | null>(null)
+
+  const handleViewDocument = async (docId: string, url: string) => {
+    setLoadingDoc(docId + '-view')
+    try {
+      const signedUrl = await getSignedUrl(url)
+      if (signedUrl) {
+        window.open(signedUrl, '_blank', 'noopener,noreferrer')
+      }
+    } catch (error) {
+      console.error('Failed to get signed URL:', error)
+    } finally {
+      setLoadingDoc(null)
+    }
+  }
+
+  const handleDownloadDocument = async (docId: string, url: string, fileName: string) => {
+    setLoadingDoc(docId + '-download')
+    try {
+      await downloadFile(url, fileName)
+    } catch (error) {
+      console.error('Failed to download file:', error)
+    } finally {
+      setLoadingDoc(null)
+    }
+  }
 
   const toggleGroup = (orderId: string) => {
     setExpandedGroups(prev =>
@@ -125,15 +153,31 @@ export function DocumentVaultSection({
                             <span className="text-sm text-foreground truncate">{doc.name}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
-                              <a href={doc.url} target="_blank" rel="noopener noreferrer">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7"
+                              onClick={() => handleViewDocument(doc.id, doc.url)}
+                              disabled={loadingDoc === doc.id + '-view'}
+                            >
+                              {loadingDoc === doc.id + '-view' ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
                                 <Eye className="h-3.5 w-3.5" />
-                              </a>
+                              )}
                             </Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7" asChild>
-                              <a href={doc.url} download>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7"
+                              onClick={() => handleDownloadDocument(doc.id, doc.url, doc.name)}
+                              disabled={loadingDoc === doc.id + '-download'}
+                            >
+                              {loadingDoc === doc.id + '-download' ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
                                 <Download className="h-3.5 w-3.5" />
-                              </a>
+                              )}
                             </Button>
                           </div>
                         </div>

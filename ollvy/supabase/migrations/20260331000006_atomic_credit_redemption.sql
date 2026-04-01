@@ -121,13 +121,4 @@ BEGIN
     ARRAY(SELECT id::TEXT FROM UNNEST(v_credits_to_update) AS id),
     NULL::TEXT;
 END;
-$$;
-
--- Grant execute permission
-GRANT EXECUTE ON FUNCTION redeem_credits_atomic(UUID, UUID, BIGINT) TO service_role;
-
--- Add comment for documentation
-COMMENT ON FUNCTION redeem_credits_atomic IS
-'Atomically redeems referral credits with proper handling of partial credits.
-Prevents race condition where a failed insert after marking original as redeemed
-could lose credits. Uses transactions and FOR UPDATE locking.';
+$$

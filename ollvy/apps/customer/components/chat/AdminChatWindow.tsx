@@ -107,9 +107,9 @@ export function AdminChatWindow({ conversationId, adminUser }: AdminChatWindowPr
       return
     }
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('documents')
-      .getPublicUrl(filePath)
+    // Store the storage path (not public URL) for signed URL generation later
+    // Format: bucket/path - the storage helper will parse this
+    const storagePath = `documents/${filePath}`
 
     const { error } = await supabase.from('chat_messages').insert({
       conversation_id: conversationId,
@@ -117,7 +117,7 @@ export function AdminChatWindow({ conversationId, adminUser }: AdminChatWindowPr
       sender_type: 'professional',
       content: `Shared a file: ${file.name}`,
       message_type: 'file',
-      file_url: publicUrl,
+      file_url: storagePath,
       file_path: filePath,
       file_name: file.name,
       file_size: file.size,

@@ -144,15 +144,14 @@ export default function RoundUploadsPage() {
 
       if (uploadError) throw new Error(`Upload failed for ${file.name}: ${uploadError.message}`)
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('work-documents')
-        .getPublicUrl(fileName)
+      // Store the storage path (not public URL) for signed URL generation later
+      const storagePath = `work-documents/${fileName}`
 
       // Update the order_work_documents row
       const { error: updateError } = await supabase
         .from('order_work_documents')
         .update({
-          file_url: publicUrl,
+          file_url: storagePath,
           file_name: file.name,
           uploaded_at: new Date().toISOString(),
           status: 'uploaded',

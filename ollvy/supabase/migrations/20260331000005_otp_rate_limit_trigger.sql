@@ -1,4 +1,4 @@
--- Migration: OTP Rate Limit Trigger
+-- Migration: OTP Rate Limit Function
 -- Purpose: Fix race condition where rate limit check and insert are not atomic
 -- Related Issue: #13 - OTP Rate Limit Race Condition
 
@@ -37,17 +37,4 @@ BEGIN
 
   RETURN NEW;
 END;
-$$;
-
--- Create trigger to run before each OTP insert
-DROP TRIGGER IF EXISTS trg_enforce_otp_rate_limits ON otp_rate_limits;
-CREATE TRIGGER trg_enforce_otp_rate_limits
-  BEFORE INSERT ON otp_rate_limits
-  FOR EACH ROW
-  EXECUTE FUNCTION enforce_otp_rate_limits();
-
--- Add comment for documentation
-COMMENT ON FUNCTION enforce_otp_rate_limits IS
-'BEFORE INSERT trigger function that enforces OTP rate limits at database level.
-Prevents race condition where concurrent requests could bypass rate limit checks.
-Limits: 5 per hour, 3 per 10 minutes.';
+$$

@@ -11,8 +11,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { formatDate, formatDateTime } from '@/lib/utils'
 import { useToast } from '@/lib/hooks/use-toast'
 import { buildRejectionMessage, getRejectionLabel } from '@/lib/constants/rejection-reasons'
+import { getSignedUrl } from '@/lib/storage'
 import type { OrderRound, RoundQuestionRequest, OrderWorkDocument } from '@/lib/types'
-import { Download, Upload, Check, AlertCircle } from 'lucide-react'
+import { Download, Upload, Check, AlertCircle, Loader2 } from 'lucide-react'
 
 interface RoundsTimelineProps {
   orderId: string
@@ -162,9 +163,7 @@ function RoundCard({
                 <div key={doc.id} className="flex items-center justify-between text-sm">
                   <span className="text-muted-foreground">{doc.document_label}</span>
                   {doc.file_url ? (
-                    <a href={doc.file_url} target="_blank" rel="noopener noreferrer" className="text-primary text-xs">
-                      View
-                    </a>
+                    <ViewDocLink fileUrl={doc.file_url} />
                   ) : (
                     <span className="text-muted-foreground text-xs">Not uploaded</span>
                   )}
@@ -376,10 +375,12 @@ function RoundDocumentsSection({
         const fileExt = file.name.split('.').pop()
         const fileName = `${orderId}/${docId}/${Date.now()}.${fileExt}`
         await supabase.storage.from('work-documents').upload(fileName, file, { cacheControl: '3600', upsert: true })
-        const { data: { publicUrl } } = supabase.storage.from('work-documents').getPublicUrl(fileName)
+
+        // Store the storage path (not public URL) for signed URL generation later
+        const storagePath = `work-documents/${fileName}`
 
         await supabase.from('order_work_documents').update({
-          file_url: publicUrl,
+          file_url: storagePath,
           file_name: file.name,
           uploaded_at: new Date().toISOString(),
           status: 'uploaded',
@@ -436,14 +437,7 @@ function RoundDocumentsSection({
                   </Badge>
                 )}
               </div>
-              <a
-                href={doc.file_url}
-                download
-                className="flex items-center gap-1 text-sm text-primary hover:underline"
-              >
-                <Download className="h-4 w-4" />
-                Download
-              </a>
+              <DownloadDocLink fileUrl={doc.file_url!} fileName={doc.file_name || doc.document_label} />
             </div>
 
             {/* If for_signing, show linked upload slot */}
@@ -558,4 +552,73 @@ function renderResponseValue(
     return options.find(o => o.value === String(responseValue))?.label ?? String(responseValue)
   }
   return String(responseValue)
+}
+
+// ViewDocLink component for viewing files with signed URLs
+function ViewDocLink({ fileUrl }: { fileUrl: string }) {
+  const [loading, setLoading] = useState(false)
+
+  const handleView = async () => {
+    setLoading(true)
+    try {
+      const signedUrl = await getSignedUrl(fileUrl)
+      if (signedUrl) {
+        window.open(signedUrl, '_blank')
+      }
+    } catch (error) {
+      console.error('Failed to get signed URL:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleView}
+      disabled={loading}
+      className="text-primary text-xs hover:underline disabled:opacity-50"
+    >
+      {loading ? 'Loading...' : 'View'}
+    </button>
+  )
+}
+
+// DownloadDocLink component for downloading files with signed URLs
+function DownloadDocLink({ fileUrl, fileName }: { fileUrl: string; fileName: string }) {
+  const [loading, setLoading] = useState(false)
+
+  const handleDownload = async () => {
+    setLoading(true)
+    try {
+      const signedUrl = await getSignedUrl(fileUrl)
+      if (signedUrl) {
+        const link = document.createElement('a')
+        link.href = signedUrl
+        link.download = fileName
+        link.target = '_blank'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+    } catch (error) {
+      console.error('Failed to download file:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <button
+      onClick={handleDownload}
+      disabled={loading}
+      className="flex items-center gap-1 text-sm text-primary hover:underline disabled:opacity-50"
+    >
+      {loading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <Download className="h-4 w-4" />
+      )}
+      {loading ? 'Loading...' : 'Download'}
+    </button>
+  )
 }

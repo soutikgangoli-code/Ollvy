@@ -32,9 +32,20 @@ interface QuestionnaireState {
   error: string | null
 }
 
+// Type for prefetched order data (from server-side fetch)
+interface PrefetchedOrderData {
+  id: string
+  questionnaire_completed_at?: string | null
+  service_package: {
+    id: string
+    slug: string
+    name: string
+  }
+}
+
 interface QuestionnaireActions {
   // Initialize
-  loadQuestionnaire: (orderId: string, forceEdit?: boolean) => Promise<void>
+  loadQuestionnaire: (orderId: string, forceEdit?: boolean, prefetchedOrder?: PrefetchedOrderData) => Promise<void>
   loadPrePaymentQuestionnaire: (serviceId: string, serviceSlug: string, loadExisting?: boolean) => Promise<void>
 
   // Navigation
@@ -78,7 +89,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
   (set, get) => ({
     ...initialState,
 
-    loadQuestionnaire: async (orderId: string, forceEdit: boolean = false) => {
+    loadQuestionnaire: async (orderId: string, forceEdit: boolean = false, prefetchedOrder?: PrefetchedOrderData) => {
       set({ isLoading: true, error: null, orderId })
 
       try {
@@ -91,15 +102,22 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           throw new Error('Not authenticated')
         }
 
-        // Use RPC function for reliable order fetching (bypasses RLS chain issues)
-        const { data: orderData, error: orderError } = await supabase
-          .rpc('get_user_order', { p_order_id: orderId })
+        // Use prefetched order data if available, otherwise fetch via RPC
+        let orderData: PrefetchedOrderData | null = prefetchedOrder || null
 
-        if (orderError) throw orderError
-
-        // RPC returns null if order doesn't exist or user doesn't own it
         if (!orderData) {
-          throw new Error('Order not found')
+          // Use RPC function for reliable order fetching (bypasses RLS chain issues)
+          const { data: fetchedOrder, error: orderError } = await supabase
+            .rpc('get_user_order', { p_order_id: orderId })
+
+          if (orderError) throw orderError
+
+          // RPC returns null if order doesn't exist or user doesn't own it
+          if (!fetchedOrder) {
+            throw new Error('Order not found')
+          }
+
+          orderData = fetchedOrder as PrefetchedOrderData
         }
 
         const servicePackage = orderData.service_package as {

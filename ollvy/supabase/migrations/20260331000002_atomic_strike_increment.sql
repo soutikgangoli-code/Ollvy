@@ -70,13 +70,4 @@ BEGIN
     (v_new_count >= 5)::BOOLEAN,
     NULL::TEXT;
 END;
-$$;
-
--- Grant execute permission
-GRANT EXECUTE ON FUNCTION apply_strike_atomic(UUID, UUID, UUID, TEXT) TO service_role;
-
--- Add comment for documentation
-COMMENT ON FUNCTION apply_strike_atomic IS
-'Atomically increments professional strike count using UPDATE...RETURNING pattern.
-Prevents race condition where concurrent SLA violations could lose strike increments.
-Returns old count, new count, and whether suspension threshold (5) was reached.';
+$$

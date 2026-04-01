@@ -978,7 +978,7 @@ export async function updateRoundDeadline(roundId: string, orderId: string, newD
 }
 
 // Admin file upload to storage (uses service role to bypass RLS)
-export async function adminUploadFile(formData: FormData): Promise<{ publicUrl: string; fileName: string }> {
+export async function adminUploadFile(formData: FormData): Promise<{ storagePath: string; fileName: string }> {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
 
@@ -1007,11 +1007,10 @@ export async function adminUploadFile(formData: FormData): Promise<{ publicUrl: 
     throw new Error(`Upload failed: ${uploadError.message}`)
   }
 
-  const { data: { publicUrl } } = supabaseServer.storage
-    .from('work-documents')
-    .getPublicUrl(path)
+  // Return the storage path (not public URL) for signed URL generation later
+  const storagePath = `work-documents/${path}`
 
-  return { publicUrl, fileName: file.name }
+  return { storagePath, fileName: file.name }
 }
 
 // Generate signed URLs for admin file access (bypasses RLS)
