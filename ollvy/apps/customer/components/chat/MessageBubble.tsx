@@ -52,7 +52,11 @@ export function MessageBubble({ message, professionalName }: MessageBubbleProps)
                 </p>
               )}
             </div>
-            <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+            <button
+              onClick={() => message.file_url && window.open(message.file_url, '_blank')}
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
+              title="Download file"
+            >
               <Download className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>

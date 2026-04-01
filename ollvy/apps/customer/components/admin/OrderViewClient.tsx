@@ -330,27 +330,36 @@ export function OrderViewClient({
       const failedDownloads: string[] = []
       let successCount = 0
 
-      // Fetch and add all files to zip using signed URLs
-      for (const doc of allDocs) {
-        try {
-          const signedUrl = signedUrlMap.get(doc.url)
-          if (!signedUrl) {
-            console.error(`No signed URL for ${doc.name}`)
-            failedDownloads.push(doc.name)
-            continue
+      // Fetch all files in PARALLEL for better performance
+      const fetchResults = await Promise.all(
+        allDocs.map(async (doc) => {
+          try {
+            const signedUrl = signedUrlMap.get(doc.url)
+            if (!signedUrl) {
+              console.error(`No signed URL for ${doc.name}`)
+              return { success: false, doc, error: 'No signed URL' }
+            }
+            const response = await fetch(signedUrl)
+            if (!response.ok) {
+              console.error(`Failed to fetch ${doc.name}: ${response.status}`)
+              return { success: false, doc, error: `HTTP ${response.status}` }
+            }
+            const blob = await response.blob()
+            return { success: true, doc, blob }
+          } catch (e) {
+            console.error(`Failed to fetch ${doc.name}:`, e)
+            return { success: false, doc, error: String(e) }
           }
-          const response = await fetch(signedUrl)
-          if (!response.ok) {
-            console.error(`Failed to fetch ${doc.name}: ${response.status}`)
-            failedDownloads.push(doc.name)
-            continue
-          }
-          const blob = await response.blob()
-          zip.folder(doc.folder)?.file(doc.name, blob)
+        })
+      )
+
+      // Process results and add to zip
+      for (const result of fetchResults) {
+        if (result.success && result.blob) {
+          zip.folder(result.doc.folder)?.file(result.doc.name, result.blob)
           successCount++
-        } catch (e) {
-          console.error(`Failed to fetch ${doc.name}:`, e)
-          failedDownloads.push(doc.name)
+        } else {
+          failedDownloads.push(result.doc.name)
         }
       }
 

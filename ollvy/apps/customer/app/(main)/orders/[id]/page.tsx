@@ -440,8 +440,37 @@ export default function OrderDetailPage() {
     }
   }
 
-  const handleDownloadEngagementLetter = () => {
-    console.log('Download engagement letter')
+  const handleDownloadEngagementLetter = async () => {
+    if (!order?.id) return
+
+    try {
+      const supabase = getClient()
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session) return
+
+      const response = await fetch(getEdgeFunctionUrl('get-engagement-letter-url'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ order_id: order.id }),
+      })
+
+      const data = await response.json()
+
+      if (data.ok && data.url) {
+        window.open(data.url, '_blank')
+      } else if (data.pdf_pending) {
+        // PDF is being generated, show a message to the user
+        console.log('Engagement letter is being generated, please try again shortly.')
+      } else {
+        console.error('Failed to get engagement letter:', data.error)
+      }
+    } catch (err) {
+      console.error('Failed to download engagement letter:', err)
+    }
   }
 
   const formatResponseValue = (value: string | string[]) => {
