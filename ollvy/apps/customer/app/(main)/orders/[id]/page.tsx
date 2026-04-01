@@ -14,6 +14,12 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -57,6 +63,7 @@ import {
   User,
   Star,
   FolderOpen,
+  Info,
 } from 'lucide-react'
 
 interface OrderDocument {
@@ -688,9 +695,19 @@ export default function OrderDetailPage() {
                       Days Left - {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                     </p>
                     {!stats.customerSetupComplete && (
-                      <span className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px]">
-                        Paused
-                      </span>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px] cursor-help">
+                              Paused
+                              <Info className="h-3 w-3" />
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="bottom" className="max-w-[200px]">
+                            <p className="text-xs">Complete your questionnaire and upload documents to resume progress.</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     )}
                   </div>
                 </div>
@@ -759,9 +776,19 @@ export default function OrderDetailPage() {
                     Expected completion: {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </p>
                   {!stats.customerSetupComplete && (
-                    <span className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px]">
-                      Paused
-                    </span>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px] cursor-help">
+                            Paused
+                            <Info className="h-3 w-3" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom" className="max-w-[200px]">
+                          <p className="text-xs">Complete your questionnaire and upload documents to resume progress.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   )}
                 </div>
               </div>
