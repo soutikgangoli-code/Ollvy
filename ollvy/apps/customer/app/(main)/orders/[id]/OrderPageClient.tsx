@@ -191,52 +191,55 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
 
         setWorkDocuments(workDocsData || [])
 
-        // Fetch invoice ID
-        const { data: invoiceData } = await supabase
-          .from('invoices')
-          .select('id')
-          .eq('order_id', orderId)
-          .single()
+        // Fetch invoice ID (table might not exist in production - fail silently)
+        try {
+          const { data: invoiceData } = await supabase
+            .from('invoices')
+            .select('id')
+            .eq('order_id', orderId)
+            .maybeSingle()
+          setInvoiceId(invoiceData?.id || null)
+        } catch {
+          // Invoice table might not exist
+        }
 
-        setInvoiceId(invoiceData?.id || null)
+        // Fetch round notification (fail silently if table doesn't exist)
+        try {
+          const { data: notificationData } = await supabase
+            .from('round_notifications')
+            .select('*')
+            .eq('order_id', orderId)
+            .eq('is_dismissed', false)
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+          setRoundNotification(notificationData)
+        } catch {
+          // Round notifications table might not exist
+        }
 
-        // Fetch round notification
-        const { data: notificationData } = await supabase
-          .from('round_notifications')
-          .select('*')
-          .eq('order_id', orderId)
-          .eq('is_dismissed', false)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .maybeSingle()
+        // Fetch questionnaire responses (fail silently if table doesn't exist)
+        try {
+          const { data: responsesData } = await supabase
+            .from('questionnaire_responses')
+            .select('question_key, response_value')
+            .eq('order_id', orderId)
 
-        setRoundNotification(notificationData)
-
-        // Fetch questionnaire responses
-        const { data: responsesData } = await supabase
-          .from('questionnaire_responses')
-          .select('question_key, response_value')
-          .eq('order_id', orderId)
-
-        // Fetch question labels from the service package questionnaire
-        if (orderData.service_package_id) {
-          const { data: packageData } = await supabase
-            .from('service_packages')
-            .select('questionnaire')
-            .eq('id', orderData.service_package_id)
-            .single()
-
-          const questionnaire = packageData?.questionnaire as Array<{ key: string; label: string }> || []
+          // Use questionnaire from order's service_package if available
+          const servicePackage = orderData.service_package as { questionnaire?: Array<{ key: string; label: string }> } | undefined
+          const questionnaire = servicePackage?.questionnaire || []
           const questionLabels = new Map(
-            questionnaire.map(q => [q.key, q.label])
+            questionnaire.map((q: { key: string; label: string }) => [q.key, q.label])
           )
 
-          const responses = (responsesData || []).map(r => ({
+          const responses = (responsesData || []).map((r: { question_key: string; response_value: string | string[] }) => ({
             question_key: r.question_key,
             question_label: questionLabels.get(r.question_key) || r.question_key,
             response_value: r.response_value,
           }))
           setQuestionnaireResponses(responses)
+        } catch {
+          // Questionnaire responses table might not exist
         }
       } catch (err) {
         console.error('Failed to fetch order:', err)
