@@ -31,6 +31,7 @@ import {
 import { OrderStatusBadge } from '@/components/orders/OrderStatusBadge'
 import { DocumentPreview } from '@/components/documents'
 import { getClient } from '@/lib/supabase'
+import { useAuthStore } from '@/lib/stores/auth-store'
 import { formatPaisa, formatDate, cn } from '@/lib/utils'
 import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
 import { WorkDocumentsSection } from '@/components/orders/WorkDocumentsSection'
@@ -117,6 +118,7 @@ interface OrderPageClientProps {
 
 export function OrderPageClient({ orderId }: OrderPageClientProps) {
   const router = useRouter()
+  const { isHydrated, isLoading: authLoading } = useAuthStore()
 
   // Loading and error states
   const [isLoading, setIsLoading] = useState(true)
@@ -133,6 +135,9 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
 
   // Fetch order data client-side using direct queries
   useEffect(() => {
+    // Wait for auth to fully hydrate before fetching
+    if (!isHydrated || authLoading) return
+
     const fetchOrderData = async () => {
       try {
         const supabase = getClient()
@@ -256,7 +261,7 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
     }
 
     fetchOrderData()
-  }, [orderId])
+  }, [orderId, isHydrated, authLoading])
 
   // Modal states
   const [previewDoc, setPreviewDoc] = useState<{

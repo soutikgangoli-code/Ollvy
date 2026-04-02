@@ -169,7 +169,7 @@ interface ProfilePageClientProps {
 
 function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
   const router = useRouter()
-  const { refreshSession } = useAuthStore()
+  const { refreshSession, isHydrated, isLoading: authLoading } = useAuthStore()
 
   const [isSaving, setIsSaving] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -196,6 +196,9 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
 
   // Fetch dashboard data client-side using RPCs that work
   useEffect(() => {
+    // Wait for auth to fully hydrate before fetching
+    if (!isHydrated || authLoading) return
+
     const fetchDashboardData = async () => {
       try {
         const supabase = getClient()
@@ -389,7 +392,7 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
     }
 
     fetchDashboardData()
-  }, [])
+  }, [isHydrated, authLoading])
 
   // Process dashboard data
   const processedData = (() => {
