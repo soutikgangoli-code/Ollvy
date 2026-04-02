@@ -11,6 +11,15 @@ const PROTECTED_ROUTES = ['/orders', '/profile', '/retainers', '/compliance']
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
+  // Redirect non-www to www (SEO canonical enforcement)
+  const host = request.headers.get('host') || ''
+  if (host === 'ollvy.com') {
+    const url = request.nextUrl.clone()
+    url.host = 'www.ollvy.com'
+    url.protocol = 'https'
+    return NextResponse.redirect(url, 308) // 308 = permanent redirect
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,

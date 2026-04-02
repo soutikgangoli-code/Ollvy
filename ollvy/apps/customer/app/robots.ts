@@ -14,6 +14,7 @@ const DISALLOWED_ROUTES = [
   '/admin',
   '/pro',
   '/api/',
+  '/_next/',
   '/order/',
   '/orders/',
   '/profile',
