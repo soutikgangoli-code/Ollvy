@@ -133,7 +133,7 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
   const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(null)
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>([])
 
-  // Fetch order data client-side using direct queries
+  // Fetch order data client-side using RPC that we know works
   useEffect(() => {
     // Wait for auth to fully hydrate before fetching
     if (!isHydrated || authLoading) return
@@ -142,31 +142,19 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
       try {
         const supabase = getClient()
 
-        // Fetch the order with service package
-        const { data: orderData, error: orderError } = await supabase
-          .from('orders')
-          .select(`
-            *,
-            service_package:service_packages (*),
-            professional:professionals (
-              id,
-              name,
-              profession_type,
-              experience_years
-            )
-          `)
-          .eq('id', orderId)
-          .single()
+        // Use the same RPC that /orders page uses - it works!
+        // Fetch all orders and find the one we need
+        const { data: allOrders, error: ordersError } = await supabase.rpc('get_user_orders')
 
-        if (orderError) {
-          console.error('Error fetching order:', orderError)
-          if (orderError.code === 'PGRST116') {
-            setError('Order not found or you do not have access to it.')
-          } else {
-            setError('There was an error loading the order details. Please try again.')
-          }
+        if (ordersError) {
+          console.error('Error fetching orders:', ordersError)
+          setError('There was an error loading the order details. Please try again.')
           return
         }
+
+        // Find the specific order by ID
+        const ordersArray = Array.isArray(allOrders) ? allOrders : []
+        const orderData = ordersArray.find((o: any) => o.id === orderId)
 
         if (!orderData) {
           setError('Order not found or you do not have access to it.')
@@ -576,21 +564,10 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
     try {
       const supabase = getClient()
 
-      // Refresh order
-      const { data: orderData } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          service_package:service_packages (*),
-          professional:professionals (
-            id,
-            name,
-            profession_type,
-            experience_years
-          )
-        `)
-        .eq('id', orderId)
-        .single()
+      // Refresh order using RPC
+      const { data: allOrders } = await supabase.rpc('get_user_orders')
+      const ordersArray = Array.isArray(allOrders) ? allOrders : []
+      const orderData = ordersArray.find((o: any) => o.id === orderId)
 
       if (orderData) setOrder(orderData as Order)
 
