@@ -121,6 +121,7 @@ export default function CheckoutPage() {
 
   // Payment
   const [isProcessing, setIsProcessing] = useState(false)
+  const [razorpayReady, setRazorpayReady] = useState(false)
 
   // Mobile bottom sheet
   const [isSheetOpen, setIsSheetOpen] = useState(false)
@@ -142,6 +143,13 @@ export default function CheckoutPage() {
   useEffect(() => {
     fetchService()
   }, [serviceId])
+
+  // Check if Razorpay is already loaded (e.g., from cache)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && (window as any).Razorpay) {
+      setRazorpayReady(true)
+    }
+  }, [])
 
   // Open auth modal once on initial load if user is not logged in
   useEffect(() => {
@@ -574,11 +582,11 @@ export default function CheckoutPage() {
       // Check Razorpay script loaded
       if (typeof window === 'undefined' || !(window as any).Razorpay) {
         toast({
-          title: 'Payment service unavailable',
-          description: 'Please refresh the page and try again.',
-          variant: 'destructive',
+          title: 'Payment loading...',
+          description: 'Please wait a moment and try again.',
         })
         setIsProcessing(false)
+        // Script might still be loading, don't show error
         return
       }
 
@@ -829,7 +837,8 @@ export default function CheckoutPage() {
       {/* Razorpay Script - preload for faster payment */}
       <Script
         src="https://checkout.razorpay.com/v1/checkout.js"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
+        onLoad={() => setRazorpayReady(true)}
       />
 
       {/* Success Modal */}
