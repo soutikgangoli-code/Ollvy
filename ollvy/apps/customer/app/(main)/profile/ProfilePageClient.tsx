@@ -194,58 +194,46 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
   const [panNumber, setPanNumber] = useState(userData.pan_number || '')
   const [aadhaarNumber, setAadhaarNumber] = useState(userData.aadhaar_number || '')
 
-  // Fetch dashboard data client-side using direct queries
+  // Fetch dashboard data client-side using RPCs that work
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const supabase = getClient()
 
-        // Fetch active orders
-        const { data: activeOrders, error: activeError } = await supabase
-          .from('orders')
-          .select(`
-            id,
-            order_number,
-            status,
-            total_paisa_snapshot,
-            created_at,
-            questionnaire_completed_at,
-            service_package:service_packages (
-              id,
-              name,
-              slug,
-              sla_working_days,
-              workflow_stages
-            )
-          `)
-          .in('status', ['pending_assignment', 'in_progress', 'waitlisted'])
-          .order('created_at', { ascending: false })
-          .limit(5)
+        // Use the same RPC that /orders page uses - it works!
+        const [activeResult, completedResult] = await Promise.all([
+          supabase.rpc('get_user_orders', {
+            p_statuses: ['pending_assignment', 'waitlisted', 'in_progress']
+          }),
+          supabase.rpc('get_user_orders', {
+            p_statuses: ['completed']
+          })
+        ])
 
-        if (activeError) console.error('Error fetching active orders:', activeError)
+        if (activeResult.error) console.error('Error fetching active orders:', activeResult.error)
+        if (completedResult.error) console.error('Error fetching completed orders:', completedResult.error)
 
-        // Fetch completed orders
-        const { data: completedOrders, error: completedError } = await supabase
-          .from('orders')
-          .select(`
-            id,
-            order_number,
-            status,
-            total_paisa_snapshot,
-            created_at,
-            service_package:service_packages (
-              id,
-              name,
-              slug
-            )
-          `)
-          .eq('status', 'completed')
-          .order('created_at', { ascending: false })
-          .limit(10)
+        // Transform RPC results to match expected format
+        const activeOrders = (Array.isArray(activeResult.data) ? activeResult.data : []).slice(0, 5).map((o: any) => ({
+          id: o.id,
+          order_number: o.order_number,
+          status: o.status,
+          total_paisa_snapshot: o.total_paisa_snapshot,
+          created_at: o.created_at,
+          questionnaire_completed_at: o.questionnaire_completed_at,
+          service_package: o.service_package,
+        }))
 
-        if (completedError) console.error('Error fetching completed orders:', completedError)
+        const completedOrders = (Array.isArray(completedResult.data) ? completedResult.data : []).slice(0, 10).map((o: any) => ({
+          id: o.id,
+          order_number: o.order_number,
+          status: o.status,
+          total_paisa_snapshot: o.total_paisa_snapshot,
+          created_at: o.created_at,
+          service_package: o.service_package,
+        }))
 
-        // Fetch retainers
+        // Fetch retainers - skip columns that don't exist
         const { data: retainers, error: retainersError } = await supabase
           .from('retainer_subscriptions')
           .select(`
@@ -262,7 +250,7 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
         if (retainersError) console.error('Error fetching retainers:', retainersError)
 
         // Get order IDs for document queries
-        const activeOrderIds = (activeOrders || []).map(o => o.id)
+        const activeOrderIds = activeOrders.map((o: any) => o.id)
 
         // Fetch document counts for active orders
         let docCounts: Record<string, { total: number; uploaded: number }> = {}
@@ -377,25 +365,15 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           }
         }
 
-        // Transform data to match expected types (Supabase returns joined data differently)
-        const transformedActiveOrders = (activeOrders || []).map(o => ({
-          ...o,
-          service_package: Array.isArray(o.service_package) ? o.service_package[0] : o.service_package,
-        }))
-
-        const transformedCompletedOrders = (completedOrders || []).map(o => ({
-          ...o,
-          service_package: Array.isArray(o.service_package) ? o.service_package[0] : o.service_package,
-        }))
-
-        const transformedRetainers = (retainers || []).map(r => ({
+        // Transform retainers data (Supabase returns joined data as arrays)
+        const transformedRetainers = (retainers || []).map((r: any) => ({
           ...r,
           service_package: Array.isArray(r.service_package) ? r.service_package[0] : r.service_package,
         }))
 
         setDashboardData({
-          active_orders: transformedActiveOrders as DashboardData['active_orders'],
-          completed_orders: transformedCompletedOrders as DashboardData['completed_orders'],
+          active_orders: activeOrders as DashboardData['active_orders'],
+          completed_orders: completedOrders as DashboardData['completed_orders'],
           retainers: transformedRetainers as DashboardData['retainers'],
           compliance: [],
           doc_counts: docCounts,
