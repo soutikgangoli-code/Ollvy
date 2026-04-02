@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -163,17 +163,27 @@ interface UserData {
 }
 
 interface ProfilePageClientProps {
-  initialDashboardData: DashboardData
   userData: UserData
   isSetup: boolean
 }
 
-function ProfileContent({ initialDashboardData, userData, isSetup }: ProfilePageClientProps) {
+function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
   const router = useRouter()
   const { refreshSession } = useAuthStore()
 
   const [isSaving, setIsSaving] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
+    active_orders: [],
+    completed_orders: [],
+    retainers: [],
+    compliance: [],
+    doc_counts: {},
+    stage_histories: {},
+    work_doc_counts: {},
+    document_groups: [],
+  })
 
   // Form state
   const [businessName, setBusinessName] = useState(userData.business_name || '')
@@ -184,8 +194,31 @@ function ProfileContent({ initialDashboardData, userData, isSetup }: ProfilePage
   const [panNumber, setPanNumber] = useState(userData.pan_number || '')
   const [aadhaarNumber, setAadhaarNumber] = useState(userData.aadhaar_number || '')
 
-  // Process dashboard data from server
+  // Fetch dashboard data client-side where auth.uid() works
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const supabase = getClient()
+        const { data, error } = await supabase.rpc('get_user_dashboard')
+
+        if (error) {
+          console.error('Error fetching dashboard data:', error)
+        } else if (data) {
+          setDashboardData(data)
+        }
+      } catch (err) {
+        console.error('Failed to fetch dashboard:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchDashboardData()
+  }, [])
+
+  // Process dashboard data
   const processedData = (() => {
+    const initialDashboardData = dashboardData
     const docCounts = initialDashboardData.doc_counts || {}
     const stageHistories = initialDashboardData.stage_histories || {}
     const workDocCounts = initialDashboardData.work_doc_counts || {}
@@ -476,6 +509,16 @@ function ProfileContent({ initialDashboardData, userData, isSetup }: ProfilePage
         </div>
       </div>
 
+      {/* Loading state for dashboard data */}
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      )}
+
+      {!isLoading && (
+        <>
+
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Main Content (2/3) */}
         <div className="lg:col-span-2 space-y-8">
@@ -695,6 +738,8 @@ function ProfileContent({ initialDashboardData, userData, isSetup }: ProfilePage
           )}
         </div>
       </div>
+      </>
+      )}
     </div>
   )
 }

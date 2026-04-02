@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createServerSupabase, getUser } from '@/lib/supabase-server'
+import { getUser } from '@/lib/supabase-server'
 import { ProfilePageClient } from './ProfilePageClient'
 
 interface PageProps {
@@ -16,30 +16,10 @@ export default async function ProfilePage({ searchParams }: PageProps) {
     redirect('/login?returnUrl=/profile')
   }
 
-  const supabase = await createServerSupabase()
-
-  // Single RPC call - ALL dashboard data at once
-  const { data: dashboardData, error } = await supabase.rpc('get_user_dashboard')
-
-  if (error) {
-    console.error('Error fetching dashboard data:', error)
-  }
-
-  // Default empty dashboard data if RPC fails or returns null
-  const initialDashboardData = dashboardData || {
-    active_orders: [],
-    completed_orders: [],
-    retainers: [],
-    compliance: [],
-    doc_counts: {},
-    stage_histories: {},
-    work_doc_counts: {},
-    document_groups: [],
-  }
-
+  // Don't call RPC here - auth.uid() doesn't work server-side
+  // Pass user to client component which will fetch data client-side
   return (
     <ProfilePageClient
-      initialDashboardData={initialDashboardData}
       userData={user}
       isSetup={isSetup}
     />

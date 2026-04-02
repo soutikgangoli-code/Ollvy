@@ -41,6 +41,7 @@ import { ChatWindow } from '@/components/chat/ChatWindow'
 import { getEdgeFunctionUrl } from '@/lib/supabase'
 import { getSignedUrl, downloadFile } from '@/lib/storage'
 import {
+  AlertCircle,
   ArrowLeft,
   MessageSquare,
   Download,
@@ -111,32 +112,73 @@ interface OrderFullDetails {
 }
 
 interface OrderPageClientProps {
-  initialData: OrderFullDetails
+  orderId: string
 }
 
-export function OrderPageClient({ initialData }: OrderPageClientProps) {
+export function OrderPageClient({ orderId }: OrderPageClientProps) {
   const router = useRouter()
-  const orderId = initialData.order.id
 
-  // Initialize state from server-fetched data - NO initial fetch needed
-  const [order, setOrder] = useState<Order>(initialData.order)
-  const [stageHistory, setStageHistory] = useState<OrderStageHistory[]>(initialData.stage_history)
-  const [documents, setDocuments] = useState<OrderDocument[]>(initialData.documents)
-  const [workDocuments, setWorkDocuments] = useState<OrderWorkDocument[]>(initialData.work_documents)
-  const [invoiceId] = useState<string | null>(initialData.invoice_id)
-  const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(initialData.round_notification)
+  // Loading and error states
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Process questionnaire responses with labels
-  const [questionnaireResponses] = useState<QuestionnaireResponse[]>(() => {
-    const questionLabels = new Map(
-      initialData.question_labels?.map(q => [q.question_key, q.question_label]) || []
-    )
-    return (initialData.questionnaire_responses || []).map(r => ({
-      question_key: r.question_key,
-      question_label: questionLabels.get(r.question_key) || r.question_key,
-      response_value: r.response_value,
-    }))
-  })
+  // Order data states
+  const [order, setOrder] = useState<Order | null>(null)
+  const [stageHistory, setStageHistory] = useState<OrderStageHistory[]>([])
+  const [documents, setDocuments] = useState<OrderDocument[]>([])
+  const [workDocuments, setWorkDocuments] = useState<OrderWorkDocument[]>([])
+  const [invoiceId, setInvoiceId] = useState<string | null>(null)
+  const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(null)
+  const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>([])
+
+  // Fetch order data client-side where auth.uid() works
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      try {
+        const supabase = getClient()
+        const { data, error: fetchError } = await supabase.rpc('get_order_full_details', {
+          p_order_id: orderId,
+        })
+
+        if (fetchError) {
+          console.error('Error fetching order details:', fetchError)
+          setError('There was an error loading the order details. Please try again.')
+          return
+        }
+
+        if (!data?.order) {
+          setError('Order not found or you do not have access to it.')
+          return
+        }
+
+        // Set all the data
+        setOrder(data.order)
+        setStageHistory(data.stage_history || [])
+        setDocuments(data.documents || [])
+        setWorkDocuments(data.work_documents || [])
+        setInvoiceId(data.invoice_id)
+        setRoundNotification(data.round_notification)
+
+        // Process questionnaire responses with labels
+        const questionLabels = new Map(
+          data.question_labels?.map((q: QuestionLabel) => [q.question_key, q.question_label]) || []
+        )
+        const responses = (data.questionnaire_responses || []).map((r: { question_key: string; response_value: string | string[] }) => ({
+          question_key: r.question_key,
+          question_label: questionLabels.get(r.question_key) || r.question_key,
+          response_value: r.response_value,
+        }))
+        setQuestionnaireResponses(responses)
+      } catch (err) {
+        console.error('Failed to fetch order:', err)
+        setError('There was an error loading the order details. Please try again.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchOrderData()
+  }, [orderId])
 
   // Modal states
   const [previewDoc, setPreviewDoc] = useState<{
@@ -468,6 +510,35 @@ export function OrderPageClient({ initialData }: OrderPageClientProps) {
   const pendingDocsCount = stats.totalDocs - stats.uploadedDocs
   const pendingWorkDocs = workDocuments.filter(d => d.direction === 'from_customer' && d.status === 'pending')
   const newDeliverables = workDocuments.filter(d => d.direction === 'to_customer')
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="container py-20 text-center">
+        <Loader2 className="h-12 w-12 text-muted-foreground mx-auto mb-4 animate-spin" />
+        <h1 className="text-xl font-semibold text-foreground mb-2">Loading Order</h1>
+        <p className="text-muted-foreground">Please wait...</p>
+      </div>
+    )
+  }
+
+  // Error state
+  if (error || !order) {
+    return (
+      <div className="container py-20 text-center">
+        <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <h1 className="text-2xl font-semibold text-foreground mb-4">
+          {error?.includes('not found') ? 'Order Not Found' : 'Error Loading Order'}
+        </h1>
+        <p className="text-muted-foreground mb-8">
+          {error || 'There was an error loading the order details. Please try again.'}
+        </p>
+        <Link href="/orders">
+          <Button>Back to Orders</Button>
+        </Link>
+      </div>
+    )
+  }
 
   return (
     <div className="container py-12 max-w-5xl">
