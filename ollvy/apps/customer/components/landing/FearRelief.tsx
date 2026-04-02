@@ -8,10 +8,10 @@ const PENALTIES = [
 ]
 
 const BENEFITS = [
-  { icon: Clock, title: 'Automated reminders' },
-  { icon: FileText, title: 'Proof of filing' },
-  { icon: MessageSquare, title: 'Direct CA access' },
-  { icon: Calendar, title: 'Compliance calendar' },
+  { icon: Clock, title: 'Deadline alerts that save you' },
+  { icon: FileText, title: 'Every filing tracked' },
+  { icon: MessageSquare, title: 'CAs who respond fast' },
+  { icon: Calendar, title: 'Always know what\'s next' },
 ]
 
 export function FearRelief() {
@@ -23,7 +23,7 @@ export function FearRelief() {
         </h2>
         <div className="grid grid-cols-2 gap-3 md:gap-6 lg:gap-12">
           {/* The Fear Side */}
-          <div className="rounded-2xl md:rounded-3xl border border-border bg-card shadow-xl shadow-foreground/5 p-4 md:p-8 lg:p-10 flex flex-col">
+          <div className="rounded-2xl md:rounded-3xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 shadow-xl shadow-foreground/5 p-4 md:p-8 lg:p-10 flex flex-col">
             <div className="inline-flex items-center gap-1.5 md:gap-2 mb-3 md:mb-6">
               <div className="flex items-center justify-center w-4 h-4 md:w-5 md:h-5 rounded-full bg-red-100 dark:bg-red-500/20">
                 <XCircle className="h-2.5 w-2.5 md:h-3 md:w-3 text-red-600 dark:text-red-400" />
@@ -41,10 +41,10 @@ export function FearRelief() {
               {PENALTIES.map((item, i) => (
                 <div
                   key={i}
-                  className="rounded-lg md:rounded-2xl p-2.5 md:p-4 bg-background border border-border"
+                  className="rounded-lg md:rounded-2xl p-2.5 md:p-4 bg-card border border-red-100 dark:border-red-900/30"
                 >
                   <p className="text-xs md:text-base text-foreground">
-                    <span className="font-bold text-red-600 dark:text-red-400">{item.penalty}</span>
+                    <span className="font-mono font-bold text-red-600 dark:text-red-400">{item.penalty}</span>
                     <span className="text-muted-foreground"> - {item.desc}</span>
                   </p>
                 </div>
