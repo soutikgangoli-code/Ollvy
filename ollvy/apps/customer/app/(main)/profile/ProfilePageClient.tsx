@@ -253,7 +253,6 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
             status,
             monthly_price_paisa,
             next_billing_date,
-            current_cycle_end,
             service_package:service_packages (
               name
             )
