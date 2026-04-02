@@ -151,8 +151,6 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
             professional:professionals (
               id,
               name,
-              display_name,
-              full_name,
               profession_type,
               experience_years
             )
@@ -587,8 +585,6 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
           professional:professionals (
             id,
             name,
-            display_name,
-            full_name,
             profession_type,
             experience_years
           )
@@ -1469,7 +1465,7 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
                 <div className="h-[400px]">
                   <ChatWindow
                     conversationId={order.chat_conversation_id}
-                    professionalName={(order.professional as { display_name?: string; full_name?: string })?.display_name || (order.professional as { full_name?: string })?.full_name || 'Your CA'}
+                    professionalName={(order.professional as { name?: string })?.name || 'Your CA'}
                   />
                 </div>
               </CardContent>
