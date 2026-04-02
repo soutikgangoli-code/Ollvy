@@ -26,6 +26,8 @@ import {
   Package,
   History,
   ArrowRight,
+  Headphones,
+  Phone,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -374,11 +376,28 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           service_package: Array.isArray(r.service_package) ? r.service_package[0] : r.service_package,
         }))
 
+        // Seed and fetch compliance obligations
+        let complianceObligations: ComplianceObligation[] = []
+        try {
+          // Seed compliance obligations (idempotent - won't duplicate)
+          await supabase.functions.invoke('seed-compliance-obligations')
+
+          // Fetch compliance obligations
+          const { data: complianceData } = await supabase
+            .from('compliance_obligations')
+            .select('id, status, due_date')
+            .order('due_date', { ascending: true })
+
+          complianceObligations = complianceData || []
+        } catch (err) {
+          console.error('Error fetching compliance:', err)
+        }
+
         setDashboardData({
           active_orders: activeOrders as DashboardData['active_orders'],
           completed_orders: completedOrders as DashboardData['completed_orders'],
           retainers: transformedRetainers as DashboardData['retainers'],
-          compliance: [],
+          compliance: complianceObligations,
           doc_counts: docCounts,
           stage_histories: stageHistories,
           work_doc_counts: workDocCounts,
@@ -863,6 +882,25 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
               await refreshSession()
             }}
           />
+
+          {/* Contact Support */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-3 text-base">
+                <Headphones className="h-5 w-5 text-muted-foreground" />
+                Need Help?
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <p className="text-sm text-muted-foreground mb-3">
+                Contact us for any issues
+              </p>
+              <a href="tel:+919217065577" className="flex items-center gap-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
+                <Phone className="h-4 w-4" />
+                +91 92170 65577
+              </a>
+            </CardContent>
+          </Card>
 
           {/* Compliance Score */}
           {processedData.hasComplianceData && (

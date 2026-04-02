@@ -1,8 +1,8 @@
 // App-wide constants
 
 // Support contact numbers
-export const SUPPORT_WHATSAPP = '917042100461'
-export const SUPPORT_PHONE = '+917042100461'
+export const SUPPORT_WHATSAPP = '919217065577'
+export const SUPPORT_PHONE = '+919217065577'
 
 // WhatsApp message link generator
 export function getWhatsAppLink(message: string): string {

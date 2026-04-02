@@ -15,7 +15,6 @@ import {
   AlertTriangle,
   Check,
   ArrowRight,
-  FileText,
   Bell,
 } from 'lucide-react'
 
@@ -42,16 +41,15 @@ export default function CompliancePage() {
   const { user } = useAuthStore()
   const [obligations, setObligations] = useState<ComplianceObligation[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
-  const profileComplete = (user?.profile_completeness_score || 0) >= 60
+  const [hasSeeded, setHasSeeded] = useState(false)
 
   useEffect(() => {
     if (user?.id) {
-      fetchObligations()
+      seedAndFetchObligations()
     }
   }, [user?.id])
 
-  const fetchObligations = async () => {
+  const seedAndFetchObligations = async () => {
     if (!user?.id) return
 
     setIsLoading(true)
@@ -59,6 +57,13 @@ export default function CompliancePage() {
     try {
       const supabase = getClient()
 
+      // Seed compliance obligations for this user (idempotent - won't duplicate)
+      if (!hasSeeded) {
+        await supabase.functions.invoke('seed-compliance-obligations')
+        setHasSeeded(true)
+      }
+
+      // Fetch obligations
       const { data, error } = await supabase
         .from('compliance_obligations')
         .select('*')
@@ -73,42 +78,6 @@ export default function CompliancePage() {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  // Gate for incomplete profile
-  if (!profileComplete) {
-    return (
-      <div className="container py-12 max-w-2xl">
-        <div className="text-center py-16">
-          <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mx-auto mb-6">
-            <FileText className="h-10 w-10 text-white/20" />
-          </div>
-          <h1 className="text-2xl font-semibold text-white mb-3">
-            Complete Your Profile
-          </h1>
-          <p className="text-white/50 max-w-md mx-auto mb-8">
-            To generate your compliance obligations, we need more information about your business. Please complete your profile first.
-          </p>
-          <div className="mb-8">
-            <div className="text-sm text-white/40 mb-2">
-              Profile: {user?.profile_completeness_score || 0}% complete
-            </div>
-            <div className="h-2 bg-white/10 rounded-full max-w-xs mx-auto">
-              <div
-                className="h-full bg-white/40 rounded-full transition-all"
-                style={{ width: `${user?.profile_completeness_score || 0}%` }}
-              />
-            </div>
-          </div>
-          <Link href="/profile">
-            <Button size="lg" className="gap-2">
-              Complete Profile
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   // Loading state

@@ -380,7 +380,7 @@ export function AccountInfoCard({
               {phone ? (
                 <>
                   <Phone className="h-3.5 w-3.5" />
-                  +91 {phone}
+                  {phone.startsWith('+') ? phone : `+91 ${phone}`}
                 </>
               ) : email ? (
                 <>

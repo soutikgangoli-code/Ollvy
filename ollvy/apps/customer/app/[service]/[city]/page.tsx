@@ -130,7 +130,7 @@ export default async function GeoPage({ params }: PageProps) {
     name: `Ollvy - ${service.name} in ${city.name}`,
     description: `Professional ${service.name.toLowerCase()} services in ${city.name}, ${city.state}. Verified CAs. Fixed prices. ${service.slaDays} working days delivery.`,
     url: `https://www.ollvy.com/${serviceSlug}/${citySlug}`,
-    telephone: '+91-7042100461',
+    telephone: '+91-9217065577',
     priceRange: `₹${adjustedService.ollvyFee.toLocaleString('en-IN')}`,
     address: {
       '@type': 'PostalAddress',
