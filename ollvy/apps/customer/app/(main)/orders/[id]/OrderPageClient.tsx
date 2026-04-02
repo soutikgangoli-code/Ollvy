@@ -181,12 +181,11 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
 
         setDocuments(docsData || [])
 
-        // Fetch work documents (exclude round documents for main list)
+        // Fetch all work documents (including round deliverables)
         const { data: workDocsData } = await supabase
           .from('order_work_documents')
           .select('*')
           .eq('order_id', orderId)
-          .is('round_id', null)
           .order('created_at', { ascending: false })
 
         setWorkDocuments(workDocsData || [])
@@ -221,7 +220,7 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
         // Fetch questionnaire responses (fail silently if table doesn't exist)
         try {
           const { data: responsesData } = await supabase
-            .from('questionnaire_responses')
+            .from('order_questionnaire_responses')
             .select('question_key, response_value')
             .eq('order_id', orderId)
 
@@ -311,8 +310,6 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
           if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
             setWorkDocuments(prev => {
               const newDoc = payload.new as OrderWorkDocument
-              // Only include non-round documents in the main list
-              if (newDoc.round_id) return prev
               const filtered = prev.filter(d => d.id !== newDoc.id)
               return [...filtered, newDoc].sort((a, b) =>
                 new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
@@ -1453,7 +1450,7 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
           ) : (
             <Card>
               <CardContent className="py-6 text-center text-sm text-muted-foreground">
-                Chat will be available once your order is assigned.
+                Chat is currently unavailable. Please contact support if this persists.
               </CardContent>
             </Card>
           )}
