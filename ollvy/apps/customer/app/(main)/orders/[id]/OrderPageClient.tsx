@@ -131,44 +131,122 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
   const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(null)
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>([])
 
-  // Fetch order data client-side where auth.uid() works
+  // Fetch order data client-side using direct queries
   useEffect(() => {
     const fetchOrderData = async () => {
       try {
         const supabase = getClient()
-        const { data, error: fetchError } = await supabase.rpc('get_order_full_details', {
-          p_order_id: orderId,
-        })
 
-        if (fetchError) {
-          console.error('Error fetching order details:', fetchError)
-          setError('There was an error loading the order details. Please try again.')
+        // Fetch the order with service package
+        const { data: orderData, error: orderError } = await supabase
+          .from('orders')
+          .select(`
+            *,
+            service_package:service_packages (*),
+            professional:professionals (
+              id,
+              name,
+              display_name,
+              full_name,
+              profession_type,
+              experience_years
+            )
+          `)
+          .eq('id', orderId)
+          .single()
+
+        if (orderError) {
+          console.error('Error fetching order:', orderError)
+          if (orderError.code === 'PGRST116') {
+            setError('Order not found or you do not have access to it.')
+          } else {
+            setError('There was an error loading the order details. Please try again.')
+          }
           return
         }
 
-        if (!data?.order) {
+        if (!orderData) {
           setError('Order not found or you do not have access to it.')
           return
         }
 
-        // Set all the data
-        setOrder(data.order)
-        setStageHistory(data.stage_history || [])
-        setDocuments(data.documents || [])
-        setWorkDocuments(data.work_documents || [])
-        setInvoiceId(data.invoice_id)
-        setRoundNotification(data.round_notification)
+        setOrder(orderData as Order)
 
-        // Process questionnaire responses with labels
-        const questionLabels = new Map(
-          data.question_labels?.map((q: QuestionLabel) => [q.question_key, q.question_label]) || []
-        )
-        const responses = (data.questionnaire_responses || []).map((r: { question_key: string; response_value: string | string[] }) => ({
-          question_key: r.question_key,
-          question_label: questionLabels.get(r.question_key) || r.question_key,
-          response_value: r.response_value,
-        }))
-        setQuestionnaireResponses(responses)
+        // Fetch stage history
+        const { data: stageData } = await supabase
+          .from('order_stage_history')
+          .select('*')
+          .eq('order_id', orderId)
+          .order('started_at', { ascending: true })
+
+        setStageHistory(stageData || [])
+
+        // Fetch documents
+        const { data: docsData } = await supabase
+          .from('order_documents')
+          .select('*')
+          .eq('order_id', orderId)
+          .order('created_at', { ascending: true })
+
+        setDocuments(docsData || [])
+
+        // Fetch work documents (exclude round documents for main list)
+        const { data: workDocsData } = await supabase
+          .from('order_work_documents')
+          .select('*')
+          .eq('order_id', orderId)
+          .is('round_id', null)
+          .order('created_at', { ascending: false })
+
+        setWorkDocuments(workDocsData || [])
+
+        // Fetch invoice ID
+        const { data: invoiceData } = await supabase
+          .from('invoices')
+          .select('id')
+          .eq('order_id', orderId)
+          .single()
+
+        setInvoiceId(invoiceData?.id || null)
+
+        // Fetch round notification
+        const { data: notificationData } = await supabase
+          .from('round_notifications')
+          .select('*')
+          .eq('order_id', orderId)
+          .eq('is_dismissed', false)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        setRoundNotification(notificationData)
+
+        // Fetch questionnaire responses
+        const { data: responsesData } = await supabase
+          .from('questionnaire_responses')
+          .select('question_key, response_value')
+          .eq('order_id', orderId)
+
+        // Fetch question labels from the service package questionnaire
+        if (orderData.service_package_id) {
+          const { data: packageData } = await supabase
+            .from('service_packages')
+            .select('questionnaire')
+            .eq('id', orderData.service_package_id)
+            .single()
+
+          const questionnaire = packageData?.questionnaire as Array<{ key: string; label: string }> || []
+          const questionLabels = new Map(
+            questionnaire.map(q => [q.key, q.label])
+          )
+
+          const responses = (responsesData || []).map(r => ({
+            question_key: r.question_key,
+            question_label: questionLabels.get(r.question_key) || r.question_key,
+            response_value: r.response_value,
+          }))
+          setQuestionnaireResponses(responses)
+        }
       } catch (err) {
         console.error('Failed to fetch order:', err)
         setError('There was an error loading the order details. Please try again.')
@@ -491,17 +569,69 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
   }
 
   const handleRefresh = async () => {
-    // Refresh all data by calling the RPC
+    // Refresh work documents and order data
     try {
       const supabase = getClient()
-      const { data } = await supabase.rpc('get_order_full_details', { p_order_id: orderId })
-      if (data) {
-        setOrder(data.order)
-        setStageHistory(data.stage_history || [])
-        setDocuments(data.documents || [])
-        setWorkDocuments(data.work_documents || [])
-        setRoundNotification(data.round_notification)
-      }
+
+      // Refresh order
+      const { data: orderData } = await supabase
+        .from('orders')
+        .select(`
+          *,
+          service_package:service_packages (*),
+          professional:professionals (
+            id,
+            name,
+            display_name,
+            full_name,
+            profession_type,
+            experience_years
+          )
+        `)
+        .eq('id', orderId)
+        .single()
+
+      if (orderData) setOrder(orderData as Order)
+
+      // Refresh stage history
+      const { data: stageData } = await supabase
+        .from('order_stage_history')
+        .select('*')
+        .eq('order_id', orderId)
+        .order('started_at', { ascending: true })
+
+      if (stageData) setStageHistory(stageData)
+
+      // Refresh documents
+      const { data: docsData } = await supabase
+        .from('order_documents')
+        .select('*')
+        .eq('order_id', orderId)
+        .order('created_at', { ascending: true })
+
+      if (docsData) setDocuments(docsData)
+
+      // Refresh work documents
+      const { data: workDocsData } = await supabase
+        .from('order_work_documents')
+        .select('*')
+        .eq('order_id', orderId)
+        .is('round_id', null)
+        .order('created_at', { ascending: false })
+
+      if (workDocsData) setWorkDocuments(workDocsData)
+
+      // Refresh round notification
+      const { data: notificationData } = await supabase
+        .from('round_notifications')
+        .select('*')
+        .eq('order_id', orderId)
+        .eq('is_dismissed', false)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      setRoundNotification(notificationData)
     } catch (err) {
       console.error('Failed to refresh:', err)
     }

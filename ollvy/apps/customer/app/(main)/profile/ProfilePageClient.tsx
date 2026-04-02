@@ -194,18 +194,216 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
   const [panNumber, setPanNumber] = useState(userData.pan_number || '')
   const [aadhaarNumber, setAadhaarNumber] = useState(userData.aadhaar_number || '')
 
-  // Fetch dashboard data client-side where auth.uid() works
+  // Fetch dashboard data client-side using direct queries
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const supabase = getClient()
-        const { data, error } = await supabase.rpc('get_user_dashboard')
 
-        if (error) {
-          console.error('Error fetching dashboard data:', error)
-        } else if (data) {
-          setDashboardData(data)
+        // Fetch active orders
+        const { data: activeOrders, error: activeError } = await supabase
+          .from('orders')
+          .select(`
+            id,
+            order_number,
+            status,
+            total_paisa_snapshot,
+            created_at,
+            questionnaire_completed_at,
+            service_package:service_packages (
+              id,
+              name,
+              slug,
+              sla_working_days,
+              workflow_stages
+            )
+          `)
+          .in('status', ['pending_assignment', 'in_progress', 'waitlisted'])
+          .order('created_at', { ascending: false })
+          .limit(5)
+
+        if (activeError) console.error('Error fetching active orders:', activeError)
+
+        // Fetch completed orders
+        const { data: completedOrders, error: completedError } = await supabase
+          .from('orders')
+          .select(`
+            id,
+            order_number,
+            status,
+            total_paisa_snapshot,
+            created_at,
+            service_package:service_packages (
+              id,
+              name,
+              slug
+            )
+          `)
+          .eq('status', 'completed')
+          .order('created_at', { ascending: false })
+          .limit(10)
+
+        if (completedError) console.error('Error fetching completed orders:', completedError)
+
+        // Fetch retainers
+        const { data: retainers, error: retainersError } = await supabase
+          .from('retainer_subscriptions')
+          .select(`
+            id,
+            status,
+            monthly_price_paisa,
+            next_billing_date,
+            current_cycle_end,
+            service_package:service_packages (
+              name
+            )
+          `)
+          .neq('status', 'cancelled')
+
+        if (retainersError) console.error('Error fetching retainers:', retainersError)
+
+        // Get order IDs for document queries
+        const activeOrderIds = (activeOrders || []).map(o => o.id)
+
+        // Fetch document counts for active orders
+        let docCounts: Record<string, { total: number; uploaded: number }> = {}
+        if (activeOrderIds.length > 0) {
+          const { data: docs } = await supabase
+            .from('order_documents')
+            .select('order_id, uploaded_at')
+            .in('order_id', activeOrderIds)
+            .eq('is_required', true)
+
+          if (docs) {
+            docs.forEach(d => {
+              if (!docCounts[d.order_id]) {
+                docCounts[d.order_id] = { total: 0, uploaded: 0 }
+              }
+              docCounts[d.order_id].total++
+              if (d.uploaded_at) docCounts[d.order_id].uploaded++
+            })
+          }
         }
+
+        // Fetch stage histories for active orders
+        let stageHistories: Record<string, number> = {}
+        if (activeOrderIds.length > 0) {
+          const { data: stages } = await supabase
+            .from('order_stage_history')
+            .select('order_id, completed_at')
+            .in('order_id', activeOrderIds)
+
+          if (stages) {
+            stages.forEach(s => {
+              if (s.completed_at) {
+                stageHistories[s.order_id] = (stageHistories[s.order_id] || 0) + 1
+              }
+            })
+          }
+        }
+
+        // Fetch work document counts for active orders
+        let workDocCounts: Record<string, { pending: number; rejected: number }> = {}
+        if (activeOrderIds.length > 0) {
+          const { data: workDocs } = await supabase
+            .from('order_work_documents')
+            .select('order_id, status')
+            .in('order_id', activeOrderIds)
+            .eq('direction', 'from_customer')
+
+          if (workDocs) {
+            workDocs.forEach(w => {
+              if (!workDocCounts[w.order_id]) {
+                workDocCounts[w.order_id] = { pending: 0, rejected: 0 }
+              }
+              if (w.status === 'pending') workDocCounts[w.order_id].pending++
+              if (w.status === 'rejected') workDocCounts[w.order_id].rejected++
+            })
+          }
+        }
+
+        // Fetch document groups for vault
+        const { data: allOrders } = await supabase
+          .from('orders')
+          .select('id, order_number, service_package:service_packages(name)')
+          .order('created_at', { ascending: false })
+
+        let documentGroups: Array<{
+          order_id: string
+          order_number: string
+          service_name: string
+          documents: Array<{
+            id: string
+            name: string
+            type: string
+            url: string
+            uploaded_at: string
+          }>
+        }> = []
+
+        if (allOrders && allOrders.length > 0) {
+          const orderIds = allOrders.map(o => o.id)
+          const { data: vaultDocs } = await supabase
+            .from('order_documents')
+            .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
+            .in('order_id', orderIds)
+            .not('file_url', 'is', null)
+            .order('uploaded_at', { ascending: false })
+
+          if (vaultDocs) {
+            const docsByOrder: Record<string, typeof vaultDocs> = {}
+            vaultDocs.forEach(d => {
+              if (!docsByOrder[d.order_id]) docsByOrder[d.order_id] = []
+              docsByOrder[d.order_id].push(d)
+            })
+
+            allOrders.forEach(order => {
+              const orderDocs = docsByOrder[order.id]
+              if (orderDocs && orderDocs.length > 0) {
+                const sp = Array.isArray(order.service_package) ? order.service_package[0] : order.service_package
+                documentGroups.push({
+                  order_id: order.id,
+                  order_number: order.order_number,
+                  service_name: (sp as { name: string })?.name || 'Service',
+                  documents: orderDocs.map(d => ({
+                    id: d.id,
+                    name: d.document_label || d.file_name || 'Document',
+                    type: d.verified_at ? 'deliverable' : 'input',
+                    url: d.file_url!,
+                    uploaded_at: d.uploaded_at || '',
+                  })),
+                })
+              }
+            })
+          }
+        }
+
+        // Transform data to match expected types (Supabase returns joined data differently)
+        const transformedActiveOrders = (activeOrders || []).map(o => ({
+          ...o,
+          service_package: Array.isArray(o.service_package) ? o.service_package[0] : o.service_package,
+        }))
+
+        const transformedCompletedOrders = (completedOrders || []).map(o => ({
+          ...o,
+          service_package: Array.isArray(o.service_package) ? o.service_package[0] : o.service_package,
+        }))
+
+        const transformedRetainers = (retainers || []).map(r => ({
+          ...r,
+          service_package: Array.isArray(r.service_package) ? r.service_package[0] : r.service_package,
+        }))
+
+        setDashboardData({
+          active_orders: transformedActiveOrders as DashboardData['active_orders'],
+          completed_orders: transformedCompletedOrders as DashboardData['completed_orders'],
+          retainers: transformedRetainers as DashboardData['retainers'],
+          compliance: [],
+          doc_counts: docCounts,
+          stage_histories: stageHistories,
+          work_doc_counts: workDocCounts,
+          document_groups: documentGroups,
+        })
       } catch (err) {
         console.error('Failed to fetch dashboard:', err)
       } finally {
