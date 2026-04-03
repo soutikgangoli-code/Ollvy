@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { AuthModal, LoginSuccessBanner } from '@/components/auth'
 import { StructuredData } from '@/components/seo/StructuredData'
 import { GTMProvider, GTMNoScript } from '@/components/analytics/GTMProvider'
+import { PostHogProvider } from '@/components/analytics/PostHogProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -95,14 +96,16 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <AuthProvider>
-            <LoginSuccessBanner />
-            <UTMProvider>
-              {children}
-            </UTMProvider>
-          </AuthProvider>
-          <AuthModal />
-          <Toaster />
+          <PostHogProvider>
+            <AuthProvider>
+              <LoginSuccessBanner />
+              <UTMProvider>
+                {children}
+              </UTMProvider>
+            </AuthProvider>
+            <AuthModal />
+            <Toaster />
+          </PostHogProvider>
         </ThemeProvider>
       </body>
     </html>

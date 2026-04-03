@@ -53,7 +53,7 @@ export function LoginSuccessBanner() {
   return (
     <div
       className={cn(
-        'fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4',
+        'fixed top-20 left-1/2 -translate-x-1/2 z-40 w-full max-w-md px-4',
         'transition-all duration-300 ease-out',
         isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
       )}
