@@ -62,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const serviceSlugs = await getAllServiceSlugs()
 
   // Static last modified date for unchanging content (updated when content changes)
-  const staticDate = new Date('2026-04-01')
+  const staticDate = new Date('2026-04-03')
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
