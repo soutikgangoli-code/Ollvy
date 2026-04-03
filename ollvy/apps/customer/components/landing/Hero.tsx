@@ -89,7 +89,7 @@ function DashboardMockup() {
 
 export function Hero() {
   return (
-    <section className="relative min-h-[60vh] md:min-h-[80vh] lg:min-h-[90vh] flex items-center bg-background pt-12 md:pt-24 pb-12 md:pb-16">
+    <section className="relative min-h-[70vh] md:min-h-[80vh] lg:min-h-[90vh] flex items-center bg-background pt-16 md:pt-24 pb-16 md:pb-16">
       <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left: Bold claim */}
@@ -102,7 +102,7 @@ export function Hero() {
             </h1>
 
             {/* The big stat - prominent with subtle glow */}
-            <div className="mt-8 flex items-center gap-4">
+            <div className="mt-10 md:mt-8 flex items-center gap-4">
               <div className="px-5 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl shadow-sm shadow-emerald-500/10 backdrop-blur-sm">
                 <span className="font-mono text-3xl md:text-4xl font-bold text-emerald-600 dark:text-emerald-400">98%</span>
                 <span className="ml-2 text-sm font-medium text-emerald-600 dark:text-emerald-400">on-time delivery</span>
@@ -110,13 +110,13 @@ export function Hero() {
             </div>
 
             {/* Subheadline - minimal */}
-            <p className="text-lg md:text-xl text-muted-foreground mt-8 max-w-[500px]">
+            <p className="text-lg md:text-xl text-muted-foreground mt-8 md:mt-8 max-w-[500px]">
               CA for GST. Lawyer for trademark. CS for MCA filings.
               All tracked in one dashboard.
             </p>
 
             {/* CTA */}
-            <div className="flex flex-wrap items-center gap-4 mt-10">
+            <div className="flex flex-wrap items-center gap-4 mt-10 md:mt-10">
               <Button size="lg" className="px-8 h-14 text-base font-semibold rounded-2xl shadow-lg shadow-primary/20" asChild>
                 <Link href="/services" prefetch={true}>
                   See all services

@@ -25,7 +25,7 @@ export function FinalCTA() {
           </Button>
         </div>
         <p className="text-sm text-muted-foreground mt-8">
-          Questions? <a href="mailto:hello@ollvy.com" className="text-foreground font-medium underline underline-offset-4">hello@ollvy.com</a>
+          Questions? <a href="mailto:care@ollvy.com" className="text-foreground font-medium underline underline-offset-4">care@ollvy.com</a>
         </p>
       </div>
     </section>
