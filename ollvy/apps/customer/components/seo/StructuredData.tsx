@@ -1,5 +1,6 @@
 // Structured Data (JSON-LD) for SEO and Google Sitelinks
 // This helps Google understand your site and show rich results
+// Note: FAQPage schema moved to app/page.tsx for live price injection
 
 export function StructuredData() {
   const organizationSchema = {
@@ -54,6 +55,13 @@ export function StructuredData() {
       'Tax Filing',
       'MCA Annual Filing',
     ],
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      reviewCount: '30',
+      bestRating: '5',
+      worstRating: '1',
+    },
   }
 
   const websiteSchema = {
@@ -131,6 +139,7 @@ export function StructuredData() {
     ],
   }
 
+  // Note: FAQPage schema moved to app/page.tsx for live price injection from database
   // Note: ProfessionalService/LocalBusiness schema removed from global layout
   // Service pages have their own Service schemas, geo pages have LocalBusiness schemas
   // Adding LocalBusiness globally causes warnings on tools, guides, and legal pages

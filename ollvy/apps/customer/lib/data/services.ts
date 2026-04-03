@@ -791,3 +791,95 @@ export async function getNavbarServices(): Promise<NavbarServiceData[]> {
     order_type: pkg.billing_cycle === 'one_time' ? 'one_time' : 'recurring' as const,
   }))
 }
+
+/**
+ * FAQ service prices for homepage FAQ schema
+ * Used to inject live prices into FAQ structured data
+ */
+export interface FAQServicePrices {
+  llp: string
+  pvtLtd: string
+  gst: string
+  trademark: string
+  fssaiBasic: string
+  fssaiState: string
+  fssaiCentral: string
+  opc: string
+  directorKyc: string
+}
+
+// Fallback prices if database is unavailable
+const FALLBACK_FAQ_PRICES: FAQServicePrices = {
+  llp: 'Rs 7,999',
+  pvtLtd: 'Rs 9,999',
+  gst: 'Rs 2,999',
+  trademark: 'Rs 6,999',
+  fssaiBasic: 'Rs 3,999',
+  fssaiState: 'Rs 5,999',
+  fssaiCentral: 'Rs 8,999',
+  opc: 'Rs 8,499',
+  directorKyc: 'Rs 999',
+}
+
+// Map of service slugs to FAQ price keys
+const FAQ_SLUG_MAP: Record<string, keyof FAQServicePrices> = {
+  'llp-incorporation': 'llp',
+  'pvt-ltd-incorporation': 'pvtLtd',
+  'gst-registration': 'gst',
+  'trademark-registration': 'trademark',
+  'fssai-basic': 'fssaiBasic',
+  'fssai-state': 'fssaiState',
+  'fssai-central': 'fssaiCentral',
+  'fssai-license': 'fssaiState', // Fallback for generic FSSAI slug
+  'opc-incorporation': 'opc',
+  'director-kyc': 'directorKyc',
+}
+
+/**
+ * Format price in Indian Rupees format (Rs X,XXX)
+ */
+function formatPriceINR(pricePaisa: number): string {
+  const rupees = pricePaisa / 100
+  return `Rs ${rupees.toLocaleString('en-IN')}`
+}
+
+/**
+ * Fetch service prices for FAQ schema
+ * Returns formatted prices for services mentioned in homepage FAQs
+ */
+export async function getFAQServicePrices(): Promise<FAQServicePrices> {
+  if (!supabaseServer) {
+    console.warn('[services] Supabase not configured, using fallback FAQ prices')
+    return FALLBACK_FAQ_PRICES
+  }
+
+  try {
+    const slugs = Object.keys(FAQ_SLUG_MAP)
+    const { data, error } = await supabaseServer
+      .from('service_packages')
+      .select('slug, price_base_paisa')
+      .in('slug', slugs)
+      .eq('is_active', true)
+
+    if (error) {
+      console.error('Error fetching FAQ service prices:', error)
+      return FALLBACK_FAQ_PRICES
+    }
+
+    // Start with fallback prices
+    const prices = { ...FALLBACK_FAQ_PRICES }
+
+    // Override with live prices from database
+    for (const pkg of data || []) {
+      const priceKey = FAQ_SLUG_MAP[pkg.slug]
+      if (priceKey) {
+        prices[priceKey] = formatPriceINR(pkg.price_base_paisa)
+      }
+    }
+
+    return prices
+  } catch (err) {
+    console.error('Failed to fetch FAQ service prices:', err)
+    return FALLBACK_FAQ_PRICES
+  }
+}
