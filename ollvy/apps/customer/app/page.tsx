@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import dynamic from 'next/dynamic'
 import { NavbarServer } from '@/components/landing/NavbarServer'
 import { Hero } from '@/components/landing/Hero'
 import { SocialProofBar } from '@/components/landing/SocialProofBar'
@@ -10,16 +9,9 @@ import { FinalCTA } from '@/components/landing/FinalCTA'
 import { Footer } from '@/components/landing/Footer'
 import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
 import { getPopularServices } from '@/lib/data/services'
-
-// Lazy load below-fold components for better LCP
-const ProductShowcase = dynamic(
-  () => import('@/components/landing/ProductShowcase').then(m => ({ default: m.ProductShowcase })),
-  { loading: () => <div className="h-96" /> }
-)
-const HomeFAQ = dynamic(
-  () => import('@/components/landing/HomeFAQ').then(m => ({ default: m.HomeFAQ })),
-  { loading: () => <div className="h-64" /> }
-)
+// Direct imports for SEO crawlability - dynamic imports hide content from Google
+import { ProductShowcase } from '@/components/landing/ProductShowcase'
+import { HomeFAQ } from '@/components/landing/HomeFAQ'
 
 /**
  * Homepage - Mercury-Inspired Redesign

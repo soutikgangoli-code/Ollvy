@@ -484,7 +484,7 @@ const FAQ_DATA = [
 // Homepage FAQ - shows all questions
 export function HomeFAQ() {
   return (
-    <section id="faqs" className="bg-background py-16 md:py-28">
+    <section id="faqs" className="bg-background py-12 md:py-16 lg:py-20">
       <div className="container max-w-4xl">
         {/* Section Heading */}
         <div className="text-center mb-14">
@@ -510,7 +510,7 @@ export function HomeFAQ() {
                   </h3>
                 </div>
               </AccordionTrigger>
-              <AccordionContent className="text-sm text-foreground/90 leading-relaxed px-6 pb-6 pt-4 ml-10">
+              <AccordionContent forceMount className="text-sm text-foreground/90 leading-relaxed px-6 pb-6 pt-4 ml-10">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

@@ -291,15 +291,12 @@ const FEATURES = [
 
 export function ProductShowcase() {
   return (
-    <section id="product-showcase" className="py-16 md:py-28 bg-background">
+    <section id="product-showcase" className="py-12 md:py-16 lg:py-20 bg-background">
       <div className="container">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight">
             Everything in one dashboard
           </h2>
-          <p className="text-lg md:text-xl text-muted-foreground mt-5">
-            No more scattered emails, WhatsApp messages, or phone calls. Track every filing in real-time.
-          </p>
         </div>
 
         {/* Product screenshots grid */}

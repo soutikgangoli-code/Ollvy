@@ -129,12 +129,17 @@ export function Footer() {
               { label: 'GST Revocation', href: '/services/gst-revocation' },
               { label: 'Trademark Registration', href: '/services/trademark-registration' },
               { label: 'MSME Registration', href: '/services/msme-registration' },
+              { label: 'Startup India DPIIT', href: '/services/startup-india' },
+              { label: 'FSSAI License', href: '/services/fssai-license' },
+              { label: 'IEC Code', href: '/services/iec-code' },
               { label: 'Cloud Kitchen Setup', href: '/services/cloud-kitchen-setup' },
               { label: 'Business ITR Filing', href: '/services/business-itr' },
+              { label: 'Director KYC', href: '/services/director-kyc' },
               { label: 'Annual Compliance', href: '/services/mca-annual-filing' },
+              { label: 'TDS Compliance', href: '/services/tds-monthly-compliance' },
+              { label: 'Payroll Management', href: '/services/payroll-management' },
               { label: 'Company Name Change', href: '/services/company-name-change' },
               { label: 'DIN Reactivation', href: '/services/din-reactivation' },
-              { label: 'TDS Compliance', href: '/services/tds-monthly-compliance' },
               { label: 'All Services', href: '/services' },
             ]}
           />

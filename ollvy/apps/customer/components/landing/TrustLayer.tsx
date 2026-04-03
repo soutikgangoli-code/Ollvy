@@ -200,11 +200,8 @@ export function TrustLayer() {
     touchEndX.current = null
   }, [goNext, goPrev])
 
-  // Get visible cards based on screen size
-  const visibleCards = trustCards.slice(currentIndex, currentIndex + visibleCount)
-
   return (
-    <section className="relative bg-card py-16 overflow-hidden">
+    <section className="relative bg-card py-12 md:py-16 lg:py-20 overflow-hidden">
       <div className="container relative">
         {/* Section Heading */}
         <h2 className="font-mono text-2xl md:text-3xl lg:text-4xl uppercase tracking-wider text-foreground text-center">
@@ -218,15 +215,22 @@ export function TrustLayer() {
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
         >
-          {/* Cards Display - 1 on mobile, 2 on desktop */}
-          <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {visibleCards.map((card, idx) => (
+          {/* Cards Display - renders ALL cards for SEO, uses CSS to show visible ones */}
+          <div className="max-w-5xl mx-auto overflow-hidden">
+            <div
+              className="flex gap-6 transition-transform duration-300 ease-out"
+              style={{
+                // Mobile: 1 card visible (100% + gap), Desktop: 2 cards visible (50% + half gap)
+                transform: visibleCount === 1
+                  ? `translateX(calc(-${currentIndex} * (100% + 24px)))`
+                  : `translateX(calc(-${currentIndex} * (50% + 12px)))`
+              }}
+            >
+              {trustCards.map((card, idx) => (
                 <Card
-                  key={`${currentIndex}-${idx}`}
+                  key={idx}
                   className={cn(
-                    "border border-border bg-background p-6 md:p-8 flex flex-col h-[480px] md:h-[460px]",
-                    idx === 1 && "hidden md:flex"
+                    "border border-border bg-background p-6 md:p-8 flex flex-col h-[480px] md:h-[460px] flex-shrink-0 w-full md:w-[calc(50%-12px)]"
                   )}
                 >
                   <h3 className="text-xl font-semibold text-foreground leading-snug">

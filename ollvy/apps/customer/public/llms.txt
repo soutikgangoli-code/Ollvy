@@ -33,9 +33,14 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 
 ### Business Licenses
 - [MSME/Udyam Registration](https://www.ollvy.com/services/msme-registration) - MSME certificate for benefits
+- [Startup India DPIIT](https://www.ollvy.com/services/startup-india) - DPIIT recognition for startups
 - [Trademark Registration](https://www.ollvy.com/services/trademark-registration) - Protect your brand name and logo
 - [FSSAI License](https://www.ollvy.com/services/fssai-license) - Food business license
+- [IEC Code](https://www.ollvy.com/services/iec-code) - Import Export Code for international trade
 - [Cloud Kitchen Setup](https://www.ollvy.com/services/cloud-kitchen-setup) - Complete cloud kitchen compliance bundle
+
+### Payroll Services
+- [Payroll Management](https://www.ollvy.com/services/payroll-management) - Monthly payroll processing and compliance
 
 ## Guides
 

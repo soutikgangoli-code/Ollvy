@@ -3,7 +3,6 @@
 import { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react'
 import Link from 'next/link'
 import Script from 'next/script'
-import dynamic from 'next/dynamic'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { BookingPanel } from './BookingPanel'
 import { ProcessStepper } from './ProcessStepper'
@@ -11,19 +10,10 @@ import { ExplainerStepper } from './ExplainerStepper'
 import { ServiceRisks } from './ServiceRisks'
 import { ProfilePersonas } from './ProfilePersonas'
 import { CompletionStats } from './CompletionStats'
-import { Skeleton } from '@/components/ui/skeleton'
-
-// Lazy load below-fold sections to improve LCP
-const RelatedServices = dynamic(() => import('./RelatedServices').then(mod => ({ default: mod.RelatedServices })), {
-  loading: () => <Skeleton className="h-40 w-full rounded-xl" />,
-})
-const HowWeReviewed = dynamic(() => import('./HowWeReviewed').then(mod => ({ default: mod.HowWeReviewed })), {
-  loading: () => <Skeleton className="h-32 w-full rounded-xl" />,
-})
-const DocumentChecklist = dynamic(
-  () => import('@/components/landing/DocumentChecklist').then(mod => ({ default: mod.DocumentChecklist })),
-  { loading: () => <Skeleton className="h-48 w-full rounded-xl" /> }
-)
+// Import directly for SEO crawlability - dynamic imports hide content from Google
+import { RelatedServices } from './RelatedServices'
+import { HowWeReviewed } from './HowWeReviewed'
+import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -749,12 +739,16 @@ export function UnifiedServicePage({
                         </button>
                       </div>
 
-                      {explainerOpen && (
+                      {/* Always render for SEO, hide visually when collapsed */}
+                      <div className={cn(
+                        'transition-all duration-300 overflow-hidden',
+                        explainerOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                      )}>
                         <ExplainerStepper
                           serviceName={service.name}
                           steps={service.serviceExplainer.steps}
                         />
-                      )}
+                      </div>
                     </div>
                   )}
                 </section>
@@ -1226,7 +1220,7 @@ export function UnifiedServicePage({
                         <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
                           {faq.q}
                         </AccordionTrigger>
-                        <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
+                        <AccordionContent forceMount className="text-sm text-muted-foreground leading-relaxed pb-5">
                           {faq.a}
                         </AccordionContent>
                       </AccordionItem>
