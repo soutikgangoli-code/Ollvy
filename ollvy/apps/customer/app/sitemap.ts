@@ -61,110 +61,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
-    {
-      url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1.0,
-    },
-    {
-      url: `${BASE_URL}/services`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/tools`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${BASE_URL}/guides`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${BASE_URL}/tools/documents`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.4,
-    },
-    {
-      url: `${BASE_URL}/tools/penalty-calculator`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.4,
-    },
-    {
-      url: `${BASE_URL}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${BASE_URL}/terms`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${BASE_URL}/cancellation`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${BASE_URL}/refunds`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    {
-      url: `${BASE_URL}/startup`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.85,
-    },
-    {
-      url: `${BASE_URL}/join`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    { url: BASE_URL, lastModified: new Date() },
+    { url: `${BASE_URL}/services`, lastModified: new Date() },
+    { url: `${BASE_URL}/tools`, lastModified: new Date() },
+    { url: `${BASE_URL}/guides`, lastModified: new Date() },
+    { url: `${BASE_URL}/tools/documents`, lastModified: new Date() },
+    { url: `${BASE_URL}/tools/penalty-calculator`, lastModified: new Date() },
+    { url: `${BASE_URL}/privacy`, lastModified: new Date() },
+    { url: `${BASE_URL}/terms`, lastModified: new Date() },
+    { url: `${BASE_URL}/cancellation`, lastModified: new Date() },
+    { url: `${BASE_URL}/refunds`, lastModified: new Date() },
+    { url: `${BASE_URL}/startup`, lastModified: new Date() },
+    { url: `${BASE_URL}/join`, lastModified: new Date() },
   ]
 
   // Service detail pages
   const serviceRoutes: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
     url: `${BASE_URL}/services/${slug}`,
     lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.85,
   }))
 
-  // Document checklist pages - individual tools should rank
+  // Document checklist pages
   const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_SLUGS.map((slug) => ({
     url: `${BASE_URL}/tools/documents/${slug}`,
     lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
   }))
 
-  // Penalty calculator pages - individual tools should rank
+  // Penalty calculator pages
   const penaltyRoutes: MetadataRoute.Sitemap = PENALTY_CALCULATOR_SLUGS.map((slug) => ({
     url: `${BASE_URL}/tools/penalty-calculator/${slug}`,
     lastModified: new Date(),
-    changeFrequency: 'monthly' as const,
-    priority: 0.8,
   }))
 
-  // Learn pages
+  // Guide pages
   const learnRoutes: MetadataRoute.Sitemap = learnSlugs.map((slug) => ({
     url: `${BASE_URL}/guides/${slug}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.75,
   }))
 
   // Geo pages - all service/city combinations
@@ -172,8 +104,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     CITIES.map((city) => ({
       url: `${BASE_URL}/${service}/${city.slug}`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
-      priority: 0.7,
     }))
   )
 
@@ -181,8 +111,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const deadlineRoutes: MetadataRoute.Sitemap = DEADLINE_SLUGS.map((slug) => ({
     url: `${BASE_URL}/${slug}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
   }))
 
   return [
