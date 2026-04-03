@@ -43,6 +43,7 @@ export function LearnServiceCTA({ primary, secondary }: {
           <Button size="lg" asChild>
             <Link
               href={`/services/${primary.slug}`}
+              prefetch={true}
             >
               Book Now →
             </Link>

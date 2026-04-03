@@ -74,6 +74,8 @@ interface AuthState {
   authModalStep: 'phone' | 'otp' | 'google' // Added 'google' step
   authModalPhone: string | null
   returnUrl: string | null // URL to return to after sign-in
+  // Login success banner
+  showLoginSuccessBanner: boolean
 }
 
 interface AuthActions {
@@ -95,6 +97,9 @@ interface AuthActions {
   setAuthModalPhone: (phone: string | null) => void
   // Phone update (for questionnaire)
   updateUserPhone: (phone: string) => Promise<boolean>
+  // Login success banner
+  setShowLoginSuccessBanner: (show: boolean) => void
+  hideLoginSuccessBanner: () => void
 }
 
 function getOAuthRedirectUrl(): string {
@@ -126,6 +131,8 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   authModalStep: 'google', // Default to Google sign-in
   authModalPhone: null,
   returnUrl: null,
+  // Login success banner
+  showLoginSuccessBanner: false,
 
   // Google OAuth Sign In
   signInWithGoogle: async (returnUrl?: string) => {
@@ -277,6 +284,10 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     }
 
     _isRefreshingSession = true
+
+    // Track if we had no session before (to detect fresh login)
+    const hadNoSession = get().session === null && get().isHydrated === false
+
     set({ isLoading: true })
     console.log('[auth-store] refreshSession starting')
 
@@ -296,12 +307,16 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
 
         console.log('[auth-store] User data:', userData?.id || 'not found')
 
+        // Show login success banner if this is a fresh login (had no session before)
+        const shouldShowBanner = hadNoSession && session !== null
+
         set({
           session,
           user: userData || null,
           isNewUser: userData ? !userData.business_type : true,
           isLoading: false,
           isHydrated: true,
+          showLoginSuccessBanner: shouldShowBanner,
         })
       } else {
         set({
@@ -335,6 +350,10 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
   closeAuthModal: () => set({ isAuthModalOpen: false, authModalStep: 'google', authModalPhone: null, lastOtpError: null, returnUrl: null }),
   setAuthModalStep: (step) => set({ authModalStep: step }),
   setAuthModalPhone: (phone) => set({ authModalPhone: phone }),
+
+  // Login success banner
+  setShowLoginSuccessBanner: (show) => set({ showLoginSuccessBanner: show }),
+  hideLoginSuccessBanner: () => set({ showLoginSuccessBanner: false }),
 
   // Update user's phone number (called from questionnaire)
   updateUserPhone: async (phone: string) => {

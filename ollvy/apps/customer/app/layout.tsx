@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
-import { AuthModal } from '@/components/auth'
+import { AuthModal, LoginSuccessBanner } from '@/components/auth'
 import { StructuredData } from '@/components/seo/StructuredData'
 import { GTMProvider, GTMNoScript } from '@/components/analytics/GTMProvider'
 
@@ -96,6 +96,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
+            <LoginSuccessBanner />
             <UTMProvider>
               {children}
             </UTMProvider>

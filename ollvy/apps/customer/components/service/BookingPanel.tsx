@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Phone, MessageCircle, Square, CheckSquare } from 'lucide-react'
@@ -311,9 +312,9 @@ export function BookingPanel({
 
       {/* CTA button */}
       <Button className="w-full mt-5" size="lg" asChild>
-        <a href={ctaUrl}>
+        <Link href={ctaUrl} prefetch={true}>
           {ctaLabel}
-        </a>
+        </Link>
       </Button>
 
       {/* GST invoice note */}

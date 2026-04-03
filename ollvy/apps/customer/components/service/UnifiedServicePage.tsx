@@ -550,9 +550,9 @@ export function UnifiedServicePage({
 
             {/* Right: CTA */}
             <Button size="sm" asChild>
-              <a href={getCtaUrl()}>
+              <Link href={getCtaUrl()} prefetch={true}>
                 {ctaLabel}
-              </a>
+              </Link>
             </Button>
           </div>
         </div>
@@ -617,9 +617,9 @@ export function UnifiedServicePage({
                 )}
 
                 <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild>
-                  <a href={getCtaUrl()}>
+                  <Link href={getCtaUrl()} prefetch={true}>
                     {ctaLabel}
-                  </a>
+                  </Link>
                 </Button>
               </div>
 
@@ -1263,9 +1263,9 @@ export function UnifiedServicePage({
                 Fixed price. Verified CA. Done within {service.slaDays} working days.
               </p>
               <Button size="lg" className="mt-8" asChild>
-                <a href={getCtaUrl()}>
+                <Link href={getCtaUrl()} prefetch={true}>
                   {ctaLabel}
-                </a>
+                </Link>
               </Button>
             </div>
           </section>
@@ -1283,9 +1283,9 @@ export function UnifiedServicePage({
           </p>
         </div>
         <Button size="lg" className="flex-1 ml-4" asChild>
-          <a href={getCtaUrl(true)}>
+          <Link href={getCtaUrl(true)} prefetch={true}>
             {ctaLabel}
-          </a>
+          </Link>
         </Button>
       </div>
     </>

@@ -26,7 +26,7 @@ export function RelatedServices({ services }: { services: RelatedServiceCard[] }
             : getGuaranteedDate(service.slaDays)
 
           return (
-            <Link key={service.slug} href={`/services/${service.slug}`}>
+            <Link key={service.slug} href={`/services/${service.slug}`} prefetch={true}>
               <Card className="border border-border bg-card p-5 h-full hover:border-foreground/30 transition-colors group">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">

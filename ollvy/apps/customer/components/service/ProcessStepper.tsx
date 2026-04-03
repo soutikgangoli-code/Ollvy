@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import {
   CheckCircle,
@@ -144,16 +145,16 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
           </Button>
         ) : (
           <Button size="sm" asChild>
-            <a href={(() => {
+            <Link href={(() => {
               if (!serviceId) return '/services'
               if (priceVariesByState) return `/quote/request/${serviceId}`
               // Always go through eligibility first - it handles redirect if no questions
               return `/checkout/${serviceId}/eligibility`
-            })()}>
+            })()} prefetch={true}>
               {serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)
                 ? 'Check Eligibility & Price →'
                 : 'Book this service →'}
-            </a>
+            </Link>
           </Button>
         )}
       </div>

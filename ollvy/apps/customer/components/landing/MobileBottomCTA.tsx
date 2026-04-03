@@ -31,11 +31,11 @@ export function MobileBottomCTA() {
   return (
     <div
       className={cn(
-        "fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 lg:hidden transition-transform duration-300",
+        "fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 lg:hidden transition-transform duration-150",
         isVisible ? "translate-y-0" : "translate-y-full"
       )}
     >
-      <Link href="/services" className="block">
+      <Link href="/services" prefetch={true} className="block">
         <Button size="lg" className="w-full">
           Book Now
         </Button>
