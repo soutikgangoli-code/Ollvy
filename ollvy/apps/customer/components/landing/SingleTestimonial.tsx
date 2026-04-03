@@ -26,7 +26,7 @@ export function SingleTestimonial() {
               <span className="text-base md:text-xl font-bold text-muted-foreground">ST</span>
             </div>
             <p className="font-bold text-base md:text-lg text-foreground">Sushant Tiwari</p>
-            <p className="text-sm md:text-base text-muted-foreground mt-0.5">Founder, TechStartup</p>
+            <p className="text-sm md:text-base text-muted-foreground mt-0.5">Founder</p>
             <p className="text-xs md:text-sm text-muted-foreground mt-1.5 px-3 py-1 rounded-full bg-muted/50">Pvt Ltd - 12 employees - Bangalore</p>
           </div>
         </div>

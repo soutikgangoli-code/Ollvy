@@ -179,14 +179,10 @@ export function Footer() {
         </div>
 
         {/* Bottom row */}
-        <div className="border-t border-border mt-10 pt-6 flex flex-col sm:flex-row justify-between gap-2 flex-wrap">
+        <div className="border-t border-border mt-10 pt-6">
           <p className="text-xs text-muted-foreground">
             © 2025 Ollvy Technologies Private Limited. All rights reserved.
           </p>
-          <div className="flex gap-4 flex-wrap">
-            <p className="text-xs text-muted-foreground font-mono">CIN: U72900KA2024PTC186XXX</p>
-            <p className="text-xs text-muted-foreground font-mono">GSTIN: 29AABCO1234X1ZX</p>
-          </div>
         </div>
       </div>
     </footer>
