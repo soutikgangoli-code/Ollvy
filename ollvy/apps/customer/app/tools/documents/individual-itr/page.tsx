@@ -5,6 +5,7 @@ import { DocumentSteps } from '@/components/tools/DocumentSteps'
 import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
+import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
 import { individualITRDocuments } from '@/lib/data/document-checklists'
 import { individualItrContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
@@ -70,62 +71,71 @@ export const metadata: Metadata = {
 
 export default function IndividualITRDocumentsPage() {
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
-      />
+    <div className="py-16 md:py-24">
+      <div className="container max-w-5xl">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
+        />
 
-      {/* Educational intro content */}
-      <DocumentPageIntro content={individualItrContent} />
+        {/* Header with H1 - Server Rendered */}
+        <DocumentPageHeader
+          h1="How to File ITR for Salaried Individuals"
+          label="Personal ITR Filing"
+          href="/tools/documents/individual-itr"
+        />
 
-      {/* Document checklist header */}
-      <div className="mb-6">
-        <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">02</span>
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+        {/* Educational intro content */}
+        <DocumentPageIntro content={individualItrContent} />
+
+        {/* Document checklist header */}
+        <div className="mb-6">
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-[10px] text-muted-foreground">02</span>
+            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1 ml-7">
+            Click on any document to see detailed requirements and how to obtain it
+          </p>
         </div>
-        <p className="text-xs text-muted-foreground mt-1 ml-7">
-          Click on any document to see detailed requirements and how to obtain it
-        </p>
+
+        {/* Document checklist */}
+        <DocumentChecklistContent
+          categories={individualITRDocuments}
+          pageTitle="Personal ITR Filing"
+          pageSubtitle="Complete list of documents required to file your Individual Income Tax Return"
+          ctaTitle="Ready to file your ITR?"
+          ctaDescription="Just share your documents with us. Ollvy's CAs review everything, maximize your deductions, and file your return correctly."
+          ctaButtonText="File My ITR"
+          ctaButtonHref="/services/business-itr"
+          penaltyCalcHref="/tools/penalty-calculator/itr-late-filing"
+          penaltyCalcText="Calculate ITR late filing penalty"
+        />
+
+        {/* Step-by-step process */}
+        <DocumentSteps content={individualItrContent} />
+
+        {/* FAQ section */}
+        <DocumentFAQSection content={individualItrContent} />
+
+        {/* Common mistakes */}
+        <DocumentCommonMistakes content={individualItrContent} />
+
+        {/* Next steps */}
+        <DocumentNextSteps content={individualItrContent} />
       </div>
-
-      {/* Document checklist */}
-      <DocumentChecklistContent
-        categories={individualITRDocuments}
-        pageTitle="Personal ITR Filing"
-        pageSubtitle="Complete list of documents required to file your Individual Income Tax Return"
-        ctaTitle="Ready to file your ITR?"
-        ctaDescription="Just share your documents with us. Ollvy's CAs review everything, maximize your deductions, and file your return correctly."
-        ctaButtonText="File My ITR"
-        ctaButtonHref="/services/business-itr"
-        penaltyCalcHref="/tools/penalty-calculator/itr-late-filing"
-        penaltyCalcText="Calculate ITR late filing penalty"
-      />
-
-      {/* Step-by-step process */}
-      <DocumentSteps content={individualItrContent} />
-
-      {/* FAQ section */}
-      <DocumentFAQSection content={individualItrContent} />
-
-      {/* Common mistakes */}
-      <DocumentCommonMistakes content={individualItrContent} />
-
-      {/* Next steps */}
-      <DocumentNextSteps content={individualItrContent} />
-    </>
+    </div>
   )
 }

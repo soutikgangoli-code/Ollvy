@@ -37,6 +37,7 @@ export interface LearnPageConfig {
 export interface RelatedTools {
   penaltyCalculators?: string[];       // e.g., ['gst-late-filing', 'itr-late-filing']
   documentChecklists?: string[];       // e.g., ['gst-registration', 'business-itr']
+  deadlines?: string[];                // e.g., ['itr-2027', 'gst-annual-2027']
 }
 
 // Tool metadata for displaying links
@@ -70,12 +71,25 @@ export const DOCUMENT_CHECKLIST_METADATA: ToolMetadata[] = [
   { slug: 'trademark', title: 'Trademark Documents', subtitle: 'TM application requirements' },
 ];
 
+export const DEADLINE_METADATA: ToolMetadata[] = [
+  { slug: 'director-kyc-2026', title: 'Director KYC 2026', subtitle: 'Due Sep 30, 2026' },
+  { slug: 'itr-2026', title: 'Business ITR 2026', subtitle: 'Due Oct 31, 2026' },
+  { slug: 'gst-annual-2026', title: 'GSTR-9 Annual Return 2026', subtitle: 'Due Dec 31, 2026' },
+  { slug: 'tds-return-q1-2027', title: 'TDS Return Q1 FY2027-28', subtitle: 'Due Jul 31, 2027' },
+  { slug: 'itr-2027', title: 'Business ITR FY2026-27', subtitle: 'Due Oct 31, 2027' },
+  { slug: 'gst-annual-2027', title: 'GSTR-9 Annual Return 2027', subtitle: 'Due Dec 31, 2027' },
+];
+
 export function getPenaltyCalculatorBySlug(slug: string): ToolMetadata | undefined {
   return PENALTY_CALCULATOR_METADATA.find(t => t.slug === slug);
 }
 
 export function getDocumentChecklistBySlug(slug: string): ToolMetadata | undefined {
   return DOCUMENT_CHECKLIST_METADATA.find(t => t.slug === slug);
+}
+
+export function getDeadlineBySlug(slug: string): ToolMetadata | undefined {
+  return DEADLINE_METADATA.find(t => t.slug === slug);
 }
 
 export type LearnCategory =

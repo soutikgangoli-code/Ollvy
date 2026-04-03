@@ -1,6 +1,12 @@
+import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getUser } from '@/lib/supabase-server'
 import { ProfilePageClient } from './ProfilePageClient'
+
+export const metadata: Metadata = {
+  title: 'Profile | Ollvy',
+  robots: 'noindex, nofollow',
+}
 
 interface PageProps {
   searchParams: Promise<{ setup?: string }>

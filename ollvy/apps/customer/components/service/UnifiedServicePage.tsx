@@ -740,10 +740,13 @@ export function UnifiedServicePage({
                       </div>
 
                       {/* Always render for SEO, hide visually when collapsed */}
-                      <div className={cn(
-                        'transition-all duration-300 overflow-hidden',
-                        explainerOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
-                      )}>
+                      <div
+                        aria-hidden={!explainerOpen}
+                        className={cn(
+                          'transition-all duration-300 overflow-hidden',
+                          explainerOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                        )}
+                      >
                         <ExplainerStepper
                           serviceName={service.name}
                           steps={service.serviceExplainer.steps}

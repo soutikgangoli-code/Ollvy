@@ -5,6 +5,7 @@ import { DocumentSteps } from '@/components/tools/DocumentSteps'
 import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
+import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
 import { soleProprietorDocuments } from '@/lib/data/document-checklists'
 import { soleProprietorContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
@@ -70,60 +71,69 @@ export const metadata: Metadata = {
 
 export default function SoleProprietorDocumentsPage() {
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
-      />
+    <div className="py-16 md:py-24">
+      <div className="container max-w-5xl">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
+        />
 
-      {/* Educational intro content */}
-      <DocumentPageIntro content={soleProprietorContent} />
+        {/* Header with H1 - Server Rendered */}
+        <DocumentPageHeader
+          h1="How to Register a Sole Proprietorship"
+          label="Sole Proprietorship"
+          href="/tools/documents/sole-proprietor"
+        />
 
-      {/* Document checklist header */}
-      <div className="mb-6">
-        <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">02</span>
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+        {/* Educational intro content */}
+        <DocumentPageIntro content={soleProprietorContent} />
+
+        {/* Document checklist header */}
+        <div className="mb-6">
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-[10px] text-muted-foreground">02</span>
+            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1 ml-7">
+            Click on any document to see detailed requirements and how to obtain it
+          </p>
         </div>
-        <p className="text-xs text-muted-foreground mt-1 ml-7">
-          Click on any document to see detailed requirements and how to obtain it
-        </p>
+
+        {/* Document checklist */}
+        <DocumentChecklistContent
+          categories={soleProprietorDocuments}
+          pageTitle="Sole Proprietorship Registration"
+          pageSubtitle="Complete list of documents required to register a Sole Proprietorship in India"
+          ctaTitle="Ready to register your business?"
+          ctaDescription="Get started with Ollvy. We handle GST registration, Shop Act license, and all compliance for sole proprietors."
+          ctaButtonText="Start GST Registration"
+          ctaButtonHref="/services/gst-registration"
+        />
+
+        {/* Step-by-step process */}
+        <DocumentSteps content={soleProprietorContent} />
+
+        {/* FAQ section */}
+        <DocumentFAQSection content={soleProprietorContent} />
+
+        {/* Common mistakes */}
+        <DocumentCommonMistakes content={soleProprietorContent} />
+
+        {/* Next steps */}
+        <DocumentNextSteps content={soleProprietorContent} />
       </div>
-
-      {/* Document checklist */}
-      <DocumentChecklistContent
-        categories={soleProprietorDocuments}
-        pageTitle="Sole Proprietorship Registration"
-        pageSubtitle="Complete list of documents required to register a Sole Proprietorship in India"
-        ctaTitle="Ready to register your business?"
-        ctaDescription="Get started with Ollvy. We handle GST registration, Shop Act license, and all compliance for sole proprietors."
-        ctaButtonText="Start GST Registration"
-        ctaButtonHref="/services/gst-registration"
-      />
-
-      {/* Step-by-step process */}
-      <DocumentSteps content={soleProprietorContent} />
-
-      {/* FAQ section */}
-      <DocumentFAQSection content={soleProprietorContent} />
-
-      {/* Common mistakes */}
-      <DocumentCommonMistakes content={soleProprietorContent} />
-
-      {/* Next steps */}
-      <DocumentNextSteps content={soleProprietorContent} />
-    </>
+    </div>
   )
 }

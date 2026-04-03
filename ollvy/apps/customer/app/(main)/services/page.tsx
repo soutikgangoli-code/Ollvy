@@ -78,7 +78,13 @@ async function fetchServices(): Promise<ServicePackage[]> {
   try {
     const { data, error } = await supabaseServer
       .from('service_packages')
-      .select('*')
+      .select(`
+        *,
+        filter_category:service_filter_categories (
+          name,
+          icon_name
+        )
+      `)
       .eq('is_active', true)
       .order('display_order', { ascending: true })
 

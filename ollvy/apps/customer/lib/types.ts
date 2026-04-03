@@ -37,6 +37,10 @@ export interface ServicePackage {
   short_description: string
   long_description?: string
   filter_category_id?: string
+  filter_category?: {
+    name: string
+    icon_name?: string
+  }
   tier_group_id?: string
   tier_label?: string
   order_type: 'one_time' | 'recurring'

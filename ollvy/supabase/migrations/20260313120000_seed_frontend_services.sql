@@ -1,13 +1,13 @@
 -- Seed frontend service configs into database
 -- This ensures the DB has the services defined in the frontend's static configs
 
--- Category UUIDs (from service_filter_categories table)
--- Registrations: abd1c33a-cdb7-45e1-89e6-bf7bf14bb70a
--- Licensing: 9d9921ea-141d-4044-a96b-57cbfc432637
--- Monthly Compliance: 9a399eff-9292-4033-8b25-fdc1e17768bc
--- Tax Filings: 401af149-dd3b-4fc0-9501-7b313afb3c06
--- Payroll: 55c56533-9a06-4e8e-ae81-2146b80434fd
--- Legal: e8eae3bc-6d5c-467f-b504-147b4f80d9a3
+-- Category slugs (from service_filter_categories table)
+-- registration - Business Registration
+-- tax - Tax & Compliance
+-- licenses - Licenses & Permits
+-- trademark - Trademark & IP
+-- ongoing - Ongoing Compliance
+-- all - All Services
 
 -- Upsert Private Limited Incorporation
 INSERT INTO service_packages (

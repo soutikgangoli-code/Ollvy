@@ -548,21 +548,16 @@ const FALLBACK_SERVICE_SLUGS = [
   'llp-incorporation',
   'gst-registration',
   'msme-registration',        // NOT 'msme-udyam'
-  'startup-india',            // NOT 'startup-india-dpiit'
   'trademark-registration',
-  // Licensing
-  'fssai-license',
-  'iec-code',
+  // Licensing / Bundles
   'cloud-kitchen-setup',
   // Annual Compliance
-  'director-kyc',
   'mca-annual-filing',
   // Tax Filings
   'business-itr',
   // Monthly Compliance
   'gst-monthly',              // NOT 'gst-monthly-filing' or 'gst-monthly-50l'
   'tds-monthly-compliance',
-  'payroll-management',
   // GST Services
   'gst-cancellation',
   'gst-revocation',

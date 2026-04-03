@@ -26,6 +26,7 @@ function DataTable({ table }: { table: TableRow[] }) {
             {keys.map((key) => (
               <th
                 key={key}
+                scope="col"
                 className="px-4 py-3 text-left text-xs font-semibold text-foreground uppercase tracking-wide border-b border-border"
               >
                 {table[0][key]}

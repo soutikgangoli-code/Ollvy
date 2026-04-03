@@ -1,17 +1,13 @@
-'use client'
-
 import Link from 'next/link'
-import Script from 'next/script'
-import { format, differenceInDays, isPast } from 'date-fns'
+import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Clock, AlertTriangle, Check } from 'lucide-react'
 import { DeadlineConfig } from '@/lib/deadlines'
-import { getGuaranteedDate } from '@/lib/dates'
 import { Navbar } from '@/components/landing/Navbar'
 import { Footer } from '@/components/landing/Footer'
 import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
+import { DeadlineCountdown, GuaranteedBadge } from './DeadlineCountdown'
 
 function AvatarStack({ count }: { count: number }) {
   const initials = ['RA', 'PK', 'SM', 'DM', 'NK'].slice(0, count)
@@ -29,63 +25,16 @@ function AvatarStack({ count }: { count: number }) {
   )
 }
 
-function getUrgencyStyle(daysLeft: number, isPastDeadline: boolean) {
-  if (isPastDeadline) return 'text-red-400'
-  if (daysLeft <= 7) return 'text-ollvy-amber'
-  return 'text-muted-foreground'
-}
-
-function getUrgencyText(deadline: DeadlineConfig, daysLeft: number, isPastDeadline: boolean) {
-  if (isPastDeadline) return deadline.postDeadlineMessage
-  if (daysLeft === 0) return 'Due today - file now'
-  if (daysLeft <= 7) return `${daysLeft} days left · Urgency is real`
-  if (daysLeft <= 30) return `${daysLeft} days left · File now - CAs are filling up fast this season`
-  return `${daysLeft} days left · ${deadline.urgencyLine}`
-}
-
 interface DeadlinePageProps {
   deadline: DeadlineConfig
 }
 
 export function DeadlinePage({ deadline }: DeadlinePageProps) {
   const dueDate = new Date(deadline.dueDate)
-  const isPastDeadline = isPast(dueDate)
-  const daysLeft = differenceInDays(dueDate, new Date())
-  const guaranteedDate = getGuaranteedDate(deadline.slaDays)
-
-  // JSON-LD structured data for SEO
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: deadline.serviceName,
-    description: deadline.seoDescription,
-    provider: {
-      '@type': 'Organization',
-      name: 'Ollvy Technologies Private Limited',
-      url: 'https://www.ollvy.com',
-    },
-    offers: {
-      '@type': 'Offer',
-      price: deadline.ollvyFee.toString(),
-      priceCurrency: 'INR',
-      availability: 'https://schema.org/InStock',
-      validThrough: deadline.dueDate,
-    },
-    areaServed: {
-      '@type': 'Country',
-      name: 'India',
-    },
-  }
 
   return (
-    <>
-      <Script
-        id="deadline-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="min-h-screen bg-background">
-        <Navbar />
+    <div className="min-h-screen bg-background">
+      <Navbar />
 
       <main className="pt-16">
         {/* Hero Section */}
@@ -142,10 +91,14 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
               <Link href={`/services/${deadline.serviceSlug}`}>Start Filing Now</Link>
             </Button>
 
-            {/* Urgency line */}
-            <p className={`text-sm mt-3 ${getUrgencyStyle(daysLeft, isPastDeadline)}`}>
-              {getUrgencyText(deadline, daysLeft, isPastDeadline)}
-            </p>
+            {/* Urgency line - client component for live countdown */}
+            <DeadlineCountdown
+              dueDate={deadline.dueDate}
+              postDeadlineMessage={deadline.postDeadlineMessage}
+              urgencyLine={deadline.urgencyLine}
+              penaltyLine={deadline.penaltyLine}
+              variant="hero"
+            />
           </div>
         </section>
 
@@ -158,35 +111,28 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                   <h3 className="font-semibold text-lg text-foreground">{deadline.serviceName}</h3>
                   <p className="text-sm text-muted-foreground mt-1">{deadline.eventLabel}</p>
                 </div>
-                {guaranteedDate && (
-                  <Badge
-                    className="bg-ollvy-green/10 text-ollvy-green border border-ollvy-green/20"
-                    aria-label={`Guaranteed by ${guaranteedDate}`}
-                  >
-                    Guaranteed by {guaranteedDate}
-                  </Badge>
-                )}
+                <GuaranteedBadge slaDays={deadline.slaDays} />
               </div>
 
               <div className="mt-6 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Ollvy fee</span>
                   <span className="font-mono text-foreground">
-                    ₹{deadline.ollvyFee.toLocaleString('en-IN')}
+                    Rs. {deadline.ollvyFee.toLocaleString('en-IN')}
                   </span>
                 </div>
                 {deadline.govtFee && deadline.govtFee > 0 && (
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Govt fee</span>
                     <span className="font-mono text-foreground">
-                      ₹{deadline.govtFee.toLocaleString('en-IN')}
+                      Rs. {deadline.govtFee.toLocaleString('en-IN')}
                     </span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm pt-2 border-t border-border">
                   <span className="font-medium text-foreground">Total</span>
                   <span className="font-mono font-bold text-foreground">
-                    ₹{((deadline.ollvyFee || 0) + (deadline.govtFee || 0)).toLocaleString('en-IN')}
+                    Rs. {((deadline.ollvyFee || 0) + (deadline.govtFee || 0)).toLocaleString('en-IN')}
                   </span>
                 </div>
               </div>
@@ -198,7 +144,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
 
               <Button className="w-full mt-6" asChild>
                 <Link href={`/services/${deadline.serviceSlug}`}>
-                  Book This Service - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
+                  Book This Service - Rs. {deadline.ollvyFee.toLocaleString('en-IN')}
                 </Link>
               </Button>
             </Card>
@@ -245,11 +191,11 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                   Skip the penalty. File {deadline.serviceName} now.
                 </h3>
                 <p className="text-sm text-muted-foreground mt-2">
-                  Fixed price ₹{deadline.ollvyFee.toLocaleString('en-IN')}. Verified CA assigned within 24 hours. Done in {deadline.slaDays} working days.
+                  Fixed price Rs. {deadline.ollvyFee.toLocaleString('en-IN')}. Verified CA assigned within 24 hours. Done in {deadline.slaDays} working days.
                 </p>
                 <Button className="mt-4" size="lg" asChild>
                   <Link href={`/services/${deadline.serviceSlug}`}>
-                    Book {deadline.serviceName} - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
+                    Book {deadline.serviceName} - Rs. {deadline.ollvyFee.toLocaleString('en-IN')}
                   </Link>
                 </Button>
               </div>
@@ -320,7 +266,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                     <div className="border-t border-border mt-6 pt-4">
                       <p className="text-sm font-semibold text-foreground">{t.name}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {t.role} · {t.business} · {t.city}
+                        {t.role} - {t.business} - {t.city}
                       </p>
                     </div>
                   </Card>
@@ -341,18 +287,21 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
             </p>
             <Button size="lg" className="mt-8" asChild>
               <Link href={`/services/${deadline.serviceSlug}`}>
-                Start Filing - ₹{deadline.ollvyFee.toLocaleString('en-IN')}
+                Start Filing - Rs. {deadline.ollvyFee.toLocaleString('en-IN')}
               </Link>
             </Button>
-            <p className={`text-sm mt-3 ${getUrgencyStyle(daysLeft, isPastDeadline)}`}>
-              {isPastDeadline ? deadline.penaltyLine : `Due ${format(dueDate, 'MMMM d, yyyy')}`}
-            </p>
+            <DeadlineCountdown
+              dueDate={deadline.dueDate}
+              postDeadlineMessage={deadline.postDeadlineMessage}
+              urgencyLine={deadline.urgencyLine}
+              penaltyLine={deadline.penaltyLine}
+              variant="footer"
+            />
           </div>
         </section>
       </main>
 
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div>
   )
 }

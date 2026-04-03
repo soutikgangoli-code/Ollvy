@@ -49,7 +49,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border py-12 bg-background">
       <div className="max-w-[1200px] mx-auto px-6">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8">
           {/* Column 1: Brand */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <OllvyWordmark />
@@ -129,22 +129,30 @@ export function Footer() {
               { label: 'GST Revocation', href: '/services/gst-revocation' },
               { label: 'Trademark Registration', href: '/services/trademark-registration' },
               { label: 'MSME Registration', href: '/services/msme-registration' },
-              { label: 'Startup India DPIIT', href: '/services/startup-india' },
-              { label: 'FSSAI License', href: '/services/fssai-license' },
-              { label: 'IEC Code', href: '/services/iec-code' },
               { label: 'Cloud Kitchen Setup', href: '/services/cloud-kitchen-setup' },
               { label: 'Business ITR Filing', href: '/services/business-itr' },
-              { label: 'Director KYC', href: '/services/director-kyc' },
               { label: 'Annual Compliance', href: '/services/mca-annual-filing' },
               { label: 'TDS Compliance', href: '/services/tds-monthly-compliance' },
-              { label: 'Payroll Management', href: '/services/payroll-management' },
               { label: 'Company Name Change', href: '/services/company-name-change' },
               { label: 'DIN Reactivation', href: '/services/din-reactivation' },
               { label: 'All Services', href: '/services' },
             ]}
           />
 
-          {/* Column 5: Guides */}
+          {/* Column 5: Deadlines */}
+          <FooterColumn
+            title="Deadlines"
+            links={[
+              { label: 'Director KYC 2026', href: '/director-kyc-2026' },
+              { label: 'Business ITR 2026', href: '/itr-2026' },
+              { label: 'GSTR-9 2026', href: '/gst-annual-2026' },
+              { label: 'TDS Return Q1 2027', href: '/tds-return-q1-2027' },
+              { label: 'Business ITR 2027', href: '/itr-2027' },
+              { label: 'GSTR-9 2027', href: '/gst-annual-2027' },
+            ]}
+          />
+
+          {/* Column 6: Guides */}
           <FooterColumn
             title="Guides"
             titleHref="/guides"
@@ -157,7 +165,7 @@ export function Footer() {
             ]}
           />
 
-          {/* Column 6: Notices */}
+          {/* Column 7: Notices */}
           <FooterColumn
             title="Notice Help"
             titleHref="/guides"
@@ -170,7 +178,7 @@ export function Footer() {
             ]}
           />
 
-          {/* Column 7: Legal */}
+          {/* Column 8: Legal */}
           <FooterColumn
             title="Legal"
             links={[
@@ -186,7 +194,7 @@ export function Footer() {
         {/* Bottom row */}
         <div className="border-t border-border mt-10 pt-6">
           <p className="text-xs text-muted-foreground">
-            © 2025 Ollvy Technologies Private Limited. All rights reserved.
+            © 2026 Ollvy Technologies Private Limited. All rights reserved.
           </p>
         </div>
       </div>

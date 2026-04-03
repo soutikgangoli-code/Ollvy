@@ -63,6 +63,5 @@ export const GEO_ENABLED_SERVICES = [
   'llp-incorporation',
   'gst-registration',
   'trademark-registration',
-  'fssai-license',
   'business-itr',
 ]

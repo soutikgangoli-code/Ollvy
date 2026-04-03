@@ -57,8 +57,60 @@ const penaltyCalculators = [
 ]
 
 export default function PenaltyCalculatorPage() {
+  // BreadcrumbList schema
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.ollvy.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Tools',
+        item: 'https://www.ollvy.com/tools',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Penalty Calculators',
+        item: 'https://www.ollvy.com/tools/penalty-calculator',
+      },
+    ],
+  }
+
+  // CollectionPage + ItemList schema
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Penalty Calculators for Indian Business Compliance',
+    description: 'Calculate penalties for late GST filing, ITR filing, MCA annual filing, Director KYC, and TDS compliance.',
+    url: 'https://www.ollvy.com/tools/penalty-calculator',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: penaltyCalculators.map((calc, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: calc.title,
+        url: `https://www.ollvy.com${calc.href}`,
+      })),
+    },
+  }
+
   return (
     <div className="py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       <div className="container max-w-4xl">
         {/* Header */}
         <div className="text-center mb-16">

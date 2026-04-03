@@ -1,4 +1,6 @@
 // Shared components for penalty calculators
+export { PenaltyCalculatorHeader } from './PenaltyCalculatorHeader'
+export { PenaltyCalculatorSelector, penaltyCalculators } from './PenaltyCalculatorSelector'
 export { TurnoverSlider } from './TurnoverSlider'
 export { EmployeeCountSlider } from './EmployeeCountSlider'
 export { DaysLateSlider } from './DaysLateSlider'

@@ -1,10 +1,10 @@
-'use client';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import {
   LearnPageConfig,
   getPenaltyCalculatorBySlug,
   getDocumentChecklistBySlug,
+  getDeadlineBySlug,
 } from '@/lib/guides/pages';
 import { ServiceConfig } from '@/lib/services';
 import { LearnHero } from './LearnHero';
@@ -102,7 +102,11 @@ function RelatedToolsSection({ relatedTools }: { relatedTools?: LearnPageConfig[
     .map(slug => getDocumentChecklistBySlug(slug))
     .filter(Boolean);
 
-  if (penaltyCalcs.length === 0 && docChecklists.length === 0) {
+  const deadlines = (relatedTools.deadlines || [])
+    .map(slug => getDeadlineBySlug(slug))
+    .filter(Boolean);
+
+  if (penaltyCalcs.length === 0 && docChecklists.length === 0 && deadlines.length === 0) {
     return null;
   }
 
@@ -112,6 +116,23 @@ function RelatedToolsSection({ relatedTools }: { relatedTools?: LearnPageConfig[
         Helpful tools
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {deadlines.map((tool) => (
+          <Link
+            key={tool!.slug}
+            href={`/${tool!.slug}`}
+            className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-foreground/30 hover:bg-muted/20 transition-colors group"
+          >
+            <div>
+              <p className="text-sm font-medium text-foreground group-hover:text-foreground/90">
+                {tool!.title}
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {tool!.subtitle}
+              </p>
+            </div>
+            <ChevronRight size={16} className="text-muted-foreground group-hover:text-foreground shrink-0" />
+          </Link>
+        ))}
         {penaltyCalcs.map((tool) => (
           <Link
             key={tool!.slug}

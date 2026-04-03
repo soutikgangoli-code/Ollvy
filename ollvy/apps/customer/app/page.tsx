@@ -56,8 +56,45 @@ export default async function LandingPage() {
   // Fetch popular services from database
   const popularServices = await getPopularServices()
 
+  // BreadcrumbList schema for homepage
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.ollvy.com',
+      },
+    ],
+  }
+
+  // Organization schema
+  const organizationJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Ollvy Technologies Private Limited',
+    url: 'https://www.ollvy.com',
+    logo: 'https://www.ollvy.com/logo.png',
+    description: 'Company Registration, GST & Compliance Services in India',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'IN',
+    },
+    sameAs: [],
+  }
+
   return (
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
       <NavbarServer />
 
       {/* Main content with padding for fixed navbar */}

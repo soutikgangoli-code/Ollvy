@@ -258,7 +258,7 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
                   {user.avatar_url ? (
                     <img
                       src={user.avatar_url}
-                      alt=""
+                      alt={user.business_name || user.email || 'User avatar'}
                       className="w-7 h-7 rounded-full object-cover"
                       referrerPolicy="no-referrer"
                     />
@@ -435,7 +435,7 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
                     {user.avatar_url ? (
                       <img
                         src={user.avatar_url}
-                        alt=""
+                        alt={user.business_name || user.email || 'User avatar'}
                         className="w-8 h-8 rounded-full object-cover"
                         referrerPolicy="no-referrer"
                       />

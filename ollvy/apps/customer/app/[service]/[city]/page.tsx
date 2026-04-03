@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getCityBySlug, CITIES, GEO_ENABLED_SERVICES } from '@/lib/geo'
-import { getServiceBySlugFromDB, getStatePricing, getServiceReviews, getRelatedServicesBySlugs } from '@/lib/data/services'
+import { getServiceBySlugFromDB, getStatePricing, getServiceReviews, getRelatedServicesBySlugs, getAllServiceSlugs } from '@/lib/data/services'
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
 
 /**
@@ -21,9 +21,19 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const params: { service: string; city: string }[] = []
+  // Validate GEO_ENABLED_SERVICES slugs exist in database
+  const dbSlugs = await getAllServiceSlugs()
+  const validServices = GEO_ENABLED_SERVICES.filter(slug => {
+    const exists = dbSlugs.includes(slug)
+    if (!exists) {
+      console.warn(`[geo] Service slug '${slug}' not found in database - skipping geo pages`)
+    }
+    return exists
+  })
 
-  for (const serviceSlug of GEO_ENABLED_SERVICES) {
+  // Generate params only for valid services
+  const params: { service: string; city: string }[] = []
+  for (const serviceSlug of validServices) {
     for (const city of CITIES) {
       params.push({
         service: serviceSlug,

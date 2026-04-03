@@ -124,6 +124,9 @@ export default async function LearnPageRoute({ params }: Props) {
     })),
   } : null;
 
+  // Get first tool question for noscript fallback (SEO + non-JS users)
+  const firstQuestion = page.tool?.questions?.[0];
+
   return (
     <>
       <script
@@ -139,6 +142,28 @@ export default async function LearnPageRoute({ params }: Props) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
+      )}
+      {/* Noscript fallback for tool first question - helps SEO and non-JS users */}
+      {firstQuestion && (
+        <noscript>
+          <div className="max-w-[760px] mx-auto px-6 py-8 border border-border rounded-lg bg-card">
+            <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+              Quick check
+            </p>
+            <p className="font-semibold text-foreground mb-1">{page.tool?.title}</p>
+            <p className="text-sm text-foreground mb-4">{firstQuestion.text}</p>
+            <ul className="space-y-2">
+              {firstQuestion.options.map((opt) => (
+                <li key={opt.value} className="text-sm text-muted-foreground border border-border rounded-lg px-4 py-3">
+                  {opt.label}
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-muted-foreground mt-4">
+              Enable JavaScript to use this interactive tool.
+            </p>
+          </div>
+        </noscript>
       )}
       <LearnPage
         page={stripFunctions(page)}

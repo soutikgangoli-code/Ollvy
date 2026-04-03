@@ -56,8 +56,8 @@ export function ServiceCard({ service }: ServiceCardProps) {
     : null
   const guaranteedDate = completionEstimate?.guaranteedDate ?? null
 
-  // Get category label from slug
-  const categoryLabel = getCategoryLabel(service.slug)
+  // Get category label from database, fallback to slug-based derivation
+  const categoryLabel = service.filter_category?.name ?? getCategoryLabel(service.slug)
 
   // Format govt fee if present
   const govtFee = service.price_govt_fees_paisa ? service.price_govt_fees_paisa / 100 : 0

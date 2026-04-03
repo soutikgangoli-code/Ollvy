@@ -24,7 +24,7 @@ export function FearRelief() {
             {/* Header with red dot */}
             <div className="flex items-center gap-1.5 mb-2">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500"></span>
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-red-600 dark:text-red-400">
+              <span className="text-[12px] font-semibold uppercase tracking-widest text-red-600 dark:text-red-400">
                 THE USUAL WAY
               </span>
             </div>
@@ -137,7 +137,7 @@ export function FearRelief() {
             {/* Header with green dot */}
             <div className="flex items-center gap-1.5 mb-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+              <span className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
                 WITH OLLVY
               </span>
             </div>
@@ -167,8 +167,8 @@ export function FearRelief() {
                       <Check className="h-2.5 w-2.5 text-white" />
                     </div>
                     <div>
-                      <p className="text-[11px] font-medium text-foreground leading-tight">GSTR-3B filed</p>
-                      <p className="text-[9px] text-muted-foreground">5 days before deadline</p>
+                      <p className="text-[13px] font-medium text-foreground leading-tight">GSTR-3B filed</p>
+                      <p className="text-[11px] text-muted-foreground">5 days before deadline</p>
                     </div>
                   </div>
                   <span className="text-[9px] text-muted-foreground">Oct 15</span>
@@ -181,8 +181,8 @@ export function FearRelief() {
                       <Check className="h-2.5 w-2.5 text-white" />
                     </div>
                     <div>
-                      <p className="text-[11px] font-medium text-foreground leading-tight">TDS return filed</p>
-                      <p className="text-[9px] text-muted-foreground">3 days before deadline</p>
+                      <p className="text-[13px] font-medium text-foreground leading-tight">TDS return filed</p>
+                      <p className="text-[11px] text-muted-foreground">3 days before deadline</p>
                     </div>
                   </div>
                   <span className="text-[9px] text-muted-foreground">Oct 7</span>
@@ -195,8 +195,8 @@ export function FearRelief() {
                       <Check className="h-2.5 w-2.5 text-white" />
                     </div>
                     <div>
-                      <p className="text-[11px] font-medium text-foreground leading-tight">Director KYC updated</p>
-                      <p className="text-[9px] text-muted-foreground">2 months before due date</p>
+                      <p className="text-[13px] font-medium text-foreground leading-tight">Director KYC updated</p>
+                      <p className="text-[11px] text-muted-foreground">2 months before due date</p>
                     </div>
                   </div>
                   <span className="text-[9px] text-muted-foreground">Sep 12</span>
@@ -209,8 +209,8 @@ export function FearRelief() {
                       <AlertCircle className="h-2.5 w-2.5 text-white" />
                     </div>
                     <div>
-                      <p className="text-[11px] font-medium text-foreground leading-tight">ROC filing - In progress</p>
-                      <p className="text-[9px] text-muted-foreground">CA assigned - Due in 18 days</p>
+                      <p className="text-[13px] font-medium text-foreground leading-tight">ROC filing - In progress</p>
+                      <p className="text-[11px] text-muted-foreground">CA assigned - Due in 18 days</p>
                     </div>
                   </div>
                   <span className="text-[9px] text-muted-foreground">Nov 18</span>

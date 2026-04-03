@@ -5,6 +5,7 @@ import { DocumentSteps } from '@/components/tools/DocumentSteps'
 import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
+import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
 import { businessITRDocuments } from '@/lib/data/document-checklists'
 import { businessItrContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
@@ -70,62 +71,71 @@ export const metadata: Metadata = {
 
 export default function BusinessITRDocumentsPage() {
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
-      />
+    <div className="py-16 md:py-24">
+      <div className="container max-w-5xl">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
+        />
 
-      {/* Educational intro content */}
-      <DocumentPageIntro content={businessItrContent} />
+        {/* Header with H1 - Server Rendered */}
+        <DocumentPageHeader
+          h1="How to File ITR for Business"
+          label="Business ITR Filing"
+          href="/tools/documents/business-itr"
+        />
 
-      {/* Document checklist header */}
-      <div className="mb-6">
-        <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">02</span>
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+        {/* Educational intro content */}
+        <DocumentPageIntro content={businessItrContent} />
+
+        {/* Document checklist header */}
+        <div className="mb-6">
+          <div className="flex items-baseline gap-3">
+            <span className="font-mono text-[10px] text-muted-foreground">02</span>
+            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1 ml-7">
+            Click on any document to see detailed requirements and how to obtain it
+          </p>
         </div>
-        <p className="text-xs text-muted-foreground mt-1 ml-7">
-          Click on any document to see detailed requirements and how to obtain it
-        </p>
+
+        {/* Document checklist */}
+        <DocumentChecklistContent
+          categories={businessITRDocuments}
+          pageTitle="Business ITR Filing"
+          pageSubtitle="Complete list of documents required for Company, LLP, or Partnership tax return filing"
+          ctaTitle="Need help with Business ITR?"
+          ctaDescription="Ollvy handles complete business ITR filing - from audit coordination to return filing. CA assigned within 24 hours."
+          ctaButtonText="File Business ITR"
+          ctaButtonHref="/services/business-itr"
+          penaltyCalcHref="/tools/penalty-calculator/itr-late-filing"
+          penaltyCalcText="Calculate ITR late filing penalty"
+        />
+
+        {/* Step-by-step process */}
+        <DocumentSteps content={businessItrContent} />
+
+        {/* FAQ section */}
+        <DocumentFAQSection content={businessItrContent} />
+
+        {/* Common mistakes */}
+        <DocumentCommonMistakes content={businessItrContent} />
+
+        {/* Next steps */}
+        <DocumentNextSteps content={businessItrContent} />
       </div>
-
-      {/* Document checklist */}
-      <DocumentChecklistContent
-        categories={businessITRDocuments}
-        pageTitle="Business ITR Filing"
-        pageSubtitle="Complete list of documents required for Company, LLP, or Partnership tax return filing"
-        ctaTitle="Need help with Business ITR?"
-        ctaDescription="Ollvy handles complete business ITR filing - from audit coordination to return filing. CA assigned within 24 hours."
-        ctaButtonText="File Business ITR"
-        ctaButtonHref="/services/business-itr"
-        penaltyCalcHref="/tools/penalty-calculator/itr-late-filing"
-        penaltyCalcText="Calculate ITR late filing penalty"
-      />
-
-      {/* Step-by-step process */}
-      <DocumentSteps content={businessItrContent} />
-
-      {/* FAQ section */}
-      <DocumentFAQSection content={businessItrContent} />
-
-      {/* Common mistakes */}
-      <DocumentCommonMistakes content={businessItrContent} />
-
-      {/* Next steps */}
-      <DocumentNextSteps content={businessItrContent} />
-    </>
+    </div>
   )
 }

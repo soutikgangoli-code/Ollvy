@@ -75,8 +75,60 @@ const documentTypes = [
 ]
 
 export default function DocumentsPage() {
+  // BreadcrumbList schema
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.ollvy.com',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Tools',
+        item: 'https://www.ollvy.com/tools',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Document Checklists',
+        item: 'https://www.ollvy.com/tools/documents',
+      },
+    ],
+  }
+
+  // CollectionPage + ItemList schema
+  const collectionJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Document Checklists for Business Registration & Compliance',
+    description: 'Complete document checklists for registering Private Limited Company, LLP, Partnership Firm, GST, ITR filing, and Trademark in India.',
+    url: 'https://www.ollvy.com/tools/documents',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: documentTypes.map((doc, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: doc.title,
+        url: `https://www.ollvy.com${doc.href}`,
+      })),
+    },
+  }
+
   return (
     <div className="py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       <div className="container max-w-4xl">
         {/* Header */}
         <div className="text-center mb-16">
