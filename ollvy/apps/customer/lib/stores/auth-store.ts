@@ -285,8 +285,16 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
 
     _isRefreshingSession = true
 
-    // Track if we had no session before (to detect fresh login)
-    const hadNoSession = get().session === null && get().isHydrated === false
+    // Check for freshLogin URL param (set by /auth/callback after OAuth)
+    const isFreshLogin = typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('freshLogin') === '1'
+
+    // Remove freshLogin param from URL to prevent banner on refresh
+    if (isFreshLogin && typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('freshLogin')
+      window.history.replaceState({}, '', url.toString())
+    }
 
     set({ isLoading: true })
     console.log('[auth-store] refreshSession starting')
@@ -307,8 +315,8 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
 
         console.log('[auth-store] User data:', userData?.id || 'not found')
 
-        // Show login success banner if this is a fresh login (had no session before)
-        const shouldShowBanner = hadNoSession && session !== null
+        // Show login success banner ONLY on fresh login (OAuth callback)
+        const shouldShowBanner = isFreshLogin && session !== null
 
         set({
           session,

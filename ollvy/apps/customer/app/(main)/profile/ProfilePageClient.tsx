@@ -241,13 +241,15 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
         // Get order IDs for document queries
         const activeOrderIds = activeOrders.map((o: any) => o.id)
 
-        // BATCH 2: Parallel queries for retainers, doc counts, stages, work docs, all orders, and compliance
+        // BATCH 2: Parallel queries for retainers, doc counts, stages, work docs, all orders, vault docs, and compliance
+        // Note: vault docs query moved here (was Batch 3) to avoid sequential bottleneck
         const [
           retainersResult,
           docCountsResult,
           stagesResult,
           workDocsResult,
           allOrdersResult,
+          vaultDocsResult,
           complianceResult
         ] = await Promise.all([
           // Retainers - no dependency
@@ -286,11 +288,20 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
                 .in('order_id', activeOrderIds)
                 .eq('direction', 'from_customer')
             : Promise.resolve({ data: null, error: null }),
-          // All orders - no dependency
+          // All orders for vault - limited to 50 most recent (prevents over-fetching)
           supabase
             .from('orders')
             .select('id, order_number, service_package:service_packages(name)')
-            .order('created_at', { ascending: false }),
+            .order('created_at', { ascending: false })
+            .limit(50),
+          // Vault documents - fetch in parallel (no dependency on allOrders result)
+          // We fetch docs for all orders and filter client-side
+          supabase
+            .from('order_documents')
+            .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
+            .not('file_url', 'is', null)
+            .order('uploaded_at', { ascending: false })
+            .limit(200),
           // Compliance - no dependency
           supabase
             .from('compliance_obligations')
@@ -334,7 +345,7 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           })
         }
 
-        // BATCH 3: Vault documents (depends on allOrders result)
+        // Process vault documents (now parallel with Batch 2 - no sequential bottleneck)
         let documentGroups: Array<{
           order_id: string
           order_number: string
@@ -349,41 +360,38 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
         }> = []
 
         const allOrders = allOrdersResult.data
-        if (allOrders && allOrders.length > 0) {
-          const orderIds = allOrders.map(o => o.id)
-          const { data: vaultDocs } = await supabase
-            .from('order_documents')
-            .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
-            .in('order_id', orderIds)
-            .not('file_url', 'is', null)
-            .order('uploaded_at', { ascending: false })
+        const vaultDocs = vaultDocsResult.data
+        if (allOrders && allOrders.length > 0 && vaultDocs && vaultDocs.length > 0) {
+          // Create a map of order IDs to order info for quick lookup
+          const orderMap = new Map(allOrders.map(o => [o.id, o]))
 
-          if (vaultDocs) {
-            const docsByOrder: Record<string, typeof vaultDocs> = {}
-            vaultDocs.forEach(d => {
+          // Group vault docs by order_id, only for orders we know about
+          const docsByOrder: Record<string, typeof vaultDocs> = {}
+          vaultDocs.forEach(d => {
+            if (orderMap.has(d.order_id)) {
               if (!docsByOrder[d.order_id]) docsByOrder[d.order_id] = []
               docsByOrder[d.order_id].push(d)
-            })
+            }
+          })
 
-            allOrders.forEach(order => {
-              const orderDocs = docsByOrder[order.id]
-              if (orderDocs && orderDocs.length > 0) {
-                const sp = Array.isArray(order.service_package) ? order.service_package[0] : order.service_package
-                documentGroups.push({
-                  order_id: order.id,
-                  order_number: order.order_number,
-                  service_name: (sp as { name: string })?.name || 'Service',
-                  documents: orderDocs.map(d => ({
-                    id: d.id,
-                    name: d.document_label || d.file_name || 'Document',
-                    type: d.verified_at ? 'deliverable' : 'input',
-                    url: d.file_url!,
-                    uploaded_at: d.uploaded_at || '',
-                  })),
-                })
-              }
-            })
-          }
+          allOrders.forEach(order => {
+            const orderDocs = docsByOrder[order.id]
+            if (orderDocs && orderDocs.length > 0) {
+              const sp = Array.isArray(order.service_package) ? order.service_package[0] : order.service_package
+              documentGroups.push({
+                order_id: order.id,
+                order_number: order.order_number,
+                service_name: (sp as { name: string })?.name || 'Service',
+                documents: orderDocs.map(d => ({
+                  id: d.id,
+                  name: d.document_label || d.file_name || 'Document',
+                  type: d.verified_at ? 'deliverable' : 'input',
+                  url: d.file_url!,
+                  uploaded_at: d.uploaded_at || '',
+                })),
+              })
+            }
+          })
         }
 
         // Transform retainers data (Supabase returns joined data as arrays)

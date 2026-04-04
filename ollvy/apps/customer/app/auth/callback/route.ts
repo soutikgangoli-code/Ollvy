@@ -29,7 +29,9 @@ export async function GET(request: NextRequest) {
     )
   }
 
-  const redirectUrl = `${origin}${next}`
+  // Add freshLogin param to trigger welcome banner
+  const separator = next.includes('?') ? '&' : '?'
+  const redirectUrl = `${origin}${next}${separator}freshLogin=1`
   const response = NextResponse.redirect(redirectUrl)
 
   const supabase = createServerClient(

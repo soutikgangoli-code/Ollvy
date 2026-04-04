@@ -188,8 +188,8 @@ export function OrderViewClient({
     // Only poll if chat_conversation_id is missing
     if (chatConversationId || !order.id) return
 
-    // Don't poll for orders that shouldn't have chat yet
-    if (order.status === 'pending_payment' || order.status === 'waitlisted') return
+    // Don't poll for waitlisted orders (they don't have chat yet)
+    if (order.status === 'waitlisted') return
 
     const supabase = getClient()
 

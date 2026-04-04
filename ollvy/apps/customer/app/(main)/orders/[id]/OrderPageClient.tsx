@@ -112,29 +112,43 @@ interface OrderFullDetails {
   round_notification: RoundNotification | null
 }
 
-interface OrderPageClientProps {
-  orderId: string
+interface InitialData {
+  order: Order
+  stageHistory: OrderStageHistory[]
+  documents: OrderDocument[]
+  workDocuments: OrderWorkDocument[]
+  invoiceId: string | null
+  roundNotification: RoundNotification | null
+  questionnaireResponses: QuestionnaireResponse[]
 }
 
-export function OrderPageClient({ orderId }: OrderPageClientProps) {
+interface OrderPageClientProps {
+  orderId: string
+  initialData?: InitialData | null
+}
+
+export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) {
   const router = useRouter()
   const { isHydrated, isLoading: authLoading } = useAuthStore()
 
-  // Loading and error states
-  const [isLoading, setIsLoading] = useState(true)
+  // Loading and error states - if we have initial data, start as not loading
+  const [isLoading, setIsLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
 
-  // Order data states
-  const [order, setOrder] = useState<Order | null>(null)
-  const [stageHistory, setStageHistory] = useState<OrderStageHistory[]>([])
-  const [documents, setDocuments] = useState<OrderDocument[]>([])
-  const [workDocuments, setWorkDocuments] = useState<OrderWorkDocument[]>([])
-  const [invoiceId, setInvoiceId] = useState<string | null>(null)
-  const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(null)
-  const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>([])
+  // Order data states - initialize with server-side data if available
+  const [order, setOrder] = useState<Order | null>(initialData?.order || null)
+  const [stageHistory, setStageHistory] = useState<OrderStageHistory[]>(initialData?.stageHistory || [])
+  const [documents, setDocuments] = useState<OrderDocument[]>(initialData?.documents || [])
+  const [workDocuments, setWorkDocuments] = useState<OrderWorkDocument[]>(initialData?.workDocuments || [])
+  const [invoiceId, setInvoiceId] = useState<string | null>(initialData?.invoiceId || null)
+  const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(initialData?.roundNotification || null)
+  const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>(initialData?.questionnaireResponses || [])
 
-  // Fetch order data client-side using RPC that we know works
+  // Fetch order data client-side ONLY if no initial data provided
   useEffect(() => {
+    // Skip if we already have data from server
+    if (initialData) return
+
     // Wait for auth to fully hydrate before fetching
     if (!isHydrated || authLoading) return
 
@@ -237,7 +251,7 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
     }
 
     fetchOrderData()
-  }, [orderId, isHydrated, authLoading])
+  }, [orderId, isHydrated, authLoading, initialData])
 
   // Modal states
   const [previewDoc, setPreviewDoc] = useState<{
@@ -336,16 +350,21 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
 
   // Fallback polling for chat_conversation_id
   // Ensures chat appears even if realtime has issues
+  // Limited to 10 attempts (30 seconds max) to prevent indefinite polling
   useEffect(() => {
     // Only poll if order exists but chat_conversation_id is missing
     if (order?.chat_conversation_id || !order?.id) return
 
-    // Don't poll for orders that shouldn't have chat yet (unpaid/waitlisted)
-    if (order.status === 'pending_payment' || order.status === 'waitlisted') return
+    // Don't poll for waitlisted orders (they don't have chat yet)
+    if (order.status === 'waitlisted') return
 
     const supabase = getClient()
+    let attemptCount = 0
+    const maxAttempts = 10 // 10 attempts * 3 seconds = 30 seconds max
 
     const pollForChat = async () => {
+      attemptCount++
+
       const { data } = await supabase
         .from('orders')
         .select('chat_conversation_id')
@@ -354,11 +373,23 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
 
       if (data?.chat_conversation_id) {
         setOrder(prev => prev ? { ...prev, chat_conversation_id: data.chat_conversation_id } : prev)
+        return true // Signal to stop polling
       }
+
+      return false
     }
 
-    // Poll every 3 seconds until chat_conversation_id is set
-    const interval = setInterval(pollForChat, 3000)
+    // Poll every 3 seconds until chat_conversation_id is set or max attempts reached
+    const interval = setInterval(async () => {
+      if (attemptCount >= maxAttempts) {
+        clearInterval(interval)
+        return
+      }
+      const found = await pollForChat()
+      if (found) {
+        clearInterval(interval)
+      }
+    }, 3000)
 
     // Also poll immediately on mount
     pollForChat()
