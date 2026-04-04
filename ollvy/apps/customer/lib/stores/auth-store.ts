@@ -289,6 +289,8 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     const isFreshLogin = typeof window !== 'undefined' &&
       new URLSearchParams(window.location.search).get('freshLogin') === '1'
 
+    console.log('[auth-store] isFreshLogin:', isFreshLogin, 'URL:', typeof window !== 'undefined' ? window.location.href : 'SSR')
+
     // Remove freshLogin param from URL to prevent banner on refresh
     if (isFreshLogin && typeof window !== 'undefined') {
       const url = new URL(window.location.href)
@@ -317,6 +319,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
 
         // Show login success banner ONLY on fresh login (OAuth callback)
         const shouldShowBanner = isFreshLogin && session !== null
+        console.log('[auth-store] shouldShowBanner:', shouldShowBanner, 'isFreshLogin:', isFreshLogin, 'hasSession:', !!session)
 
         set({
           session,

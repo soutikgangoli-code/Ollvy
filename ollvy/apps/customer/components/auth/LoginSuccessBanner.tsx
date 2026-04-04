@@ -15,6 +15,11 @@ export function LoginSuccessBanner() {
                    session?.user?.user_metadata?.name ||
                    null
 
+  // Debug: Log session metadata to see what Google provides
+  if (showLoginSuccessBanner && session) {
+    console.log('[LoginSuccessBanner] user_metadata:', session.user?.user_metadata)
+  }
+
   // Handle mount animation and auto-dismiss
   useEffect(() => {
     if (showLoginSuccessBanner) {
