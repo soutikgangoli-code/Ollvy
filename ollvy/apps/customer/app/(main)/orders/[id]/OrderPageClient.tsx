@@ -543,7 +543,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
     })
   }, [order, stats, stageHistory, documents, questionnaireResponses, servicePackage])
 
-  const completedStagesCount = timelineStages.filter(s => s.isCompleted).length
+  const completedStagesCount = timelineStages.filter((s: { isCompleted: boolean }) => s.isCompleted).length
 
   // Calculate active stage key for work documents filtering
   const activeStageKey = useMemo(() => {
