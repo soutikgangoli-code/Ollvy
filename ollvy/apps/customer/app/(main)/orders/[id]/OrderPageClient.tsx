@@ -522,7 +522,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
         if (isCompleted && historyForStage?.completed_at) {
           completedDate = formatDate(historyForStage.completed_at)
         }
-        isCurrent = !isCompleted && workflowStages.slice(0, index).every((_, i) => {
+        isCurrent = !isCompleted && workflowStages.slice(0, index).every((_: WorkflowDisplayStage, i: number) => {
           if (i === 0) return questionnaireCompleted
           if (i === 1) return allDocsUploaded
           return !!stageHistory.find(h =>
