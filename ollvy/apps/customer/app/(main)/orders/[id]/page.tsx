@@ -106,7 +106,9 @@ export default async function OrderDetailPage({ params }: PageProps) {
   // Build questionnaire responses with labels
   let questionnaireResponses: QuestionnaireResponse[] = []
   if (responsesResult.status === 'fulfilled' && responsesResult.value.data) {
-    const servicePackage = orderResult.data.service_package as { questionnaire?: Array<{ key: string; label: string }> } | undefined
+    // Handle array case - Supabase can return service_package as an array due to join behavior
+    const rawServicePackage = orderResult.data.service_package
+    const servicePackage = (Array.isArray(rawServicePackage) ? rawServicePackage[0] : rawServicePackage) as { questionnaire?: Array<{ key: string; label: string }> } | undefined
     const questionnaire = servicePackage?.questionnaire || []
     const questionLabels = new Map(
       questionnaire.map((q: { key: string; label: string }) => [q.key, q.label])
