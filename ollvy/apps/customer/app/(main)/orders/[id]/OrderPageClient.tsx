@@ -33,7 +33,7 @@ import { DocumentPreview } from '@/components/documents'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { formatPaisa, formatDate, cn } from '@/lib/utils'
-import type { Order, OrderStageHistory, OrderWorkDocument, WorkflowDisplayStage } from '@/lib/types'
+import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
 import { WorkDocumentsSection } from '@/components/orders/WorkDocumentsSection'
 import { RoundNotificationBanner } from '@/components/orders/RoundNotificationBanner'
 import { FinalOutputBanner } from '@/components/orders/FinalOutputBanner'
@@ -101,13 +101,6 @@ interface QuestionLabel {
   question_label: string
 }
 
-interface TimelineStage extends WorkflowDisplayStage {
-  isCompleted: boolean
-  isCurrent: boolean
-  completedDate: string | null
-  expectedDateRange: string | null
-}
-
 interface OrderFullDetails {
   order: Order
   stage_history: OrderStageHistory[]
@@ -150,14 +143,6 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
   const [invoiceId, setInvoiceId] = useState<string | null>(initialData?.invoiceId || null)
   const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(initialData?.roundNotification || null)
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>(initialData?.questionnaireResponses || [])
-
-  // Handle case where Supabase returns service_package as array instead of object
-  const servicePackage = useMemo(() => {
-    if (!order?.service_package) return null
-    return Array.isArray(order.service_package)
-      ? order.service_package[0]
-      : order.service_package
-  }, [order?.service_package])
 
   // Fetch order data client-side ONLY if no initial data provided
   useEffect(() => {
@@ -244,9 +229,8 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
         if (responsesResult.status === 'fulfilled' && responsesResult.value.data) {
           // Use questionnaire from order's service_package if available
-          // Handle array vs object for service_package
-          const sp = Array.isArray(orderData.service_package) ? orderData.service_package[0] : orderData.service_package
-          const questionnaire = (sp as { questionnaire?: Array<{ key: string; label: string }> })?.questionnaire || []
+          const servicePackage = orderData.service_package as { questionnaire?: Array<{ key: string; label: string }> } | undefined
+          const questionnaire = servicePackage?.questionnaire || []
           const questionLabels = new Map(
             questionnaire.map((q: { key: string; label: string }) => [q.key, q.label])
           )
@@ -424,7 +408,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
     const docProgress = totalDocs > 0 ? Math.round((uploadedDocs / totalDocs) * 100) : 0
 
     // Calculate estimated completion
-    const slaDays = servicePackage?.sla_working_days || 7
+    const slaDays = order?.service_package?.sla_working_days || 7
     const createdAt = order?.created_at ? new Date(order.created_at) : new Date()
 
     // Check if customer has completed their part (questionnaire + documents)
@@ -465,12 +449,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
       slaStartDate,
       customerSetupComplete,
     }
-  }, [order, documents, questionnaireResponses, servicePackage])
+  }, [order, documents, questionnaireResponses])
 
   // Calculate dynamic dates for each stage
   const calculateStageDate = (stageIndex: number, isStart: boolean = true) => {
     const baseDate = stats.slaStartDate
-    const workflowStages = servicePackage?.workflow_stages || []
+    const workflowStages = order?.service_package?.workflow_stages || []
 
     const stage = workflowStages[stageIndex]
     if (!stage?.timeline) return null
@@ -494,12 +478,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
   // Build timeline stages based on actual progress
   const timelineStages = useMemo(() => {
-    const workflowStages = servicePackage?.workflow_stages || []
+    const workflowStages = order?.service_package?.workflow_stages || []
     const hasQuestionnaireAnswers = questionnaireResponses.length > 0
     const questionnaireCompleted = !!order?.questionnaire_completed_at && hasQuestionnaireAnswers
     const allDocsUploaded = stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0
 
-    return workflowStages.map((stage: WorkflowDisplayStage, index: number) => {
+    return workflowStages.map((stage, index) => {
       let isCompleted = false
       let isCurrent = false
       let completedDate: string | null = null
@@ -529,7 +513,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
         if (isCompleted && historyForStage?.completed_at) {
           completedDate = formatDate(historyForStage.completed_at)
         }
-        isCurrent = !isCompleted && workflowStages.slice(0, index).every((_: WorkflowDisplayStage, i: number) => {
+        isCurrent = !isCompleted && workflowStages.slice(0, index).every((_, i) => {
           if (i === 0) return questionnaireCompleted
           if (i === 1) return allDocsUploaded
           return !!stageHistory.find(h =>
@@ -548,17 +532,17 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
       return { ...stage, isCompleted, isCurrent, completedDate, expectedDateRange }
     })
-  }, [order, stats, stageHistory, documents, questionnaireResponses, servicePackage])
+  }, [order, stats, stageHistory, documents, questionnaireResponses])
 
-  const completedStagesCount = timelineStages.filter((s: TimelineStage) => s.isCompleted).length
+  const completedStagesCount = timelineStages.filter(s => s.isCompleted).length
 
   // Calculate active stage key for work documents filtering
   const activeStageKey = useMemo(() => {
-    const workflowStages = servicePackage?.workflow_stages || []
+    const workflowStages = order?.service_package?.workflow_stages || []
     const currentStageIndex = Math.min(completedStagesCount, workflowStages.length - 1)
     const currentStage = workflowStages[currentStageIndex]
     return currentStage?.stage_key || null
-  }, [servicePackage?.workflow_stages, completedStagesCount])
+  }, [order?.service_package?.workflow_stages, completedStagesCount])
 
   const handleDownloadInvoice = async () => {
     if (!invoiceId) return
@@ -796,7 +780,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-2xl font-semibold text-foreground">
-                {servicePackage?.name || 'Order'}
+                {order.service_package?.name || 'Order'}
               </h1>
               <OrderStatusBadge status={order.status} />
             </div>
@@ -944,12 +928,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           <Card>
             <CardContent className="p-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {servicePackage?.name || 'Order'}
+                {order.service_package?.name || 'Order'}
               </h2>
 
               {/* Progress Bar Segments */}
               <div className="flex gap-1 mb-3">
-                {timelineStages.map((stage: TimelineStage, index: number) => (
+                {timelineStages.map((stage, index) => (
                   <div
                     key={stage.step}
                     className={cn(
@@ -967,7 +951,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
               {/* Stage Info Row */}
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm text-muted-foreground">
-                  Stage {completedStagesCount + (timelineStages.some((s: TimelineStage) => s.isCurrent) ? 1 : 0)} of {timelineStages.length}
+                  Stage {completedStagesCount + (timelineStages.some(s => s.isCurrent) ? 1 : 0)} of {timelineStages.length}
                 </p>
                 <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
                   {order.status === 'completed' ? 'Completed' : 'In Progress'}
@@ -1013,7 +997,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
             </CardHeader>
             <CardContent>
               <div className="space-y-0">
-                {timelineStages.map((stage: TimelineStage, index: number) => {
+                {timelineStages.map((stage, index) => {
                   const isQuestionsStage = index === 0
                   const isDocumentsStage = index === 1
 
@@ -1214,8 +1198,8 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           </Card>
 
           {/* Rounds Timeline */}
-          {servicePackage?.id && (
-            <RoundsTimeline orderId={orderId} servicePackageId={servicePackage.id} />
+          {order.service_package?.id && (
+            <RoundsTimeline orderId={orderId} servicePackageId={order.service_package.id} />
           )}
         </div>
 
