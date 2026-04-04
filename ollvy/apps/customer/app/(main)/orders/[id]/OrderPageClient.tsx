@@ -144,6 +144,14 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
   const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(initialData?.roundNotification || null)
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>(initialData?.questionnaireResponses || [])
 
+  // Handle case where Supabase returns service_package as array instead of object
+  const servicePackage = useMemo(() => {
+    if (!order?.service_package) return null
+    return Array.isArray(order.service_package)
+      ? order.service_package[0]
+      : order.service_package
+  }, [order?.service_package])
+
   // Fetch order data client-side ONLY if no initial data provided
   useEffect(() => {
     // Skip if we already have data from server
@@ -229,8 +237,9 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
         if (responsesResult.status === 'fulfilled' && responsesResult.value.data) {
           // Use questionnaire from order's service_package if available
-          const servicePackage = orderData.service_package as { questionnaire?: Array<{ key: string; label: string }> } | undefined
-          const questionnaire = servicePackage?.questionnaire || []
+          // Handle array vs object for service_package
+          const sp = Array.isArray(orderData.service_package) ? orderData.service_package[0] : orderData.service_package
+          const questionnaire = (sp as { questionnaire?: Array<{ key: string; label: string }> })?.questionnaire || []
           const questionLabels = new Map(
             questionnaire.map((q: { key: string; label: string }) => [q.key, q.label])
           )
@@ -408,7 +417,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
     const docProgress = totalDocs > 0 ? Math.round((uploadedDocs / totalDocs) * 100) : 0
 
     // Calculate estimated completion
-    const slaDays = order?.service_package?.sla_working_days || 7
+    const slaDays = servicePackage?.sla_working_days || 7
     const createdAt = order?.created_at ? new Date(order.created_at) : new Date()
 
     // Check if customer has completed their part (questionnaire + documents)
@@ -449,12 +458,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
       slaStartDate,
       customerSetupComplete,
     }
-  }, [order, documents, questionnaireResponses])
+  }, [order, documents, questionnaireResponses, servicePackage])
 
   // Calculate dynamic dates for each stage
   const calculateStageDate = (stageIndex: number, isStart: boolean = true) => {
     const baseDate = stats.slaStartDate
-    const workflowStages = order?.service_package?.workflow_stages || []
+    const workflowStages = servicePackage?.workflow_stages || []
 
     const stage = workflowStages[stageIndex]
     if (!stage?.timeline) return null
@@ -478,7 +487,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
   // Build timeline stages based on actual progress
   const timelineStages = useMemo(() => {
-    const workflowStages = order?.service_package?.workflow_stages || []
+    const workflowStages = servicePackage?.workflow_stages || []
     const hasQuestionnaireAnswers = questionnaireResponses.length > 0
     const questionnaireCompleted = !!order?.questionnaire_completed_at && hasQuestionnaireAnswers
     const allDocsUploaded = stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0
@@ -532,17 +541,17 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
       return { ...stage, isCompleted, isCurrent, completedDate, expectedDateRange }
     })
-  }, [order, stats, stageHistory, documents, questionnaireResponses])
+  }, [order, stats, stageHistory, documents, questionnaireResponses, servicePackage])
 
   const completedStagesCount = timelineStages.filter(s => s.isCompleted).length
 
   // Calculate active stage key for work documents filtering
   const activeStageKey = useMemo(() => {
-    const workflowStages = order?.service_package?.workflow_stages || []
+    const workflowStages = servicePackage?.workflow_stages || []
     const currentStageIndex = Math.min(completedStagesCount, workflowStages.length - 1)
     const currentStage = workflowStages[currentStageIndex]
     return currentStage?.stage_key || null
-  }, [order?.service_package?.workflow_stages, completedStagesCount])
+  }, [servicePackage?.workflow_stages, completedStagesCount])
 
   const handleDownloadInvoice = async () => {
     if (!invoiceId) return
@@ -780,7 +789,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-2xl font-semibold text-foreground">
-                {order.service_package?.name || 'Order'}
+                {servicePackage?.name || 'Order'}
               </h1>
               <OrderStatusBadge status={order.status} />
             </div>
@@ -928,7 +937,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           <Card>
             <CardContent className="p-6">
               <h2 className="text-xl font-semibold text-foreground mb-4">
-                {order.service_package?.name || 'Order'}
+                {servicePackage?.name || 'Order'}
               </h2>
 
               {/* Progress Bar Segments */}
@@ -1198,8 +1207,8 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           </Card>
 
           {/* Rounds Timeline */}
-          {order.service_package?.id && (
-            <RoundsTimeline orderId={orderId} servicePackageId={order.service_package.id} />
+          {servicePackage?.id && (
+            <RoundsTimeline orderId={orderId} servicePackageId={servicePackage.id} />
           )}
         </div>
 
