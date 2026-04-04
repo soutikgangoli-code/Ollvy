@@ -123,10 +123,11 @@ export default function PaymentSuccessPage() {
         .single()
 
       if (orderError) {
-        // Retry up to 3 times with 1 second delay (handles RLS race condition after payment)
+        // Retry up to 3 times with exponential backoff (handles RLS race condition after payment)
         if (retryCount < 3) {
           console.log(`Order not found, retrying... (attempt ${retryCount + 1})`)
-          await new Promise(resolve => setTimeout(resolve, 1000))
+          const delay = 200 * Math.pow(2, retryCount) // 200ms, 400ms, 800ms
+          await new Promise(resolve => setTimeout(resolve, delay))
           return fetchOrder(retryCount + 1)
         }
         throw orderError
@@ -134,18 +135,21 @@ export default function PaymentSuccessPage() {
 
       const servicePackage = (orderData.service_package as unknown) as { id: string; name: string; slug: string; sla_working_days: number; workflow_stages: unknown[]; has_govt_processing?: boolean; completion_max_days?: number | null; completion_range_text?: string | null }
 
-      // Fetch document counts
-      const { data: docsData } = await supabase
-        .from('order_documents')
-        .select('id, uploaded_at')
-        .eq('order_id', orderId)
+      // Fetch document counts and questionnaire count in parallel
+      const [docsResult, questionResult] = await Promise.all([
+        supabase
+          .from('order_documents')
+          .select('id, uploaded_at')
+          .eq('order_id', orderId),
+        supabase
+          .from('service_questionnaires')
+          .select('id', { count: 'exact', head: true })
+          .eq('service_package_id', servicePackage.id)
+          .eq('is_active', true)
+      ])
 
-      // Check if service has questionnaire questions
-      const { count: questionCount } = await supabase
-        .from('service_questionnaires')
-        .select('id', { count: 'exact', head: true })
-        .eq('service_package_id', servicePackage.id)
-        .eq('is_active', true)
+      const docsData = docsResult.data
+      const questionCount = questionResult.count
 
       const documentsCount = docsData?.length || 0
       const documentsUploaded = docsData?.filter(d => d.uploaded_at)?.length || 0

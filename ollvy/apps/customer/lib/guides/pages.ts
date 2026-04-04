@@ -72,12 +72,12 @@ export const DOCUMENT_CHECKLIST_METADATA: ToolMetadata[] = [
 ];
 
 export const DEADLINE_METADATA: ToolMetadata[] = [
-  { slug: 'director-kyc-2026', title: 'Director KYC 2026', subtitle: 'Due Sep 30, 2026' },
-  { slug: 'itr-2026', title: 'Business ITR 2026', subtitle: 'Due Oct 31, 2026' },
-  { slug: 'gst-annual-2026', title: 'GSTR-9 Annual Return 2026', subtitle: 'Due Dec 31, 2026' },
-  { slug: 'tds-return-q1-2027', title: 'TDS Return Q1 FY2027-28', subtitle: 'Due Jul 31, 2027' },
-  { slug: 'itr-2027', title: 'Business ITR FY2026-27', subtitle: 'Due Oct 31, 2027' },
-  { slug: 'gst-annual-2027', title: 'GSTR-9 Annual Return 2027', subtitle: 'Due Dec 31, 2027' },
+  { slug: 'tds-return-q4-fy2025-26', title: 'TDS Return Q4 FY2025-26', subtitle: 'Due May 31, 2026' },
+  { slug: 'tds-return-q1-fy2026-27', title: 'TDS Return Q1 FY2026-27', subtitle: 'Due Jul 31, 2026' },
+  { slug: 'director-kyc-2026', title: 'Director KYC 2026', subtitle: 'Triennial - Next Jun 30, 2028' },
+  { slug: 'tds-return-q2-fy2026-27', title: 'TDS Return Q2 FY2026-27', subtitle: 'Due Oct 31, 2026' },
+  { slug: 'business-itr-fy2025-26', title: 'Business ITR FY2025-26', subtitle: 'Due Oct 31, 2026' },
+  { slug: 'gstr-9-fy2025-26', title: 'GSTR-9 FY2025-26', subtitle: 'Due Dec 31, 2026' },
 ];
 
 export function getPenaltyCalculatorBySlug(slug: string): ToolMetadata | undefined {
@@ -104,7 +104,11 @@ export type LearnCategory =
   | 'GST Notice'
   | 'Income Tax Notice'
   | 'TDS Notice'
-  | 'ROC Notice';
+  | 'ROC Notice'
+  | 'TDS Filing'
+  | 'Income Tax Filing'
+  | 'ROC Filing'
+  | 'GST Filing';
 
 export type NoticeSeverity = 'urgent' | 'serious' | 'moderate';
 
@@ -206,6 +210,14 @@ import { tds194c194jDemand } from './pages/tds-194c-194j-demand';
 import { rocAnnualFilingDefaultNotice } from './pages/roc-annual-filing-default-notice';
 import { dir3KycDinDeactivation } from './pages/dir-3-kyc-din-deactivation';
 
+// Deadline Guides
+import { tdsQ4FY2526 } from './pages/tds-return-q4-fy2025-26';
+import { tdsQ1FY2627 } from './pages/tds-return-q1-fy2026-27';
+import { directorKYC2026 } from './pages/director-kyc-2026';
+import { tdsQ2FY2627 } from './pages/tds-return-q2-fy2026-27';
+import { businessITRFY2526 } from './pages/business-itr-fy2025-26';
+import { gstr9FY2526 } from './pages/gstr-9-fy2025-26';
+
 export const LEARN_PAGES: LearnPageConfig[] = [
   // Tier 1 - Core Business Decisions
   gstRegistration,
@@ -256,6 +268,14 @@ export const LEARN_PAGES: LearnPageConfig[] = [
   // ROC Notices
   rocAnnualFilingDefaultNotice,
   dir3KycDinDeactivation,
+
+  // Deadline Guides
+  tdsQ4FY2526,
+  tdsQ1FY2627,
+  directorKYC2026,
+  tdsQ2FY2627,
+  businessITRFY2526,
+  gstr9FY2526,
 ];
 
 export function getLearnPageBySlug(slug: string): LearnPageConfig | undefined {

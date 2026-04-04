@@ -205,7 +205,7 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
       try {
         const supabase = getClient()
 
-        // Use the same RPC that /orders page uses - it works!
+        // BATCH 1: Fetch active and completed orders in parallel
         const [activeResult, completedResult] = await Promise.all([
           supabase.rpc('get_user_orders', {
             p_statuses: ['pending_assignment', 'waitlisted', 'in_progress']
@@ -238,88 +238,103 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           service_package: o.service_package,
         }))
 
-        // Fetch retainers - skip columns that don't exist
-        const { data: retainers, error: retainersError } = await supabase
-          .from('retainer_subscriptions')
-          .select(`
-            id,
-            status,
-            monthly_price_paisa,
-            next_billing_date,
-            service_package:service_packages (
-              name
-            )
-          `)
-          .neq('status', 'cancelled')
-
-        if (retainersError) console.error('Error fetching retainers:', retainersError)
-
         // Get order IDs for document queries
         const activeOrderIds = activeOrders.map((o: any) => o.id)
 
-        // Fetch document counts for active orders
+        // BATCH 2: Parallel queries for retainers, doc counts, stages, work docs, all orders, and compliance
+        const [
+          retainersResult,
+          docCountsResult,
+          stagesResult,
+          workDocsResult,
+          allOrdersResult,
+          complianceResult
+        ] = await Promise.all([
+          // Retainers - no dependency
+          supabase
+            .from('retainer_subscriptions')
+            .select(`
+              id,
+              status,
+              monthly_price_paisa,
+              next_billing_date,
+              service_package:service_packages (
+                name
+              )
+            `)
+            .neq('status', 'cancelled'),
+          // Document counts - needs activeOrderIds (empty array is fine for .in())
+          activeOrderIds.length > 0
+            ? supabase
+                .from('order_documents')
+                .select('order_id, uploaded_at')
+                .in('order_id', activeOrderIds)
+                .eq('is_required', true)
+            : Promise.resolve({ data: null, error: null }),
+          // Stage history - needs activeOrderIds
+          activeOrderIds.length > 0
+            ? supabase
+                .from('order_stage_history')
+                .select('order_id, completed_at')
+                .in('order_id', activeOrderIds)
+            : Promise.resolve({ data: null, error: null }),
+          // Work docs - needs activeOrderIds
+          activeOrderIds.length > 0
+            ? supabase
+                .from('order_work_documents')
+                .select('order_id, status')
+                .in('order_id', activeOrderIds)
+                .eq('direction', 'from_customer')
+            : Promise.resolve({ data: null, error: null }),
+          // All orders - no dependency
+          supabase
+            .from('orders')
+            .select('id, order_number, service_package:service_packages(name)')
+            .order('created_at', { ascending: false }),
+          // Compliance - no dependency
+          supabase
+            .from('compliance_obligations')
+            .select('id, status, due_date')
+            .order('due_date', { ascending: true })
+        ])
+
+        if (retainersResult.error) console.error('Error fetching retainers:', retainersResult.error)
+
+        // Process document counts
         let docCounts: Record<string, { total: number; uploaded: number }> = {}
-        if (activeOrderIds.length > 0) {
-          const { data: docs } = await supabase
-            .from('order_documents')
-            .select('order_id, uploaded_at')
-            .in('order_id', activeOrderIds)
-            .eq('is_required', true)
-
-          if (docs) {
-            docs.forEach(d => {
-              if (!docCounts[d.order_id]) {
-                docCounts[d.order_id] = { total: 0, uploaded: 0 }
-              }
-              docCounts[d.order_id].total++
-              if (d.uploaded_at) docCounts[d.order_id].uploaded++
-            })
-          }
+        if (docCountsResult.data) {
+          docCountsResult.data.forEach((d: any) => {
+            if (!docCounts[d.order_id]) {
+              docCounts[d.order_id] = { total: 0, uploaded: 0 }
+            }
+            docCounts[d.order_id].total++
+            if (d.uploaded_at) docCounts[d.order_id].uploaded++
+          })
         }
 
-        // Fetch stage histories for active orders
+        // Process stage histories
         let stageHistories: Record<string, number> = {}
-        if (activeOrderIds.length > 0) {
-          const { data: stages } = await supabase
-            .from('order_stage_history')
-            .select('order_id, completed_at')
-            .in('order_id', activeOrderIds)
-
-          if (stages) {
-            stages.forEach(s => {
-              if (s.completed_at) {
-                stageHistories[s.order_id] = (stageHistories[s.order_id] || 0) + 1
-              }
-            })
-          }
+        if (stagesResult.data) {
+          stagesResult.data.forEach((s: any) => {
+            if (s.completed_at) {
+              stageHistories[s.order_id] = (stageHistories[s.order_id] || 0) + 1
+            }
+          })
         }
 
-        // Fetch work document counts for active orders
+        // Process work document counts
         let workDocCounts: Record<string, { pending: number; rejected: number }> = {}
-        if (activeOrderIds.length > 0) {
-          const { data: workDocs } = await supabase
-            .from('order_work_documents')
-            .select('order_id, status')
-            .in('order_id', activeOrderIds)
-            .eq('direction', 'from_customer')
-
-          if (workDocs) {
-            workDocs.forEach(w => {
-              if (!workDocCounts[w.order_id]) {
-                workDocCounts[w.order_id] = { pending: 0, rejected: 0 }
-              }
-              if (w.status === 'pending') workDocCounts[w.order_id].pending++
-              if (w.status === 'rejected') workDocCounts[w.order_id].rejected++
-            })
-          }
+        if (workDocsResult.data) {
+          workDocsResult.data.forEach((w: any) => {
+            if (!workDocCounts[w.order_id]) {
+              workDocCounts[w.order_id] = { pending: 0, rejected: 0 }
+            }
+            if (w.status === 'pending') workDocCounts[w.order_id].pending++
+            if (w.status === 'rejected') workDocCounts[w.order_id].rejected++
+          })
         }
 
-        // Fetch document groups for vault
-        const { data: allOrders } = await supabase
-          .from('orders')
-          .select('id, order_number, service_package:service_packages(name)')
-          .order('created_at', { ascending: false })
-
+        // BATCH 3: Vault documents (depends on allOrders result)
         let documentGroups: Array<{
           order_id: string
           order_number: string
@@ -333,6 +348,7 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           }>
         }> = []
 
+        const allOrders = allOrdersResult.data
         if (allOrders && allOrders.length > 0) {
           const orderIds = allOrders.map(o => o.id)
           const { data: vaultDocs } = await supabase
@@ -371,27 +387,13 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
         }
 
         // Transform retainers data (Supabase returns joined data as arrays)
-        const transformedRetainers = (retainers || []).map((r: any) => ({
+        const transformedRetainers = (retainersResult.data || []).map((r: any) => ({
           ...r,
           service_package: Array.isArray(r.service_package) ? r.service_package[0] : r.service_package,
         }))
 
-        // Seed and fetch compliance obligations
-        let complianceObligations: ComplianceObligation[] = []
-        try {
-          // Seed compliance obligations (idempotent - won't duplicate)
-          await supabase.functions.invoke('seed-compliance-obligations')
-
-          // Fetch compliance obligations
-          const { data: complianceData } = await supabase
-            .from('compliance_obligations')
-            .select('id, status, due_date')
-            .order('due_date', { ascending: true })
-
-          complianceObligations = complianceData || []
-        } catch (err) {
-          console.error('Error fetching compliance:', err)
-        }
+        // Process compliance obligations
+        const complianceObligations: ComplianceObligation[] = complianceResult.data || []
 
         setDashboardData({
           active_orders: activeOrders as DashboardData['active_orders'],

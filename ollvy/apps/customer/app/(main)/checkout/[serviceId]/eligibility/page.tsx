@@ -71,7 +71,10 @@ export default function EligibilityPage() {
 
         if (countError) {
           console.error('Error checking pre-payment questions:', countError)
-          setHasPrePaymentQuestions(false)
+          // Don't redirect on error - stay in loading state and retry
+          // Set to null to indicate "unknown" rather than "definitely none"
+          setHasPrePaymentQuestions(null)
+          setError('Failed to load eligibility questions. Please refresh the page.')
         } else {
           setHasPrePaymentQuestions((count ?? 0) > 0)
         }
@@ -98,12 +101,13 @@ export default function EligibilityPage() {
 
   // Redirect to checkout if no pre-payment questions
   useEffect(() => {
-    if (hasPrePaymentQuestions === false && service) {
-      // No pre-payment questions - redirect to checkout
+    // Only redirect if we DEFINITELY know there are no pre-payment questions
+    // (not on error, not on null/undefined)
+    if (hasPrePaymentQuestions === false && service && !error) {
       const checkoutUrl = `/checkout/${serviceId}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
       router.replace(checkoutUrl)
     }
-  }, [hasPrePaymentQuestions, service, serviceId, router, searchParams])
+  }, [hasPrePaymentQuestions, service, serviceId, router, searchParams, error])
 
   // Handle completion of pre-payment questionnaire
   const handleComplete = useCallback((answers: Record<string, unknown>) => {
@@ -137,14 +141,28 @@ export default function EligibilityPage() {
     )
   }
 
-  // Error state
-  if (error || !service) {
+  // Error state - service not found
+  if (!service) {
     return (
       <div className="container max-w-3xl mx-auto py-12 px-4">
         <div className="rounded-xl border border-destructive/50 bg-destructive/5 p-8 text-center">
           <p className="text-destructive mb-4">{error || 'Service not found'}</p>
           <Button asChild>
             <Link href="/services">Browse Services</Link>
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state - pre-payment questions check failed (but service loaded)
+  if (error && service) {
+    return (
+      <div className="container max-w-3xl mx-auto py-12 px-4">
+        <div className="rounded-xl border border-destructive/50 bg-destructive/5 p-8 text-center">
+          <p className="text-destructive mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Retry
           </Button>
         </div>
       </div>

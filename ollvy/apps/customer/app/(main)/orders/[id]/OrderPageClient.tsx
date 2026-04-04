@@ -142,88 +142,78 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
       try {
         const supabase = getClient()
 
-        // Use the same RPC that /orders page uses - it works!
-        // Fetch all orders and find the one we need
-        const { data: allOrders, error: ordersError } = await supabase.rpc('get_user_orders')
+        // Batch 1: Fetch all independent data in parallel
+        const [orderResult, stageResult, docsResult, workDocsResult] = await Promise.all([
+          // Direct query for single order instead of fetching ALL orders via RPC
+          supabase
+            .from('orders')
+            .select(`
+              *,
+              service_package:service_packages(*),
+              professional:professionals(*)
+            `)
+            .eq('id', orderId)
+            .single(),
+          supabase
+            .from('order_stage_history')
+            .select('*')
+            .eq('order_id', orderId)
+            .order('started_at', { ascending: true }),
+          supabase
+            .from('order_documents')
+            .select('*')
+            .eq('order_id', orderId)
+            .order('created_at', { ascending: true }),
+          supabase
+            .from('order_work_documents')
+            .select('*')
+            .eq('order_id', orderId)
+            .order('created_at', { ascending: false })
+        ])
 
-        if (ordersError) {
-          console.error('Error fetching orders:', ordersError)
-          setError('There was an error loading the order details. Please try again.')
-          return
-        }
-
-        // Find the specific order by ID
-        const ordersArray = Array.isArray(allOrders) ? allOrders : []
-        const orderData = ordersArray.find((o: any) => o.id === orderId)
-
-        if (!orderData) {
+        if (orderResult.error) {
+          console.error('Error fetching order:', orderResult.error)
           setError('Order not found or you do not have access to it.')
           return
         }
 
+        const orderData = orderResult.data
         setOrder(orderData as Order)
+        setStageHistory(stageResult.data || [])
+        setDocuments(docsResult.data || [])
+        setWorkDocuments(workDocsResult.data || [])
 
-        // Fetch stage history
-        const { data: stageData } = await supabase
-          .from('order_stage_history')
-          .select('*')
-          .eq('order_id', orderId)
-          .order('started_at', { ascending: true })
-
-        setStageHistory(stageData || [])
-
-        // Fetch documents
-        const { data: docsData } = await supabase
-          .from('order_documents')
-          .select('*')
-          .eq('order_id', orderId)
-          .order('created_at', { ascending: true })
-
-        setDocuments(docsData || [])
-
-        // Fetch all work documents (including round deliverables)
-        const { data: workDocsData } = await supabase
-          .from('order_work_documents')
-          .select('*')
-          .eq('order_id', orderId)
-          .order('created_at', { ascending: false })
-
-        setWorkDocuments(workDocsData || [])
-
-        // Fetch invoice ID (table might not exist in production - fail silently)
-        try {
-          const { data: invoiceData } = await supabase
+        // Batch 2: Optional data - use Promise.allSettled to fail silently
+        const [invoiceResult, notificationResult, responsesResult] = await Promise.allSettled([
+          supabase
             .from('invoices')
             .select('id')
             .eq('order_id', orderId)
-            .maybeSingle()
-          setInvoiceId(invoiceData?.id || null)
-        } catch {
-          // Invoice table might not exist
-        }
-
-        // Fetch round notification (fail silently if table doesn't exist)
-        try {
-          const { data: notificationData } = await supabase
+            .maybeSingle(),
+          supabase
             .from('round_notifications')
             .select('*')
             .eq('order_id', orderId)
             .eq('is_dismissed', false)
             .order('created_at', { ascending: false })
             .limit(1)
-            .maybeSingle()
-          setRoundNotification(notificationData)
-        } catch {
-          // Round notifications table might not exist
-        }
-
-        // Fetch questionnaire responses (fail silently if table doesn't exist)
-        try {
-          const { data: responsesData } = await supabase
+            .maybeSingle(),
+          supabase
             .from('order_questionnaire_responses')
             .select('question_key, response_value')
             .eq('order_id', orderId)
+        ])
 
+        // Process optional results
+        if (invoiceResult.status === 'fulfilled' && invoiceResult.value.data) {
+          setInvoiceId(invoiceResult.value.data.id || null)
+        }
+
+        if (notificationResult.status === 'fulfilled') {
+          setRoundNotification(notificationResult.value.data)
+        }
+
+        if (responsesResult.status === 'fulfilled' && responsesResult.value.data) {
           // Use questionnaire from order's service_package if available
           const servicePackage = orderData.service_package as { questionnaire?: Array<{ key: string; label: string }> } | undefined
           const questionnaire = servicePackage?.questionnaire || []
@@ -231,14 +221,12 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
             questionnaire.map((q: { key: string; label: string }) => [q.key, q.label])
           )
 
-          const responses = (responsesData || []).map((r: { question_key: string; response_value: string | string[] }) => ({
+          const responses = (responsesResult.value.data || []).map((r: { question_key: string; response_value: string | string[] }) => ({
             question_key: r.question_key,
             question_label: questionLabels.get(r.question_key) || r.question_key,
             response_value: r.response_value,
           }))
           setQuestionnaireResponses(responses)
-        } catch {
-          // Questionnaire responses table might not exist
         }
       } catch (err) {
         console.error('Failed to fetch order:', err)
@@ -560,56 +548,52 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
   }
 
   const handleRefresh = async () => {
-    // Refresh work documents and order data
+    // Refresh all data in parallel
     try {
       const supabase = getClient()
 
-      // Refresh order using RPC
-      const { data: allOrders } = await supabase.rpc('get_user_orders')
-      const ordersArray = Array.isArray(allOrders) ? allOrders : []
-      const orderData = ordersArray.find((o: any) => o.id === orderId)
+      // Fetch all data in parallel
+      const [orderResult, stageResult, docsResult, workDocsResult, notificationResult] = await Promise.all([
+        // Direct query for single order
+        supabase
+          .from('orders')
+          .select(`
+            *,
+            service_package:service_packages(*),
+            professional:professionals(*)
+          `)
+          .eq('id', orderId)
+          .single(),
+        supabase
+          .from('order_stage_history')
+          .select('*')
+          .eq('order_id', orderId)
+          .order('started_at', { ascending: true }),
+        supabase
+          .from('order_documents')
+          .select('*')
+          .eq('order_id', orderId)
+          .order('created_at', { ascending: true }),
+        supabase
+          .from('order_work_documents')
+          .select('*')
+          .eq('order_id', orderId)
+          .order('created_at', { ascending: false }),
+        supabase
+          .from('round_notifications')
+          .select('*')
+          .eq('order_id', orderId)
+          .eq('is_dismissed', false)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+      ])
 
-      if (orderData) setOrder(orderData as Order)
-
-      // Refresh stage history
-      const { data: stageData } = await supabase
-        .from('order_stage_history')
-        .select('*')
-        .eq('order_id', orderId)
-        .order('started_at', { ascending: true })
-
-      if (stageData) setStageHistory(stageData)
-
-      // Refresh documents
-      const { data: docsData } = await supabase
-        .from('order_documents')
-        .select('*')
-        .eq('order_id', orderId)
-        .order('created_at', { ascending: true })
-
-      if (docsData) setDocuments(docsData)
-
-      // Refresh work documents
-      const { data: workDocsData } = await supabase
-        .from('order_work_documents')
-        .select('*')
-        .eq('order_id', orderId)
-        .is('round_id', null)
-        .order('created_at', { ascending: false })
-
-      if (workDocsData) setWorkDocuments(workDocsData)
-
-      // Refresh round notification
-      const { data: notificationData } = await supabase
-        .from('round_notifications')
-        .select('*')
-        .eq('order_id', orderId)
-        .eq('is_dismissed', false)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
-      setRoundNotification(notificationData)
+      if (orderResult.data) setOrder(orderResult.data as Order)
+      if (stageResult.data) setStageHistory(stageResult.data)
+      if (docsResult.data) setDocuments(docsResult.data)
+      if (workDocsResult.data) setWorkDocuments(workDocsResult.data)
+      setRoundNotification(notificationResult.data)
     } catch (err) {
       console.error('Failed to refresh:', err)
     }

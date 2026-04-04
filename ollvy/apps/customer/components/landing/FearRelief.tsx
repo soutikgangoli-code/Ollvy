@@ -29,102 +29,102 @@ export function FearRelief() {
               </span>
             </div>
 
-            {/* WhatsApp chat card */}
-            <div className="rounded-2xl overflow-hidden border border-border/50 bg-card shadow-md flex-1 flex flex-col">
+            {/* WhatsApp chat card - intentionally NOT theme-aware to mimic real WhatsApp */}
+            <div className="rounded-2xl overflow-hidden border border-zinc-200 bg-white shadow-md flex-1 flex flex-col">
               {/* WhatsApp header */}
-              <div className="px-3 py-2 flex items-center gap-2 border-b border-border">
-                <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center text-muted-foreground font-medium text-[10px]">
+              <div className="px-3 py-2 flex items-center gap-2 border-b border-zinc-100 bg-zinc-50">
+                <div className="w-7 h-7 rounded-full bg-zinc-200 flex items-center justify-center text-zinc-500 font-medium text-[10px]">
                   CS
                 </div>
                 <div>
-                  <p className="font-medium text-foreground text-[11px]">CA Sharma</p>
-                  <p className="text-[9px] text-muted-foreground">Last seen today at 8:37 AM</p>
+                  <p className="font-medium text-zinc-900 text-[11px]">CA Sharma</p>
+                  <p className="text-[9px] text-zinc-500">Last seen today at 8:37 AM</p>
                 </div>
               </div>
 
               {/* Chat area - WhatsApp style background */}
-              <div className="p-2 space-y-1.5 flex-1 bg-cover bg-center" style={{ backgroundImage: `url('/images/whatsapp-bg.jpg')` }}>
+              <div className="p-2 space-y-1.5 flex-1 bg-[#e5ddd5] bg-cover bg-center" style={{ backgroundImage: `url('/images/whatsapp-bg.jpg')` }}>
 
                 {/* Date: Tuesday, 18 Oct */}
                 <div className="flex justify-center">
-                  <span className="text-[9px] bg-card/80 backdrop-blur-sm text-muted-foreground px-1.5 py-0.5 rounded shadow-sm">
+                  <span className="text-[9px] bg-white/90 backdrop-blur-sm text-zinc-600 px-1.5 py-0.5 rounded shadow-sm">
                     Tuesday, 18 Oct
                   </span>
                 </div>
 
                 {/* User message */}
                 <div className="flex justify-end">
-                  <div className="bg-emerald-100 dark:bg-emerald-900/70 rounded-lg px-2 py-1.5 max-w-[85%] shadow-sm">
-                    <p className="text-[11px] text-foreground leading-tight">Hi Sharma ji, Q2 GST return file hua? Deadline is the 20th</p>
-                    <p className="text-[8px] text-muted-foreground text-right">10:23 AM ✓✓</p>
+                  <div className="bg-[#dcf8c6] rounded-lg px-2 py-1.5 max-w-[85%] shadow-sm">
+                    <p className="text-[11px] text-zinc-900 leading-tight">Hi Sharma ji, Q2 GST return file hua? Deadline is the 20th</p>
+                    <p className="text-[8px] text-zinc-500 text-right">10:23 AM ✓✓</p>
                   </div>
                 </div>
 
                 {/* Date: Wednesday, 19 Oct */}
                 <div className="flex justify-center">
-                  <span className="text-[9px] bg-card/80 backdrop-blur-sm text-muted-foreground px-1.5 py-0.5 rounded shadow-sm">
+                  <span className="text-[9px] bg-white/90 backdrop-blur-sm text-zinc-600 px-1.5 py-0.5 rounded shadow-sm">
                     Wednesday, 19 Oct
                   </span>
                 </div>
 
                 {/* User message - question mark */}
                 <div className="flex justify-end">
-                  <div className="bg-emerald-100 dark:bg-emerald-900/70 rounded-lg px-2 py-1.5 shadow-sm">
-                    <p className="text-[11px] text-foreground">?</p>
-                    <p className="text-[8px] text-muted-foreground text-right">11:02 AM ✓✓ Read</p>
+                  <div className="bg-[#dcf8c6] rounded-lg px-2 py-1.5 shadow-sm">
+                    <p className="text-[11px] text-zinc-900">?</p>
+                    <p className="text-[8px] text-zinc-500 text-right">11:02 AM ✓✓ Read</p>
                   </div>
                 </div>
 
                 {/* User message */}
                 <div className="flex justify-end">
-                  <div className="bg-emerald-100 dark:bg-emerald-900/70 rounded-lg px-2 py-1.5 max-w-[85%] shadow-sm">
-                    <p className="text-[11px] text-foreground leading-tight">Please confirm, deadline is tomorrow</p>
-                    <p className="text-[8px] text-muted-foreground text-right">2:47 PM ✓✓ Read</p>
+                  <div className="bg-[#dcf8c6] rounded-lg px-2 py-1.5 max-w-[85%] shadow-sm">
+                    <p className="text-[11px] text-zinc-900 leading-tight">Please confirm, deadline is tomorrow</p>
+                    <p className="text-[8px] text-zinc-500 text-right">2:47 PM ✓✓ Read</p>
                   </div>
                 </div>
 
                 {/* CA response */}
                 <div className="flex justify-start">
-                  <div className="bg-card rounded-lg px-2 py-1.5 shadow-sm">
-                    <p className="text-[11px] text-foreground leading-tight">Kal tak ho jayega <span role="img" aria-label="thumbs up">👍</span></p>
-                    <p className="text-[8px] text-muted-foreground">6:12 PM</p>
+                  <div className="bg-white rounded-lg px-2 py-1.5 shadow-sm">
+                    <p className="text-[11px] text-zinc-900 leading-tight">Kal tak ho jayega <span role="img" aria-label="thumbs up">👍</span></p>
+                    <p className="text-[8px] text-zinc-500">6:12 PM</p>
                   </div>
                 </div>
 
                 {/* Date: Thursday, 20 Oct - Deadline missed */}
                 <div className="flex justify-center">
-                  <span className="text-[9px] bg-card/80 backdrop-blur-sm text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded shadow-sm font-medium">
+                  <span className="text-[9px] bg-white/90 backdrop-blur-sm text-red-600 px-1.5 py-0.5 rounded shadow-sm font-medium">
                     Thursday, 20 Oct - Deadline missed
                   </span>
                 </div>
 
                 {/* PDF attachment with penalty - sent by USER (right side) */}
                 <div className="flex justify-end">
-                  <div className="bg-red-100 dark:bg-red-900/50 rounded-lg overflow-hidden shadow-sm max-w-[90%] border-l-2 border-red-500">
+                  <div className="bg-red-100 rounded-lg overflow-hidden shadow-sm max-w-[90%] border-l-2 border-red-500">
                     {/* PDF header */}
                     <div className="flex items-center gap-2 p-2">
-                      <div className="w-7 h-7 rounded-lg bg-card/60 dark:bg-red-900/30 flex items-center justify-center">
+                      <div className="w-7 h-7 rounded-lg bg-white/60 flex items-center justify-center">
                         <FileText className="h-3.5 w-3.5 text-red-400" />
                       </div>
                       <div>
-                        <p className="text-[11px] font-medium text-foreground leading-tight">Late_Filing_Notice_GSTR3B.pdf</p>
-                        <p className="text-[8px] text-muted-foreground">PDF - 84 KB - GST Portal</p>
+                        <p className="text-[11px] font-medium text-zinc-900 leading-tight">Late_Filing_Notice_GSTR3B.pdf</p>
+                        <p className="text-[8px] text-zinc-500">PDF - 84 KB - GST Portal</p>
                       </div>
                     </div>
                     {/* Penalty box - white fill */}
-                    <div className="mx-2 mb-1.5 px-2 py-1.5 bg-card rounded-md">
-                      <p className="text-[10px] text-red-500 dark:text-red-400">Penalty levied under Section 47</p>
-                      <p className="text-[11px] font-bold text-foreground">Amount due: ₹10,000</p>
+                    <div className="mx-2 mb-1.5 px-2 py-1.5 bg-white rounded-md">
+                      <p className="text-[10px] text-red-500">Penalty levied under Section 47</p>
+                      <p className="text-[11px] font-bold text-zinc-900">Amount due: ₹10,000</p>
                     </div>
-                    <p className="text-[8px] text-muted-foreground text-right px-2 pb-1.5">9:14 AM ✓✓ Read</p>
+                    <p className="text-[8px] text-zinc-500 text-right px-2 pb-1.5">9:14 AM ✓✓ Read</p>
                   </div>
                 </div>
 
                 {/* User final message */}
                 <div className="flex justify-end">
-                  <div className="bg-emerald-100 dark:bg-emerald-900/70 rounded-lg px-2 py-1.5 max-w-[85%] shadow-sm">
-                    <p className="text-[11px] text-foreground leading-tight">Sharma ji ye dekho. Please call karo abhi.</p>
-                    <p className="text-[8px] text-muted-foreground text-right">9:16 AM ✓✓ Read</p>
+                  <div className="bg-[#dcf8c6] rounded-lg px-2 py-1.5 max-w-[85%] shadow-sm">
+                    <p className="text-[11px] text-zinc-900 leading-tight">Sharma ji ye dekho. Please call karo abhi.</p>
+                    <p className="text-[8px] text-zinc-500 text-right">9:16 AM ✓✓ Read</p>
                   </div>
                 </div>
 

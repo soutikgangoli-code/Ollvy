@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 
 const CATEGORY_ORDER: LearnCategory[] = [
   'GST', 'Incorporation', 'Startup', 'Licensing', 'Tax', 'Compliance', 'Payroll', 'Registration',
+  'TDS Filing', 'Income Tax Filing', 'ROC Filing', 'GST Filing',
   'GST Notice', 'Income Tax Notice', 'TDS Notice', 'ROC Notice',
 ];
 
@@ -35,6 +36,10 @@ const CATEGORY_LABELS: Record<LearnCategory, string> = {
   Compliance: 'Compliance',
   Payroll: 'Payroll',
   Registration: 'Registration',
+  'TDS Filing': 'TDS Filing Deadlines',
+  'Income Tax Filing': 'Income Tax Filing Deadlines',
+  'ROC Filing': 'ROC Filing Deadlines',
+  'GST Filing': 'GST Filing Deadlines',
   'GST Notice': 'GST Notices',
   'Income Tax Notice': 'Income Tax Notices',
   'TDS Notice': 'TDS Notices',
