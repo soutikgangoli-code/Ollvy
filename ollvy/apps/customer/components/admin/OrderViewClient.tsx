@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -176,6 +176,43 @@ export function OrderViewClient({
   // Note state
   const [newNote, setNewNote] = useState('')
   const [quickUploadOpen, setQuickUploadOpen] = useState(false)
+
+  // Chat conversation state (with polling fallback)
+  const [chatConversationId, setChatConversationId] = useState<string | null>(
+    order.chat_conversation_id
+  )
+
+  // Fallback polling for chat_conversation_id
+  // Ensures chat appears even if realtime has issues or page loaded before webhook completed
+  useEffect(() => {
+    // Only poll if chat_conversation_id is missing
+    if (chatConversationId || !order.id) return
+
+    // Don't poll for orders that shouldn't have chat yet
+    if (order.status === 'pending_payment' || order.status === 'waitlisted') return
+
+    const supabase = getClient()
+
+    const pollForChat = async () => {
+      const { data } = await supabase
+        .from('orders')
+        .select('chat_conversation_id')
+        .eq('id', order.id)
+        .single()
+
+      if (data?.chat_conversation_id) {
+        setChatConversationId(data.chat_conversation_id)
+      }
+    }
+
+    // Poll every 3 seconds until chat_conversation_id is set
+    const interval = setInterval(pollForChat, 3000)
+
+    // Also poll immediately on mount
+    pollForChat()
+
+    return () => clearInterval(interval)
+  }, [order.id, order.status, chatConversationId])
 
   // Check if final output exists
   const hasFinalOutput = rounds.some(r =>
@@ -797,14 +834,14 @@ export function OrderViewClient({
 
       {/* RIGHT PANEL - 40% Chat */}
       <div className="w-[40%] flex flex-col h-full">
-        {order.chat_conversation_id ? (
+        {chatConversationId ? (
           <div className="flex flex-col h-full">
             <div className="flex items-center justify-between px-4 py-3 border-b shrink-0">
               <span className="font-medium text-sm">Order Chat</span>
               <Badge variant="destructive" className="text-xs">User can see this</Badge>
             </div>
             <AdminChatWindow
-              conversationId={order.chat_conversation_id}
+              conversationId={chatConversationId}
               adminUser={{
                 id: adminUser.id,
                 auth_user_id: adminUser.auth_user_id,

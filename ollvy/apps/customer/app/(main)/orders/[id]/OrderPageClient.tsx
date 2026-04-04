@@ -334,6 +334,38 @@ export function OrderPageClient({ orderId }: OrderPageClientProps) {
     }
   }, [orderId])
 
+  // Fallback polling for chat_conversation_id
+  // Ensures chat appears even if realtime has issues
+  useEffect(() => {
+    // Only poll if order exists but chat_conversation_id is missing
+    if (order?.chat_conversation_id || !order?.id) return
+
+    // Don't poll for orders that shouldn't have chat yet (unpaid/waitlisted)
+    if (order.status === 'pending_payment' || order.status === 'waitlisted') return
+
+    const supabase = getClient()
+
+    const pollForChat = async () => {
+      const { data } = await supabase
+        .from('orders')
+        .select('chat_conversation_id')
+        .eq('id', order.id)
+        .single()
+
+      if (data?.chat_conversation_id) {
+        setOrder(prev => prev ? { ...prev, chat_conversation_id: data.chat_conversation_id } : prev)
+      }
+    }
+
+    // Poll every 3 seconds until chat_conversation_id is set
+    const interval = setInterval(pollForChat, 3000)
+
+    // Also poll immediately on mount
+    pollForChat()
+
+    return () => clearInterval(interval)
+  }, [order?.id, order?.chat_conversation_id, order?.status])
+
   // Calculate progress stats
   const stats = useMemo(() => {
     const totalDocs = documents.length
