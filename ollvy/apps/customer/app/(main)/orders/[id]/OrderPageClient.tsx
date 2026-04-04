@@ -33,7 +33,7 @@ import { DocumentPreview } from '@/components/documents'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { formatPaisa, formatDate, cn } from '@/lib/utils'
-import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
+import type { Order, OrderStageHistory, OrderWorkDocument, WorkflowDisplayStage } from '@/lib/types'
 import { WorkDocumentsSection } from '@/components/orders/WorkDocumentsSection'
 import { RoundNotificationBanner } from '@/components/orders/RoundNotificationBanner'
 import { FinalOutputBanner } from '@/components/orders/FinalOutputBanner'
@@ -492,7 +492,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
     const questionnaireCompleted = !!order?.questionnaire_completed_at && hasQuestionnaireAnswers
     const allDocsUploaded = stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0
 
-    return workflowStages.map((stage, index) => {
+    return workflowStages.map((stage: WorkflowDisplayStage, index: number) => {
       let isCompleted = false
       let isCurrent = false
       let completedDate: string | null = null
