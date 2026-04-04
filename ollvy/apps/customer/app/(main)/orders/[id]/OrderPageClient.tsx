@@ -101,6 +101,13 @@ interface QuestionLabel {
   question_label: string
 }
 
+interface TimelineStage extends WorkflowDisplayStage {
+  isCompleted: boolean
+  isCurrent: boolean
+  completedDate: string | null
+  expectedDateRange: string | null
+}
+
 interface OrderFullDetails {
   order: Order
   stage_history: OrderStageHistory[]
@@ -543,7 +550,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
     })
   }, [order, stats, stageHistory, documents, questionnaireResponses, servicePackage])
 
-  const completedStagesCount = timelineStages.filter((s: { isCompleted: boolean }) => s.isCompleted).length
+  const completedStagesCount = timelineStages.filter((s: TimelineStage) => s.isCompleted).length
 
   // Calculate active stage key for work documents filtering
   const activeStageKey = useMemo(() => {
@@ -942,7 +949,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
               {/* Progress Bar Segments */}
               <div className="flex gap-1 mb-3">
-                {timelineStages.map((stage, index) => (
+                {timelineStages.map((stage: TimelineStage, index: number) => (
                   <div
                     key={stage.step}
                     className={cn(
@@ -960,7 +967,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
               {/* Stage Info Row */}
               <div className="flex items-center justify-between mb-4">
                 <p className="text-sm text-muted-foreground">
-                  Stage {completedStagesCount + (timelineStages.some(s => s.isCurrent) ? 1 : 0)} of {timelineStages.length}
+                  Stage {completedStagesCount + (timelineStages.some((s: TimelineStage) => s.isCurrent) ? 1 : 0)} of {timelineStages.length}
                 </p>
                 <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
                   {order.status === 'completed' ? 'Completed' : 'In Progress'}
@@ -1006,7 +1013,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
             </CardHeader>
             <CardContent>
               <div className="space-y-0">
-                {timelineStages.map((stage, index) => {
+                {timelineStages.map((stage: TimelineStage, index: number) => {
                   const isQuestionsStage = index === 0
                   const isDocumentsStage = index === 1
 
