@@ -286,17 +286,30 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     _isRefreshingSession = true
 
     // Check for freshLogin URL param (set by /auth/callback after OAuth)
-    const isFreshLogin = typeof window !== 'undefined' &&
-      new URLSearchParams(window.location.search).get('freshLogin') === '1'
+    // Also check sessionStorage in case URL param was consumed by a previous render (React Strict Mode)
+    const FRESH_LOGIN_KEY = 'ollvy_fresh_login'
+    let isFreshLogin = false
+
+    if (typeof window !== 'undefined') {
+      const urlHasFreshLogin = new URLSearchParams(window.location.search).get('freshLogin') === '1'
+      const storageHasFreshLogin = sessionStorage.getItem(FRESH_LOGIN_KEY) === '1'
+
+      isFreshLogin = urlHasFreshLogin || storageHasFreshLogin
+
+      // If URL has freshLogin, store it in sessionStorage for resilience
+      if (urlHasFreshLogin) {
+        sessionStorage.setItem(FRESH_LOGIN_KEY, '1')
+      }
+
+      // Remove freshLogin param from URL to prevent banner on refresh
+      if (urlHasFreshLogin) {
+        const url = new URL(window.location.href)
+        url.searchParams.delete('freshLogin')
+        window.history.replaceState({}, '', url.toString())
+      }
+    }
 
     console.log('[auth-store] isFreshLogin:', isFreshLogin, 'URL:', typeof window !== 'undefined' ? window.location.href : 'SSR')
-
-    // Remove freshLogin param from URL to prevent banner on refresh
-    if (isFreshLogin && typeof window !== 'undefined') {
-      const url = new URL(window.location.href)
-      url.searchParams.delete('freshLogin')
-      window.history.replaceState({}, '', url.toString())
-    }
 
     set({ isLoading: true })
     console.log('[auth-store] refreshSession starting')
@@ -321,6 +334,11 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
         const shouldShowBanner = isFreshLogin && session !== null
         console.log('[auth-store] shouldShowBanner:', shouldShowBanner, 'isFreshLogin:', isFreshLogin, 'hasSession:', !!session)
 
+        // Clear the fresh login flag from sessionStorage once we've processed it
+        if (shouldShowBanner && typeof window !== 'undefined') {
+          sessionStorage.removeItem('ollvy_fresh_login')
+        }
+
         set({
           session,
           user: userData || null,
@@ -330,6 +348,10 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
           showLoginSuccessBanner: shouldShowBanner,
         })
       } else {
+        // Clear fresh login flag if no session (shouldn't happen but be safe)
+        if (typeof window !== 'undefined') {
+          sessionStorage.removeItem('ollvy_fresh_login')
+        }
         set({
           session: null,
           user: null,
@@ -340,6 +362,10 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
       }
     } catch (error) {
       console.error('[auth-store] refreshSession error:', error)
+      // Clear fresh login flag on error
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('ollvy_fresh_login')
+      }
       set({ isLoading: false, isHydrated: true })
     } finally {
       _isRefreshingSession = false
