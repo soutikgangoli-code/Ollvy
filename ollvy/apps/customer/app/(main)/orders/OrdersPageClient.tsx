@@ -11,11 +11,19 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 import type { Order } from '@/lib/types'
 import { Package, ArrowRight, ArrowLeft } from 'lucide-react'
 
-export function OrdersPageClient() {
+interface OrdersPageClientProps {
+  initialData?: { active: Order[]; completed: Order[] } | null
+}
+
+export function OrdersPageClient({ initialData }: OrdersPageClientProps) {
   const { session, user, isHydrated, isLoading: authLoading } = useAuthStore()
-  const [activeOrders, setActiveOrders] = useState<Order[]>([])
-  const [completedOrders, setCompletedOrders] = useState<Order[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+
+  // Initialize with server data if available
+  const [activeOrders, setActiveOrders] = useState<Order[]>(initialData?.active || [])
+  const [completedOrders, setCompletedOrders] = useState<Order[]>(initialData?.completed || [])
+
+  // Only show loading if no initial data provided
+  const [isLoading, setIsLoading] = useState(!initialData)
 
   // Scroll to top on mount
   useEffect(() => {
@@ -23,6 +31,9 @@ export function OrdersPageClient() {
   }, [])
 
   useEffect(() => {
+    // Skip client fetch if server already provided data
+    if (initialData) return
+
     // Wait for auth to fully hydrate and load
     if (!isHydrated || authLoading) return
 
@@ -33,7 +44,7 @@ export function OrdersPageClient() {
     } else {
       setIsLoading(false)
     }
-  }, [session, isHydrated, authLoading])
+  }, [session, isHydrated, authLoading, initialData])
 
   const fetchOrders = async () => {
     if (!session) return

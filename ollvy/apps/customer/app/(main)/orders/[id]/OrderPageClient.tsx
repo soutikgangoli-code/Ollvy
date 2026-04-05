@@ -58,6 +58,7 @@ import {
   FolderOpen,
   Info,
   Loader2,
+  MessageSquare,
 } from 'lucide-react'
 
 interface OrderDocument {
@@ -1224,9 +1225,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           {order.professional_id && (
             <div className="rounded-xl border border-border bg-card overflow-hidden">
               <div className="px-6 py-4 border-b border-border/50">
-                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                  Assigned Professional
-                </span>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    Assigned Professional
+                  </span>
+                </div>
               </div>
               <div className="p-6">
                 <div className="flex items-center gap-3">
@@ -1280,9 +1284,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
               {/* Collapsible header */}
               <CollapsibleTrigger asChild>
                 <div className="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-muted/30 transition-colors">
-                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                    Order Summary
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <Receipt className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                      Order Summary
+                    </span>
+                  </div>
                   <div className="flex items-center gap-2">
                     <span className="text-lg font-mono font-semibold">{formatPaisa(order.total_paisa_snapshot)}</span>
                     <ChevronDown className={cn(
@@ -1439,9 +1446,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           {/* Downloads */}
           <div className="rounded-xl border border-border bg-card overflow-hidden">
             <div className="px-6 py-4 border-b border-border/50">
-              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                Downloads
-              </span>
+              <div className="flex items-center gap-2">
+                <Download className="h-4 w-4 text-muted-foreground" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                  Downloads
+                </span>
+              </div>
             </div>
             <div className="p-4 space-y-2">
               {order.razorpay_payment_id && (
@@ -1494,9 +1504,12 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           {order.chat_conversation_id ? (
             <div className="rounded-xl border border-border overflow-hidden h-[450px] flex flex-col">
               <div className="px-6 py-4 border-b border-border/50 shrink-0">
-                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                  Chat with your CA
-                </span>
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    Chat with your CA
+                  </span>
+                </div>
               </div>
               <div className="flex-1 min-h-0">
                 <ChatWindow

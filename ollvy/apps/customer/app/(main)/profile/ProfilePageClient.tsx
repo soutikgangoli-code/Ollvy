@@ -29,6 +29,7 @@ import {
   Phone,
 } from 'lucide-react'
 import Link from 'next/link'
+import type { ProfileInitialData } from './page'
 
 const INDIAN_STATES = [
   'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
@@ -166,24 +167,89 @@ interface UserData {
 interface ProfilePageClientProps {
   userData: UserData
   isSetup: boolean
+  initialData?: ProfileInitialData | null
 }
 
-function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
+function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientProps) {
   const router = useRouter()
   const { refreshSession, isHydrated, isLoading: authLoading } = useAuthStore()
 
   const [isSaving, setIsSaving] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [dashboardData, setDashboardData] = useState<DashboardData>({
-    active_orders: [],
-    completed_orders: [],
-    retainers: [],
-    compliance: [],
-    doc_counts: {},
-    stage_histories: {},
-    work_doc_counts: {},
-    document_groups: [],
+
+  // Only show loading if no initial data was provided from server
+  const [isLoading, setIsLoading] = useState(!initialData)
+
+  // Initialize dashboard data with server data if available
+  const [dashboardData, setDashboardData] = useState<DashboardData>(() => {
+    if (initialData) {
+      // Build document groups from server data
+      const orderMap = new Map(initialData.vault_orders.map(o => [o.id, o]))
+      const docsByOrder: Record<string, typeof initialData.vault_documents> = {}
+
+      initialData.vault_documents.forEach(d => {
+        if (orderMap.has(d.order_id)) {
+          if (!docsByOrder[d.order_id]) docsByOrder[d.order_id] = []
+          docsByOrder[d.order_id].push(d)
+        }
+      })
+
+      const document_groups = initialData.vault_orders
+        .filter(order => docsByOrder[order.id]?.length > 0)
+        .map(order => ({
+          order_id: order.id,
+          order_number: order.order_number,
+          service_name: order.service_package?.name || 'Service',
+          documents: docsByOrder[order.id].map(d => ({
+            id: d.id,
+            name: d.document_label || d.file_name || 'Document',
+            type: d.verified_at ? 'deliverable' : 'input',
+            url: d.file_url!,
+            uploaded_at: d.uploaded_at || '',
+          })),
+        }))
+
+      return {
+        active_orders: initialData.active_orders.map(o => ({
+          ...o,
+          service_package: {
+            id: o.service_package?.id || '',
+            name: o.service_package?.name || 'Service',
+            slug: o.service_package?.slug || '',
+            sla_working_days: o.service_package?.sla_working_days || 0,
+            workflow_stages: o.service_package?.workflow_stages,
+          }
+        })) as DashboardData['active_orders'],
+        completed_orders: initialData.completed_orders.map(o => ({
+          ...o,
+          service_package: {
+            id: o.service_package?.id || '',
+            name: o.service_package?.name || 'Service',
+            slug: o.service_package?.slug || '',
+          }
+        })) as DashboardData['completed_orders'],
+        retainers: initialData.retainers.map(r => ({
+          ...r,
+          service_package: { name: r.service_package?.name || 'Retainer' }
+        })),
+        compliance: initialData.compliance,
+        doc_counts: {},
+        stage_histories: {},
+        work_doc_counts: {},
+        document_groups,
+      }
+    }
+
+    return {
+      active_orders: [],
+      completed_orders: [],
+      retainers: [],
+      compliance: [],
+      doc_counts: {},
+      stage_histories: {},
+      work_doc_counts: {},
+      document_groups: [],
+    }
   })
 
   // Form state
@@ -195,236 +261,322 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
   const [panNumber, setPanNumber] = useState(userData.pan_number || '')
   const [aadhaarNumber, setAadhaarNumber] = useState(userData.aadhaar_number || '')
 
-  // Fetch dashboard data client-side using RPCs that work
+  // Fetch dependent data (doc counts, stages, work docs) - only needs activeOrderIds
+  // This runs client-side because it needs the active order IDs
   useEffect(() => {
     // Wait for auth to fully hydrate before fetching
     if (!isHydrated || authLoading) return
 
-    const fetchDashboardData = async () => {
+    const fetchDependentData = async () => {
+      // Get active order IDs - either from initialData or dashboardData
+      const activeOrderIds = dashboardData.active_orders.map(o => o.id)
+
+      if (activeOrderIds.length === 0) {
+        setIsLoading(false)
+        return
+      }
+
       try {
         const supabase = getClient()
 
-        // BATCH 1: Fetch ALL independent queries in parallel
-        // This includes orders AND queries that don't depend on activeOrderIds
-        const [
-          activeResult,
-          completedResult,
-          retainersResult,
-          allOrdersResult,
-          vaultDocsResult,
-          complianceResult
-        ] = await Promise.all([
-          // Active orders
-          supabase.rpc('get_user_orders', {
-            p_statuses: ['pending_assignment', 'waitlisted', 'in_progress']
-          }),
-          // Completed orders
-          supabase.rpc('get_user_orders', {
-            p_statuses: ['completed']
-          }),
-          // Retainers - no dependency on orders
-          supabase
-            .from('retainer_subscriptions')
-            .select(`
-              id,
-              status,
-              monthly_price_paisa,
-              next_billing_date,
-              service_package:service_packages (
-                name
-              )
-            `)
-            .neq('status', 'cancelled'),
-          // All orders for vault - no dependency
-          supabase
-            .from('orders')
-            .select('id, order_number, service_package:service_packages(name)')
-            .order('created_at', { ascending: false })
-            .limit(50),
-          // Vault documents - no dependency
+        // Fetch only the dependent data that needs activeOrderIds
+        const [docCounts, stages, workDocs] = await Promise.all([
+          // Document counts - needs activeOrderIds
           supabase
             .from('order_documents')
-            .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
-            .not('file_url', 'is', null)
-            .order('uploaded_at', { ascending: false })
-            .limit(200),
-          // Compliance - no dependency
+            .select('order_id, uploaded_at')
+            .in('order_id', activeOrderIds)
+            .eq('is_required', true),
+          // Stage history - needs activeOrderIds
           supabase
-            .from('compliance_obligations')
-            .select('id, status, due_date')
-            .order('due_date', { ascending: true })
+            .from('order_stage_history')
+            .select('order_id, completed_at')
+            .in('order_id', activeOrderIds),
+          // Work docs - needs activeOrderIds
+          supabase
+            .from('order_work_documents')
+            .select('order_id, status')
+            .in('order_id', activeOrderIds)
+            .eq('direction', 'from_customer')
         ])
 
-        if (activeResult.error) console.error('Error fetching active orders:', activeResult.error)
-        if (completedResult.error) console.error('Error fetching completed orders:', completedResult.error)
-
-        // Transform RPC results to match expected format
-        const activeOrders = (Array.isArray(activeResult.data) ? activeResult.data : []).slice(0, 5).map((o: any) => ({
-          id: o.id,
-          order_number: o.order_number,
-          status: o.status,
-          total_paisa_snapshot: o.total_paisa_snapshot,
-          created_at: o.created_at,
-          questionnaire_completed_at: o.questionnaire_completed_at,
-          service_package: o.service_package,
-        }))
-
-        const completedOrders = (Array.isArray(completedResult.data) ? completedResult.data : []).slice(0, 10).map((o: any) => ({
-          id: o.id,
-          order_number: o.order_number,
-          status: o.status,
-          total_paisa_snapshot: o.total_paisa_snapshot,
-          created_at: o.created_at,
-          service_package: o.service_package,
-        }))
-
-        // Get order IDs for dependent queries
-        const activeOrderIds = activeOrders.map((o: any) => o.id)
-
-        // BATCH 2: Only queries that NEED activeOrderIds
-        // These run after we have the active order IDs
-        let docCountsResult: { data: any; error: any } = { data: null, error: null }
-        let stagesResult: { data: any; error: any } = { data: null, error: null }
-        let workDocsResult: { data: any; error: any } = { data: null, error: null }
-
-        if (activeOrderIds.length > 0) {
-          const [docCounts, stages, workDocs] = await Promise.all([
-            // Document counts - needs activeOrderIds
-            supabase
-              .from('order_documents')
-              .select('order_id, uploaded_at')
-              .in('order_id', activeOrderIds)
-              .eq('is_required', true),
-            // Stage history - needs activeOrderIds
-            supabase
-              .from('order_stage_history')
-              .select('order_id, completed_at')
-              .in('order_id', activeOrderIds),
-            // Work docs - needs activeOrderIds
-            supabase
-              .from('order_work_documents')
-              .select('order_id, status')
-              .in('order_id', activeOrderIds)
-              .eq('direction', 'from_customer')
-          ])
-          docCountsResult = docCounts
-          stagesResult = stages
-          workDocsResult = workDocs
-        }
-
-        if (retainersResult.error) console.error('Error fetching retainers:', retainersResult.error)
-
         // Process document counts
-        let docCounts: Record<string, { total: number; uploaded: number }> = {}
-        if (docCountsResult.data) {
-          docCountsResult.data.forEach((d: any) => {
-            if (!docCounts[d.order_id]) {
-              docCounts[d.order_id] = { total: 0, uploaded: 0 }
+        const docCountsMap: Record<string, { total: number; uploaded: number }> = {}
+        if (docCounts.data) {
+          docCounts.data.forEach((d: any) => {
+            if (!docCountsMap[d.order_id]) {
+              docCountsMap[d.order_id] = { total: 0, uploaded: 0 }
             }
-            docCounts[d.order_id].total++
-            if (d.uploaded_at) docCounts[d.order_id].uploaded++
+            docCountsMap[d.order_id].total++
+            if (d.uploaded_at) docCountsMap[d.order_id].uploaded++
           })
         }
 
         // Process stage histories
-        let stageHistories: Record<string, number> = {}
-        if (stagesResult.data) {
-          stagesResult.data.forEach((s: any) => {
+        const stageHistoriesMap: Record<string, number> = {}
+        if (stages.data) {
+          stages.data.forEach((s: any) => {
             if (s.completed_at) {
-              stageHistories[s.order_id] = (stageHistories[s.order_id] || 0) + 1
+              stageHistoriesMap[s.order_id] = (stageHistoriesMap[s.order_id] || 0) + 1
             }
           })
         }
 
         // Process work document counts
-        let workDocCounts: Record<string, { pending: number; rejected: number }> = {}
-        if (workDocsResult.data) {
-          workDocsResult.data.forEach((w: any) => {
-            if (!workDocCounts[w.order_id]) {
-              workDocCounts[w.order_id] = { pending: 0, rejected: 0 }
+        const workDocCountsMap: Record<string, { pending: number; rejected: number }> = {}
+        if (workDocs.data) {
+          workDocs.data.forEach((w: any) => {
+            if (!workDocCountsMap[w.order_id]) {
+              workDocCountsMap[w.order_id] = { pending: 0, rejected: 0 }
             }
-            if (w.status === 'pending') workDocCounts[w.order_id].pending++
-            if (w.status === 'rejected') workDocCounts[w.order_id].rejected++
+            if (w.status === 'pending') workDocCountsMap[w.order_id].pending++
+            if (w.status === 'rejected') workDocCountsMap[w.order_id].rejected++
           })
         }
 
-        // Process vault documents (now parallel with Batch 2 - no sequential bottleneck)
-        let documentGroups: Array<{
-          order_id: string
-          order_number: string
-          service_name: string
-          documents: Array<{
-            id: string
-            name: string
-            type: string
-            url: string
-            uploaded_at: string
-          }>
-        }> = []
-
-        const allOrders = allOrdersResult.data
-        const vaultDocs = vaultDocsResult.data
-        if (allOrders && allOrders.length > 0 && vaultDocs && vaultDocs.length > 0) {
-          // Create a map of order IDs to order info for quick lookup
-          const orderMap = new Map(allOrders.map(o => [o.id, o]))
-
-          // Group vault docs by order_id, only for orders we know about
-          const docsByOrder: Record<string, typeof vaultDocs> = {}
-          vaultDocs.forEach(d => {
-            if (orderMap.has(d.order_id)) {
-              if (!docsByOrder[d.order_id]) docsByOrder[d.order_id] = []
-              docsByOrder[d.order_id].push(d)
-            }
-          })
-
-          allOrders.forEach(order => {
-            const orderDocs = docsByOrder[order.id]
-            if (orderDocs && orderDocs.length > 0) {
-              const sp = Array.isArray(order.service_package) ? order.service_package[0] : order.service_package
-              documentGroups.push({
-                order_id: order.id,
-                order_number: order.order_number,
-                service_name: (sp as { name: string })?.name || 'Service',
-                documents: orderDocs.map(d => ({
-                  id: d.id,
-                  name: d.document_label || d.file_name || 'Document',
-                  type: d.verified_at ? 'deliverable' : 'input',
-                  url: d.file_url!,
-                  uploaded_at: d.uploaded_at || '',
-                })),
-              })
-            }
-          })
-        }
-
-        // Transform retainers data (Supabase returns joined data as arrays)
-        const transformedRetainers = (retainersResult.data || []).map((r: any) => ({
-          ...r,
-          service_package: Array.isArray(r.service_package) ? r.service_package[0] : r.service_package,
+        setDashboardData(prev => ({
+          ...prev,
+          doc_counts: docCountsMap,
+          stage_histories: stageHistoriesMap,
+          work_doc_counts: workDocCountsMap,
         }))
-
-        // Process compliance obligations
-        const complianceObligations: ComplianceObligation[] = complianceResult.data || []
-
-        setDashboardData({
-          active_orders: activeOrders as DashboardData['active_orders'],
-          completed_orders: completedOrders as DashboardData['completed_orders'],
-          retainers: transformedRetainers as DashboardData['retainers'],
-          compliance: complianceObligations,
-          doc_counts: docCounts,
-          stage_histories: stageHistories,
-          work_doc_counts: workDocCounts,
-          document_groups: documentGroups,
-        })
       } catch (err) {
-        console.error('Failed to fetch dashboard:', err)
+        console.error('Failed to fetch dependent data:', err)
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchDashboardData()
-  }, [isHydrated, authLoading])
+    // If we have initialData, fetch dependent data immediately
+    // Otherwise, fall back to full client-side fetch
+    if (initialData) {
+      fetchDependentData()
+    } else {
+      fetchAllDashboardData()
+    }
+  }, [isHydrated, authLoading, initialData])
+
+  // Full client-side fetch - only used as fallback when server data not available
+  const fetchAllDashboardData = async () => {
+    try {
+      const supabase = getClient()
+
+      // BATCH 1: Fetch ALL independent queries in parallel
+      const [
+        activeResult,
+        completedResult,
+        retainersResult,
+        allOrdersResult,
+        vaultDocsResult,
+        complianceResult
+      ] = await Promise.all([
+        // Active orders
+        supabase.rpc('get_user_orders', {
+          p_statuses: ['pending_assignment', 'waitlisted', 'in_progress']
+        }),
+        // Completed orders
+        supabase.rpc('get_user_orders', {
+          p_statuses: ['completed']
+        }),
+        // Retainers - no dependency on orders
+        supabase
+          .from('retainer_subscriptions')
+          .select(`
+            id,
+            status,
+            monthly_price_paisa,
+            next_billing_date,
+            service_package:service_packages (
+              name
+            )
+          `)
+          .neq('status', 'cancelled'),
+        // All orders for vault - no dependency
+        supabase
+          .from('orders')
+          .select('id, order_number, service_package:service_packages(name)')
+          .order('created_at', { ascending: false })
+          .limit(50),
+        // Vault documents - no dependency
+        supabase
+          .from('order_documents')
+          .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
+          .not('file_url', 'is', null)
+          .order('uploaded_at', { ascending: false })
+          .limit(200),
+        // Compliance - no dependency
+        supabase
+          .from('compliance_obligations')
+          .select('id, status, due_date')
+          .order('due_date', { ascending: true })
+      ])
+
+      if (activeResult.error) console.error('Error fetching active orders:', activeResult.error)
+      if (completedResult.error) console.error('Error fetching completed orders:', completedResult.error)
+
+      // Transform RPC results to match expected format
+      const activeOrders = (Array.isArray(activeResult.data) ? activeResult.data : []).slice(0, 5).map((o: any) => ({
+        id: o.id,
+        order_number: o.order_number,
+        status: o.status,
+        total_paisa_snapshot: o.total_paisa_snapshot,
+        created_at: o.created_at,
+        questionnaire_completed_at: o.questionnaire_completed_at,
+        service_package: o.service_package,
+      }))
+
+      const completedOrders = (Array.isArray(completedResult.data) ? completedResult.data : []).slice(0, 10).map((o: any) => ({
+        id: o.id,
+        order_number: o.order_number,
+        status: o.status,
+        total_paisa_snapshot: o.total_paisa_snapshot,
+        created_at: o.created_at,
+        service_package: o.service_package,
+      }))
+
+      // Get order IDs for dependent queries
+      const activeOrderIds = activeOrders.map((o: any) => o.id)
+
+      // BATCH 2: Only queries that NEED activeOrderIds
+      let docCountsResult: { data: any; error: any } = { data: null, error: null }
+      let stagesResult: { data: any; error: any } = { data: null, error: null }
+      let workDocsResult: { data: any; error: any } = { data: null, error: null }
+
+      if (activeOrderIds.length > 0) {
+        const [docCounts, stages, workDocs] = await Promise.all([
+          // Document counts - needs activeOrderIds
+          supabase
+            .from('order_documents')
+            .select('order_id, uploaded_at')
+            .in('order_id', activeOrderIds)
+            .eq('is_required', true),
+          // Stage history - needs activeOrderIds
+          supabase
+            .from('order_stage_history')
+            .select('order_id, completed_at')
+            .in('order_id', activeOrderIds),
+          // Work docs - needs activeOrderIds
+          supabase
+            .from('order_work_documents')
+            .select('order_id, status')
+            .in('order_id', activeOrderIds)
+            .eq('direction', 'from_customer')
+        ])
+        docCountsResult = docCounts
+        stagesResult = stages
+        workDocsResult = workDocs
+      }
+
+      if (retainersResult.error) console.error('Error fetching retainers:', retainersResult.error)
+
+      // Process document counts
+      let docCounts: Record<string, { total: number; uploaded: number }> = {}
+      if (docCountsResult.data) {
+        docCountsResult.data.forEach((d: any) => {
+          if (!docCounts[d.order_id]) {
+            docCounts[d.order_id] = { total: 0, uploaded: 0 }
+          }
+          docCounts[d.order_id].total++
+          if (d.uploaded_at) docCounts[d.order_id].uploaded++
+        })
+      }
+
+      // Process stage histories
+      let stageHistories: Record<string, number> = {}
+      if (stagesResult.data) {
+        stagesResult.data.forEach((s: any) => {
+          if (s.completed_at) {
+            stageHistories[s.order_id] = (stageHistories[s.order_id] || 0) + 1
+          }
+        })
+      }
+
+      // Process work document counts
+      let workDocCounts: Record<string, { pending: number; rejected: number }> = {}
+      if (workDocsResult.data) {
+        workDocsResult.data.forEach((w: any) => {
+          if (!workDocCounts[w.order_id]) {
+            workDocCounts[w.order_id] = { pending: 0, rejected: 0 }
+          }
+          if (w.status === 'pending') workDocCounts[w.order_id].pending++
+          if (w.status === 'rejected') workDocCounts[w.order_id].rejected++
+        })
+      }
+
+      // Process vault documents
+      let documentGroups: Array<{
+        order_id: string
+        order_number: string
+        service_name: string
+        documents: Array<{
+          id: string
+          name: string
+          type: string
+          url: string
+          uploaded_at: string
+        }>
+      }> = []
+
+      const allOrders = allOrdersResult.data
+      const vaultDocs = vaultDocsResult.data
+      if (allOrders && allOrders.length > 0 && vaultDocs && vaultDocs.length > 0) {
+        // Create a map of order IDs to order info for quick lookup
+        const orderMap = new Map(allOrders.map(o => [o.id, o]))
+
+        // Group vault docs by order_id, only for orders we know about
+        const docsByOrder: Record<string, typeof vaultDocs> = {}
+        vaultDocs.forEach(d => {
+          if (orderMap.has(d.order_id)) {
+            if (!docsByOrder[d.order_id]) docsByOrder[d.order_id] = []
+            docsByOrder[d.order_id].push(d)
+          }
+        })
+
+        allOrders.forEach(order => {
+          const orderDocs = docsByOrder[order.id]
+          if (orderDocs && orderDocs.length > 0) {
+            const sp = Array.isArray(order.service_package) ? order.service_package[0] : order.service_package
+            documentGroups.push({
+              order_id: order.id,
+              order_number: order.order_number,
+              service_name: (sp as { name: string })?.name || 'Service',
+              documents: orderDocs.map(d => ({
+                id: d.id,
+                name: d.document_label || d.file_name || 'Document',
+                type: d.verified_at ? 'deliverable' : 'input',
+                url: d.file_url!,
+                uploaded_at: d.uploaded_at || '',
+              })),
+            })
+          }
+        })
+      }
+
+      // Transform retainers data (Supabase returns joined data as arrays)
+      const transformedRetainers = (retainersResult.data || []).map((r: any) => ({
+        ...r,
+        service_package: Array.isArray(r.service_package) ? r.service_package[0] : r.service_package,
+      }))
+
+      // Process compliance obligations
+      const complianceObligations: ComplianceObligation[] = complianceResult.data || []
+
+      setDashboardData({
+        active_orders: activeOrders as DashboardData['active_orders'],
+        completed_orders: completedOrders as DashboardData['completed_orders'],
+        retainers: transformedRetainers as DashboardData['retainers'],
+        compliance: complianceObligations,
+        doc_counts: docCounts,
+        stage_histories: stageHistories,
+        work_doc_counts: workDocCounts,
+        document_groups: documentGroups,
+      })
+    } catch (err) {
+      console.error('Failed to fetch dashboard:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   // Process dashboard data
   const processedData = (() => {
