@@ -75,7 +75,7 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
   }
 
   return (
-    <div className="border-t border-border p-4 bg-card">
+    <div className="border-t border-border p-4 bg-card shrink-0">
       {/* Selected file preview */}
       {selectedFile && (
         <div className="mb-3 flex items-center gap-2 bg-muted rounded-lg px-3 py-2">

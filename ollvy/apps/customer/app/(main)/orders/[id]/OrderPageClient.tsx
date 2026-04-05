@@ -1507,20 +1507,18 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
           {/* Chat with CA */}
           {order.chat_conversation_id ? (
-            <Card>
-              <CardHeader className="pb-3">
+            <Card className="flex flex-col h-[450px] overflow-hidden">
+              <CardHeader className="pb-3 shrink-0">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
                   <MessageSquare className="h-4 w-4 text-muted-foreground" />
                   Chat with your CA
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-0">
-                <div className="h-[400px]">
-                  <ChatWindow
-                    conversationId={order.chat_conversation_id}
-                    professionalName={(order.professional as { name?: string })?.name || 'Your CA'}
-                  />
-                </div>
+              <CardContent className="p-0 flex-1 min-h-0 flex flex-col">
+                <ChatWindow
+                  conversationId={order.chat_conversation_id}
+                  professionalName={(order.professional as { name?: string })?.name || 'Your CA'}
+                />
               </CardContent>
             </Card>
           ) : (

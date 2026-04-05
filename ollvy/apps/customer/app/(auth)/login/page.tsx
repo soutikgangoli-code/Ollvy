@@ -22,7 +22,7 @@ function LoginContent() {
 
     // Not logged in - open the auth modal and stay on this page
     // When auth completes, session will become truthy and we'll redirect
-    openAuthModal()
+    openAuthModal(returnUrl)
   }, [session, isHydrated, openAuthModal, router, returnUrl])
 
   // Show a minimal loading state while on login page

@@ -494,23 +494,28 @@ serve(async (req) => {
       }
     }
 
-    // 2. Create chat conversation for this order
-    const { data: chatConversation, error: chatError } = await supabase
-      .from('chat_conversations')
-      .insert({
-        order_id: order.id,
-      })
-      .select()
-      .single();
+    // 2. Create chat conversation for this order (if not already created by trigger)
+    if (!order.chat_conversation_id) {
+      const { data: chatConversation, error: chatError } = await supabase
+        .from('chat_conversations')
+        .insert({
+          order_id: order.id,
+          user_id: order.user_id,
+        })
+        .select()
+        .single();
 
-    if (chatError) {
-      console.error('Failed to create chat conversation:', chatError);
+      if (chatError) {
+        console.error('Failed to create chat conversation:', chatError);
+      } else {
+        // Link chat to order
+        await supabase
+          .from('orders')
+          .update({ chat_conversation_id: chatConversation.id })
+          .eq('id', order.id);
+      }
     } else {
-      // Link chat to order
-      await supabase
-        .from('orders')
-        .update({ chat_conversation_id: chatConversation.id })
-        .eq('id', order.id);
+      console.log(`Chat conversation already exists for order ${order.id}`);
     }
 
     // 3. Call auto-assign-professional

@@ -39,14 +39,18 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
     // Fetch messages
     const fetchMessages = async () => {
       setIsLoading(true)
+      console.log('[ChatWindow] Fetching messages for conversation:', conversationId)
+
       const { data, error } = await supabase
         .from('chat_messages')
         .select('*')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true })
 
+      console.log('[ChatWindow] Fetch result:', { data, error, count: data?.length })
+
       if (error) {
-        console.error('Error fetching messages:', error)
+        console.error('[ChatWindow] Error fetching messages:', error)
       } else {
         setMessages(data || [])
       }
@@ -86,16 +90,20 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
 
     const supabase = getClient()
 
-    const { error } = await supabase.from('chat_messages').insert({
+    console.log('[ChatWindow] Sending message:', { conversationId, userId: user.id, content })
+
+    const { data, error } = await supabase.from('chat_messages').insert({
       conversation_id: conversationId,
       sender_id: user.id,
       sender_type: 'user',
       content,
       message_type: 'text',
-    })
+    }).select()
+
+    console.log('[ChatWindow] Send result:', { data, error })
 
     if (error) {
-      console.error('Error sending message:', error)
+      console.error('[ChatWindow] Error sending message:', error)
       throw error
     }
   }
@@ -157,11 +165,11 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full overflow-hidden">
       {/* Messages container */}
       <div
         ref={containerRef}
-        className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted"
+        className="flex-1 min-h-0 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
