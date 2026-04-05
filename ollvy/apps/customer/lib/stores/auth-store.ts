@@ -322,11 +322,28 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
       if (session) {
         // Fetch user data from our users table
         // User creation happens server-side in /auth/callback route
-        const { data: userData } = await supabase
+        let { data: userData } = await supabase
           .from('users')
           .select('*')
           .eq('auth_user_id', session.user.id)
           .single()
+
+        // If user not found, create via RPC (fallback for failed callback creation)
+        if (!userData) {
+          console.log('[auth-store] User not found, creating via ensure_user_exists RPC')
+          const { data: rpcResult, error: rpcError } = await supabase.rpc('ensure_user_exists', {
+            p_email: session.user.email,
+            p_avatar_url: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture,
+            p_full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name,
+          })
+
+          if (rpcError) {
+            console.error('[auth-store] Error creating user:', rpcError)
+          } else if (rpcResult && !rpcResult.error) {
+            userData = rpcResult
+            console.log('[auth-store] User created via RPC:', userData?.id)
+          }
+        }
 
         console.log('[auth-store] User data:', userData?.id || 'not found')
 

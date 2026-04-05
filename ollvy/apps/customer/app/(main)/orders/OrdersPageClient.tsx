@@ -13,7 +13,7 @@ import type { Order } from '@/lib/types'
 import { Package, ArrowRight, ArrowLeft } from 'lucide-react'
 
 export function OrdersPageClient() {
-  const { user, isHydrated, isLoading: authLoading } = useAuthStore()
+  const { session, user, isHydrated, isLoading: authLoading } = useAuthStore()
   const [activeOrders, setActiveOrders] = useState<Order[]>([])
   const [completedOrders, setCompletedOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -22,15 +22,17 @@ export function OrdersPageClient() {
     // Wait for auth to fully hydrate and load
     if (!isHydrated || authLoading) return
 
-    if (user) {
+    // Fetch orders if we have a session (even if user lookup failed)
+    // The RPC will handle finding the user by email and linking auth_user_id
+    if (session) {
       fetchOrders()
     } else {
       setIsLoading(false)
     }
-  }, [user, isHydrated, authLoading])
+  }, [session, isHydrated, authLoading])
 
   const fetchOrders = async () => {
-    if (!user) return
+    if (!session) return
 
     setIsLoading(true)
 
