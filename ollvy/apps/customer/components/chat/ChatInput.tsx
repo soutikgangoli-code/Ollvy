@@ -51,8 +51,15 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
+      e.stopPropagation()
       handleSend()
     }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    handleSend()
   }
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,24 +82,25 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
   }
 
   return (
-    <div className="border-t border-border px-3 py-2 bg-card shrink-0">
+    <form onSubmit={handleSubmit} className="border-t border-border px-3 py-2 bg-card shrink-0 overflow-hidden">
       {/* Selected file preview */}
       {selectedFile && (
         <div className="mb-2 flex items-center gap-2 bg-muted rounded-lg px-3 py-2">
-          <Paperclip className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm text-foreground truncate flex-1">
+          <Paperclip className="h-4 w-4 text-muted-foreground shrink-0" />
+          <span className="text-sm text-foreground truncate flex-1 min-w-0">
             {selectedFile.name}
           </span>
           <button
+            type="button"
             onClick={clearFile}
-            className="p-1 hover:bg-accent rounded transition-colors"
+            className="p-1 hover:bg-accent rounded transition-colors shrink-0"
           >
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
       )}
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 overflow-hidden">
         {/* File upload button */}
         {onFileUpload && (
           <>
@@ -108,7 +116,7 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
               onClick={() => fileInputRef.current?.click()}
               disabled={disabled || isSending}
               className={cn(
-                'p-2 rounded-full transition-colors',
+                'p-2 rounded-full transition-colors shrink-0',
                 disabled || isSending
                   ? 'opacity-40 cursor-not-allowed'
                   : 'hover:bg-muted text-muted-foreground hover:text-foreground'
@@ -129,7 +137,7 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
           placeholder="Type a message..."
           disabled={disabled || isSending}
           className={cn(
-            'flex-1 h-10 px-4 bg-muted border border-border rounded-full',
+            'flex-1 min-w-0 h-10 px-4 bg-muted border border-border rounded-full',
             'text-foreground placeholder:text-muted-foreground',
             'focus:outline-none focus:border-ring transition-colors',
             (disabled || isSending) && 'opacity-40 cursor-not-allowed'
@@ -138,9 +146,9 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
 
         {/* Send button - circular green */}
         <Button
-          onClick={handleSend}
+          type="submit"
           disabled={(!message.trim() && !selectedFile) || isSending || disabled}
-          className="h-10 w-10 rounded-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 p-0 border-0"
+          className="h-10 w-10 shrink-0 rounded-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 p-0 border-0"
         >
           {isSending ? (
             <Loader2 className="h-4 w-4 text-white animate-spin" />
@@ -149,6 +157,6 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
           )}
         </Button>
       </div>
-    </div>
+    </form>
   )
 }

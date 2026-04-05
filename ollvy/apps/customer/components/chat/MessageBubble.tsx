@@ -57,11 +57,6 @@ export function MessageBubble({ message, professionalName }: MessageBubbleProps)
             ? 'bg-emerald-100 dark:bg-emerald-900/50 rounded-br-sm'
             : 'bg-card border border-border rounded-bl-sm'
         )}>
-          {!isUser && isProfessional && professionalName && (
-            <p className="text-xs text-muted-foreground mb-1">
-              {professionalName.split(' ')[0]}, Ollvy Compliance Team
-            </p>
-          )}
           <div className="flex items-center gap-3">
             <div className={cn(
               'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0',
