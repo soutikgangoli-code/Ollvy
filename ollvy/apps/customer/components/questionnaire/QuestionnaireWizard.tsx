@@ -282,6 +282,28 @@ export function QuestionnaireWizard({
   // Already completed - check if all questions are answered
   if (isCompleted) {
     const { totalQuestions, answeredQuestions, firstIncompleteStep } = completionStats
+
+    // If there are no questions configured for this service, show "No Questionnaire Required"
+    // instead of "All Done" (which would be misleading)
+    if (totalQuestions === 0 && steps.length === 0) {
+      return (
+        <div className="rounded-xl border border-border bg-card p-8 text-center">
+          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h2 className="text-xl font-semibold text-foreground mb-2">
+            No Questionnaire Required
+          </h2>
+          <p className="text-muted-foreground mb-6">
+            This service does not require a questionnaire. Continue to upload your documents.
+          </p>
+          <Button onClick={() => router.push(`/orders/${orderId}/documents`)}>
+            Continue to Documents
+          </Button>
+        </div>
+      )
+    }
+
     const hasIncompleteAnswers = answeredQuestions < totalQuestions
     const incompleteCount = totalQuestions - answeredQuestions
 

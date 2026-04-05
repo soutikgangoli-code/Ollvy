@@ -6,18 +6,19 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import { formatDate, formatDateTime } from '@/lib/utils'
 import { useToast } from '@/lib/hooks/use-toast'
-import { buildRejectionMessage, getRejectionLabel } from '@/lib/constants/rejection-reasons'
+import { buildRejectionMessage } from '@/lib/constants/rejection-reasons'
 import { getSignedUrl } from '@/lib/storage'
-import type { OrderRound, RoundQuestionRequest, OrderWorkDocument } from '@/lib/types'
-import { Download, Upload, Check, AlertCircle, Loader2 } from 'lucide-react'
+import type { OrderRound, RoundQuestionRequest, OrderWorkDocument, WorkflowDisplayStage } from '@/lib/types'
+import { Download, Upload, Check, AlertCircle, Loader2, FileText, MessageSquare } from 'lucide-react'
 
 interface RoundsTimelineProps {
   orderId: string
   servicePackageId: string
+  workflowStages?: WorkflowDisplayStage[]
 }
 
 interface Round0Data {
@@ -35,10 +36,11 @@ interface Round0Data {
     file_name?: string
     verified_at?: string
     rejection_reason?: string
+    stage_key?: string
   }>
 }
 
-export function RoundsTimeline({ orderId, servicePackageId }: RoundsTimelineProps) {
+export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] }: RoundsTimelineProps) {
   const { user } = useAuthStore()
   const supabase = getClient()
   const [rounds, setRounds] = useState<OrderRound[]>([])
@@ -56,7 +58,7 @@ export function RoundsTimeline({ orderId, servicePackageId }: RoundsTimelineProp
           id, order_id, round_number, title, status, created_at, completed_at,
           round_question_requests (id, question_text, answer_text, answered_at, position),
           order_work_documents (
-            id, direction, document_label, description, tag, status,
+            id, direction, document_label, description, tag, status, stage_key,
             file_url, file_name, uploaded_at, rejection_reason, linked_request_id
           )
         `)
@@ -74,12 +76,11 @@ export function RoundsTimeline({ orderId, servicePackageId }: RoundsTimelineProp
         .select('question_key, question_label, question_type, options, display_order')
         .eq('service_package_id', servicePackageId)
         .order('display_order', { ascending: true }),
-      // Initial documents
+      // All order documents (not just doc_collection stage)
       supabase
         .from('order_documents')
         .select('id, document_label, file_url, file_name, verified_at, rejection_reason, stage_key')
-        .eq('order_id', orderId)
-        .eq('stage_key', 'doc_collection'),
+        .eq('order_id', orderId),
     ]).then(([roundsRes, answersRes, questionsRes, docsRes]) => {
       setRounds((roundsRes.data as OrderRound[]) || [])
       setRound0Data({
@@ -90,451 +91,376 @@ export function RoundsTimeline({ orderId, servicePackageId }: RoundsTimelineProp
     })
   }, [orderId, servicePackageId, user?.id])
 
-  if (!rounds.length) return null
+  // Compute all answers for the Answers tab
+  const allAnswers = round0Data.questions.map(q => {
+    const answer = round0Data.answers.find(a => a.question_key === q.question_key)
+    return {
+      question_key: q.question_key,
+      question_label: q.question_label,
+      question_type: q.question_type,
+      options: q.options,
+      response_value: answer?.response_value,
+    }
+  })
+
+  // Compute all round question responses
+  const roundQuestionResponses = rounds
+    .filter(r => r.round_number > 0)
+    .flatMap(r => (r.round_question_requests || []).filter(q => q.answered_at))
+
+  // Compute documents grouped by stage
+  const documentsByStage = groupDocumentsByStage(round0Data.initialDocs, rounds, workflowStages)
+
+  const hasData = allAnswers.length > 0 || round0Data.initialDocs.length > 0 || rounds.some(r =>
+    (r.round_question_requests?.length ?? 0) > 0 || (r.order_work_documents?.length ?? 0) > 0
+  )
+
+  if (!hasData) return null
 
   return (
     <Card className="mt-6">
       <CardHeader>
         <CardTitle className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-          Steps
+          Documents and Answers
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {rounds.map(round => (
-          <RoundCard
-            key={round.id}
-            round={round}
-            orderId={orderId}
-            round0Data={round.round_number === 0 ? round0Data : null}
-          />
-        ))}
+      <CardContent>
+        <Tabs defaultValue="documents" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="documents" className="gap-2">
+              <FileText className="h-4 w-4" />
+              Documents
+            </TabsTrigger>
+            <TabsTrigger value="answers" className="gap-2">
+              <MessageSquare className="h-4 w-4" />
+              Answers
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Documents Tab */}
+          <TabsContent value="documents" className="mt-4 space-y-4">
+            {Object.entries(documentsByStage).map(([stageKey, docs]) => {
+              if (docs.length === 0) return null
+
+              // Find stage title from workflowStages
+              const stage = workflowStages.find(s => s.stage_key === stageKey)
+              const stageTitle = stage?.title || formatStageKey(stageKey)
+
+              return (
+                <div key={stageKey} className="space-y-2">
+                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    {stageTitle}
+                  </h4>
+                  <div className="space-y-2">
+                    {docs.map(doc => (
+                      <DocumentRow key={doc.id} doc={doc} />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+
+            {/* Work documents from rounds */}
+            {rounds.filter(r => r.round_number > 0).map(round => {
+              const workDocs = round.order_work_documents || []
+              if (workDocs.length === 0) return null
+
+              return (
+                <div key={round.id} className="space-y-2">
+                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    {round.title}
+                  </h4>
+                  <div className="space-y-2">
+                    {workDocs.map(doc => (
+                      <WorkDocumentRow key={doc.id} doc={doc} orderId={orderId} roundId={round.id} />
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+          </TabsContent>
+
+          {/* Answers Tab */}
+          <TabsContent value="answers" className="mt-4 space-y-4">
+            {/* Initial questionnaire answers */}
+            {allAnswers.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  Initial Submission
+                </h4>
+                <div className="space-y-2 rounded-lg border border-border p-4">
+                  {allAnswers.map(answer => (
+                    <div key={answer.question_key} className="flex justify-between items-start gap-4">
+                      <span className="text-sm text-muted-foreground flex-1">{answer.question_label}</span>
+                      <span className="text-sm font-medium text-foreground text-right max-w-[50%]">
+                        {renderResponseValue(answer.response_value, answer.question_type, answer.options)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Round question responses */}
+            {rounds.filter(r => r.round_number > 0).map(round => {
+              const answered = (round.round_question_requests || []).filter(q => q.answered_at)
+              if (answered.length === 0) return null
+
+              return (
+                <div key={round.id} className="space-y-2">
+                  <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                    {round.title}
+                  </h4>
+                  <div className="space-y-2 rounded-lg border border-border p-4">
+                    {answered.map(q => (
+                      <div key={q.id} className="space-y-1">
+                        <p className="text-sm text-muted-foreground">{q.question_text}</p>
+                        <p className="text-sm font-medium text-foreground">{q.answer_text}</p>
+                        <p className="text-xs text-muted-foreground">{formatDateTime(q.answered_at!)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
+            })}
+
+            {allAnswers.length === 0 && roundQuestionResponses.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                <p className="text-sm">No answers submitted yet</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   )
 }
 
-// Round Card Component
-function RoundCard({
-  round,
-  orderId,
-  round0Data,
-}: {
-  round: OrderRound
-  orderId: string
-  round0Data: Round0Data | null
-}) {
-  const questions = round.round_question_requests || []
-  const fromCustomerDocs = (round.order_work_documents || []).filter(d => d.direction === 'from_customer')
-  const toCustomerDocs = (round.order_work_documents || []).filter(d => d.direction === 'to_customer')
-
-  const actionTag = getActionTag(round, questions, fromCustomerDocs, toCustomerDocs)
-
-  // For Round 0, render read-only content
-  if (round.round_number === 0) {
-    return (
-      <div className="border border-border rounded-lg p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h4 className="font-medium text-foreground">{round.title}</h4>
-          <Badge variant="default" className="text-xs">Completed</Badge>
-        </div>
-        {round0Data && round0Data.answers.length > 0 && (
-          <div className="mb-4">
-            <p className="text-xs text-muted-foreground mb-2">Your answers</p>
-            <div className="space-y-1 text-sm">
-              {round0Data.questions.map(q => {
-                const answer = round0Data.answers.find(a => a.question_key === q.question_key)
-                return (
-                  <div key={q.question_key} className="flex justify-between">
-                    <span className="text-muted-foreground">{q.question_label}</span>
-                    <span className="font-medium text-foreground">
-                      {renderResponseValue(answer?.response_value, q.question_type, q.options)}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        )}
-        {round0Data && round0Data.initialDocs.length > 0 && (
-          <div>
-            <p className="text-xs text-muted-foreground mb-2">Uploaded documents</p>
-            <div className="space-y-2">
-              {round0Data.initialDocs.map(doc => (
-                <div key={doc.id} className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">{doc.document_label}</span>
-                  {doc.file_url ? (
-                    <ViewDocLink fileUrl={doc.file_url} />
-                  ) : (
-                    <span className="text-muted-foreground text-xs">Not uploaded</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  // For Round 1+, render interactive content
-  // Check what action is needed
-  const hasUnansweredQuestions = questions.some(q => !q.answered_at)
-  const hasPendingDocRequests = fromCustomerDocs.some(d => d.status === 'pending' || d.status === 'rejected')
-  const hasReuploadDocs = fromCustomerDocs.some(d => d.linked_request_id)
-
-  // Determine action button
-  const getActionButton = () => {
-    // Questions always link first if both exist
-    if (hasUnansweredQuestions) {
-      return (
-        <Button asChild size="sm">
-          <Link href={`/orders/${orderId}/round-questions/${round.id}`}>
-            Answer questions
-          </Link>
-        </Button>
-      )
-    }
-
-    if (hasPendingDocRequests) {
-      return (
-        <Button asChild size="sm">
-          <Link href={`/orders/${orderId}/round-uploads/${round.id}`}>
-            {hasReuploadDocs ? 'Upload additional documents' : 'Upload documents'}
-          </Link>
-        </Button>
-      )
-    }
-
-    return null
-  }
-
-  const actionButton = getActionButton()
-
-  return (
-    <div className="border border-border rounded-lg p-4">
-      <div className="flex items-center justify-between mb-3">
-        <h4 className="font-medium text-foreground">{round.title}</h4>
-        <Badge variant={actionTag.variant as any} className="text-xs">{actionTag.label}</Badge>
-      </div>
-
-      {/* Questions Section */}
-      {questions.length > 0 && (
-        <RoundQuestionsSection round={round} questions={questions} orderId={orderId} />
-      )}
-
-      {/* Documents Section */}
-      {(fromCustomerDocs.length > 0 || toCustomerDocs.length > 0) && (
-        <RoundDocumentsSection
-          round={round}
-          fromCustomerDocs={fromCustomerDocs}
-          toCustomerDocs={toCustomerDocs}
-          orderId={orderId}
-          questionsAnswered={questions.every(q => q.answered_at)}
-        />
-      )}
-
-      {/* Action Button - prominent CTA at bottom of active round card */}
-      {round.status !== 'completed' && actionButton && (
-        <div className="mt-4 pt-4 border-t border-border">
-          {actionButton}
-        </div>
-      )}
-    </div>
-  )
-}
-
-// Questions Section
-function RoundQuestionsSection({
-  round,
-  questions,
-  orderId,
-}: {
-  round: OrderRound
-  questions: RoundQuestionRequest[]
-  orderId: string
-}) {
-  const { toast } = useToast()
-  const supabase = getClient()
+// Document Row Component - for initial order_documents
+function DocumentRow({ doc }: { doc: Round0Data['initialDocs'][0] }) {
   const [loading, setLoading] = useState(false)
-  const [answers, setAnswers] = useState<Record<string, string>>({})
-  // Ref to prevent double submissions from rapid clicks
-  const submitInFlightRef = useRef(false)
 
-  const unansweredQuestions = questions.filter(q => !q.answered_at)
-  const answeredQuestions = questions.filter(q => q.answered_at)
-
-  const handleAnswerChange = (questionId: string, value: string) => {
-    setAnswers(prev => ({ ...prev, [questionId]: value }))
-  }
-
-  const handleSubmit = async () => {
-    // Prevent double submission
-    if (submitInFlightRef.current) return
-    submitInFlightRef.current = true
-
-    const allFilled = unansweredQuestions.every(q => answers[q.id]?.trim())
-    if (!allFilled) {
-      toast({ title: 'Please answer all questions', variant: 'destructive' })
-      submitInFlightRef.current = false
-      return
-    }
-
+  const handleView = async () => {
+    if (!doc.file_url) return
     setLoading(true)
     try {
-      for (const q of unansweredQuestions) {
-        await supabase
-          .from('round_question_requests')
-          .update({
-            answer_text: answers[q.id].trim(),
-            answered_at: new Date().toISOString(),
-          })
-          .eq('id', q.id)
+      const signedUrl = await getSignedUrl(doc.file_url)
+      if (signedUrl) {
+        window.open(signedUrl, '_blank')
       }
-      toast({ title: 'Answers submitted' })
-      // Reload page to refresh state
-      window.location.reload()
-    } catch (err) {
-      toast({ title: 'Error submitting answers', variant: 'destructive' })
-      submitInFlightRef.current = false
+    } catch (error) {
+      console.error('Failed to get signed URL:', error)
     } finally {
       setLoading(false)
     }
   }
 
+  const getStatusBadge = () => {
+    if (doc.rejection_reason) {
+      return <Badge variant="destructive" className="text-xs">Rejected</Badge>
+    }
+    if (doc.verified_at) {
+      return <Badge variant="default" className="text-xs bg-emerald-600">Verified</Badge>
+    }
+    if (doc.file_url) {
+      return <Badge variant="secondary" className="text-xs">Uploaded</Badge>
+    }
+    return <Badge variant="outline" className="text-xs">Pending</Badge>
+  }
+
   return (
-    <div className="mb-4">
-      <p className="text-xs text-muted-foreground mb-2">Questions</p>
-
-      {/* Answered questions */}
-      {answeredQuestions.map(q => (
-        <div key={q.id} className="mb-2 p-3 bg-muted rounded-lg">
-          <p className="text-sm font-medium text-foreground">{q.question_text}</p>
-          <p className="text-sm text-muted-foreground mt-1">{q.answer_text}</p>
-          <p className="text-xs text-muted-foreground mt-1">{formatDateTime(q.answered_at!)}</p>
-        </div>
-      ))}
-
-      {/* Unanswered questions */}
-      {unansweredQuestions.length > 0 && (
-        <div className="space-y-3">
-          {unansweredQuestions.map(q => (
-            <div key={q.id}>
-              <p className="text-sm font-medium text-foreground mb-1">{q.question_text}</p>
-              <Textarea
-                placeholder="Your answer..."
-                value={answers[q.id] || ''}
-                onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-              />
-            </div>
-          ))}
-          <Button
-            onClick={handleSubmit}
-            disabled={loading || !unansweredQuestions.every(q => answers[q.id]?.trim())}
+    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+        <span className="text-sm font-medium text-foreground truncate">{doc.document_label}</span>
+      </div>
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {getStatusBadge()}
+        {doc.file_url && (
+          <button
+            onClick={handleView}
+            disabled={loading}
+            className="text-xs text-primary hover:underline disabled:opacity-50"
           >
-            {loading ? 'Submitting...' : 'Submit answers'}
-          </Button>
-        </div>
-      )}
+            {loading ? 'Loading...' : 'View'}
+          </button>
+        )}
+      </div>
     </div>
   )
 }
 
-// Documents Section
-function RoundDocumentsSection({
-  round,
-  fromCustomerDocs,
-  toCustomerDocs,
+// Work Document Row Component - for order_work_documents
+function WorkDocumentRow({
+  doc,
   orderId,
-  questionsAnswered,
+  roundId
 }: {
-  round: OrderRound
-  fromCustomerDocs: OrderWorkDocument[]
-  toCustomerDocs: OrderWorkDocument[]
+  doc: OrderWorkDocument
   orderId: string
-  questionsAnswered: boolean
+  roundId: string
 }) {
-  const { toast } = useToast()
-  const supabase = getClient()
   const [loading, setLoading] = useState(false)
-  const [stagedFiles, setStagedFiles] = useState<Record<string, File>>({})
-  // Ref to prevent double submissions from rapid clicks
-  const submitInFlightRef = useRef(false)
 
-  const handleFileStage = (docId: string, file: File) => {
-    setStagedFiles(prev => ({ ...prev, [docId]: file }))
-  }
-
-  const handleSubmitDocs = async () => {
-    // Prevent double submission
-    if (submitInFlightRef.current) return
-    submitInFlightRef.current = true
-
+  const handleDownload = async () => {
+    if (!doc.file_url) return
     setLoading(true)
     try {
-      for (const [docId, file] of Object.entries(stagedFiles)) {
-        const fileExt = file.name.split('.').pop()
-        const fileName = `${orderId}/${docId}/${Date.now()}.${fileExt}`
-        await supabase.storage.from('work-documents').upload(fileName, file, { cacheControl: '3600', upsert: true })
-
-        // Store the storage path (not public URL) for signed URL generation later
-        const storagePath = `work-documents/${fileName}`
-
-        await supabase.from('order_work_documents').update({
-          file_url: storagePath,
-          file_name: file.name,
-          uploaded_at: new Date().toISOString(),
-          status: 'uploaded',
-          uploaded_by_type: 'customer',
-        }).eq('id', docId)
+      const signedUrl = await getSignedUrl(doc.file_url)
+      if (signedUrl) {
+        const link = document.createElement('a')
+        link.href = signedUrl
+        link.download = doc.file_name || doc.document_label
+        link.target = '_blank'
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
       }
-      toast({ title: 'Documents uploaded successfully' })
-      window.location.reload()
-    } catch (err) {
-      toast({ title: 'Error uploading documents', variant: 'destructive' })
-      submitInFlightRef.current = false
+    } catch (error) {
+      console.error('Failed to download file:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const pendingDocs = fromCustomerDocs.filter(d => d.status === 'pending' || d.status === 'rejected')
-  const hasStagedFiles = Object.keys(stagedFiles).length > 0
+  const getStatusBadge = () => {
+    if (doc.status === 'rejected') {
+      return <Badge variant="destructive" className="text-xs">Rejected</Badge>
+    }
+    if (doc.status === 'verified') {
+      return <Badge variant="default" className="text-xs bg-emerald-600">Verified</Badge>
+    }
+    if (doc.status === 'uploaded') {
+      return <Badge variant="secondary" className="text-xs">Under Review</Badge>
+    }
+    return <Badge variant="outline" className="text-xs">Pending</Badge>
+  }
 
-  // If questions not answered, gray out docs section
-  if (!questionsAnswered && round.round_question_requests && round.round_question_requests.length > 0) {
+  const getTagBadge = () => {
+    if (!doc.tag) return null
+    const tagLabels: Record<string, string> = {
+      'for_signing': 'For Signing',
+      'government_processing': 'Govt Processing',
+      'final_output': 'Final Document',
+      'informational': 'Informational',
+    }
     return (
-      <div className="opacity-50 pointer-events-none">
-        <p className="text-xs text-muted-foreground mb-2">Documents</p>
-        <p className="text-sm text-muted-foreground">Complete the questions above first.</p>
-      </div>
+      <Badge variant="outline" className="text-xs">
+        {tagLabels[doc.tag] || doc.tag}
+      </Badge>
     )
   }
 
+  const isFromCustomer = doc.direction === 'from_customer'
+  const isToCustomer = doc.direction === 'to_customer'
+
   return (
-    <div>
-      <p className="text-xs text-muted-foreground mb-2">Documents</p>
-
-      {/* Admin uploads (to_customer) */}
-      {toCustomerDocs.map(doc => {
-        // Find linked from_customer doc if this is for_signing
-        const linkedFromDoc = doc.linked_request_id
-          ? fromCustomerDocs.find(d => d.id === doc.linked_request_id)
-          : null
-
-        return (
-          <div key={doc.id} className="mb-3">
-            <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-              <div className="flex-1">
-                <p className="text-sm font-medium text-foreground">{doc.document_label}</p>
-                {doc.description && (
-                  <p className="text-xs text-muted-foreground mt-0.5">{doc.description}</p>
-                )}
-                {doc.tag && (
-                  <Badge variant="outline" className="text-xs mt-1">
-                    {doc.tag === 'for_signing' ? 'For Signing' :
-                     doc.tag === 'government_processing' ? 'Government Processing' :
-                     doc.tag === 'final_output' ? 'Final Document' : 'Informational'}
-                  </Badge>
-                )}
-              </div>
-              <DownloadDocLink fileUrl={doc.file_url!} fileName={doc.file_name || doc.document_label} />
-            </div>
-
-            {/* If for_signing, show linked upload slot */}
-            {linkedFromDoc && linkedFromDoc.status === 'pending' && (
-              <div className="mt-2 ml-4 p-3 border border-dashed border-amber-400 rounded-lg bg-amber-50 dark:bg-amber-950">
-                <p className="text-sm font-medium text-amber-800 dark:text-amber-200 mb-2">
-                  Upload signed: {linkedFromDoc.document_label}
-                </p>
-                <input
-                  type="file"
-                  onChange={(e) => e.target.files?.[0] && handleFileStage(linkedFromDoc.id, e.target.files[0])}
-                  className="text-sm"
-                />
-                {stagedFiles[linkedFromDoc.id] && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Staged: {stagedFiles[linkedFromDoc.id].name}
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
-        )
-      })}
-
-      {/* From customer docs (not linked to for_signing) */}
-      {fromCustomerDocs.filter(d => !toCustomerDocs.some(t => t.linked_request_id === d.id)).map(doc => (
-        <div key={doc.id} className="mb-3">
-          {doc.status === 'rejected' && doc.rejection_reason && (
-            <div className="mb-2 p-2 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded text-sm text-red-700 dark:text-red-300">
-              <AlertCircle className="h-4 w-4 inline mr-1" />
-              {buildRejectionMessage(doc.document_label, doc.rejection_reason)}
-            </div>
+    <div className="flex items-center justify-between p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        {isToCustomer ? (
+          <Download className="h-4 w-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+        ) : (
+          <Upload className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+        )}
+        <div className="flex-1 min-w-0">
+          <span className="text-sm font-medium text-foreground truncate block">{doc.document_label}</span>
+          {doc.description && (
+            <span className="text-xs text-muted-foreground truncate block">{doc.description}</span>
           )}
-          <div className="p-3 border border-dashed border-border rounded-lg">
-            <p className="text-sm font-medium text-foreground mb-2">{doc.document_label}</p>
-            {doc.description && (
-              <p className="text-xs text-muted-foreground mb-2">{doc.description}</p>
-            )}
-            {doc.status === 'pending' || doc.status === 'rejected' ? (
-              <>
-                <input
-                  type="file"
-                  onChange={(e) => e.target.files?.[0] && handleFileStage(doc.id, e.target.files[0])}
-                  className="text-sm"
-                />
-                {stagedFiles[doc.id] && (
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Staged: {stagedFiles[doc.id].name}
-                  </p>
-                )}
-              </>
-            ) : doc.status === 'uploaded' ? (
-              <div className="flex items-center gap-2 text-sm text-amber-600">
-                <Upload className="h-4 w-4" />
-                Uploaded - Awaiting review
-              </div>
-            ) : doc.status === 'verified' ? (
-              <div className="flex items-center gap-2 text-sm text-emerald-600">
-                <Check className="h-4 w-4" />
-                Verified
-              </div>
-            ) : null}
-          </div>
         </div>
-      ))}
-
-      {/* Submit button */}
-      {hasStagedFiles && (
-        <Button onClick={handleSubmitDocs} disabled={loading} className="mt-3">
-          {loading ? 'Uploading...' : `Submit ${Object.keys(stagedFiles).length} document${Object.keys(stagedFiles).length > 1 ? 's' : ''}`}
-        </Button>
-      )}
+      </div>
+      <div className="flex items-center gap-2 flex-shrink-0">
+        {getTagBadge()}
+        {getStatusBadge()}
+        {isToCustomer && doc.file_url && (
+          <button
+            onClick={handleDownload}
+            disabled={loading}
+            className="flex items-center gap-1 text-xs text-primary hover:underline disabled:opacity-50"
+          >
+            {loading ? (
+              <Loader2 className="h-3 w-3 animate-spin" />
+            ) : (
+              <Download className="h-3 w-3" />
+            )}
+            {loading ? 'Loading...' : 'Download'}
+          </button>
+        )}
+        {isFromCustomer && !doc.file_url && (
+          <Link href={`/orders/${orderId}/round-uploads/${roundId}`}>
+            <Button size="sm" variant="outline" className="h-7 text-xs">
+              Upload
+            </Button>
+          </Link>
+        )}
+      </div>
     </div>
   )
 }
 
 // Helper functions
-function getActionTag(
-  round: OrderRound,
-  questions: RoundQuestionRequest[],
-  fromCustomerDocs: OrderWorkDocument[],
-  toCustomerDocs: OrderWorkDocument[]
-): { label: string; variant: string } {
-  if (round.status === 'completed') return { label: 'Completed', variant: 'default' }
+function groupDocumentsByStage(
+  initialDocs: Round0Data['initialDocs'],
+  rounds: OrderRound[],
+  workflowStages: WorkflowDisplayStage[]
+): Record<string, Round0Data['initialDocs']> {
+  const grouped: Record<string, Round0Data['initialDocs']> = {}
 
-  const hasUnansweredQ = questions.some(q => !q.answered_at)
-  const hasPendingDocs = fromCustomerDocs.some(d => d.status === 'pending' || d.status === 'rejected')
-  const hasReuploadDocs = fromCustomerDocs.some(d => d.linked_request_id)
-  const hasForSigning = toCustomerDocs.some(d => d.tag === 'for_signing')
-  const hasGovt = toCustomerDocs.some(d => d.tag === 'government_processing')
+  // Default stage for docs without stage_key
+  const defaultStageKey = 'doc_collection'
 
-  if (hasUnansweredQ && !hasPendingDocs) return { label: 'Answer questions', variant: 'secondary' }
-  if (hasForSigning) return { label: 'Sign and re-upload', variant: 'destructive' }
-  if (hasPendingDocs && hasReuploadDocs) return { label: 'Upload additional documents', variant: 'secondary' }
-  if (hasPendingDocs) return { label: 'Upload documents', variant: 'secondary' }
-  if (hasGovt) return { label: 'Awaiting government processing', variant: 'outline' }
-  return { label: 'Awaiting review', variant: 'outline' }
+  // Initialize groups for each workflow stage
+  for (const stage of workflowStages) {
+    if (stage.stage_key) {
+      grouped[stage.stage_key] = []
+    }
+  }
+  grouped[defaultStageKey] = []
+
+  // Group initial documents by their stage_key
+  for (const doc of initialDocs) {
+    const stageKey = doc.stage_key || defaultStageKey
+    if (!grouped[stageKey]) {
+      grouped[stageKey] = []
+    }
+    grouped[stageKey].push(doc)
+  }
+
+  // Filter out empty groups and keep order from workflowStages
+  const orderedGroups: Record<string, Round0Data['initialDocs']> = {}
+
+  // First add doc_collection if it has docs
+  if (grouped[defaultStageKey]?.length > 0) {
+    orderedGroups[defaultStageKey] = grouped[defaultStageKey]
+  }
+
+  // Then add other stages in order
+  for (const stage of workflowStages) {
+    if (stage.stage_key && grouped[stage.stage_key]?.length > 0) {
+      orderedGroups[stage.stage_key] = grouped[stage.stage_key]
+    }
+  }
+
+  return orderedGroups
+}
+
+function formatStageKey(stageKey: string): string {
+  // Convert stage_key to human-readable title
+  // e.g., 'doc_collection' -> 'Document Collection'
+  const specialCases: Record<string, string> = {
+    'doc_collection': 'Initial Documents',
+    'initial_submission': 'Initial Submission',
+  }
+
+  if (specialCases[stageKey]) {
+    return specialCases[stageKey]
+  }
+
+  return stageKey
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 }
 
 function renderResponseValue(
@@ -552,73 +478,4 @@ function renderResponseValue(
     return options.find(o => o.value === String(responseValue))?.label ?? String(responseValue)
   }
   return String(responseValue)
-}
-
-// ViewDocLink component for viewing files with signed URLs
-function ViewDocLink({ fileUrl }: { fileUrl: string }) {
-  const [loading, setLoading] = useState(false)
-
-  const handleView = async () => {
-    setLoading(true)
-    try {
-      const signedUrl = await getSignedUrl(fileUrl)
-      if (signedUrl) {
-        window.open(signedUrl, '_blank')
-      }
-    } catch (error) {
-      console.error('Failed to get signed URL:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <button
-      onClick={handleView}
-      disabled={loading}
-      className="text-primary text-xs hover:underline disabled:opacity-50"
-    >
-      {loading ? 'Loading...' : 'View'}
-    </button>
-  )
-}
-
-// DownloadDocLink component for downloading files with signed URLs
-function DownloadDocLink({ fileUrl, fileName }: { fileUrl: string; fileName: string }) {
-  const [loading, setLoading] = useState(false)
-
-  const handleDownload = async () => {
-    setLoading(true)
-    try {
-      const signedUrl = await getSignedUrl(fileUrl)
-      if (signedUrl) {
-        const link = document.createElement('a')
-        link.href = signedUrl
-        link.download = fileName
-        link.target = '_blank'
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-      }
-    } catch (error) {
-      console.error('Failed to download file:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return (
-    <button
-      onClick={handleDownload}
-      disabled={loading}
-      className="flex items-center gap-1 text-sm text-primary hover:underline disabled:opacity-50"
-    >
-      {loading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        <Download className="h-4 w-4" />
-      )}
-      {loading ? 'Loading...' : 'Download'}
-    </button>
-  )
 }

@@ -353,7 +353,15 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           filter: `id=eq.${orderId}`,
         },
         (payload) => {
-          setOrder(prev => ({ ...prev, ...payload.new } as Order))
+          setOrder(prev => {
+            if (!prev) return payload.new as Order
+            return {
+              ...prev,
+              ...payload.new,
+              // Preserve chat_conversation_id if realtime update doesn't include it
+              chat_conversation_id: (payload.new as Order).chat_conversation_id ?? prev.chat_conversation_id,
+            } as Order
+          })
         }
       )
       .subscribe()
@@ -1216,7 +1224,11 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
           {/* Rounds Timeline */}
           {servicePackage?.id && (
-            <RoundsTimeline orderId={orderId} servicePackageId={servicePackage.id} />
+            <RoundsTimeline
+              orderId={orderId}
+              servicePackageId={servicePackage.id}
+              workflowStages={servicePackage.workflow_stages || []}
+            />
           )}
         </div>
 
