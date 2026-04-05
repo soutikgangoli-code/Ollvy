@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getUser, createServerSupabase } from '@/lib/supabase-server'
+import { getUser, createServerSupabase, supabaseServer } from '@/lib/supabase-server'
 import { OrderPageClient } from './OrderPageClient'
 import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
 
@@ -49,13 +49,14 @@ export default async function OrderDetailPage({ params }: PageProps) {
   // Server-side data fetching - much faster than client-side
   const supabase = await createServerSupabase()
 
-  // Fetch all data in parallel server-side
+  // First, verify user can access this order (RLS check)
+  // We fetch order without service_package join because RLS on service_packages
+  // blocks inactive packages, but we need to show order details for existing orders
   const [orderResult, stageResult, docsResult, workDocsResult] = await Promise.all([
     supabase
       .from('orders')
       .select(`
         *,
-        service_package:service_packages(*),
         professional:professionals(*)
       `)
       .eq('id', orderId)
@@ -82,6 +83,24 @@ export default async function OrderDetailPage({ params }: PageProps) {
     return <OrderPageClient orderId={orderId} initialData={null} />
   }
 
+  // Fetch service_package using service role client (bypasses RLS)
+  // This is safe because we already verified user access to the order above
+  let servicePackageData = null
+  if (supabaseServer && orderResult.data.service_package_id) {
+    const { data: spData } = await supabaseServer
+      .from('service_packages')
+      .select('*')
+      .eq('id', orderResult.data.service_package_id)
+      .single()
+    servicePackageData = spData
+  }
+
+  // Attach service_package to order data
+  const orderWithServicePackage = {
+    ...orderResult.data,
+    service_package: servicePackageData
+  }
+
   // Fetch optional data (don't block on these)
   const [invoiceResult, notificationResult, responsesResult] = await Promise.allSettled([
     supabase
@@ -106,10 +125,8 @@ export default async function OrderDetailPage({ params }: PageProps) {
   // Build questionnaire responses with labels
   let questionnaireResponses: QuestionnaireResponse[] = []
   if (responsesResult.status === 'fulfilled' && responsesResult.value.data) {
-    // Handle array case - Supabase can return service_package as an array due to join behavior
-    const rawServicePackage = orderResult.data.service_package
-    const servicePackage = (Array.isArray(rawServicePackage) ? rawServicePackage[0] : rawServicePackage) as { questionnaire?: Array<{ key: string; label: string }> } | undefined
-    const questionnaire = servicePackage?.questionnaire || []
+    // servicePackageData is already a single object (fetched via service role)
+    const questionnaire = (servicePackageData as { questionnaire?: Array<{ key: string; label: string }> } | null)?.questionnaire || []
     const questionLabels = new Map(
       questionnaire.map((q: { key: string; label: string }) => [q.key, q.label])
     )
@@ -121,7 +138,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
   }
 
   const initialData = {
-    order: orderResult.data as Order,
+    order: orderWithServicePackage as Order,
     stageHistory: (stageResult.data || []) as OrderStageHistory[],
     documents: (docsResult.data || []) as OrderDocument[],
     workDocuments: (workDocsResult.data || []) as OrderWorkDocument[],
