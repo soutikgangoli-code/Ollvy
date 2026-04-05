@@ -75,24 +75,24 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
   }
 
   return (
-    <div className="border-t border-border p-4 bg-card shrink-0">
+    <div className="border-t border-border px-3 py-2 bg-card shrink-0">
       {/* Selected file preview */}
       {selectedFile && (
-        <div className="mb-3 flex items-center gap-2 bg-muted rounded-lg px-3 py-2">
+        <div className="mb-2 flex items-center gap-2 bg-muted rounded-lg px-3 py-2">
           <Paperclip className="h-4 w-4 text-muted-foreground" />
-          <span className="text-sm text-foreground/80 truncate flex-1">
+          <span className="text-sm text-foreground truncate flex-1">
             {selectedFile.name}
           </span>
           <button
             onClick={clearFile}
-            className="p-1 hover:bg-muted-foreground/10 rounded transition-colors"
+            className="p-1 hover:bg-accent rounded transition-colors"
           >
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
       )}
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {/* File upload button */}
         {onFileUpload && (
           <>
@@ -108,7 +108,7 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
               onClick={() => fileInputRef.current?.click()}
               disabled={disabled || isSending}
               className={cn(
-                'p-2 rounded-lg transition-colors',
+                'p-2 rounded-full transition-colors',
                 disabled || isSending
                   ? 'opacity-40 cursor-not-allowed'
                   : 'hover:bg-muted text-muted-foreground hover:text-foreground'
@@ -119,7 +119,7 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
           </>
         )}
 
-        {/* Message input */}
+        {/* Message input - pill shaped */}
         <input
           ref={inputRef}
           type="text"
@@ -129,23 +129,23 @@ export function ChatInput({ onSend, onFileUpload, disabled }: ChatInputProps) {
           placeholder="Type a message..."
           disabled={disabled || isSending}
           className={cn(
-            'flex-1 h-11 px-4 bg-muted border border-border rounded-xl',
+            'flex-1 h-10 px-4 bg-muted border border-border rounded-full',
             'text-foreground placeholder:text-muted-foreground',
             'focus:outline-none focus:border-ring transition-colors',
             (disabled || isSending) && 'opacity-40 cursor-not-allowed'
           )}
         />
 
-        {/* Send button */}
+        {/* Send button - circular green */}
         <Button
           onClick={handleSend}
           disabled={(!message.trim() && !selectedFile) || isSending || disabled}
-          className="h-11 w-11 p-0"
+          className="h-10 w-10 rounded-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 p-0 border-0"
         >
           {isSending ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <Loader2 className="h-4 w-4 text-white animate-spin" />
           ) : (
-            <Send className="h-5 w-5" />
+            <Send className="h-4 w-4 text-white" />
           )}
         </Button>
       </div>

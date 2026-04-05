@@ -166,10 +166,10 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Messages container */}
+      {/* Messages container - subtle theme-aware background */}
       <div
         ref={containerRef}
-        className="flex-1 min-h-0 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-muted"
+        className="flex-1 min-h-0 p-3 overflow-y-auto scrollbar-thin scrollbar-thumb-muted bg-muted/30 dark:bg-muted/20"
       >
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">

@@ -50,12 +50,12 @@ export function MessageBubble({ message, professionalName }: MessageBubbleProps)
   // File messages
   if (message.message_type === 'file' && message.file_path) {
     return (
-      <div className={cn('flex mb-4', isUser ? 'justify-end' : 'justify-start')}>
+      <div className={cn('flex mb-3', isUser ? 'justify-end' : 'justify-start')}>
         <div className={cn(
-          'max-w-[75%] rounded-2xl px-4 py-3',
+          'max-w-[75%] rounded-2xl px-4 py-3 shadow-sm',
           isUser
-            ? 'bg-primary/10 rounded-br-sm'
-            : 'bg-muted rounded-bl-sm'
+            ? 'bg-emerald-100 dark:bg-emerald-900/50 rounded-br-sm'
+            : 'bg-card border border-border rounded-bl-sm'
         )}>
           {!isUser && isProfessional && professionalName && (
             <p className="text-xs text-muted-foreground mb-1">
@@ -63,13 +63,25 @@ export function MessageBubble({ message, professionalName }: MessageBubbleProps)
             </p>
           )}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">
-              <FileText className="h-5 w-5 text-muted-foreground" />
+            <div className={cn(
+              'w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0',
+              isUser ? 'bg-emerald-200/50 dark:bg-emerald-800/50' : 'bg-muted'
+            )}>
+              <FileText className={cn(
+                'h-5 w-5',
+                isUser ? 'text-emerald-700 dark:text-emerald-300' : 'text-muted-foreground'
+              )} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-foreground truncate">{message.file_name || 'File'}</p>
+              <p className={cn(
+                'text-sm truncate',
+                isUser ? 'text-emerald-900 dark:text-emerald-100' : 'text-foreground'
+              )}>{message.file_name || 'File'}</p>
               {message.file_size && (
-                <p className="text-xs text-muted-foreground">
+                <p className={cn(
+                  'text-xs',
+                  isUser ? 'text-emerald-700/70 dark:text-emerald-300/70' : 'text-muted-foreground'
+                )}>
                   {(message.file_size / 1024).toFixed(1)} KB
                 </p>
               )}
@@ -77,17 +89,31 @@ export function MessageBubble({ message, professionalName }: MessageBubbleProps)
             <button
               onClick={handleDownload}
               disabled={downloading}
-              className="p-2 hover:bg-muted rounded-lg transition-colors disabled:opacity-50"
+              className={cn(
+                'p-2 rounded-lg transition-colors disabled:opacity-50',
+                isUser
+                  ? 'hover:bg-emerald-200/50 dark:hover:bg-emerald-800/50'
+                  : 'hover:bg-accent'
+              )}
               title="Download file"
             >
               {downloading ? (
-                <Loader2 className="h-4 w-4 text-muted-foreground animate-spin" />
+                <Loader2 className={cn(
+                  'h-4 w-4 animate-spin',
+                  isUser ? 'text-emerald-700 dark:text-emerald-300' : 'text-muted-foreground'
+                )} />
               ) : (
-                <Download className="h-4 w-4 text-muted-foreground" />
+                <Download className={cn(
+                  'h-4 w-4',
+                  isUser ? 'text-emerald-700 dark:text-emerald-300' : 'text-muted-foreground'
+                )} />
               )}
             </button>
           </div>
-          <p className="text-[10px] text-muted-foreground/70 mt-2 text-right">
+          <p className={cn(
+            'text-[10px] mt-2 text-right',
+            isUser ? 'text-emerald-700/70 dark:text-emerald-300/70' : 'text-muted-foreground/70'
+          )}>
             {formatTime(message.created_at)}
           </p>
         </div>
@@ -97,22 +123,28 @@ export function MessageBubble({ message, professionalName }: MessageBubbleProps)
 
   // Text messages
   return (
-    <div className={cn('flex mb-4', isUser ? 'justify-end' : 'justify-start')}>
+    <div className={cn('flex mb-3', isUser ? 'justify-end' : 'justify-start')}>
       <div className={cn(
-        'max-w-[75%] rounded-2xl px-4 py-3',
+        'max-w-[75%] rounded-2xl px-4 py-3 shadow-sm',
         isUser
-          ? 'bg-primary/10 rounded-br-sm'
-          : 'bg-muted rounded-bl-sm'
+          ? 'bg-emerald-100 dark:bg-emerald-900/50 rounded-br-sm'
+          : 'bg-card border border-border rounded-bl-sm'
       )}>
         {!isUser && isProfessional && professionalName && (
           <p className="text-xs text-muted-foreground mb-1">
             {professionalName.split(' ')[0]}, Ollvy Compliance Team
           </p>
         )}
-        <p className="text-sm text-foreground whitespace-pre-wrap break-words">
+        <p className={cn(
+          'text-sm whitespace-pre-wrap break-words',
+          isUser ? 'text-emerald-900 dark:text-emerald-100' : 'text-foreground'
+        )}>
           {message.content}
         </p>
-        <p className="text-[10px] text-muted-foreground/70 mt-1 text-right">
+        <p className={cn(
+          'text-[10px] mt-1 text-right',
+          isUser ? 'text-emerald-700/70 dark:text-emerald-300/70' : 'text-muted-foreground/70'
+        )}>
           {formatTime(message.created_at)}
         </p>
       </div>
