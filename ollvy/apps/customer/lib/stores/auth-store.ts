@@ -365,10 +365,8 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
           showLoginSuccessBanner: shouldShowBanner,
         })
       } else {
-        // Clear fresh login flag if no session (shouldn't happen but be safe)
-        if (typeof window !== 'undefined') {
-          sessionStorage.removeItem('ollvy_fresh_login')
-        }
+        // Don't clear fresh login flag here - session might still be loading
+        // The flag will be cleared when the banner is successfully shown
         set({
           session: null,
           user: null,
@@ -379,10 +377,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
       }
     } catch (error) {
       console.error('[auth-store] refreshSession error:', error)
-      // Clear fresh login flag on error
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('ollvy_fresh_login')
-      }
+      // Don't clear fresh login flag on error - might retry and succeed
       set({ isLoading: false, isHydrated: true })
     } finally {
       _isRefreshingSession = false

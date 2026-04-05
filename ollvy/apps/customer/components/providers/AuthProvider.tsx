@@ -31,8 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.log('[AuthProvider] Auth event:', event)
       if (!isMounted) return
 
-      // After initial hydration, only respond to SIGNED_OUT or TOKEN_REFRESHED
-      // Ignore redundant SIGNED_IN/INITIAL_SESSION events that cause hangs
+      // After initial hydration, only respond to specific events
       if (initialHydrationComplete.current) {
         if (event === 'SIGNED_OUT') {
           setSession(null)
@@ -40,8 +39,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } else if (event === 'TOKEN_REFRESHED' && session) {
           // Only update session token, don't re-fetch user data
           setSession(session)
+        } else if (event === 'SIGNED_IN' && session) {
+          // Check for pending fresh login that wasn't processed during hydration
+          // This handles the race condition where getSession() returns null initially
+          // but the session is established shortly after
+          const hasPendingFreshLogin = sessionStorage.getItem('ollvy_fresh_login') === '1'
+          if (hasPendingFreshLogin) {
+            console.log('[AuthProvider] SIGNED_IN with pending fresh login, calling refreshSession')
+            // Call refreshSession which will detect the sessionStorage flag,
+            // fetch user data, show the banner, and clear the flag
+            await refreshSession()
+          }
         }
-        // Ignore SIGNED_IN and INITIAL_SESSION after hydration
+        // Ignore INITIAL_SESSION after hydration
         return
       }
 
