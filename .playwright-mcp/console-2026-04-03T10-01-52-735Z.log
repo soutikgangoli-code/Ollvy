@@ -1,0 +1,45 @@
+[    1987ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/services/gst-registration:0
+[    2166ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/react-dom@18.3.1_react@18.2.0/node_modules/react-dom/cjs/react-dom.development.js:29889
+[    2232ms] Error: Cannot find module './vendor-chunks/@supabase+auth-js@2.101.1.js'
+Require stack:
+- /Users/apple/Desktop/Ollvy-main.123/ollvy/apps/customer/.next/server/webpack-runtime.js
+- /Users/apple/Desktop/Ollvy-main.123/ollvy/apps/customer/.next/server/app/(main)/services/[slug]/page.js
+- /Users/apple/Desktop/Ollvy-main.123/ollvy/node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/server/require.js
+- /Users/apple/Desktop/Ollvy-main.123/ollvy/node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/server/load-components.js
+- /Users/apple/Desktop/Ollvy-main.123/ollvy/node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/build/utils.js
+- /Users/apple/Desktop/Ollvy-main.123/ollvy/node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/apple/Desktop/Ollvy-main.123/ollvy/node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/jest-worker/processChild.js
+    at Function.<anonymous> (node:internal/modules/cjs/loader:1383:15)
+    at <unknown> (file:///Users/apple/Desktop/Ollvy-main.123/ollvy/node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/server/require-hook.js:57:36)
+    at defaultResolveImpl (node:internal/modules/cjs/loader:1025:19)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1030:22)
+    at Function._load (node:internal/modules/cjs/loader:1192:37)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.<anonymous> (node:internal/modules/cjs/loader:1463:12)
+    at mod.require (file:///Users/apple/Desktop/Ollvy-main.123/ollvy/node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/server/require-hook.js:68:28)
+    at require (node:internal/modules/helpers:147:16)
+[    2233ms] [LOG] [HMR] connected @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:45
+[   12314ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:88
+[   13316ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:88
+[   14318ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:88
+[   15320ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:88
+[   16322ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:88
+[   21324ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:88
+[   26329ms] [LOG] [HMR] connected @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/websocket.js:45
+[   26337ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/80c83563b45a2526.webpack.hot-update.json:0
+[   26338ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/hot-reloader-pages.js:347
+[   27747ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/hot-reloader-pages.js:206
+[   30445ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/hot-reloader-pages.js:206
+[   30455ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/80c83563b45a2526.webpack.hot-update.json:0
+[   30455ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/hot-reloader-pages.js:347
+[   30791ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/_next/static/webpack/80c83563b45a2526.webpack.hot-update.json:0
+[   30791ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///(pages-dir-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/client/dev/hot-reloader/pages/hot-reloader-pages.js:347
+[   34734ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:25630
+[   34882ms] [LOG] [GTM Event] clear_ecommerce {ecommerce: null} @ webpack-internal:///(app-pages-browser)/./lib/hooks/useGTM.ts:17
+[   34883ms] [LOG] [GTM Event] view_item {ecommerce: Object} @ webpack-internal:///(app-pages-browser)/./lib/hooks/useGTM.ts:17
+[   34885ms] [LOG] [AuthProvider] Mounting, starting hydration @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:27
+[   34885ms] [LOG] [auth-store] refreshSession starting @ webpack-internal:///(app-pages-browser)/./lib/stores/auth-store.ts:188
+[   34945ms] [LOG] [auth-store] getSession result: no session @ webpack-internal:///(app-pages-browser)/./lib/stores/auth-store.ts:192
+[   34950ms] [LOG] [AuthProvider] Initial hydration complete @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:32
+[   34950ms] [LOG] [AuthProvider] Auth event: INITIAL_SESSION @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:38

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+// Card components removed - using custom styled containers for penalty calculator style
 import { Progress } from '@/components/ui/progress'
 import {
   Popover,
@@ -44,7 +44,6 @@ import { getSignedUrl, downloadFile } from '@/lib/storage'
 import {
   AlertCircle,
   ArrowLeft,
-  MessageSquare,
   Download,
   FileText,
   Calendar,
@@ -53,13 +52,9 @@ import {
   ChevronRight,
   ChevronDown,
   Receipt,
-  Building2,
-  Target,
-  TrendingUp,
   Check,
   Circle,
   Upload,
-  User,
   FolderOpen,
   Info,
   Loader2,
@@ -740,77 +735,70 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
       {/* Notification Banner - Pending Work Documents */}
       {pendingWorkDocs.length > 0 && (
-        <div className="mb-6 p-4 rounded-xl border border-amber-500/30 bg-amber-500/10">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
-              <FileText className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-foreground">
-                Your CA has requested {pendingWorkDocs.length} document{pendingWorkDocs.length !== 1 ? 's' : ''}
-              </p>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                {pendingWorkDocs.map(d => d.document_label).join(', ')}
-              </p>
-            </div>
-            <Button
-              size="sm"
-              className="flex-shrink-0 gap-1"
-              onClick={() => {
-                const workDocsSection = document.getElementById('work-documents-section')
-                workDocsSection?.scrollIntoView({ behavior: 'smooth' })
-              }}
-            >
-              <Upload className="h-4 w-4" />
-              Upload Now
-            </Button>
+        <div className="flex gap-3 p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 mb-6">
+          <FileText className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-amber-600 dark:text-amber-400 mb-0.5">
+              Documents Requested
+            </p>
+            <p className="text-xs text-amber-700/80 dark:text-amber-300/80">
+              {pendingWorkDocs.map(d => d.document_label).join(', ')}
+            </p>
           </div>
+          <Button
+            size="sm"
+            className="shrink-0"
+            onClick={() => {
+              const workDocsSection = document.getElementById('work-documents-section')
+              workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >
+            Upload Now
+          </Button>
         </div>
       )}
 
       {/* Notification Banner - New Deliverables */}
       {newDeliverables.length > 0 && pendingWorkDocs.length === 0 && (
-        <div className="mb-6 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
-              <Download className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-foreground">
-                Your CA has shared {newDeliverables.length} document{newDeliverables.length !== 1 ? 's' : ''}
-              </p>
-              <p className="text-sm text-muted-foreground mt-0.5">
-                {newDeliverables.map(d => d.document_label).join(', ')}
-              </p>
-            </div>
-            <Button
-              size="sm"
-              variant="outline"
-              className="flex-shrink-0 gap-1"
-              onClick={() => {
-                const workDocsSection = document.getElementById('work-documents-section')
-                workDocsSection?.scrollIntoView({ behavior: 'smooth' })
-              }}
-            >
-              <Download className="h-4 w-4" />
-              View Documents
-            </Button>
+        <div className="flex gap-3 p-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 mb-6">
+          <Download className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-medium text-emerald-600 dark:text-emerald-400 mb-0.5">
+              Documents Available
+            </p>
+            <p className="text-xs text-emerald-700/80 dark:text-emerald-300/80">
+              {newDeliverables.map(d => d.document_label).join(', ')}
+            </p>
           </div>
+          <Button
+            size="sm"
+            variant="outline"
+            className="shrink-0"
+            onClick={() => {
+              const workDocsSection = document.getElementById('work-documents-section')
+              workDocsSection?.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >
+            View Documents
+          </Button>
         </div>
       )}
 
       {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-start justify-between gap-4 flex-wrap mb-4">
+      <div className="mb-12">
+        <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
+          Order #{order.order_number}
+        </p>
+        <div className="flex items-start justify-between gap-4 flex-wrap mb-2">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-2xl font-semibold text-foreground">
+              <h1 className="text-3xl md:text-4xl font-semibold text-foreground tracking-tight">
                 {servicePackage?.name || 'Order'}
               </h1>
               <OrderStatusBadge status={order.status} />
             </div>
             <p className="text-muted-foreground">
-              Order #{order.order_number} <span className="mx-2 text-muted-foreground/50">|</span> {formatDate(order.created_at)}
+              {formatDate(order.created_at)}
             </p>
           </div>
 
@@ -849,100 +837,84 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           })()}
         </div>
 
-        {/* Stats Cards Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-          {/* Progress */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.docProgress}%</p>
-                  <p className="text-xs text-muted-foreground">Progress</p>
-                </div>
-              </div>
-              <Progress value={stats.docProgress} className="h-1.5" />
-            </CardContent>
-          </Card>
+        {/* Stats Cards Row - Unified Container */}
+        <div className="rounded-xl border border-border bg-card p-6 mt-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {/* Progress */}
+            <div className="space-y-1">
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Progress
+              </p>
+              <p className="text-2xl font-mono font-semibold tracking-tight text-foreground">
+                {stats.docProgress}%
+              </p>
+              <Progress value={stats.docProgress} className="h-1.5 mt-2" />
+            </div>
 
-          {/* Documents - Clickable */}
-          <Card
-            className="cursor-pointer hover:bg-muted/30 transition-colors"
-            onClick={() => {
-              if (stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0) {
-                setDocumentsModalIndex(0)
-                setShowDocumentsModal(true)
-              } else {
-                router.push(`/orders/${orderId}/documents`)
-              }
-            }}
-          >
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                  <FileText className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.uploadedDocs}/{stats.totalDocs}</p>
-                  <p className="text-xs text-muted-foreground">Documents</p>
-                </div>
-              </div>
-              <Progress value={stats.totalDocs > 0 ? (stats.uploadedDocs / stats.totalDocs) * 100 : 0} className="h-1.5" />
-            </CardContent>
-          </Card>
+            {/* Documents - Clickable */}
+            <div
+              className="space-y-1 cursor-pointer hover:opacity-80 transition-opacity"
+              onClick={() => {
+                if (stats.uploadedDocs === stats.totalDocs && stats.totalDocs > 0) {
+                  setDocumentsModalIndex(0)
+                  setShowDocumentsModal(true)
+                } else {
+                  router.push(`/orders/${orderId}/documents`)
+                }
+              }}
+            >
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Documents
+              </p>
+              <p className="text-2xl font-mono font-semibold tracking-tight text-foreground">
+                {stats.uploadedDocs}/{stats.totalDocs}
+              </p>
+              <Progress value={stats.totalDocs > 0 ? (stats.uploadedDocs / stats.totalDocs) * 100 : 0} className="h-1.5 mt-2" />
+            </div>
 
-          {/* Days Remaining */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                  <Clock className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-foreground font-mono">
-                    {stats.customerSetupComplete ? stats.daysRemaining : stats.slaDays}
-                  </p>
-                  <div className="flex items-center gap-1.5">
-                    <p className="text-xs text-muted-foreground">
-                      Days Left - {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                    </p>
-                    {!stats.customerSetupComplete && (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px] cursor-help">
-                              Paused
-                              <Info className="h-3 w-3" />
-                            </span>
-                          </TooltipTrigger>
-                          <TooltipContent side="bottom" className="max-w-[200px]">
-                            <p className="text-xs">Complete your questionnaire and upload documents to resume progress.</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    )}
-                  </div>
-                </div>
+            {/* Days Remaining */}
+            <div className="space-y-1">
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Days Left
+              </p>
+              <p className="text-2xl font-mono font-semibold tracking-tight text-foreground">
+                {stats.customerSetupComplete ? stats.daysRemaining : stats.slaDays}
+              </p>
+              <div className="flex items-center gap-1.5 mt-2">
+                <p className="text-xs text-muted-foreground">
+                  {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                </p>
+                {!stats.customerSetupComplete && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px] cursor-help">
+                          Paused
+                          <Info className="h-3 w-3" />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-[200px]">
+                        <p className="text-xs">Complete your questionnaire and upload documents to resume progress.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* SLA */}
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                  <Target className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold text-foreground font-mono">{stats.slaDays}</p>
-                  <p className="text-xs text-muted-foreground">Day SLA</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            {/* SLA */}
+            <div className="space-y-1">
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                SLA
+              </p>
+              <p className="text-2xl font-mono font-semibold tracking-tight text-foreground">
+                {stats.slaDays} days
+              </p>
+              <p className="text-xs text-muted-foreground mt-2">
+                Working days
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -950,12 +922,19 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* Progress Overview Card */}
-          <Card>
-            <CardContent className="p-6">
-              <h2 className="text-xl font-semibold text-foreground mb-4">
+          <div className="rounded-xl border border-border overflow-hidden">
+            {/* Header section */}
+            <div className="px-6 pt-6 pb-4">
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-1">
+                Service
+              </p>
+              <h2 className="text-xl font-semibold text-foreground">
                 {servicePackage?.name || 'Order'}
               </h2>
+            </div>
 
+            {/* Progress bar section */}
+            <div className="px-6 py-4 border-t border-border/30">
               {/* Progress Bar Segments */}
               <div className="flex gap-1 mb-3">
                 {timelineStages.map((stage: TimelineStage, index: number) => (
@@ -974,7 +953,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
               </div>
 
               {/* Stage Info Row */}
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between">
                 <p className="text-sm text-muted-foreground">
                   Stage {completedStagesCount + (timelineStages.some((s: TimelineStage) => s.isCurrent) ? 1 : 0)} of {timelineStages.length}
                 </p>
@@ -982,45 +961,52 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                   {order.status === 'completed' ? 'Completed' : 'In Progress'}
                 </span>
               </div>
+            </div>
 
-              {/* Expected Completion */}
-              <div className="pt-3 border-t border-border">
-                <div className="flex items-center gap-2">
-                  <p className="text-sm text-muted-foreground">
-                    Expected completion: {stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                  </p>
-                  {!stats.customerSetupComplete && (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px] cursor-help">
-                            Paused
-                            <Info className="h-3 w-3" />
-                          </span>
-                        </TooltipTrigger>
-                        <TooltipContent side="bottom" className="max-w-[200px]">
-                          <p className="text-xs">Complete your questionnaire and upload documents to resume progress.</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
-                </div>
+            {/* Expected completion section */}
+            <div className="px-6 py-4 border-t border-border/30 bg-muted/30">
+              <div className="flex items-center gap-2">
+                <p className="text-sm text-muted-foreground">
+                  Expected completion: <span className="font-mono font-medium text-foreground">{stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                </p>
+                {!stats.customerSetupComplete && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px] cursor-help">
+                          Paused
+                          <Info className="h-3 w-3" />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom" className="max-w-[200px]">
+                        <p className="text-xs">Complete your questionnaire and upload documents to resume progress.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Timeline */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-muted-foreground" />
-                Progress Timeline
-                <span className="ml-2 text-sm font-normal text-muted-foreground">
-                  {completedStagesCount} of {timelineStages.length} complete
+          <div className="rounded-xl border border-border bg-card overflow-hidden">
+            {/* Header */}
+            <div className="px-6 py-4 border-b border-border/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    Progress Timeline
+                  </span>
+                </div>
+                <span className="text-sm text-muted-foreground">
+                  {completedStagesCount} of {timelineStages.length}
                 </span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+              </div>
+            </div>
+
+            {/* Timeline content */}
+            <div className="p-6">
               <div className="space-y-0">
                 {timelineStages.map((stage: TimelineStage, index: number) => {
                   const isQuestionsStage = index === 0
@@ -1219,8 +1205,8 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                   )
                 })}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Rounds Timeline */}
           {servicePackage?.id && (
@@ -1236,14 +1222,13 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
         <div className="space-y-4">
           {/* Assigned Professional */}
           {order.professional_id && (
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-border/50">
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                   Assigned Professional
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0">
+                </span>
+              </div>
+              <div className="p-6">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
                     <span className="text-lg font-semibold text-foreground">
@@ -1285,41 +1270,39 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                     )}
                   </Button>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {/* Order Summary */}
-          <Card>
+          <div className="rounded-xl border border-border overflow-hidden">
             <Collapsible open={summaryOpen} onOpenChange={setSummaryOpen}>
+              {/* Collapsible header */}
               <CollapsibleTrigger asChild>
-                <CardHeader className="cursor-pointer hover:bg-muted/30 transition-colors">
-                  <CardTitle className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Building2 className="h-5 w-5 text-muted-foreground" />
-                      Order Summary
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-mono">{formatPaisa(order.total_paisa_snapshot)}</span>
-                      <ChevronDown className={cn(
-                        'h-4 w-4 text-muted-foreground transition-transform',
-                        summaryOpen && 'rotate-180'
-                      )} />
-                    </div>
-                  </CardTitle>
-                </CardHeader>
+                <div className="px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-muted/30 transition-colors">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    Order Summary
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-mono font-semibold">{formatPaisa(order.total_paisa_snapshot)}</span>
+                    <ChevronDown className={cn(
+                      'h-4 w-4 text-muted-foreground transition-transform',
+                      summaryOpen && 'rotate-180'
+                    )} />
+                  </div>
+                </div>
               </CollapsibleTrigger>
 
               {/* Quick Action: Work Documents */}
               {order.professional_id && workDocuments.length > 0 && (
-                <div className="px-6 pb-3 border-b border-border">
+                <div className="px-6 pb-3 border-t border-border/30">
                   <button
                     onClick={(e) => {
                       e.stopPropagation()
                       const workDocsSection = document.getElementById('work-documents-section')
                       workDocsSection?.scrollIntoView({ behavior: 'smooth' })
                     }}
-                    className="w-full flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                    className="w-full flex items-center justify-between p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors mt-3"
                   >
                     <div className="flex items-center gap-3">
                       <FolderOpen className="h-4 w-4 text-muted-foreground" />
@@ -1342,7 +1325,8 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                 </div>
               )}
               <CollapsibleContent>
-                <CardContent className="space-y-6 pt-0">
+                {/* Breakdown section */}
+                <div className="px-6 py-4 border-t border-border/30 space-y-3">
                   {/* Price Breakdown */}
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
@@ -1380,85 +1364,86 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                       <span className="font-medium text-foreground">{order.promo_code_used}</span>
                     </div>
                   )}
+                </div>
 
-                  {/* Key Dates */}
-                  <div className="space-y-2">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Key Dates</p>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Ordered</span>
-                        <span className="text-foreground">{formatDate(order.created_at)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Est. Completion</span>
-                        <span className="text-foreground font-medium">
-                          {formatDate(stats.estimatedCompletion.toISOString())}
-                        </span>
-                      </div>
+                {/* Key dates section */}
+                <div className="px-6 py-4 border-t border-border/30 bg-muted/30">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                    Key Dates
+                  </p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Ordered</span>
+                      <span className="text-foreground font-mono">{formatDate(order.created_at)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Est. Completion</span>
+                      <span className="text-foreground font-mono font-medium">
+                        {formatDate(stats.estimatedCompletion.toISOString())}
+                      </span>
                     </div>
                   </div>
+                </div>
 
-                  {/* Submitted Work Documents */}
-                  {workDocuments.filter(d => d.direction === 'from_customer' && d.file_url).length > 0 && (
-                    <div className="space-y-2 pt-4 border-t border-border">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Submitted Documents
-                      </p>
-                      <div className="space-y-2">
-                        {workDocuments
-                          .filter(d => d.direction === 'from_customer' && d.file_url)
-                          .map(doc => (
-                            <div
-                              key={doc.id}
-                              className="flex items-center gap-3 p-2 rounded-lg bg-muted/30"
-                            >
-                              <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-foreground truncate">
-                                  {doc.document_label}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  {doc.status === 'verified' ? 'Verified' : doc.status === 'uploaded' ? 'Under Review' : doc.status}
-                                </p>
-                              </div>
-                              {doc.status === 'verified' && (
-                                <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-                              )}
+                {/* Submitted Work Documents */}
+                {workDocuments.filter(d => d.direction === 'from_customer' && d.file_url).length > 0 && (
+                  <div className="px-6 py-4 border-t border-border/30">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                      Submitted Documents
+                    </p>
+                    <div className="space-y-2">
+                      {workDocuments
+                        .filter(d => d.direction === 'from_customer' && d.file_url)
+                        .map(doc => (
+                          <div
+                            key={doc.id}
+                            className="flex items-center gap-3 p-2 rounded-lg bg-muted/30"
+                          >
+                            <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-foreground truncate">
+                                {doc.document_label}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {doc.status === 'verified' ? 'Verified' : doc.status === 'uploaded' ? 'Under Review' : doc.status}
+                              </p>
                             </div>
-                          ))}
-                      </div>
+                            {doc.status === 'verified' && (
+                              <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                            )}
+                          </div>
+                        ))}
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* Received Deliverables */}
-                  {workDocuments.filter(d => d.direction === 'to_customer').length > 0 && (
-                    <div className="space-y-2 pt-4 border-t border-border">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Received Deliverables
-                      </p>
-                      <div className="space-y-2">
-                        {workDocuments
-                          .filter(d => d.direction === 'to_customer')
-                          .map(doc => (
-                            <DeliverableDownloadButton key={doc.id} doc={doc} />
-                          ))}
-                      </div>
+                {/* Received Deliverables */}
+                {workDocuments.filter(d => d.direction === 'to_customer').length > 0 && (
+                  <div className="px-6 py-4 border-t border-border/30">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                      Received Deliverables
+                    </p>
+                    <div className="space-y-2">
+                      {workDocuments
+                        .filter(d => d.direction === 'to_customer')
+                        .map(doc => (
+                          <DeliverableDownloadButton key={doc.id} doc={doc} />
+                        ))}
                     </div>
-                  )}
-                </CardContent>
+                  </div>
+                )}
               </CollapsibleContent>
             </Collapsible>
-          </Card>
+          </div>
 
           {/* Downloads */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-medium flex items-center gap-2">
-                <Download className="h-4 w-4 text-muted-foreground" />
+          <div className="rounded-xl border border-border bg-card overflow-hidden">
+            <div className="px-6 py-4 border-b border-border/50">
+              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                 Downloads
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 pt-0">
+              </span>
+            </div>
+            <div className="p-4 space-y-2">
               {order.razorpay_payment_id && (
                 <button
                   onClick={handleDownloadInvoice}
@@ -1491,8 +1476,8 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                     Documents will appear once processed
                   </p>
                 )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Work Documents Section */}
           <div id="work-documents-section">
@@ -1507,26 +1492,25 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
 
           {/* Chat with CA */}
           {order.chat_conversation_id ? (
-            <Card className="flex flex-col h-[450px] overflow-hidden">
-              <CardHeader className="pb-3 shrink-0">
-                <CardTitle className="text-sm font-medium flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            <div className="rounded-xl border border-border overflow-hidden h-[450px] flex flex-col">
+              <div className="px-6 py-4 border-b border-border/50 shrink-0">
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                   Chat with your CA
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0 flex-1 min-h-0 flex flex-col">
+                </span>
+              </div>
+              <div className="flex-1 min-h-0">
                 <ChatWindow
                   conversationId={order.chat_conversation_id}
                   professionalName={(order.professional as { name?: string })?.name || 'Your CA'}
                 />
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ) : (
-            <Card>
-              <CardContent className="py-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="py-6 text-center text-sm text-muted-foreground">
                 Chat is currently unavailable. Please contact support if this persists.
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
         </div>
       </div>

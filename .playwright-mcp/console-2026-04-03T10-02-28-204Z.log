@@ -1,0 +1,8 @@
+[    1140ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@15.5.14_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:25630
+[    1236ms] [LOG] [GTM Event] clear_ecommerce {ecommerce: null} @ webpack-internal:///(app-pages-browser)/./lib/hooks/useGTM.ts:17
+[    1236ms] [LOG] [GTM Event] view_item {ecommerce: Object} @ webpack-internal:///(app-pages-browser)/./lib/hooks/useGTM.ts:17
+[    1237ms] [LOG] [AuthProvider] Mounting, starting hydration @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:27
+[    1237ms] [LOG] [auth-store] refreshSession starting @ webpack-internal:///(app-pages-browser)/./lib/stores/auth-store.ts:188
+[    1292ms] [LOG] [auth-store] getSession result: no session @ webpack-internal:///(app-pages-browser)/./lib/stores/auth-store.ts:192
+[    1297ms] [LOG] [AuthProvider] Initial hydration complete @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:32
+[    1297ms] [LOG] [AuthProvider] Auth event: INITIAL_SESSION @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:38

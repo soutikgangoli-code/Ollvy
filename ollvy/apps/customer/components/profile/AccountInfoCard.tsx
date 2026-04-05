@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Phone, Building2, MapPin, Pencil, Check, X, Loader2, FileText, Mail, CreditCard, Fingerprint } from 'lucide-react'
@@ -197,8 +196,13 @@ export function AccountInfoCard({
 
   if (isEditing) {
     return (
-      <Card className="border-border">
-        <CardContent className="p-5">
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="px-6 py-4 border-b border-border/50">
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+            Edit Account Information
+          </span>
+        </div>
+        <div className="p-6">
           {/* Avatar */}
           <div className="flex items-center gap-4 mb-4">
             <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center">
@@ -357,14 +361,19 @@ export function AccountInfoCard({
               Save
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     )
   }
 
   return (
-    <Card className="border-border">
-      <CardContent className="p-5">
+    <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="px-6 py-4 border-b border-border/50">
+        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+          Account Information
+        </span>
+      </div>
+      <div className="p-6">
         {/* Avatar and Name */}
         <div className="flex items-center gap-4 mb-4">
           <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center">
@@ -440,8 +449,10 @@ export function AccountInfoCard({
           )}
           {/* Registration Numbers Section */}
           {(gstin || cin || din || tan || iec || fssaiNumber || udyamNumber || shopEstablishmentNumber || ptNumber || trademarkNumber) && (
-            <div className="pt-2 mt-2 border-t border-border space-y-1.5">
-              <p className="text-xs font-medium text-muted-foreground mb-2">Registration Numbers</p>
+            <div className="pt-3 mt-3 border-t border-border/30 space-y-1.5">
+              <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground mb-3">
+                Registration Numbers
+              </p>
               {gstin && (
                 <p className="flex items-center gap-2">
                   <FileText className="h-3.5 w-3.5 flex-shrink-0" />
@@ -516,7 +527,7 @@ export function AccountInfoCard({
           <Pencil className="h-3.5 w-3.5" />
           Edit Profile
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

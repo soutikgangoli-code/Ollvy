@@ -23,7 +23,9 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
 
   // Scroll to bottom when messages change
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight
+    }
   }
 
   useEffect(() => {

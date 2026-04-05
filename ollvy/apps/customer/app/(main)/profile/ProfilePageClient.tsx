@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -205,14 +204,55 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
       try {
         const supabase = getClient()
 
-        // BATCH 1: Fetch active and completed orders in parallel
-        const [activeResult, completedResult] = await Promise.all([
+        // BATCH 1: Fetch ALL independent queries in parallel
+        // This includes orders AND queries that don't depend on activeOrderIds
+        const [
+          activeResult,
+          completedResult,
+          retainersResult,
+          allOrdersResult,
+          vaultDocsResult,
+          complianceResult
+        ] = await Promise.all([
+          // Active orders
           supabase.rpc('get_user_orders', {
             p_statuses: ['pending_assignment', 'waitlisted', 'in_progress']
           }),
+          // Completed orders
           supabase.rpc('get_user_orders', {
             p_statuses: ['completed']
-          })
+          }),
+          // Retainers - no dependency on orders
+          supabase
+            .from('retainer_subscriptions')
+            .select(`
+              id,
+              status,
+              monthly_price_paisa,
+              next_billing_date,
+              service_package:service_packages (
+                name
+              )
+            `)
+            .neq('status', 'cancelled'),
+          // All orders for vault - no dependency
+          supabase
+            .from('orders')
+            .select('id, order_number, service_package:service_packages(name)')
+            .order('created_at', { ascending: false })
+            .limit(50),
+          // Vault documents - no dependency
+          supabase
+            .from('order_documents')
+            .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
+            .not('file_url', 'is', null)
+            .order('uploaded_at', { ascending: false })
+            .limit(200),
+          // Compliance - no dependency
+          supabase
+            .from('compliance_obligations')
+            .select('id, status, due_date')
+            .order('due_date', { ascending: true })
         ])
 
         if (activeResult.error) console.error('Error fetching active orders:', activeResult.error)
@@ -238,76 +278,39 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           service_package: o.service_package,
         }))
 
-        // Get order IDs for document queries
+        // Get order IDs for dependent queries
         const activeOrderIds = activeOrders.map((o: any) => o.id)
 
-        // BATCH 2: Parallel queries for retainers, doc counts, stages, work docs, all orders, vault docs, and compliance
-        // Note: vault docs query moved here (was Batch 3) to avoid sequential bottleneck
-        const [
-          retainersResult,
-          docCountsResult,
-          stagesResult,
-          workDocsResult,
-          allOrdersResult,
-          vaultDocsResult,
-          complianceResult
-        ] = await Promise.all([
-          // Retainers - no dependency
-          supabase
-            .from('retainer_subscriptions')
-            .select(`
-              id,
-              status,
-              monthly_price_paisa,
-              next_billing_date,
-              service_package:service_packages (
-                name
-              )
-            `)
-            .neq('status', 'cancelled'),
-          // Document counts - needs activeOrderIds (empty array is fine for .in())
-          activeOrderIds.length > 0
-            ? supabase
-                .from('order_documents')
-                .select('order_id, uploaded_at')
-                .in('order_id', activeOrderIds)
-                .eq('is_required', true)
-            : Promise.resolve({ data: null, error: null }),
-          // Stage history - needs activeOrderIds
-          activeOrderIds.length > 0
-            ? supabase
-                .from('order_stage_history')
-                .select('order_id, completed_at')
-                .in('order_id', activeOrderIds)
-            : Promise.resolve({ data: null, error: null }),
-          // Work docs - needs activeOrderIds
-          activeOrderIds.length > 0
-            ? supabase
-                .from('order_work_documents')
-                .select('order_id, status')
-                .in('order_id', activeOrderIds)
-                .eq('direction', 'from_customer')
-            : Promise.resolve({ data: null, error: null }),
-          // All orders for vault - limited to 50 most recent (prevents over-fetching)
-          supabase
-            .from('orders')
-            .select('id, order_number, service_package:service_packages(name)')
-            .order('created_at', { ascending: false })
-            .limit(50),
-          // Vault documents - fetch in parallel (no dependency on allOrders result)
-          // We fetch docs for all orders and filter client-side
-          supabase
-            .from('order_documents')
-            .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
-            .not('file_url', 'is', null)
-            .order('uploaded_at', { ascending: false })
-            .limit(200),
-          // Compliance - no dependency
-          supabase
-            .from('compliance_obligations')
-            .select('id, status, due_date')
-            .order('due_date', { ascending: true })
-        ])
+        // BATCH 2: Only queries that NEED activeOrderIds
+        // These run after we have the active order IDs
+        let docCountsResult: { data: any; error: any } = { data: null, error: null }
+        let stagesResult: { data: any; error: any } = { data: null, error: null }
+        let workDocsResult: { data: any; error: any } = { data: null, error: null }
+
+        if (activeOrderIds.length > 0) {
+          const [docCounts, stages, workDocs] = await Promise.all([
+            // Document counts - needs activeOrderIds
+            supabase
+              .from('order_documents')
+              .select('order_id, uploaded_at')
+              .in('order_id', activeOrderIds)
+              .eq('is_required', true),
+            // Stage history - needs activeOrderIds
+            supabase
+              .from('order_stage_history')
+              .select('order_id, completed_at')
+              .in('order_id', activeOrderIds),
+            // Work docs - needs activeOrderIds
+            supabase
+              .from('order_work_documents')
+              .select('order_id, status')
+              .in('order_id', activeOrderIds)
+              .eq('direction', 'from_customer')
+          ])
+          docCountsResult = docCounts
+          stagesResult = stages
+          workDocsResult = workDocs
+        }
 
         if (retainersResult.error) console.error('Error fetching retainers:', retainersResult.error)
 
@@ -577,7 +580,10 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
     return (
       <div className="container py-12 max-w-2xl">
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-foreground mb-1">
+          <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">
+            Get Started
+          </p>
+          <h1 className="text-3xl md:text-4xl font-semibold text-foreground tracking-tight mb-1">
             Complete Your Profile
           </h1>
           <p className="text-muted-foreground">
@@ -585,17 +591,19 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           </p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
+        <div className="rounded-xl border border-border bg-card overflow-hidden">
+          <div className="px-6 py-4 border-b border-border/50">
+            <div className="flex items-center gap-3">
               <Building2 className="h-5 w-5 text-muted-foreground" />
-              Business Details
-            </CardTitle>
-            <CardDescription>
+              <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                Business Details
+              </span>
+            </div>
+            <p className="text-sm text-muted-foreground mt-1">
               This information helps us provide accurate pricing and services
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+            </p>
+          </div>
+          <div className="p-6 space-y-6">
             <div className="space-y-2">
               <Label htmlFor="businessName">Business Name</Label>
               <Input
@@ -699,8 +707,8 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
                 'Save & Continue'
               )}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     )
   }
@@ -711,15 +719,110 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-foreground mb-1">Profile</h1>
+          <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">
+            Dashboard
+          </p>
+          <h1 className="text-3xl md:text-4xl font-semibold text-foreground tracking-tight mb-1">
+            Profile
+          </h1>
           <p className="text-muted-foreground">Manage your account and view orders</p>
         </div>
       </div>
 
-      {/* Loading state for dashboard data */}
+      {/* Loading state - skeleton that matches page layout */}
       {isLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Main Content (2/3) */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Active Orders Section */}
+            <section>
+              <div className="flex items-center justify-between mb-4">
+                <Skeleton className="h-4 w-32" />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[1, 2].map((i) => (
+                  <div key={i} className="rounded-xl border border-border bg-card p-5">
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-2">
+                          <Skeleton className="h-5 w-32" />
+                          <Skeleton className="h-3 w-20" />
+                        </div>
+                        <Skeleton className="h-5 w-20" />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <Skeleton className="h-3 w-24" />
+                          <Skeleton className="h-3 w-8" />
+                        </div>
+                        <Skeleton className="h-2 w-full rounded-full" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Document Vault Section */}
+            <section>
+              <div className="rounded-xl border border-border bg-card overflow-hidden">
+                <div className="px-6 py-4 border-b border-border/50">
+                  <Skeleton className="h-3 w-28" />
+                </div>
+                <div className="p-4 space-y-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="flex items-center justify-between py-2">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="h-10 w-10 rounded-lg" />
+                        <div className="space-y-1">
+                          <Skeleton className="h-4 w-36" />
+                          <Skeleton className="h-3 w-24" />
+                        </div>
+                      </div>
+                      <Skeleton className="h-8 w-8 rounded-md" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* Sidebar (1/3) */}
+          <div className="space-y-6">
+            {/* Account Info Card Skeleton */}
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-border/50">
+                <Skeleton className="h-3 w-32" />
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-14 w-14 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-5 w-32" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="space-y-1">
+                    <Skeleton className="h-3 w-16" />
+                    <Skeleton className="h-5 w-full" />
+                  </div>
+                ))}
+                <Skeleton className="h-9 w-full mt-4" />
+              </div>
+            </div>
+
+            {/* Help Card Skeleton */}
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-border/50">
+                <Skeleton className="h-3 w-24" />
+              </div>
+              <div className="p-6">
+                <Skeleton className="h-4 w-36 mb-3" />
+                <Skeleton className="h-5 w-32" />
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -732,10 +835,12 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           {/* Active Orders */}
           <section>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-medium text-foreground flex items-center gap-2">
-                <Package className="h-5 w-5 text-muted-foreground" />
-                Active Orders
-              </h2>
+              <div className="flex items-center gap-2">
+                <Package className="h-4 w-4 text-muted-foreground" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                  Active Orders
+                </span>
+              </div>
               {processedData.activeOrders.length > 0 && (
                 <Link href="/orders">
                   <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground">
@@ -765,22 +870,24 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
                 ))}
               </div>
             ) : (
-              <Card className="border-dashed">
-                <CardContent className="p-8 text-center">
-                  <Package className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground mb-3">No active orders</p>
-                  <Link href="/services">
-                    <Button>Browse Services</Button>
-                  </Link>
-                </CardContent>
-              </Card>
+              <div className="rounded-xl border border-dashed border-border bg-card p-8 text-center">
+                <Package className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground mb-3">No active orders</p>
+                <Link href="/services">
+                  <Button>Browse Services</Button>
+                </Link>
+              </div>
             )}
           </section>
 
           {/* Retainers */}
           {processedData.retainers.length > 0 && (
             <section>
-              <h2 className="text-lg font-medium text-foreground mb-4">Active Retainers</h2>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                  Active Retainers
+                </span>
+              </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 {processedData.retainers.map((retainer) => (
                   <RetainerStatusCard
@@ -799,7 +906,6 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
 
           {/* Document Vault */}
           <section>
-            <h2 className="text-lg font-medium text-foreground mb-4">Document Vault</h2>
             <DocumentVaultSection documentGroups={processedData.documentGroups} />
           </section>
 
@@ -807,10 +913,12 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           {processedData.completedOrders.length > 0 && (
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium text-foreground flex items-center gap-2">
-                  <History className="h-5 w-5 text-muted-foreground" />
-                  Completed ({processedData.completedOrders.length})
-                </h2>
+                <div className="flex items-center gap-2">
+                  <History className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    Completed ({processedData.completedOrders.length})
+                  </span>
+                </div>
                 <Link href="/orders?status=completed">
                   <Button variant="ghost" size="sm" className="gap-1 text-muted-foreground">
                     View All
@@ -818,27 +926,27 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
                   </Button>
                 </Link>
               </div>
-              <Card>
-                <CardContent className="p-4">
+              <div className="rounded-xl border border-border bg-card overflow-hidden">
+                <div className="p-4">
                   <div className="space-y-3">
                     {processedData.completedOrders.slice(0, 3).map((order) => (
                       <Link
                         key={order.id}
                         href={`/orders/${order.id}`}
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-lg hover:bg-muted/30 transition-colors"
                       >
                         <div>
                           <p className="font-medium text-foreground text-sm">
                             {order.service_package?.name}
                           </p>
-                          <p className="text-xs text-muted-foreground font-mono">{order.order_number}</p>
+                          <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">{order.order_number}</p>
                         </div>
                         <Check className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
                       </Link>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             </section>
           )}
         </div>
@@ -894,14 +1002,16 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
           />
 
           {/* Contact Support */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-3 text-base">
-                <Headphones className="h-5 w-5 text-muted-foreground" />
-                Need Help?
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-0">
+          <div className="rounded-xl border border-border bg-card overflow-hidden">
+            <div className="px-6 py-4 border-b border-border/50">
+              <div className="flex items-center gap-2">
+                <Headphones className="h-4 w-4 text-muted-foreground" />
+                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                  Need Help?
+                </span>
+              </div>
+            </div>
+            <div className="p-6">
               <p className="text-sm text-muted-foreground mb-3">
                 Contact us for any issues
               </p>
@@ -909,8 +1019,8 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
                 <Phone className="h-4 w-4" />
                 +91 92170 65577
               </a>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Compliance Score */}
           {processedData.hasComplianceData && (
@@ -923,17 +1033,19 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
 
           {/* Referral */}
           {userData.referral_code && (
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-3 text-base">
-                  <Gift className="h-5 w-5 text-muted-foreground" />
-                  Referral Program
-                </CardTitle>
-                <CardDescription>
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-border/50">
+                <div className="flex items-center gap-2">
+                  <Gift className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    Referral Program
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">
                   Share your code and earn credits
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0">
+                </p>
+              </div>
+              <div className="p-6">
                 <div className="flex items-center gap-3">
                   <div className="flex-1 bg-muted rounded-lg px-4 py-3 font-mono text-lg text-foreground">
                     {userData.referral_code}
@@ -959,8 +1071,8 @@ function ProfileContent({ userData, isSetup }: ProfilePageClientProps) {
                     </span>
                   </p>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
         </div>
       </div>

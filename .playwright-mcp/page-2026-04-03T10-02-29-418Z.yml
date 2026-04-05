@@ -1,0 +1,667 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+          - button "Search Services ⌘ K" [ref=e18] [cursor=pointer]:
+            - img [ref=e19]
+            - generic [ref=e22]: Search Services
+            - generic [ref=e23]:
+              - generic [ref=e24]: ⌘
+              - text: K
+          - button "Sign in" [ref=e25] [cursor=pointer]
+    - navigation "Popular services" [ref=e26]:
+      - link "Private Limited Company Registration" [ref=e27] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e32] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e34] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e35]:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - link "Ollvy":
+                - /url: /
+              - generic: "|"
+              - generic: GST Reg
+              - generic: ₹8,999
+            - tablist:
+              - tab "Process" [selected]
+              - tab "What's Included"
+              - tab "Why Ollvy"
+              - tab "Risks"
+              - tab "Reviews"
+              - tab "Documents"
+              - tab "FAQs"
+            - link "Book Now":
+              - /url: /checkout/47d80242-749f-4a3e-b951-a2bf64f86598/eligibility
+      - main [ref=e37]:
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - heading "GST Registration" [level=1] [ref=e40]
+            - paragraph [ref=e41]: Your GSTIN, applied for and obtained. We handle every step.
+            - generic [ref=e42]:
+              - paragraph [ref=e44]:
+                - img [ref=e45]
+                - text: Guaranteed by 15 Apr
+              - link "Book Now" [ref=e48] [cursor=pointer]:
+                - /url: /checkout/47d80242-749f-4a3e-b951-a2bf64f86598/eligibility
+            - generic [ref=e49]:
+              - generic [ref=e50]: For Businesses above ₹40L turnover (₹20L for services)
+              - generic [ref=e51]: Type One-time
+              - generic [ref=e52]: Turnaround 7 days
+          - tablist [ref=e53]:
+            - generic [ref=e55]:
+              - tab "Process" [selected] [ref=e56] [cursor=pointer]
+              - tab "What's Included" [ref=e57] [cursor=pointer]
+              - tab "Why Ollvy" [ref=e58] [cursor=pointer]
+              - tab "Risks" [ref=e59] [cursor=pointer]
+              - tab "Reviews" [ref=e60] [cursor=pointer]
+              - tab "Documents" [ref=e61] [cursor=pointer]
+              - tab "FAQs" [ref=e62] [cursor=pointer]
+        - generic [ref=e64]:
+          - generic [ref=e65]:
+            - generic [ref=e66]:
+              - paragraph [ref=e67]: THE PROCESS
+              - heading "How Ollvy registers your GST Reg" [level=2] [ref=e68]
+              - generic [ref=e69]:
+                - generic [ref=e72]:
+                  - button "Step 1" [ref=e73] [cursor=pointer]
+                  - button "Step 2" [ref=e74] [cursor=pointer]
+                  - button "Step 3" [ref=e75] [cursor=pointer]
+                  - button "Step 4" [ref=e76] [cursor=pointer]
+                  - button "Step 5" [ref=e77] [cursor=pointer]
+                - generic [ref=e78]:
+                  - img [ref=e80]
+                  - generic [ref=e83]:
+                    - heading "Answer 5 questions" [level=3] [ref=e84]
+                    - generic [ref=e85]: Day 0
+                  - paragraph [ref=e86]: Business type, trade name, address. We build your checklist.
+                  - paragraph [ref=e89]: CA assigned, checklist sent
+                - generic [ref=e90]:
+                  - button "Previous Step" [disabled]:
+                    - img
+                    - text: Previous Step
+                  - button "Next Step" [ref=e91] [cursor=pointer]:
+                    - text: Next Step
+                    - img
+              - generic [ref=e92]:
+                - button "What is GST Registration?" [ref=e94] [cursor=pointer]:
+                  - text: What is GST Registration?
+                  - img [ref=e95]
+                - generic [ref=e97]:
+                  - generic [ref=e99]:
+                    - button [ref=e100] [cursor=pointer]: What it is
+                    - button [ref=e101] [cursor=pointer]: Why it exists
+                    - button [ref=e102] [cursor=pointer]: How it helps you
+                    - button [ref=e103] [cursor=pointer]: Why it is required
+                    - button [ref=e104] [cursor=pointer]: What happens without it
+                  - paragraph [ref=e106]: GST Registration is mandatory registration under the Goods and Services Tax Act, 2017. You receive a 15-digit GSTIN (GST Identification Number) that identifies your business in the GST system. It allows you to collect GST from customers, claim input tax credit on purchases, and file GST returns.
+                  - button [ref=e108] [cursor=pointer]:
+                    - text: Next Step
+                    - img
+            - generic [ref=e109]:
+              - paragraph [ref=e110]: WHAT YOU GET
+              - heading "Everything included for ₹8,999" [level=2] [ref=e111]:
+                - text: Everything included for
+                - generic [ref=e112]: ₹8,999
+              - paragraph [ref=e113]: What your CA handles on your behalf. Nothing hidden.
+              - generic [ref=e114]:
+                - generic [ref=e115]:
+                  - generic [ref=e119]:
+                    - paragraph [ref=e120]: GST REG-01 Application
+                    - generic [ref=e121]: Business details - complete ✓
+                    - generic [ref=e123]: Promoter/Partner info - complete ✓
+                    - generic [ref=e125]: Place of business - complete ✓
+                    - paragraph [ref=e127]: All 23 fields handled by your CA
+                  - generic [ref=e129]:
+                    - img [ref=e131]
+                    - generic [ref=e133]:
+                      - heading "CA handles the GSTN portal - all 23 fields" [level=3] [ref=e134]
+                      - paragraph [ref=e135]: The GST REG-01 form has 23 fields across 5 tabs. Your CA fills the entire form. You answer 5 questions in the app.
+                      - generic [ref=e136]:
+                        - generic [ref=e137]:
+                          - paragraph [ref=e138]: Without Ollvy
+                          - paragraph [ref=e139]: 23 fields · 5 tabs · 3-4 hours on GSTN portal
+                        - generic [ref=e140]:
+                          - paragraph [ref=e141]: With Ollvy
+                          - paragraph [ref=e142]: 5 questions in app · ~4 minutes
+                - generic [ref=e143]:
+                  - generic [ref=e147]:
+                    - paragraph [ref=e148]: Application Reference Number
+                    - paragraph [ref=e149]: AA270325014782R
+                    - paragraph [ref=e150]: Processing
+                    - paragraph [ref=e151]: "Filed: 25 Mar 2025"
+                    - paragraph [ref=e152]: Verify at gstn.gov.in
+                  - generic [ref=e154]:
+                    - img [ref=e156]
+                    - generic [ref=e158]:
+                      - heading "ARN shared same day - you can track it yourself" [level=3] [ref=e159]
+                      - paragraph [ref=e160]: The ARN is generated the moment your CA submits. We share it immediately. You can verify at gstn.gov.in.
+                - generic [ref=e163]:
+                  - img [ref=e165]
+                  - generic [ref=e167]:
+                    - heading "Officer queries handled - no extra charge" [level=3] [ref=e168]
+                    - paragraph [ref=e169]: If the GST officer requests clarification, your CA responds within 24 hours. This is part of the service.
+                - generic [ref=e170]:
+                  - generic [ref=e174]:
+                    - generic [ref=e175]:
+                      - generic [ref=e176]: GSTR-1
+                      - generic [ref=e177]: Due 11th of each month
+                    - generic [ref=e178]:
+                      - generic [ref=e179]: GSTR-3B
+                      - generic [ref=e180]: Due 20th of each month
+                    - paragraph [ref=e181]: Added to your calendar automatically
+                  - generic [ref=e183]:
+                    - img [ref=e185]
+                    - generic [ref=e187]:
+                      - heading "Compliance calendar updated automatically" [level=3] [ref=e188]
+                      - paragraph [ref=e189]: The moment your GSTIN is issued, your compliance calendar shows GSTR-1 and GSTR-3B due dates.
+            - generic [ref=e190]:
+              - generic [ref=e192]: Ollvy Guided
+              - heading "We file correctly. Not just on time." [level=2] [ref=e193]:
+                - text: We file correctly.
+                - text: Not just on time.
+              - paragraph [ref=e194]: Most CAs submit what you give them and hope for the best. Ollvy reviews your documents before filing - not after a notice arrives.
+              - generic [ref=e195]:
+                - generic [ref=e196]:
+                  - paragraph [ref=e197]: Others
+                  - paragraph [ref=e198]: Take your documents as-is. Submit the application. If there's a query or rejection, it's your problem.
+                - generic [ref=e199]:
+                  - paragraph [ref=e200]: Ollvy
+                  - paragraph [ref=e201]: Review every document before filing. Catch mismatches, expired items, and format issues. Then file.
+              - generic [ref=e202]:
+                - heading "We catch compliance gaps before regulators do." [level=3] [ref=e203]
+                - generic [ref=e204]:
+                  - generic [ref=e205]:
+                    - generic [ref=e207]: "1"
+                    - paragraph [ref=e208]: we review
+                    - paragraph [ref=e209]: your documents
+                    - paragraph [ref=e210]: Every upload checked before anything is filed
+                  - generic [ref=e211]:
+                    - generic [ref=e213]: "2"
+                    - paragraph [ref=e214]: we flag
+                    - paragraph [ref=e215]: the risks
+                    - paragraph [ref=e216]: Issues identified - expiry dates, mismatches, format errors
+                  - generic [ref=e217]:
+                    - generic [ref=e219]: "3"
+                    - paragraph [ref=e220]: we fix
+                    - paragraph [ref=e221]: if possible
+                    - paragraph [ref=e222]: Fixable issues resolved before filing, not after
+                  - generic [ref=e223]:
+                    - generic [ref=e225]: "4"
+                    - paragraph [ref=e226]: we file
+                    - paragraph [ref=e227]: correctly
+                    - paragraph [ref=e228]: Clean submission - lower chance of officer query
+            - generic [ref=e230]:
+              - heading "We handle the messy situations too." [level=2] [ref=e231]
+              - paragraph [ref=e232]: The situations most CAs decline or overcharge for.
+              - generic [ref=e233]:
+                - generic [ref=e234]:
+                  - generic [ref=e235]: F
+                  - generic [ref=e236]:
+                    - paragraph [ref=e237]: First GST registration
+                    - paragraph [ref=e238]: Never done this before. We explain what each document is for.
+                - generic [ref=e239]:
+                  - generic [ref=e240]: T
+                  - generic [ref=e241]:
+                    - paragraph [ref=e242]: Turnover just crossed threshold
+                    - paragraph [ref=e243]: You waited until legally required. Smart. Now we register you quickly.
+                - generic [ref=e244]:
+                  - generic [ref=e245]: V
+                  - generic [ref=e246]:
+                    - paragraph [ref=e247]: Voluntary registration
+                    - paragraph [ref=e248]: Below threshold but want to issue GST invoices. Completely legal.
+                - generic [ref=e249]:
+                  - generic [ref=e250]: H
+                  - generic [ref=e251]:
+                    - paragraph [ref=e252]: Home as principal place of business
+                    - paragraph [ref=e253]: Fully legal. We verify address proof matches your home's electricity bill.
+            - generic [ref=e255]:
+              - heading "What could go wrong with GST Reg" [level=2] [ref=e256]
+              - paragraph [ref=e257]: These are the risks. We handle most of them, but you should know what they are.
+              - generic [ref=e258]:
+                - generic [ref=e259]:
+                  - img [ref=e261]
+                  - generic [ref=e264]:
+                    - heading "Address proof mismatch" [level=3] [ref=e265]
+                    - paragraph [ref=e266]: The business address on your documents must match exactly. Your CA reviews all documents for consistency.
+                - generic [ref=e267]:
+                  - img [ref=e269]
+                  - generic [ref=e272]:
+                    - heading "Aadhaar OTP fails" [level=3] [ref=e273]
+                    - paragraph [ref=e274]: GST registration requires Aadhaar-based authentication. If mobile number is old, OTP fails. We check this upfront.
+                - generic [ref=e275]:
+                  - img [ref=e277]
+                  - generic [ref=e279]:
+                    - heading "Operating without registration" [level=3] [ref=e280]
+                    - paragraph [ref=e281]: If turnover has crossed threshold without registration, you're liable for 100% unpaid tax plus ₹10,000 minimum penalty.
+            - generic [ref=e282]:
+              - paragraph [ref=e283]: NEXT STEPS
+              - heading "What GST Reg unlocks" [level=2] [ref=e284]
+              - paragraph [ref=e285]: Services that become available or mandatory after completion.
+              - generic [ref=e286]:
+                - generic [ref=e287]:
+                  - generic [ref=e288]:
+                    - generic [ref=e289]:
+                      - generic [ref=e290]:
+                        - heading "GST Monthly Filing" [level=4] [ref=e291]
+                        - generic [ref=e292]: Required
+                      - paragraph [ref=e293]: GSTR-1 by 11th, GSTR-3B by 20th. Every month. Mandatory.
+                    - generic [ref=e294]: From ₹2,999/month
+                  - link "Learn more" [ref=e295] [cursor=pointer]:
+                    - /url: /services/gst-monthly
+                    - text: Learn more
+                    - img [ref=e296]
+                - generic [ref=e298]:
+                  - generic [ref=e299]:
+                    - generic [ref=e300]:
+                      - generic [ref=e301]:
+                        - heading "GSTR-9 Annual Return" [level=4] [ref=e302]
+                        - generic [ref=e303]: Required
+                      - paragraph [ref=e304]: Annual reconciliation. Due Dec 31 every year.
+                    - generic [ref=e305]: ₹8,999
+                  - link "Learn more" [ref=e306] [cursor=pointer]:
+                    - /url: /services/gst-annual-return
+                    - text: Learn more
+                    - img [ref=e307]
+            - generic [ref=e309]:
+              - paragraph [ref=e310]: CUSTOMER REVIEWS
+              - heading "What customers say about GST Reg" [level=2] [ref=e311]
+              - generic [ref=e312]:
+                - generic [ref=e313]: ✓ GSTIN in 5 days
+                - generic [ref=e314]: ✓ CA was responsive
+                - generic [ref=e315]: ✓ ARN shared same day
+                - generic [ref=e316]: ✓ No extra charges
+              - generic [ref=e317]:
+                - generic [ref=e318]:
+                  - generic [ref=e319]:
+                    - img [ref=e320]
+                    - img [ref=e322]
+                    - img [ref=e324]
+                    - img [ref=e326]
+                    - img [ref=e328]
+                    - generic [ref=e330]: March 2025
+                  - paragraph [ref=e331]: "\"Very smooth process. The CS assigned was responsive and explained every step. Got my certificate within the promised timeframe.\""
+                  - paragraph [ref=e332]: "- Verified customer"
+                - generic [ref=e333]:
+                  - generic [ref=e334]:
+                    - img [ref=e335]
+                    - img [ref=e337]
+                    - img [ref=e339]
+                    - img [ref=e341]
+                    - img [ref=e343]
+                    - generic [ref=e345]: February 2025
+                  - paragraph [ref=e346]: "\"No surprises on fees, everything was explained upfront. The dashboard made tracking easy.\""
+                  - paragraph [ref=e347]: "- Verified customer"
+            - generic [ref=e348]:
+              - paragraph [ref=e349]: DOCUMENTS REQUIRED
+              - generic [ref=e351]:
+                - generic [ref=e352]:
+                  - paragraph [ref=e353]: DOCUMENTS REQUIRED
+                  - heading "What you'll need for GST Reg" [level=2] [ref=e354]
+                  - paragraph [ref=e355]: Gather these documents before starting. Click any to see exactly what we need.
+                - generic [ref=e357]:
+                  - generic [ref=e358]:
+                    - generic [ref=e359]: Required Documents
+                    - generic [ref=e360]: 13 total
+                  - list [ref=e361]:
+                    - listitem [ref=e362]:
+                      - img [ref=e364]
+                      - generic [ref=e367]: PAN Card
+                    - listitem [ref=e368]:
+                      - img [ref=e370]
+                      - generic [ref=e373]: Aadhaar Card
+                    - listitem [ref=e374]:
+                      - img [ref=e376]
+                      - generic [ref=e379]: Passport-size Photo
+                    - listitem [ref=e380]:
+                      - img [ref=e382]
+                      - generic [ref=e385]: Email ID and Mobile Number
+                    - listitem [ref=e386]:
+                      - img [ref=e388]
+                      - generic [ref=e391]: Utility Bill
+                  - button "View complete checklist" [ref=e393] [cursor=pointer]:
+                    - text: View complete checklist
+                    - img [ref=e394]
+            - generic [ref=e396]:
+              - paragraph [ref=e397]: COMMON QUESTIONS
+              - heading "Frequently asked questions" [level=2] [ref=e398]
+              - generic [ref=e399]:
+                - heading "When is GST registration mandatory?" [level=3] [ref=e401]:
+                  - button "When is GST registration mandatory?" [ref=e402] [cursor=pointer]:
+                    - text: When is GST registration mandatory?
+                    - img [ref=e403]
+                - heading "Can I register voluntarily below threshold?" [level=3] [ref=e406]:
+                  - button "Can I register voluntarily below threshold?" [ref=e407] [cursor=pointer]:
+                    - text: Can I register voluntarily below threshold?
+                    - img [ref=e408]
+                - heading "What's an ARN and why does it matter?" [level=3] [ref=e411]:
+                  - button "What's an ARN and why does it matter?" [ref=e412] [cursor=pointer]:
+                    - text: What's an ARN and why does it matter?
+                    - img [ref=e413]
+                - heading "What if the officer raises a query?" [level=3] [ref=e416]:
+                  - button "What if the officer raises a query?" [ref=e417] [cursor=pointer]:
+                    - text: What if the officer raises a query?
+                    - img [ref=e418]
+                - heading "What documents do I need?" [level=3] [ref=e421]:
+                  - button "What documents do I need?" [ref=e422] [cursor=pointer]:
+                    - text: What documents do I need?
+                    - img [ref=e423]
+                - heading "What are my obligations after getting GSTIN?" [level=3] [ref=e426]:
+                  - button "What are my obligations after getting GSTIN?" [ref=e427] [cursor=pointer]:
+                    - text: What are my obligations after getting GSTIN?
+                    - img [ref=e428]
+            - generic [ref=e431]:
+              - heading "Services you'll need next" [level=2] [ref=e432]
+              - paragraph [ref=e433]: These services often go with what you're booking.
+              - generic [ref=e434]:
+                - link "GST Filing GSTR-1 by the 11th. GSTR-3B by the 20th. Every month. Handled. ₹2,999 Monthly" [ref=e435] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+                  - generic [ref=e436]:
+                    - generic [ref=e437]:
+                      - generic [ref=e438]:
+                        - heading "GST Filing" [level=3] [ref=e439]
+                        - paragraph [ref=e440]: GSTR-1 by the 11th. GSTR-3B by the 20th. Every month. Handled.
+                      - img [ref=e441]
+                    - generic [ref=e443]:
+                      - generic [ref=e444]: ₹2,999
+                      - generic [ref=e445]: Monthly
+                - link "Pvt Ltd Your company, incorporated. MCA-compliant, with PAN and TAN ready. ₹22,998 By 24 Apr" [ref=e446] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+                  - generic [ref=e447]:
+                    - generic [ref=e448]:
+                      - generic [ref=e449]:
+                        - heading "Pvt Ltd" [level=3] [ref=e450]
+                        - paragraph [ref=e451]: Your company, incorporated. MCA-compliant, with PAN and TAN ready.
+                      - img [ref=e452]
+                    - generic [ref=e454]:
+                      - generic [ref=e455]: ₹22,998
+                      - generic [ref=e456]:
+                        - img [ref=e457]
+                        - text: By 24 Apr
+                - link "Business ITR ITR-6 for Pvt Ltd, ITR-5 for LLP. Filed correctly, on time. ₹11,999 By 17 Apr" [ref=e460] [cursor=pointer]:
+                  - /url: /services/business-itr
+                  - generic [ref=e461]:
+                    - generic [ref=e462]:
+                      - generic [ref=e463]:
+                        - heading "Business ITR" [level=3] [ref=e464]
+                        - paragraph [ref=e465]: ITR-6 for Pvt Ltd, ITR-5 for LLP. Filed correctly, on time.
+                      - img [ref=e466]
+                    - generic [ref=e468]:
+                      - generic [ref=e469]: ₹11,999
+                      - generic [ref=e470]:
+                        - img [ref=e471]
+                        - text: By 17 Apr
+            - generic [ref=e474]:
+              - heading "How we reviewed this page" [level=3] [ref=e475]
+              - paragraph [ref=e476]: The penalty amounts, deadlines, and regulatory requirements on this page are sourced directly from official government portals. We do not use secondary sources. When regulations change, we update the page.
+              - generic [ref=e477]:
+                - button "sources" [ref=e478] [cursor=pointer]:
+                  - img [ref=e479]
+                  - text: sources
+                - button "history" [ref=e482] [cursor=pointer]:
+                  - img [ref=e483]
+                  - text: history
+              - list [ref=e487]:
+                - listitem [ref=e488]:
+                  - generic [ref=e490]:
+                    - link "GST Portal" [ref=e491] [cursor=pointer]:
+                      - /url: https://www.gst.gov.in
+                      - text: GST Portal
+                      - img [ref=e492]
+                    - paragraph [ref=e496]: Official GSTN portal — registration and filing
+                - listitem [ref=e497]:
+                  - generic [ref=e499]:
+                    - link "CGST Act, 2017" [ref=e500] [cursor=pointer]:
+                      - /url: https://cbic-gst.gov.in/gst-acts.html
+                      - text: CGST Act, 2017
+                      - img [ref=e501]
+                    - paragraph [ref=e505]: "Section 22: Registration thresholds. Section 25: Registration procedure."
+          - complementary [ref=e506]:
+            - generic [ref=e507]:
+              - generic [ref=e509]:
+                - img [ref=e510]
+                - paragraph [ref=e513]: Guaranteed by 15 Apr
+              - generic [ref=e514]:
+                - paragraph [ref=e515]: Total to pay now
+                - paragraph [ref=e516]: ₹8,999
+              - generic [ref=e517]:
+                - generic [ref=e518]:
+                  - generic [ref=e519]:
+                    - img [ref=e521]
+                    - generic [ref=e524]:
+                      - paragraph [ref=e525]: GST Reg
+                      - paragraph [ref=e526]: Service fee
+                  - generic [ref=e527]: ₹8,999
+                - generic [ref=e528]:
+                  - generic [ref=e529]: Total Amount
+                  - generic [ref=e530]: ₹8,999
+              - link "Book Now" [ref=e531] [cursor=pointer]:
+                - /url: /checkout/47d80242-749f-4a3e-b951-a2bf64f86598
+              - paragraph [ref=e532]: GST-compliant invoice generated at checkout
+              - generic [ref=e533]:
+                - paragraph [ref=e534]: Questions about documents, process, or price?
+                - generic [ref=e535]:
+                  - link "WhatsApp" [ref=e536] [cursor=pointer]:
+                    - /url: https://wa.me/919217065577?text=Hi%2C%20I%20have%20a%20question%20about%20GST%20Registration
+                    - img
+                    - text: WhatsApp
+                  - link "Call" [ref=e537] [cursor=pointer]:
+                    - /url: tel:+919217065577
+                    - img
+                    - text: Call
+        - generic [ref=e539]:
+          - heading "Get GST Reg done now" [level=2] [ref=e540]
+          - paragraph [ref=e541]: Fixed price. Verified CA. Done within 7 working days.
+          - link "Book Now" [ref=e542] [cursor=pointer]:
+            - /url: /checkout/47d80242-749f-4a3e-b951-a2bf64f86598/eligibility
+    - contentinfo [ref=e543]:
+      - generic [ref=e544]:
+        - generic [ref=e545]:
+          - generic [ref=e546]:
+            - link "Ollvy" [ref=e547] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e548]: You run your business. We handle the rest.
+            - generic [ref=e549]:
+              - link "LinkedIn" [ref=e550] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e551]
+              - link "Twitter" [ref=e555] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e556]
+          - generic [ref=e558]:
+            - link "Calculators" [ref=e559] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e560]:
+              - listitem [ref=e561]:
+                - link "GST Late Filing" [ref=e562] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e563]:
+                - link "GST Demand Notice" [ref=e564] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e565]:
+                - link "ITR Late Filing" [ref=e566] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e567]:
+                - link "TDS Late Filing" [ref=e568] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e569]:
+                - link "MCA Annual Filing" [ref=e570] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e571]:
+                - link "Director KYC" [ref=e572] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e573]:
+                - link "PF/ESIC Penalty" [ref=e574] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e575]:
+                - link "Professional Tax" [ref=e576] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e577]:
+                - link "Shops & Establishment" [ref=e578] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e579]:
+                - link "Startup DPIIT" [ref=e580] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e581]:
+            - link "Checklists" [ref=e582] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e583]:
+              - listitem [ref=e584]:
+                - link "Pvt Ltd Documents" [ref=e585] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e586]:
+                - link "LLP Documents" [ref=e587] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e588]:
+                - link "Partnership Documents" [ref=e589] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e590]:
+                - link "Sole Proprietor" [ref=e591] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e592]:
+                - link "GST Registration" [ref=e593] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e594]:
+                - link "Individual ITR" [ref=e595] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e596]:
+                - link "Business ITR" [ref=e597] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e598]:
+                - link "Trademark" [ref=e599] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e600]:
+            - link "Services" [ref=e601] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e602]:
+              - listitem [ref=e603]:
+                - link "Pvt Ltd Registration" [ref=e604] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e605]:
+                - link "LLP Registration" [ref=e606] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e607]:
+                - link "GST Registration" [ref=e608] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e609]:
+                - link "GST Monthly Filing" [ref=e610] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e611]:
+                - link "GST Cancellation" [ref=e612] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e613]:
+                - link "GST Revocation" [ref=e614] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e615]:
+                - link "Trademark Registration" [ref=e616] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e617]:
+                - link "MSME Registration" [ref=e618] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e619]:
+                - link "Cloud Kitchen Setup" [ref=e620] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e621]:
+                - link "Business ITR Filing" [ref=e622] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e623]:
+                - link "Annual Compliance" [ref=e624] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e625]:
+                - link "TDS Compliance" [ref=e626] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e627]:
+                - link "Company Name Change" [ref=e628] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e629]:
+                - link "DIN Reactivation" [ref=e630] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e631]:
+                - link "All Services" [ref=e632] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e633]:
+            - link "Guides" [ref=e634] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e635]:
+              - listitem [ref=e636]:
+                - link "Do I Need GST?" [ref=e637] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e638]:
+                - link "Pvt Ltd vs LLP" [ref=e639] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e640]:
+                - link "Which ITR Form?" [ref=e641] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e642]:
+                - link "DPIIT Recognition" [ref=e643] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e644]:
+                - link "All Guides" [ref=e645] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e646]:
+            - link "Notice Help" [ref=e647] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e648]:
+              - listitem [ref=e649]:
+                - link "GST DRC-01 Notice" [ref=e650] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e651]:
+                - link "GST ASMT-10 Notice" [ref=e652] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e653]:
+                - link "IT 143(1) Intimation" [ref=e654] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e655]:
+                - link "IT 148/148A Notice" [ref=e656] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e657]:
+                - link "TDS Short Deduction" [ref=e658] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e659]:
+            - paragraph [ref=e660]: Legal
+            - list [ref=e661]:
+              - listitem [ref=e662]:
+                - link "Privacy Policy" [ref=e663] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e664]:
+                - link "Terms of Service" [ref=e665] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e666]:
+                - link "Cancellation Policy" [ref=e667] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e668]:
+                - link "Refund Policy" [ref=e669] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e670]:
+                - link "Contact" [ref=e671] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e673]: © 2025 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list

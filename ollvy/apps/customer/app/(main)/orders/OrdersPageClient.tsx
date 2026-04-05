@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { OrderCard } from '@/components/orders/OrderCard'
@@ -17,6 +16,11 @@ export function OrdersPageClient() {
   const [activeOrders, setActiveOrders] = useState<Order[]>([])
   const [completedOrders, setCompletedOrders] = useState<Order[]>([])
   const [isLoading, setIsLoading] = useState(true)
+
+  // Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   useEffect(() => {
     // Wait for auth to fully hydrate and load
@@ -115,7 +119,14 @@ export function OrdersPageClient() {
         </Button>
       </Link>
 
-      <h1 className="text-3xl font-semibold text-foreground mb-8">My Orders</h1>
+      <div className="mb-8">
+        <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">
+          Dashboard
+        </p>
+        <h1 className="text-3xl md:text-4xl font-semibold text-foreground tracking-tight">
+          My Orders
+        </h1>
+      </div>
 
       <Tabs defaultValue="active" className="w-full">
         <TabsList className="mb-8">
@@ -132,16 +143,14 @@ export function OrdersPageClient() {
 
         <TabsContent value="active">
           {activeOrders.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground mb-4">
-                  No active orders at the moment.
-                </p>
-                <Link href="/services">
-                  <Button variant="outline">Browse services</Button>
-                </Link>
-              </CardContent>
-            </Card>
+            <div className="rounded-xl border border-border bg-card py-12 text-center">
+              <p className="text-muted-foreground mb-4">
+                No active orders at the moment.
+              </p>
+              <Link href="/services">
+                <Button variant="outline">Browse services</Button>
+              </Link>
+            </div>
           ) : (
             <div className="space-y-4">
               {activeOrders.map((order) => (
@@ -153,13 +162,11 @@ export function OrdersPageClient() {
 
         <TabsContent value="completed">
           {completedOrders.length === 0 ? (
-            <Card>
-              <CardContent className="py-12 text-center">
-                <p className="text-muted-foreground">
-                  No completed orders yet.
-                </p>
-              </CardContent>
-            </Card>
+            <div className="rounded-xl border border-border bg-card py-12 text-center">
+              <p className="text-muted-foreground">
+                No completed orders yet.
+              </p>
+            </div>
           ) : (
             <div className="space-y-4">
               {completedOrders.map((order) => (

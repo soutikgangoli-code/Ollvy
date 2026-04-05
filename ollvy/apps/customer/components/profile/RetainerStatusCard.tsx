@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { Calendar, Clock, ArrowRight, RefreshCw } from 'lucide-react'
@@ -57,8 +56,7 @@ export function RetainerStatusCard({
   const cycleProgress = Math.max(0, Math.min(100, ((30 - daysRemaining) / 30) * 100))
 
   return (
-    <Card className="border-border">
-      <CardContent className="p-5">
+    <div className="rounded-xl border border-border bg-card p-5 hover:border-muted-foreground/50 transition-colors">
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-1">
@@ -111,7 +109,6 @@ export function RetainerStatusCard({
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </Link>
-      </CardContent>
-    </Card>
+    </div>
   )
 }

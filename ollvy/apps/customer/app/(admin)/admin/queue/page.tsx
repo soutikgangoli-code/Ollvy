@@ -27,6 +27,7 @@ interface QueueOrder {
 }
 
 export default async function AdminQueuePage() {
+  // getAdminUser is cached - layout already called it, so this returns cached result
   const adminUser = await getAdminUser()
   if (!supabaseServer) redirect('/admin/login')
 
@@ -63,33 +64,85 @@ export default async function AdminQueuePage() {
   let roundsData: { order_id: string; status: string }[] = []
   let workDocsData: { order_id: string; status: string; direction: string; tag: string | null }[] = []
   let questionnaireData: { order_id: string; question_key: string; response_value: string }[] = []
+  let adminsData: { id: string; name: string; email: string; is_active: boolean }[] | null = null
 
   if (orderIds.length > 0) {
-    const [roundsRes, workDocsRes, questionnaireRes] = await Promise.all([
-      supabaseServer
-        .from('order_rounds')
-        .select('order_id, status')
-        .in('order_id', orderIds),
-      supabaseServer
-        .from('order_work_documents')
-        .select('order_id, status, direction, tag')
-        .in('order_id', orderIds),
-      supabaseServer
-        .from('order_questionnaire_responses')
-        .select('order_id, question_key, response_value')
-        .in('order_id', orderIds)
-        .in('question_key', ['company_name', 'proposed_company_name', 'business_name', 'llp_name'])
+    // Parallelize all secondary queries including admin_users for super_admin
+    const roundsPromise = supabaseServer
+      .from('order_rounds')
+      .select('order_id, status')
+      .in('order_id', orderIds)
+
+    const workDocsPromise = supabaseServer
+      .from('order_work_documents')
+      .select('order_id, status, direction, tag')
+      .in('order_id', orderIds)
+
+    const questionnairePromise = supabaseServer
+      .from('order_questionnaire_responses')
+      .select('order_id, question_key, response_value')
+      .in('order_id', orderIds)
+      .in('question_key', ['company_name', 'proposed_company_name', 'business_name', 'llp_name'])
+
+    // Add admin_users query for super_admin (parallelize instead of sequential)
+    const adminsPromise = isSuper
+      ? supabaseServer
+          .from('admin_users')
+          .select('id, name, email, is_active')
+          .eq('is_active', true)
+          .order('name')
+      : null
+
+    const [roundsRes, workDocsRes, questionnaireRes, adminsRes] = await Promise.all([
+      roundsPromise,
+      workDocsPromise,
+      questionnairePromise,
+      adminsPromise
     ])
+
     roundsData = roundsRes.data || []
     workDocsData = workDocsRes.data || []
     questionnaireData = questionnaireRes.data || []
+    if (adminsRes) {
+      adminsData = adminsRes.data
+    }
+  } else if (isSuper) {
+    // No orders but still need admin users for super_admin
+    const { data } = await supabaseServer
+      .from('admin_users')
+      .select('id, name, email, is_active')
+      .eq('is_active', true)
+      .order('name')
+    adminsData = data
   }
 
-  // Calculate buckets client-side
+  // Build Maps for O(1) lookups instead of O(n*m) filtering
+  const roundsByOrderId = new Map<string, typeof roundsData>()
+  for (const r of roundsData) {
+    const arr = roundsByOrderId.get(r.order_id) || []
+    arr.push(r)
+    roundsByOrderId.set(r.order_id, arr)
+  }
+
+  const workDocsByOrderId = new Map<string, typeof workDocsData>()
+  for (const d of workDocsData) {
+    const arr = workDocsByOrderId.get(d.order_id) || []
+    arr.push(d)
+    workDocsByOrderId.set(d.order_id, arr)
+  }
+
+  const questionnaireByOrderId = new Map<string, typeof questionnaireData>()
+  for (const q of questionnaireData) {
+    const arr = questionnaireByOrderId.get(q.order_id) || []
+    arr.push(q)
+    questionnaireByOrderId.set(q.order_id, arr)
+  }
+
+  // Calculate buckets with O(1) lookups
   const orders: QueueOrder[] = (ordersRaw || []).map(order => {
-    const orderRounds = roundsData.filter(r => r.order_id === order.id)
-    const orderWorkDocs = workDocsData.filter(d => d.order_id === order.id)
-    const orderQuestionnaire = questionnaireData.filter(q => q.order_id === order.id)
+    const orderRounds = roundsByOrderId.get(order.id) || []
+    const orderWorkDocs = workDocsByOrderId.get(order.id) || []
+    const orderQuestionnaire = questionnaireByOrderId.get(order.id) || []
 
     // Handle both single object and array cases for joins
     const servicePackage = Array.isArray(order.service_packages)
@@ -163,30 +216,22 @@ export default async function AdminQueuePage() {
     }
   })
 
-  // Fetch admin users for bulk assignment (super_admin only)
+  // Process admin users for bulk assignment (super_admin only) - already fetched in parallel
   let adminUsers: Array<{ id: string; name: string; email: string; activeOrderCount: number }> = []
-  if (isSuper && supabaseServer) {
-    const { data: admins } = await supabaseServer
-      .from('admin_users')
-      .select('id, name, email, is_active')
-      .eq('is_active', true)
-      .order('name')
-
-    if (admins) {
-      // Compute counts from already-fetched orders (no N+1 queries)
-      const adminOrderCounts: Record<string, number> = {}
-      for (const order of ordersRaw || []) {
-        if (order.assigned_admin_id) {
-          adminOrderCounts[order.assigned_admin_id] = (adminOrderCounts[order.assigned_admin_id] || 0) + 1
-        }
+  if (isSuper && adminsData) {
+    // Compute counts from already-fetched orders (no N+1 queries)
+    const adminOrderCounts: Record<string, number> = {}
+    for (const order of ordersRaw || []) {
+      if (order.assigned_admin_id) {
+        adminOrderCounts[order.assigned_admin_id] = (adminOrderCounts[order.assigned_admin_id] || 0) + 1
       }
-
-      adminUsers = admins.map(admin => ({
-        ...admin,
-        activeOrderCount: adminOrderCounts[admin.id] || 0,
-      }))
-      adminUsers.sort((a, b) => a.activeOrderCount - b.activeOrderCount)
     }
+
+    adminUsers = adminsData.map(admin => ({
+      ...admin,
+      activeOrderCount: adminOrderCounts[admin.id] || 0,
+    }))
+    adminUsers.sort((a, b) => a.activeOrderCount - b.activeOrderCount)
   }
 
   return <QueueClient orders={orders} adminUser={adminUser} adminUsers={adminUsers} />

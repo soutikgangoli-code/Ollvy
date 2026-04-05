@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   FileText,
@@ -87,32 +86,30 @@ export function DocumentVaultSection({
 
   if (documentGroups.length === 0) {
     return (
-      <Card className="border-border">
-        <CardContent className="p-6 text-center">
-          <FolderOpen className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-          <p className="text-muted-foreground">No documents yet</p>
-          <p className="text-sm text-muted-foreground mt-1">
-            Documents will appear here after your first order
-          </p>
-        </CardContent>
-      </Card>
+      <div className="rounded-xl border border-border bg-card p-6 text-center">
+        <FolderOpen className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+        <p className="text-muted-foreground">No documents yet</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Documents will appear here after your first order
+        </p>
+      </div>
     )
   }
 
   return (
-    <Card className="border-border">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <FolderOpen className="h-5 w-5 text-muted-foreground" />
+    <div className="rounded-xl border border-border bg-card overflow-hidden">
+      <div className="px-6 py-4 border-b border-border/50 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <FolderOpen className="h-4 w-4 text-muted-foreground" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
             Document Vault
-          </CardTitle>
-          <span className="text-xs text-muted-foreground">
-            {totalDocuments} document{totalDocuments !== 1 ? 's' : ''}
           </span>
         </div>
-      </CardHeader>
-      <CardContent className="pt-0 space-y-3">
+        <span className="text-xs text-muted-foreground">
+          {totalDocuments} document{totalDocuments !== 1 ? 's' : ''}
+        </span>
+      </div>
+      <div className="p-4 space-y-3">
         {visibleGroups.map((group) => {
           const isExpanded = expandedGroups.includes(group.orderId)
           const deliverables = group.documents.filter(d => d.type === 'deliverable')
@@ -211,7 +208,7 @@ export function DocumentVaultSection({
               : `Show ${documentGroups.length - maxVisibleGroups} more order${documentGroups.length - maxVisibleGroups > 1 ? 's' : ''}`}
           </Button>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

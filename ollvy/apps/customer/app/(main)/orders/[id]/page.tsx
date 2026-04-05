@@ -70,7 +70,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .from('order_documents')
       .select('*')
       .eq('order_id', orderId)
-      .order('created_at', { ascending: true }),
+      .order('created_at', { ascending: false }),
     supabase
       .from('order_work_documents')
       .select('*')
@@ -83,26 +83,9 @@ export default async function OrderDetailPage({ params }: PageProps) {
     return <OrderPageClient orderId={orderId} initialData={null} />
   }
 
-  // Fetch service_package using service role client (bypasses RLS)
-  // This is safe because we already verified user access to the order above
-  let servicePackageData = null
-  if (supabaseServer && orderResult.data.service_package_id) {
-    const { data: spData } = await supabaseServer
-      .from('service_packages')
-      .select('*')
-      .eq('id', orderResult.data.service_package_id)
-      .single()
-    servicePackageData = spData
-  }
-
-  // Attach service_package to order data
-  const orderWithServicePackage = {
-    ...orderResult.data,
-    service_package: servicePackageData
-  }
-
-  // Fetch optional data (don't block on these)
-  const [invoiceResult, notificationResult, responsesResult] = await Promise.allSettled([
+  // Fetch optional data (don't block on these) - includes service_package in parallel
+  // Service package uses service role client (bypasses RLS) - safe because BATCH 1 verified user access
+  const [invoiceResult, notificationResult, responsesResult, servicePackageResult] = await Promise.allSettled([
     supabase
       .from('invoices')
       .select('id')
@@ -119,8 +102,27 @@ export default async function OrderDetailPage({ params }: PageProps) {
     supabase
       .from('order_questionnaire_responses')
       .select('question_key, response_value')
-      .eq('order_id', orderId)
+      .eq('order_id', orderId),
+    // Service package - now parallel with other optional queries
+    supabaseServer && orderResult.data.service_package_id
+      ? supabaseServer
+          .from('service_packages')
+          .select('*')
+          .eq('id', orderResult.data.service_package_id)
+          .single()
+      : Promise.resolve({ data: null, error: null })
   ])
+
+  // Extract service package data from result
+  const servicePackageData = servicePackageResult.status === 'fulfilled'
+    ? servicePackageResult.value.data
+    : null
+
+  // Attach service_package to order data
+  const orderWithServicePackage = {
+    ...orderResult.data,
+    service_package: servicePackageData
+  }
 
   // Build questionnaire responses with labels
   let questionnaireResponses: QuestionnaireResponse[] = []

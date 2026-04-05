@@ -17,14 +17,15 @@ export interface AdminUser {
 // For cross-request caching, consider using unstable_cache or external caching (Redis).
 export const getAdminUser = cache(async (): Promise<AdminUser> => {
   const supabase = await createServerSupabase()
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) redirect('/admin/login')
+  // Use getUser() instead of getSession() for security - it verifies with auth server
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/admin/login')
   if (!supabaseServer) redirect('/admin/login')
 
   const { data: adminUser } = await supabaseServer
     .from('admin_users')
     .select('id, auth_user_id, name, email, role, is_active')
-    .eq('auth_user_id', session.user.id)
+    .eq('auth_user_id', user.id)
     .single()
 
   if (!adminUser?.is_active) redirect('/admin/login')
