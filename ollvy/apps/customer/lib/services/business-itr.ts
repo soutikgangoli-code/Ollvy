@@ -92,37 +92,37 @@ export const businessItr: ServiceConfig = {
   serviceRisks: [
     {
       icon: 'clock',
-      title: 'Belated filing interest at 1% per month',
-      body: "Section 234A: if you file after Oct 31 and have tax due, 1% monthly interest accrues on the outstanding amount from Nov 1. On ₹5L tax liability, that's ₹5,000 per month.",
+      title: 'Belated filing interest',
+      body: 'Section 234A: if you file after the due date with tax outstanding, 1% monthly interest accrues from the original deadline.',
     },
     {
       icon: 'document',
-      title: "Losses can't be carried forward",
-      body: 'If your company made a loss this year and you file late, you lose the right to carry it forward and offset against future profits. This is irreversible.',
+      title: 'Losses cannot be carried forward if filed late',
+      body: 'A company that made a loss and files after October 31 loses the right to offset that loss against future profits. That tax benefit cannot be recovered.',
     },
     {
       icon: 'alert',
-      title: 'Defective return notice',
-      body: 'Late filers are more likely to receive defective return notices under Section 139(9) - requires a response within 15 days or the return is treated as not filed.',
+      title: 'Audit requirement',
+      body: 'Audit is mandatory if turnover exceeds Rs 1 crore (Rs 10 crore if cash transactions are under 5% of total). Audited financials must be ready before ITR can be filed.',
     },
   ],
 
   profilePersonas: [
     {
-      label: 'First year filing',
-      detail: "New company, first ITR. We walk you through every document you need and why.",
+      label: 'First year after incorporation',
+      detail: 'First ITR. We walk through every document required.',
     },
     {
       label: 'Changed CA mid-year',
-      detail: "Previous CA's books are a mess. We reconcile and file correctly from whatever state they're in.",
+      detail: 'Previous CA\'s books need reconciliation. We clean up and file correctly.',
     },
     {
       label: 'Company made a loss',
-      detail: 'Loss returns are filed to preserve carry-forward rights. We ensure it\'s done correctly.',
+      detail: 'Loss return filed to preserve carry-forward rights.',
     },
     {
       label: 'Filing late',
-      detail: 'We calculate the interest liability upfront and file immediately to stop it growing.',
+      detail: 'We calculate interest liability upfront so there are no surprises, then file immediately.',
     },
   ],
 
@@ -139,28 +139,23 @@ export const businessItr: ServiceConfig = {
   faqs: [
     {
       category: 'General',
-      q: 'When is business ITR due?',
-      a: 'For companies not requiring audit: Sep 30. For companies requiring audit: Oct 31. For transfer pricing cases: Nov 30. Most Pvt Ltd companies fall under Oct 31.',
+      q: 'When is Business ITR due?',
+      a: 'For Pvt Ltd companies: October 31 - statutory audit is mandatory for all companies regardless of turnover, so the extended deadline always applies. For LLPs not requiring tax audit: July 31. For LLPs requiring tax audit (turnover above Rs 1 crore): October 31.',
     },
     {
       category: 'General',
-      q: "What's the difference between ITR-5 and ITR-6?",
-      a: "ITR-6 is for companies (Pvt Ltd, Public Ltd). ITR-5 is for LLPs, Partnership Firms, AOPs, and BOIs. The forms are different, the schedules are different, and the filing process is different. We handle both.",
+      q: 'What is the difference between ITR-5 and ITR-6?',
+      a: 'ITR-6 for companies (Pvt Ltd, Public Ltd, OPC). ITR-5 for LLPs and partnership firms.',
     },
     {
       category: 'Process',
       q: 'What documents do I need?',
-      a: "Audited financials (if applicable), P&L and Balance Sheet, trial balance, bank statements for all accounts, Form 26AS (TDS certificate), and previous year's ITR acknowledgement. We send a personalised checklist.",
+      a: 'Audited financials (P&L, Balance Sheet), trial balance, bank statements, Form 26AS, and depreciation schedule.',
     },
     {
       category: 'Process',
-      q: 'Do I need to be audited?',
-      a: "Audit is required if turnover exceeds ₹1Cr (₹10Cr if cash transactions are under 5%). The audit must be completed before ITR is filed. If you need an audit, book it separately - we can do that too.",
-    },
-    {
-      category: 'After Completion',
-      q: "What happens after filing?",
-      a: "You receive the ITR-V acknowledgement immediately. Within 30 days, you may receive an intimation under Section 143(1) - this is normal processing. If there's a demand or refund, we explain it and help you respond.",
+      q: 'Do I need a statutory audit?',
+      a: 'Mandatory for all Pvt Ltd companies regardless of turnover. For LLPs: mandatory above Rs 40 lakh turnover or Rs 25 lakh contribution.',
     },
   ],
 

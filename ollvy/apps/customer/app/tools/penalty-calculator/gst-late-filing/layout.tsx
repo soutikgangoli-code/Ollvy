@@ -1,21 +1,24 @@
 import { Metadata } from 'next'
+import { gstLateFilingPage } from '@/lib/tools/penalty-calculator-pages'
+
+const config = gstLateFilingPage
 
 export const metadata: Metadata = {
-  title: 'GST Late Filing Penalty Calculator 2025 | Ollvy',
-  description: 'Calculate GST late filing penalties and interest for GSTR-1, GSTR-3B, and GSTR-9. Enter turnover and days late to get instant penalty estimates based on Section 47 CGST Act.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/penalty-calculator/gst-late-filing',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'GST Late Filing Penalty Calculator | Ollvy',
-    description: 'Calculate GST late filing penalties for GSTR-1, GSTR-3B, GSTR-9. Free instant calculator.',
-    url: 'https://www.ollvy.com/tools/penalty-calculator/gst-late-filing',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GST Late Filing Penalty Calculator | Ollvy',
-    description: 'Calculate GST late filing penalties for GSTR-1, GSTR-3B, GSTR-9.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }

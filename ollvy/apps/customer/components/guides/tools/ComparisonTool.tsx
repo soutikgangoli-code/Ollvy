@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { CheckCircle, AlertCircle, Info } from 'lucide-react';
 import { LearnToolConfig, EligibilityQuestion, EligibilityResult } from '@/lib/guides/pages';
 import Link from 'next/link';
+import { LearnToolRankedResult } from '../LearnToolRankedResult';
 
 // Get result styling based on type
 function getResultStyle(type: EligibilityResult['type']) {
@@ -31,7 +32,7 @@ function getResultStyle(type: EligibilityResult['type']) {
 export function ComparisonTool({ config }: {
   config: LearnToolConfig;
 }) {
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<string[]>([]);
   const [result, setResult] = useState<EligibilityResult | null>(null);
   const [step, setStep] = useState(0);
 
@@ -39,7 +40,8 @@ export function ComparisonTool({ config }: {
   const currentQ = questions[step];
 
   const handleAnswer = (answer: string) => {
-    const newAnswers = { ...answers, [step]: answer };
+    const newAnswers = [...answers];
+    newAnswers[step] = answer;
     setAnswers(newAnswers);
 
     // Check for early-exit branches
@@ -107,7 +109,8 @@ export function ComparisonTool({ config }: {
       ) : (
         <div className="p-6">
           <div className={cn(
-            "flex items-start gap-3 rounded-lg p-4 mb-5",
+            "flex items-start gap-3 rounded-lg p-4",
+            result.ranking ? "mb-2" : "mb-5",
             resultStyle?.bg
           )}>
             {Icon && <Icon size={16} className={cn(resultStyle?.iconColor, "mt-0.5 shrink-0")} />}
@@ -116,6 +119,12 @@ export function ComparisonTool({ config }: {
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{result.body}</p>
             </div>
           </div>
+
+          {result.ranking && (
+            <div className="mb-5">
+              <LearnToolRankedResult ranking={result.ranking} />
+            </div>
+          )}
 
           {recommendation && (result.type === 'eligible' || result.type === 'mandatory' || result.type === 'recommended') && (
             <Button className="w-full" asChild>
@@ -126,7 +135,7 @@ export function ComparisonTool({ config }: {
           )}
 
           <button
-            onClick={() => { setAnswers({}); setStep(0); setResult(null); }}
+            onClick={() => { setAnswers([]); setStep(0); setResult(null); }}
             className="w-full mt-3 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Start over
@@ -139,7 +148,7 @@ export function ComparisonTool({ config }: {
 
 function evaluateAnswers(
   questions: EligibilityQuestion[],
-  answers: Record<number, string>,
+  answers: string[],
   defaultResult?: EligibilityResult
 ): EligibilityResult {
   for (const [i, q] of questions.entries()) {
@@ -155,8 +164,8 @@ function evaluateAnswers(
 
 function getEarlyResult(
   questions: EligibilityQuestion[],
-  answers: Record<number, string>,
+  answers: string[],
   currentStep: number
 ): EligibilityResult | null {
-  return questions[currentStep]?.earlyExit?.(answers[currentStep]) ?? null;
+  return questions[currentStep]?.earlyExit?.(answers[currentStep], answers) ?? null;
 }

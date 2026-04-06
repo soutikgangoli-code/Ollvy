@@ -6,9 +6,14 @@ import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/Docume
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
+import { ToolIntroSection, ToolIntroCTA, ToolFAQSection } from '@/components/tools/DocumentPageToolExtensions'
 import { businessITRDocuments } from '@/lib/data/document-checklists'
 import { businessItrContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
+import { businessItrChecklistPage } from '@/lib/tools/document-checklist-pages'
+import { generateToolFAQSchema } from '@/lib/tools/types'
+
+const config = businessItrChecklistPage
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -48,23 +53,25 @@ const documentListJsonLd = generateDocumentListSchema(
   'https://www.ollvy.com/tools/documents/business-itr'
 )
 
+const configFaqJsonLd = generateToolFAQSchema(config)
+
 export const metadata: Metadata = {
-  title: 'How to File Business ITR - Documents & Process | Ollvy',
-  description: 'Complete guide to business ITR filing in India. ITR-3, ITR-4, tax audit, presumptive taxation, P&L, balance sheet, documents required, and FAQs.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   keywords: ['business ITR filing', 'how to file ITR-3', 'ITR-4 filing', 'tax audit', 'presumptive taxation 44AD', 'business income tax return', 'freelancer ITR'],
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/documents/business-itr',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'How to File Business ITR in India | Ollvy',
-    description: 'Complete guide to business income tax return filing - process, audit, and documents.',
-    url: 'https://www.ollvy.com/tools/documents/business-itr',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'How to File Business ITR | Ollvy',
-    description: 'Complete guide to business income tax return filing in India.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
@@ -89,6 +96,16 @@ export default function BusinessITRDocumentsPage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
+        />
+
+        {/* New intro section from config - at the very top */}
+        <ToolIntroSection text={config.intro} />
+
+        {/* CTA link after intro */}
+        <ToolIntroCTA config={config} />
 
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
@@ -135,6 +152,9 @@ export default function BusinessITRDocumentsPage() {
 
         {/* Next steps */}
         <DocumentNextSteps content={businessItrContent} />
+
+        {/* New FAQ section from config - at the very bottom */}
+        <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
       </div>
     </div>
   )

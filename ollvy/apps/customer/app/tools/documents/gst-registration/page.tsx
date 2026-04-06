@@ -6,9 +6,14 @@ import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/Docume
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
+import { ToolIntroSection, ToolIntroCTA, ToolFAQSection } from '@/components/tools/DocumentPageToolExtensions'
 import { gstDocuments } from '@/lib/data/document-checklists'
 import { gstRegistrationContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
+import { gstChecklistPage } from '@/lib/tools/document-checklist-pages'
+import { generateToolFAQSchema } from '@/lib/tools/types'
+
+const config = gstChecklistPage
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -48,23 +53,25 @@ const documentListJsonLd = generateDocumentListSchema(
   'https://www.ollvy.com/tools/documents/gst-registration'
 )
 
+const configFaqJsonLd = generateToolFAQSchema(config)
+
 export const metadata: Metadata = {
-  title: 'How to Register for GST - Documents & Process | Ollvy',
-  description: 'Complete checklist of documents needed for GST registration in India 2025-26. PAN, Aadhaar, address proof, bank statement requirements. Step-by-step process for sole proprietors and companies.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   keywords: ['GST registration documents', 'GST documents list', 'documents for GST number', 'GST registration requirements india', 'how to register for GST', 'GSTIN documents 2025'],
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/documents/gst-registration',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'How to Register for GST - Documents & Process | Ollvy',
-    description: 'Complete checklist of documents needed for GST registration in India. Step-by-step process for proprietors and businesses.',
-    url: 'https://www.ollvy.com/tools/documents/gst-registration',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'How to Register for GST - Documents & Process | Ollvy',
-    description: 'Complete checklist of documents needed for GST registration in India. Step-by-step process for proprietors and businesses.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
@@ -89,6 +96,16 @@ export default function GSTDocumentsPage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
+        />
+
+        {/* New intro section from config - at the very top */}
+        <ToolIntroSection text={config.intro} />
+
+        {/* CTA link after intro */}
+        <ToolIntroCTA config={config} />
 
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
@@ -135,6 +152,9 @@ export default function GSTDocumentsPage() {
 
         {/* Next steps */}
         <DocumentNextSteps content={gstRegistrationContent} />
+
+        {/* New FAQ section from config - at the very bottom */}
+        <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
       </div>
     </div>
   )

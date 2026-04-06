@@ -5,7 +5,7 @@ export const dinReactivation: ServiceConfig = {
   name: 'DIN Reactivation',
   shortName: 'DIN Reactivation',
   category: 'Registrations',
-  tagline: 'DIN deactivated? File DIR-3 KYC and restore it within 3 working days.',
+  tagline: 'DIN deactivated? We restore it.',
 
   ollvyFee: 3499,
   govtFee: 5000,
@@ -28,97 +28,75 @@ export const dinReactivation: ServiceConfig = {
   processSteps: [
     {
       step: 1,
-      title: 'Share your DIN and documents - CS checks status immediately',
-      timeline: 'Day 0',
-      body: "Your DIN number, PAN card, Aadhaar card, and mobile number linked to Aadhaar. A company secretary is assigned within 2 hours. They verify your DIN status on MCA21 and confirm the deactivation date. The ₹5,000/day penalty stops the moment DIR-3 KYC is filed - every hour you wait adds to the accumulated liability.",
-      visual: 'upload',
-      milestone: 'CS assigned, DIN status and penalty calculated',
+      title: 'Check reason for deactivation',
+      timeline: 'Day 0-1',
+      body: 'DIN status verified on MCA21. Years of outstanding KYC identified.',
+      visual: 'checklist',
+      milestone: 'Deactivation reason confirmed',
     },
     {
       step: 2,
-      title: 'DIR-3 KYC filed with late fee - OTP in real time',
-      timeline: 'Day 1',
-      body: "Your CS fills DIR-3 KYC on MCA21 and triggers OTP verification. OTP is sent to the mobile number linked to your Aadhaar. You share it with your CS. Form is submitted. The ₹500 late fee is paid to MCA as part of the filing. This step takes about 10 minutes of your time. The penalty clock stops the moment the form is submitted.",
+      title: 'File all pending DIR-3 KYC',
+      timeline: 'Day 1-5',
+      body: 'DIR-3 KYC filed for all outstanding years with OTP verification. Rs 5,000 late fee applies per missed year.',
       visual: 'form',
-      milestone: 'DIR-3 KYC submitted to MCA, penalty clock stopped',
+      milestone: 'All KYC filings cleared',
     },
     {
       step: 3,
+      title: 'DIR-3C reactivation application',
+      timeline: 'Day 5-7',
+      body: 'Reactivation form filed with explanation and payment.',
+      visual: 'form',
+      milestone: 'Reactivation application submitted',
+    },
+    {
+      step: 4,
       title: 'DIN reactivated',
-      timeline: 'Day 1-3',
-      body: "MCA processes DIR-3 KYC within 24-72 hours. DIN status changes to Active on MCA21. If you hold directorships in multiple companies, all are restored by one filing. The DIR-3 KYC acknowledgement is uploaded to your Ollvy account. Your compliance calendar is updated with next year's Sep 30 deadline.",
+      timeline: 'Day 7-10',
+      body: 'DIN status changed to Active on MCA21.',
       visual: 'stamp',
+      milestone: 'DIN active, all directorships restored',
       isCompletion: true,
-      milestone: 'DIN active on MCA21, all directorships restored',
     },
   ],
 
   whatsIncluded: [
     {
-      title: 'Penalty clock stops on Day 1',
-      body: "The ₹5,000/day penalty stops accumulating the moment DIR-3 KYC is submitted - not when MCA processes it, not when the DIN is confirmed active. Submitted = stopped. Your CS files on Day 1.",
-      mockVisualType: 'status',
-      mockVisualData: {
-        row1: 'DIN: 08765432',
-        row2: 'Status: Deactivated',
-        row3: 'Penalty accrued: ₹4,35,000 (87 days)',
-        note: 'Filing today stops the clock immediately',
-      },
+      title: 'All outstanding DIR-3 KYC filed',
+      body: 'Every year of missed KYC cleared. OTP verification coordinated in real time.',
     },
     {
-      title: 'OTP verification coordinated live',
-      body: "DIR-3 KYC requires Aadhaar OTP. Your CS coordinates the verification in real time - they file, OTP arrives on your phone, you share it, they submit. Takes 10 minutes. You need to be available for this step.",
+      title: 'DIR-3C application',
+      body: 'Reactivation form with explanation submitted to MCA.',
     },
     {
-      title: 'All directorships restored - one filing',
-      body: "DIR-3 KYC is tied to your DIN, not to any specific company. Filing once restores your DIN across every company where you are a director. All blocked MCA filings for all those companies are unblocked simultaneously.",
-    },
-    {
-      title: 'Compliance calendar updated - Sep 30 reminder set',
-      body: "The moment we file, next year's Sep 30 deadline is added to your compliance calendar with automated reminders. You will not miss it again.",
-      mockVisualType: 'calendar',
-      mockVisualData: {
-        row1: 'DIR-3 KYC - Due Sep 30, 2026',
-        row2: 'Reminder: Aug 31, 2026',
-        row3: 'Status: Scheduled',
-      },
+      title: 'DIN fully restored',
+      body: 'All directorial rights, signing authority, and MCA filing access restored across all companies.',
     },
   ],
 
   serviceRisks: [
     {
       icon: 'clock',
-      title: '₹5,000/day penalty is accumulating right now',
-      body: "Every day of delay adds ₹5,000 to your accumulated liability. By day 90, that is ₹4,50,000. The accumulated penalty does not disappear when you file - it is a liability that may need to be paid separately. Filing today stops it from growing further.",
+      title: 'Rs 5,000 per missed year',
+      body: 'The government late fee is Rs 5,000 per year of missed DIR-3 KYC. Multiple missed years means multiple fees - these are mandatory and non-negotiable.',
     },
     {
       icon: 'building',
-      title: 'Every company you direct is affected',
-      body: "A deactivated DIN blocks all MCA filings for every company where you hold a directorship. Annual returns, share transfers, director changes, address changes - everything is frozen until your DIN is restored.",
-    },
-    {
-      icon: 'alert',
-      title: 'This is for DIR-3 KYC deactivation only',
-      body: "This service reactivates DINs deactivated for non-filing of annual DIR-3 KYC. If your DIN was deactivated under Section 164 (director disqualification), that is a different process requiring legal intervention. Contact us before ordering if you are unsure which applies.",
+      title: 'All companies blocked until DIN is active',
+      body: 'Every company where you are a director cannot file any MCA form while your DIN is deactivated. The impact is not limited to one company.',
     },
   ],
 
   profilePersonas: [
     {
-      label: 'Missed the Sep 30 deadline',
-      detail: "DIN deactivated on Oct 1. ₹5,000/day running. CS files the same day - penalty stops today.",
+      label: 'Missed DIR-3 KYC',
+      detail: 'DIN deactivated for one or more years of missed KYC. Act before the company\'s filing deadlines pass.',
     },
     {
-      label: 'Penalty has been accumulating for months',
-      detail: "DIN inactive for a long time. We file immediately to stop further accumulation. The accumulated amount is a separate liability.",
-    },
-    {
-      label: 'Multiple directorships blocked',
-      detail: "Director in 3+ companies. All their MCA filings are frozen. One DIR-3 KYC filing restores all.",
-    },
-    {
-      label: "Did not know the DIN was deactivated",
-      detail: "Found out when trying to sign an annual return. We verify DIN status first and file the same day.",
+      label: 'Multiple directorships',
+      detail: 'One DIN reactivation covers all companies. We verify all directorships are unblocked.',
     },
   ],
 
@@ -136,32 +114,22 @@ export const dinReactivation: ServiceConfig = {
     {
       category: 'General',
       q: 'Why was my DIN deactivated?',
-      a: "MCA deactivates DINs on Oct 1 every year for every director who did not file DIR-3 KYC by Sep 30. It is an automatic process - not a targeted action against you.",
+      a: 'Deactivated when DIR-3 KYC is not filed by September 30 each year. Automated by MCA from October 1.',
     },
     {
       category: 'General',
       q: 'What is the late fee?',
-      a: "MCA charges ₹500 as the late filing fee for DIR-3 KYC filed after Sep 30. This is separate from the ₹5,000/day penalty that was accumulating. The late fee is the government's charge for processing the late filing - we pass it through at cost.",
+      a: 'Rs 5,000 per year of missed DIR-3 KYC. This is a government fee and is fixed.',
     },
     {
       category: 'Process',
-      q: 'How long does reactivation take after filing?',
-      a: "MCA confirms reactivation within 24-72 hours of submission. Most cases are confirmed within 1 working day. The DIN is not immediately active the moment we file - MCA must process it.",
+      q: 'How long does reactivation take?',
+      a: '10 working days from when we receive your documents.',
     },
     {
       category: 'Process',
-      q: 'Does filing stop the ₹5,000/day penalty immediately?',
-      a: "Yes - the penalty stops accruing from the date of DIR-3 KYC submission, not from the date MCA confirms processing. We share the submission acknowledgement immediately so you have proof of the stop date.",
-    },
-    {
-      category: 'Process',
-      q: 'Does this cover Section 164 disqualification?',
-      a: "No. Section 164 disqualification (for not filing annual returns for 3 consecutive years) is a legal matter that requires an application to the NCLT. This service only covers DIN deactivation from non-filing of DIR-3 KYC. Contact us before ordering if you are unsure which applies to you.",
-    },
-    {
-      category: 'Documents',
-      q: 'What do I need?',
-      a: "PAN card, Aadhaar card, and the mobile number linked to your Aadhaar. You must be available for OTP verification during the filing session - it takes 10 minutes.",
+      q: 'Does reactivation fix the issue for all companies where I am a director?',
+      a: 'Yes. Your DIN is a single identifier. Reactivating it restores your status across all directorships.',
     },
   ],
 

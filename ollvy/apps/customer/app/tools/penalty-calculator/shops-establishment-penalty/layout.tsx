@@ -1,25 +1,28 @@
 import { Metadata } from 'next'
+import { shopEstablishmentPage } from '@/lib/tools/penalty-calculator-pages'
+
+const config = shopEstablishmentPage
 
 export const metadata: Metadata = {
-  title: 'Shops and Establishment Penalty Calculator 2025 | Ollvy',
-  description: 'Calculate penalties for Shops and Establishment Act violations. Late registration, renewal delays, and compliance penalties by state.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/penalty-calculator/shops-establishment-penalty',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'Shops and Establishment Penalty Calculator | Ollvy',
-    description: 'Calculate Shop Act penalties for late registration and renewal.',
-    url: 'https://www.ollvy.com/tools/penalty-calculator/shops-establishment-penalty',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shops and Establishment Penalty Calculator | Ollvy',
-    description: 'Calculate Shop Act penalties for late registration and renewal.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
-export default function ShopsEstablishmentLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }

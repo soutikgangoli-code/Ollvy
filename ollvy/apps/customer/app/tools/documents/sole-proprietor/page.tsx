@@ -6,9 +6,14 @@ import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/Docume
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
+import { ToolIntroSection, ToolIntroCTA, ToolFAQSection } from '@/components/tools/DocumentPageToolExtensions'
 import { soleProprietorDocuments } from '@/lib/data/document-checklists'
 import { soleProprietorContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
+import { soleProprietorChecklistPage } from '@/lib/tools/document-checklist-pages'
+import { generateToolFAQSchema } from '@/lib/tools/types'
+
+const config = soleProprietorChecklistPage
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -48,23 +53,25 @@ const documentListJsonLd = generateDocumentListSchema(
   'https://www.ollvy.com/tools/documents/sole-proprietor'
 )
 
+const configFaqJsonLd = generateToolFAQSchema(config)
+
 export const metadata: Metadata = {
-  title: 'How to Register Sole Proprietorship - Documents & Process | Ollvy',
-  description: 'Complete guide to sole proprietorship registration in India. Step-by-step process, GST registration, Udyam, Shop Act, required documents, and FAQs answered.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   keywords: ['sole proprietorship registration', 'how to register proprietorship', 'sole proprietorship documents', 'proprietorship GST registration', 'Udyam registration'],
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/documents/sole-proprietor',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'How to Register Sole Proprietorship in India | Ollvy',
-    description: 'Complete guide to sole proprietorship registration - process, documents, and requirements.',
-    url: 'https://www.ollvy.com/tools/documents/sole-proprietor',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'How to Register Sole Proprietorship | Ollvy',
-    description: 'Complete guide to sole proprietorship registration in India.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
@@ -89,6 +96,16 @@ export default function SoleProprietorDocumentsPage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
+        />
+
+        {/* New intro section from config - at the very top */}
+        <ToolIntroSection text={config.intro} />
+
+        {/* CTA link after intro */}
+        <ToolIntroCTA config={config} />
 
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
@@ -133,6 +150,9 @@ export default function SoleProprietorDocumentsPage() {
 
         {/* Next steps */}
         <DocumentNextSteps content={soleProprietorContent} />
+
+        {/* New FAQ section from config - at the very bottom */}
+        <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
       </div>
     </div>
   )

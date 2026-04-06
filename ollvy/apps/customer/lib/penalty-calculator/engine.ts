@@ -35,57 +35,41 @@ import {
 
 /**
  * Get the current Indian financial year (April to March)
- * Returns the calendar year in which the financial year starts
- * e.g., FY 2025-26 returns 2025
  */
 function getCurrentFinancialYear(): number {
   const now = new Date()
-  const currentMonth = now.getMonth() // 0-11
+  const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
-
-  // Financial year starts in April (month 3)
-  // If we're in Jan-Mar, we're still in the previous FY
   return currentMonth < 3 ? currentYear - 1 : currentYear
 }
 
 /**
- * Get due dates for the current financial year
- * Dynamically calculates dates based on FY instead of hardcoding
+ * Get due dates dynamically based on current financial year
  */
 function getDueDates(): Record<string, string> {
   const fy = getCurrentFinancialYear()
-  const nextYear = fy + 1
 
   return {
-    // Annual compliances - due in the same calendar year as FY start
-    'business-itr': `${fy}-10-31`, // October 31 of FY start year
-    'gst-annual-return': `${fy}-12-31`, // December 31 of FY start year
-    'director-kyc': `${fy}-09-30`, // September 30 of FY start year
-    'mca-annual-filing': `${fy}-10-30`, // 30 days after AGM (assumed Sep 30)
-
-    // Monthly compliances - use next month's date relative to current date
-    // These are rolling dates, shown as example for the first month of FY
-    'tds-monthly-compliance': getNextMonthlyDueDate(7), // 7th of following month
-    'gst-monthly': getNextMonthlyDueDate(20), // 20th of following month
-    'pf-compliance': getNextMonthlyDueDate(15), // 15th of following month
-    'esic-compliance': getNextMonthlyDueDate(15), // 15th of following month
+    'business-itr': `${fy}-10-31`,
+    'gst-annual-return': `${fy}-12-31`,
+    'director-kyc': `${fy}-09-30`,
+    'mca-annual-filing': `${fy}-10-30`,
+    'tds-monthly-compliance': getNextMonthlyDueDate(7),
+    'gst-monthly': getNextMonthlyDueDate(20),
+    'pf-compliance': getNextMonthlyDueDate(15),
+    'esic-compliance': getNextMonthlyDueDate(15),
   }
 }
 
-/**
- * Get the next monthly due date for a compliance with a specific day
- */
 function getNextMonthlyDueDate(dayOfMonth: number): string {
   const now = new Date()
   let year = now.getFullYear()
-  let month = now.getMonth() + 1 // Next month
+  let month = now.getMonth() + 1
 
-  // If we're past the due date this month, use next month
   if (now.getDate() >= dayOfMonth) {
     month++
   }
 
-  // Handle year rollover
   if (month > 12) {
     month = 1
     year++
@@ -94,12 +78,8 @@ function getNextMonthlyDueDate(dayOfMonth: number): string {
   return `${year}-${String(month).padStart(2, '0')}-${String(dayOfMonth).padStart(2, '0')}`
 }
 
-// Get due dates dynamically
 const DUE_DATES = getDueDates()
 
-/**
- * Available compliance options based on business profile
- */
 export const COMPLIANCE_OPTIONS: ComplianceOption[] = [
   {
     slug: 'gst',
@@ -146,22 +126,16 @@ export const COMPLIANCE_OPTIONS: ComplianceOption[] = [
   },
 ]
 
-/**
- * Get applicable compliances based on business profile
- */
 export function getApplicableCompliances(inputs: CalculatorInputs): ComplianceOption[] {
   return COMPLIANCE_OPTIONS.filter((option) => option.condition(inputs))
 }
 
-/**
- * Calculate GST filing penalty
- */
 function calculateGstPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
   if (!inputs.gstRegistered) return null
   if (!inputs.selectedCompliances.includes('gst')) return null
 
+  // Rs. 50/day combined per CBIC Notification 19/2021 (non-nil returns)
   const penaltyAmount = GST_LATE_FEE_PER_DAY * inputs.daysLate
-  // Interest on outstanding tax (18% annual, prorated)
   const interestAmount = Math.round(
     inputs.outstandingTax * GST_INTEREST_RATE * (inputs.daysLate / 365)
   )
@@ -174,15 +148,12 @@ function calculateGstPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null 
     penaltyAmount,
     interestAmount,
     totalAmount: penaltyAmount + interestAmount,
-    statute: 'CGST Act 2017, Section 47',
-    explanation: `Late fee of ₹100/day per return (CGST+SGST combined). ${inputs.outstandingTax > 0 ? `Plus 18% annual interest on ₹${inputs.outstandingTax.toLocaleString('en-IN')} outstanding tax.` : ''}`,
+    statute: 'Section 47, CGST Act 2017 (late fee) + Section 50 (interest on unpaid tax)',
+    explanation: `Rs. 50/day late fee (Rs. 25 CGST + Rs. 25 SGST) per CBIC Notification 19/2021.${inputs.outstandingTax > 0 ? ` Plus 18% annual interest on Rs. ${inputs.outstandingTax.toLocaleString('en-IN')} unpaid tax (Section 50).` : ''}`,
     serviceSlug: SERVICE_SLUGS.gst,
   }
 }
 
-/**
- * Calculate MCA annual filing penalty
- */
 function calculateMcaPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
   if (!['pvt_ltd', 'llp'].includes(inputs.businessType)) return null
   if (!inputs.selectedCompliances.includes('mca')) return null
@@ -197,15 +168,12 @@ function calculateMcaPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null 
     penaltyAmount,
     interestAmount: 0,
     totalAmount: penaltyAmount,
-    statute: 'Companies Act 2013, Sections 92 and 137',
-    explanation: 'AOC-4 due within 30 days of AGM, MGT-7 within 60 days. Both attract ₹100/day penalty (combined ₹200/day).',
+    statute: 'Companies Act 2013, Section 92 (MGT-7) and Section 137 (AOC-4)',
+    explanation: 'AOC-4 due 30 days after AGM (Section 137), MGT-7 due 60 days after AGM (Section 92). Rs. 100/day per form - Rs. 200/day if both are overdue.',
     serviceSlug: SERVICE_SLUGS.mca,
   }
 }
 
-/**
- * Calculate Director KYC penalty
- */
 function calculateDirectorKycPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
   if (!['pvt_ltd', 'llp'].includes(inputs.businessType)) return null
   if (!inputs.selectedCompliances.includes('director-kyc')) return null
@@ -218,25 +186,20 @@ function calculateDirectorKycPenalty(inputs: CalculatorInputs): PenaltyBreakdown
     penaltyAmount: DIRECTOR_KYC_FLAT_PENALTY,
     interestAmount: 0,
     totalAmount: DIRECTOR_KYC_FLAT_PENALTY,
-    statute: 'Companies Act 2013, Section 155',
-    explanation: 'Flat ₹5,000 penalty for late filing. DIN gets deactivated, blocking all MCA filings until DIR-3 KYC is filed.',
+    statute: 'Companies Act 2013, Rule 12A',
+    explanation: 'Rs. 5,000 reactivation fee per director. DIN deactivates automatically on October 1 if KYC is not filed by September 30, blocking all MCA filings for the company.',
     serviceSlug: SERVICE_SLUGS.directorKyc,
   }
 }
 
-/**
- * Calculate Business ITR penalty
- */
 function calculateItrPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
   if (inputs.businessType === 'not_registered') return null
   if (!inputs.selectedCompliances.includes('itr')) return null
 
-  // Penalty based on turnover
   const penaltyAmount = inputs.annualTurnover >= ITR_HIGH_PENALTY_THRESHOLD
     ? ITR_HIGH_PENALTY
     : ITR_LOW_PENALTY
 
-  // Interest: 1% per month on outstanding tax
   const monthsLate = Math.ceil(inputs.daysLate / 30)
   const interestAmount = Math.round(inputs.outstandingTax * ITR_INTEREST_RATE * monthsLate)
 
@@ -248,22 +211,18 @@ function calculateItrPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null 
     penaltyAmount,
     interestAmount,
     totalAmount: penaltyAmount + interestAmount,
-    statute: 'Income Tax Act 1961, Section 234F',
-    explanation: `Flat penalty of ₹${penaltyAmount.toLocaleString('en-IN')} for late filing${inputs.annualTurnover >= ITR_HIGH_PENALTY_THRESHOLD ? ' (turnover ≥ ₹5Cr)' : ' (turnover < ₹5Cr)'}. ${inputs.outstandingTax > 0 ? `Plus 1%/month interest on ₹${inputs.outstandingTax.toLocaleString('en-IN')} unpaid tax.` : ''}`,
+    statute: 'Income Tax Act 1961, Section 234F (late fee) + Section 234A (interest)',
+    explanation: `Rs. ${penaltyAmount.toLocaleString('en-IN')} late filing fee under Section 234F${inputs.annualTurnover >= ITR_HIGH_PENALTY_THRESHOLD ? ' (turnover above Rs. 5 crore)' : ''}.${inputs.outstandingTax > 0 ? ` Plus 1% per month interest on Rs. ${inputs.outstandingTax.toLocaleString('en-IN')} unpaid tax under Section 234A.` : ''}`,
     serviceSlug: SERVICE_SLUGS.itr,
   }
 }
 
-/**
- * Calculate TDS penalty
- */
 function calculateTdsPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
   const applicable = inputs.hasEmployees || ['pvt_ltd', 'llp', 'partnership'].includes(inputs.businessType)
   if (!applicable) return null
   if (!inputs.selectedCompliances.includes('tds')) return null
 
   const penaltyAmount = TDS_LATE_FEE_PER_DAY * inputs.daysLate
-  // 1.5% per month on outstanding TDS
   const monthsLate = Math.ceil(inputs.daysLate / 30)
   const interestAmount = Math.round(inputs.outstandingTax * TDS_INTEREST_RATE * monthsLate)
 
@@ -275,20 +234,16 @@ function calculateTdsPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null 
     penaltyAmount,
     interestAmount,
     totalAmount: penaltyAmount + interestAmount,
-    statute: 'Income Tax Act 1961, Section 234E',
-    explanation: `₹200/day late fee for delayed 24Q/26Q return. ${inputs.outstandingTax > 0 ? `Plus 1.5%/month interest on ₹${inputs.outstandingTax.toLocaleString('en-IN')} late TDS deposit.` : ''} 40% expense disallowance possible.`,
+    statute: 'Income Tax Act 1961, Section 234E (late return) + Section 201(1A) (late deposit)',
+    explanation: `Rs. 200/day under Section 234E for late TDS return filing.${inputs.outstandingTax > 0 ? ` Plus 1.5% per month interest on Rs. ${inputs.outstandingTax.toLocaleString('en-IN')} in late TDS deposit (Section 201(1A)).` : ''} If TDS was not deducted at all: 30% of that payment is disallowed as a business expense under Section 40(a)(ia).`,
     serviceSlug: SERVICE_SLUGS.tds,
   }
 }
 
-/**
- * Calculate PF penalty
- */
 function calculatePfPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
   if (!inputs.hasEmployees || inputs.employeeCount < PF_THRESHOLD_EMPLOYEES) return null
   if (!inputs.selectedCompliances.includes('pf')) return null
 
-  // Estimate monthly PF contribution (basic salary ≈ ₹15,000/employee × 12% × employees)
   const estimatedMonthlyPf = Math.round(15000 * 0.12 * inputs.employeeCount)
   const interestAmount = Math.round(estimatedMonthlyPf * PF_INTEREST_RATE * (inputs.daysLate / 365))
 
@@ -301,19 +256,15 @@ function calculatePfPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
     interestAmount,
     totalAmount: PF_DEFAULT_PENALTY + interestAmount,
     statute: 'EPF Act 1952, Section 14B',
-    explanation: `₹5,000 flat penalty per default event. Plus 12% annual interest on delayed PF contributions (~₹${estimatedMonthlyPf.toLocaleString('en-IN')}/month estimated).`,
+    explanation: `PF damages under Section 14B (EPF Act). Rate depends on default period: under 2 months = 5% p.a., 2-4 months = 10% p.a., 4-6 months = 15% p.a., above 6 months = 25% p.a. Estimated monthly PF: Rs. ${estimatedMonthlyPf.toLocaleString('en-IN')}.`,
     serviceSlug: SERVICE_SLUGS.pf,
   }
 }
 
-/**
- * Calculate ESIC penalty
- */
 function calculateEsicPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null {
   if (!inputs.hasEmployees || inputs.employeeCount < ESIC_THRESHOLD_EMPLOYEES) return null
   if (!inputs.selectedCompliances.includes('esic')) return null
 
-  // Estimate monthly ESIC contribution (gross salary ≈ ₹18,000/employee × 4% × employees)
   const estimatedMonthlyEsic = Math.round(18000 * 0.04 * inputs.employeeCount)
   const interestAmount = Math.round(estimatedMonthlyEsic * ESIC_INTEREST_RATE * (inputs.daysLate / 365))
 
@@ -325,15 +276,12 @@ function calculateEsicPenalty(inputs: CalculatorInputs): PenaltyBreakdown | null
     penaltyAmount: ESIC_DEFAULT_PENALTY,
     interestAmount,
     totalAmount: ESIC_DEFAULT_PENALTY + interestAmount,
-    statute: 'ESI Act 1948, Section 85',
-    explanation: `₹5,000 flat penalty per default. Plus 12% annual interest on delayed ESIC contributions (~₹${estimatedMonthlyEsic.toLocaleString('en-IN')}/month estimated).`,
+    statute: 'ESI Act 1948, Section 85B',
+    explanation: `12% annual interest on delayed ESIC contributions under Section 85B (ESI Act). Estimated monthly ESIC: Rs. ${estimatedMonthlyEsic.toLocaleString('en-IN')}.`,
     serviceSlug: SERVICE_SLUGS.esic,
   }
 }
 
-/**
- * Determine risk level based on total exposure
- */
 function getRiskLevel(totalExposure: number): RiskLevel {
   if (totalExposure <= RISK_LEVEL_LOW_MAX) return 'low'
   if (totalExposure <= RISK_LEVEL_MEDIUM_MAX) return 'medium'
@@ -341,13 +289,9 @@ function getRiskLevel(totalExposure: number): RiskLevel {
   return 'critical'
 }
 
-/**
- * Main calculation function
- */
 export function calculatePenalties(inputs: CalculatorInputs): CalculationResult {
   const penalties: PenaltyBreakdown[] = []
 
-  // Calculate each applicable penalty
   const gstPenalty = calculateGstPenalty(inputs)
   if (gstPenalty) penalties.push(gstPenalty)
 
@@ -369,7 +313,6 @@ export function calculatePenalties(inputs: CalculatorInputs): CalculationResult 
   const esicPenalty = calculateEsicPenalty(inputs)
   if (esicPenalty) penalties.push(esicPenalty)
 
-  // Sum up totals
   const totalPenalty = penalties.reduce((sum, p) => sum + p.penaltyAmount, 0)
   const totalInterest = penalties.reduce((sum, p) => sum + p.interestAmount, 0)
   const totalExposure = totalPenalty + totalInterest
@@ -383,9 +326,6 @@ export function calculatePenalties(inputs: CalculatorInputs): CalculationResult 
   }
 }
 
-/**
- * Format currency in Indian style
- */
 export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',

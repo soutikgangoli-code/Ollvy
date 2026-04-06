@@ -1,4 +1,14 @@
-import { LearnSection, TableRow } from '@/lib/guides/pages';
+import { LearnSection, LearnSectionTable } from '@/lib/guides/pages';
+import { LearnSectionTable as LearnSectionTableComponent } from './LearnSectionTable';
+
+// Convert ALL CAPS or mixed case to Title Case for SEO-friendly headings
+function toTitleCase(str: string): string {
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
 interface FaqItem {
   q: string;
@@ -12,45 +22,6 @@ interface ProcessStepItem {
   body: string;
   milestone?: string;
   isCompletion?: boolean;
-}
-
-function DataTable({ table }: { table: TableRow[] }) {
-  if (table.length === 0) return null;
-  const keys = Object.keys(table[0]);
-
-  return (
-    <div className="mt-6 overflow-x-auto">
-      <table className="w-full text-sm border border-border rounded-lg overflow-hidden">
-        <thead>
-          <tr className="bg-muted/30">
-            {keys.map((key) => (
-              <th
-                key={key}
-                scope="col"
-                className="px-4 py-3 text-left text-xs font-semibold text-foreground uppercase tracking-wide border-b border-border"
-              >
-                {table[0][key]}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {table.slice(1).map((row, i) => (
-            <tr key={i} className="border-b border-border last:border-b-0 hover:bg-muted/10">
-              {keys.map((key, j) => (
-                <td
-                  key={j}
-                  className="px-4 py-3 text-muted-foreground"
-                >
-                  {row[key]}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
 }
 
 function FaqList({ faqs }: { faqs: FaqItem[] }) {
@@ -116,13 +87,13 @@ export function LearnSectionBlock({ section }: { section: LearnSection }) {
       {section.number ? (
         <div className="flex items-baseline gap-3 mb-4">
           <span className="font-mono text-[10px] text-muted-foreground">{section.number}</span>
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-            {section.heading}
+          <h2 className="text-sm font-semibold text-foreground tracking-wide">
+            {toTitleCase(section.heading)}
           </h2>
         </div>
       ) : (
         <h2 className="text-xl font-semibold text-foreground mb-4">
-          {section.heading}
+          {toTitleCase(section.heading)}
         </h2>
       )}
 
@@ -162,8 +133,8 @@ export function LearnSectionBlock({ section }: { section: LearnSection }) {
         </div>
       )}
 
-      {section.table && section.table.length > 0 && (
-        <DataTable table={section.table} />
+      {section.table && (
+        <LearnSectionTableComponent table={section.table} />
       )}
 
       {bullets && bullets.length > 0 && (

@@ -6,7 +6,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   name: 'TDS Monthly Compliance',
   shortName: 'TDS Filing',
   category: 'Monthly Compliance',
-  tagline: 'Deduct TDS. Deposit challan. File return. Every month, on time.',
+  tagline: 'Deduct TDS. Deposit the challan. File the return. Every month, on time.',
 
   ollvyFee: 3999,
   retainerCycleLabel: 'per month',
@@ -99,37 +99,37 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   serviceRisks: [
     {
       icon: 'clock',
-      title: 'Late deposit - interest accrues daily',
-      body: 'TDS must be deposited by 7th of the following month. Late deposit: 1% per month interest from deduction date to deposit date. At ₹50,000 TDS, 2 months late = ₹1,000 interest.',
+      title: 'Deposit due by 7th - not the 31st',
+      body: 'TDS must be deposited by the 7th of the following month (March TDS by April 30). Late deposit incurs 1.5% per month interest from the date of deduction.',
     },
     {
       icon: 'document',
-      title: 'Wrong TDS rate applied',
-      body: "Under-deducting TDS: you're liable for the shortfall plus interest. Over-deducting: the deductee complains. Professional fees (194J) is 10%, but contractors (194C) is 1%/2%. We apply the correct rate.",
+      title: 'Wrong TDS rate',
+      body: 'Under-deducting makes you liable for the shortfall plus interest. We apply current applicable rates for each section.',
     },
     {
       icon: 'alert',
-      title: 'Return not filed - Form 16 blocked',
-      body: "If quarterly return is not filed, Form 16/16A cannot be generated on TRACES. Your employees cannot claim TDS credit in their ITR. They'll call you in July asking for Form 16.",
+      title: 'Missing PAN of deductees',
+      body: 'TDS at the higher rate of 20% applies if the deductee\'s PAN is not furnished. We flag missing PANs during data review.',
     },
   ],
 
   profilePersonas: [
     {
       label: 'First time deducting TDS',
-      detail: 'New to TDS compliance. We explain every section and threshold.',
+      detail: 'New to TDS obligations. We explain each section and threshold.',
     },
     {
-      label: 'Have employees on salary',
-      detail: '24Q filing for salary TDS. Form 16 generation enabled.',
+      label: 'Paying employees',
+      detail: 'Form 24Q salary TDS handled, Form 16 generated quarterly.',
     },
     {
-      label: 'Paying contractors and professionals',
-      detail: '26Q filing for contractor (194C) and professional (194J) payments.',
+      label: 'Paying contractors or consultants',
+      detail: 'Form 26Q for 194C and 194J payments.',
     },
     {
-      label: 'Already have TDS backlog',
-      detail: 'Missed filings. We calculate interest, file returns, regularize status.',
+      label: 'Multiple payment types',
+      detail: 'Rent, salary, contractors, professional fees - all categories covered under one retainer.',
     },
   ],
 
@@ -147,32 +147,22 @@ export const tdsMonthlyCompliance: ServiceConfig = {
     {
       category: 'General',
       q: 'Who needs to deduct TDS?',
-      a: "Any business making payments above threshold limits - salary to employees, rent above ₹2.4L/year, professional fees above ₹30,000, contractor payments above ₹30,000. If you're making these payments, you must deduct TDS.",
+      a: 'Any business making payments above prescribed threshold limits - salary, rent above Rs 2.4 lakh per year, contractor payments above Rs 30,000 per contract or Rs 1 lakh per year, professional fees above Rs 30,000 per year.',
     },
     {
       category: 'General',
-      q: 'What is the due date for TDS deposit?',
-      a: '7th of the following month. March TDS is due April 7th. Salary TDS is due 7th. For March (last month of FY), government deductors have till April 30th.',
+      q: 'What happens if I do not deduct TDS?',
+      a: 'The expense is disallowed under Section 40(a)(ia) - you pay tax on it as if it were profit. Plus interest at 1.5% per month on the amount that should have been deducted.',
     },
     {
       category: 'Process',
-      q: 'What is the difference between challan and return?',
-      a: 'Challan is the monthly deposit of TDS amount to the government. Return is the quarterly declaration of all deductions and deposits. Both are mandatory. Challan is monthly, return is quarterly.',
+      q: 'When must TDS be deposited?',
+      a: 'By the 7th of the following month for most payments. For March, the deadline is April 30.',
     },
     {
       category: 'Process',
-      q: 'Do I need a TAN?',
-      a: "Yes. Tax Deduction Account Number (TAN) is mandatory for deducting TDS. If you don't have one, we can help you apply (separate service, ₹999). TAN application takes 3-5 days.",
-    },
-    {
-      category: 'Documents',
-      q: 'What data do I need to provide monthly?',
-      a: 'Salary register with employee PAN, vendor payment list with PAN and payment amounts, rent payment details. We provide a simple template to fill. Takes 15 minutes per month.',
-    },
-    {
-      category: 'After Completion',
-      q: 'When do I get Form 16 for employees?',
-      a: 'Form 16 is generated on TRACES after Q4 return (24Q) is filed. Due date is June 15 every year. We file Q4 by May 31 - Form 16 available by June 1.',
+      q: 'When are TDS returns due?',
+      a: 'Quarterly. Q1 (April-June): July 31. Q2 (July-Sep): October 31. Q3 (Oct-Dec): January 31. Q4 (Jan-Mar): May 31.',
     },
   ],
 

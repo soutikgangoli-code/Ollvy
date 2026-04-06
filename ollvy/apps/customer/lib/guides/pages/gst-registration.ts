@@ -1,19 +1,19 @@
-// lib/guides/pages/gst-registration.ts
-import { LearnPageConfig } from '../pages';
+import { LearnPageConfig } from '../pages'
 
 export const gstRegistration: LearnPageConfig = {
   slug: 'do-i-need-gst-registration',
   title: 'Do I Need GST Registration?',
-  seoTitle: 'Do I Need GST Registration in 2025? | Ollvy',
-  seoDescription: 'Find out if GST registration is mandatory or optional for your business in India. Check turnover thresholds, business type, and exemptions - updated 2025.',
+  seoTitle: 'Do I Need GST Registration in India 2025? | Ollvy',
+  seoDescription:
+    'Find out if GST registration is mandatory for your business in India. Covers turnover thresholds, exemptions, interstate supply rules, and e-commerce.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-gst-registration',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'Tax',
   ctaServiceSlug: 'gst-registration',
   relatedServiceSlugs: ['gst-registration', 'gst-monthly'],
   relatedLearnSlugs: ['pvt-ltd-vs-llp', 'do-i-need-to-file-itr', 'is-msme-registration-worth-it'],
   relatedTools: {
-    penaltyCalculators: ['gst-late-filing', 'gst-demand-notice'],
+    penaltyCalculators: ['gst-late-filing'],
     documentChecklists: ['gst-registration'],
   },
 
@@ -22,243 +22,212 @@ export const gstRegistration: LearnPageConfig = {
     title: 'Is GST Registration Mandatory for You?',
     questions: [
       {
-        text: 'What is your annual turnover - or what do you expect it to be in your first year?',
+        text: 'What was your turnover in the last 12 months?',
         options: [
           { value: 'below_20l', label: 'Below Rs. 20 lakh' },
-          { value: '20l_to_40l', label: 'Rs. 20 lakh - Rs. 40 lakh' },
+          { value: '20l_to_40l', label: 'Rs. 20 lakh to Rs. 40 lakh' },
           { value: 'above_40l', label: 'Above Rs. 40 lakh' },
-          { value: 'not_sure', label: 'Not sure yet' },
         ],
         earlyExit: (answer) => {
           if (answer === 'above_40l') {
             return {
               type: 'mandatory',
-              headline: 'GST registration is mandatory for you.',
-              body: 'Your turnover is above the Rs. 40 lakh threshold for most businesses. You must register for GST within 30 days of crossing this limit.',
+              headline: 'GST registration is mandatory.',
+              body: 'Your turnover is above Rs. 40 lakh. Register within 30 days of crossing this threshold.',
               ctaLabel: 'Get GST Registration',
               ctaHref: '/checkout/gst-registration',
-            };
+            }
           }
-          return null;
+          return null
         },
       },
       {
-        text: 'What does your business actually do?',
+        text: 'Do you make any interstate sales - goods or services to customers in other states?',
         options: [
-          { value: 'goods_only', label: 'I sell goods' },
-          { value: 'services_only', label: 'I provide services' },
-          { value: 'both', label: 'Both goods and services' },
-          { value: 'ecommerce', label: 'I sell on Amazon, Flipkart, my own website, or any other online marketplace' },
-        ],
-        earlyExit: (answer) => {
-          if (answer === 'ecommerce') {
-            return {
-              type: 'mandatory',
-              headline: 'GST registration is mandatory for you.',
-              body: 'If you sell through any e-commerce platform, GST registration is required from day one, regardless of how much you are making. That is the law (Section 24, CGST Act).',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            };
-          }
-          return null;
-        },
-        evaluator: (answer, allAnswers) => {
-          if (answer === 'goods_only' && allAnswers[0] === '20l_to_40l') {
-            // Per Section 22, CGST Act 2017: Goods threshold is Rs. 40 lakh in most states
-            // Rs. 20-40 lakh for goods means NOT mandatory in regular states
-            return {
-              type: 'not_required',
-              headline: 'GST registration is not mandatory yet.',
-              body: 'For goods sellers, the threshold is Rs. 40 lakh in most states - you are below this limit. However, if you are in a special category state (Arunachal Pradesh, Assam, Manipur, Meghalaya, Mizoram, Nagaland, Sikkim, Tripura, Himachal Pradesh, Uttarakhand, or J&K), the threshold is Rs. 20 lakh and registration would be mandatory.',
-            };
-          }
-          if (answer === 'services_only' && allAnswers[0] === '20l_to_40l') {
-            return {
-              type: 'mandatory',
-              headline: 'GST registration is mandatory for you.',
-              body: 'For services, the threshold is Rs. 20 lakh in most states. Your turnover is above this limit.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            };
-          }
-          if (answer === 'both' && allAnswers[0] === '20l_to_40l') {
-            return {
-              type: 'mandatory',
-              headline: 'GST registration is likely mandatory for you.',
-              body: 'For services, the threshold is Rs. 20 lakh. Since you provide both goods and services, and your turnover is above Rs. 20 lakh, registration is required.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            };
-          }
-          return null;
-        },
-      },
-      {
-        text: 'Do you sell to customers outside your home state?',
-        options: [
-          { value: 'yes_interstate', label: 'Yes, I sell across states' },
-          { value: 'no_local', label: 'No, only within my state' },
-          { value: 'exports', label: 'I export outside India' },
+          { value: 'yes_interstate', label: 'Yes, I sell to customers in other states' },
+          { value: 'no_local', label: 'No, everything is within my state' },
+          { value: 'not_sure', label: 'Not sure' },
         ],
         earlyExit: (answer) => {
           if (answer === 'yes_interstate') {
             return {
               type: 'mandatory',
-              headline: 'GST registration is mandatory for you.',
-              body: 'The moment you sell across state lines, GST registration is required. No exceptions, no turnover threshold.',
+              headline: 'GST registration is mandatory.',
+              body: 'Any interstate supply triggers mandatory registration - there is no turnover threshold for this. Even a single sale to a customer in another state applies.',
               ctaLabel: 'Get GST Registration',
               ctaHref: '/checkout/gst-registration',
-            };
+            }
           }
-          if (answer === 'exports') {
-            return {
-              type: 'recommended',
-              headline: 'You should register for GST.',
-              body: 'If you export, you should register so you can claim back the GST you pay on your inputs. This is a significant financial benefit.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            };
-          }
-          return null;
+          return null
         },
       },
       {
-        text: 'Were you registered under the old tax system - VAT, Service Tax, or Excise?',
+        text: 'Do you sell through e-commerce platforms like Amazon, Flipkart, or Swiggy?',
         options: [
-          { value: 'yes_old', label: 'Yes, I had a VAT or Service Tax registration' },
-          { value: 'no_new', label: 'No, I am starting fresh' },
-          { value: 'casual_taxable', label: 'I supply occasionally - exhibitions, seasonal stalls, pop-ups' },
+          { value: 'yes_ecommerce', label: 'Yes, I sell through e-commerce' },
+          { value: 'no_ecommerce', label: 'No, I sell only through my own channels' },
         ],
-        evaluator: (answer) => {
-          if (answer === 'yes_old') {
+        earlyExit: (answer) => {
+          if (answer === 'yes_ecommerce') {
             return {
               type: 'mandatory',
-              headline: 'You should have migrated to GST already.',
-              body: 'If you were registered under VAT or Service Tax, you were supposed to migrate to GST. If that has not happened, you need to act now.',
+              headline: 'GST registration is mandatory.',
+              body: 'E-commerce sellers must register from day one - Section 24(ix), CGST Act. There is no Rs. 20 lakh threshold for this.',
               ctaLabel: 'Get GST Registration',
               ctaHref: '/checkout/gst-registration',
-            };
+            }
           }
-          if (answer === 'casual_taxable') {
+          return null
+        },
+      },
+      {
+        text: 'What kind of business do you run?',
+        options: [
+          { value: 'services', label: 'Service-based (consulting, freelancing, IT, etc.)' },
+          { value: 'goods', label: 'Trading goods' },
+          { value: 'manufacturing', label: 'Manufacturing' },
+          { value: 'food', label: 'Restaurant or food business' },
+          { value: 'other', label: 'Something else' },
+        ],
+        evaluator: (answer, allAnswers) => {
+          if ((answer === 'services' || answer === 'food' || answer === 'other') && allAnswers[0] === '20l_to_40l') {
             return {
               type: 'mandatory',
-              headline: 'You need to register as a casual taxable person.',
-              body: 'If you supply at exhibitions or pop-ups, you need to register at least 5 days before the event.',
+              headline: 'GST registration is mandatory for you.',
+              body: 'For service providers (including food, restaurants, and most other businesses), the threshold is Rs. 20 lakh. Your turnover is above it. The Rs. 40 lakh threshold applies only to businesses that exclusively sell goods.',
               ctaLabel: 'Get GST Registration',
               ctaHref: '/checkout/gst-registration',
-            };
+            }
           }
-          return null;
+          if ((answer === 'goods' || answer === 'manufacturing') && allAnswers[0] === '20l_to_40l') {
+            return {
+              type: 'not_required',
+              headline: 'Not mandatory yet - but check your state.',
+              body: 'For goods sellers in most states, the threshold is Rs. 40 lakh. Your turnover is below this. However, if you are in a special category state (J&K, Himachal Pradesh, Uttarakhand, or the North-Eastern states), the threshold drops to Rs. 20 lakh and registration would be mandatory.',
+            }
+          }
+          return null
         },
       },
     ],
     defaultResult: {
       type: 'recommended',
-      headline: 'You do not have to register right now - but it might still make sense',
-      body: 'Based on what you have told us, GST registration is not legally required yet. But here is something worth thinking about: if your clients are other businesses, being GST-registered means they can claim back the tax on what they pay you. Without that, you are making yourself less attractive than a competitor who is registered. It is also worth doing before your turnover crosses the threshold - you do not want to be scrambling mid-year.',
+      headline: 'Registration is not mandatory right now - but consider it.',
+      body: 'Your turnover is below the threshold and you have no mandatory triggers. Still, voluntary registration lets you claim input tax credit on your purchases, issue GST invoices to business clients, and scale without disruption. If any clients are asking for your GSTIN, register.',
     },
   },
 
   sections: [
     {
       number: '01',
-      heading: "LET'S START WITH THE BASICS",
-      body: 'GST (Goods and Services Tax) registration is governed by the Central Goods and Services Tax Act, 2017. The law puts businesses into two buckets: those who must register (no choice) and those who can register voluntarily. Understanding which bucket you are in matters because running without registration when it is required can cost you up to 100% of your tax amount as a penalty - plus the possibility of prosecution.',
-      note: 'Source: Central Goods and Services Tax Act, 2017',
+      heading: 'THE SHORT ANSWER',
+      body: 'GST registration becomes mandatory the moment any of these are true:',
+      bullets: [
+        'Your aggregate turnover crosses Rs. 20 lakh in a financial year (Rs. 10 lakh in special category states for services, Rs. 40 lakh for goods-only suppliers in most states)',
+        'You make any interstate supply - even a single sale to a customer in another state',
+        'You sell through any e-commerce platform - mandatory regardless of turnover',
+        'You are liable to pay tax under reverse charge',
+        'You are an agent of a registered supplier',
+      ],
+      table: {
+        caption: 'GST Registration Thresholds by Business Type (FY 2025-26)',
+        headers: ['Business Type', 'Normal States', 'Special Category States*', 'Notes'],
+        rows: [
+          ['Services', 'Rs. 20 lakh', 'Rs. 10 lakh', 'Covers consulting, IT, freelancing, restaurants'],
+          ['Goods only', 'Rs. 40 lakh', 'Rs. 20 lakh', 'Only for businesses that exclusively supply goods'],
+          ['Interstate supply', 'Mandatory', 'Mandatory', 'No threshold - even one out-of-state sale triggers this'],
+          ['E-commerce sellers', 'Mandatory', 'Mandatory', 'Amazon, Flipkart, Swiggy, Zomato - no exemption'],
+          ['Reverse charge payer', 'Mandatory', 'Mandatory', 'Applies regardless of turnover'],
+          ['Exempt goods/services only', 'Not required', 'Not required', 'e.g. fresh produce, core healthcare'],
+        ],
+      },
+      note: 'Source: Section 22 and Section 24, Central Goods and Services Tax Act, 2017. *Special category states: Manipur, Mizoram, Nagaland, Tripura, Arunachal Pradesh, Sikkim, Meghalaya, Assam, Himachal Pradesh, Uttarakhand, J&K',
     },
     {
       number: '02',
-      heading: 'SITUATIONS WHERE YOU MUST REGISTER',
-      body: 'If any of these apply to you, registration is not optional.',
+      heading: 'INTERSTATE SUPPLY: THE TRIGGER MOST PEOPLE MISS',
+      body: 'If you provide services or sell goods to customers outside your state - even if your total turnover is Rs. 5 lakh - you need GST registration. There is no threshold for interstate supply.',
       bullets: [
-        'Your annual turnover crosses Rs. 40 lakh if you sell goods, or Rs. 20 lakh if you provide services - in most states',
-        'You are in a special category state (J&K, Himachal Pradesh, Uttarakhand, the North-Eastern states, or Sikkim) - the threshold drops to Rs. 20 lakh for goods and Rs. 10 lakh for services',
-        'You sell anything across state borders - even one order to a customer in another state means you must register',
-        'You sell on Amazon, Flipkart, Meesho, your own website, or any online marketplace - register before your first sale',
-        'You supply at exhibitions, seasonal stalls, or pop-ups anywhere outside your home state',
-        'You are a non-resident making taxable supplies in India',
-        'You are required to deduct TDS under GST (this mainly applies to government entities and PSUs)',
+        'You are a Mumbai-based freelancer building a website for a Delhi client - that is an interstate supply',
+        'You sell handmade products to customers across India via your own website - interstate supply',
+        'You provide consulting to companies in multiple states - interstate supply',
       ],
-      note: 'Source: Sections 22 and 24, Central Goods and Services Tax Act, 2017. Once your turnover crosses the limit, you have 30 days to register.',
+      note: 'Source: Section 24, CGST Act. One narrow exception: interstate supply of services below Rs. 20 lakh may be exempt under Notification 10/2017 Central Tax - but this does not apply to goods at all.',
     },
     {
       number: '03',
-      heading: 'SITUATIONS WHERE REGISTERING IS A SMART MOVE EVEN IF NOT REQUIRED',
-      body: 'Even if the law does not force you to register, there are situations where doing it voluntarily just makes business sense.',
+      heading: 'E-COMMERCE: NO THRESHOLD AT ALL',
+      body: 'Selling through any e-commerce platform means mandatory registration from day one. No turnover threshold applies.',
       bullets: [
-        'Your clients are other GST-registered businesses - they can only claim Input Tax Credit from registered suppliers. If you are unregistered, every invoice you raise costs your client extra. That makes you harder to work with.',
-        'You spend a lot on purchases - if your input costs are high (raw materials, equipment, professional services), being registered means you can claim back the GST on those purchases',
-        'You export goods or services - registered exporters can get a refund on the GST they paid on inputs',
-        'You want to look credible - a GSTIN on your invoices signals that you are a serious business',
-        'You expect to cross the threshold within the year - better to register now than panic later',
+        'Amazon, Flipkart, Meesho, Myntra - any marketplace',
+        'Swiggy, Zomato, Dunzo - any food or delivery platform',
+        'Urban Company and similar service platforms',
+        'Your own website if you use a payment gateway and ship to multiple states',
       ],
-      note: 'One catch: if you register voluntarily, you cannot cancel that registration for at least one year.',
+      note: 'Source: Section 24(ix), CGST Act 2017. The platform must deduct TCS from your sales - that mechanism only works with a GSTIN.',
     },
     {
       number: '04',
-      heading: 'SITUATIONS WHERE YOU GENUINELY DO NOT NEED TO REGISTER',
-      body: 'Some businesses are truly exempt - and that is perfectly fine.',
+      heading: 'WHEN YOU GENUINELY DO NOT NEED GST',
+      body: 'You are exempt if all of these are true at the same time:',
       bullets: [
-        'Farmers selling their own produce directly - completely exempt',
-        'Businesses that only deal in exempted goods or services (think: fresh milk, eggs, unprocessed food, most healthcare services, core educational services)',
-        'Service providers below Rs. 20 lakh turnover who operate only within one state',
-        'If all your sales are zero-rated or exempt, and you have no inter-state transactions, you likely do not need to register',
+        'Your aggregate turnover is below the threshold for your business type and state',
+        'You make no interstate supply',
+        'You sell through no e-commerce platform',
+        'You are not liable to pay reverse charge',
+        'You deal only in GST-exempt goods or services (fresh vegetables, certain healthcare, core education)',
+        'You are engaged exclusively in agriculture',
       ],
-      note: 'A quick note: having a bank account, a Udyam certificate, or a shop licence does not automatically mean you need GST registration. These are separate things.',
+      note: 'Having a bank account, Udyam certificate, or shop licence does not automatically trigger GST registration. These are separate things.',
     },
     {
       number: '05',
-      heading: 'WHAT ACTUALLY HAPPENS IF YOU DO NOT REGISTER WHEN YOU SHOULD',
-      body: 'Let us be direct about this - the consequences are real.',
+      heading: 'WHY EXEMPT BUSINESSES SOMETIMES REGISTER ANYWAY',
+      body: 'Voluntary registration exists for practical reasons.',
       bullets: [
-        'Penalty: Rs. 10,000 or the tax amount you should have collected - whichever is higher',
-        'For evasion above Rs. 2 crore, GSTIN officers can arrest without a warrant',
-        'You cannot claim Input Tax Credit on anything you bought while unregistered - that money is gone',
-        'Government tenders often require a valid GSTIN - without one, you cannot bid',
-        'Banks and NBFCs increasingly ask for GST returns when you apply for a working capital loan',
-        'Amazon and Flipkart can suspend your seller account if your GSTIN lapses or is missing',
+        'Input Tax Credit: If you are registered, you can claim back the GST you pay on purchases and reduce your tax liability',
+        'B2B credibility: Business clients can only claim ITC from registered suppliers - without your GSTIN, they absorb that tax as a cost',
+        'Tender eligibility: Government tenders often require GSTIN as a baseline condition',
+        'E-commerce readiness: If you plan to sell on Amazon or Flipkart in the future, you will need GSTIN anyway',
+        'Loan applications: Banks increasingly ask for GST returns as income proof',
       ],
-      note: 'For exact penalty calculations based on your situation, use our penalty calculator: /tools/penalty-calculator/gst-late-filing',
+      note: 'Voluntary registration is under Section 25(3) of the CGST Act. Once you register voluntarily, all provisions of the Act apply, including return filing obligations.',
     },
     {
       number: '06',
-      heading: 'A SIMPLE WAY TO DECIDE',
-      body: 'Go through this list. Stop at the first YES - that is your answer.',
+      heading: 'WHAT HAPPENS IF YOU DO NOT REGISTER WHEN YOU SHOULD',
+      body: '',
       bullets: [
-        'Do you sell on any online marketplace? YES - register before your next sale',
-        'Do you make any sales to customers in another state? YES - register before that happens',
-        'Is your turnover above Rs. 40 lakh (goods) or Rs. 20 lakh (services)? YES - you have 30 days from when you crossed the limit',
-        'Are you in a special category state and above Rs. 10 lakh? YES - same 30-day window',
-        'Are your business clients asking for your GSTIN? YES - consider voluntary registration',
-        'None of the above? You are likely exempt - just revisit this every year as you grow',
+        'Penalty: 100% of the tax due or Rs. 10,000, whichever is higher (Section 122)',
+        'Interest: 18% per annum on unpaid tax from the date it was due',
+        'No ITC recovery: You cannot claim back GST paid on purchases while you were unregistered',
+        'Seizure: Goods can be seized if transported without valid GST documents',
+        'Prosecution: Evasion above Rs. 2 crore can lead to arrest without warrant',
       ],
+      note: 'Use our penalty calculator for exact amounts: /tools/penalty-calculator/gst-late-filing',
     },
   ],
 
   faqs: [
     {
-      q: 'I am a freelancer earning Rs. 18 lakh from foreign clients. Do I need GST?',
-      a: 'Services you export are treated as zero-rated under GST, which is good. But you still need to register once your total turnover crosses Rs. 20 lakh - even if all of it comes from foreign clients. The benefit is that you can then claim refunds on the GST you paid on your own expenses.',
+      q: 'I am a freelancer earning Rs. 15 lakh per year. All my clients are in my state. Do I need GST?',
+      a: 'If all your clients are in the same state and your aggregate turnover is below Rs. 20 lakh, GST registration is not mandatory. But verify carefully - even one client in another state makes registration compulsory.',
     },
     {
-      q: 'Can I use my home address for GST registration?',
-      a: 'Yes, you can. Your principal place of business can be your home. You will need to upload a self-declaration, and either proof of ownership or a rent agreement along with a no-objection letter from the property owner.',
+      q: 'What is the difference between aggregate turnover and taxable turnover?',
+      a: 'Aggregate turnover includes the total value of all taxable supplies, exempt supplies, exports, and interstate supplies - calculated on a PAN-India basis, not state-wise. Taxable turnover is only the portion subject to GST. For determining the registration threshold, aggregate turnover is what matters.',
     },
     {
-      q: 'I run multiple businesses. Do I need a separate GSTIN for each?',
-      a: 'If your businesses are in the same state and under the same PAN, one GSTIN usually works. If they operate in different states, you need a separate GSTIN for each state. And if they are entirely separate legal entities, each one needs its own registration.',
+      q: 'Can I register for GST even if I am below the threshold?',
+      a: 'Yes. Section 25(3) allows voluntary registration. Once registered, you can issue tax invoices, collect GST, and claim input tax credit. Many small businesses register voluntarily for credibility and to work with larger clients.',
     },
     {
-      q: 'How long does GST registration actually take?',
-      a: 'If you complete Aadhaar authentication during the process, approval typically comes through within 3 working days. Without Aadhaar authentication, the department may trigger a physical verification, which can stretch to 30 days.',
+      q: 'I sell on Instagram and WhatsApp. Is that e-commerce?',
+      a: 'No. Selling directly via social media is not e-commerce under GST law. The e-commerce provision applies only when you sell through a platform that facilitates the transaction (like Amazon or Swiggy). Direct social selling is treated like any other direct sale.',
     },
     {
-      q: 'What is the composition scheme? Should I go for it?',
-      a: 'The composition scheme lets small businesses - below Rs. 1.5 crore for goods, Rs. 50 lakh for services - pay a flat tax rate (1-6%) and file quarterly instead of monthly. The tradeoff is that you cannot charge GST on your invoices, which means your B2B clients cannot claim any Input Tax Credit from you. It works well if most of your customers are end consumers, not other businesses.',
-    },
-    {
-      q: 'Can I cancel my GST registration once I have it?',
-      a: 'Voluntary registrations cannot be cancelled for at least one year. After that, you can apply if your turnover has dropped below the threshold. If you registered because you were legally required to, you can cancel once you no longer meet those conditions.',
+      q: 'What happens if I cross the threshold mid-year?',
+      a: 'You must apply for GST registration within 30 days of crossing the threshold. GST liability starts from the date you became liable, not the date you registered. Late registration means you owe GST on all supplies made after crossing the threshold.',
     },
   ],
-};
+}

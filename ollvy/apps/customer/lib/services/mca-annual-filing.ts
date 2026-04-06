@@ -94,38 +94,38 @@ export const mcaAnnualFiling: ServiceConfig = {
 
   serviceRisks: [
     {
-      icon: 'clock',
-      title: 'AGM not held on time',
-      body: 'AGM must be held within 6 months of financial year end (Sep 30 for March FY). If AGM is delayed, MCA annual filing is automatically delayed. We cannot file without an AGM date. Hold your AGM first.',
+      icon: 'document',
+      title: 'Audit must be complete first',
+      body: 'AOC-4 requires signed, audited financial statements. We cannot file until the audit is done. Plan your audit timeline to allow filing before the deadline.',
     },
     {
-      icon: 'document',
-      title: 'Audited financials not ready',
-      body: "AOC-4 requires audited balance sheet and P&L with auditor's signature. If your audit is incomplete, we cannot file. Get your audit done first. We can recommend auditors if needed.",
+      icon: 'clock',
+      title: 'AGM not held on time',
+      body: 'If your AGM is delayed past September 30, MCA filing deadlines shift. We calculate new deadlines from your actual AGM date.',
     },
     {
       icon: 'alert',
-      title: 'Penalty accruing daily',
-      body: "Late filing penalty is ₹100/day per form. For both forms, that's ₹200/day. At 90 days late, you owe ₹18,000. At 180 days, ₹36,000. There is no ceiling. File as soon as audit is ready.",
+      title: 'Penalty accrues daily',
+      body: 'Rs 100 per day per form from the deadline. For both forms, Rs 200 per day. No ceiling on the penalty. File as soon as documents are ready.',
     },
   ],
 
   profilePersonas: [
     {
       label: 'First year after incorporation',
-      detail: 'First MCA annual filing. We explain every field.',
+      detail: 'First MCA filing. We explain every field and what it means.',
     },
     {
-      label: 'Running late on filing',
-      detail: 'Already past deadline. We calculate penalty and file immediately.',
+      label: 'Running past the deadline',
+      detail: 'Already in default. We calculate penalty and file immediately to stop it.',
     },
     {
       label: 'Director changes during the year',
-      detail: 'New director appointments or resignations reflected in MGT-7.',
+      detail: 'Appointments and resignations reflected correctly in MGT-7.',
     },
     {
       label: 'Share transfer happened',
-      detail: 'Equity changes during the year. Shareholder details updated in MGT-7.',
+      detail: 'Updated shareholding pattern captured accurately.',
     },
   ],
 
@@ -142,33 +142,28 @@ export const mcaAnnualFiling: ServiceConfig = {
   faqs: [
     {
       category: 'General',
-      q: 'What is MCA annual filing?',
-      a: 'Two mandatory forms: AOC-4 (financial statements) and MGT-7 (annual return). Every Pvt Ltd, OPC, and public company must file these every year with the Registrar of Companies.',
+      q: 'When is MCA annual filing due?',
+      a: 'AOC-4: within 30 days of AGM. MGT-7: within 60 days of AGM. AGM must be held by September 30 for companies with a March financial year end.',
     },
     {
       category: 'General',
-      q: 'When is MCA annual filing due?',
-      a: 'AOC-4: within 30 days of AGM. MGT-7: within 60 days of AGM. AGM must be held within 6 months of financial year end. For March FY, AGM by Sep 30, AOC-4 by Oct 30, MGT-7 by Nov 30.',
+      q: 'Is this different from Business ITR?',
+      a: 'Yes. MCA annual filing is for the Ministry of Corporate Affairs (company registry). Business ITR is filed with the Income Tax department. Both are mandatory and have separate deadlines.',
     },
     {
       category: 'Process',
-      q: 'Can I file if my audit is not complete?',
-      a: 'No. AOC-4 requires audited financials signed by your auditor. Complete the audit first, then book MCA annual filing. We can recommend auditors if you need one.',
+      q: 'Can I file if the audit is not complete?',
+      a: 'No. AOC-4 requires signed, audited financials.',
     },
     {
       category: 'Process',
-      q: 'What if I haven\'t held AGM yet?',
-      a: "Hold your AGM first. MCA filing deadlines are calculated from AGM date. If AGM is delayed beyond Sep 30 (for March FY), you'll need ROC extension or face compounding application.",
+      q: 'What if I missed the deadline?',
+      a: 'Penalty is Rs 100 per day per form from the due date. We calculate the exact amount and file immediately to stop further accumulation.',
     },
     {
       category: 'Documents',
       q: 'What documents do I need?',
-      a: 'Audited balance sheet, P&L statement, notes to accounts, director report, auditor report (for AOC-4). List of shareholders as of March 31, director appointment/resignation details, share transfer register (for MGT-7).',
-    },
-    {
-      category: 'After Completion',
-      q: 'What happens after filing?',
-      a: 'ROC processes the forms within 24-48 hours. Once approved, your company\'s public record on MCA21 is updated. You can download the filed forms anytime. Annual compliance cycle resets.',
+      a: 'Audited Balance Sheet, P&L, notes to accounts, director report, auditor report, and updated shareholder list.',
     },
   ],
 

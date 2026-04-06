@@ -1,25 +1,28 @@
 import { Metadata } from 'next'
+import { pfEsicPage } from '@/lib/tools/penalty-calculator-pages'
+
+const config = pfEsicPage
 
 export const metadata: Metadata = {
-  title: 'PF and ESIC Penalty Calculator 2025 | Ollvy',
-  description: 'Calculate penalties for late PF (EPF) and ESIC contributions. Includes damages under Section 14B and interest calculations for delayed deposits.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/penalty-calculator/pf-esic-penalty',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'PF and ESIC Penalty Calculator | Ollvy',
-    description: 'Calculate penalties for late PF and ESIC contributions. Free instant calculator.',
-    url: 'https://www.ollvy.com/tools/penalty-calculator/pf-esic-penalty',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PF and ESIC Penalty Calculator | Ollvy',
-    description: 'Calculate penalties for late PF and ESIC contributions.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
-export default function PFESICLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }

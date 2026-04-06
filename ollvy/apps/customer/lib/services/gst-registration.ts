@@ -129,19 +129,19 @@ export const gstRegistration: ServiceConfig = {
   profilePersonas: [
     {
       label: 'First GST registration',
-      detail: "Never done this before. We explain what each document is for and why it's needed.",
+      detail: 'Never done this before. We explain what each document is for and why it is needed.',
     },
     {
       label: 'Turnover just crossed threshold',
-      detail: 'You waited until you were legally required. Smart. Now we register you quickly.',
+      detail: 'You waited until legally required. Now we register you quickly.',
     },
     {
       label: 'Voluntary registration',
-      detail: 'Below threshold but want to issue GST invoices. Completely legal. We handle it.',
+      detail: 'Below threshold but want to issue GST invoices to B2B clients. Completely legal.',
     },
     {
       label: 'Home as principal place of business',
-      detail: "Fully legal. We verify the address proof matches your home's electricity bill.",
+      detail: 'Fully legal. We verify your electricity bill matches before filing.',
     },
   ],
 
@@ -159,32 +159,32 @@ export const gstRegistration: ServiceConfig = {
     {
       category: 'General',
       q: 'When is GST registration mandatory?',
-      a: "GST registration is mandatory when your aggregate turnover crosses ₹40L in a financial year (₹20L for service providers, ₹10L for special category states). It's also mandatory for inter-state supply regardless of turnover, and for e-commerce sellers.",
+      a: 'When aggregate turnover crosses Rs 40 lakh (Rs 20 lakh for service providers, Rs 10 lakh for special category states). Also mandatory for any inter-state supply regardless of turnover, and for all e-commerce sellers from day one.',
     },
     {
       category: 'General',
-      q: 'Can I register voluntarily below the threshold?',
-      a: "Yes. If you want to issue GST invoices to clients or claim input tax credit on your purchases, you can register voluntarily. This is common for B2B service providers who want to look established, or businesses that want to claim ITC on capital purchases.",
+      q: 'Can I register voluntarily if I am below the threshold?',
+      a: 'Yes. Voluntary registration lets you issue GST invoices and claim ITC on purchases. Cannot be cancelled for at least one year from date of registration.',
     },
     {
       category: 'Process',
-      q: "What's an ARN and why does it matter?",
-      a: "ARN is Application Reference Number - it's generated the moment your application is submitted to GSTN. You can use it to track status on the government portal yourself. We share it the same day we file, so you don't have to wait wondering if we actually submitted.",
+      q: 'What is an ARN and why does it matter?',
+      a: 'Application Reference Number - generated the moment your application is submitted. You can track status on the government portal yourself without waiting for updates from us.',
     },
     {
       category: 'Process',
       q: 'What if the officer raises a query?',
-      a: "Officers raise queries in about 20% of applications - usually for address proof clarification or Aadhaar verification issues. Your CA responds within 24 hours. This is included in the service. Most queries are resolved in one reply.",
+      a: 'Your CA responds within 24 hours. Included in the service. Most queries are resolved in one reply.',
     },
     {
       category: 'Documents',
       q: 'What documents do I need?',
-      a: "It depends on your business type. Sole proprietor: PAN, Aadhaar, address proof, bank statement. Pvt Ltd: Same, plus Certificate of Incorporation, board resolution, and PAN of all directors. We send you a personalised checklist - not the full 20-item government list.",
+      a: 'Depends on your business type. Sole proprietor: PAN, Aadhaar, address proof, bank statement. Pvt Ltd: same, plus Certificate of Incorporation, board resolution, and director PANs. We send a personalised checklist.',
     },
     {
       category: 'After Completion',
       q: 'What are my obligations after getting GSTIN?',
-      a: "GSTR-1 by 11th of every month (outward supplies), GSTR-3B by 20th (net tax payment). Even if you have zero sales, you must file nil returns. GSTR-9 annual return by Dec 31. We add all of these to your compliance calendar automatically.",
+      a: 'GSTR-1 by 11th of every month (outward supplies), GSTR-3B by 20th (net tax payment). Nil returns required even if there are no transactions. GSTR-9 annual return by December 31. All deadlines added to your compliance calendar automatically.',
     },
   ],
 

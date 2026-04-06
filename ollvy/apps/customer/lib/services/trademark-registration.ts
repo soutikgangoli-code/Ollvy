@@ -5,7 +5,7 @@ export const trademarkRegistration: ServiceConfig = {
   name: 'Trademark Registration',
   shortName: 'Trademark',
   category: 'Legal',
-  tagline: 'Protect your brand name. 10-year validity. Nationwide protection.',
+  tagline: 'Protect your brand name. 10-year protection. Nationwide.',
 
   ollvyFee: 14999,
   govtFee: 4500,
@@ -73,33 +73,27 @@ export const trademarkRegistration: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Trademark search before filing',
-      body: "Before we file, your attorney searches the Trademark Registry for conflicts. If your exact mark is already registered in your class, we tell you upfront. No point paying the govt fee for a certain rejection.",
-      comparisonWithout: 'File blindly, wait months, get rejected',
+      body: 'Attorney searches the Registry before we spend your government fee. If your exact mark is already registered in your class, we tell you upfront.',
+      comparisonWithout: 'File without searching, wait months, get rejected',
       comparisonWithOllvy: 'Search first, modify if needed, then file',
-      mockVisualType: 'status',
-      mockVisualData: {
-        row1: 'TECHBRIDGE - Class 42',
-        row2: 'No identical marks found ✓',
-        row3: '2 similar marks reviewed - no conflict',
-      },
     },
     {
       title: 'Class selection guidance',
-      body: "Trademarks are registered per class (45 classes total). Your attorney recommends which classes you actually need. Most tech companies need Class 42 (software) and Class 35 (business services). We don't upsell unnecessary classes.",
+      body: 'Trademarks are registered per class (45 classes under the Nice Classification). Attorney recommends only the classes you actually need - we do not push unnecessary filings.',
     },
     {
-      title: 'Examination objection response included',
-      body: "If the Trademark Examiner raises objections (common for descriptive marks), your attorney responds. This is included - not a separate charge. Most objections are resolved in one response.",
+      title: 'Examiner objection response included',
+      body: 'If the Trademark Examiner raises objections (common for descriptive marks), your attorney responds. Included in the service - not a separate charge.',
       comparisonWithout: 'Objection raised, you pay extra to respond',
       comparisonWithOllvy: 'Objection response included in service',
     },
     {
-      title: 'Renewal reminder 10 years out',
-      body: "Your trademark expires in 10 years. We add the renewal date to your compliance calendar. You'll get reminders 6 months before expiry. Most people forget - you won't.",
+      title: 'Renewal reminder',
+      body: 'Trademark expires 10 years from filing date. Renewal reminder added to your compliance calendar 6 months before expiry.',
       mockVisualType: 'calendar',
       mockVisualData: {
-        row1: 'Trademark Renewal - Mar 2035',
-        row2: 'Reminder: Sep 2034',
+        row1: 'Trademark Renewal - Due in 10 years',
+        row2: 'Reminder: 6 months before expiry',
         row3: 'Status: Scheduled',
       },
     },
@@ -109,36 +103,36 @@ export const trademarkRegistration: ServiceConfig = {
     {
       icon: 'document',
       title: 'Similar mark already exists',
-      body: "If someone has already registered a similar mark in your class, the Examiner will reject your application. Our search catches most conflicts, but the Registry has marks we can't see (pending applications). If rejected, we help you appeal or modify.",
+      body: 'If a similar mark is already registered in your class, the Examiner will reject your application. Our search catches most conflicts, but pending applications that are not yet published cannot be seen. If rejected, we help you appeal or modify.',
     },
     {
       icon: 'clock',
-      title: 'Govt processing takes 12-18 months',
-      body: "Trademark registration in India takes 12-18 months end-to-end. The filing happens in 7 days, but examination and publication are government-side. We track status and update you, but we can't speed up the Registry.",
+      title: 'Government processing takes 12-18 months',
+      body: 'The 7-day timeline is for filing. Examination, publication, and certificate issuance are government-side. We track and update you but cannot speed up the Registry.',
     },
     {
       icon: 'alert',
       title: 'Opposition during publication',
-      body: "After examination, your mark is published for 4 months. Anyone can oppose. If opposed, it becomes a legal proceeding. Opposition response is a separate service (it's rare - happens in <5% of cases).",
+      body: 'After examination, your mark is published for 4 months. Anyone can file an opposition. If opposed, it becomes a formal legal proceeding. Opposition response is a separate service and is rare - happens in under 5% of cases.',
     },
   ],
 
   profilePersonas: [
     {
       label: 'First trademark',
-      detail: "Never registered a trademark before. We explain classes, search, and the entire process.",
+      detail: 'Never registered before. We explain classes, search, and the full process.',
     },
     {
-      label: 'Logo + word mark',
-      detail: 'You want to protect both. Two applications are needed. We handle both.',
+      label: 'Logo and word mark',
+      detail: 'You want to protect both. Two separate applications needed. We handle both.',
     },
     {
       label: 'Multiple classes',
-      detail: 'Tech + retail + services. Each class is ₹4,500 additional govt fee. We guide you on what you actually need.',
+      detail: 'Tech, retail, and services. Each class is a separate application and a separate government fee.',
     },
     {
       label: 'Already using the name',
-      detail: "You've been using the brand for years without registration. That's common. Register it now before someone else does.",
+      detail: 'You have been using the brand for years without registration. File now before someone else does.',
     },
   ],
 
@@ -156,32 +150,32 @@ export const trademarkRegistration: ServiceConfig = {
     {
       category: 'General',
       q: 'What can I trademark?',
-      a: "Words, logos, slogans, sounds, and even colours in some cases. Most businesses trademark their brand name (word mark) and logo separately. This gives broader protection.",
+      a: 'Words, logos, slogans, sounds, and in some cases colours. Most businesses file a word mark and a logo mark separately for broader protection.',
     },
     {
       category: 'General',
-      q: 'How long does trademark protection last?',
-      a: "10 years from filing date, renewable indefinitely in 10-year increments. Renewal fee is ₹10,000 (govt) per class.",
+      q: 'How long does protection last?',
+      a: '10 years from the filing date, renewable indefinitely in 10-year increments.',
     },
     {
       category: 'Process',
-      q: 'Why does registration take so long?',
-      a: "The 7-day timeline is for filing the application. Examination by the Registry takes 6-12 months. Then 4 months of publication. Then certificate issuance. Total: 12-18 months. This is government processing time.",
+      q: 'Why does registration take 12-18 months?',
+      a: 'The 7-day timeline is for filing. Examination by the Registry takes 6-12 months. Then 4 months of public opposition window. Then certificate issuance. All government-side processing.',
     },
     {
       category: 'Process',
-      q: 'Can I use the ® symbol after filing?',
-      a: "No. You can only use ® after registration is granted. Until then, use ™ (for goods) or ℠ (for services) to indicate you claim the mark.",
+      q: 'Can I use the R symbol after filing?',
+      a: 'No. Use R only after registration is granted. Until then, use TM (for goods) or SM (for services) to indicate your claim.',
     },
     {
       category: 'Documents',
       q: 'What documents do I need?',
-      a: "PAN, Aadhaar, address proof, and the logo file (if registering a logo). For companies: Certificate of Incorporation and board resolution.",
+      a: 'PAN, Aadhaar, address proof, and the logo file if registering a logo. For companies: Certificate of Incorporation and board resolution.',
     },
     {
       category: 'Pricing',
       q: 'What if I need multiple classes?',
-      a: "Each class is a separate application with separate govt fee (₹4,500 each). Ollvy fee is ₹7,999 for the first class, ₹3,999 for each additional class filed together.",
+      a: 'Each class is a separate application with a separate government fee. Our attorney will recommend only the classes you actually need.',
     },
   ],
 

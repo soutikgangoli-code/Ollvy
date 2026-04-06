@@ -5,7 +5,7 @@ export const companyNameChange: ServiceConfig = {
   name: 'Company Name Change',
   shortName: 'Name Change',
   category: 'Registrations',
-  tagline: 'Change your company name on MCA. New certificate in 20 working days.',
+  tagline: 'New name. Same company. All MCA formalities handled.',
 
   ollvyFee: 6999,
   govtFee: 3000,
@@ -71,61 +71,48 @@ export const companyNameChange: ServiceConfig = {
 
   whatsIncluded: [
     {
-      title: '3 name preferences checked simultaneously',
-      body: "We check all 3 proposed names against the MCA21 registry and trademark database before filing any of them. Most CAs submit one name and wait for rejection before trying the next - adding 3-5 days per rejection. We do all 3 in parallel so the RUN application goes in with the best available option.",
-      comparisonWithout: 'Submit first name, wait 2 days for rejection, repeat',
-      comparisonWithOllvy: '3 names checked simultaneously - faster to first approval',
+      title: 'Name availability search',
+      body: 'MCA company registry and trademark database both checked before filing to avoid rejection.',
     },
     {
-      title: 'Board and special resolutions drafted by CS - not templated',
-      body: "Two separate resolutions are required: board resolution (directors approving the name change) and special resolution (shareholders approving). Your CS drafts both for your specific company. Directors and shareholders download from the app, sign, and return. No legal drafting on your part.",
+      title: 'Special resolution drafting',
+      body: 'Shareholder special resolution, board resolution, and EGM notice drafted per Companies Act requirements.',
     },
     {
-      title: 'RUN + INC-24 + MGT-14 - all forms handled',
-      body: "Three separate MCA filings are required for a name change: RUN (name reservation), INC-24 (name change application), and MGT-14 (registration of special resolution). Your CS handles all three in the correct sequence.",
-      comparisonWithout: 'Navigate MCA21 portal for 3 different forms in sequence',
-      comparisonWithOllvy: 'CS handles all 3 - you just sign the resolutions',
+      title: 'MOA amendment',
+      body: 'Memorandum of Association updated to reflect the new name.',
     },
     {
-      title: 'New Certificate of Incorporation delivered',
-      body: "The new CoI is uploaded to your Ollvy account permanently. It carries your updated company name with the same CIN. Note: the name change on MCA does not automatically update your GST registration, bank accounts, or trademark. Each of these requires a separate amendment.",
+      title: 'New Certificate of Incorporation',
+      body: 'Fresh certificate issued by MCA with the new name. Your CIN, PAN, and TAN remain unchanged.',
     },
   ],
 
   serviceRisks: [
     {
-      icon: 'document',
-      title: 'MCA may reject all 3 name preferences',
-      body: "MCA rejects names too similar to existing companies, containing restricted words (Bank, Finance, National, Exchange, etc.), or misleading about the business activity. If all 3 preferences are rejected, your CS will suggest 3 alternatives based on the rejection reasons. One additional round of filing is within scope.",
-    },
-    {
       icon: 'alert',
-      title: 'Name change does not update downstream registrations',
-      body: "After MCA issues the new CoI, your GST registration, bank accounts, trademark, IEC, and all contracts still reflect the old name. Each requires a separate amendment process. These are not part of this service - but we can advise on sequencing.",
+      title: 'Update all downstream registrations',
+      body: 'After the name change, you must update GST (core amendment), bank accounts, trademark if registered, import-export code, FSSAI if applicable, and all contracts. The MCA name change does not cascade automatically to other registrations.',
     },
     {
-      icon: 'clock',
-      title: 'All directors must sign - delays if one is unavailable',
-      body: "INC-24 cannot be filed until all directors have signed the board resolution. If a director is travelling or slow to respond, it stalls the entire application. Your CS tracks completion and follows up daily.",
+      icon: 'document',
+      title: 'Trademark conflict',
+      body: 'If someone has registered a similar trademark, MCA may reject the name or you may receive a legal notice after the change. Our trademark search reduces this risk.',
     },
   ],
 
   profilePersonas: [
     {
-      label: 'Rebranding the business',
-      detail: 'Old name no longer reflects what the company does. MCA filing handled - downstream updates are separate.',
+      label: 'Rebranding',
+      detail: 'New brand identity. MCA name aligned with new brand.',
     },
     {
-      label: 'Placeholder name at incorporation',
-      detail: 'Used a temporary name when incorporating and now want to formalise. Common situation - clean process.',
+      label: 'Business pivot',
+      detail: 'Core business changed. Name no longer reflects the company.',
     },
     {
-      label: 'Post-acquisition or merger',
-      detail: 'Company is being absorbed into a new brand. Name change as part of the corporate restructuring.',
-    },
-    {
-      label: 'Name causing market confusion',
-      detail: 'Too similar to a competitor. We file 3 distinct alternatives to maximise first-attempt approval.',
+      label: 'Name conflict',
+      detail: 'Another company has a similar name causing confusion. Changing to a distinct name.',
     },
   ],
 
@@ -141,34 +128,24 @@ export const companyNameChange: ServiceConfig = {
 
   faqs: [
     {
-      category: 'General',
-      q: 'Can any Pvt Ltd or OPC change its name?',
-      a: "Yes, any Pvt Ltd or OPC can change its name under Section 13 of the Companies Act. The new name must be approved by MCA, cannot be identical or deceptively similar to an existing registered company, and cannot contain restricted words without prior approval.",
-    },
-    {
-      category: 'General',
-      q: 'What happens to my CIN after the name change?',
-      a: "Your CIN stays the same. Only the name in the CIN changes - the number is unchanged. Your company's history, contracts, and tax records are all continuous. There is no break in the entity.",
+      category: 'Process',
+      q: 'Does my PAN or GST change when I change my company name?',
+      a: 'PAN and TAN remain the same. GST requires a core amendment (name change update) - separate process but straightforward.',
     },
     {
       category: 'Process',
-      q: 'What if MCA rejects my preferred names?',
-      a: "Your CS will notify you immediately with the rejection reason and suggest 3 alternatives. We refile at no extra charge. One additional round of filing is within scope. Rejections add 3-5 days per round.",
+      q: 'Can I change the name to anything?',
+      a: 'Subject to MCA availability and not containing restricted words. Name must be distinct from existing companies and trademarks.',
     },
     {
       category: 'Process',
-      q: 'How long does the name change take?',
-      a: "20 working days end to end - 2 days for RUN approval, 7-10 days for INC-24 processing, 2-3 days for new CoI issuance. The timeline depends on MCA processing speed (which Ollvy cannot control) and how quickly directors sign the resolutions.",
+      q: 'How long does the process take?',
+      a: '20 working days from start to new Certificate of Incorporation.',
     },
     {
       category: 'Process',
-      q: 'Do I need to update my GST registration after the name change?',
-      a: "Yes. Your GST registration will still show the old company name until you file a GST amendment. This is a separate process. Banks, vendors, and clients may flag the mismatch until it is updated.",
-    },
-    {
-      category: 'Documents',
-      q: 'What do I need to provide?',
-      a: "Your Certificate of Incorporation, company PAN, and MOA. Your CS handles all the resolutions, MCA filings, and follow-up.",
+      q: 'Do I need a special resolution?',
+      a: 'Yes. A name change requires a special resolution (75% majority of shareholders voting in favour).',
     },
   ],
 

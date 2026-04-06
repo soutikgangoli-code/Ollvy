@@ -1,18 +1,17 @@
-// lib/guides/pages/fssai-license.ts
-import { LearnPageConfig } from '../pages';
+import { LearnPageConfig } from '../pages'
 
 export const fssaiLicense: LearnPageConfig = {
   slug: 'do-i-need-fssai-license',
   title: 'Do I Need an FSSAI Licence?',
   seoTitle: 'Do I Need an FSSAI Licence in India 2025? | Ollvy',
-  seoDescription: 'Find out if FSSAI registration or licence is mandatory for your food business in India. Covers restaurants, cloud kitchens, home cooks, manufacturers, and importers.',
+  seoDescription:
+    'Find out if FSSAI registration or licence is mandatory for your food business in India. Covers restaurants, cloud kitchens, home cooks, manufacturers, and importers.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-fssai-license',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'Licensing',
   ctaServiceSlug: 'fssai-license',
   relatedServiceSlugs: ['fssai-license'],
-  relatedLearnSlugs: ['do-i-need-shop-establishment-registration', 'do-i-need-gst-registration', 'is-msme-registration-worth-it'],
-  // No closely related penalty calculators or document checklists for FSSAI
+  relatedLearnSlugs: ['do-i-need-gst-registration'],
 
   tool: {
     type: 'eligibility',
@@ -21,22 +20,22 @@ export const fssaiLicense: LearnPageConfig = {
       {
         text: 'What does your food business do?',
         options: [
-          { value: 'restaurant_cafe', label: 'Restaurant, cafe, dhaba, canteen, or cloud kitchen' },
-          { value: 'manufacturer_packager', label: 'Manufacturing, processing, or packaging food products' },
-          { value: 'trader_retailer', label: 'Trading, retailing, or distributing food (offline or online)' },
-          { value: 'importer_exporter', label: 'Importing or exporting food' },
+          { value: 'restaurant', label: 'Restaurant, cafe, dhaba, canteen, or cloud kitchen' },
+          { value: 'manufacturing', label: 'Manufacturing, processing, or packaging food products' },
+          { value: 'trading', label: 'Trading, retailing, or distributing food (offline or online)' },
+          { value: 'import_export', label: 'Importing or exporting food' },
         ],
         earlyExit: (answer) => {
-          if (answer === 'importer_exporter') {
+          if (answer === 'import_export') {
             return {
               type: 'mandatory',
               headline: 'You need a Central FSSAI Licence.',
-              body: 'All food importers and exporters need a Central licence regardless of turnover.',
+              body: 'Food importers and exporters require a Central FSSAI Licence regardless of turnover. This is issued by the FSSAI central office in New Delhi.',
               ctaLabel: 'Get FSSAI Licence',
               ctaHref: '/checkout/fssai-license',
-            };
+            }
           }
-          return null;
+          return null
         },
       },
       {
@@ -50,37 +49,37 @@ export const fssaiLicense: LearnPageConfig = {
           if (answer === 'below_12l') {
             return {
               type: 'mandatory',
-              headline: 'You need Basic FSSAI Registration (Form A).',
-              body: 'Petty food businesses with turnover below Rs. 12 lakh need Basic Registration - the simplest and cheapest option.',
-              ctaLabel: 'Get FSSAI Registration',
+              headline: 'You need Basic FSSAI Registration.',
+              body: 'Even the smallest food business needs at minimum a Basic Registration (Form A). Issued by your local Food Safety Officer, it is the simplest and cheapest option.',
+              ctaLabel: 'Get FSSAI Licence',
               ctaHref: '/checkout/fssai-license',
-            };
+            }
           }
           if (answer === '12l_to_20cr') {
             return {
               type: 'mandatory',
-              headline: 'You need a State FSSAI Licence (Form B).',
-              body: 'Food businesses with turnover between Rs. 12 lakh and Rs. 20 crore need a State FSSAI Licence.',
+              headline: 'You need a State FSSAI Licence.',
+              body: 'Businesses with turnover between Rs. 12 lakh and Rs. 20 crore operating within one state need a State FSSAI Licence (Form B - State). Issued by the State Food Safety Authority.',
               ctaLabel: 'Get FSSAI Licence',
               ctaHref: '/checkout/fssai-license',
-            };
+            }
           }
           if (answer === 'above_20cr') {
             return {
               type: 'mandatory',
               headline: 'You need a Central FSSAI Licence.',
-              body: 'Food businesses with turnover above Rs. 20 crore need a Central FSSAI Licence.',
+              body: 'Businesses above Rs. 20 crore turnover, multi-state operations, importers, and exporters need a Central FSSAI Licence (Form B - Central). Issued by the FSSAI central office.',
               ctaLabel: 'Get FSSAI Licence',
               ctaHref: '/checkout/fssai-license',
-            };
+            }
           }
-          return null;
+          return null
         },
       },
     ],
     defaultResult: {
       type: 'mandatory',
-      headline: 'Yes - any food business needs FSSAI',
+      headline: 'Yes - any food business needs FSSAI.',
       body: 'Under the Food Safety and Standards Act, 2006, anyone involved in the manufacture, processing, distribution, sale, or import of food must be registered or licensed. This applies to every food business - from a home baker selling on Instagram to a national food chain.',
     },
   },
@@ -88,19 +87,28 @@ export const fssaiLicense: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'THREE TIERS, AND WHICH ONE IS YOURS',
-      body: 'The Food Safety and Standards Act, 2006 does not apply a one-size-fits-all approach. There are three tiers depending on the scale of your food operation. The right tier matters - using the wrong one is treated as non-compliance.',
+      heading: 'THREE TIERS - AND WHICH ONE IS YOURS',
+      body: 'The Food Safety and Standards Act, 2006 has three tiers depending on the scale of your food operation. Using the wrong tier is treated as non-compliance.',
       bullets: [
-        'Basic Registration (Form A): For small food businesses - home-based food sellers, petty manufacturers, small canteens, and temporary stall holders - with annual turnover below Rs. 12 lakh. This is the simplest and cheapest option. Issued by the local Food Safety Officer.',
+        'Basic Registration (Form A): For small food businesses - home-based sellers, petty manufacturers, small canteens, temporary stall holders - with annual turnover below Rs. 12 lakh. The simplest and cheapest option. Issued by the local Food Safety Officer.',
         'State FSSAI Licence (Form B - State): For food businesses with turnover between Rs. 12 lakh and Rs. 20 crore. Covers restaurants, hotels, distributors, transporters, and manufacturers operating within one state. Issued by the State Food Safety Authority.',
         'Central FSSAI Licence (Form B - Central): For businesses above Rs. 20 crore turnover, importers, exporters, central government canteens, and businesses operating across multiple states. Issued by the FSSAI central office in New Delhi.',
       ],
+      table: {
+        caption: 'FSSAI Registration vs Licence: Which One Do You Need?',
+        headers: ['Type', 'Annual Turnover', 'Who Issues', 'Processing Time', 'Annual Fee', 'Validity'],
+        rows: [
+          ['Basic Registration (Form A)', 'Below Rs. 12 lakh', 'Local Food Safety Officer', '7 working days', 'Rs. 100/year', '1-5 years (chosen at application)'],
+          ['State Licence (Form B - State)', 'Rs. 12 lakh to Rs. 20 crore, single state', 'State Food Safety Authority', '30 days', 'Rs. 2,000-5,000/year by category', '1-5 years'],
+          ['Central Licence (Form B - Central)', 'Above Rs. 20 crore OR multi-state OR importer/exporter', 'FSSAI, New Delhi', '60 days', 'Rs. 7,500/year', '1-5 years'],
+        ],
+      },
       note: 'Source: Food Safety and Standards (Licensing and Registration of Food Businesses) Regulations, 2011',
     },
     {
       number: '02',
-      heading: 'IF YOU DEAL WITH FOOD IN ANY COMMERCIAL WAY, THIS APPLIES TO YOU',
-      body: '"Food business" is defined broadly enough to cover almost every commercial food activity imaginable.',
+      heading: 'IF YOU DEAL WITH FOOD COMMERCIALLY, THIS APPLIES',
+      body: '"Food business" is broad enough to cover almost every commercial food activity.',
       bullets: [
         'Restaurants, dhabas, cafes, food courts, canteens',
         'Cloud kitchens and delivery-only operations',
@@ -109,19 +117,32 @@ export const fssaiLicense: LearnPageConfig = {
         'Packaged water and beverage producers',
         'Meat, fish, and poultry processors',
         'Oil mills and flour mills',
-        'Retailers, supermarkets, and kirana stores selling packaged food',
+        'Retailers and kirana stores selling packaged food',
         'Food importers and exporters',
       ],
+      table: {
+        caption: 'FSSAI Requirements by Platform and Business Type',
+        headers: ['Business Type / Platform', 'Licence Required', 'Where FSSAI Number Appears'],
+        rows: [
+          ['Restaurant, cafe, cloud kitchen', 'State Licence (unless turnover below Rs. 12 lakh)', 'Displayed at premises, on Swiggy/Zomato profile'],
+          ['Home-based food seller (Instagram, WhatsApp)', 'Basic Registration minimum', 'On packaging, in social media bio'],
+          ['Swiggy / Zomato partner', 'State Licence minimum', 'Mandatory on platform profile - verified by platform'],
+          ['Amazon / Flipkart food seller', 'State or Central Licence', 'Printed on packaging label, shown in product listing'],
+          ['Multi-state restaurant chain', 'Central Licence', 'Displayed at all outlets under single licence'],
+          ['Food manufacturer (single state)', 'State Licence or Central (if above Rs. 20 crore)', 'On all product packaging and invoices'],
+          ['Food importer or exporter', 'Central Licence only', 'On all import/export documentation'],
+        ],
+      },
     },
     {
       number: '03',
-      heading: 'A FEW THINGS PEOPLE MISS',
-      body: 'Some business situations that people commonly overlook.',
+      heading: 'THINGS PEOPLE COMMONLY MISS',
+      body: '',
       bullets: [
-        'Home-based food sellers: If you are selling home-cooked food via Instagram, a WhatsApp group, or a food delivery app, you need at minimum a Basic FSSAI Registration. "I sell from home" is not an exemption.',
-        'Cloud kitchens: Even with no dine-in customers, if you are preparing food for delivery, you need a State Licence.',
-        'E-commerce food sellers: Selling packaged food on Amazon or Flipkart requires your FSSAI number to be printed on the packaging and displayed on the platform.',
-        'Multi-state operations: If you run restaurants in more than one state, you need a Central Licence, not separate state licences.',
+        'Home-based food sellers: If you sell home-cooked food via Instagram, WhatsApp, or a delivery app, you need at minimum a Basic FSSAI Registration. "I sell from home" is not an exemption.',
+        'Cloud kitchens: No dine-in customers does not change the requirement. Preparing food for delivery requires a State Licence.',
+        'E-commerce food sellers: Selling packaged food on Amazon or Flipkart requires your FSSAI number printed on packaging and displayed on the platform.',
+        'Multi-state operations: Restaurants in more than one state need a Central Licence, not separate state licences.',
       ],
     },
     {
@@ -129,8 +150,8 @@ export const fssaiLicense: LearnPageConfig = {
       heading: 'WHO DOES NOT NEED AN FSSAI',
       body: 'The exemptions are narrow.',
       bullets: [
-        'Farmers selling their own unprocessed produce directly at the farm gate - fully exempt',
-        'Pure logistics companies that transport food but do not own, process, or sell it - partially exempt',
+        'Farmers selling their own unprocessed produce directly at the farm gate',
+        'Pure logistics companies that transport food but do not own, process, or sell it',
         'Religious or community events distributing free food below state-specific quantity thresholds',
       ],
       note: 'If you are charging money for food in any form, assume you need FSSAI. The exemptions are genuinely narrow.',
@@ -153,7 +174,7 @@ export const fssaiLicense: LearnPageConfig = {
       body: '',
       bullets: [
         'Any food business at any scale = some form of FSSAI is required',
-        'Turnover below Rs. 12 lakh = Basic Registration (Form A) - simplest and cheapest',
+        'Turnover below Rs. 12 lakh = Basic Registration (Form A)',
         'Turnover Rs. 12 lakh to Rs. 20 crore, single state = State FSSAI Licence (Form B)',
         'Turnover above Rs. 20 crore, multi-state, or importer/exporter = Central FSSAI Licence',
         'On Swiggy, Zomato, or Amazon = FSSAI number required by the platform',
@@ -176,7 +197,7 @@ export const fssaiLicense: LearnPageConfig = {
     },
     {
       q: 'My restaurant is on Swiggy and Zomato. Do they check FSSAI?',
-      a: 'Yes. Both platforms require you to upload your FSSAI licence at the time of onboarding and your FSSAI number is displayed on your restaurant profile for customers to see. They periodically verify it against the FSSAI database and can suspend your account if it is expired or invalid.',
+      a: 'Yes. Both platforms require you to upload your FSSAI licence at the time of onboarding and your FSSAI number is displayed on your restaurant profile. They periodically verify it against the FSSAI database and can suspend your account if it is expired or invalid.',
     },
   ],
-};
+}

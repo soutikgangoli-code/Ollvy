@@ -1,25 +1,28 @@
 import { Metadata } from 'next'
+import { tdsLateFilingPage } from '@/lib/tools/penalty-calculator-pages'
+
+const config = tdsLateFilingPage
 
 export const metadata: Metadata = {
-  title: 'TDS Late Filing Penalty Calculator 2025 | Ollvy',
-  description: 'Calculate TDS return late filing penalties under Section 234E and prosecution risk under Section 271H. Covers 24Q, 26Q, 27Q, and 27EQ returns.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/penalty-calculator/tds-late-filing',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'TDS Late Filing Penalty Calculator | Ollvy',
-    description: 'Calculate TDS late filing penalties under Section 234E and 271H. Free instant calculator.',
-    url: 'https://www.ollvy.com/tools/penalty-calculator/tds-late-filing',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TDS Late Filing Penalty Calculator | Ollvy',
-    description: 'Calculate TDS late filing penalties under Section 234E and 271H.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
-export default function TDSLateFilingLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }

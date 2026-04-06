@@ -6,9 +6,14 @@ import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/Docume
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
+import { ToolIntroSection, ToolIntroCTA, ToolFAQSection } from '@/components/tools/DocumentPageToolExtensions'
 import { individualITRDocuments } from '@/lib/data/document-checklists'
 import { individualItrContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
+import { individualItrChecklistPage } from '@/lib/tools/document-checklist-pages'
+import { generateToolFAQSchema } from '@/lib/tools/types'
+
+const config = individualItrChecklistPage
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -48,23 +53,25 @@ const documentListJsonLd = generateDocumentListSchema(
   'https://www.ollvy.com/tools/documents/individual-itr'
 )
 
+const configFaqJsonLd = generateToolFAQSchema(config)
+
 export const metadata: Metadata = {
-  title: 'How to File ITR for Salaried - Documents & Process | Ollvy',
-  description: 'Complete guide to ITR filing for salaried individuals. Step-by-step process, Form 16, 26AS, deductions, Old vs New regime, documents required, and FAQs.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   keywords: ['how to file ITR', 'ITR filing process', 'salaried ITR documents', 'Form 16', 'income tax return filing', 'ITR-1 Sahaj', '80C deductions'],
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/documents/individual-itr',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'How to File ITR for Salaried Individuals | Ollvy',
-    description: 'Complete guide to income tax return filing - process, documents, and deductions.',
-    url: 'https://www.ollvy.com/tools/documents/individual-itr',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'How to File ITR for Salaried | Ollvy',
-    description: 'Complete guide to individual income tax return filing in India.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
@@ -89,6 +96,16 @@ export default function IndividualITRDocumentsPage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
+        />
+
+        {/* New intro section from config - at the very top */}
+        <ToolIntroSection text={config.intro} />
+
+        {/* CTA link after intro */}
+        <ToolIntroCTA config={config} />
 
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
@@ -135,6 +152,9 @@ export default function IndividualITRDocumentsPage() {
 
         {/* Next steps */}
         <DocumentNextSteps content={individualItrContent} />
+
+        {/* New FAQ section from config - at the very bottom */}
+        <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
       </div>
     </div>
   )

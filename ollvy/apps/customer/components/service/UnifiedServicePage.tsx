@@ -4,6 +4,7 @@ import { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react
 import Link from 'next/link'
 import Script from 'next/script'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
+import { servicesBySlug } from '@/lib/services/data'
 import { BookingPanel } from './BookingPanel'
 import { ProcessStepper } from './ProcessStepper'
 import { ExplainerStepper } from './ExplainerStepper'
@@ -13,6 +14,7 @@ import { CompletionStats } from './CompletionStats'
 // Import directly for SEO crawlability - dynamic imports hide content from Google
 import { RelatedServices } from './RelatedServices'
 import { HowWeReviewed } from './HowWeReviewed'
+import { LearnSectionTable } from '@/components/guides/LearnSectionTable'
 import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -255,6 +257,9 @@ export function UnifiedServicePage({
   relatedServices = [],
   geoContext,
 }: UnifiedServicePageProps) {
+  // Look up static config for govtFees and documents tables
+  const staticConfig = servicesBySlug[service.slug]
+
   const [heroVisible, setHeroVisible] = useState(true)
   const [activeSection, setActiveSection] = useState<SectionId>('process')
   const heroRef = useRef<HTMLDivElement>(null)
@@ -452,8 +457,8 @@ export function UnifiedServicePage({
     return () => observer.disconnect()
   }, [])
 
-  // JSON-LD structured data
-  const jsonLd = {
+  // JSON-LD structured data for Service
+  const serviceJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: service.name,
@@ -485,13 +490,35 @@ export function UnifiedServicePage({
       : {}),
   }
 
+  // FAQ JSON-LD structured data (use static config FAQs if available, fallback to DB)
+  const faqSource = staticConfig?.faqs ?? service.faqs
+  const faqJsonLd = faqSource.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqSource.map(faq => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+  } : null
+
   return (
     <>
       <Script
         id="service-jsonld"
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
       />
+      {faqJsonLd && (
+        <Script
+          id="faq-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
 
       {/* Sticky top bar - replaces navbar when hero scrolls out */}
       <div
@@ -842,6 +869,38 @@ export function UnifiedServicePage({
                     ))}
                   </div>
                 </section>
+
+                {/* Section: Government Fees (from static config) */}
+                {staticConfig?.govtFees && (
+                  <section className="py-16 border-b border-border">
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                      GOVERNMENT FEES
+                    </p>
+                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
+                      Official fees paid to the government
+                    </h2>
+                    <p className="text-sm text-muted-foreground mb-8">
+                      These fees are collected by Ollvy and remitted in full to the relevant government authority.
+                    </p>
+                    <LearnSectionTable table={staticConfig.govtFees} />
+                  </section>
+                )}
+
+                {/* Section: Documents Required Table (from static config) */}
+                {staticConfig?.documents && (
+                  <section className="py-16 border-b border-border">
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                      DOCUMENTS REQUIRED
+                    </p>
+                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
+                      Documents you will need to provide
+                    </h2>
+                    <p className="text-sm text-muted-foreground mb-8">
+                      Prepare these documents before starting the process.
+                    </p>
+                    <LearnSectionTable table={staticConfig.documents} />
+                  </section>
+                )}
 
                 {/* Section: Why Ollvy */}
                 <section

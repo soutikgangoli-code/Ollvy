@@ -1,6 +1,13 @@
 // lib/guides/pages.ts
 // SEO Content Architecture for /guides pages
 
+import type { LearnSectionTable } from './types/learn-section-table';
+import type { ToolRanking } from './types/tool-ranking';
+
+export type { LearnSectionTable } from './types/learn-section-table';
+export type { ToolRanking, UrgencyLevel, ComparisonRanking, UrgencyRanking, BenefitsRanking, FormAssignmentRanking } from './types/tool-ranking';
+export { URGENCY_LEVELS, getUrgencyLevel } from './types/tool-ranking';
+
 export interface LearnPageConfig {
   slug: string;
   title: string;                       // H1 - plain language, specific
@@ -131,8 +138,8 @@ export interface LearnToolConfig {
 export interface EligibilityQuestion {
   text: string;
   options: Array<{ value: string; label: string }>;
-  evaluator?: (answer: string, allAnswers: Record<number, string>) => EligibilityResult | null;
-  earlyExit?: (answer: string) => EligibilityResult | null;
+  evaluator?: (answer: string, allAnswers: string[]) => EligibilityResult | null;
+  earlyExit?: (answer: string, allAnswers?: string[]) => EligibilityResult | null;
 }
 
 export interface EligibilityResult {
@@ -141,6 +148,7 @@ export interface EligibilityResult {
   body: string;
   ctaLabel?: string;
   ctaHref?: string;
+  ranking?: ToolRanking;
 }
 
 export interface LearnSection {
@@ -148,13 +156,14 @@ export interface LearnSection {
   heading: string;
   body: string;                        // markdown - rendered as prose
   bullets?: string[];                  // bullet points for the section
-  table?: TableRow[];                  // optional data table
+  table?: LearnSectionTable;           // optional comparison/reference table
   list?: string[];                     // optional bullet list (plain text) - alias for bullets
   note?: string;                       // italicised note at bottom of section
   componentSlot?: 'document-checklist' | 'process-stepper' | 'faq-list';
   componentProps?: Record<string, unknown>;
 }
 
+/** @deprecated Use LearnSectionTable instead */
 export interface TableRow {
   [key: string]: string;
 }

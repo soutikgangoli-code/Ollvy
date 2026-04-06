@@ -1,17 +1,17 @@
-// lib/guides/pages/trademark.ts
-import { LearnPageConfig } from '../pages';
+import { LearnPageConfig, getUrgencyLevel, URGENCY_LEVELS } from '../pages'
 
 export const trademarkRegistration: LearnPageConfig = {
   slug: 'do-i-need-trademark-registration',
   title: 'Do I Need Trademark Registration?',
   seoTitle: 'Do I Need to Register a Trademark in India 2025? | Ollvy',
-  seoDescription: 'Find out if trademark registration makes sense for your brand in India. Understand protection, costs, enforcement, and when to prioritise it in 2025.',
+  seoDescription:
+    'Find out if trademark registration makes sense for your brand in India. Understand protection, costs, enforcement, and when to prioritise it in 2025.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-trademark-registration',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'Registration',
   ctaServiceSlug: 'trademark-registration',
   relatedServiceSlugs: ['trademark-registration'],
-  relatedLearnSlugs: ['pvt-ltd-vs-llp', 'should-i-get-dpiit-startup-recognition', 'is-msme-registration-worth-it'],
+  relatedLearnSlugs: ['pvt-ltd-vs-llp', 'is-msme-registration-worth-it'],
   relatedTools: {
     documentChecklists: ['trademark'],
   },
@@ -23,106 +23,116 @@ export const trademarkRegistration: LearnPageConfig = {
       {
         text: 'How central is your brand name or logo to your business?',
         options: [
-          { value: 'very_central', label: 'It is the product - customers search for us by name' },
-          { value: 'important', label: 'It matters, but we also compete on quality and relationships' },
-          { value: 'not_central', label: 'We are a B2B supplier or white-label; the brand is less important' },
+          { value: 'central', label: 'It is the product - customers search for us by name' },
+          { value: 'matters', label: 'It matters, but we compete on quality too' },
+          { value: 'less_important', label: 'B2B supplier or white-label - brand is less important' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'very_central') {
-            return {
-              type: 'mandatory',
-              headline: 'Trademark registration is strongly recommended.',
-              body: 'Consumer brands and D2C companies where the name is the primary recall are at very high risk without trademark protection. Someone else can register your name and force you to rebrand.',
-              ctaLabel: 'Register My Trademark',
-              ctaHref: '/checkout/trademark-registration',
-            };
-          }
-          return null;
-        },
       },
       {
-        text: 'Have you spent money building brand awareness in the last 12 months?',
+        text: 'Have you spent money building brand awareness?',
         options: [
-          { value: 'significant_investment', label: 'Yes - significant spend on ads, packaging, or marketing' },
-          { value: 'some_investment', label: 'Some - social media and basic content' },
-          { value: 'no_investment', label: 'Not yet - we have not started marketing' },
+          { value: 'significant', label: 'Yes - significant spend on ads, packaging, or marketing' },
+          { value: 'some', label: 'Some - social media and basic content' },
+          { value: 'none', label: 'Not yet - not started marketing' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'significant_investment') {
-            return {
-              type: 'mandatory',
-              headline: 'Register your trademark urgently.',
-              body: 'Brand equity built without a trademark is legally unprotected. Someone can register the same name and send you a cease-and-desist. Protect your investment now.',
-              ctaLabel: 'Register My Trademark',
-              ctaHref: '/checkout/trademark-registration',
-            };
-          }
-          return null;
-        },
       },
       {
         text: 'Is anyone else using a similar name in your industry?',
         options: [
-          { value: 'yes_similar', label: 'Yes, there are similar names out there' },
+          { value: 'yes_similar', label: 'Yes, similar names exist' },
           { value: 'not_sure', label: 'Not sure - I have not checked' },
-          { value: 'unique', label: 'Our name is unique - nothing similar exists' },
+          { value: 'unique', label: 'Our name is unique - nothing similar' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'yes_similar') {
-            return {
-              type: 'mandatory',
-              headline: 'Register immediately - you are at risk.',
-              body: 'You are at risk of a trademark objection or an infringement claim. Do a trademark search immediately and register before investing further in the brand.',
-              ctaLabel: 'Register My Trademark',
-              ctaHref: '/checkout/trademark-registration',
-            };
-          }
-          if (answer === 'not_sure') {
-            return {
-              type: 'recommended',
-              headline: 'Do a search and register.',
-              body: 'Run a free search on the IP India portal before spending another rupee on marketing. Then register to secure your brand.',
-              ctaLabel: 'Register My Trademark',
-              ctaHref: '/checkout/trademark-registration',
-            };
-          }
-          return null;
-        },
       },
       {
         text: 'Are any of these in your plans?',
         options: [
-          { value: 'yes_expand', label: 'Expanding internationally or licensing my brand' },
-          { value: 'yes_funding', label: 'Raising investor funding' },
-          { value: 'no_local', label: 'None of these - staying India-focused and self-funded' },
+          { value: 'international', label: 'Expanding internationally or licensing my brand' },
+          { value: 'funding', label: 'Raising investor funding' },
+          { value: 'ecommerce', label: 'Selling on Amazon, Flipkart, or Meesho' },
+          { value: 'none', label: 'None of these right now' },
         ],
-        evaluator: (answer) => {
-          if (answer === 'yes_expand') {
-            return {
-              type: 'mandatory',
-              headline: 'International trademark protection starts with Indian registration.',
-              body: 'Convention applications in other countries require a home country registration. Register in India first.',
-              ctaLabel: 'Register My Trademark',
-              ctaHref: '/checkout/trademark-registration',
-            };
+        evaluator: (answer: string, allAnswers: string[]) => {
+          const answers = [...allAnswers, answer]
+
+          const factors: { text: string; points: number }[] = []
+          let score = 0
+
+          // Q1: Brand centrality
+          if (answers[0] === 'central') {
+            score += 40
+            factors.push({ text: 'Brand is core to how customers find you', points: 40 })
+          } else if (answers[0] === 'matters') {
+            score += 20
+            factors.push({ text: 'Brand is a meaningful competitive asset', points: 20 })
+          } else {
+            score += 5
+            factors.push({ text: 'Brand plays a minor role in your business model', points: 5 })
           }
-          if (answer === 'yes_funding') {
-            return {
-              type: 'recommended',
-              headline: 'Register before your funding round.',
-              body: 'Investors check IP as part of due diligence. An unregistered brand is a flag that can delay a deal.',
-              ctaLabel: 'Register My Trademark',
-              ctaHref: '/checkout/trademark-registration',
-            };
+
+          // Q2: Marketing spend
+          if (answers[1] === 'significant') {
+            score += 30
+            factors.push({ text: 'Significant marketing spend building unprotected brand value', points: 30 })
+          } else if (answers[1] === 'some') {
+            score += 15
+            factors.push({ text: 'Some marketing spend - protection is worthwhile', points: 15 })
+          } else {
+            score += 0
+            factors.push({ text: 'No marketing spend yet - risk is currently low', points: 0 })
           }
-          return null;
+
+          // Q3: Similar names
+          if (answers[2] === 'yes_similar') {
+            score += 25
+            factors.push({ text: 'Similar names exist - race to register is already on', points: 25 })
+          } else if (answers[2] === 'not_sure') {
+            score += 10
+            factors.push({ text: 'No trademark search done - unknown risk', points: 10 })
+          } else {
+            score += 5
+            factors.push({ text: 'Name appears unique - lower risk of conflict', points: 5 })
+          }
+
+          // Q4: Plans
+          if (answers[3] === 'international') {
+            score += 15
+            factors.push({ text: 'International expansion requires registered IP', points: 15 })
+          } else if (answers[3] === 'funding') {
+            score += 15
+            factors.push({ text: 'Investors check IP in due diligence - unregistered brand is a flag', points: 15 })
+          } else if (answers[3] === 'ecommerce') {
+            score += 15
+            factors.push({ text: 'Amazon and Flipkart Brand Registry requires trademark registration', points: 15 })
+          }
+
+          const level = getUrgencyLevel(score)
+          const levelInfo = URGENCY_LEVELS[level]
+
+          return {
+            type: (score >= 60 ? 'mandatory' : score >= 35 ? 'recommended' : 'optional') as 'mandatory' | 'recommended' | 'optional',
+            headline: levelInfo.label,
+            body: levelInfo.description,
+            ctaLabel: score >= 60 ? 'Register Trademark Now' : 'See What Registration Costs',
+            ctaHref: '/checkout/trademark-registration',
+            ranking: {
+              type: 'urgency' as const,
+              urgency: {
+                score,
+                maxScore: 100,
+                level,
+                label: levelInfo.label,
+                factors: factors.filter(f => f.points > 0),
+              },
+            },
+          }
         },
       },
     ],
     defaultResult: {
       type: 'recommended',
-      headline: 'Not urgent right now - but register before you scale',
-      body: 'Your brand exposure is moderate at the moment. The cost of registering is Rs. 4,500 (for individuals and small entities) and the process is much better than it used to be. Do it before you invest heavily in marketing - because after that point, if someone else has registered the same name, you have no legal recourse.',
+      headline: 'Set a timeline.',
+      body: 'Brand exposure is low now, but that will change. Rs. 4,500 per class for 10 years of protection.',
     },
   },
 
@@ -130,31 +140,44 @@ export const trademarkRegistration: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT A TRADEMARK ACTUALLY DOES FOR YOU',
-      body: "A trademark is a legally recognised sign - a name, a logo, a tagline, or a combination of these - that identifies your products or services as yours and not someone else's. Once you register it under the Trade Marks Act, 1999, you have the exclusive right to use that mark commercially in India for 10 years (and you can keep renewing it forever). More importantly, you get the legal power to stop others from using the same or a confusingly similar mark in your category of business.",
+      body: 'A trademark is a legally recognised sign - a name, logo, tagline, or combination - that identifies your products or services as yours. Once registered under the Trade Marks Act, 1999, you have the exclusive right to use that mark commercially in India for 10 years (renewable forever). More importantly, you have the legal power to stop others from using the same or confusingly similar mark in your category.',
       note: 'Source: Trade Marks Act, 1999; Trade Marks Rules, 2017',
     },
     {
       number: '02',
-      heading: 'WHEN YOU REALLY CANNOT AFFORD TO WAIT',
-      body: 'In these situations, trademark registration is not a "nice to have" - it is urgent.',
+      heading: 'WHEN YOU CANNOT AFFORD TO WAIT',
+      body: 'Registration is urgent in these situations.',
       bullets: [
-        'You are spending on ads, packaging, or social media - every rupee you spend is building value in a brand that is currently unprotected. Someone can swoop in and register it.',
-        'You sell on Amazon or Flipkart - both platforms have brand registry programs that require trademark registration. Without it, your listings are vulnerable to hijackers and copycats.',
-        'You run a SaaS or tech product - your product name is your primary asset. A competitor in the same space can register a similar name if you do not act first.',
-        'You plan to franchise or license - legally, you cannot license a brand you do not own as a registered trademark.',
-        'You are raising investor funding - IP due diligence will catch an unregistered brand. This can delay or complicate your round.',
-        'In India, trademark rights generally go to whoever registers first. Waiting means someone else can register your own name and force you to change it.',
+        'You are spending on ads, packaging, or social media - every rupee is building value in an unprotected brand',
+        'You sell on Amazon or Flipkart - both platforms have brand registry programs requiring trademark registration. Without it, your listings are open to hijackers and copycats',
+        'You run a SaaS or tech product - your product name is your primary asset. A competitor can register a similar name first',
+        'You plan to franchise or license - you cannot license a brand you do not own as a registered trademark',
+        'You are raising investor funding - IP due diligence will catch an unregistered brand and can delay or complicate your round',
+        'India gives trademark rights to whoever registers first - waiting means someone else can register your name',
       ],
+      table: {
+        caption: 'When to Register Your Trademark: Urgency by Situation',
+        headers: ['Situation', 'Urgency', 'Why'],
+        rows: [
+          ['Selling on Amazon or Flipkart', 'Immediate', 'Brand Registry requires registered trademark. Without it, listings are open to hijackers.'],
+          ['Raising investor funding', 'Before closing the round', 'IP due diligence will flag an unregistered brand. Can delay or reduce valuation.'],
+          ['Significant marketing spend ongoing', 'This month', 'Every rupee builds equity in an unprotected brand. Someone can register your name.'],
+          ['Planning to franchise or license', 'Before any discussions', 'You cannot legally license a mark you do not own as a registered trademark.'],
+          ['International expansion planned', 'Now', 'Paris Convention gives you 6 months from Indian filing to claim priority in other countries.'],
+          ['Early stage, still validating name', '3-6 months', 'Register the moment you commit to the name. Do a free IP India search today.'],
+          ['B2B supplier, white-label', 'Low urgency', 'Register before any consumer-facing marketing begins.'],
+        ],
+      },
       note: 'Source: Section 28, Trade Marks Act, 1999',
     },
     {
       number: '03',
       heading: 'WHEN YOU CAN TAKE A BIT MORE TIME',
-      body: 'These situations are lower urgency, but you should still set a timeline.',
+      body: 'Lower urgency, but set a timeline.',
       bullets: [
-        'You are in the early stages and still validating your product - aim to register within 6 months of committing to a name',
-        'You are a B2B service firm that mostly gets work through referrals - the risk of someone copying your brand name is lower, but register before you hit a scale where rebranding would hurt',
-        'You run a local service business (salon, restaurant, regional brand) - register before you open your second location',
+        'Early stage, still validating your product - aim to register within 6 months of committing to a name',
+        'B2B service firm that mostly gets work through referrals - lower risk of copying, but register before you scale',
+        'Local service business (salon, restaurant, regional brand) - register before you open your second location',
       ],
     },
     {
@@ -162,43 +185,53 @@ export const trademarkRegistration: LearnPageConfig = {
       heading: 'WHEN IT IS GENUINELY NOT URGENT',
       body: '',
       bullets: [
-        'You are still figuring out your product and have not settled on a name',
-        'You are a pure white-label supplier with no consumer-facing brand',
-        'You work under your own name serving a small local client base',
-        'You have already done a thorough trademark search and the field is clear',
+        'You are still testing and have not settled on a name',
+        'Pure white-label supplier with no consumer-facing brand',
+        'Working under your own name serving a small local client base',
       ],
-      note: 'A note: even without a registered trademark, you can claim some protection against copycats under the legal concept of "passing off" (Section 27, Trade Marks Act). But proving passing off means demonstrating prior reputation and goodwill in court - which is expensive, slow, and uncertain. Registration is far simpler.',
+      note: 'Even without a registered trademark, you have limited protection against copycats under "passing off" (Section 27, Trade Marks Act). But proving passing off requires demonstrating prior reputation in court - expensive, slow, and uncertain. Registration is far simpler.',
     },
     {
       number: '05',
-      heading: 'THE REAL RISKS OF SKIPPING REGISTRATION',
-      body: 'This is what actually happens to businesses that delay.',
+      heading: 'WHAT ACTUALLY HAPPENS TO BUSINESSES THAT DELAY',
+      body: '',
       bullets: [
-        'Someone else registers your name - even in bad faith - and legally demands you stop using it',
-        'You get a cease-and-desist letter from a registered trademark holder, even if you have been using the name longer than them. Without a registration, your protection is limited to expensive and uncertain litigation.',
-        'Without a registered trademark, you cannot enrol in Amazon Brand Registry - leaving your product listings open to unauthorised sellers and piggybackers',
+        'Someone else registers your name and legally demands you stop using it',
+        'You receive a cease-and-desist from a registered holder, even if you have been using the name longer - without registration, your protection is limited',
+        'Without a registered trademark, you cannot enrol in Amazon Brand Registry, leaving your listings open to unauthorised sellers',
         'Competitors can file IP infringement complaints against your marketplace listings if they have a registered mark and you do not',
-        'In M&A or funding due diligence, an unregistered brand is flagged as an IP risk that can affect valuation or deal terms',
+        'In M&A or funding due diligence, an unregistered brand is flagged as an IP risk affecting valuation',
       ],
     },
     {
       number: '06',
       heading: 'THE COST IS LOW ENOUGH THAT THE QUESTION IS JUST WHEN',
-      body: 'Trademark registration costs Rs. 4,500 per class if you are an individual or small entity, and Rs. 9,000 for other businesses. That is the government fee - not per year, per 10 years.',
+      body: 'Government filing fee: Rs. 4,500 per class for individuals and small entities (Rs. 9,000 for others). That is per class, per 10 years - not per year.',
       bullets: [
-        'You have decided on a name and have started any marketing at all? Register within the next 30 days.',
-        'You are raising funding or planning an M&A? Register today.',
-        'You are expanding to a second city, a new product, or a new category? Register before that expansion.',
-        'Still testing your product-market fit? Do a free search on the IP India portal now, and register the moment you commit to the name.',
-        'Renewal cost: Rs. 9,000-10,000 every 10 years. That is the cost of protecting your brand.',
+        'Decided on a name and started any marketing? Register within 30 days',
+        'Raising funding or planning M&A? Register today',
+        'Expanding to a second city or new product? Register before that expansion',
+        'Still testing product-market fit? Do a free search on the IP India portal now, and register the moment you commit to the name',
+        'Renewal: Rs. 9,000 to Rs. 10,000 every 10 years',
       ],
+      table: {
+        caption: 'Trademark Registration Fees in India (IP India, 2025)',
+        headers: ['Fee Type', 'Individual / Startup / Small Entity', 'Company / Others', 'Notes'],
+        rows: [
+          ['Registration per class', 'Rs. 4,500', 'Rs. 9,000', 'One-time government fee per 10-year term'],
+          ['Renewal per class', 'Rs. 9,000', 'Rs. 10,000', 'Every 10 years - mark stays active indefinitely'],
+          ['Expedited examination', 'Rs. 20,000', 'Rs. 40,000', 'Faster examination, not faster registration'],
+          ['Opposition reply', 'Rs. 2,700', 'Rs. 2,700', 'If a third party opposes your application'],
+          ['Correction of error', 'Rs. 900', 'Rs. 900', 'Per application, per form'],
+        ],
+      },
     },
   ],
 
   faqs: [
     {
       q: 'How long does trademark registration actually take?',
-      a: 'Your application is filed and gets a filing date immediately - and your rights are protected from that date, not the final registration date. From filing to receiving your official registration certificate (assuming no objections), the typical timeline is 18-24 months.',
+      a: 'Your application is filed and gets a filing date immediately - and your rights are protected from that date, not the final registration date. From filing to receiving the official registration certificate (assuming no objections), the typical timeline is 18-24 months.',
     },
     {
       q: 'What is a trademark class and which one do I need?',
@@ -206,15 +239,15 @@ export const trademarkRegistration: LearnPageConfig = {
     },
     {
       q: 'Can I trademark a common word like "Fresh" or "Quick"?',
-      a: 'Descriptive or generic words are very difficult to register on their own. But a distinctive combination, a stylised logo, or a word used in an unexpected context (think: Apple for computers) can be protected. A trademark attorney can tell you whether your name is protectable before you build a business around it.',
+      a: 'Descriptive or generic words are very difficult to register on their own. But a distinctive combination, a stylised logo, or a word used in an unexpected context (Apple for computers) can be protected. A trademark attorney can assess whether your name is protectable before you build a business around it.',
     },
     {
       q: 'What do TM, R, and C symbols mean?',
-      a: 'TM can be used by anyone who claims rights to a mark - even without registration. R can only be used once your trademark is officially registered - using it before registration is an offence. C applies to creative works like art, music, or writing, not to trademarks.',
+      a: 'TM can be used by anyone claiming rights to a mark - even without registration. R can only be used once your trademark is officially registered; using it before registration is an offence. C applies to creative works like art and music, not trademarks.',
     },
     {
       q: 'Do I need a trademark or a copyright for my logo?',
       a: 'Both can apply. Copyright protects the artistic creation automatically from the moment it is made. Trademark protects the logo as a brand identifier in commerce. For a business, trademark registration is usually more important because it gives you enforceable commercial rights and a practical way to stop copycats.',
     },
   ],
-};
+}

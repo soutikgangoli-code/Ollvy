@@ -1,25 +1,28 @@
 import { Metadata } from 'next'
+import { gstDemandPage } from '@/lib/tools/penalty-calculator-pages'
+
+const config = gstDemandPage
 
 export const metadata: Metadata = {
-  title: 'GST Demand Notice Calculator 2025 | Ollvy',
-  description: 'Calculate interest and penalties on GST demand notices (DRC-01). Understand Section 73 and 74 implications for tax demands, interest, and penalties.',
+  title: config.seoTitle,
+  description: config.seoDescription,
   alternates: {
-    canonical: 'https://www.ollvy.com/tools/penalty-calculator/gst-demand-notice',
+    canonical: config.canonicalUrl,
   },
   openGraph: {
-    title: 'GST Demand Notice Calculator | Ollvy',
-    description: 'Calculate interest and penalties on GST demand notices (DRC-01).',
-    url: 'https://www.ollvy.com/tools/penalty-calculator/gst-demand-notice',
+    title: config.seoTitle,
+    description: config.seoDescription,
+    url: config.canonicalUrl,
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'GST Demand Notice Calculator | Ollvy',
-    description: 'Calculate interest and penalties on GST demand notices.',
+    title: config.seoTitle,
+    description: config.seoDescription,
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
 
-export default function GSTDemandLayout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }

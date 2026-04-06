@@ -6,6 +6,7 @@ import { CheckCircle, AlertCircle, XCircle, Info } from 'lucide-react';
 import { LearnToolConfig, EligibilityQuestion, EligibilityResult } from '@/lib/guides/pages';
 import { ServiceConfig } from '@/lib/services';
 import Link from 'next/link';
+import { LearnToolRankedResult } from '../LearnToolRankedResult';
 
 // Get result styling based on type
 function getResultStyle(type: EligibilityResult['type']) {
@@ -49,7 +50,7 @@ export function EligibilityTool({ config, ctaService }: {
   config: LearnToolConfig;
   ctaService: ServiceConfig;
 }) {
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [answers, setAnswers] = useState<string[]>([]);
   const [result, setResult] = useState<EligibilityResult | null>(null);
   const [step, setStep] = useState(0);
 
@@ -57,7 +58,8 @@ export function EligibilityTool({ config, ctaService }: {
   const currentQ = questions[step];
 
   const handleAnswer = (answer: string) => {
-    const newAnswers = { ...answers, [step]: answer };
+    const newAnswers = [...answers];
+    newAnswers[step] = answer;
     setAnswers(newAnswers);
 
     // Check for early-exit branches
@@ -118,7 +120,8 @@ export function EligibilityTool({ config, ctaService }: {
       ) : (
         <div className="p-6">
           <div className={cn(
-            "flex items-start gap-3 rounded-lg p-4 mb-5",
+            "flex items-start gap-3 rounded-lg p-4",
+            result.ranking ? "mb-2" : "mb-5",
             resultStyle?.bg
           )}>
             {Icon && <Icon size={16} className={cn(resultStyle?.iconColor, "mt-0.5 shrink-0")} />}
@@ -127,6 +130,12 @@ export function EligibilityTool({ config, ctaService }: {
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{result.body}</p>
             </div>
           </div>
+
+          {result.ranking && (
+            <div className="mb-5">
+              <LearnToolRankedResult ranking={result.ranking} />
+            </div>
+          )}
 
           {resultStyle?.showCta && (
             <Button className="w-full" asChild>
@@ -137,7 +146,7 @@ export function EligibilityTool({ config, ctaService }: {
           )}
 
           <button
-            onClick={() => { setAnswers({}); setStep(0); setResult(null); }}
+            onClick={() => { setAnswers([]); setStep(0); setResult(null); }}
             className="w-full mt-3 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Start over
@@ -152,7 +161,7 @@ export function EligibilityTool({ config, ctaService }: {
 // These are pure functions - no side effects
 function evaluateAnswers(
   questions: EligibilityQuestion[],
-  answers: Record<number, string>,
+  answers: string[],
   defaultResult?: EligibilityResult
 ): EligibilityResult {
   // Each question has an `evaluator` function that returns a result or null
@@ -170,8 +179,8 @@ function evaluateAnswers(
 
 function getEarlyResult(
   questions: EligibilityQuestion[],
-  answers: Record<number, string>,
+  answers: string[],
   currentStep: number
 ): EligibilityResult | null {
-  return questions[currentStep]?.earlyExit?.(answers[currentStep]) ?? null;
+  return questions[currentStep]?.earlyExit?.(answers[currentStep], answers) ?? null;
 }

@@ -1,100 +1,136 @@
-// lib/guides/pages/msme-udyam.ts
-import { LearnPageConfig } from '../pages';
+import { LearnPageConfig } from '../pages'
+
+// FACTUAL UPDATE: Thresholds updated to April 2025 revised limits
+// Source: Ministry of MSME Notification S.O. 1364(E), March 21, 2025
 
 export const msmeUdyam: LearnPageConfig = {
   slug: 'is-msme-registration-worth-it',
   title: 'Is MSME / Udyam Registration Worth It?',
   seoTitle: 'Is MSME / Udyam Registration Worth It in 2025? | Ollvy',
-  seoDescription: 'Find out if Udyam (MSME) registration makes sense for your business. Covers benefits, eligibility, credit access, government tenders, and what you actually get.',
+  seoDescription:
+    'Find out if Udyam (MSME) registration makes sense for your business. Covers benefits, eligibility, credit access, government tenders, and what you actually get.',
   canonicalUrl: 'https://www.ollvy.com/guides/is-msme-registration-worth-it',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'Registration',
   ctaServiceSlug: 'gst-registration',
-  relatedServiceSlugs: ['gst-registration'],
-  relatedLearnSlugs: ['should-i-get-dpiit-startup-recognition', 'pvt-ltd-vs-llp', 'do-i-need-gst-registration'],
-  // No closely related penalty calculators or document checklists for MSME
+  relatedServiceSlugs: ['gst-registration', 'msme-registration'],
+  relatedLearnSlugs: ['pvt-ltd-vs-llp', 'should-i-get-dpiit-startup-recognition'],
 
   tool: {
     type: 'eligibility',
     title: 'Should You Register as an MSME?',
     questions: [
       {
-        text: "What is your business' annual turnover?",
+        text: 'What is your annual turnover?',
         options: [
-          { value: 'below_5cr', label: 'Below Rs. 5 crore' },
-          { value: '5cr_to_250cr', label: 'Rs. 5 crore to Rs. 250 crore' },
-          { value: 'above_250cr', label: 'Above Rs. 250 crore' },
+          { value: 'below_10cr', label: 'Below Rs. 10 crore (Micro Enterprise)' },
+          { value: '10cr_100cr', label: 'Rs. 10 crore to Rs. 100 crore (Small Enterprise)' },
+          { value: '100cr_500cr', label: 'Rs. 100 crore to Rs. 500 crore (Medium Enterprise)' },
+          { value: 'above_500cr', label: 'Above Rs. 500 crore' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'above_250cr') {
+        earlyExit: (answer: string) => {
+          if (answer === 'above_500cr') {
             return {
-              type: 'not_required',
-              headline: 'Your business is above the MSME turnover limit.',
-              body: 'MSME classification only applies to businesses with turnover up to Rs. 250 crore. Your business is above this limit.',
-            };
+              type: 'ineligible' as const,
+              headline: 'Above the MSME ceiling.',
+              body: 'Maximum turnover for Medium Enterprise is Rs. 500 crore. Your business does not qualify.',
+            }
           }
-          return null;
+          return null
         },
       },
       {
         text: 'What is the main reason you are looking at Udyam registration?',
         options: [
-          { value: 'bank_loan', label: 'Getting a business loan or better credit terms' },
-          { value: 'government_tender', label: 'Participating in government tenders or GeM' },
-          { value: 'subsidy_benefits', label: 'Accessing subsidies or government schemes' },
-          { value: 'just_curious', label: 'Not sure - I just want to understand if it helps me' },
+          { value: 'credit', label: 'Getting a business loan or better credit terms' },
+          { value: 'tenders', label: 'Government tenders or GeM marketplace' },
+          { value: 'subsidies', label: 'Accessing subsidies or government schemes' },
+          { value: 'payments', label: 'Recovering delayed payments from large buyers' },
+          { value: 'not_sure', label: 'Not sure - want to understand what I get' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'bank_loan') {
-            return {
-              type: 'recommended',
-              headline: 'Udyam registration will significantly help with credit.',
-              body: 'Priority sector lending, CGTMSE collateral-free guarantee, and faster processing make credit significantly more accessible for Udyam-registered MSMEs.',
-              ctaLabel: 'Get Udyam Registration',
-            };
-          }
-          if (answer === 'government_tender') {
-            return {
-              type: 'recommended',
-              headline: 'Udyam registration is essential for government tenders.',
-              body: 'GeM and PSU tenders have MSME-exclusive categories and price preference. Registration unlocks these opportunities.',
-              ctaLabel: 'Get Udyam Registration',
-            };
-          }
-          if (answer === 'subsidy_benefits') {
-            return {
-              type: 'recommended',
-              headline: 'Udyam registration unlocks scheme benefits.',
-              body: 'Access to CLSS, ZED certification subsidies, and technology upgrade schemes becomes available with registration.',
-              ctaLabel: 'Get Udyam Registration',
-            };
-          }
-          return null;
-        },
       },
       {
         text: 'Do you supply to large companies, listed firms, or government entities?',
         options: [
-          { value: 'yes_large', label: 'Yes, we sell to corporates, PSUs, or the government' },
-          { value: 'no_b2c', label: 'No, mostly small businesses or end consumers' },
+          { value: 'yes', label: 'Yes - we sell to corporates, PSUs, or government' },
+          { value: 'no', label: 'No - mostly small businesses or end consumers' },
+          { value: 'plan_to', label: 'Not yet, but planning to' },
         ],
-        evaluator: (answer) => {
-          if (answer === 'yes_large') {
-            return {
-              type: 'recommended',
-              headline: 'Udyam registration gives you payment protection.',
-              body: 'Under the MSMED Act, your buyers must pay you within 45 days. If they do not, compound interest at 3x the RBI bank rate kicks in automatically. This protection only exists for registered MSMEs.',
-              ctaLabel: 'Get Udyam Registration',
-            };
+        evaluator: (answer: string, allAnswers: string[]) => {
+          const answers = [...allAnswers, answer]
+          const mainReason = answers[1]
+          const suppliesLarge = answers[2] === 'yes' || answers[2] === 'plan_to'
+
+          const benefits: { label: string; relevance: 'high' | 'medium' | 'low'; reason: string; description: string }[] = []
+
+          // Credit access
+          benefits.push({
+            label: 'Collateral-Free Credit (CGTMSE)',
+            description: 'Loans up to Rs. 10 crore without pledging assets or a third-party guarantee',
+            relevance: mainReason === 'credit' ? 'high' : 'medium',
+            reason: mainReason === 'credit'
+              ? 'This is your primary goal - CGTMSE is the most direct benefit'
+              : 'Useful for future credit needs even if not the primary driver',
+          })
+
+          // Payment protection
+          benefits.push({
+            label: 'Payment Protection (MSME Samadhaan)',
+            description: 'Compound interest at 3x RBI rate if large buyers delay beyond 45 days. File online, resolve in 90 days.',
+            relevance: suppliesLarge ? 'high' : mainReason === 'payments' ? 'high' : 'low',
+            reason: suppliesLarge
+              ? 'You supply to large companies - this is your legal leverage for delayed payments'
+              : 'Less relevant until you supply to companies above Rs. 250 crore turnover',
+          })
+
+          // Tenders
+          benefits.push({
+            label: 'Government Tender Preference',
+            description: 'MSME-exclusive categories on GeM. Government departments must buy a % of procurement from MSMEs.',
+            relevance: mainReason === 'tenders' ? 'high' : answers[2] === 'yes' ? 'medium' : 'low',
+            reason: mainReason === 'tenders'
+              ? 'This is your primary goal - GeM and tender preference directly apply'
+              : 'Register and explore GeM listing even if tenders are not your immediate focus',
+          })
+
+          // Subsidies and schemes
+          benefits.push({
+            label: 'Subsidies and Schemes (ISO, CLSS)',
+            description: 'ISO certification cost reimbursement, Credit Linked Capital Subsidy for technology upgrades.',
+            relevance: mainReason === 'subsidies' ? 'high' : 'medium',
+            reason: mainReason === 'subsidies'
+              ? 'Several central and state government schemes are exclusively for registered MSMEs'
+              : 'Available on registration - worth exploring as you grow',
+          })
+
+          // Credit card (micro only)
+          if (answers[0] === 'below_10cr') {
+            benefits.push({
+              label: 'Udyam Credit Card',
+              description: 'Rs. 5 lakh credit limit specifically for micro enterprises registered on Udyam portal.',
+              relevance: mainReason === 'credit' ? 'high' : 'medium',
+              reason: 'As a micro enterprise, you are eligible for the new Udyam credit card launched in Budget 2025',
+            })
           }
-          return null;
+
+          return {
+            type: 'recommended' as const,
+            headline: 'Yes - register. It is free and takes 15 minutes.',
+            body: 'Udyam is free, instant, and needs only your PAN and Aadhaar. Here is what matters most for your situation.',
+            ctaLabel: 'Register MSME (Free)',
+            ctaHref: '/checkout/msme-registration',
+            ranking: {
+              type: 'benefits' as const,
+              benefits,
+            },
+          }
         },
       },
     ],
     defaultResult: {
       type: 'recommended',
-      headline: 'Yes - register. It is free and the benefits are real.',
-      body: 'Udyam registration is free, instant, and done entirely online with just your PAN and Aadhaar. There is no cost and practically no downside. What you get in return: better access to credit, exclusive government tender categories, and legal protection if large buyers delay payment. There is almost no reason not to do this.',
+      headline: 'Yes - register. It is free and takes 15 minutes.',
+      body: 'No cost, no inspection. Udyam registration gives you credit access, tender eligibility, and payment protection from large buyers.',
     },
   },
 
@@ -102,46 +138,69 @@ export const msmeUdyam: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT UDYAM REGISTRATION ACTUALLY IS',
-      body: "Udyam Registration is the government's official recognition of your business as a Micro, Small, or Medium Enterprise under the MSME Development Act, 2006. It replaced the older Udyog Aadhar system from July 1, 2020. You register on the Udyam portal, it is linked to your PAN and Aadhaar, and it is completely free. No inspection, no verification, no paperwork sent anywhere.",
+      body: 'Udyam Registration is the government\'s official recognition of your business as a Micro, Small, or Medium Enterprise under the MSME Development Act, 2006. It replaced the older Udyog Aadhar system from July 1, 2020. Registration is on the Udyam portal, linked to your PAN and Aadhaar, and completely free.',
       note: 'Source: MSMED Act 2006; DPIIT Notification, June 26, 2020',
     },
     {
       number: '02',
-      heading: 'DO YOU QUALIFY?',
-      body: 'Classification is based on two things: investment in equipment or plant and machinery, and annual turnover. Both criteria must be met.',
+      heading: 'DO YOU QUALIFY? (APRIL 2025 THRESHOLDS)',
+      body: 'Classification uses two criteria: investment in plant/machinery/equipment AND annual turnover. Both must be met.',
       bullets: [
-        'Micro Enterprise: Investment below Rs. 1 crore AND turnover below Rs. 5 crore',
-        'Small Enterprise: Investment below Rs. 10 crore AND turnover below Rs. 50 crore',
-        'Medium Enterprise: Investment below Rs. 50 crore AND turnover below Rs. 250 crore',
-        'If either number exceeds the limit, you move into the next category',
+        'Micro Enterprise: Investment below Rs. 2.5 crore AND turnover below Rs. 10 crore',
+        'Small Enterprise: Investment below Rs. 25 crore AND turnover below Rs. 100 crore',
+        'Medium Enterprise: Investment below Rs. 125 crore AND turnover below Rs. 500 crore',
+        'If either number exceeds the limit, you move to the next category',
         'For service businesses, office equipment, computers, and software count as "equipment"',
+        'Investment is measured as written-down value (depreciated cost per IT returns) - not original purchase price',
       ],
-      note: 'Source: Ministry of MSME Notification S.O. 2119(E), June 26, 2020',
+      table: {
+        caption: 'MSME Classification Thresholds - April 2025 (Notification S.O. 1364(E))',
+        headers: ['Category', 'Investment Limit', 'Turnover Limit', 'Both criteria must be met'],
+        rows: [
+          ['Micro Enterprise', 'Up to Rs. 2.5 crore', 'Up to Rs. 10 crore', 'Either limit breached = upgrade to Small'],
+          ['Small Enterprise', 'Up to Rs. 25 crore', 'Up to Rs. 100 crore', 'Either limit breached = upgrade to Medium'],
+          ['Medium Enterprise', 'Up to Rs. 125 crore', 'Up to Rs. 500 crore', 'Either limit breached = no longer MSME'],
+        ],
+      },
+      note: 'Source: Ministry of MSME Notification S.O. 1364(E), March 21, 2025. Effective April 1, 2025. These are revised limits - 2.5x higher for investment, 2x higher for turnover vs pre-2025 thresholds.',
     },
     {
       number: '03',
       heading: 'THE BENEFITS THAT ACTUALLY MATTER',
-      body: 'Not everything government schemes promise is real. These ones are.',
+      body: '',
       bullets: [
-        'Loans without collateral: Through CGTMSE (the Credit Guarantee Fund Trust for Micro and Small Enterprises), you can get loans up to Rs. 2 crore without putting up any collateral or a third-party guarantee. For most small business owners, this is transformative.',
-        'Priority sector lending: Banks have MSME-specific quotas and targets. Your loan application genuinely moves faster through the system.',
-        'Government tender preference: The Government e-Marketplace has MSME-exclusive product and service categories. Government departments are mandated to buy a certain percentage of their procurement from MSMEs.',
-        'Payment protection: If a company above Rs. 250 crore turnover has not paid you within 45 days, compound interest at 3x the RBI bank rate accrues automatically. You can file online through MSME Samadhaan and a Facilitation Council must resolve it within 90 days. This only works if you are registered.',
+        'Collateral-free loans: Through CGTMSE, you can get loans without putting up any collateral. Budget 2025 raised the guarantee cover to Rs. 10 crore for micro and small enterprises.',
+        'Priority sector lending: Banks have MSME-specific quotas. Your loan application moves faster through the system.',
+        'Government tender preference: The Government e-Marketplace has MSME-exclusive categories. Government departments are mandated to buy a percentage of procurement from MSMEs.',
+        'Payment protection: If a company above Rs. 250 crore turnover has not paid you within 45 days, compound interest at 3x the RBI bank rate accrues automatically. File through MSME Samadhaan online.',
         'ISO certification reimbursement: Government reimburses the cost of ISO certification for registered MSMEs.',
-        'Technology upgrade subsidies: Credit Linked Capital Subsidy Scheme (CLSS) provides upfront capital subsidy for technology upgrades.',
+        'Technology upgrade subsidies: Credit Linked Capital Subsidy Scheme (CLSS) provides capital subsidy for technology upgrades.',
       ],
+      table: {
+        caption: 'Key MSME Benefits and Who Gets Them',
+        headers: ['Benefit', 'What You Actually Get', 'Best For'],
+        rows: [
+          ['CGTMSE collateral-free loans', 'Loans up to Rs. 10 crore without pledging assets (Budget 2025 limit)', 'All MSMEs needing credit'],
+          ['Priority sector lending', 'Banks have mandatory MSME targets - faster approvals, better rates', 'All MSMEs'],
+          ['GeM exclusive categories', 'Government departments must buy certain % from MSMEs on GeM marketplace', 'MSMEs supplying to government'],
+          ['Payment protection (MSME Samadhaan)', 'If buyer above Rs. 250 crore turnover delays beyond 45 days: auto compound interest at 3x RBI rate', 'MSMEs supplying to large corporates'],
+          ['ISO certification reimbursement', 'Central government reimburses ISO certification cost', 'All MSMEs seeking ISO'],
+          ['Udyam Credit Card (micro only)', 'Rs. 5 lakh credit card for micro enterprises registered on Udyam portal', 'Micro enterprises only'],
+          ['CLSS technology subsidy', 'Capital subsidy for technology upgrades via Credit Linked Capital Subsidy Scheme', 'Manufacturing MSMEs'],
+        ],
+      },
       note: 'CGTMSE is managed jointly by SIDBI and the Ministry of MSME.',
     },
     {
       number: '04',
       heading: 'WHAT IT DOES NOT DO',
-      body: 'Let us clear up some common misconceptions.',
+      body: '',
       bullets: [
-        'It is not mandatory - it is a voluntary registration',
-        'It does not automatically give you a loan - it makes you eligible for specific schemes; banks still assess your creditworthiness',
-        'It is not the same as DPIIT Startup Recognition - those are different, with different benefits',
-        'It does not replace GST, PF, ESI, or any other compliance - those are separate',
-        'There is no direct income tax exemption just for being an MSME - any tax benefits require separate qualification',
+        'Not mandatory - it is a voluntary registration',
+        'Does not automatically give you a loan - it makes you eligible for specific schemes; banks still assess creditworthiness',
+        'Not the same as DPIIT Startup Recognition - different programme, different benefits',
+        'Does not replace GST, PF, ESI, or any other compliance',
+        'No direct income tax exemption just for being an MSME',
       ],
     },
     {
@@ -150,10 +209,10 @@ export const msmeUdyam: LearnPageConfig = {
       body: 'If you supply to large companies and have experienced delayed payments, this might be the single most valuable reason to register.',
       bullets: [
         'Under Section 15 of the MSMED Act, buyers must pay MSME suppliers within 45 days of accepting goods or services. If there is no written agreement, the limit is 15 days.',
-        'Delay beyond 45 days = compound interest at 3x RBI bank rate, automatically, without needing a court order',
-        'Large companies (above Rs. 250 crore turnover) now have to disclose MSME payment dues in their MCA filings (MSME Form 1). This creates real corporate governance pressure.',
-        'You can file online through the MSME Samadhaan portal - a formal, quick-resolution mechanism.',
-        'None of this is available to you if you are not registered.',
+        'Delay beyond 45 days means compound interest at 3x RBI bank rate - automatically, without needing a court order',
+        'Large companies (above Rs. 250 crore turnover) must disclose MSME payment dues in their MCA filings (MSME Form 1). This creates real corporate governance pressure.',
+        'File online through the MSME Samadhaan portal - a formal, fast-resolution mechanism',
+        'None of this is available if you are not registered',
       ],
       note: 'Source: Sections 15-23, Micro, Small and Medium Enterprises Development Act, 2006',
     },
@@ -163,10 +222,10 @@ export const msmeUdyam: LearnPageConfig = {
       body: '',
       bullets: [
         'Cost: Zero',
-        'Time: 10-15 minutes on udyamregistration.gov.in with your Aadhaar and PAN',
-        'Downside: None in practice - you just need to update if you cross a classification threshold',
+        'Time: 10-15 minutes on udyamregistration.gov.in with Aadhaar and PAN',
+        'Downside: None - just update if you cross a classification threshold',
         'Upside: Better credit terms, tender access, payment protection, scheme eligibility',
-        'Verdict: Almost any business below Rs. 250 crore turnover should do this today',
+        'Verdict: Any business below Rs. 500 crore turnover should register today',
       ],
     },
   ],
@@ -178,7 +237,7 @@ export const msmeUdyam: LearnPageConfig = {
     },
     {
       q: 'I have an old Udyog Aadhar registration. Is that still valid?',
-      a: 'No. Udyog Aadhar registrations expired on December 31, 2021. You need to re-register on the new Udyam Registration portal at udyamregistration.gov.in. Old certificates are no longer accepted for scheme benefits.',
+      a: 'No. Udyog Aadhar registrations expired on December 31, 2021. Register on the new Udyam Registration portal at udyamregistration.gov.in. Old certificates are no longer accepted for scheme benefits.',
     },
     {
       q: 'Does MSME registration help with my income tax?',
@@ -186,7 +245,7 @@ export const msmeUdyam: LearnPageConfig = {
     },
     {
       q: 'What happens if my turnover grows past the MSME limit?',
-      a: 'Your Udyam registration is automatically upgraded to the appropriate category as your business grows. The portal syncs with your income tax return data annually. If you cross the medium enterprise limit altogether, the registration lapses.',
+      a: 'Your Udyam registration is automatically reclassified to the appropriate category as your business grows - the portal syncs with your income tax return data annually. If you cross the medium enterprise ceiling (Rs. 500 crore turnover or Rs. 125 crore investment), the registration lapses.',
     },
   ],
-};
+}

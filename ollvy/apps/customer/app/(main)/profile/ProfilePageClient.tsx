@@ -12,7 +12,6 @@ import {
   DashboardOrderCard,
   ComplianceScoreGauge,
   DocumentVaultSection,
-  RetainerStatusCard,
   AccountInfoCard,
 } from '@/components/profile'
 import {
@@ -1031,30 +1030,6 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
               </div>
             )}
           </section>
-
-          {/* Retainers */}
-          {processedData.retainers.length > 0 && (
-            <section>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                  Active Retainers
-                </span>
-              </div>
-              <div className="grid sm:grid-cols-2 gap-4">
-                {processedData.retainers.map((retainer) => (
-                  <RetainerStatusCard
-                    key={retainer.id}
-                    retainerId={retainer.id}
-                    serviceName={retainer.service_package?.name || 'Retainer'}
-                    status={retainer.status as any}
-                    currentCycleEnd={retainer.current_cycle_end || ''}
-                    nextBillingDate={retainer.next_billing_date || ''}
-                    monthlyPrice={retainer.monthly_price_paisa}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
 
           {/* Document Vault */}
           <section>

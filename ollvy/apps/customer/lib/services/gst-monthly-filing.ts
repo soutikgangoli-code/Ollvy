@@ -117,37 +117,37 @@ export const gstMonthlyFiling: ServiceConfig = {
   serviceRisks: [
     {
       icon: 'clock',
-      title: 'Late filing: ₹50/day, minimum ₹20,000',
-      body: "GSTR-3B late fee is ₹50/day (₹25 CGST + ₹25 SGST) with a minimum of ₹20,000 per return. Plus 18% annual interest on unpaid tax. Miss one month and it compounds.",
+      title: 'Late fee accumulates quickly',
+      body: 'Rs 50 per day per return, Rs 100 per day for both returns combined. Plus 18% interest on any unpaid tax. Penalties are avoidable - data must be shared by the 8th.',
     },
     {
       icon: 'mismatch',
-      title: 'GSTR-1 and GSTR-3B mismatch',
-      body: "If your GSTR-1 figures don't match GSTR-3B, GSTN flags it automatically under Section 61. You get a notice. Responding requires a CA - which is not included in most retainers. With Ollvy, it's the same CA who filed, so they can respond.",
+      title: 'GSTR-1 and GSTR-3B figures must match',
+      body: 'Discrepancies between the two returns are flagged automatically by GSTN. We file both from the same data set to ensure consistency.',
     },
     {
       icon: 'alert',
-      title: 'ITC claimed but vendor hasn\'t filed',
-      body: "You paid the vendor, have the invoice, claimed ITC. But if they haven't filed their GSTR-1, your ITC gets blocked and you get a notice. We catch this by checking GSTR-2B before claiming.",
+      title: 'Vendor not filed = ITC blocked',
+      body: 'If your vendor has not filed their GSTR-1, their invoices do not appear in your GSTR-2B. Claiming ITC on those invoices invites a mismatch notice. We check before claiming.',
     },
   ],
 
   profilePersonas: [
     {
-      label: 'First time outsourcing GST',
-      detail: "Your accountant was handling it. Now you want a professional. We take over seamlessly.",
+      label: 'Switching from another CA',
+      detail: 'Seamless takeover. We review your filing history before the first cycle.',
     },
     {
       label: 'Multiple GSTINs',
-      detail: 'Multiple states, multiple registrations. We handle all of them under one retainer.',
+      detail: 'Multiple states, multiple registrations. All handled under one retainer.',
     },
     {
       label: 'High transaction volume',
-      detail: "500+ invoices/month. We can handle it - pricing is based on turnover, not invoice count.",
+      detail: '500+ invoices a month. Priced by turnover, not invoice count.',
     },
     {
-      label: 'Previous CA went quiet',
-      detail: "Your last CA stopped responding before a deadline. We don't do that. SLA is enforced.",
+      label: 'Previous CA stopped responding',
+      detail: 'We work to SLA every month. You get acknowledgement numbers, not silence.',
     },
   ],
 
@@ -165,27 +165,22 @@ export const gstMonthlyFiling: ServiceConfig = {
     {
       category: 'General',
       q: 'What does the monthly retainer cover?',
-      a: "GSTR-1 filing by 11th, GSTR-3B filing by 20th, ITC reconciliation against GSTR-2B, late fee computation, and monthly compliance report. Does not include audit response, demand notices, or amendment returns.",
+      a: 'GSTR-1 by 11th, GSTR-3B by 20th, ITC reconciliation against GSTR-2B, and monthly compliance report.',
     },
     {
       category: 'General',
       q: 'Can I cancel anytime?',
-      a: "Yes. No minimum term. Cancel before the 1st of any month and you won't be billed for that month. We recommend giving notice by the 25th to ensure smooth handoff.",
+      a: 'Yes. No minimum term. Cancel before the 1st of any month and you will not be charged for that cycle.',
     },
     {
       category: 'Process',
-      q: 'What data do I need to provide each month?',
-      a: "Sales invoices (or export from Tally/Zoho), purchase register, and any updates to your vendor list. If you use accounting software, the export takes 2 minutes.",
+      q: 'What data do I need to share each month?',
+      a: 'Sales invoices and purchase register. If you use accounting software, the export takes 2 minutes.',
     },
     {
       category: 'Process',
-      q: 'Do I need to give you my GST login?',
-      a: "Yes, but only for filing. You can create a sub-user with restricted access if you prefer. We never make changes to your profile or registration details without explicit approval.",
-    },
-    {
-      category: 'Pricing',
-      q: 'Why do prices vary by turnover?',
-      a: "Higher turnover = more invoices = more reconciliation work. The base price (₹2,999/month) covers up to ₹50L annual turnover. Above that, pricing scales with complexity.",
+      q: 'What if I have no transactions in a month?',
+      a: 'Nil GSTR-1 and GSTR-3B must still be filed. We handle nil returns as part of the retainer.',
     },
   ],
 
