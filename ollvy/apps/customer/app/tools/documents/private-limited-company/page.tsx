@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
-import { DocumentPageIntro } from '@/components/tools/DocumentPageIntro'
+import { DocumentTimelineCost, DocumentEditorialIntro, DocumentWhoNeedsThis } from '@/components/tools/DocumentPageIntro'
 import { DocumentSteps } from '@/components/tools/DocumentSteps'
 import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
-import { ToolIntroSection, ToolIntroCTA, ToolFAQSection } from '@/components/tools/DocumentPageToolExtensions'
+import { ToolIntroSection, DocumentCTA, ToolFAQSection, ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
 import { pvtLtdDocuments } from '@/lib/data/document-checklists'
 import { privateLimitedContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
@@ -101,12 +101,6 @@ export default function PrivateLimitedDocumentsPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
         />
 
-        {/* New intro section from config - at the very top */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* CTA link after intro */}
-        <ToolIntroCTA config={config} />
-
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
           h1="How to Register a Private Limited Company"
@@ -114,10 +108,19 @@ export default function PrivateLimitedDocumentsPage() {
           href="/tools/documents/private-limited-company"
         />
 
-        {/* Educational intro content */}
-        <DocumentPageIntro content={privateLimitedContent} />
+        {/* Timeline and Government Fee bar */}
+        <DocumentTimelineCost content={privateLimitedContent} />
 
-        {/* Document checklist header */}
+        {/* Editorial intro - describes the service/process */}
+        <DocumentEditorialIntro content={privateLimitedContent} />
+
+        {/* Who Needs This - section 01 */}
+        <DocumentWhoNeedsThis content={privateLimitedContent} sectionNumber="01" />
+
+        {/* Practical intro from config - right before checklist */}
+        <ToolIntroSection text={config.intro} />
+
+        {/* Document checklist header - section 02 */}
         <div className="mb-6">
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-[10px] text-muted-foreground">02</span>
@@ -128,7 +131,7 @@ export default function PrivateLimitedDocumentsPage() {
           </p>
         </div>
 
-        {/* Document checklist */}
+        {/* Document checklist - CTA hidden, will be rendered separately below */}
         <DocumentChecklistContent
           categories={pvtLtdDocuments}
           pageTitle="Private Limited Company Registration"
@@ -139,22 +142,36 @@ export default function PrivateLimitedDocumentsPage() {
           ctaButtonHref="/services/pvt-ltd-incorporation"
           penaltyCalcHref="/tools/penalty-calculator/mca-annual-filing"
           penaltyCalcText="Calculate MCA filing penalty"
+          hideCta
         />
 
-        {/* Step-by-step process */}
-        <DocumentSteps content={privateLimitedContent} />
+        {/* Step-by-step process - section 03 */}
+        <DocumentSteps content={privateLimitedContent} sectionNumber="03" />
 
-        {/* FAQ section */}
-        <DocumentFAQSection content={privateLimitedContent} />
+        {/* FAQ section from content - section 04 */}
+        <DocumentFAQSection content={privateLimitedContent} sectionNumber="04" />
 
-        {/* Common mistakes */}
-        <DocumentCommonMistakes content={privateLimitedContent} />
+        {/* Common mistakes - section 05 */}
+        <DocumentCommonMistakes content={privateLimitedContent} sectionNumber="05" />
 
-        {/* Next steps */}
-        <DocumentNextSteps content={privateLimitedContent} />
+        {/* Next steps - section 06 */}
+        <DocumentNextSteps content={privateLimitedContent} sectionNumber="06" />
 
-        {/* New FAQ section from config - at the very bottom */}
+        {/* CTA Section - moved to end, before FAQs */}
+        <DocumentCTA
+          title="Ready to incorporate your company?"
+          description="Get started with Ollvy. We handle DSC, DIN, name approval, and all MCA filings. Most companies are incorporated within 7-10 days."
+          buttonText="Start Company Registration"
+          buttonHref="/services/pvt-ltd-incorporation"
+          penaltyCalcHref="/tools/penalty-calculator/mca-annual-filing"
+          penaltyCalcText="Calculate MCA filing penalty"
+        />
+
+        {/* More FAQs from config - section 07 */}
         <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
+
+        {/* Last reviewed - at the very bottom like service pages */}
+        <ToolLastReviewed lastReviewed={config.lastReviewed} sources={config.reviewSources} />
       </div>
     </div>
   )

@@ -1,6 +1,7 @@
 'use client'
 
-import { Check, FileText, Calendar, MessageSquare, Clock, AlertTriangle, Circle } from 'lucide-react'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { Check, FileText, Calendar, MessageSquare, Clock, AlertTriangle, Circle, ChevronLeft, ChevronRight } from 'lucide-react'
 
 // Mockup 1: Order Tracking - matches /orders/[id] page
 function OrderTrackingMockup() {
@@ -290,6 +291,58 @@ const FEATURES = [
 ]
 
 export function ProductShowcase() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Items per view: 1 on mobile, 2 on desktop
+  const itemsPerView = isMobile ? 1 : 2
+  const maxIndex = FEATURES.length - itemsPerView
+
+  // Handle scroll events to update current index
+  const handleScroll = useCallback(() => {
+    if (!scrollContainerRef.current) return
+    const container = scrollContainerRef.current
+    const scrollLeft = container.scrollLeft
+    const cardWidth = container.offsetWidth / itemsPerView
+    const newIndex = Math.round(scrollLeft / cardWidth)
+    setCurrentIndex(Math.min(newIndex, maxIndex))
+  }, [itemsPerView, maxIndex])
+
+  // Scroll to specific index
+  const scrollToIndex = useCallback((index: number) => {
+    if (!scrollContainerRef.current) return
+    const container = scrollContainerRef.current
+    const cardWidth = container.offsetWidth / itemsPerView
+    container.scrollTo({ left: cardWidth * index, behavior: 'smooth' })
+    setCurrentIndex(index)
+  }, [itemsPerView])
+
+  const canScrollLeft = currentIndex > 0
+  const canScrollRight = currentIndex < maxIndex
+
+  const handlePrev = () => {
+    if (canScrollLeft) {
+      scrollToIndex(currentIndex - 1)
+    }
+  }
+
+  const handleNext = () => {
+    if (canScrollRight) {
+      scrollToIndex(currentIndex + 1)
+    }
+  }
+
   return (
     <section id="product-showcase" className="py-12 md:py-16 lg:py-20 bg-background">
       <div className="container">
@@ -299,18 +352,49 @@ export function ProductShowcase() {
           </h2>
         </div>
 
-        {/* Product screenshots grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          {FEATURES.map((item, i) => (
-            <div key={i}>
-              {/* Mockup card - auto height on mobile, fixed aspect on desktop */}
-              <div className="min-h-[280px] md:aspect-[4/3] md:min-h-0 rounded-2xl border border-border bg-card overflow-hidden mb-4 md:mb-5 shadow-sm">
-                <item.Mockup />
+        {/* Carousel container */}
+        <div className="relative">
+          {/* Left arrow - desktop only */}
+          <button
+            onClick={handlePrev}
+            disabled={!canScrollLeft}
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-6 z-10 w-10 h-10 lg:w-12 lg:h-12 items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label="Previous"
+          >
+            <ChevronLeft className="h-5 w-5 lg:h-6 lg:w-6 text-foreground" />
+          </button>
+
+          {/* Scrollable carousel */}
+          <div
+            ref={scrollContainerRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 md:gap-8"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {FEATURES.map((item, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 w-full md:w-[calc(50%-16px)] snap-start"
+              >
+                {/* Mockup card - auto height on mobile, fixed aspect on desktop */}
+                <div className="min-h-[280px] md:aspect-[4/3] md:min-h-0 rounded-2xl border border-border bg-card overflow-hidden mb-4 md:mb-5 shadow-sm">
+                  <item.Mockup />
+                </div>
+                <h3 className="font-semibold text-base md:text-lg text-foreground">{item.title}</h3>
+                <p className="text-sm md:text-base text-muted-foreground mt-1">{item.desc}</p>
               </div>
-              <h3 className="font-semibold text-base md:text-lg text-foreground">{item.title}</h3>
-              <p className="text-sm md:text-base text-muted-foreground mt-1">{item.desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          {/* Right arrow - desktop only */}
+          <button
+            onClick={handleNext}
+            disabled={!canScrollRight}
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-6 z-10 w-10 h-10 lg:w-12 lg:h-12 items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label="Next"
+          >
+            <ChevronRight className="h-5 w-5 lg:h-6 lg:w-6 text-foreground" />
+          </button>
         </div>
       </div>
     </section>

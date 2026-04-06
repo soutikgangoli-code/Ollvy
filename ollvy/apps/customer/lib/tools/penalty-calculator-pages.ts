@@ -12,8 +12,20 @@ export const gstLateFilingPage: ToolPageConfig = {
   category: 'GST',
   relatedServiceSlug: 'gst-monthly-50l',
   relatedServiceLabel: 'Get GST Returns Filed on Time',
-  relatedCalculatorSlugs: ['gst-demand', 'tds-late-filing', 'itr-late-filing'],
+  relatedCalculatorSlugs: ['gst-demand-notice', 'tds-late-filing', 'itr-late-filing'],
   relatedLearnSlug: 'do-i-need-gst-registration',
+  reviewSources: [
+    {
+      name: 'CBIC Notification 19/2021 - Late Fee Rates',
+      url: 'https://www.cbic.gov.in/resources/htdocs-cbec/gst/notfctn-19-central-tax-english-2021.pdf',
+      description: 'Official notification specifying revised late fee rates for GSTR-1 and GSTR-3B',
+    },
+    {
+      name: 'CBIC GST Rates Portal',
+      url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html',
+      description: 'Central Board of Indirect Customs and Taxes - GST rate information',
+    },
+  ],
 
   intro: `Missing a GST return filing deadline costs money every day. This calculator tells you exactly how much.
 
@@ -82,6 +94,18 @@ export const gstDemandPage: ToolPageConfig = {
   relatedServiceLabel: 'Get GST Compliance Help',
   relatedCalculatorSlugs: ['gst-late-filing'],
   relatedLearnSlug: 'do-i-need-gst-registration',
+  reviewSources: [
+    {
+      name: 'CGST Act 2017 - Full Text',
+      url: 'https://www.cbic.gov.in/resources/htdocs-cbec/gst/cgst-act.pdf',
+      description: 'Central Goods and Services Tax Act with Sections 73 and 74 penalty provisions',
+    },
+    {
+      name: 'CGST Act Updated (January 2024)',
+      url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf',
+      description: 'Latest consolidated CGST Act with all amendments',
+    },
+  ],
 
   intro: `Received a GST show cause notice? The penalty you face depends entirely on whether the notice is under Section 73 or Section 74 of the CGST Act, and how quickly you respond.
 
@@ -138,6 +162,18 @@ export const directorKycPage: ToolPageConfig = {
   relatedServiceLabel: 'Reactivate Your DIN',
   relatedCalculatorSlugs: ['mca-annual-filing'],
   relatedLearnSlug: 'pvt-ltd-vs-llp',
+  reviewSources: [
+    {
+      name: 'MCA Rules - Directors Appointment and Qualification',
+      url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/rules.html?act=NDA2MA==',
+      description: 'Companies (Appointment and Qualification of Directors) Rules including Rule 12A',
+    },
+    {
+      name: 'MCA DIR-3 KYC Portal',
+      url: 'https://www.mca.gov.in/MinistryV2/dir3kyc.html',
+      description: 'Official MCA page for DIR-3 KYC filing requirements and procedures',
+    },
+  ],
 
   intro: `Every director of an Indian company must file DIR-3 KYC annually by September 30. Miss the deadline and the DIN (Director Identification Number) is automatically deactivated by MCA on October 1.
 
@@ -194,6 +230,18 @@ export const mcaFilingPage: ToolPageConfig = {
   relatedServiceLabel: 'File MCA Annual Returns',
   relatedCalculatorSlugs: ['director-kyc'],
   relatedLearnSlug: 'pvt-ltd-vs-llp',
+  reviewSources: [
+    {
+      name: 'Companies Act 2013 - Full Text',
+      url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/acts.html?act=NTk2MQ==',
+      description: 'The Companies Act 2013 with filing requirements and penalty provisions',
+    },
+    {
+      name: 'MCA Rules - Company Management and Administration',
+      url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/rules.html?act=NDA3Mg==',
+      description: 'Companies (Management and Administration) Rules for AOC-4 and MGT-7',
+    },
+  ],
 
   intro: `Every Private Limited company must file two annual returns with the Registrar of Companies: AOC-4 (financial statements) within 30 days of the AGM, and MGT-7 (annual return) within 60 days of the AGM. The AGM itself must be held by September 30 for companies with a March financial year-end.
 
@@ -250,6 +298,18 @@ export const itrLateFilingPage: ToolPageConfig = {
   relatedServiceLabel: 'File Business ITR',
   relatedCalculatorSlugs: ['tds-late-filing'],
   relatedLearnSlug: 'do-i-need-to-file-itr',
+  reviewSources: [
+    {
+      name: 'Income Tax Act 1961 - Full Text',
+      url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf',
+      description: 'The Income Tax Act with Sections 234A, 234B, 234F penalty provisions',
+    },
+    {
+      name: 'Income Tax Portal - Section 234F Guide',
+      url: 'https://www.incometax.gov.in/iec/foportal/help/individual/return-applicable-1#234f',
+      description: 'Official e-filing portal guidance on late filing fees',
+    },
+  ],
 
   intro: `Missing the Income Tax Return deadline has three separate financial consequences: a flat late filing fee, interest on any unpaid tax, and the permanent loss of loss carry-forward rights.
 
@@ -309,6 +369,18 @@ export const tdsLateFilingPage: ToolPageConfig = {
   relatedServiceLabel: 'Get TDS Filed on Time',
   relatedCalculatorSlugs: ['itr-late-filing'],
   relatedLearnSlug: 'do-i-need-to-file-itr',
+  reviewSources: [
+    {
+      name: 'Income Tax Act 1961 - Full Text',
+      url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf',
+      description: 'The Income Tax Act with Sections 234E, 201, and 40(a)(ia) provisions',
+    },
+    {
+      name: 'TRACES - TDS CPC Portal',
+      url: 'https://www.tdscpc.gov.in/app/statreg.xhtml',
+      description: 'TDS Centralized Processing Cell - statutory requirements and regulations',
+    },
+  ],
 
   intro: `TDS non-compliance has three separate penalties that can apply simultaneously: a late filing fee, interest on late deposit, and a business expense disallowance that effectively taxes money you have already spent.
 
@@ -371,6 +443,18 @@ export const pfEsicPage: ToolPageConfig = {
   relatedServiceLabel: 'Get Payroll Compliance Help',
   relatedCalculatorSlugs: [],
   relatedLearnSlug: 'when-does-pf-registration-become-mandatory',
+  reviewSources: [
+    {
+      name: 'EPF Act 1952 - Full Text',
+      url: 'https://www.epfindia.gov.in/site_docs/PDFs/Downloads_PDFs/EPFAct1952.pdf',
+      description: 'Employees Provident Funds and Miscellaneous Provisions Act with Section 14B damages',
+    },
+    {
+      name: 'ESI Act 1948 - Amended Text',
+      url: 'https://www.esic.gov.in/attachments/files/ESI_Act_amended_upto_2010.pdf',
+      description: 'Employees State Insurance Act with Section 85B interest provisions',
+    },
+  ],
 
   intro: `PF and ESIC non-compliance has a tiered penalty structure that gets more expensive the longer the default continues. For PF, the penalty is called "damages" under Section 14B of the Employees Provident Funds and Miscellaneous Provisions Act, 1952.
 
@@ -429,6 +513,18 @@ export const professionalTaxPage: ToolPageConfig = {
   relatedServiceLabel: 'Get PT Compliance Help',
   relatedCalculatorSlugs: ['pf-esic-penalty'],
   relatedLearnSlug: 'do-i-need-professional-tax-registration',
+  reviewSources: [
+    {
+      name: 'Maharashtra Professional Tax - Labour Department',
+      url: 'https://www.mah.labour.gov.in/professionaltax.php',
+      description: 'Official Maharashtra Labour Department page for Professional Tax rates and compliance',
+    },
+    {
+      name: 'Constitution of India - Article 276',
+      url: 'https://legislative.gov.in/constitution-of-india',
+      description: 'Constitutional provision setting Rs. 2,500 per annum maximum on Professional Tax',
+    },
+  ],
 
   intro: `Professional Tax is a state-level tax levied by about half the states in India. If your business is in Delhi, Uttar Pradesh, Rajasthan, Haryana, Punjab, or Himachal Pradesh, Professional Tax does not apply to you at all - stop reading.
 
@@ -485,6 +581,18 @@ export const shopEstablishmentPage: ToolPageConfig = {
   relatedServiceLabel: 'Get Business Registered',
   relatedCalculatorSlugs: ['professional-tax-penalty'],
   relatedLearnSlug: 'do-i-need-shop-establishment-registration',
+  reviewSources: [
+    {
+      name: 'Maharashtra Shops and Establishments Act',
+      url: 'https://www.mah.labour.gov.in/ShopsAct.php',
+      description: 'Official Maharashtra Labour Department page for Shops and Establishments Act compliance',
+    },
+    {
+      name: 'Delhi Shops and Establishments Act',
+      url: 'https://labour.delhi.gov.in/content/shops-and-establishments-act',
+      description: 'Delhi Labour Department guidance on Shops and Establishments registration',
+    },
+  ],
 
   intro: `Every commercial establishment - shop, office, restaurant, IT company, hotel, or cloud kitchen - must register under the state's Shops and Establishments Act within 30 days of starting business. Operating without registration exposes you to penalties under the state Act, and practically blocks you from opening a bank current account or applying for other licences.
 
@@ -541,6 +649,18 @@ export const dpiitFemaPage: ToolPageConfig = {
   relatedServiceLabel: 'Get Startup Compliance Help',
   relatedCalculatorSlugs: ['mca-annual-filing'],
   relatedLearnSlug: 'should-i-get-dpiit-startup-recognition',
+  reviewSources: [
+    {
+      name: 'FEMA Act and Rules - RBI',
+      url: 'https://fema.rbi.org.in/fema/english/FEMA_CONTENTS.aspx',
+      description: 'Reserve Bank of India - Foreign Exchange Management Act regulations and rules',
+    },
+    {
+      name: 'FIRMS Portal - RBI Foreign Investment Reporting',
+      url: 'https://firms.rbi.org.in/firms/faces/pages/login.xhtml',
+      description: 'RBI Foreign Investment Reporting and Management System for FC-GPR and FC-TRS filings',
+    },
+  ],
 
   intro: `Startups receiving foreign equity investment have FEMA (Foreign Exchange Management Act, 1999) reporting obligations that many founders miss, often discovering the issue only during funding due diligence.
 

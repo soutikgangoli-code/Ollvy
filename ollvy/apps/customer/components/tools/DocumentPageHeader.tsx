@@ -1,4 +1,6 @@
 // Server Component - H1 is server-rendered for SEO
+import Link from 'next/link'
+import { ChevronRight } from 'lucide-react'
 import { DocumentTypeSelector } from './DocumentTypeSelector'
 
 interface DocumentPageHeaderProps {
@@ -10,6 +12,19 @@ interface DocumentPageHeaderProps {
 export function DocumentPageHeader({ h1, label, href }: DocumentPageHeaderProps) {
   return (
     <div className="mb-12 text-center">
+      {/* Breadcrumb: Tools > Documents > [Checklist Name] */}
+      <nav className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4" aria-label="Breadcrumb">
+        <Link href="/tools" className="hover:text-foreground transition-colors">
+          Tools
+        </Link>
+        <ChevronRight className="h-3 w-3" />
+        <Link href="/tools/documents" className="hover:text-foreground transition-colors">
+          Documents
+        </Link>
+        <ChevronRight className="h-3 w-3" />
+        <span className="text-foreground">{label}</span>
+      </nav>
+
       <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
         Complete Guide & Document Checklist
       </p>

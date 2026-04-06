@@ -2,10 +2,13 @@ import { ReactNode } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { type ToolPageConfig, generateToolFAQSchema, generateToolBreadcrumbSchema } from '@/lib/tools/types'
+import { PenaltyCalculatorSelector, penaltyCalculators } from '@/components/penalty-calculator/PenaltyCalculatorSelector'
+import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
 
 interface ToolPageWrapperProps {
   config: ToolPageConfig
   children: ReactNode // The calculator or checklist widget
+  showCalculatorSelector?: boolean // Show the penalty calculator selector dropdown
 }
 
 /**
@@ -145,9 +148,14 @@ function RelatedLinks({ config }: { config: ToolPageConfig }) {
  * Main wrapper component for tool pages (calculators and checklists)
  * Handles intro, howToUse, FAQs, and JSON-LD schema
  */
-export function ToolPageWrapper({ config, children }: ToolPageWrapperProps) {
+export function ToolPageWrapper({ config, children, showCalculatorSelector }: ToolPageWrapperProps) {
   const faqSchema = generateToolFAQSchema(config)
   const breadcrumbSchema = generateToolBreadcrumbSchema(config.category, config.title, config.canonicalUrl)
+
+  // Get the current calculator info for the selector
+  const currentCalculator = showCalculatorSelector
+    ? penaltyCalculators.find(calc => config.canonicalUrl.includes(calc.href.replace('/tools/penalty-calculator/', '')))
+    : null
 
   return (
     <div className="py-16 md:py-24">
@@ -164,28 +172,40 @@ export function ToolPageWrapper({ config, children }: ToolPageWrapperProps) {
 
         {/* Header with H1 */}
         <header className="mb-8">
-          <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+          {/* Breadcrumb: Tools > Penalty Calculators > [Calculator Name] */}
+          <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-2" aria-label="Breadcrumb">
             <Link href="/tools" className="hover:text-foreground transition-colors">
               Tools
             </Link>
             <ChevronRight className="h-3 w-3" />
-            <span>{config.category}</span>
-          </div>
+            <Link href="/tools/penalty-calculator" className="hover:text-foreground transition-colors">
+              Penalty Calculators
+            </Link>
+            <ChevronRight className="h-3 w-3" />
+            <span className="text-foreground">{config.title}</span>
+          </nav>
           <h1 className="text-2xl md:text-3xl font-bold text-foreground">
             {config.title}
           </h1>
-          <p className="text-xs text-muted-foreground mt-2">
-            Last reviewed: {config.lastReviewed}
-          </p>
         </header>
 
-        {/* Intro section - rendered ABOVE the widget for SEO */}
-        <IntroSection text={config.intro} />
+        {/* Calculator selector dropdown - shown between H1 and widget */}
+        {showCalculatorSelector && currentCalculator && (
+          <div className="mb-8">
+            <PenaltyCalculatorSelector
+              currentHref={currentCalculator.href}
+              currentLabel={currentCalculator.label}
+            />
+          </div>
+        )}
 
         {/* The actual tool widget (calculator or checklist) */}
         <div className="mb-8">
           {children}
         </div>
+
+        {/* Intro section - rendered BELOW the widget */}
+        <IntroSection text={config.intro} />
 
         {/* How to Use section - rendered BELOW the widget */}
         <HowToUseSection text={config.howToUse} title={config.title} />
@@ -212,6 +232,9 @@ export function ToolPageWrapper({ config, children }: ToolPageWrapperProps) {
             </Link>
           </div>
         </section>
+
+        {/* How we reviewed - at bottom like service pages */}
+        <ToolLastReviewed lastReviewed={config.lastReviewed} sources={config.reviewSources} />
 
         {/* Print styles */}
         <style

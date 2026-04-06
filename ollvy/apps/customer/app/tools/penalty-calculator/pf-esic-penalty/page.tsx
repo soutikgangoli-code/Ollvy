@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function Page() {
   return (
-    <ToolPageWrapper config={pfEsicPage}>
+    <ToolPageWrapper config={pfEsicPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <PFESICCalculator />
       </Suspense>

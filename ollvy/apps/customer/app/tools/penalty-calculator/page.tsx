@@ -130,15 +130,15 @@ export default function PenaltyCalculatorPage() {
         <div className="space-y-4">
           {penaltyCalculators.map((calc) => (
             <Link key={calc.href} href={calc.href}>
-              <Card className="border border-border hover:border-ollvy-red/50 transition-colors cursor-pointer group">
+              <Card className="border border-border hover:border-border transition-colors cursor-pointer group">
                 <CardHeader className="flex flex-row items-start gap-4">
-                  <div className="p-3 rounded-lg bg-ollvy-red/10 shrink-0">
-                    <calc.icon className="h-6 w-6 text-ollvy-red" />
+                  <div className="p-3 rounded-lg bg-muted shrink-0">
+                    <calc.icon className="h-6 w-6 text-foreground" />
                   </div>
                   <div className="flex-1">
                     <CardTitle className="text-xl flex items-center justify-between">
                       {calc.title}
-                      <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-ollvy-red transition-colors" />
+                      <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-foreground transition-colors" />
                     </CardTitle>
                     <CardDescription className="mt-2 text-base">{calc.description}</CardDescription>
                   </div>

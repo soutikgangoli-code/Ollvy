@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
-import { DocumentPageIntro } from '@/components/tools/DocumentPageIntro'
+import { DocumentTimelineCost, DocumentEditorialIntro, DocumentWhoNeedsThis } from '@/components/tools/DocumentPageIntro'
 import { DocumentSteps } from '@/components/tools/DocumentSteps'
 import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
-import { ToolIntroSection, ToolIntroCTA, ToolFAQSection } from '@/components/tools/DocumentPageToolExtensions'
+import { ToolIntroSection, DocumentCTA, ToolFAQSection, ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
 import { trademarkDocuments } from '@/lib/data/document-checklists'
 import { trademarkContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
@@ -101,12 +101,6 @@ export default function TrademarkDocumentsPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
         />
 
-        {/* New intro section from config - at the very top */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* CTA link after intro */}
-        <ToolIntroCTA config={config} />
-
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
           h1="How to Register a Trademark in India"
@@ -114,10 +108,19 @@ export default function TrademarkDocumentsPage() {
           href="/tools/documents/trademark"
         />
 
-        {/* Educational intro content */}
-        <DocumentPageIntro content={trademarkContent} />
+        {/* Timeline and Government Fee bar */}
+        <DocumentTimelineCost content={trademarkContent} />
 
-        {/* Document checklist header */}
+        {/* Editorial intro - describes the service/process */}
+        <DocumentEditorialIntro content={trademarkContent} />
+
+        {/* Who Needs This - section 01 */}
+        <DocumentWhoNeedsThis content={trademarkContent} sectionNumber="01" />
+
+        {/* Practical intro from config - right before checklist */}
+        <ToolIntroSection text={config.intro} />
+
+        {/* Document checklist header - section 02 */}
         <div className="mb-6">
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-[10px] text-muted-foreground">02</span>
@@ -128,7 +131,7 @@ export default function TrademarkDocumentsPage() {
           </p>
         </div>
 
-        {/* Document checklist */}
+        {/* Document checklist - CTA hidden, will be rendered separately below */}
         <DocumentChecklistContent
           categories={trademarkDocuments}
           pageTitle="Trademark Registration"
@@ -137,22 +140,34 @@ export default function TrademarkDocumentsPage() {
           ctaDescription="Ollvy handles complete trademark registration - from search to filing to monitoring. Protect your brand with experienced IP attorneys."
           ctaButtonText="Register Trademark"
           ctaButtonHref="/services/trademark-registration"
+          hideCta
         />
 
-        {/* Step-by-step process */}
-        <DocumentSteps content={trademarkContent} />
+        {/* Step-by-step process - section 03 */}
+        <DocumentSteps content={trademarkContent} sectionNumber="03" />
 
-        {/* FAQ section */}
-        <DocumentFAQSection content={trademarkContent} />
+        {/* FAQ section from content - section 04 */}
+        <DocumentFAQSection content={trademarkContent} sectionNumber="04" />
 
-        {/* Common mistakes */}
-        <DocumentCommonMistakes content={trademarkContent} />
+        {/* Common mistakes - section 05 */}
+        <DocumentCommonMistakes content={trademarkContent} sectionNumber="05" />
 
-        {/* Next steps */}
-        <DocumentNextSteps content={trademarkContent} />
+        {/* Next steps - section 06 */}
+        <DocumentNextSteps content={trademarkContent} sectionNumber="06" />
 
-        {/* New FAQ section from config - at the very bottom */}
+        {/* CTA Section - moved to end, before FAQs */}
+        <DocumentCTA
+          title="Ready to protect your brand?"
+          description="Ollvy handles complete trademark registration - from search to filing to monitoring. Protect your brand with experienced IP attorneys."
+          buttonText="Register Trademark"
+          buttonHref="/services/trademark-registration"
+        />
+
+        {/* More FAQs from config - section 07 */}
         <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
+
+        {/* Last reviewed - at the very bottom like service pages */}
+        <ToolLastReviewed lastReviewed={config.lastReviewed} sources={config.reviewSources} />
       </div>
     </div>
   )

@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function GSTLatePenaltyPage() {
   return (
-    <ToolPageWrapper config={gstLateFilingPage}>
+    <ToolPageWrapper config={gstLateFilingPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <GSTLateFilingCalculator />
       </Suspense>

@@ -7,6 +7,22 @@ interface Props {
 }
 
 /**
+ * Wraps numbers (including currency, percentages, and numeric values) in font-mono spans
+ */
+function formatWithMonoNumbers(text: string): React.ReactNode {
+  // Match: ₹ amounts, percentages, plain numbers with optional commas/decimals, and ranges like "7-10"
+  const parts = text.split(/(₹[\d,]+(?:\.\d+)?(?:\s*(?:Cr|L|K|crore|lakh))?|\d+(?:,\d+)*(?:\.\d+)?%?(?:\s*(?:Cr|L|K|crore|lakh|days?|years?|months?))?|\d+-\d+)/gi)
+
+  return parts.map((part, i) => {
+    // Check if this part contains numbers
+    if (/^₹?[\d,.-]+(?:\.\d+)?%?(?:\s*(?:Cr|L|K|crore|lakh|days?|years?|months?))?$/i.test(part) || /^\d+-\d+$/.test(part)) {
+      return <span key={i} className="font-mono">{part}</span>
+    }
+    return part
+  })
+}
+
+/**
  * Renders a comparison/reference table inside a LearnSection.
  *
  * Used for:
@@ -50,7 +66,7 @@ export function LearnSectionTable({ table }: Props) {
                   key={cellIndex}
                   className="px-3 py-2 text-muted-foreground"
                 >
-                  {cell}
+                  {formatWithMonoNumbers(cell)}
                 </td>
               ))}
             </tr>

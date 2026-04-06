@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function Page() {
   return (
-    <ToolPageWrapper config={tdsLateFilingPage}>
+    <ToolPageWrapper config={tdsLateFilingPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <TDSLateFilingCalculator />
       </Suspense>

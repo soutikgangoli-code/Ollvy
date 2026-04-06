@@ -1,22 +1,21 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, ArrowRight, FileText, History } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import type { ToolPageConfig } from '@/lib/tools/types'
 
 /**
  * Renders the intro section from ToolPageConfig for document checklist pages
- * Placed at the very top of the page, above the existing content
+ * Placed immediately before the document checklist widget
  */
 export function ToolIntroSection({ text }: { text: string }) {
   const paragraphs = text.split('\n\n').filter(Boolean)
 
   return (
-    <section className="mb-10">
-      <div className="flex items-baseline gap-3 mb-4">
-        <span className="font-mono text-[10px] text-muted-foreground">00</span>
-        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-          Overview
-        </h2>
-      </div>
+    <section className="mb-8">
       <div className="prose prose-sm dark:prose-invert max-w-none">
         {paragraphs.map((paragraph, index) => (
           <p key={index} className="text-muted-foreground leading-relaxed mb-4 last:mb-0">
@@ -65,6 +64,144 @@ export function ToolFAQSection({ faqs, sectionNumber }: { faqs: ToolPageConfig['
           </div>
         ))}
       </div>
+    </section>
+  )
+}
+
+/**
+ * Standalone CTA section - used when CTA is separated from DocumentChecklistContent
+ */
+export function DocumentCTA({
+  title,
+  description,
+  buttonText,
+  buttonHref,
+  penaltyCalcHref,
+  penaltyCalcText,
+}: {
+  title: string
+  description: string
+  buttonText: string
+  buttonHref: string
+  penaltyCalcHref?: string
+  penaltyCalcText?: string
+}) {
+  return (
+    <section className="mt-16 py-10 text-center">
+      <h3 className="text-xl font-semibold text-foreground">{title}</h3>
+      <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto leading-relaxed">
+        {description}
+      </p>
+      <Button className="mt-6 h-12 px-8" size="lg" asChild>
+        <Link href={buttonHref}>
+          {buttonText}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Link>
+      </Button>
+      {penaltyCalcHref && (
+        <p className="mt-4">
+          <Link
+            href={penaltyCalcHref}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+          >
+            {penaltyCalcText || 'Calculate late filing penalty'}
+            <ChevronRight size={12} />
+          </Link>
+        </p>
+      )}
+    </section>
+  )
+}
+
+/**
+ * How we reviewed section - matches service page HowWeReviewed component exactly
+ * Has tabs for Sources and History
+ */
+export function ToolLastReviewed({
+  lastReviewed,
+  sources = []
+}: {
+  lastReviewed: string
+  sources?: Array<{ name: string; url: string; description: string }>
+}) {
+  const [activeTab, setActiveTab] = useState<'sources' | 'history'>('sources')
+
+  return (
+    <section className="mt-16 pt-10 border-t border-border">
+      <h3 className="text-sm font-semibold text-foreground mb-1">
+        How we reviewed this page
+      </h3>
+      <p className="text-xs text-muted-foreground mb-5 leading-relaxed max-w-[560px]">
+        The penalty amounts, deadlines, and regulatory requirements on this page
+        are sourced directly from official government portals. We do not use
+        secondary sources. When regulations change, we update the page.
+      </p>
+
+      {/* Tabs */}
+      <div className="flex gap-0 border-b border-border mb-5">
+        {(['sources', 'history'] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={cn(
+              'flex items-center gap-1.5 px-4 py-2 text-xs font-medium border-b-2 -mb-px transition-colors capitalize',
+              activeTab === tab
+                ? 'border-foreground text-foreground'
+                : 'border-transparent text-muted-foreground'
+            )}
+          >
+            {tab === 'sources' ? <FileText size={11} /> : <History size={11} />}
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === 'sources' && (
+        <div>
+          {sources.length > 0 ? (
+            <ul className="space-y-3">
+              {sources.map((source) => (
+                <li key={source.name} className="flex items-start gap-3">
+                  <div className="w-1 h-1 rounded-full bg-muted-foreground mt-2 shrink-0" />
+                  <div>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-medium text-foreground hover:underline inline-flex items-center gap-1"
+                    >
+                      {source.name}
+                      <span className="opacity-50">↗</span>
+                    </a>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {source.description}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Sources will be added soon.
+            </p>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'history' && (
+        <div>
+          <p className="text-xs text-muted-foreground">
+            Last reviewed:{' '}
+            <span className="text-foreground font-medium">
+              {lastReviewed}
+            </span>
+          </p>
+          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+            Penalty amounts and deadlines are manually verified against source
+            portals when any regulatory update is announced.
+          </p>
+        </div>
+      )}
     </section>
   )
 }

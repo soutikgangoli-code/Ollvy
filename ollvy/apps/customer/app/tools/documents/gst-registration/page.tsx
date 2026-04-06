@@ -1,12 +1,12 @@
 import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
-import { DocumentPageIntro } from '@/components/tools/DocumentPageIntro'
+import { DocumentTimelineCost, DocumentEditorialIntro, DocumentWhoNeedsThis } from '@/components/tools/DocumentPageIntro'
 import { DocumentSteps } from '@/components/tools/DocumentSteps'
 import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
-import { ToolIntroSection, ToolIntroCTA, ToolFAQSection } from '@/components/tools/DocumentPageToolExtensions'
+import { ToolIntroSection, DocumentCTA, ToolFAQSection, ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
 import { gstDocuments } from '@/lib/data/document-checklists'
 import { gstRegistrationContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
@@ -101,12 +101,6 @@ export default function GSTDocumentsPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
         />
 
-        {/* New intro section from config - at the very top */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* CTA link after intro */}
-        <ToolIntroCTA config={config} />
-
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
           h1="How to Register for GST in India"
@@ -114,10 +108,19 @@ export default function GSTDocumentsPage() {
           href="/tools/documents/gst-registration"
         />
 
-        {/* Educational intro content */}
-        <DocumentPageIntro content={gstRegistrationContent} />
+        {/* Timeline and Government Fee bar */}
+        <DocumentTimelineCost content={gstRegistrationContent} />
 
-        {/* Document checklist header */}
+        {/* Editorial intro - describes the service/process */}
+        <DocumentEditorialIntro content={gstRegistrationContent} />
+
+        {/* Who Needs This - section 01 */}
+        <DocumentWhoNeedsThis content={gstRegistrationContent} sectionNumber="01" />
+
+        {/* Practical intro from config - right before checklist */}
+        <ToolIntroSection text={config.intro} />
+
+        {/* Document checklist header - section 02 */}
         <div className="mb-6">
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-[10px] text-muted-foreground">02</span>
@@ -128,7 +131,7 @@ export default function GSTDocumentsPage() {
           </p>
         </div>
 
-        {/* Document checklist */}
+        {/* Document checklist - CTA hidden, will be rendered separately below */}
         <DocumentChecklistContent
           categories={gstDocuments}
           pageTitle="GST Registration"
@@ -139,22 +142,36 @@ export default function GSTDocumentsPage() {
           ctaButtonHref="/services/gst-registration"
           penaltyCalcHref="/tools/penalty-calculator/gst-late-filing"
           penaltyCalcText="Calculate GST late filing penalty"
+          hideCta
         />
 
-        {/* Step-by-step process */}
-        <DocumentSteps content={gstRegistrationContent} />
+        {/* Step-by-step process - section 03 */}
+        <DocumentSteps content={gstRegistrationContent} sectionNumber="03" />
 
-        {/* FAQ section */}
-        <DocumentFAQSection content={gstRegistrationContent} />
+        {/* FAQ section from content - section 04 */}
+        <DocumentFAQSection content={gstRegistrationContent} sectionNumber="04" />
 
-        {/* Common mistakes */}
-        <DocumentCommonMistakes content={gstRegistrationContent} />
+        {/* Common mistakes - section 05 */}
+        <DocumentCommonMistakes content={gstRegistrationContent} sectionNumber="05" />
 
-        {/* Next steps */}
-        <DocumentNextSteps content={gstRegistrationContent} />
+        {/* Next steps - section 06 */}
+        <DocumentNextSteps content={gstRegistrationContent} sectionNumber="06" />
 
-        {/* New FAQ section from config - at the very bottom */}
+        {/* CTA Section - moved to end, before FAQs */}
+        <DocumentCTA
+          title="Ready to get your GST number?"
+          description="Get started with Ollvy. We handle the entire GST registration process - from document verification to ARN tracking to GSTIN delivery."
+          buttonText="Start GST Registration"
+          buttonHref="/services/gst-registration"
+          penaltyCalcHref="/tools/penalty-calculator/gst-late-filing"
+          penaltyCalcText="Calculate GST late filing penalty"
+        />
+
+        {/* More FAQs from config - section 07 */}
         <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
+
+        {/* Last reviewed - at the very bottom like service pages */}
+        <ToolLastReviewed lastReviewed={config.lastReviewed} sources={config.reviewSources} />
       </div>
     </div>
   )

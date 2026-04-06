@@ -26,19 +26,14 @@ function parseTimeline(timeline: string) {
   return { number: null, unit: mainPart, note: parts.length > 1 ? parts.slice(1).join(' | ') : null }
 }
 
-export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
+/**
+ * Timeline and Government Fee bar - shown at top of document pages
+ */
+export function DocumentTimelineCost({ content }: DocumentPageIntroProps) {
   const timeline = parseTimeline(content.intro.timeline)
 
   return (
-    <div className="mb-12 space-y-10">
-      {/* Main description */}
-      <div className="text-sm text-muted-foreground leading-relaxed space-y-4">
-        {content.intro.description.split('\n\n').map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
-        ))}
-      </div>
-
-      {/* Stats - Timeline & Cost */}
+    <div className="mb-10">
       <div className="grid grid-cols-[35%_1px_1fr] gap-6">
         <div>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
@@ -63,47 +58,82 @@ export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
         <div>
           <p className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-2">
             <IndianRupee className="h-3 w-3" />
-            Cost
+            Government Fee
           </p>
           <div className="space-y-1">
-            {content.intro.cost.split('|').map((part, index) => (
-              <p key={index} className="font-mono text-sm text-foreground">
-                {part.trim()}
-              </p>
-            ))}
+            {content.intro.cost.split('|')
+              .filter(part => part.toLowerCase().includes('government'))
+              .map((part, index) => (
+                <p key={index} className="font-mono text-sm text-foreground">
+                  {part.trim().replace(/^Government fee:\s*/i, '')}
+                </p>
+              ))}
           </div>
         </div>
       </div>
+    </div>
+  )
+}
 
-      {/* Who needs this */}
-      <div>
-        <div className="mb-3">
-          <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[10px] text-muted-foreground">01</span>
-            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-              Who needs {content.slug.includes('itr') ? 'to file' : 'this'}?
-            </h2>
-          </div>
+/**
+ * Editorial intro text - describes the service/process
+ */
+export function DocumentEditorialIntro({ content }: DocumentPageIntroProps) {
+  return (
+    <div className="mb-10 text-sm text-muted-foreground leading-relaxed space-y-4">
+      {content.intro.description.split('\n\n').map((paragraph, index) => (
+        <p key={index}>{paragraph}</p>
+      ))}
+    </div>
+  )
+}
+
+/**
+ * "Who needs this" section
+ */
+export function DocumentWhoNeedsThis({ content, sectionNumber = '01' }: DocumentPageIntroProps & { sectionNumber?: string }) {
+  return (
+    <div className="mb-10">
+      <div className="mb-3">
+        <div className="flex items-baseline gap-3">
+          <span className="font-mono text-[10px] text-muted-foreground">{sectionNumber}</span>
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+            Who needs {content.slug.includes('itr') ? 'to file' : 'this'}?
+          </h2>
         </div>
+      </div>
 
-        <div className="space-y-1.5">
-          {content.intro.whoNeeds.map((item, index) => (
-            <div
-              key={index}
-              className="p-3 rounded-xl border border-border/50 bg-card hover:border-border hover:bg-muted/50 transition-all"
-            >
-              <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-lg bg-muted border border-border/50 flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                </div>
-                <div className="flex-1 min-w-0 pt-1.5">
-                  <p className="text-sm text-muted-foreground">{item}</p>
-                </div>
+      <div className="space-y-1.5">
+        {content.intro.whoNeeds.map((item, index) => (
+          <div
+            key={index}
+            className="p-3 rounded-xl border border-border/50 bg-card hover:border-border hover:bg-muted/50 transition-all"
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-lg bg-muted border border-border/50 flex items-center justify-center shrink-0">
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <div className="flex-1 min-w-0 pt-1.5">
+                <p className="text-sm text-muted-foreground">{item}</p>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
+    </div>
+  )
+}
+
+/**
+ * Combined component for backward compatibility - includes all sections
+ * @deprecated Use individual components (DocumentTimelineCost, DocumentEditorialIntro, DocumentWhoNeedsThis) instead
+ */
+export function DocumentPageIntro({ content }: DocumentPageIntroProps) {
+  return (
+    <div className="mb-12 space-y-10">
+      <DocumentEditorialIntro content={content} />
+      <DocumentTimelineCost content={content} />
+      <DocumentWhoNeedsThis content={content} />
     </div>
   )
 }

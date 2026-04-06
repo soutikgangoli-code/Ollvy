@@ -15,7 +15,6 @@ import { CompletionStats } from './CompletionStats'
 import { RelatedServices } from './RelatedServices'
 import { HowWeReviewed } from './HowWeReviewed'
 import { LearnSectionTable } from '@/components/guides/LearnSectionTable'
-import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -47,6 +46,16 @@ interface GeoContext {
   state: string
 }
 
+// Mapping from service slug to document checklist page path
+const documentChecklistPaths: Record<string, string> = {
+  'pvt-ltd-incorporation': '/tools/documents/private-limited-company',
+  'llp-incorporation': '/tools/documents/llp',
+  'gst-registration': '/tools/documents/gst-registration',
+  'trademark-registration': '/tools/documents/trademark',
+  'business-itr': '/tools/documents/business-itr',
+  'cloud-kitchen-setup': '/tools/documents/fssai',
+}
+
 interface UnifiedServicePageProps {
   service: DBServiceConfig
   pricing: ServicePricingData | null
@@ -62,7 +71,6 @@ const SECTIONS = [
   { id: 'why-ollvy', label: 'Why Ollvy' },
   { id: 'risks', label: 'Risks' },
   { id: 'reviews', label: 'Reviews' },
-  { id: 'documents', label: 'Documents' },
   { id: 'faqs', label: 'FAQs' },
 ] as const
 
@@ -306,7 +314,6 @@ export function UnifiedServicePage({
     'why-ollvy': null,
     risks: null,
     reviews: null,
-    documents: null,
     faqs: null,
   })
 
@@ -793,7 +800,7 @@ export function UnifiedServicePage({
                     WHAT YOU GET
                   </p>
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
-                    Everything included for <span className="font-mono">₹{displayTotalOllvyFee.toLocaleString('en-IN')}</span>
+                    Everything included
                   </h2>
                   <p className="text-sm text-muted-foreground mb-10">
                     What your CA handles on your behalf. Nothing hidden.
@@ -899,6 +906,17 @@ export function UnifiedServicePage({
                       Prepare these documents before starting the process.
                     </p>
                     <LearnSectionTable table={staticConfig.documents} />
+                    {documentChecklistPaths[service.slug] && (
+                      <div className="mt-6">
+                        <Link
+                          href={documentChecklistPaths[service.slug]}
+                          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          See full document checklist
+                          <ArrowRight size={14} />
+                        </Link>
+                      </div>
+                    )}
                   </section>
                 )}
 
@@ -1241,22 +1259,6 @@ export function UnifiedServicePage({
                       </Card>
                     </div>
                   )}
-                </section>
-
-                {/* Section: Documents */}
-                <section
-                  id="documents"
-                  ref={(el) => { sectionRefs.current.documents = el }}
-                  className="py-16 border-b border-border scroll-mt-28"
-                >
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
-                    DOCUMENTS REQUIRED
-                  </p>
-                  <DocumentChecklist
-                    serviceSlug={service.slug}
-                    serviceName={service.shortName}
-                    showSectionHeader={true}
-                  />
                 </section>
 
                 {/* Section: FAQs */}

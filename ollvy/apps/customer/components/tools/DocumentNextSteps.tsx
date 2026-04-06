@@ -4,16 +4,22 @@ import type { DocumentPageContent } from '@/lib/tools/document-content'
 
 interface DocumentNextStepsProps {
   content: DocumentPageContent
+  sectionNumber?: string
 }
 
-export function DocumentNextSteps({ content }: DocumentNextStepsProps) {
+export function DocumentNextSteps({ content, sectionNumber }: DocumentNextStepsProps) {
   if (!content.nextSteps || content.nextSteps.length === 0) {
     return null
   }
 
   return (
     <div className="mt-12">
-      <h2 className="text-lg font-semibold text-foreground mb-4">Related services</h2>
+      <div className="flex items-baseline gap-3 mb-4">
+        {sectionNumber && (
+          <span className="font-mono text-[10px] text-muted-foreground">{sectionNumber}</span>
+        )}
+        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Related services</h2>
+      </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {content.nextSteps.map((step, index) => (
           <Link

@@ -3,9 +3,10 @@ import type { DocumentPageContent } from '@/lib/tools/document-content'
 
 interface DocumentCommonMistakesProps {
   content: DocumentPageContent
+  sectionNumber?: string
 }
 
-export function DocumentCommonMistakes({ content }: DocumentCommonMistakesProps) {
+export function DocumentCommonMistakes({ content, sectionNumber }: DocumentCommonMistakesProps) {
   if (!content.commonMistakes || content.commonMistakes.length === 0) {
     return null
   }
@@ -13,10 +14,13 @@ export function DocumentCommonMistakes({ content }: DocumentCommonMistakesProps)
   return (
     <div className="mt-12 p-6 rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-amber-500/5">
       <div className="flex items-center gap-3 mb-4">
+        {sectionNumber && (
+          <span className="font-mono text-[10px] text-amber-600 dark:text-amber-500">{sectionNumber}</span>
+        )}
         <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center">
           <AlertTriangle className="h-4 w-4 text-amber-600 dark:text-amber-500" />
         </div>
-        <h2 className="text-lg font-semibold text-foreground">Common mistakes to avoid</h2>
+        <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Common mistakes to avoid</h2>
       </div>
       <ul className="space-y-3">
         {content.commonMistakes.map((mistake, index) => (

@@ -5,6 +5,12 @@ export interface ToolFaq {
   a: string
 }
 
+export interface ReviewSource {
+  name: string
+  url: string
+  description: string
+}
+
 export interface ToolPageConfig {
   slug: string
   title: string               // H1
@@ -22,6 +28,9 @@ export interface ToolPageConfig {
   howToUse: string
 
   faqs: ToolFaq[]
+
+  // Review sources - official government portals
+  reviewSources?: ReviewSource[]
 
   // Internal linking
   relatedServiceSlug: string          // primary CTA
@@ -53,21 +62,25 @@ export function generateToolFAQSchema(config: ToolPageConfig) {
 
 /**
  * Generate breadcrumb JSON-LD schema for tool pages
+ * For penalty calculators: Tools > Penalty Calculators > [Name]
  */
 export function generateToolBreadcrumbSchema(
   category: string,
   title: string,
   canonicalUrl: string
 ) {
-  const categorySlug = category.toLowerCase().replace(/\s+/g, '-')
+  // Penalty calculators use /tools/penalty-calculator path
+  const isPenaltyCalculator = canonicalUrl.includes('/penalty-calculator/')
+  const categoryName = isPenaltyCalculator ? 'Penalty Calculators' : category
+  const categoryPath = isPenaltyCalculator ? 'penalty-calculator' : category.toLowerCase().replace(/\s+/g, '-')
+
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Ollvy', item: 'https://www.ollvy.com' },
-      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://www.ollvy.com/tools' },
-      { '@type': 'ListItem', position: 3, name: category, item: `https://www.ollvy.com/tools/${categorySlug}` },
-      { '@type': 'ListItem', position: 4, name: title, item: canonicalUrl },
+      { '@type': 'ListItem', position: 1, name: 'Tools', item: 'https://www.ollvy.com/tools' },
+      { '@type': 'ListItem', position: 2, name: categoryName, item: `https://www.ollvy.com/tools/${categoryPath}` },
+      { '@type': 'ListItem', position: 3, name: title, item: canonicalUrl },
     ],
   }
 }

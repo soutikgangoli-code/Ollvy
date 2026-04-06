@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function Page() {
   return (
-    <ToolPageWrapper config={shopEstablishmentPage}>
+    <ToolPageWrapper config={shopEstablishmentPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <ShopsEstablishmentCalculator />
       </Suspense>

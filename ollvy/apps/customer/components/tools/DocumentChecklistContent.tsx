@@ -48,6 +48,7 @@ interface DocumentChecklistContentProps {
   pageSubtitle?: string
   penaltyCalcHref?: string
   penaltyCalcText?: string
+  hideCta?: boolean
 }
 
 // Document Detail Panel - shown on the right side
@@ -174,6 +175,7 @@ export function DocumentChecklistContent({
   pageSubtitle,
   penaltyCalcHref,
   penaltyCalcText,
+  hideCta = false,
 }: DocumentChecklistContentProps) {
   const detailPanelRef = useRef<HTMLDivElement>(null)
 
@@ -382,30 +384,32 @@ export function DocumentChecklistContent({
         </div>
       </div>
 
-      {/* CTA Section */}
-      <div className="mt-16 rounded-xl border border-border bg-card p-10 text-center">
-        <h3 className="text-xl font-semibold text-foreground">{ctaTitle}</h3>
-        <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto leading-relaxed">
-          {ctaDescription}
-        </p>
-        <Button className="mt-6 h-12 px-8" size="lg" asChild>
-          <Link href={ctaButtonHref}>
-            {ctaButtonText}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
-        {penaltyCalcHref && (
-          <p className="mt-4">
-            <Link
-              href={penaltyCalcHref}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
-            >
-              {penaltyCalcText || 'Calculate late filing penalty'}
-              <ChevronRight size={12} />
-            </Link>
+      {/* CTA Section - can be hidden via hideCta prop when CTA is rendered separately */}
+      {!hideCta && (
+        <div className="mt-16 py-10 text-center">
+          <h3 className="text-xl font-semibold text-foreground">{ctaTitle}</h3>
+          <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto leading-relaxed">
+            {ctaDescription}
           </p>
-        )}
-      </div>
+          <Button className="mt-6 h-12 px-8" size="lg" asChild>
+            <Link href={ctaButtonHref}>
+              {ctaButtonText}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+          {penaltyCalcHref && (
+            <p className="mt-4">
+              <Link
+                href={penaltyCalcHref}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+              >
+                {penaltyCalcText || 'Calculate late filing penalty'}
+                <ChevronRight size={12} />
+              </Link>
+            </p>
+          )}
+        </div>
+      )}
     </>
   )
 }

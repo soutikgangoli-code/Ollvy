@@ -208,8 +208,8 @@ export default function ToolsPage() {
         {/* Penalty Calculators Section */}
         <div>
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-ollvy-red/10">
-              <Calculator className="h-5 w-5 text-ollvy-red" />
+            <div className="p-2 rounded-lg bg-muted">
+              <Calculator className="h-5 w-5 text-foreground" />
             </div>
             <h2 className="text-2xl font-semibold text-foreground">Penalty Calculators</h2>
           </div>
@@ -219,11 +219,11 @@ export default function ToolsPage() {
           <div className="grid md:grid-cols-2 gap-4">
             {penaltyTools.map((tool) => (
               <Link key={tool.href} href={tool.href}>
-                <Card className="h-full border border-border hover:border-ollvy-red/50 transition-colors cursor-pointer group">
+                <Card className="h-full border border-border hover:border-border transition-colors cursor-pointer group">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center justify-between">
                       {tool.title}
-                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-ollvy-red transition-colors" />
+                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                     </CardTitle>
                     <CardDescription>{tool.description}</CardDescription>
                   </CardHeader>

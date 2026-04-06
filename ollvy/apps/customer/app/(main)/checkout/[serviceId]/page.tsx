@@ -123,8 +123,6 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [razorpayReady, setRazorpayReady] = useState(false)
 
-  // Mobile bottom sheet
-  const [isSheetOpen, setIsSheetOpen] = useState(false)
 
   // Success modal
   const [successModal, setSuccessModal] = useState<{
@@ -798,37 +796,20 @@ export default function CheckoutPage() {
         <div className="lg:hidden">
           <MobileBottomBarComponent
             total={priceBreakdown?.total || 0}
+            serviceFee={priceBreakdown?.serviceFee || 0}
+            govtFees={priceBreakdown?.govtFees || 0}
+            gstAmount={priceBreakdown?.gst || 0}
+            gstRate={priceBreakdown?.gstRate || 18}
             isProcessing={isProcessing}
             canSubmit={canSubmit || false}
             onSubmit={handleCheckout}
-            isSheetOpen={isSheetOpen}
-            setIsSheetOpen={setIsSheetOpen}
-            orderSummary={
-              <OrderSummarySidebar
-                serviceName={service.name}
-                serviceDisplayName={selectedVariantData?.sublabel}
-                serviceFee={priceBreakdown?.serviceFee || 0}
-                govtFees={priceBreakdown?.govtFees || 0}
-                addons={selectedAddons}
-                gstRate={priceBreakdown?.gstRate || 18}
-                gstAmount={priceBreakdown?.gst || 0}
-                total={priceBreakdown?.total || 0}
-                promoInput={promoCode}
-                onPromoChange={setPromoCode}
-                onApplyPromo={handleApplyPromo}
-                onRemovePromo={handleRemovePromo}
-                promoLoading={promoLoading}
-                promoError={promoError}
-                promoApplied={promoApplied}
-                isProcessing={isProcessing}
-                canSubmit={canSubmit || false}
-                onSubmit={handleCheckout}
-                isMobile
-                slaDays={service.sla_working_days || 15}
-                hasGovtProcessing={service.has_govt_processing ?? false}
-                completionMaxDays={service.completion_max_days}
-                completionRangeText={service.completion_range_text}
-              />
+            guaranteedDate={
+              getCompletionEstimate(
+                service.sla_working_days || 15,
+                service.has_govt_processing ?? false,
+                service.completion_max_days,
+                service.completion_range_text
+              )?.guaranteedDate || ''
             }
           />
         </div>
@@ -1082,6 +1063,13 @@ function OrderSummarySidebar({
             ({completionEstimate.govtDisclaimer})
           </p>
         )}
+        {/* Free if not delivered guarantee */}
+        <div className="flex items-center gap-1.5 mt-2 ml-[22px]">
+          <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
+          <span className="text-xs text-[hsl(var(--ollvy-green-fg))]">
+            Free if not delivered by {guaranteedDate}
+          </span>
+        </div>
       </div>
 
       {/* Total amount - prominent */}
@@ -1374,42 +1362,103 @@ function PreCursorSummaryCard({ answers, serviceSlug, serviceId, onEdit }: PreCu
   )
 }
 
-// Mobile Bottom Bar Component
+// Mobile Bottom Bar Component with collapsed/expanded states
 interface MobileBottomBarComponentProps {
   total: number
+  serviceFee: number
+  govtFees: number
+  gstAmount: number
+  gstRate: number
   isProcessing: boolean
   canSubmit: boolean
   onSubmit: () => void
-  isSheetOpen: boolean
-  setIsSheetOpen: (open: boolean) => void
-  orderSummary: React.ReactNode
+  guaranteedDate: string
 }
 
 function MobileBottomBarComponent({
   total,
+  serviceFee,
+  govtFees,
+  gstAmount,
+  gstRate,
   isProcessing,
   canSubmit,
   onSubmit,
-  isSheetOpen,
-  setIsSheetOpen,
-  orderSummary,
+  guaranteedDate,
 }: MobileBottomBarComponentProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  // Service fee for display = base service + govt fees (combined)
+  const displayServiceFee = serviceFee + govtFees
+
   return (
     <>
-      {/* Fixed bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border p-4 z-40">
-        <div className="flex items-center justify-between gap-4">
-          <button onClick={() => setIsSheetOpen(true)} className="text-left">
-            <p className="text-xs text-muted-foreground">Total</p>
-            <p className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</p>
+      {/* Fixed bottom bar - 76px collapsed */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-40">
+        {/* Expanded breakdown section - slides up */}
+        <div
+          className={cn(
+            'overflow-hidden transition-all duration-300 ease-out',
+            isExpanded ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+          )}
+        >
+          <div className="px-4 pt-4 pb-2 border-b border-border">
+            {/* Fee breakdown */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">Service fee</span>
+                <span className="font-mono text-sm text-foreground">{formatPrice(displayServiceFee)}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-muted-foreground">GST ({gstRate}%)</span>
+                <span className="font-mono text-sm text-foreground">{formatPrice(gstAmount)}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-border">
+                <span className="text-sm font-semibold text-foreground">Total</span>
+                <span className="font-mono text-sm font-bold text-foreground">{formatPrice(total)}</span>
+              </div>
+            </div>
+            {/* Free if not delivered guarantee */}
+            <div className="flex items-center gap-1.5 mt-3">
+              <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
+              <span className="text-xs text-[hsl(var(--ollvy-green-fg))]">
+                Free if not delivered by {guaranteedDate}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Collapsed bar - always visible, 76px */}
+        <div className="flex items-center justify-between gap-4 p-4 h-[76px]">
+          {/* Left side - tappable to toggle expanded */}
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-left flex-1"
+          >
+            {/* Guaranteed by date */}
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
+              <span className="text-xs text-[hsl(var(--ollvy-green-fg))]">
+                Guaranteed by {guaranteedDate}
+              </span>
+            </div>
+            {/* Total with chevron */}
+            <div className="flex items-center gap-1.5">
+              <span className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</span>
+              <ChevronDown
+                className={cn(
+                  'h-4 w-4 text-muted-foreground transition-transform duration-200',
+                  isExpanded ? 'rotate-180' : 'rotate-0'
+                )}
+              />
+            </div>
           </button>
+
+          {/* Right side - Pay Now button */}
           <Button
-            onClick={canSubmit ? onSubmit : () => setIsSheetOpen(true)}
-            disabled={isProcessing}
-            className={cn(
-              'h-11 px-6 text-base font-medium rounded-md',
-              canSubmit ? 'bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white' : 'bg-[hsl(var(--ollvy-green))]/50 text-white'
-            )}
+            onClick={onSubmit}
+            disabled={isProcessing || !canSubmit}
+            className="h-11 px-6 text-base font-medium rounded-md bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white"
           >
             {isProcessing ? (
               <>
@@ -1426,29 +1475,8 @@ function MobileBottomBarComponent({
         </div>
       </div>
 
-      {/* Overlay */}
-      {isSheetOpen && (
-        <div className="fixed inset-0 bg-black/50 z-50" onClick={() => setIsSheetOpen(false)} />
-      )}
-
-      {/* Bottom sheet */}
-      <div
-        className={cn(
-          'fixed bottom-0 left-0 right-0 bg-background rounded-t-2xl z-50 transition-transform duration-300 max-h-[85vh] overflow-y-auto',
-          isSheetOpen ? 'translate-y-0' : 'translate-y-full'
-        )}
-      >
-        <div className="sticky top-0 bg-background border-b border-border p-4 flex items-center justify-between">
-          <h3 className="font-semibold text-foreground">Order Summary</h3>
-          <button onClick={() => setIsSheetOpen(false)} className="p-1 hover:bg-muted rounded">
-            <span className="text-muted-foreground">✕</span>
-          </button>
-        </div>
-        <div className="p-4">{orderSummary}</div>
-      </div>
-
-      {/* Spacer */}
-      <div className="h-20" />
+      {/* Spacer - accounts for collapsed bar height */}
+      <div className="h-[76px]" />
     </>
   )
 }

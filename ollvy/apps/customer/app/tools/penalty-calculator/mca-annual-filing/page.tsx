@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function Page() {
   return (
-    <ToolPageWrapper config={mcaFilingPage}>
+    <ToolPageWrapper config={mcaFilingPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <MCAFilingCalculator />
       </Suspense>

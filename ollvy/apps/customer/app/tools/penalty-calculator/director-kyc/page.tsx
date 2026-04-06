@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function Page() {
   return (
-    <ToolPageWrapper config={directorKycPage}>
+    <ToolPageWrapper config={directorKycPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <DirectorKYCCalculator />
       </Suspense>

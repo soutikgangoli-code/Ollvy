@@ -14,6 +14,18 @@ export const pvtLtdChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'Register Your Pvt Ltd Company',
   relatedCalculatorSlugs: ['mca-annual-filing', 'director-kyc'],
   relatedLearnSlug: 'pvt-ltd-vs-llp',
+  reviewSources: [
+    {
+      name: 'Companies Act 2013 - MCA',
+      url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/acts.html',
+      description: 'Ministry of Corporate Affairs - Companies Act 2013 and related rules',
+    },
+    {
+      name: 'MCA Company Registration Portal',
+      url: 'https://www.mca.gov.in/MinistryV2/companyregistration.html',
+      description: 'Official MCA page for company incorporation process and SPICe+ form',
+    },
+  ],
 
   intro: `Registering a Private Limited Company requires documents from all directors and shareholders, plus proof of the registered office address. Missing or mismatched documents are the most common cause of delays and MCA rejections - getting everything right before filing saves weeks.
 
@@ -70,6 +82,18 @@ export const llpChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'Register Your LLP',
   relatedCalculatorSlugs: ['mca-annual-filing'],
   relatedLearnSlug: 'pvt-ltd-vs-llp',
+  reviewSources: [
+    {
+      name: 'LLP Act 2008 - MCA',
+      url: 'https://www.mca.gov.in/MinistryV2/LLPAct2008.html',
+      description: 'Ministry of Corporate Affairs - Limited Liability Partnership Act 2008',
+    },
+    {
+      name: 'LLP Portal - MCA',
+      url: 'https://llp.gov.in/welcome.html',
+      description: 'Official MCA portal for LLP incorporation and FiLLiP form filing',
+    },
+  ],
 
   intro: `LLP registration through the FiLLiP form requires PAN, Aadhaar, and address proof from all designated partners, plus the registered office address proof. The process is similar to Pvt Ltd incorporation but uses different forms and has some key differences.
 
@@ -126,6 +150,18 @@ export const gstChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'Get GST Registration',
   relatedCalculatorSlugs: ['gst-late-filing'],
   relatedLearnSlug: 'do-i-need-gst-registration',
+  reviewSources: [
+    {
+      name: 'CBIC GST Portal',
+      url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html',
+      description: 'Central Board of Indirect Customs and Taxes - GST information and rates',
+    },
+    {
+      name: 'GST Portal - Registration Help',
+      url: 'https://www.gst.gov.in/help/Registration',
+      description: 'Official GST Portal guidance on registration process and documents',
+    },
+  ],
 
   intro: `GST registration through GST REG-01 requires different documents depending on your business structure. The most common reason for delay or rejection is an address mismatch - the address on your electricity bill must match your application exactly, including floor, area, and PIN code.
 
@@ -182,6 +218,18 @@ export const trademarkChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'Register Your Trademark',
   relatedCalculatorSlugs: [],
   relatedLearnSlug: 'do-i-need-trademark-registration',
+  reviewSources: [
+    {
+      name: 'IP India - Trade Marks',
+      url: 'https://ipindia.gov.in/trade-marks.htm',
+      description: 'Controller General of Patents, Designs and Trade Marks - official trademark information',
+    },
+    {
+      name: 'IP India - Trademark Public Search',
+      url: 'https://ipindiaonline.gov.in/tmrpublicsearch/frmmain.aspx',
+      description: 'Official trademark search portal for checking existing registrations',
+    },
+  ],
 
   intro: `Trademark registration with the IP India Trademark Registry requires fewer documents than most government filings - primarily proof of identity for the applicant and the mark itself. The most technically specific requirement is the logo file format if you are registering a device mark (logo).
 
@@ -238,6 +286,18 @@ export const individualItrChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'File Your ITR',
   relatedCalculatorSlugs: ['itr-late-filing'],
   relatedLearnSlug: 'do-i-need-to-file-itr',
+  reviewSources: [
+    {
+      name: 'Income Tax Portal - Help Section',
+      url: 'https://www.incometax.gov.in/iec/foportal/help',
+      description: 'Official e-filing portal guidance on ITR forms and filing process',
+    },
+    {
+      name: 'Income Tax Act 1961',
+      url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf',
+      description: 'The Income Tax Act with all sections and schedules',
+    },
+  ],
 
   intro: `Filing an individual income tax return for FY 2024-25 requires gathering documents from multiple sources - your employer, your bank, and various investment platforms. Missing even one document (like a Form 26AS showing TDS that was not declared) can lead to a notice asking you to explain the discrepancy.
 
@@ -294,6 +354,18 @@ export const businessItrChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'File Business ITR',
   relatedCalculatorSlugs: ['itr-late-filing', 'tds-late-filing'],
   relatedLearnSlug: 'which-itr-form-should-i-use',
+  reviewSources: [
+    {
+      name: 'Income Tax Portal - Help Section',
+      url: 'https://www.incometax.gov.in/iec/foportal/help',
+      description: 'Official e-filing portal guidance on ITR forms and filing process',
+    },
+    {
+      name: 'Income Tax Act 1961',
+      url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf',
+      description: 'The Income Tax Act with all sections and schedules',
+    },
+  ],
 
   intro: `Filing Business ITR for a Private Limited company (ITR-6) or LLP (ITR-5) requires audited financial statements plus several supporting documents that your CA will use to prepare the tax computation.
 
@@ -352,6 +424,18 @@ export const soleProprietorChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'Get GST Registration',
   relatedCalculatorSlugs: ['gst-late-filing'],
   relatedLearnSlug: 'do-i-need-gst-registration',
+  reviewSources: [
+    {
+      name: 'GST Portal',
+      url: 'https://www.gst.gov.in/',
+      description: 'Official Goods and Services Tax Portal for registration and compliance',
+    },
+    {
+      name: 'Udyam Registration Portal',
+      url: 'https://udyamregistration.gov.in/',
+      description: 'Official MSME Udyam Registration portal for small business registration',
+    },
+  ],
 
   intro: `A sole proprietorship has no formal registration process with MCA - there is no certificate from any authority that says "you are now a proprietorship." Instead, a sole proprietor establishes business identity through a combination of registrations that together prove the existence of the business.
 
@@ -408,6 +492,18 @@ export const partnershipChecklistPage: ToolPageConfig = {
   relatedServiceLabel: 'Register Your Partnership',
   relatedCalculatorSlugs: ['itr-late-filing'],
   relatedLearnSlug: 'pvt-ltd-vs-llp',
+  reviewSources: [
+    {
+      name: 'Indian Partnership Act 1932',
+      url: 'https://www.indiacode.nic.in/handle/123456789/2412',
+      description: 'The Indian Partnership Act 1932 - governing law for partnership firms',
+    },
+    {
+      name: 'Maharashtra Registrar of Firms',
+      url: 'https://firms.maharashtra.gov.in',
+      description: 'State Registrar of Firms portal for partnership registration (Maharashtra)',
+    },
+  ],
 
   intro: `A partnership firm can operate without formal registration, but registering it with the Registrar of Firms provides legal standing to enforce contracts and sue in court. The registration process requires a partnership deed plus identity and address documents for all partners.
 

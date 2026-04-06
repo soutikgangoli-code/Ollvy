@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function Page() {
   return (
-    <ToolPageWrapper config={gstDemandPage}>
+    <ToolPageWrapper config={gstDemandPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <GSTDemandCalculator />
       </Suspense>

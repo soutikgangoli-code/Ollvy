@@ -5,7 +5,7 @@ import { ToolPageWrapper } from '@/components/tools/ToolPageWrapper'
 
 export default function Page() {
   return (
-    <ToolPageWrapper config={dpiitFemaPage}>
+    <ToolPageWrapper config={dpiitFemaPage} showCalculatorSelector>
       <Suspense fallback={<CalculatorSkeleton />}>
         <StartupDPIITCalculator />
       </Suspense>

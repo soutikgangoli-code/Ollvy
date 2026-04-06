@@ -2,15 +2,16 @@ import type { DocumentPageContent } from '@/lib/tools/document-content'
 
 interface DocumentStepsProps {
   content: DocumentPageContent
+  sectionNumber?: string
 }
 
-export function DocumentSteps({ content }: DocumentStepsProps) {
+export function DocumentSteps({ content, sectionNumber = '03' }: DocumentStepsProps) {
   return (
     <div className="mb-12">
       {/* Section header */}
       <div className="mb-4">
         <div className="flex items-baseline gap-3">
-          <span className="font-mono text-[10px] text-muted-foreground">03</span>
+          <span className="font-mono text-[10px] text-muted-foreground">{sectionNumber}</span>
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
             Step-by-step process
           </h2>
