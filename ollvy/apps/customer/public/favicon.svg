@@ -2,7 +2,7 @@
   <rect width="120" height="40" rx="6" fill="white"/>
   <text x="60" y="20" dominant-baseline="middle" text-anchor="middle"
     font-family="system-ui, -apple-system, sans-serif"
-    font-size="28" font-weight="600" fill="#000000" letter-spacing="-0.5">
-    Ollvy
+    font-size="22" font-weight="700" fill="#000000" letter-spacing="6">
+    OLLVY
   </text>
 </svg>

@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
-  <rect width="192" height="192" rx="24" fill="white"/>
-  <text x="96" y="96" dominant-baseline="middle" text-anchor="middle"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="64" fill="white"/>
+  <text x="256" y="280" dominant-baseline="middle" text-anchor="middle"
     font-family="system-ui, -apple-system, sans-serif"
-    font-size="56" font-weight="600" fill="#000000" letter-spacing="-1">
-    Ollvy
+    font-size="100" font-weight="700" fill="#000000" letter-spacing="20">
+    OLLVY
   </text>
 </svg>

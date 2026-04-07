@@ -1,8 +1,10 @@
 import { Star } from 'lucide-react'
 
 export function SocialProofBar() {
+  // On mobile (< lg), trust bar is shown inline in Hero component
+  // This component only renders on desktop (lg+)
   return (
-    <section className="py-10">
+    <section className="hidden lg:block py-10">
       <div className="container">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 px-8 py-5 rounded-2xl border border-border/50 bg-muted/40 backdrop-blur-sm">
           <p className="text-base text-muted-foreground">

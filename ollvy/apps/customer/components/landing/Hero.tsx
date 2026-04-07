@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, Check, Star } from 'lucide-react'
 
 function DashboardMockup() {
   return (
@@ -123,6 +123,22 @@ export function Hero() {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
+            </div>
+
+            {/* Trust bar - mobile only, right below CTA */}
+            <div className="mt-10 lg:hidden">
+              <div className="flex flex-col gap-2 px-4 py-2.5 rounded-xl border border-border/50 bg-muted/40">
+                <p className="text-xs text-muted-foreground">
+                  Trusted by <span className="text-foreground font-medium">100+ businesses</span> across India
+                </p>
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Star key={i} className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+                  ))}
+                  <span className="ml-1 text-xs font-bold text-foreground">4.8</span>
+                  <span className="text-[10px] text-muted-foreground ml-0.5">30+ reviews</span>
+                </div>
+              </div>
             </div>
           </div>
 
