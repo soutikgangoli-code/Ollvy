@@ -10,10 +10,14 @@ export function LoginSuccessBanner() {
   const [mounted, setMounted] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
-  // Get the user's name from Google OAuth metadata
-  const userName = session?.user?.user_metadata?.full_name ||
-                   session?.user?.user_metadata?.name ||
-                   null
+  // Get the user's name from Google OAuth metadata and title case it
+  const rawName = session?.user?.user_metadata?.full_name ||
+                  session?.user?.user_metadata?.name ||
+                  null
+
+  const userName = rawName
+    ? rawName.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+    : null
 
   // Debug: Log session metadata to see what Google provides
   if (showLoginSuccessBanner && session) {
@@ -23,19 +27,16 @@ export function LoginSuccessBanner() {
   // Handle mount animation and auto-dismiss
   useEffect(() => {
     if (showLoginSuccessBanner) {
-      // Small delay for slide-in animation
-      const mountTimer = setTimeout(() => {
-        setMounted(true)
-        setIsVisible(true)
-      }, 100)
+      // Show immediately
+      setMounted(true)
+      setIsVisible(true)
 
-      // Auto-dismiss after 4 seconds
+      // Auto-dismiss after 3 seconds
       const dismissTimer = setTimeout(() => {
         handleDismiss()
-      }, 4000)
+      }, 3000)
 
       return () => {
-        clearTimeout(mountTimer)
         clearTimeout(dismissTimer)
       }
     } else {
