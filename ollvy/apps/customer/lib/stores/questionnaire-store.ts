@@ -29,6 +29,7 @@ interface QuestionnaireState {
   isLoading: boolean
   isSaving: boolean
   isCompleted: boolean
+  hasInitialized: boolean  // True after first successful load attempt completes
   error: string | null
 }
 
@@ -82,6 +83,7 @@ const initialState: QuestionnaireState = {
   isLoading: false,
   isSaving: false,
   isCompleted: false,
+  hasInitialized: false,
   error: null,
 }
 
@@ -130,6 +132,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         if (orderData.questionnaire_completed_at && !forceEdit) {
           set({
             isLoading: false,
+            hasInitialized: true,
             isCompleted: true,
             serviceSlug: servicePackage.slug,
             serviceName: servicePackage.name,
@@ -276,6 +279,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
 
         set({
           isLoading: false,
+          hasInitialized: true,
           serviceSlug: servicePackage.slug,
           serviceName: servicePackage.name,
           questions: questionsData as ServiceQuestion[],
@@ -291,6 +295,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         console.error('Failed to load questionnaire:', error)
         set({
           isLoading: false,
+          hasInitialized: true,
           error: 'Failed to load questionnaire',
         })
       }
@@ -369,6 +374,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
 
         set({
           isLoading: false,
+          hasInitialized: true,
           serviceSlug: servicePackage.slug,
           serviceName: servicePackage.name,
           questions: questionsData as ServiceQuestion[],
@@ -382,6 +388,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         console.error('Failed to load pre-payment questionnaire:', error)
         set({
           isLoading: false,
+          hasInitialized: true,
           error: 'Failed to load eligibility questions',
         })
       }

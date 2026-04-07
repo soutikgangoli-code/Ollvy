@@ -464,6 +464,18 @@ export function UnifiedServicePage({
     return () => observer.disconnect()
   }, [])
 
+  // Hide global header when service sticky header is active
+  useEffect(() => {
+    if (heroVisible) {
+      document.body.classList.remove('service-header-active')
+    } else {
+      document.body.classList.add('service-header-active')
+    }
+    return () => {
+      document.body.classList.remove('service-header-active')
+    }
+  }, [heroVisible])
+
   // JSON-LD structured data for Service
   const serviceJsonLd = {
     '@context': 'https://schema.org',
@@ -530,7 +542,7 @@ export function UnifiedServicePage({
       {/* Sticky top bar - replaces navbar when hero scrolls out */}
       <div
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 bg-background border-b border-border transition-all duration-300',
+          'fixed top-0 left-0 right-0 z-[60] bg-background border-b border-border transition-all duration-300',
           heroVisible
             ? '-translate-y-full opacity-0 pointer-events-none'
             : 'translate-y-0 opacity-100'
@@ -547,9 +559,6 @@ export function UnifiedServicePage({
               <span className="text-muted-foreground">|</span>
               <span className="font-semibold text-foreground">
                 {service.shortName}
-              </span>
-              <span className="hidden sm:inline text-sm text-muted-foreground font-mono">
-                ₹{totalFee.toLocaleString('en-IN')}
               </span>
             </div>
 
@@ -581,13 +590,6 @@ export function UnifiedServicePage({
                 }}
               />
             </nav>
-
-            {/* Right: CTA */}
-            <Button size="sm" asChild>
-              <Link href={getCtaUrl()} prefetch={true}>
-                {ctaLabel}
-              </Link>
-            </Button>
           </div>
         </div>
 
@@ -602,7 +604,7 @@ export function UnifiedServicePage({
                 aria-selected={activeSection === section.id}
                 onClick={() => scrollToSection(section.id)}
                 className={cn(
-                  'shrink-0 px-3 py-3 text-sm font-medium transition-colors whitespace-nowrap border-b-2',
+                  'shrink-0 px-3 py-3 text-xs font-medium transition-colors whitespace-nowrap border-b-2',
                   activeSection === section.id
                     ? 'text-foreground border-foreground'
                     : 'text-muted-foreground border-transparent hover:text-foreground'

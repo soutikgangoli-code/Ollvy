@@ -114,22 +114,8 @@ export default function LLPDocumentsPage() {
         {/* Editorial intro - describes the service/process */}
         <DocumentEditorialIntro content={llpContent} />
 
-        {/* Who Needs This - section 01 */}
-        <DocumentWhoNeedsThis content={llpContent} sectionNumber="01" />
-
-        {/* Practical intro from config - right before checklist */}
+        {/* Practical intro from config */}
         <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist header - section 02 */}
-        <div className="mb-6">
-          <div className="flex items-baseline gap-3">
-            <span className="font-mono text-[10px] text-muted-foreground">02</span>
-            <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Documents required</h2>
-          </div>
-          <p className="text-xs text-muted-foreground mt-1 ml-7">
-            Click on any document to see detailed requirements and how to obtain it
-          </p>
-        </div>
 
         {/* Document checklist - CTA hidden, will be rendered separately below */}
         <DocumentChecklistContent
@@ -145,17 +131,20 @@ export default function LLPDocumentsPage() {
           hideCta
         />
 
-        {/* Step-by-step process - section 03 */}
-        <DocumentSteps content={llpContent} sectionNumber="03" />
+        {/* Who Needs This - section 01 */}
+        <DocumentWhoNeedsThis content={llpContent} sectionNumber="01" />
 
-        {/* FAQ section from content - section 04 */}
-        <DocumentFAQSection content={llpContent} sectionNumber="04" />
+        {/* Step-by-step process - section 02 */}
+        <DocumentSteps content={llpContent} sectionNumber="02" />
 
-        {/* Common mistakes - section 05 */}
-        <DocumentCommonMistakes content={llpContent} sectionNumber="05" />
+        {/* FAQ section from content - section 03 */}
+        <DocumentFAQSection content={llpContent} sectionNumber="03" />
 
-        {/* Next steps - section 06 */}
-        <DocumentNextSteps content={llpContent} sectionNumber="06" />
+        {/* Common mistakes - section 04 */}
+        <DocumentCommonMistakes content={llpContent} sectionNumber="04" />
+
+        {/* Next steps - section 05 */}
+        <DocumentNextSteps content={llpContent} sectionNumber="05" />
 
         {/* CTA Section - moved to end, before FAQs */}
         <DocumentCTA
@@ -167,8 +156,8 @@ export default function LLPDocumentsPage() {
           penaltyCalcText="Calculate MCA filing penalty"
         />
 
-        {/* More FAQs from config - section 07 */}
-        <ToolFAQSection faqs={config.faqs} sectionNumber="07" />
+        {/* More FAQs from config - section 06 */}
+        <ToolFAQSection faqs={config.faqs} sectionNumber="06" />
 
         {/* Last reviewed - at the very bottom like service pages */}
         <ToolLastReviewed lastReviewed={config.lastReviewed} sources={config.reviewSources} />

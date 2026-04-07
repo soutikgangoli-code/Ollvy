@@ -48,6 +48,7 @@ export function QuestionnaireWizard({
     isLoading,
     isSaving,
     isCompleted,
+    hasInitialized,
     error,
     loadQuestionnaire,
     loadPrePaymentQuestionnaire,
@@ -68,12 +69,13 @@ export function QuestionnaireWizard({
   }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadExisting, loadQuestionnaire, loadPrePaymentQuestionnaire])
 
   // Handle case where there are no pre-payment questions (redirect to checkout)
-  // Only trigger after data has loaded (serviceName is set)
+  // Only trigger after data has loaded (serviceName is set) AND store has initialized
+  // The hasInitialized guard prevents redirect during the reset window before questions load
   useEffect(() => {
-    if (!isLoading && mode === 'pre_payment' && serviceName && steps.length === 0) {
+    if (!isLoading && hasInitialized && mode === 'pre_payment' && serviceName && steps.length === 0) {
       onComplete?.({})
     }
-  }, [isLoading, mode, serviceName, steps.length, onComplete])
+  }, [isLoading, hasInitialized, mode, serviceName, steps.length, onComplete])
 
   // Get current step data
   const currentStepData = useMemo(() => {

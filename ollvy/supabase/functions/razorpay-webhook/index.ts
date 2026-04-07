@@ -495,24 +495,42 @@ serve(async (req) => {
     }
 
     // 2. Create chat conversation for this order (if not already created by trigger)
+    // The AFTER INSERT trigger should have created it, but check as fallback
     if (!order.chat_conversation_id) {
-      const { data: chatConversation, error: chatError } = await supabase
+      // Check if conversation already exists for this order (trigger may have created it)
+      const { data: existingChat } = await supabase
         .from('chat_conversations')
-        .insert({
-          order_id: order.id,
-          user_id: order.user_id,
-        })
-        .select()
+        .select('id')
+        .eq('order_id', order.id)
         .single();
 
-      if (chatError) {
-        console.error('Failed to create chat conversation:', chatError);
-      } else {
-        // Link chat to order
+      if (existingChat) {
+        // Trigger created the chat but order wasn't updated - link it now
         await supabase
           .from('orders')
-          .update({ chat_conversation_id: chatConversation.id })
+          .update({ chat_conversation_id: existingChat.id })
           .eq('id', order.id);
+        console.log(`Linked existing chat conversation ${existingChat.id} to order ${order.id}`);
+      } else {
+        // No chat exists - create one (fallback for edge cases)
+        const { data: chatConversation, error: chatError } = await supabase
+          .from('chat_conversations')
+          .insert({
+            order_id: order.id,
+            user_id: order.user_id,
+          })
+          .select()
+          .single();
+
+        if (chatError) {
+          console.error('Failed to create chat conversation:', chatError);
+        } else {
+          // Link chat to order
+          await supabase
+            .from('orders')
+            .update({ chat_conversation_id: chatConversation.id })
+            .eq('id', order.id);
+        }
       }
     } else {
       console.log(`Chat conversation already exists for order ${order.id}`);

@@ -2,10 +2,10 @@ import sharp from 'sharp'
 
 const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
-  <rect width="192" height="192" fill="white"/>
+  <rect width="192" height="192" rx="24" fill="white"/>
   <text x="96" y="96" dominant-baseline="middle" text-anchor="middle"
     font-family="system-ui, -apple-system, sans-serif"
-    font-size="32" font-weight="600" fill="#000000">
+    font-size="56" font-weight="600" fill="#000000" letter-spacing="-1">
     Ollvy
   </text>
 </svg>`

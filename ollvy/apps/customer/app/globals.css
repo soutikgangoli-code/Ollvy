@@ -110,7 +110,6 @@ html {
   }
 
   body {
-    overflow-x: hidden;
     width: 100%;
     position: relative;
   }
@@ -241,5 +240,11 @@ textarea,
 .animate-card-expand {
   animation: card-expand 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
+}
+
+/* Hide global header when service page sticky header is active */
+.service-header-active header:first-of-type {
+  opacity: 0;
+  pointer-events: none;
 }
 

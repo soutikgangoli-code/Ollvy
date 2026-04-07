@@ -316,7 +316,7 @@ export function ProductShowcase() {
     const scrollLeft = container.scrollLeft
     const cardWidth = container.offsetWidth / itemsPerView
     const newIndex = Math.round(scrollLeft / cardWidth)
-    setCurrentIndex(Math.min(newIndex, maxIndex))
+    setCurrentIndex(Math.min(Math.max(0, newIndex), maxIndex))
   }, [itemsPerView, maxIndex])
 
   // Scroll to specific index
@@ -328,19 +328,15 @@ export function ProductShowcase() {
     setCurrentIndex(index)
   }, [itemsPerView])
 
-  const canScrollLeft = currentIndex > 0
-  const canScrollRight = currentIndex < maxIndex
-
+  // Infinite loop navigation
   const handlePrev = () => {
-    if (canScrollLeft) {
-      scrollToIndex(currentIndex - 1)
-    }
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : maxIndex
+    scrollToIndex(newIndex)
   }
 
   const handleNext = () => {
-    if (canScrollRight) {
-      scrollToIndex(currentIndex + 1)
-    }
+    const newIndex = currentIndex < maxIndex ? currentIndex + 1 : 0
+    scrollToIndex(newIndex)
   }
 
   return (
@@ -354,16 +350,6 @@ export function ProductShowcase() {
 
         {/* Carousel container */}
         <div className="relative">
-          {/* Left arrow - desktop only */}
-          <button
-            onClick={handlePrev}
-            disabled={!canScrollLeft}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 lg:-translate-x-6 z-10 w-10 h-10 lg:w-12 lg:h-12 items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            aria-label="Previous"
-          >
-            <ChevronLeft className="h-5 w-5 lg:h-6 lg:w-6 text-foreground" />
-          </button>
-
           {/* Scrollable carousel */}
           <div
             ref={scrollContainerRef}
@@ -386,15 +372,39 @@ export function ProductShowcase() {
             ))}
           </div>
 
-          {/* Right arrow - desktop only */}
-          <button
-            onClick={handleNext}
-            disabled={!canScrollRight}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 lg:translate-x-6 z-10 w-10 h-10 lg:w-12 lg:h-12 items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
-            aria-label="Next"
-          >
-            <ChevronRight className="h-5 w-5 lg:h-6 lg:w-6 text-foreground" />
-          </button>
+          {/* Mobile: Dot indicators */}
+          <div className="flex md:hidden justify-center gap-2 mt-6">
+            {FEATURES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => scrollToIndex(i)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  i === currentIndex
+                    ? 'bg-foreground'
+                    : 'bg-muted-foreground/30'
+                }`}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Desktop: Arrow buttons below carousel */}
+          <div className="hidden md:flex justify-center gap-3 mt-8">
+            <button
+              onClick={handlePrev}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="h-5 w-5 text-foreground" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors"
+              aria-label="Next"
+            >
+              <ChevronRight className="h-5 w-5 text-foreground" />
+            </button>
+          </div>
         </div>
       </div>
     </section>

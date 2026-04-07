@@ -2,7 +2,8 @@ import { ReactNode } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { type ToolPageConfig, generateToolFAQSchema, generateToolBreadcrumbSchema } from '@/lib/tools/types'
-import { PenaltyCalculatorSelector, penaltyCalculators } from '@/components/penalty-calculator/PenaltyCalculatorSelector'
+import { PenaltyCalculatorSelector } from '@/components/penalty-calculator/PenaltyCalculatorSelector'
+import { penaltyCalculators } from '@/components/penalty-calculator/penalty-calculator-data'
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
 
 interface ToolPageWrapperProps {
