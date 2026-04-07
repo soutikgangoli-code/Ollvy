@@ -171,10 +171,10 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
 
-        {/* Header with H1 */}
-        <header className="mb-8">
+        {/* Header with H1 - Centered like Document pages */}
+        <header className="mb-12 text-center">
           {/* Breadcrumb: Tools > Penalty Calculators > [Calculator Name] */}
-          <nav className="flex items-center gap-2 text-xs text-muted-foreground mb-2" aria-label="Breadcrumb">
+          <nav className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4" aria-label="Breadcrumb">
             <Link href="/tools" className="hover:text-foreground transition-colors">
               Tools
             </Link>
@@ -185,20 +185,29 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
             <ChevronRight className="h-3 w-3" />
             <span className="text-foreground">{config.title}</span>
           </nav>
-          <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+
+          <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            Penalty Calculator
+          </p>
+
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-6 tracking-tight">
             {config.title}
           </h1>
-        </header>
 
-        {/* Calculator selector dropdown - shown between H1 and widget */}
-        {showCalculatorSelector && currentCalculator && (
-          <div className="mb-8">
-            <PenaltyCalculatorSelector
-              currentHref={currentCalculator.href}
-              currentLabel={currentCalculator.label}
-            />
-          </div>
-        )}
+          {/* Calculator selector dropdown - centered */}
+          {showCalculatorSelector && currentCalculator && (
+            <div className="flex justify-center mb-6">
+              <PenaltyCalculatorSelector
+                currentHref={currentCalculator.href}
+                currentLabel={currentCalculator.label}
+              />
+            </div>
+          )}
+
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Calculate exact penalties, interest, and late fees based on Indian compliance law
+          </p>
+        </header>
 
         {/* The actual tool widget (calculator or checklist) */}
         <div className="mb-8">
@@ -218,15 +227,15 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
         <RelatedLinks config={config} />
 
         {/* CTA */}
-        <section className="mt-16 max-w-3xl">
+        <section className="mt-16 flex">
           <div className="rounded-xl border border-border bg-card p-6">
             <p className="font-medium text-foreground mb-2">Need help with {config.category.toLowerCase()} compliance?</p>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-foreground/70 mb-4">
               Our team handles the paperwork so you can focus on your business.
             </p>
             <Link
               href={`/services/${config.relatedServiceSlug}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium rounded-full hover:bg-[hsl(var(--ollvy-green))]/90 transition-colors"
             >
               {config.relatedServiceLabel}
               <ChevronRight className="h-4 w-4" />

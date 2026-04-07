@@ -548,11 +548,11 @@ export function UnifiedServicePage({
             : 'translate-y-0 opacity-100'
         )}
       >
-        {/* Desktop: Full bar with logo, tabs, CTA */}
+        {/* Desktop: Full bar with logo, tabs - single left-aligned row */}
         <div className="hidden md:block max-w-[1200px] mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            {/* Left: Logo + Service name */}
-            <div className="flex items-center gap-4">
+          <div className="flex items-center gap-8 h-16">
+            {/* Logo + Service name */}
+            <div className="flex items-center gap-4 shrink-0">
               <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
                 Ollvy
               </Link>
@@ -562,7 +562,7 @@ export function UnifiedServicePage({
               </span>
             </div>
 
-            {/* Center: Section tabs */}
+            {/* Section tabs - flows immediately after service name */}
             <nav ref={stickyNavRef} className="flex items-center gap-6 relative" role="tablist">
               {SECTIONS.map((section) => (
                 <button

@@ -538,17 +538,21 @@ export function PenaltyCalculatorTool({
       )}
 
       {/* Final CTA */}
-      <Card className="mt-12 p-8 text-center border-primary/20 bg-primary/5">
-        <h3 className="text-xl font-semibold text-foreground">Need help with compliance?</h3>
-        <p className="text-muted-foreground mt-2 max-w-lg mx-auto">
+      <div className="mt-12 flex">
+      <Card className="p-6 border-border bg-card">
+        <h3 className="text-lg font-semibold text-foreground">Need help with compliance?</h3>
+        <p className="text-foreground/70 mt-2 text-sm">
           Ollvy handles your compliance from start to finish. Stop penalty accrual today.
         </p>
-        <Button className="mt-6" size="lg" asChild>
-          <Link href={ctaHref}>
-            {ctaText}
-          </Link>
-        </Button>
+        <Link
+          href={ctaHref}
+          className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium rounded-full hover:bg-[hsl(var(--ollvy-green))]/90 transition-colors"
+        >
+          {ctaText}
+          <ChevronRight className="h-4 w-4" />
+        </Link>
       </Card>
+      </div>
     </>
   )
 }

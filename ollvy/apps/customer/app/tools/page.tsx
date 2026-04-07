@@ -188,16 +188,16 @@ export default function ToolsPage() {
           <p className="text-muted-foreground mb-6">
             Know exactly what documents you need before starting your registration process.
           </p>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-3">
             {documentTools.map((tool) => (
               <Link key={tool.href} href={tool.href}>
-                <Card className="h-full border border-border hover:border-primary/50 transition-colors cursor-pointer group">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center justify-between">
-                      {tool.title}
-                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                <Card className="h-full border border-border hover:border-[hsl(var(--ollvy-green))] transition-colors cursor-pointer group">
+                  <CardHeader className="py-3 px-4">
+                    <CardTitle className="text-sm font-medium flex items-center justify-between gap-2 text-foreground/80">
+                      <span className="line-clamp-1">{tool.title}</span>
+                      <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-[hsl(var(--ollvy-green))] transition-colors shrink-0" />
                     </CardTitle>
-                    <CardDescription>{tool.description}</CardDescription>
+                    <CardDescription className="text-xs line-clamp-2">{tool.description}</CardDescription>
                   </CardHeader>
                 </Card>
               </Link>
@@ -216,16 +216,16 @@ export default function ToolsPage() {
           <p className="text-muted-foreground mb-6">
             Calculate the real cost of missing compliance deadlines based on Indian law.
           </p>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-3">
             {penaltyTools.map((tool) => (
               <Link key={tool.href} href={tool.href}>
-                <Card className="h-full border border-border hover:border-border transition-colors cursor-pointer group">
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center justify-between">
-                      {tool.title}
-                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+                <Card className="h-full border border-border hover:border-[hsl(var(--ollvy-green))] transition-colors cursor-pointer group">
+                  <CardHeader className="py-3 px-4">
+                    <CardTitle className="text-sm font-medium flex items-center justify-between gap-2 text-foreground/80">
+                      <span className="line-clamp-1">{tool.title}</span>
+                      <ArrowRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-[hsl(var(--ollvy-green))] transition-colors shrink-0" />
                     </CardTitle>
-                    <CardDescription>{tool.description}</CardDescription>
+                    <CardDescription className="text-xs line-clamp-2">{tool.description}</CardDescription>
                   </CardHeader>
                 </Card>
               </Link>

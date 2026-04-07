@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Script from 'next/script'
-import { ArrowLeft, Loader2, ArrowRight, Check, X, ChevronDown, CheckCircle, Phone, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Loader2, ArrowRight, Check, X, ChevronDown, ChevronUp, CheckCircle, Phone, MessageCircle, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -1393,16 +1393,18 @@ function MobileBottomBarComponent({
 
   return (
     <>
-      {/* Fixed bottom bar - 76px collapsed */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-40">
-        {/* Expanded breakdown section - slides up */}
+      {/* Fixed bottom bar container - relative for absolute positioning of expanded panel */}
+      <div className="fixed bottom-0 left-0 right-0 z-40">
+        {/* Expanded breakdown section - slides UP from above the bar */}
         <div
           className={cn(
-            'overflow-hidden transition-all duration-300 ease-out',
-            isExpanded ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'
+            'absolute bottom-full left-0 right-0 bg-background border-t border-border shadow-lg transition-all duration-300 ease-out',
+            isExpanded
+              ? 'translate-y-0 opacity-100'
+              : 'translate-y-2 opacity-0 pointer-events-none'
           )}
         >
-          <div className="px-4 pt-4 pb-2 border-b border-border">
+          <div className="px-4 py-4">
             {/* Fee breakdown */}
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -1429,49 +1431,49 @@ function MobileBottomBarComponent({
         </div>
 
         {/* Collapsed bar - always visible, 76px */}
-        <div className="flex items-center justify-between gap-4 p-4 h-[76px]">
-          {/* Left side - tappable to toggle expanded */}
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-left flex-1"
-          >
-            {/* Guaranteed by date */}
-            <div className="flex items-center gap-1.5 mb-0.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
-              <span className="text-xs text-[hsl(var(--ollvy-green-fg))]">
+        <div className="bg-background border-t border-border">
+          <div className="flex items-center justify-between gap-4 p-4 h-[76px]">
+            {/* Left side - tappable to toggle expanded */}
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="text-left flex-1"
+            >
+              {/* Guaranteed by date - green badge style */}
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 mb-1 rounded-full text-xs font-medium bg-[hsl(var(--ollvy-green))]/10 border border-[hsl(var(--ollvy-green))]/30 text-[hsl(var(--ollvy-green-fg))]">
+                <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
                 Guaranteed by {guaranteedDate}
               </span>
-            </div>
-            {/* Total with chevron */}
-            <div className="flex items-center gap-1.5">
-              <span className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</span>
-              <ChevronDown
-                className={cn(
-                  'h-4 w-4 text-muted-foreground transition-transform duration-200',
-                  isExpanded ? 'rotate-180' : 'rotate-0'
-                )}
-              />
-            </div>
-          </button>
+              {/* Total with chevron - UP when collapsed, DOWN when expanded */}
+              <div className="flex items-center gap-1.5">
+                <span className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</span>
+                <ChevronUp
+                  className={cn(
+                    'h-4 w-4 text-muted-foreground transition-transform duration-200',
+                    isExpanded ? 'rotate-180' : 'rotate-0'
+                  )}
+                />
+              </div>
+            </button>
 
-          {/* Right side - Pay Now button */}
-          <Button
-            onClick={onSubmit}
-            disabled={isProcessing || !canSubmit}
-            className="h-11 px-6 text-base font-medium rounded-md bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white"
-          >
-            {isProcessing ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
-              </>
-            ) : (
-              <>
-                Pay Now
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </>
-            )}
-          </Button>
+            {/* Right side - Pay Now button */}
+            <Button
+              onClick={onSubmit}
+              disabled={isProcessing || !canSubmit}
+              className="h-11 px-6 text-base font-medium rounded-md bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white"
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  Pay Now
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          </div>
         </div>
       </div>
 

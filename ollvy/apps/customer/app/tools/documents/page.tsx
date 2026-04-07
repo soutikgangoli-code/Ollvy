@@ -145,20 +145,20 @@ export default function DocumentsPage() {
         </div>
 
         {/* Document Type Cards */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           {documentTypes.map((doc) => (
             <Link key={doc.href} href={doc.href}>
-              <Card className="border border-border hover:border-primary/50 transition-colors cursor-pointer group">
-                <CardHeader className="flex flex-row items-start gap-4">
-                  <div className="p-3 rounded-lg bg-primary/10 shrink-0">
-                    <doc.icon className="h-6 w-6 text-primary" />
+              <Card className="border border-border hover:border-[hsl(var(--ollvy-green))] transition-colors cursor-pointer group">
+                <CardHeader className="flex flex-row items-start gap-3 py-4 px-4">
+                  <div className="p-2 rounded-lg bg-muted shrink-0">
+                    <doc.icon className="h-4 w-4 text-muted-foreground group-hover:text-[hsl(var(--ollvy-green))] transition-colors" />
                   </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-xl flex items-center justify-between">
-                      {doc.title}
-                      <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-sm font-medium flex items-center justify-between gap-2 text-foreground/80">
+                      <span className="truncate">{doc.title}</span>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-[hsl(var(--ollvy-green))] transition-colors shrink-0" />
                     </CardTitle>
-                    <CardDescription className="mt-2 text-base">{doc.description}</CardDescription>
+                    <CardDescription className="mt-1 text-xs line-clamp-2">{doc.description}</CardDescription>
                   </div>
                 </CardHeader>
               </Card>
