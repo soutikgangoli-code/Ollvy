@@ -582,6 +582,21 @@ export default function CheckoutPage() {
           email: user.email || undefined,
         },
         theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.9)' },
+        modal: {
+          ondismiss: async () => {
+            // Cancel the order if user dismisses without paying
+            // Only cancel if still pending_payment (guards against race with webhook)
+            if (data.order_id) {
+              const supabaseClient = getClient()
+              await supabaseClient
+                .from('orders')
+                .update({ status: 'cancelled' })
+                .eq('id', data.order_id)
+                .eq('status', 'pending_payment')
+            }
+            setIsProcessing(false)
+          },
+        },
       }
 
       // Check Razorpay script loaded

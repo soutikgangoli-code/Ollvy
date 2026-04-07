@@ -440,7 +440,8 @@ serve(async (req) => {
     }
 
     // Check if order is in correct state for payment processing
-    // Note: pending_assignment is used as initial status (pending_payment not in enum)
+    // Orders should be in pending_payment status (created by create-razorpay-order)
+    // Also accept pending_assignment for backward compatibility with old orders
     if (order.status !== 'pending_payment' && order.status !== 'pending_assignment') {
       console.log(`Order ${order.id} cannot be processed (status: ${order.status}), skipping`);
       return new Response(

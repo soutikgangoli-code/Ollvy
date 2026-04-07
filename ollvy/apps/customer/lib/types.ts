@@ -85,6 +85,7 @@ export interface FilterCategory {
 
 // Order types
 export type OrderStatus =
+  | 'pending_payment'
   | 'pending_assignment'
   | 'waitlisted'
   | 'in_progress'

@@ -467,14 +467,14 @@ serve(async (req) => {
     }
 
     // Create order in database with snapshots
-    // Note: Using pending_assignment as initial status (pending_payment not in enum)
+    // Order starts as pending_payment until webhook confirms payment.captured
     const { data: order, error: orderError } = await supabase
       .from('orders')
       .insert({
         user_id: userId,
         service_package_id: servicePackage.id,
         order_type: servicePackage.order_type,
-        status: 'pending_assignment',
+        status: 'pending_payment',
         city: user.city || null,
         price_base_paisa_snapshot: basePricePaisa,
         price_govt_fees_paisa_snapshot: govtFeesPaisa,
