@@ -97,6 +97,14 @@ interface QuestionLabel {
   question_label: string
 }
 
+interface OrderAddon {
+  id: string
+  addon_id: string
+  addon_name: string
+  price_paisa_snapshot: number
+  govt_fee_paisa_snapshot: number
+}
+
 interface TimelineStage extends WorkflowDisplayStage {
   isCompleted: boolean
   isCurrent: boolean
@@ -146,6 +154,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
   const [invoiceId, setInvoiceId] = useState<string | null>(initialData?.invoiceId || null)
   const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(initialData?.roundNotification || null)
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>(initialData?.questionnaireResponses || [])
+  const [orderAddons, setOrderAddons] = useState<OrderAddon[]>([])
 
   // Fetch order data client-side ONLY if no initial data provided
   useEffect(() => {
@@ -201,7 +210,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
         setWorkDocuments(workDocsResult.data || [])
 
         // Batch 2: Optional data - use Promise.allSettled to fail silently
-        const [invoiceResult, notificationResult, responsesResult] = await Promise.allSettled([
+        const [invoiceResult, notificationResult, responsesResult, addonsResult] = await Promise.allSettled([
           supabase
             .from('invoices')
             .select('id')
@@ -218,6 +227,10 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
           supabase
             .from('order_questionnaire_responses')
             .select('question_key, response_value')
+            .eq('order_id', orderId),
+          supabase
+            .from('order_addons')
+            .select('id, addon_id, addon_name, price_paisa_snapshot, govt_fee_paisa_snapshot')
             .eq('order_id', orderId)
         ])
 
@@ -246,6 +259,10 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
             response_value: r.response_value,
           }))
           setQuestionnaireResponses(responses)
+        }
+
+        if (addonsResult.status === 'fulfilled' && addonsResult.value.data) {
+          setOrderAddons(addonsResult.value.data || [])
         }
       } catch (err) {
         console.error('Failed to fetch order:', err)
@@ -1273,6 +1290,52 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                       </span>
                     )}
                   </Button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* What's Included - Cloud Kitchen only */}
+          {servicePackage?.slug === 'cloud-kitchen-setup' && (
+            <div className="rounded-xl border border-border bg-card overflow-hidden">
+              <div className="px-6 py-4 border-b border-border/50">
+                <div className="flex items-center gap-2">
+                  <Check className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    What&apos;s Included
+                  </span>
+                </div>
+              </div>
+              <div className="p-4 space-y-2">
+                {/* Base FSSAI licence - always included */}
+                <div className="flex items-center gap-3 p-2 rounded-lg bg-muted/30">
+                  <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                    <Check className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">FSSAI State Licence</span>
+                </div>
+                {/* Purchased add-ons from order_addons */}
+                {orderAddons.map((addon) => {
+                  // Map addon_id to display name
+                  const addonDisplayNames: Record<string, string> = {
+                    'gst-registration': 'GST Registration',
+                    'shop-establishment': 'Shop & Establishment Registration',
+                    'trade-license': 'Trade Licence / Eating House Licence',
+                  }
+                  const displayName = addonDisplayNames[addon.addon_id] || addon.addon_name
+                  return (
+                    <div key={addon.id} className="flex items-center gap-3 p-2 rounded-lg bg-muted/30">
+                      <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <span className="text-sm font-medium text-foreground">{displayName}</span>
+                    </div>
+                  )
+                })}
+                {orderAddons.length === 0 && (
+                  <p className="text-xs text-muted-foreground text-center py-2">
+                    No additional services purchased
+                  </p>
                 )}
               </div>
             </div>

@@ -1,11 +1,11 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, Receipt, FileText, Building2, UserCheck, Banknote } from 'lucide-react'
+import { ArrowRight, Receipt, FileText, Building2, UserCheck, Banknote, AlertTriangle, Users, Landmark, Store, Globe } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Penalty Calculators for Indian Business Compliance | Ollvy',
-  description: 'Calculate penalties for late GST filing, ITR filing, MCA annual filing, Director KYC, and TDS compliance. Real calculations based on Indian law.',
+  description: 'Calculate penalties for late GST filing, ITR, MCA, TDS, PF/ESIC, Professional Tax, and more. Real calculations based on Indian law.',
   alternates: {
     canonical: 'https://www.ollvy.com/tools/penalty-calculator',
   },
@@ -53,6 +53,36 @@ const penaltyCalculators = [
     description: 'Calculate penalties for delayed TDS return filing (24Q/26Q) and late TDS deposit. Rs. 200/day plus 1.5% monthly interest.',
     href: '/tools/penalty-calculator/tds-late-filing',
     icon: Banknote,
+  },
+  {
+    title: 'GST Demand Notice Penalty',
+    description: 'Calculate penalty on Section 73 and 74 demand notices. No penalty if paid within 30 days of SCN.',
+    href: '/tools/penalty-calculator/gst-demand-notice',
+    icon: AlertTriangle,
+  },
+  {
+    title: 'PF & ESIC Penalty',
+    description: 'Calculate PF damages under Section 14B and ESIC interest for late contributions.',
+    href: '/tools/penalty-calculator/pf-esic-penalty',
+    icon: Users,
+  },
+  {
+    title: 'Professional Tax Penalty',
+    description: 'Calculate Professional Tax penalties for Maharashtra, Karnataka, Tamil Nadu, and other states.',
+    href: '/tools/penalty-calculator/professional-tax-penalty',
+    icon: Landmark,
+  },
+  {
+    title: 'Shop & Establishment Penalty',
+    description: 'Calculate penalty for operating without Shop and Establishment registration by state.',
+    href: '/tools/penalty-calculator/shops-establishment-penalty',
+    icon: Store,
+  },
+  {
+    title: 'DPIIT / FEMA Compliance',
+    description: 'Estimate FEMA compounding fees for FC-GPR, FC-TRS, and ESOP reporting delays.',
+    href: '/tools/penalty-calculator/startup-dpiit-compliance',
+    icon: Globe,
   },
 ]
 

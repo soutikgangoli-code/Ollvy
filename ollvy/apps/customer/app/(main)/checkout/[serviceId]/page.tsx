@@ -43,6 +43,13 @@ interface PriceBreakdown {
 // Session storage helpers for checkout persistence
 const CHECKOUT_STATE_KEY = 'ollvy_checkout_state'
 
+// Cloud kitchen add-on display labels for "What's Included" section
+const CLOUD_KITCHEN_ADDON_LABELS: Record<string, string> = {
+  'gst-registration': 'GST Registration',
+  'shop-establishment': 'Shop & Establishment Registration',
+  'trade-license': 'Trade Licence / Eating House Licence',
+}
+
 interface CheckoutState {
   serviceId: string
   variant: string | null
@@ -622,6 +629,27 @@ export default function CheckoutPage() {
     }))
   }, [service?.addons])
 
+  // Cloud kitchen: Dynamic "What's Included" based on selected add-ons
+  const dynamicScopeIncluded = useMemo(() => {
+    // Only apply dynamic logic for cloud-kitchen-setup
+    if (service?.slug !== 'cloud-kitchen-setup') {
+      return service?.scope_included || []
+    }
+
+    // Base item always included
+    const items = ['FSSAI State Licence']
+
+    // Add selected add-ons
+    selectedAddonIds.forEach(addonId => {
+      const label = CLOUD_KITCHEN_ADDON_LABELS[addonId]
+      if (label) {
+        items.push(label)
+      }
+    })
+
+    return items
+  }, [service?.slug, service?.scope_included, selectedAddonIds])
+
   const canSubmit = priceBreakdown && priceBreakdown.total > 0 && isHydrated
 
   // Error state (only after loading completes)
@@ -730,7 +758,7 @@ export default function CheckoutPage() {
             ) : (
               <ScopeOfWorkCard
                 serviceName={service.name}
-                scopeIncluded={service.scope_included || [
+                scopeIncluded={dynamicScopeIncluded.length > 0 ? dynamicScopeIncluded : [
                   'Name availability check via MCA RUN portal',
                   'Drafting of MoA and AoA',
                   'DSC for up to 2 directors',

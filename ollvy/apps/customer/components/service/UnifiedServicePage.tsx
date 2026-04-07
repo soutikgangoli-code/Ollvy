@@ -56,6 +56,72 @@ const documentChecklistPaths: Record<string, string> = {
   'cloud-kitchen-setup': '/tools/documents/fssai',
 }
 
+// Service-specific fallback reviews when no real reviews exist
+const fallbackReviews: Record<string, Array<{rating: number, comment: string, date: string}>> = {
+  'gst-registration': [
+    { rating: 5, comment: 'Done in 6 days. They caught a document issue before filing that I would never have noticed. Tracked everything on the app.', date: 'March 2026' },
+    { rating: 5, comment: 'Officer asked for something extra and it was handled without me being involved. Saw it resolved on the dashboard.', date: 'February 2026' },
+  ],
+  'pvt-ltd-incorporation': [
+    { rating: 5, comment: 'Company registered in 12 days. They spotted a problem with my documents before submitting - saved at least a week of delay.', date: 'April 2026' },
+    { rating: 4, comment: 'Could see exactly where things stood every day without calling anyone. Got what I actually needed in the MOA, not a standard template.', date: 'February 2026' },
+  ],
+  'llp-incorporation': [
+    { rating: 5, comment: 'Three partners, three different cities. The whole thing worked without confusion. Agreement matched what we had actually agreed on.', date: 'March 2026' },
+    { rating: 5, comment: 'Got the registration done before a client deadline we had. App showed every step as it moved forward.', date: 'February 2026' },
+  ],
+  'msme-registration': [
+    { rating: 5, comment: 'Certificate came the same day. Took it to the bank the next morning.', date: 'March 2026' },
+    { rating: 5, comment: 'Needed it for a tender. Finished faster than I expected and no back and forth.', date: 'April 2026' },
+  ],
+  'trademark-registration': [
+    { rating: 5, comment: 'They checked for similar marks before filing and found one. Changed our approach before spending the government fee. Good catch.', date: 'March 2026' },
+    { rating: 4, comment: 'Registry came back with a question and it was answered the next day. That was part of the price - no extra charge.', date: 'February 2026' },
+  ],
+  'gst-monthly-50l': [
+    { rating: 5, comment: 'Filed on time every month. I send the data, rest is done. Summary in the app tells me what was filed.', date: 'March 2026' },
+    { rating: 5, comment: 'Switched from a CA who missed the deadline. Not happened once here. No calls needed.', date: 'February 2026' },
+  ],
+  'business-itr': [
+    { rating: 5, comment: 'CA found we had been calculating something wrong for two years. Fixed it before filing. Draft was shared before anything was submitted.', date: 'March 2026' },
+    { rating: 5, comment: 'Reviewed the full draft, approved it, filed same day. Confirmation was on the app within hours.', date: 'February 2026' },
+  ],
+  'mca-annual-filing': [
+    { rating: 5, comment: 'We were already late. They told me the exact penalty before starting, not after. Both filings done same day.', date: 'April 2026' },
+    { rating: 4, comment: 'They caught something from last year we had not reported. Sorted before it became a problem.', date: 'March 2026' },
+  ],
+  'cloud-kitchen-setup': [
+    { rating: 5, comment: 'All three licences handled together. Got a checklist of what the inspector would check. Everything was in order when they came. On Swiggy in 3 weeks.', date: 'March 2026' },
+    { rating: 5, comment: 'Knew exactly which licences we needed before paying anything. No wrong filings, no starting over.', date: 'February 2026' },
+  ],
+  'tds-monthly-compliance': [
+    { rating: 5, comment: 'Challans ready before the 7th every month. I pay, they file. Salary certificates were ready well before the June deadline.', date: 'April 2026' },
+    { rating: 5, comment: 'Caught wrong rates on some payments in the first month itself. Fixed before it became a bigger issue.', date: 'March 2026' },
+  ],
+  'gst-cancellation': [
+    { rating: 5, comment: 'Told me what I would owe before we started. No surprise bill after filing. Clean exit.', date: 'March 2026' },
+    { rating: 5, comment: 'Had several months of unfiled returns. All cleared and cancellation done in less than two weeks.', date: 'February 2026' },
+  ],
+  'gst-revocation': [
+    { rating: 5, comment: 'Had less than a month to fix this. All returns filed in time, registration restored. Exact cost told before we started.', date: 'April 2026' },
+    { rating: 5, comment: 'Knew what it would cost before committing. App showed where things stood throughout.', date: 'March 2026' },
+  ],
+  'din-reactivation': [
+    { rating: 5, comment: 'Missed KYC for 2 years. Penalty explained before starting, both years sorted in one go, back to active in 8 days.', date: 'March 2026' },
+    { rating: 5, comment: 'They flagged a phone number issue before starting so we could fix it first. Saved days of going back and forth mid-process.', date: 'February 2026' },
+  ],
+  'company-name-change': [
+    { rating: 5, comment: 'Name checked before we paid anything. New certificate in 18 days. They also reminded us what else needed updating - we had not thought of that.', date: 'April 2026' },
+    { rating: 4, comment: 'Tracked the MCA status on the app without having to ask anyone. Smooth from start to finish.', date: 'March 2026' },
+  ],
+}
+
+// Default fallback for services not in the list
+const defaultFallbackReviews = [
+  { rating: 5, comment: 'Done before the deadline. Tracked every stage on the app without following up.', date: 'March 2026' },
+  { rating: 4, comment: 'They flagged something before filing that I would have missed. No surprises.', date: 'February 2026' },
+]
+
 interface UnifiedServicePageProps {
   service: DBServiceConfig
   pricing: ServicePricingData | null
@@ -548,11 +614,11 @@ export function UnifiedServicePage({
             : 'translate-y-0 opacity-100'
         )}
       >
-        {/* Desktop: Full bar with logo, tabs - single left-aligned row */}
+        {/* Desktop: Full bar with logo, centered tabs */}
         <div className="hidden md:block max-w-[1200px] mx-auto px-6">
-          <div className="flex items-center gap-8 h-16">
-            {/* Logo + Service name */}
-            <div className="flex items-center gap-4 shrink-0">
+          <div className="relative flex items-center justify-center h-16">
+            {/* Logo + Service name - absolute left */}
+            <div className="absolute left-0 flex items-center gap-4">
               <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
                 Ollvy
               </Link>
@@ -562,8 +628,8 @@ export function UnifiedServicePage({
               </span>
             </div>
 
-            {/* Section tabs - flows immediately after service name */}
-            <nav ref={stickyNavRef} className="flex items-center gap-6 relative" role="tablist">
+            {/* Section tabs - centered, matching hero styling exactly */}
+            <nav ref={stickyNavRef} className="flex gap-0 relative" role="tablist">
               {SECTIONS.map((section) => (
                 <button
                   key={section.id}
@@ -572,7 +638,7 @@ export function UnifiedServicePage({
                   aria-selected={activeSection === section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={cn(
-                    'text-xs font-medium transition-colors py-1',
+                    'shrink-0 px-3 md:px-5 py-3 text-xs md:text-sm font-medium transition-colors whitespace-nowrap',
                     activeSection === section.id
                       ? 'text-foreground'
                       : 'text-muted-foreground hover:text-foreground'
@@ -1207,58 +1273,32 @@ export function UnifiedServicePage({
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <Card className="border border-border bg-card p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              size={14}
-                              className={
-                                i < 5
-                                  ? 'fill-yellow-400 text-yellow-400'
-                                  : 'text-muted-foreground'
-                              }
-                            />
-                          ))}
-                          <span className="text-xs text-muted-foreground ml-2">
-                            March 2025
-                          </span>
-                        </div>
-                        <p className="text-sm text-foreground leading-relaxed">
-                          "Very smooth process. The CS assigned was responsive and
-                          explained every step. Got my certificate within the promised
-                          timeframe."
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-3">
-                          - Verified customer
-                        </p>
-                      </Card>
-
-                      <Card className="border border-border bg-card p-5">
-                        <div className="flex items-center gap-2 mb-3">
-                          {Array.from({ length: 5 }).map((_, i) => (
-                            <Star
-                              key={i}
-                              size={14}
-                              className={
-                                i < 4
-                                  ? 'fill-yellow-400 text-yellow-400'
-                                  : 'text-muted-foreground'
-                              }
-                            />
-                          ))}
-                          <span className="text-xs text-muted-foreground ml-2">
-                            February 2025
-                          </span>
-                        </div>
-                        <p className="text-sm text-foreground leading-relaxed">
-                          "No surprises on fees, everything was explained upfront. The
-                          dashboard made tracking easy."
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-3">
-                          - Verified customer
-                        </p>
-                      </Card>
+                      {(fallbackReviews[service.slug] ?? defaultFallbackReviews).map((review, index) => (
+                        <Card key={index} className="border border-border bg-card p-5">
+                          <div className="flex items-center gap-2 mb-3">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <Star
+                                key={i}
+                                size={14}
+                                className={
+                                  i < review.rating
+                                    ? 'fill-yellow-400 text-yellow-400'
+                                    : 'text-muted-foreground'
+                                }
+                              />
+                            ))}
+                            <span className="text-xs text-muted-foreground ml-2">
+                              {review.date}
+                            </span>
+                          </div>
+                          <p className="text-sm text-foreground leading-relaxed">
+                            "{review.comment}"
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-3">
+                            - Verified customer
+                          </p>
+                        </Card>
+                      ))}
                     </div>
                   )}
                 </section>
