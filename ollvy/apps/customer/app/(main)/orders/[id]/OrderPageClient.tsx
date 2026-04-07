@@ -131,6 +131,7 @@ interface InitialData {
   invoiceId: string | null
   roundNotification: RoundNotification | null
   questionnaireResponses: QuestionnaireResponse[]
+  orderAddons?: OrderAddon[]
 }
 
 interface OrderPageClientProps {
@@ -154,7 +155,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
   const [invoiceId, setInvoiceId] = useState<string | null>(initialData?.invoiceId || null)
   const [roundNotification, setRoundNotification] = useState<RoundNotification | null>(initialData?.roundNotification || null)
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>(initialData?.questionnaireResponses || [])
-  const [orderAddons, setOrderAddons] = useState<OrderAddon[]>([])
+  const [orderAddons, setOrderAddons] = useState<OrderAddon[]>(initialData?.orderAddons || [])
 
   // Fetch order data client-side ONLY if no initial data provided
   useEffect(() => {
@@ -283,6 +284,13 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
       : order.service_package as ServicePackage
   }, [order?.service_package])
 
+  // Get variant label from service_package variants array
+  const selectedVariant = useMemo(() => {
+    if (!order?.variant_id || !servicePackage?.variants) return null
+    const variants = servicePackage.variants as Array<{ id: string; label: string; sublabel?: string }>
+    return variants.find(v => v.id === order.variant_id) || null
+  }, [order?.variant_id, servicePackage?.variants])
+
   // Modal states
   const [previewDoc, setPreviewDoc] = useState<{
     label: string
@@ -379,10 +387,36 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
       )
       .subscribe()
 
+    // Subscribe to order_stage_history changes for real-time progress updates
+    const stageHistoryChannel = supabase
+      .channel(`order-stage-history-${orderId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'order_stage_history',
+          filter: `order_id=eq.${orderId}`,
+        },
+        async () => {
+          // Refetch stage history when changes occur
+          const { data } = await supabase
+            .from('order_stage_history')
+            .select('*')
+            .eq('order_id', orderId)
+            .order('started_at', { ascending: true })
+          if (data) {
+            setStageHistory(data)
+          }
+        }
+      )
+      .subscribe()
+
     return () => {
       supabase.removeChannel(docsChannel)
       supabase.removeChannel(workDocsChannel)
       supabase.removeChannel(orderChannel)
+      supabase.removeChannel(stageHistoryChannel)
     }
   }, [orderId])
 
@@ -815,9 +849,16 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
               </h1>
               <OrderStatusBadge status={order.status} />
             </div>
-            <p className="text-muted-foreground">
-              {formatDate(order.created_at)}
-            </p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <p className="text-muted-foreground">
+                {formatDate(order.created_at)}
+              </p>
+              {selectedVariant && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-muted text-xs font-medium text-muted-foreground">
+                  {selectedVariant.sublabel || selectedVariant.label}
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Continue Setup Button */}

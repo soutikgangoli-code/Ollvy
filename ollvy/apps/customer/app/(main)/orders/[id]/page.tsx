@@ -28,6 +28,14 @@ interface QuestionnaireResponse {
   response_value: string | string[]
 }
 
+interface OrderAddon {
+  id: string
+  addon_id: string
+  addon_name: string
+  price_paisa_snapshot: number
+  govt_fee_paisa_snapshot: number
+}
+
 interface RoundNotification {
   id: string
   order_id: string
@@ -85,7 +93,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
 
   // Fetch optional data (don't block on these) - includes service_package in parallel
   // Service package uses service role client (bypasses RLS) - safe because BATCH 1 verified user access
-  const [invoiceResult, notificationResult, responsesResult, servicePackageResult] = await Promise.allSettled([
+  const [invoiceResult, notificationResult, responsesResult, servicePackageResult, addonsResult] = await Promise.allSettled([
     supabase
       .from('invoices')
       .select('id')
@@ -110,7 +118,12 @@ export default async function OrderDetailPage({ params }: PageProps) {
           .select('*')
           .eq('id', orderResult.data.service_package_id)
           .single()
-      : Promise.resolve({ data: null, error: null })
+      : Promise.resolve({ data: null, error: null }),
+    // Order addons - fetch server-side to avoid flash of empty content
+    supabase
+      .from('order_addons')
+      .select('id, addon_id, addon_name, price_paisa_snapshot, govt_fee_paisa_snapshot')
+      .eq('order_id', orderId)
   ])
 
   // Extract service package data from result
@@ -139,6 +152,11 @@ export default async function OrderDetailPage({ params }: PageProps) {
     }))
   }
 
+  // Extract order addons
+  const orderAddons: OrderAddon[] = addonsResult.status === 'fulfilled' && addonsResult.value.data
+    ? addonsResult.value.data
+    : []
+
   const initialData = {
     order: orderWithServicePackage as Order,
     stageHistory: (stageResult.data || []) as OrderStageHistory[],
@@ -147,6 +165,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
     invoiceId: invoiceResult.status === 'fulfilled' ? invoiceResult.value.data?.id || null : null,
     roundNotification: notificationResult.status === 'fulfilled' ? notificationResult.value.data as RoundNotification | null : null,
     questionnaireResponses,
+    orderAddons,
   }
 
   return <OrderPageClient orderId={orderId} initialData={initialData} />

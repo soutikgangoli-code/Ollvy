@@ -28,6 +28,72 @@ function formatPrice(paisa: number): string {
   return '\u20B9' + Math.ceil(paisa / 100).toLocaleString('en-IN')
 }
 
+interface PaymentRetryModalProps {
+  isOpen: boolean
+  serviceName: string
+  onRetry: () => void
+  onClose: () => void
+}
+
+export function PaymentRetryModal({
+  isOpen,
+  serviceName,
+  onRetry,
+  onClose,
+}: PaymentRetryModalProps) {
+  return (
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="sm:max-w-[400px] border-border bg-card p-0 overflow-hidden gap-0">
+        {/* Header */}
+        <div className="px-6 pt-8 pb-6 text-center">
+          <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+            <ArrowRight className="h-7 w-7 text-muted-foreground stroke-[2]" />
+          </div>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono mb-3">
+            PAYMENT INCOMPLETE
+          </p>
+          <p className="text-xl font-medium text-foreground">
+            Complete your payment
+          </p>
+        </div>
+
+        {/* Service detail */}
+        <div className="px-6 pb-6">
+          <div className="border border-border rounded-xl divide-y divide-border">
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                SERVICE
+              </span>
+              <span className="text-sm font-medium text-foreground">
+                {serviceName}
+              </span>
+            </div>
+            <div className="px-4 py-3 flex justify-between items-center">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
+                STATUS
+              </span>
+              <span className="text-sm font-mono text-amber-600 dark:text-amber-400">
+                Awaiting payment
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="px-6 pb-6">
+          <Button
+            onClick={onRetry}
+            className="w-full h-11 text-sm font-medium gap-2"
+          >
+            Complete payment
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
 export function PaymentSuccessModal({
   isOpen,
   orderNumber,

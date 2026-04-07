@@ -25,6 +25,7 @@ import {
   FilingTimeline,
   AddOnsSection,
   PaymentSuccessModal,
+  PaymentRetryModal,
   WhatsIncludedCard,
   WhatsNotIncludedCard,
 } from '@/components/checkout'
@@ -137,6 +138,12 @@ export default function CheckoutPage() {
     orderId: string
     orderNumber: string
   } | null>(null)
+
+  // Retry modal (shown when user dismisses Razorpay without paying)
+  const [showRetryModal, setShowRetryModal] = useState(false)
+
+  // Razorpay instance ref (for retry functionality)
+  const razorpayRef = useRef<any>(null)
 
   // Track if we've shown the initial auth prompt (don't keep re-opening if user dismisses)
   const [hasShownAuthPrompt, setHasShownAuthPrompt] = useState(false)
@@ -583,17 +590,9 @@ export default function CheckoutPage() {
         },
         theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.9)' },
         modal: {
-          ondismiss: async () => {
-            // Cancel the order if user dismisses without paying
-            // Only cancel if still pending_payment (guards against race with webhook)
-            if (data.order_id) {
-              const supabaseClient = getClient()
-              await supabaseClient
-                .from('orders')
-                .update({ status: 'cancelled' })
-                .eq('id', data.order_id)
-                .eq('status', 'pending_payment')
-            }
+          ondismiss: () => {
+            // Show retry modal when user dismisses without paying
+            setShowRetryModal(true)
             setIsProcessing(false)
           },
         },
@@ -611,6 +610,7 @@ export default function CheckoutPage() {
       }
 
       const razorpay = new (window as any).Razorpay(options)
+      razorpayRef.current = razorpay
       razorpay.open()
     } catch (err: any) {
       console.error('Checkout error:', err)
@@ -883,6 +883,22 @@ export default function CheckoutPage() {
             // Redirect to questionnaire flow (will redirect to documents if no questionnaire)
             router.push(`/orders/${orderId}/questionnaire`)
           }}
+        />
+      )}
+
+      {/* Retry Modal (shown when user dismisses Razorpay without paying) */}
+      {service && (
+        <PaymentRetryModal
+          isOpen={showRetryModal}
+          serviceName={service.name}
+          onRetry={() => {
+            setShowRetryModal(false)
+            // Reopen Razorpay with existing razorpay_order_id
+            if (razorpayRef.current) {
+              razorpayRef.current.open()
+            }
+          }}
+          onClose={() => setShowRetryModal(false)}
         />
       )}
     </div>
