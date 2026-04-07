@@ -366,7 +366,7 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     id: pkg.id,
     slug: pkg.slug,
     name: pkg.name,
-    shortName: pkg.short_name ?? pkg.name.split(' ').slice(0, 2).join(' '),
+    shortName: pkg.short_name ?? pkg.name?.split(' ').slice(0, 2).join(' ') ?? '',
     category: pkg.category ?? 'Services',
     tagline: pkg.tagline ?? pkg.short_description ?? '',
 

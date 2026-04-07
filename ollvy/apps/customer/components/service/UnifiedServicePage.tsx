@@ -143,7 +143,8 @@ const SECTIONS = [
 type SectionId = typeof SECTIONS[number]['id']
 
 // Helper to wrap numbers and currency in font-mono spans
-function formatWithMonoNumbers(text: string): React.ReactNode {
+function formatWithMonoNumbers(text: string | undefined | null): React.ReactNode {
+  if (!text) return null
   // Match numbers (with optional commas, decimals) and currency symbols
   const parts = text.split(/(₹[\d,]+(?:\.\d+)?|\d+(?:,\d+)*(?:\.\d+)?%?)/g)
   return parts.map((part, i) => {
@@ -282,7 +283,7 @@ function MockVisual({
           {Object.entries(data)
             .filter(([k]) => k.startsWith('row'))
             .map(([k, v]) => {
-              const [name, ...rest] = v.split(' - ')
+              const [name, ...rest] = v?.split(' - ') ?? []
               return (
                 <div key={k} className="flex justify-between items-center">
                   <span className="text-foreground">{name}</span>
