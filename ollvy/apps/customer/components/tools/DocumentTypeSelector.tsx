@@ -35,13 +35,13 @@ export function DocumentTypeSelector({ currentHref, currentLabel }: DocumentType
 
   return (
     <Select value={currentHref} onValueChange={handleChange}>
-      <SelectTrigger className="w-[360px] h-11 bg-card border-border text-sm">
+      <SelectTrigger className="w-full max-w-[360px] h-11 bg-card border-border text-sm">
         <SelectValue>
           <span className="text-muted-foreground">Switch guide:</span>{' '}
           <span className="text-foreground">{currentLabel}</span>
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="max-h-[400px] min-w-[360px]">
+      <SelectContent className="max-h-[400px] min-w-[280px] sm:min-w-[360px]">
         {documentTypes.map((type) => (
           <SelectItem
             key={type.href}

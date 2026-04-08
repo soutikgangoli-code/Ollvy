@@ -294,6 +294,8 @@ export function ProductShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartRef = useRef({ x: 0, scrollLeft: 0 })
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -308,16 +310,17 @@ export function ProductShowcase() {
   // Items per view: 1 on mobile, 2 on desktop
   const itemsPerView = isMobile ? 1 : 2
   const maxIndex = FEATURES.length - itemsPerView
+  const totalPages = maxIndex + 1
 
   // Handle scroll events to update current index
   const handleScroll = useCallback(() => {
-    if (!scrollContainerRef.current) return
+    if (!scrollContainerRef.current || isDragging) return
     const container = scrollContainerRef.current
     const scrollLeft = container.scrollLeft
     const cardWidth = container.offsetWidth / itemsPerView
     const newIndex = Math.round(scrollLeft / cardWidth)
     setCurrentIndex(Math.min(Math.max(0, newIndex), maxIndex))
-  }, [itemsPerView, maxIndex])
+  }, [itemsPerView, maxIndex, isDragging])
 
   // Scroll to specific index
   const scrollToIndex = useCallback((index: number) => {
@@ -327,6 +330,37 @@ export function ProductShowcase() {
     container.scrollTo({ left: cardWidth * index, behavior: 'smooth' })
     setCurrentIndex(index)
   }, [itemsPerView])
+
+  // Mouse drag handlers
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    if (!scrollContainerRef.current) return
+    setIsDragging(true)
+    dragStartRef.current = {
+      x: e.pageX,
+      scrollLeft: scrollContainerRef.current.scrollLeft,
+    }
+  }, [])
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    if (!isDragging || !scrollContainerRef.current) return
+    e.preventDefault()
+    const dx = e.pageX - dragStartRef.current.x
+    scrollContainerRef.current.scrollLeft = dragStartRef.current.scrollLeft - dx
+  }, [isDragging])
+
+  const handleMouseUp = useCallback(() => {
+    if (!isDragging) return
+    setIsDragging(false)
+    // Snap to nearest card after drag ends
+    handleScroll()
+  }, [isDragging, handleScroll])
+
+  const handleMouseLeave = useCallback(() => {
+    if (isDragging) {
+      setIsDragging(false)
+      handleScroll()
+    }
+  }, [isDragging, handleScroll])
 
   return (
     <section id="product-showcase" className="py-12 md:py-16 lg:py-20 bg-background">
@@ -343,7 +377,13 @@ export function ProductShowcase() {
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 md:gap-8 cursor-grab active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            className={`flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 md:gap-8 ${
+              isDragging ? 'cursor-grabbing' : 'cursor-grab'
+            }`}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {FEATURES.map((item, i) => (
@@ -361,9 +401,9 @@ export function ProductShowcase() {
             ))}
           </div>
 
-          {/* Dot indicators - always show all 4 */}
+          {/* Dot indicators - show correct number of pages */}
           <div className="flex justify-center gap-2 mt-6 md:mt-8">
-            {FEATURES.map((_, i) => (
+            {Array.from({ length: totalPages }).map((_, i) => (
               <button
                 key={i}
                 onClick={() => scrollToIndex(i)}
@@ -372,7 +412,7 @@ export function ProductShowcase() {
                     ? 'bg-foreground scale-110'
                     : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                 }`}
-                aria-label={`Go to slide ${i + 1}`}
+                aria-label={`Go to page ${i + 1}`}
               />
             ))}
           </div>

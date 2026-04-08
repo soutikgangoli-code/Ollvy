@@ -24,13 +24,13 @@ export function PenaltyCalculatorSelector({ currentHref, currentLabel }: Penalty
 
   return (
     <Select value={currentHref} onValueChange={handleChange}>
-      <SelectTrigger className="w-[320px] h-11 bg-card border-border text-sm">
+      <SelectTrigger className="w-full max-w-[320px] h-11 bg-card border-border text-sm">
         <SelectValue>
           <span className="text-muted-foreground">Switch calculator:</span>{' '}
           <span className="text-foreground">{currentLabel}</span>
         </SelectValue>
       </SelectTrigger>
-      <SelectContent className="max-h-[400px] min-w-[320px]">
+      <SelectContent className="max-h-[400px] min-w-[280px] sm:min-w-[320px]">
         {penaltyCalculators.map((calc) => (
           <SelectItem
             key={calc.href}
