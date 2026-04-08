@@ -5,7 +5,7 @@ export const gstDrc01Notice: LearnPageConfig = {
   slug: 'gst-drc-01-notice',
   title: 'GST DRC-01 Notice: What It Means and What to Do',
   seoTitle: 'GST DRC-01 Notice: What It Is and How to Reply (2025) | Ollvy',
-  seoDescription: 'Got a GST DRC-01 notice? Understand what it means, why you got it, your exact deadline, and how to reply correctly. Expert CA guidance from Ollvy.',
+  seoDescription: 'A DRC-01 is a formal GST tax demand. You have 30 days to reply before the officer passes an order without hearing your side. Understand Section 73 vs 74 and how to respond.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-drc-01-notice',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
@@ -23,8 +23,8 @@ export const gstDrc01Notice: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'FIRST, TAKE A BREATH - THEN READ THIS CAREFULLY',
-      body: "A DRC-01 notice is a Summary of the Show Cause Notice. In plain English: the GST department believes you owe them tax - and they are now formally putting that demand in writing and asking you to explain yourself or pay up.\n\nThis is serious. But it is not the end. A DRC-01 is the department's opening move, not their final word. You have a right to reply, a right to be heard, and if your case is strong, the demand can be reduced or dropped entirely.\n\nWhat you must not do is ignore it.",
+      heading: 'WHAT A DRC-01 IS AND WHY YOU GOT IT',
+      body: "A DRC-01 notice is a Summary of the Show Cause Notice. In plain English: the GST department believes you owe them tax and they are now formally putting that demand in writing and asking you to explain yourself or pay up.\n\nThis is serious. But it is not the end. A DRC-01 is the department's opening move, not their final word. You have a right to reply, a right to be heard, and if your case is strong, the demand can be reduced or dropped entirely.\n\nWhat you must not do is ignore it.",
       note: 'Source: Section 73 and Section 74, Central Goods and Services Tax Act, 2017. Rule 142, CGST Rules 2017.',
     },
     {
@@ -60,6 +60,12 @@ export const gstDrc01Notice: LearnPageConfig = {
     },
     {
       number: '05',
+      heading: 'PAY BEFORE REPLYING: WHEN THIS IS THE RIGHT MOVE',
+      body: 'If the case is under Section 73 and you agree the tax is due, paying the full demand plus interest within 30 days of the SCN means zero penalty. Section 73(8) is explicit: "no penalty shall be payable and all proceedings shall be deemed to be concluded." This is the cheapest and fastest resolution path if you accept the liability.\n\nIf the case is under Section 74 (fraud allegation), paying within 30 days of the SCN reduces the penalty from 100 percent to 15 percent. Do not pay under Section 74 without professional advice. If the fraud allegation itself can be challenged, your reply should challenge the Section 74 classification before you pay anything.',
+      note: 'Partial payment is also an option. Pay what you agree with, state it clearly in your DRC-06 reply with challan details, and contest the rest.',
+    },
+    {
+      number: '06',
       heading: 'WHAT HAPPENS AT THE PERSONAL HEARING',
       body: 'After you file DRC-06, the officer will grant you a personal hearing. Do not skip this. The personal hearing is your opportunity to present your case verbally, clarify anything in your written reply, and understand exactly what the officer is thinking.\n\nA few things to know about personal hearings:',
       bullets: [
@@ -71,7 +77,7 @@ export const gstDrc01Notice: LearnPageConfig = {
       ],
     },
     {
-      number: '06',
+      number: '07',
       heading: 'THE MOST COMMON MISTAKES PEOPLE MAKE',
       body: '',
       bullets: [
@@ -84,7 +90,7 @@ export const gstDrc01Notice: LearnPageConfig = {
       ],
     },
     {
-      number: '07',
+      number: '08',
       heading: 'AFTER THE DRC-01: WHAT COMES NEXT',
       body: 'One of three things will happen after your reply and hearing:',
       bullets: [
@@ -117,5 +123,10 @@ export const gstDrc01Notice: LearnPageConfig = {
       q: 'I missed the 30-day deadline. What are my options now?',
       a: "If DRC-07 has already been passed, you can file an appeal to the Appellate Authority within 3 months of the order date with a 10% pre-deposit of the disputed tax. If DRC-07 has not yet been passed (the officer has not yet issued the order), speak to a CA immediately - there may still be an opportunity to request that the officer hear your submission before passing the order, though this is at the officer's discretion.",
     },
+  ],
+
+  sources: [
+    { name: 'CGST Act, 2017 (Section 73 and 74)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Primary legislation governing GST demand and recovery proceedings' },
+    { name: 'CGST Rules, 2017 (Rule 142)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Rules for service of show cause notice and reply procedure' },
   ],
 };

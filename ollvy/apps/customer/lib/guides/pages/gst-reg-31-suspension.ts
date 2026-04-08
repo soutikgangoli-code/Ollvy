@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const gstReg31Suspension: LearnPageConfig = {
   slug: 'gst-reg-31-suspension',
   title: 'GST REG-31 Notice: Your GST Registration Has Been Suspended',
-  seoTitle: 'GST REG-31 Registration Suspension Notice 2025: What to Do | Ollvy',
-  seoDescription: 'Got a GST REG-31 suspension notice? Your GSTIN is suspended - clients cannot claim ITC from your invoices. Understand what triggered this and how to restore it.',
+  seoTitle: 'GST REG-31 Suspension Notice: What to Do Now (2025) | Ollvy',
+  seoDescription: 'A GST REG-31 notice means your registration is suspended. You cannot issue invoices or claim ITC while suspended. REG-17 cancellation notice follows within 30 days if you do not act.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-reg-31-suspension',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
@@ -24,7 +24,7 @@ export const gstReg31Suspension: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'SUSPENDED IS NOT CANCELLED - BUT IT IS STILL A CRISIS',
+      heading: 'YOUR GSTIN IS SUSPENDED',
       body: "REG-31 is the intimation that your GST registration has been suspended, typically as a precursor to cancellation under REG-17. Suspension means your GSTIN is in an inactive state.\n\nThe critical business impact: during suspension, a GST portal search for your GSTIN will show \"Suspended\" status. Any client who pays you and claims ITC on your invoice during this period will face ITC rejection during their audit or return processing. This damages your client relationships and can result in them demanding compensation or ending the contract.",
       note: 'Source: Section 29(2) proviso, CGST Act 2017; Rule 21A, CGST Rules 2017.',
     },
@@ -58,8 +58,13 @@ export const gstReg31Suspension: LearnPageConfig = {
         'Inform them immediately that your GSTIN is temporarily suspended and that you are working to restore it.',
         'Advise them to hold off claiming ITC on your recent invoices until the suspension is lifted.',
         'Once restoration is confirmed, inform them explicitly so they can proceed with ITC claims.',
-        'Consider holding new invoicing until the restoration is confirmed - issuing invoices while suspended creates ITC risk for your clients and puts your business relationships under strain.',
+        'Consider holding new invoicing until the restoration is confirmed. Issuing invoices while suspended creates ITC risk for your clients and puts your business relationships under strain.',
       ],
+    },
+    {
+      number: '05',
+      heading: 'THE IMPACT ON YOUR CUSTOMERS WHILE YOU ARE SUSPENDED',
+      body: 'Every day your GSTIN is suspended, your customers are affected. Invoices issued during suspension are not valid tax invoices. Your customers cannot claim ITC on them.\n\nIf you supply to GST-registered businesses and your GSTIN shows as "suspended" on the portal, your customers may refuse to accept invoices or put payments on hold until the suspension is resolved. For B2B businesses, this can cause immediate cash flow disruption.\n\nThe faster you resolve the suspension, the smaller this impact is.',
     },
   ],
 
@@ -68,5 +73,14 @@ export const gstReg31Suspension: LearnPageConfig = {
       q: 'How long does GST suspension typically last?',
       a: 'Suspension is not time-limited by law. It continues until either: (a) the officer restores it after reviewing your response, or (b) the officer issues a REG-17 leading to formal cancellation. Your goal is to respond promptly to ensure the officer takes action (restoration) rather than allowing it to drift toward cancellation.',
     },
+    {
+      q: 'I filed all pending returns. How long before the suspension is lifted?',
+      a: 'If the suspension was due to non-filing and there are no other grounds for cancellation, the officer should revoke it after verifying your returns. This typically takes a few days to 2 weeks. Follow up with the jurisdictional officer if it is not lifted within 7 working days of filing.',
+    },
+  ],
+
+  sources: [
+    { name: 'CGST Rules, 2017 (Rule 21A)', url: 'https://www.gst.gov.in', description: 'Suspension of registration provision and automatic revocation rule' },
+    { name: 'CBIC GST Portal', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Official GST compliance and notice tracking portal' },
   ],
 };

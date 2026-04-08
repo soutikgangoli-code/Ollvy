@@ -1452,20 +1452,59 @@ function MobileBottomBarComponent({
 
   return (
     <>
-      {/* Fixed bottom bar container - relative for absolute positioning of expanded panel */}
-      <div className="fixed bottom-0 left-0 right-0 z-40">
-        {/* Expanded breakdown section - slides UP from above the bar */}
-        <div
-          className={cn(
-            'absolute bottom-full left-0 right-0 bg-background border-t border-border shadow-lg transition-all duration-300 ease-out',
-            isExpanded
-              ? 'translate-y-0 opacity-100'
-              : 'translate-y-2 opacity-0 pointer-events-none'
-          )}
-        >
-          <div className="px-4 py-4">
+      {/* Fixed bottom bar container - grows upward when expanded */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border transition-all duration-300"
+      >
+        {/* Collapsed bar - always visible at top of container */}
+        <div className="px-4 py-3 flex items-center justify-between h-[76px]">
+          {/* Left side - tappable to toggle expanded */}
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="text-left flex-1"
+          >
+            {/* Guaranteed by date - green badge style */}
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 mb-1 rounded-full text-xs font-medium bg-[hsl(var(--ollvy-green))]/10 border border-[hsl(var(--ollvy-green))]/30 text-[hsl(var(--ollvy-green-fg))]">
+              <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
+              Guaranteed by {guaranteedDate}
+            </span>
+            {/* Total with chevron - UP when collapsed (tap to expand), DOWN when expanded */}
+            <div className="flex items-center gap-1.5">
+              <span className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</span>
+              <ChevronUp
+                className={cn(
+                  'h-4 w-4 text-muted-foreground transition-transform duration-200',
+                  isExpanded ? 'rotate-180' : 'rotate-0'
+                )}
+              />
+            </div>
+          </button>
+
+          {/* Right side - Pay Now button */}
+          <Button
+            onClick={onSubmit}
+            disabled={isProcessing || !canSubmit}
+            className="h-11 px-6 text-base font-medium rounded-md bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white"
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                Pay Now
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </>
+            )}
+          </Button>
+        </div>
+
+        {/* Breakdown - appears below the bar when expanded */}
+        {isExpanded && (
+          <div className="px-4 pb-4 border-t border-border">
             {/* Fee breakdown */}
-            <div className="space-y-2">
+            <div className="space-y-2 pt-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Service fee</span>
                 <span className="font-mono text-sm text-foreground">{formatPrice(displayServiceFee)}</span>
@@ -1487,53 +1526,7 @@ function MobileBottomBarComponent({
               </span>
             </div>
           </div>
-        </div>
-
-        {/* Collapsed bar - always visible, 76px */}
-        <div className="bg-background border-t border-border">
-          <div className="flex items-center justify-between gap-4 p-4 h-[76px]">
-            {/* Left side - tappable to toggle expanded */}
-            <button
-              onClick={() => setIsExpanded(!isExpanded)}
-              className="text-left flex-1"
-            >
-              {/* Guaranteed by date - green badge style */}
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 mb-1 rounded-full text-xs font-medium bg-[hsl(var(--ollvy-green))]/10 border border-[hsl(var(--ollvy-green))]/30 text-[hsl(var(--ollvy-green-fg))]">
-                <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
-                Guaranteed by {guaranteedDate}
-              </span>
-              {/* Total with chevron - UP when collapsed, DOWN when expanded */}
-              <div className="flex items-center gap-1.5">
-                <span className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</span>
-                <ChevronUp
-                  className={cn(
-                    'h-4 w-4 text-muted-foreground transition-transform duration-200',
-                    isExpanded ? 'rotate-180' : 'rotate-0'
-                  )}
-                />
-              </div>
-            </button>
-
-            {/* Right side - Pay Now button */}
-            <Button
-              onClick={onSubmit}
-              disabled={isProcessing || !canSubmit}
-              className="h-11 px-6 text-base font-medium rounded-md bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white"
-            >
-              {isProcessing ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
-                </>
-              ) : (
-                <>
-                  Pay Now
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Spacer - accounts for collapsed bar height */}

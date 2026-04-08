@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax1399DefectiveReturn: LearnPageConfig = {
   slug: 'income-tax-139-9-defective-return',
   title: 'Income Tax Section 139(9) Notice: Defective Return',
-  seoTitle: 'Income Tax 139(9) Defective Return Notice 2025: How to Fix It | Ollvy',
-  seoDescription: 'Got an Income Tax Section 139(9) notice saying your return is defective? Understand exactly what is wrong and how to fix it within 15 days before your ITR becomes invalid.',
+  seoTitle: 'Section 139(9) Defective Return: Fix Within 15 Days (2025) | Ollvy',
+  seoDescription: 'A 139(9) notice means your ITR has a structural defect. Fix it within 15 days or your return becomes invalid. Common defects: wrong ITR form, missing schedules, or audit report not filed.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-139-9-defective-return',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -24,7 +24,7 @@ export const incomeTax1399DefectiveReturn: LearnPageConfig = {
     {
       number: '01',
       heading: 'YOUR RETURN WAS FILED BUT THE DEPARTMENT SAYS IT IS DEFECTIVE',
-      body: 'A Section 139(9) notice means the income tax department processed your filed return and found something that makes it technically incomplete or incorrect in a way that invalidates it. This is not about tax liability - it is about the structural integrity of your return filing itself.\n\nThe specific defect will be mentioned in the notice. You have 15 days to fix it. If you do not, the return is legally treated as if it was never filed at all - which has significant consequences including loss of refunds and inability to carry forward losses.',
+      body: 'A Section 139(9) notice means the income tax department processed your filed return and found something that makes it technically incomplete or incorrect in a way that invalidates it. This is not about tax liability, it is about the structural integrity of your return filing itself.\n\nThe specific defect will be mentioned in the notice. You have 15 days to fix it. If you do not, the return is legally treated as if it was never filed at all, which has significant consequences including loss of refunds and inability to carry forward losses.',
       note: 'Source: Section 139(9), Income Tax Act, 1961.',
     },
     {
@@ -86,7 +86,16 @@ export const incomeTax1399DefectiveReturn: LearnPageConfig = {
     },
     {
       q: 'I received the 139(9) notice very late and only have 3 days left. What should I do?',
-      a: 'File the corrected return today with whatever is available. Do not wait for perfection. If you need more time for documentation (audit report, etc.), request an extension in writing to the CPC at the same time. A partially corrected return that was filed in time is better than a perfect return filed after the deadline.',
+      a: 'File the corrected return today with whatever is available. If you need more time for documentation (audit report, etc.), request an extension in writing to the CPC at the same time. A partially corrected return that was filed in time is better than a perfect return filed after the deadline.',
     },
+    {
+      q: 'The defect code in my notice is unclear. How do I know what to fix?',
+      a: 'Log into the income tax portal and check the specific defect code description. The CPC assigns defect codes with explanations. If it is still unclear, contact the CPC helpline (1800-103-4455) for clarification before filing your response.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 139(9))', url: 'https://incometaxindia.gov.in', description: 'Defective return notice provision' },
+    { name: 'CPC Bengaluru Helpline', url: 'https://incometaxindiaefiling.gov.in', description: 'Defect code explanations and rectification guidance' },
   ],
 };

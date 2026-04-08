@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax1432Scrutiny: LearnPageConfig = {
   slug: 'income-tax-143-2-scrutiny',
   title: 'Income Tax Section 143(2) Scrutiny Notice: A Human is Reviewing Your Return',
-  seoTitle: 'Income Tax 143(2) Scrutiny Notice 2025: What to Do | Ollvy',
-  seoDescription: 'Received an Income Tax Section 143(2) scrutiny notice? A tax officer has selected your return for detailed examination. Understand what it means and how to respond.',
+  seoTitle: 'Section 143(2) Scrutiny Notice: Step by Step Response (2025) | Ollvy',
+  seoDescription: 'A 143(2) notice means your return was selected for detailed scrutiny. The process runs 12-18 months through the faceless assessment system. Engage a CA from day one.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-143-2-scrutiny',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -23,8 +23,8 @@ export const incomeTax1432Scrutiny: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'THIS IS DIFFERENT FROM 143(1). A REAL OFFICER IS LOOKING AT YOUR RETURN.',
-      body: 'A Section 143(2) notice means your income tax return has been selected for scrutiny assessment. An assessing officer (a real person, not an automated system) has selected your case and is now conducting a detailed examination of your income, deductions, exemptions, and tax paid.\n\nThe officer has the power to call for any documents, examine books of accounts, make enquiries from third parties (banks, clients, employers), and ultimately pass an assessment order that can be higher than what you declared.\n\nThis is serious but manageable if handled correctly from the start.',
+      heading: 'A REAL OFFICER IS REVIEWING YOUR RETURN',
+      body: 'A Section 143(2) notice means your income tax return has been selected for scrutiny assessment. An assessing officer (a real person, not an automated system) has selected your case and is now conducting a detailed examination of your income, deductions, exemptions, and tax paid.\n\nThe officer has the power to call for any documents, examine books of accounts, make enquiries from third parties (banks, clients, employers), and ultimately pass an assessment order that can be higher than what you declared.',
       note: 'Source: Section 143(2), Income Tax Act, 1961.',
     },
     {
@@ -66,7 +66,7 @@ export const incomeTax1432Scrutiny: LearnPageConfig = {
         'Respond fully and on time: Partial responses and missed deadlines create negative impressions and invite harder follow-up queries.',
         'Do not over-share: Only answer what is asked. Do not volunteer information that was not requested and that might open new lines of enquiry.',
         'Document everything: Keep a log of every document submitted, every query answered, and every communication with the officer. Get written acknowledgements.',
-        "Understand what the officer is looking for: Most scrutiny notices focus on one or two specific issues. Understanding the officer's concern early helps you address it effectively.",
+        "Understand what the officer is looking for: Most scrutiny notices focus on one or two specific issues.",
         'Do not make verbal commitments: Everything in a scrutiny proceeding should be in writing. If you make a verbal statement that is later used against you, you have no record to contest it.',
       ],
     },
@@ -98,5 +98,14 @@ export const incomeTax1432Scrutiny: LearnPageConfig = {
       q: 'I received both 143(1) intimation with no demand and then 143(2). Is that normal?',
       a: 'Yes. A 143(1) intimation means the CPC processed your return with no issues found through automated checking. A 143(2) notice means your case was separately selected for scrutiny by a human officer. These are two independent processes and receiving a clean 143(1) does not protect you from 143(2) scrutiny.',
     },
+    {
+      q: 'The notice says I must respond by a date that is only 15 days away. Is that enough time?',
+      a: 'Legally, you have the right to request an extension if the original deadline is too short. Write to the officer (through the portal) requesting a reasonable extension with specific reasons. Officers typically grant 15-30 additional days for first requests.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 143(2))', url: 'https://incometaxindia.gov.in', description: 'Scrutiny assessment notice provision' },
+    { name: 'Income Tax Act, 1961 (Section 144B)', url: 'https://incometaxindia.gov.in', description: 'Faceless assessment scheme procedures' },
   ],
 };

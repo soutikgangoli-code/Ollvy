@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const tdsShortDeductionNotice: LearnPageConfig = {
   slug: 'tds-short-deduction-notice',
   title: 'TDS Short Deduction or Non-Deduction Notice from TRACES',
-  seoTitle: 'TDS Short Deduction Notice from TRACES 2025: How to Respond | Ollvy',
-  seoDescription: 'Got a TDS short deduction or non-deduction notice from TRACES? Understand why it was generated, what interest and penalty applies, and how to regularise.',
+  seoTitle: 'TDS Short Deduction Notice: Interest and Penalty Explained (2025) | Ollvy',
+  seoDescription: 'TRACES detected TDS short or non-deduction. Interest runs at 1-1.5 percent per month. Section 40(a)(ia) disallows 30 percent of the expense. File a correction return after depositing the shortfall.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-short-deduction-notice',
   lastReviewed: 'March 2025',
   category: 'TDS Notice',
@@ -24,7 +24,7 @@ export const tdsShortDeductionNotice: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHY YOU RECEIVED THIS NOTICE',
-      body: 'TDS (Tax Deducted at Source) is a withholding obligation. When you make certain payments above specified thresholds - contractor fees, professional fees, rent, commission, salary - you are legally required to deduct a percentage of that payment and deposit it with the government.\n\nA short deduction notice means the TRACES system (the TDS processing system run by the income tax department) has found that you either deducted less than you were required to, or did not deduct at all, for a particular payment or set of payments.',
+      body: 'TDS (Tax Deducted at Source) is a withholding obligation. When you make certain payments above specified thresholds (contractor fees, professional fees, rent, commission, salary), you are legally required to deduct a percentage of that payment and deposit it with the government.\n\nA short deduction notice means the TRACES system (the TDS processing system run by the income tax department) has found that you either deducted less than you were required to, or did not deduct at all, for a particular payment or set of payments.',
       note: 'Source: Chapter XVII, Income Tax Act, 1961. TDS provisions: Sections 192 to 196D.',
     },
     {
@@ -58,7 +58,7 @@ export const tdsShortDeductionNotice: LearnPageConfig = {
       body: '',
       bullets: [
         'If you did not deduct TDS and have not yet paid the vendor: Deduct TDS now from the next payment to the vendor, deposit it with the government via Challan 281, and file a correction in your TDS return.',
-        'If you already paid the vendor without deducting TDS: You have two options - (a) Deduct from the next payment (cumulative arrears), or (b) Pay the TDS out of your own pocket and deposit it. Option (b) is cleaner from a compliance standpoint. Interest accrues from the date of the original payment.',
+        'If you already paid the vendor without deducting TDS: You have two options. (a) Deduct from the next payment (cumulative arrears), or (b) Pay the TDS out of your own pocket and deposit it. Option (b) is cleaner from a compliance standpoint. Interest accrues from the date of the original payment.',
         'File a revised TDS return: After depositing the short/non-deducted amount, file a correction statement in TRACES (Form 26Q/27Q/24Q as applicable) reflecting the corrected deduction and deposit.',
         'Respond to the TRACES notice: Upload the correction details and challan on the TRACES portal in response to the notice.',
         'Apply for condonation of interest if the default was due to a genuine interpretive issue: Section 119(2)(b) allows waiver of interest in genuine cases. This requires a detailed application to the CBDT.',
@@ -85,7 +85,17 @@ export const tdsShortDeductionNotice: LearnPageConfig = {
     },
     {
       q: 'I was not aware that TDS was required on a particular payment. Does ignorance reduce the penalty?',
-      a: 'Not officially. TDS obligations are statutory and ignorance is not a defence. However, for penalties (not interest), the officer does have discretion to reduce or waive penalties in genuine cases of inadvertent error with immediate correction. This discretion is exercised more favourably if you correct proactively before or immediately after receiving notice.',
+      a: 'TDS obligations are statutory and ignorance is not a defence. However, for penalties (not interest), the officer does have discretion to reduce or waive penalties in genuine cases of inadvertent error with immediate correction.',
     },
+    {
+      q: 'What is the Section 40(a)(ia) disallowance?',
+      a: 'If TDS was not deducted on a payment to a resident (contractor, professional, rent), 30 percent of that expense is disallowed in your income tax computation. This increases your taxable income and tax liability for the year.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Sections 192-196D)', url: 'https://incometaxindia.gov.in', description: 'TDS provisions for different payment types' },
+    { name: 'Income Tax Act, 1961 (Section 201)', url: 'https://incometaxindia.gov.in', description: 'Consequences of failure to deduct or pay TDS' },
+    { name: 'TRACES Portal', url: 'https://www.tdscpc.gov.in', description: 'TDS return filing and correction' },
   ],
 };

@@ -436,12 +436,15 @@ export function UnifiedServicePage({
     : 'Book Now'
 
   // Build base checkout/eligibility URL
-  // Always go through eligibility first - it handles redirect to checkout if no questions
+  // Only services with pre-qualifying questions go through eligibility
+  // Others go directly to checkout - no intermediate loading screen
   const getCtaUrl = (includeVariant = false) => {
     const serviceId = service.id || service.slug
     const baseUrl = service.priceVariesByState
       ? `/quote/request/${serviceId}`
-      : `/checkout/${serviceId}/eligibility`
+      : priceVariesByQuestionnaire
+      ? `/checkout/${serviceId}/eligibility`
+      : `/checkout/${serviceId}`
     if (includeVariant && service.variants && selectedVariant) {
       return `${baseUrl}?variant=${selectedVariant}`
     }

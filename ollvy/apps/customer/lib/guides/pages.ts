@@ -39,6 +39,9 @@ export interface LearnPageConfig {
 
   // Related external tools (penalty calculators, document checklists)
   relatedTools?: RelatedTools;
+
+  // Sources for ToolLastReviewed component
+  sources?: Array<{ name: string; url: string; description: string }>;
 }
 
 export interface RelatedTools {

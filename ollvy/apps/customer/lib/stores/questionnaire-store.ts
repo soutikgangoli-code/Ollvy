@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { getClient } from '../supabase'
 import { getPreCursorAnswers } from '../pre-cursor'
+import { logCustomerQuestionnaireAnswer } from '@/app/(main)/orders/[id]/actions'
 import type {
   ServiceQuestion,
   QuestionnaireStep,
@@ -497,6 +498,14 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         if (failures.length > 0) {
           console.error('Some responses failed to save:', failures)
           // Continue anyway - partial save is better than no save
+        }
+
+        // Log to activity log (only for successfully saved questions)
+        const successfulKeys = results
+          .filter(r => r.status === 'fulfilled')
+          .map(r => r.key)
+        if (successfulKeys.length > 0) {
+          await logCustomerQuestionnaireAnswer(orderId, successfulKeys, currentStep)
         }
 
         // Update order's questionnaire_step

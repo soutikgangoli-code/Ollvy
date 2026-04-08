@@ -5,7 +5,7 @@ export const gstAsmt10Notice: LearnPageConfig = {
   slug: 'gst-asmt-10-notice',
   title: 'GST ASMT-10 Scrutiny Notice: What It Means and How to Reply',
   seoTitle: 'GST ASMT-10 Notice: How to Reply and What It Means (2025) | Ollvy',
-  seoDescription: 'Received a GST ASMT-10 scrutiny notice? Understand what discrepancy the department found, your reply deadline, and how to respond before it escalates.',
+  seoDescription: 'A GST ASMT-10 notice means an officer found a discrepancy in your returns. You have 15 days to reply in Form ASMT-11. No reply leads to a best judgment assessment under Section 62.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-asmt-10-notice',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
@@ -24,7 +24,7 @@ export const gstAsmt10Notice: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT IS ASMT-10 AND WHY DID YOU GET IT',
-      body: "An ASMT-10 notice is a scrutiny notice issued under Section 61 of the CGST Act. It means a GST officer has reviewed your filed GST returns and found something that does not add up. They are not accusing you of fraud - not yet. They are asking you to explain the discrepancy before deciding what to do next.\n\nThink of it as the officer flagging a specific issue and saying: \"Your numbers don't match. Tell me why.\" The operative word is yet - if your reply is poor or missing, ASMT-10 escalates.",
+      body: "An ASMT-10 notice is a scrutiny notice issued under Section 61 of the CGST Act. It means a GST officer has reviewed your filed GST returns and found something that does not add up. They are not accusing you of fraud, not yet. They are asking you to explain the discrepancy before deciding what to do next.\n\nThink of it as the officer flagging a specific issue and saying: \"Your numbers don't match. Tell me why.\" The operative word is yet. If your reply is poor or missing, ASMT-10 escalates.",
       note: 'Source: Section 61, Central Goods and Services Tax Act, 2017. Rule 99, CGST Rules 2017.',
     },
     {
@@ -43,7 +43,7 @@ export const gstAsmt10Notice: LearnPageConfig = {
     {
       number: '03',
       heading: 'YOUR EXACT DEADLINE AND WHAT HAPPENS NEXT',
-      body: 'You have 15 days from the date of the ASMT-10 notice to file your reply in Form ASMT-11 on the GST portal.\n\nIf you need more time, you can request an extension before the 15 days expire. Extension requests are generally considered reasonable if submitted promptly with a genuine reason.\n\nHere is how the path forks based on your reply:',
+      body: 'You have 15 days from the date of the ASMT-10 notice to file your reply in Form ASMT-11 on the GST portal.\n\nIf you need more time, you can request an extension before the 15 days expire. Extension requests are generally considered reasonable if submitted promptly with a genuine reason.\n\nThe outcome depends on your reply:',
       bullets: [
         'You reply and the officer is satisfied: The officer issues ASMT-12 (acceptance of reply) and closes the matter. This is the outcome you are working toward.',
         'You reply but the officer is not fully satisfied: The officer may ask follow-up questions or proceed to initiate a formal audit under Section 65 or Section 66.',
@@ -57,7 +57,7 @@ export const gstAsmt10Notice: LearnPageConfig = {
       heading: 'HOW TO WRITE A STRONG ASMT-11 REPLY',
       body: 'Your reply in ASMT-11 is your one chance to close this at the lowest level of the hierarchy. A strong reply does the following:',
       bullets: [
-        'Addresses each discrepancy specifically by the line item or period the notice mentions - do not give generic answers',
+        'Addresses each discrepancy specifically by the line item or period the notice mentions. Do not give generic answers',
         'Provides a reconciliation statement: For a GSTR-1 vs 3B mismatch, a table showing exactly which invoices account for the difference (credit notes issued, return of goods, timing of invoice vs payment) is the most effective reply',
         'Attaches supporting documents: GSTR returns, financial statements, purchase invoices, bank statements, contracts, and any other evidence that supports your explanation',
         'Acknowledges errors if there are any: If you made a genuine mistake in filing, acknowledge it clearly, explain how it happened (human error, software issue), show the correct position, and offer to pay any tax due with interest',
@@ -68,6 +68,11 @@ export const gstAsmt10Notice: LearnPageConfig = {
     },
     {
       number: '05',
+      heading: 'WHAT VOLUNTARY PAYMENT AT ASMT-10 STAGE SAVES YOU',
+      body: 'If you agree that some or all of the discrepancy represents genuine underpaid tax, paying it voluntarily through DRC-03 before or alongside your ASMT-11 reply has real financial advantages.\n\nAt the ASMT-10 stage, before formal demand proceedings begin, there is no mandatory penalty. If the matter progresses to DRC-01A and you pay there, the same applies for non-fraud cases. Once DRC-01 is issued, a minimum 10 percent penalty applies under Section 73.\n\nPaying early also demonstrates compliance intent, which influences how officers approach your case at every subsequent stage.',
+    },
+    {
+      number: '06',
       heading: 'THE ASMT-10 TO DRC-01 ESCALATION PATH',
       body: 'It is worth understanding the full escalation path so you know what you are trying to prevent:',
       bullets: [
@@ -81,7 +86,7 @@ export const gstAsmt10Notice: LearnPageConfig = {
       ],
     },
     {
-      number: '06',
+      number: '07',
       heading: 'MISTAKES THAT TURN A MINOR QUERY INTO A MAJOR DEMAND',
       body: '',
       bullets: [
@@ -111,5 +116,10 @@ export const gstAsmt10Notice: LearnPageConfig = {
       q: 'The ASMT-10 notice says the discrepancy is Rs. 12 lakh. Will I have to pay all of this?',
       a: 'Not necessarily. The Rs. 12 lakh is the discrepancy flagged, not necessarily the final tax due. After your reply and reconciliation, the officer may accept your explanation fully, partially, or not at all. What you eventually owe (if anything) depends entirely on the quality of your reply.',
     },
+  ],
+
+  sources: [
+    { name: 'CGST Act, 2017 (Section 61)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Scrutiny of returns provision under which ASMT-10 is issued' },
+    { name: 'CGST Rules, 2017 (Rule 99)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Procedure for scrutiny of returns and reply in Form ASMT-11' },
   ],
 };

@@ -23,6 +23,7 @@ export default async function OrdersPage() {
   if (supabaseServer) {
     try {
       // Fetch ALL orders in ONE query (not 2 separate RPCs)
+      // Exclude pending_payment at SQL level - these are unpaid abandoned orders
       const { data: orders, error } = await supabaseServer
         .from('orders')
         .select(`
@@ -41,15 +42,18 @@ export default async function OrdersPage() {
           )
         `)
         .eq('user_id', user.id)
+        .neq('status', 'pending_payment')
         .order('created_at', { ascending: false })
 
       if (!error && orders) {
         // Split on server (no extra query)
         const activeStatuses = ['pending_assignment', 'waitlisted', 'in_progress']
-        const completedStatuses = ['completed', 'cancelled', 'disputed']
+        const completedStatuses = ['completed', 'disputed']
 
         const active = orders.filter(o => activeStatuses.includes(o.status)) as Order[]
-        const completed = orders.filter(o => completedStatuses.includes(o.status)).slice(0, 20) as Order[]
+        // Only show cancelled orders that were actually paid (not abandoned payment attempts)
+        const cancelledPaid = orders.filter(o => o.status === 'cancelled' && o.paid_at !== null)
+        const completed = [...orders.filter(o => completedStatuses.includes(o.status)), ...cancelledPaid].slice(0, 20) as Order[]
 
         initialData = { active, completed }
       }

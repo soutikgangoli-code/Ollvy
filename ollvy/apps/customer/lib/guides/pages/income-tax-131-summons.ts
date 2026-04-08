@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax131Summons: LearnPageConfig = {
   slug: 'income-tax-131-summons',
   title: 'Income Tax Section 131 Summons: What to Do When You Are Called In',
-  seoTitle: 'Income Tax Section 131 Summons 2025: How to Respond | Ollvy',
-  seoDescription: 'Got an Income Tax Section 131 summons? This is the highest level of individual notice in routine tax proceedings. Understand what is expected and how to appear.',
+  seoTitle: 'Section 131 Summons: Appear or Face Prosecution (2025) | Ollvy',
+  seoDescription: 'A Section 131 summons requires your personal attendance for examination on oath. Non-compliance is a criminal offence under Section 131(1A). Take a CA or advocate with you.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-131-summons',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -46,10 +46,10 @@ export const incomeTax131Summons: LearnPageConfig = {
       bullets: [
         'Do not go alone: Engage a CA or tax advocate and have them accompany you as your authorised representative. Under Section 288 of the IT Act, you can be represented by a CA or advocate.',
         'Review the summons carefully: It will specify what documents to bring and (sometimes) the specific issues to be examined. Prepare these thoroughly.',
-        'Know what you are going to say: Discuss with your CA what answers are appropriate for the likely questions. Do not speculate or guess - if you do not know the answer to a question, say so.',
+        'Know what you are going to say: Discuss with your CA what answers are appropriate for the likely questions. If you do not know the answer to a question, say so.',
         'Be truthful: You are being examined on oath. False statements constitute perjury, which is a criminal offence under Section 193 of the Indian Penal Code.',
         'Take notes: During the examination, ask for a copy of the statement recorded. Everything that is recorded becomes part of the official proceedings.',
-        'Do not bring more than what is asked: If the summons asks for three years of bank statements, bring those. Do not bring additional records that were not asked for - they may open new avenues of enquiry.',
+        'Do not bring more than what is asked: If the summons asks for three years of bank statements, bring those. Additional records that were not asked for may open new avenues of enquiry.',
       ],
     },
     {
@@ -72,7 +72,16 @@ export const incomeTax131Summons: LearnPageConfig = {
     },
     {
       q: 'The Section 131 summons asks me to bring all books of accounts for 5 years. That is thousands of pages. What do I do?',
-      a: 'You are required to produce what was asked. For very large volumes, write to the officer in advance to discuss a practical arrangement (e.g., production in batches, digital copies). Officers are generally practical about this. Do not use volume as a reason to not produce the records - that is non-compliance.',
+      a: 'You are required to produce what was asked. For very large volumes, write to the officer in advance to discuss a practical arrangement (production in batches, digital copies). Officers are generally practical about this.',
     },
+    {
+      q: 'Can I send someone else on my behalf?',
+      a: 'Yes, you can authorise a CA or advocate to appear on your behalf under Section 288 of the Income Tax Act. File a written power of attorney or authorisation letter. However, if the officer specifically wants to examine you personally, you must appear.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 131)', url: 'https://incometaxindia.gov.in', description: 'Powers of income tax authorities for discovery and enforcement' },
+    { name: 'Income Tax Act, 1961 (Section 288)', url: 'https://incometaxindia.gov.in', description: 'Appearance by authorised representative' },
   ],
 };

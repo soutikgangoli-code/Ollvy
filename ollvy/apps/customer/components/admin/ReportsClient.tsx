@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { formatPaisa, formatDate } from '@/lib/utils'
+import { formatPaisa, formatDate, cn } from '@/lib/utils'
 import { usePersistedState } from '@/lib/hooks/use-persisted-state'
 
 interface Order {
@@ -185,7 +185,7 @@ export function ReportsClient({
 
         {/* Revenue by Order */}
         <TabsContent value="by-order">
-          <Card>
+          <Card className="overflow-hidden">
             <CardHeader>
               <CardTitle className="text-lg">Revenue by Order</CardTitle>
             </CardHeader>
@@ -271,7 +271,7 @@ export function ReportsClient({
 
         {/* Revenue by User */}
         <TabsContent value="by-user">
-          <Card>
+          <Card className="overflow-hidden">
             <CardHeader>
               <CardTitle className="text-lg">Revenue by User</CardTitle>
             </CardHeader>
@@ -346,9 +346,9 @@ function SummaryCard({
   highlight?: boolean
 }) {
   return (
-    <Card className={highlight ? 'border-green-500/50 bg-green-500/5' : ''}>
+    <Card className={cn('overflow-hidden', highlight && 'border-green-500/50 bg-green-500/5')}>
       <CardContent className="p-4">
-        <div className={`text-2xl font-bold ${highlight ? 'text-green-600 dark:text-green-400' : 'text-foreground'}`}>
+        <div className={cn('text-xl md:text-2xl font-bold truncate', highlight ? 'text-green-600 dark:text-green-400' : 'text-foreground')}>
           {value}
         </div>
         <div className="text-sm font-medium text-foreground">{label}</div>

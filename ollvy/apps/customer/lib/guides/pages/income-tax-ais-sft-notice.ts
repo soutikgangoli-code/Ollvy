@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTaxAisSftNotice: LearnPageConfig = {
   slug: 'income-tax-ais-sft-notice',
   title: 'Income Tax AIS / SFT High-Value Transaction Notice',
-  seoTitle: 'Income Tax AIS / High Value Transaction Notice 2025 | Ollvy',
-  seoDescription: 'Got a notice about a high-value transaction in your AIS or SFT? Understand what the department has found, whether it is taxable, and how to respond.',
+  seoTitle: 'AIS / SFT High Value Transaction Notice: Explain or Pay (2025) | Ollvy',
+  seoDescription: 'AIS now shows every high-value transaction to the department. If your ITR does not reflect a transaction in your AIS, expect a notice. Respond proactively before it becomes a 148A.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-ais-sft-notice',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -25,7 +25,7 @@ export const incomeTaxAisSftNotice: LearnPageConfig = {
     {
       number: '01',
       heading: 'THE DEPARTMENT HAS YOUR TRANSACTION DATA AND IS ASKING ABOUT IT',
-      body: 'The income tax department now receives detailed financial information about you from dozens of sources: banks, stock exchanges, mutual fund houses, property registrars, foreign exchange dealers, insurance companies, and more. This data flows through two systems: the Annual Information Statement (AIS) and the Statement of Financial Transactions (SFT / Form 61A).\n\nWhen a transaction appears in your AIS and does not show up in your filed income tax return - or the income tax return shows much lower income than the transaction data suggests - the department sends you a communication asking for an explanation.',
+      body: 'The income tax department now receives detailed financial information about you from dozens of sources: banks, stock exchanges, mutual fund houses, property registrars, foreign exchange dealers, insurance companies, and more. This data flows through two systems: the Annual Information Statement (AIS) and the Statement of Financial Transactions (SFT / Form 61A).\n\nWhen a transaction appears in your AIS and does not show up in your filed income tax return, or the income tax return shows much lower income than the transaction data suggests, the department sends you a communication asking for an explanation.',
       note: 'Source: Section 285BA, Income Tax Act, 1961 (SFT obligations of reporting entities). AIS launched 2021 as an expansion of Form 26AS.',
     },
     {
@@ -51,7 +51,7 @@ export const incomeTaxAisSftNotice: LearnPageConfig = {
       bullets: [
         'Transaction was correctly reported in your ITR: Simply provide the reference - the schedule, amount, and treatment in your return. The matter typically closes here.',
         'Transaction was not reported because it is not taxable income: Explain and document. Examples: a loan receipt (not income), sale of shares at a loss, gift received from relatives, proceeds from selling household goods.',
-        'Transaction was taxable and was not reported: The most uncomfortable situation. You will need to assess whether to file a revised return (if within the deadline) or a belated return, and pay tax with interest. Proactive disclosure is almost always better than waiting for a formal demand.',
+        'Transaction was taxable and was not reported: The most uncomfortable situation. You will need to assess whether to file a revised return (if within the deadline) or a belated return, and pay tax with interest. Proactive disclosure is better than waiting for a formal demand.',
         'Transaction data in AIS is wrong: This happens. Banks and other entities sometimes file SFT data incorrectly. You can submit a response on the AIS/26AS portal flagging the transaction as incorrect, with documentary evidence.',
       ],
     },
@@ -69,7 +69,16 @@ export const incomeTaxAisSftNotice: LearnPageConfig = {
     },
     {
       q: 'My AIS shows Rs. 35 lakh in mutual fund redemptions. I reported the capital gains but not the gross redemption amount. Will I get a notice?',
-      a: 'Possibly. The AIS shows gross transaction value while your ITR shows net capital gains. The difference can look like unreported income to an automated system. If you receive a communication, simply explain this in your response with your ITR Schedule CG (capital gains) showing the purchase price, sale price, and gains computed. This is a common and easily explained discrepancy.',
+      a: 'Possibly. The AIS shows gross transaction value while your ITR shows net capital gains. The difference can look like unreported income to an automated system. If you receive a communication, explain this with your ITR Schedule CG showing the purchase price, sale price, and gains computed.',
     },
+    {
+      q: 'How do I check my AIS before the department contacts me?',
+      a: 'Log into the income tax portal (incometax.gov.in), go to AIS, and review all reported transactions. If you find discrepancies between your AIS and your filed ITR, proactively file a revised return or keep documentation ready to explain the difference.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 285BA)', url: 'https://incometaxindia.gov.in', description: 'SFT reporting obligations for financial entities' },
+    { name: 'Income Tax Portal AIS', url: 'https://incometaxindia.gov.in', description: 'Annual Information Statement access' },
   ],
 };

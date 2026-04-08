@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax1421Notice: LearnPageConfig = {
   slug: 'income-tax-142-1-notice',
   title: 'Income Tax Section 142(1) Notice: What the Department is Asking For',
-  seoTitle: 'Income Tax Section 142(1) Notice 2025: How to Respond | Ollvy',
-  seoDescription: 'Received an Income Tax Section 142(1) notice? It is either asking you to file a return or produce documents. Understand which situation you are in and how to respond.',
+  seoTitle: 'Section 142(1) Notice: Return Filing or Document Production (2025) | Ollvy',
+  seoDescription: 'A 142(1) notice has two purposes: asking you to file a return (142(1)(i)) or produce documents during scrutiny (142(1)(ii)). Non-compliance attracts Rs. 10,000 penalty per notice under 271(1)(b).',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-142-1-notice',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -24,7 +24,7 @@ export const incomeTax1421Notice: LearnPageConfig = {
     {
       number: '01',
       heading: 'SECTION 142(1) IS USED IN TWO VERY DIFFERENT SITUATIONS',
-      body: 'A Section 142(1) notice has two entirely distinct purposes under the law and which one applies to you determines what you need to do. Read your notice carefully to identify which situation you are in.',
+      body: 'A Section 142(1) notice has two entirely distinct purposes under the law, and which one applies to you determines what you need to do. Read your notice carefully to identify which situation you are in.',
       bullets: [
         'Situation A - Filing a return: Under Section 142(1)(i), if you have not filed an income tax return and the assessing officer believes you should have, they can ask you to file. This can happen even before the assessment process begins.',
         'Situation B - Producing documents, accounts, or information: Under Section 142(1)(ii) and (iii), during the course of an assessment (usually scrutiny under 143(2)), the officer can ask you to produce specific books of accounts, documents, bank statements, or answer specific questions. This is the more common use.',
@@ -39,7 +39,7 @@ export const incomeTax1421Notice: LearnPageConfig = {
         'If the return is being filed late, Section 234F late fees apply: Rs. 5,000 if income above Rs. 5 lakh; Rs. 1,000 if below.',
         'Interest under Section 234A (1% per month on tax due) applies from the original due date.',
         'The return you file after a 142(1)(i) notice is treated as a belated return.',
-        'Do not treat this lightly - not filing even after a 142(1) notice can lead to Best Judgment Assessment under Section 144.',
+        'Not filing even after a 142(1) notice can lead to Best Judgment Assessment under Section 144.',
       ],
     },
     {
@@ -63,7 +63,7 @@ export const incomeTax1421Notice: LearnPageConfig = {
       bullets: [
         'Penalty under Section 271(1)(b): Rs. 10,000 per notice that you fail to comply with. This is a fixed penalty, not proportional to your income.',
         'Best Judgment Assessment under Section 144: If you repeatedly fail to respond, the officer can pass a best judgment assessment based on available information - typically unfavourable.',
-        'Prosecution under Section 276D: Persistent non-compliance with production orders can lead to criminal prosecution.',
+        'Prosecution under Section 276D: Persistent non-compliance with production orders can lead to prosecution.',
       ],
     },
   ],
@@ -75,7 +75,16 @@ export const incomeTax1421Notice: LearnPageConfig = {
     },
     {
       q: 'I received a 142(1) notice but I thought my scrutiny was already closed. What is happening?',
-      a: 'Sometimes 142(1) notices are issued after earlier responses as follow-up queries. Check whether the case is still open in the faceless assessment system. If the scrutiny was formally concluded and the final 143(3) order was passed, a fresh 142(1) should not be possible unless a new proceeding (like a reassessment under 148) has been initiated.',
+      a: 'Sometimes 142(1) notices are issued after earlier responses as follow-up queries. Check whether the case is still open in the faceless assessment system. If the scrutiny was formally concluded and the final 143(3) order was passed, a fresh 142(1) should not be possible unless a new proceeding has been initiated.',
     },
+    {
+      q: 'Can I send the documents by post instead of uploading them?',
+      a: 'Under the faceless assessment scheme, all documents must be uploaded digitally through the income tax portal. Physical submission is no longer accepted for faceless cases. If the file size is too large, split the documents into multiple uploads or compress them.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 142(1))', url: 'https://incometaxindia.gov.in', description: 'Notice for return filing or document production' },
+    { name: 'Income Tax Act, 1961 (Section 271(1)(b))', url: 'https://incometaxindia.gov.in', description: 'Penalty for non-compliance with notice' },
   ],
 };

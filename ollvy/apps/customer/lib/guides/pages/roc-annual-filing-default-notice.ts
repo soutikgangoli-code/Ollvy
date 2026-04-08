@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const rocAnnualFilingDefaultNotice: LearnPageConfig = {
   slug: 'roc-annual-filing-default-notice',
   title: 'ROC / MCA Show Cause Notice for Annual Filing Default',
-  seoTitle: 'ROC Annual Filing Default Notice 2025 | Ollvy',
-  seoDescription: 'Got an ROC or MCA show cause notice for not filing annual returns? Understand the director disqualification risk, penalties, and how to regularise before it is too late.',
+  seoTitle: 'ROC Annual Filing Default: Director Disqualification Risk (2025) | Ollvy',
+  seoDescription: 'Three consecutive years of non-filing disqualifies all directors under Section 164(2). File AOC-4 and MGT-7 immediately. Penalties accumulate at Rs. 100 per day. Use CFSS amnesty if available.',
   canonicalUrl: 'https://www.ollvy.com/guides/roc-annual-filing-default-notice',
   lastReviewed: 'March 2025',
   category: 'ROC Notice',
@@ -23,8 +23,8 @@ export const rocAnnualFilingDefaultNotice: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'THIS IS NOT JUST ABOUT PAPERWORK - DIRECTORS CAN BE DISQUALIFIED',
-      body: "Every Private Limited Company is required to file two annual returns with the Ministry of Corporate Affairs (MCA): AOC-4 (Financial Statements including Balance Sheet, P&L, and auditor's report) and MGT-7 (Annual Return showing shareholding, directors, etc.).\n\nWhen these are not filed, the Registrar of Companies (ROC) issues a notice under Section 234 of the Companies Act, 2013. If defaults continue for three consecutive financial years, every director of the defaulting company is disqualified under Section 164(2) - meaning they cannot be appointed as a director in any company for 5 years.",
+      heading: 'DIRECTORS CAN BE DISQUALIFIED FOR NON-FILING',
+      body: "Every Private Limited Company is required to file two annual returns with the Ministry of Corporate Affairs (MCA): AOC-4 (Financial Statements including Balance Sheet, P&L, and auditor's report) and MGT-7 (Annual Return showing shareholding, directors, etc.).\n\nWhen these are not filed, the Registrar of Companies (ROC) issues a notice under Section 234 of the Companies Act, 2013. If defaults continue for three consecutive financial years, every director of the defaulting company is disqualified under Section 164(2), meaning they cannot be appointed as a director in any company for 5 years.",
       note: 'Source: Sections 92, 137, 164(2), 234, Companies Act 2013.',
     },
     {
@@ -69,7 +69,7 @@ export const rocAnnualFilingDefaultNotice: LearnPageConfig = {
       body: 'If you are disqualified:',
       bullets: [
         'You cannot be appointed or continue as director of any company for 5 years from the date of disqualification',
-        'This affects ALL your directorships - you must vacate directorship in every company, not just the defaulting one',
+        'This affects all your directorships. You must vacate directorship in every company, not just the defaulting one',
         'Banks often run DIN status checks during director due diligence for loans',
         'SEBI registered entities and listed companies check for director disqualification',
         "Restoring the directorship requires filing a representation with the ROC and separately with each company's board",
@@ -84,7 +84,17 @@ export const rocAnnualFilingDefaultNotice: LearnPageConfig = {
     },
     {
       q: 'I am a director in 6 companies. If one company defaults for 3 years and my DIN is disqualified, am I automatically removed from all 6?',
-      a: 'Yes. Section 164(2) disqualification attaches to your DIN and applies to all companies where you are a director. You must vacate all directorships within 30 days of the default being completed. Each company where you are a director must then fill your position. This is why catching annual filing defaults early matters so much.',
+      a: 'Yes. Section 164(2) disqualification attaches to your DIN and applies to all companies where you are a director. You must vacate all directorships within 30 days of the default being completed. Each company where you are a director must then fill your position.',
     },
+    {
+      q: 'What is the Companies Fresh Start Scheme (CFSS)?',
+      a: 'The MCA periodically runs CFSS amnesty schemes that waive additional filing fees for companies that regularise their defaults. Check the MCA portal for current scheme availability. When active, CFSS significantly reduces the cost of clearing multiple years of defaults.',
+    },
+  ],
+
+  sources: [
+    { name: 'Companies Act, 2013 (Section 164(2))', url: 'https://www.mca.gov.in', description: 'Director disqualification for non-filing' },
+    { name: 'Companies Act, 2013 (Sections 92, 137)', url: 'https://www.mca.gov.in', description: 'Annual filing requirements for AOC-4 and MGT-7' },
+    { name: 'MCA Portal', url: 'https://www.mca.gov.in', description: 'Annual filing and penalty payment' },
   ],
 };

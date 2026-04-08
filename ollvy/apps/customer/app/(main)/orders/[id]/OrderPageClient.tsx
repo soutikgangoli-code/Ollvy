@@ -157,6 +157,18 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
   const [questionnaireResponses, setQuestionnaireResponses] = useState<QuestionnaireResponse[]>(initialData?.questionnaireResponses || [])
   const [orderAddons, setOrderAddons] = useState<OrderAddon[]>(initialData?.orderAddons || [])
 
+  // Timeline collapsed state with localStorage persistence
+  const [timelineCollapsed, setTimelineCollapsed] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return localStorage.getItem('timeline_collapsed') === 'true'
+  })
+
+  const toggleTimeline = () => {
+    const next = !timelineCollapsed
+    setTimelineCollapsed(next)
+    localStorage.setItem('timeline_collapsed', String(next))
+  }
+
   // Fetch order data client-side ONLY if no initial data provided
   useEffect(() => {
     // Skip if we already have data from server
@@ -1058,13 +1070,25 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                     Progress Timeline
                   </span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {completedStagesCount} of {timelineStages.length}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-muted-foreground">
+                    {completedStagesCount} of {timelineStages.length}
+                  </span>
+                  <button
+                    onClick={toggleTimeline}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label={timelineCollapsed ? 'Expand timeline' : 'Collapse timeline'}
+                  >
+                    <ChevronDown
+                      className={cn('h-4 w-4 transition-transform duration-200', timelineCollapsed && 'rotate-180')}
+                    />
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* Timeline content */}
+            {!timelineCollapsed && (
             <div className="p-6">
               <div className="space-y-0">
                 {timelineStages.map((stage: TimelineStage, index: number) => {
@@ -1108,7 +1132,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                         <div className="flex items-center gap-2 flex-wrap">
                           <h4
                             className={cn(
-                              'font-medium',
+                              'font-mono font-medium text-sm',
                               stage.isCompleted || stage.isCurrent
                                 ? 'text-foreground'
                                 : 'text-muted-foreground'
@@ -1248,7 +1272,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                             )
                           })()}
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-sm font-mono text-muted-foreground mt-1">
                           {stage.isCompleted ? (
                             <span>
                               Completed{stage.completedDate ? ` on ${stage.completedDate}` : ''}
@@ -1265,6 +1289,7 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                 })}
               </div>
             </div>
+            )}
           </div>
 
           {/* Rounds Timeline */}

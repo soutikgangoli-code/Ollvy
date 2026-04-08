@@ -136,7 +136,7 @@ export function TeamClient({ teamMembers, currentAdminId }: TeamClientProps) {
         <Button onClick={() => setAddDialogOpen(true)}>Add member</Button>
       </div>
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-lg">
             Team Members

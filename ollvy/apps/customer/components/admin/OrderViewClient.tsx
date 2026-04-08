@@ -182,6 +182,10 @@ export function OrderViewClient({
     order.chat_conversation_id
   )
 
+  // Realtime state for documents and questionnaire
+  const [documents, setDocuments] = useState<OrderDocument[]>(initialDocs)
+  const [answers, setAnswers] = useState<Array<{ question_key: string; response_value: any }>>(questionnaireAnswers)
+
   // Fallback polling for chat_conversation_id
   // Ensures chat appears even if realtime has issues or page loaded before webhook completed
   useEffect(() => {
@@ -214,6 +218,70 @@ export function OrderViewClient({
     return () => clearInterval(interval)
   }, [order.id, order.status, chatConversationId])
 
+  // Realtime subscriptions for documents and questionnaire responses
+  useEffect(() => {
+    const supabase = getClient()
+    const orderId = order.id
+
+    // Subscribe to order_documents changes
+    const docsChannel = supabase
+      .channel(`admin-order-docs-${orderId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'order_documents',
+          filter: `order_id=eq.${orderId}`,
+        },
+        (payload) => {
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            setDocuments(prev => {
+              const newDoc = payload.new as OrderDocument
+              const filtered = prev.filter(d => d.id !== newDoc.id)
+              return [...filtered, newDoc].sort((a, b) =>
+                new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime()
+              )
+            })
+          } else if (payload.eventType === 'DELETE') {
+            setDocuments(prev => prev.filter(d => d.id !== (payload.old as OrderDocument).id))
+          }
+        }
+      )
+      .subscribe()
+
+    // Subscribe to order_questionnaire_responses changes
+    const answersChannel = supabase
+      .channel(`admin-order-answers-${orderId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'order_questionnaire_responses',
+          filter: `order_id=eq.${orderId}`,
+        },
+        (payload) => {
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            const newAnswer = payload.new as { question_key: string; response_value: any }
+            setAnswers(prev => {
+              const filtered = prev.filter(a => a.question_key !== newAnswer.question_key)
+              return [...filtered, newAnswer]
+            })
+          } else if (payload.eventType === 'DELETE') {
+            const oldAnswer = payload.old as { question_key: string }
+            setAnswers(prev => prev.filter(a => a.question_key !== oldAnswer.question_key))
+          }
+        }
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(docsChannel)
+      supabase.removeChannel(answersChannel)
+    }
+  }, [order.id])
+
   // Check if final output exists
   const hasFinalOutput = rounds.some(r =>
     r.order_work_documents?.some(d => d.tag === 'final_output')
@@ -225,13 +293,13 @@ export function OrderViewClient({
   // Merged questionnaire data
   const mergedAnswers = useMemo(() => {
     return questionnaireQuestions.map(q => {
-      const answer = questionnaireAnswers.find(a => a.question_key === q.question_key)
+      const answer = answers.find(a => a.question_key === q.question_key)
       return {
         ...q,
         response_value: answer?.response_value ?? null,
       }
     })
-  }, [questionnaireQuestions, questionnaireAnswers])
+  }, [questionnaireQuestions, answers])
 
   // Handle status change
   const handleStatusChange = async (newStatus: string) => {
@@ -380,7 +448,7 @@ export function OrderViewClient({
       const allDocs: Array<{ url: string; name: string; folder: string; bucket: 'order-documents' | 'work-documents' }> = []
 
       // Initial documents (order-documents bucket)
-      initialDocs.forEach(doc => {
+      documents.forEach(doc => {
         if (doc.file_url && doc.file_name) {
           allDocs.push({ url: doc.file_url, name: doc.file_name, folder: '00-Initial', bucket: 'order-documents' })
         }
@@ -694,14 +762,14 @@ export function OrderViewClient({
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium">Initial Documents</span>
                     <Badge variant="secondary" className="font-normal text-xs">
-                      {initialDocs.filter(d => d.verified_at).length}/{initialDocs.length} verified
+                      {documents.filter(d => d.verified_at).length}/{documents.length} verified
                     </Badge>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="pb-4">
-                  {initialDocs.length > 0 ? (
+                  {documents.length > 0 ? (
                     <div className="space-y-3">
-                      {initialDocs.map(doc => (
+                      {documents.map(doc => (
                         <InitialDocumentCard key={doc.id} doc={doc} orderId={order.id} />
                       ))}
                     </div>
@@ -930,7 +998,7 @@ export function OrderViewClient({
         open={addRoundOpen}
         onOpenChange={setAddRoundOpen}
         orderId={order.id}
-        initialDocs={initialDocs}
+        initialDocs={documents}
         rounds={rounds}
       />
 

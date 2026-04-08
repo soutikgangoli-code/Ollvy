@@ -52,7 +52,7 @@ export function UserDetailClient({ user, orders }: UserDetailClientProps) {
       </Link>
 
       {/* User Info */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle>{user.business_name || 'No Business Name'}</CardTitle>
         </CardHeader>
@@ -105,7 +105,7 @@ export function UserDetailClient({ user, orders }: UserDetailClientProps) {
       </Card>
 
       {/* Orders */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-lg">
             Orders

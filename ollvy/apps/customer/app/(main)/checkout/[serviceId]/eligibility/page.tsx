@@ -121,21 +121,25 @@ export default function EligibilityPage() {
     router.push(checkoutUrl)
   }, [service, serviceId, router, searchParams])
 
-  // Loading state
-  if (isLoading || !isHydrated) {
+  // Loading state while checking for pre-payment questions - prevents flash
+  if (isLoading || !isHydrated || hasPrePaymentQuestions === null) {
     return (
-      <div className="container max-w-3xl mx-auto py-12 px-4">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
-          <div className="h-6 w-48 bg-muted rounded animate-pulse" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto" />
+          <p className="text-sm text-muted-foreground mt-3">Loading...</p>
         </div>
-        <div className="rounded-xl border border-border bg-card p-8">
-          <div className="space-y-4">
-            <div className="h-8 w-64 bg-muted rounded animate-pulse" />
-            <div className="h-4 w-full bg-muted rounded animate-pulse" />
-            <div className="h-12 w-full bg-muted rounded animate-pulse" />
-            <div className="h-12 w-full bg-muted rounded animate-pulse" />
-          </div>
+      </div>
+    )
+  }
+
+  // Loading state while redirect to checkout fires (no pre-payment questions)
+  if (hasPrePaymentQuestions === false) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto" />
+          <p className="text-sm text-muted-foreground mt-3">Loading...</p>
         </div>
       </div>
     )
@@ -178,17 +182,6 @@ export default function EligibilityPage() {
           <p className="text-muted-foreground">
             Please sign in to check eligibility and pricing
           </p>
-        </div>
-      </div>
-    )
-  }
-
-  // Waiting for pre-payment questions check
-  if (hasPrePaymentQuestions === null) {
-    return (
-      <div className="container max-w-3xl mx-auto py-12 px-4">
-        <div className="flex items-center justify-center p-8">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
       </div>
     )

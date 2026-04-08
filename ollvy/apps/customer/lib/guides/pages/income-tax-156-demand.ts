@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax156Demand: LearnPageConfig = {
   slug: 'income-tax-156-demand',
   title: 'Income Tax Section 156 Notice of Demand: Tax Has Been Assessed and is Now Due',
-  seoTitle: 'Income Tax Section 156 Notice of Demand 2025: What to Do | Ollvy',
-  seoDescription: 'Received a Section 156 income tax notice of demand? This is the formal payment request after an assessment. Understand your 30-day window and options.',
+  seoTitle: 'Section 156 Demand Notice: Pay, Appeal, or Rectify (2025) | Ollvy',
+  seoDescription: 'A Section 156 notice is the formal demand for tax determined in an assessment order. Pay within 30 days, or interest at 1 percent per month starts. Appeal requires 20 percent pre-deposit for stay.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-156-demand',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -24,7 +24,7 @@ export const incomeTax156Demand: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT THIS NOTICE IS TELLING YOU',
-      body: 'A Section 156 notice is the formal demand that follows an assessment order. It is not the assessment itself - it is the instruction to pay the tax that was determined in an earlier order (typically a 143(1) intimation, 143(3) assessment order, or a reassessment order).\n\nThink of it this way: the assessment order is the court judgment. The Section 156 notice is the execution notice asking you to pay the amount in the judgment.',
+      body: 'A Section 156 notice is the formal demand that follows an assessment order. It is not the assessment itself. It is the instruction to pay the tax that was determined in an earlier order (typically a 143(1) intimation, 143(3) assessment order, or a reassessment order).\n\nThink of it this way: the assessment order is the court judgment. The Section 156 notice is the execution notice asking you to pay the amount in the judgment.',
       note: 'Source: Section 156, Income Tax Act, 1961.',
     },
     {
@@ -44,7 +44,7 @@ export const incomeTax156Demand: LearnPageConfig = {
       heading: 'WHEN PAYING IS NOT YOUR BEST FIRST MOVE',
       body: 'Do not pay automatically without reviewing the underlying assessment order.',
       bullets: [
-        'Verify the original assessment order that created this demand - is it a 143(1) intimation, 143(3) assessment order, or something else?',
+        'Verify the original assessment order that created this demand. Is it a 143(1) intimation, 143(3) assessment order, or something else?',
         'Is the demand figure correct? Check for arithmetic errors in the assessment order.',
         'Did you already pay this demand and it was not mapped correctly? Check your payment records.',
         'Is the demand disputable on merit? Did the officer disallow a legitimate deduction? Did they add income that should not have been added? These are grounds for appeal.',
@@ -62,5 +62,14 @@ export const incomeTax156Demand: LearnPageConfig = {
       q: 'Can the department take any action before the 30-day window expires?',
       a: 'Generally no. The 30 days in Section 156 is a mandatory notice period before recovery action can begin. However, if the officer has reason to believe you are about to transfer assets to evade payment, a provisional attachment under Section 281B can be made before the 30 days.',
     },
+    {
+      q: 'I want to pay the demand in instalments. Is that possible?',
+      a: 'Yes, under Section 220(3) you can request instalment payment. Write to the assessing officer with a proposed schedule and reasons why you cannot pay in one instalment. This is discretionary and typically granted for large demands with genuine financial constraints.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 156)', url: 'https://incometaxindia.gov.in', description: 'Notice of demand provision' },
+    { name: 'Income Tax Act, 1961 (Section 220)', url: 'https://incometaxindia.gov.in', description: 'Interest and instalment payment provisions' },
   ],
 };

@@ -111,7 +111,7 @@ export function OrdersListClient({ orders }: OrdersListClientProps) {
       </div>
 
       {/* Orders Table */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-lg">
             Orders

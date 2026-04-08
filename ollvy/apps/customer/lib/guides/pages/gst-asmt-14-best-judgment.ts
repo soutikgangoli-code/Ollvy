@@ -5,7 +5,7 @@ export const gstAsmt14BestJudgment: LearnPageConfig = {
   slug: 'gst-asmt-14-best-judgment',
   title: 'GST ASMT-14 Notice: Best Judgment Assessment',
   seoTitle: 'GST ASMT-14 Notice: Best Judgment Assessment Explained (2025) | Ollvy',
-  seoDescription: 'Received a GST ASMT-14 notice? This is a best judgment assessment - usually issued when ASMT-10 was not replied to. Understand what it means and how to challenge it.',
+  seoDescription: 'A GST ASMT-14 is a best judgment assessment issued when ASMT-10 was not replied to. Filing all pending returns within 30 days withdraws the assessment under Section 62(2).',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-asmt-14-best-judgment',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
@@ -25,7 +25,7 @@ export const gstAsmt14BestJudgment: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT IS ASMT-14 AND HOW DID YOU GET HERE',
-      body: "If you are reading this, it is likely because an earlier ASMT-10 scrutiny notice was either not replied to or the reply was not accepted by the officer.\n\nASMT-14 is issued under Section 62 of the CGST Act (Assessment of Non-Filers). It is the GST officer's best judgment assessment - meaning they have determined your GST liability using whatever information they had, without your input. The final assessment order follows in ASMT-15.\n\nHere is the important part: if you file all your pending returns within 30 days of receiving ASMT-14, the assessment order can be withdrawn. This is a one-time relief built into the law.",
+      body: "If you are reading this, it is likely because an earlier ASMT-10 scrutiny notice was either not replied to or the reply was not accepted by the officer.\n\nASMT-14 is issued under Section 62 of the CGST Act (Assessment of Non-Filers). It is the GST officer's best judgment assessment, meaning they have determined your GST liability using whatever information they had, without your input. The final assessment order follows in ASMT-15.\n\nIf you file all your pending returns within 30 days of receiving ASMT-14, the assessment order can be withdrawn. This is a one-time relief built into the law.",
       note: 'Source: Section 62, CGST Act 2017. Rule 100, CGST Rules 2017.',
     },
     {
@@ -40,6 +40,11 @@ export const gstAsmt14BestJudgment: LearnPageConfig = {
     },
     {
       number: '03',
+      heading: 'CALCULATING WHAT YOU OWE TO FILE RETURNS AND CLOSE THIS',
+      body: 'To file pending returns and trigger Section 62(2) withdrawal, you need to pay:\n\nPending tax: the actual GST liability for each unfiled period based on your outward supplies and eligible ITC.\n\nInterest under Section 50: 18 percent per annum from the original due date of each return to the date of actual payment. This is calculated separately for each month.\n\nLate fees: for GSTR-3B, the late fee is Rs. 50 per day for returns with a tax liability (Rs. 25 CGST plus Rs. 25 SGST), capped at Rs. 10,000 per return. For nil returns, it is Rs. 20 per day, capped at Rs. 500.\n\nGet a CA to calculate the exact amount before filing so there are no surprises.',
+    },
+    {
+      number: '04',
       heading: 'WHY BEST JUDGMENT ASSESSMENTS ARE ALMOST ALWAYS OVERSTATED',
       body: 'When an officer does a best judgment assessment without your data, they use the most conservative (for them) assumptions available:',
       bullets: [
@@ -48,7 +53,7 @@ export const gstAsmt14BestJudgment: LearnPageConfig = {
         'Tax rates applied may be the higher applicable rate for your industry',
         'This means the ASMT-14 amount is almost always much higher than your actual liability',
       ],
-      note: 'This is exactly why filing pending returns (even late) within 30 days is often the most effective path - the Section 62(2) withdrawal resets the position to your actual filed numbers rather than the officer\'s estimates.',
+      note: 'This is exactly why filing pending returns (even late) within 30 days is often the most effective path. The Section 62(2) withdrawal resets the position to your actual filed numbers rather than the officer\'s estimates.',
     },
   ],
 
@@ -61,5 +66,14 @@ export const gstAsmt14BestJudgment: LearnPageConfig = {
       q: 'The ASMT-14 shows Rs. 22 lakh as my GST liability. My actual liability should be around Rs. 3 lakh. Should I file returns or appeal?',
       a: 'File returns first (within 30 days) to trigger the Section 62(2) withdrawal. This brings the dispute down to your actual liability. If there are still disputes after filing (interest, penalty, or specific disallowances), deal with those through the officer or appeal. The Section 62(2) route is almost always cheaper and faster than a full appeal.',
     },
+    {
+      q: 'The 30-day window has passed. What are my options now?',
+      a: 'You can still file the pending returns but the Section 62(2) automatic withdrawal no longer applies. You must appeal the ASMT-14 order to the Appellate Authority within 3 months of the assessment order. Pay 10 percent of the disputed tax as pre-deposit. File the pending returns simultaneously to show compliance intent.',
+    },
+  ],
+
+  sources: [
+    { name: 'CGST Act, 2017 (Section 62)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Best judgment assessment of non-filers and withdrawal provision under Section 62(2)' },
+    { name: 'CGST Rules, 2017 (Rule 100)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Procedure for best judgment assessment under Section 62' },
   ],
 };

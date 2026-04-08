@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax1431Intimation: LearnPageConfig = {
   slug: 'income-tax-143-1-intimation',
   title: 'Income Tax Section 143(1) Intimation: What It Means',
-  seoTitle: 'Income Tax 143(1) Intimation Notice 2025: What to Do | Ollvy',
-  seoDescription: 'Got an Income Tax 143(1) intimation? It is not always a demand - but sometimes it is. Understand what the CPC is telling you and how to respond correctly.',
+  seoTitle: 'Section 143(1) Intimation: Demand, Refund, or No Action (2025) | Ollvy',
+  seoDescription: 'A 143(1) intimation shows the CPC processing result: demand raised, refund due, or no adjustment. TDS mismatch is the most common demand trigger. File Section 154 rectification to fix errors.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-143-1-intimation',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -25,7 +25,7 @@ export const incomeTax1431Intimation: LearnPageConfig = {
     {
       number: '01',
       heading: 'THIS IS THE MOST COMMON INCOME TAX COMMUNICATION - HERE IS WHAT IT MEANS',
-      body: "Almost everyone who files an ITR gets a Section 143(1) intimation eventually. It is generated automatically by the Centralised Processing Centre (CPC) in Bengaluru after your return is processed - not by a human tax officer looking at your specific case.\n\nThe intimation is the CPC's way of telling you: \"We processed your return. Here is what we computed. Here is where it differs from what you filed.\"\n\nThree things can happen in a 143(1) intimation:",
+      body: "Almost everyone who files an ITR gets a Section 143(1) intimation eventually. It is generated automatically by the Centralised Processing Centre (CPC) in Bengaluru after your return is processed, not by a human tax officer looking at your specific case.\n\nThe intimation is the CPC's way of telling you: \"We processed your return. Here is what we computed. Here is where it differs from what you filed.\"\n\nThree things can happen in a 143(1) intimation:",
       bullets: [
         'A demand is raised: The CPC found something that increases your tax liability and is asking you to pay the difference. This requires action.',
         'A refund is determined: The CPC agrees you overpaid and is initiating your refund. Good news - no action needed.',
@@ -39,7 +39,7 @@ export const incomeTax1431Intimation: LearnPageConfig = {
       body: 'The CPC processes your return through an automated system that checks for specific things. A demand is raised when the system finds one of these:',
       bullets: [
         'Arithmetical error: Your computation has a mathematical mistake - additions, subtractions, deduction limits applied wrongly.',
-        'Incorrect claim: You claimed a deduction or exemption that is not allowed on the face of the return - for example, 80C deduction claimed above the Rs. 1.5 lakh limit.',
+        'Incorrect claim: You claimed a deduction or exemption that is not allowed on the face of the return, for example, 80C deduction claimed above the Rs. 1.5 lakh limit.',
         'Disallowance of loss set-off: You tried to set off a loss from one head against income from another where the law does not permit it.',
         'TDS mismatch: The TDS you claimed in your return does not match what is actually reflected in your Form 26AS or AIS. If your employer or deductor has not filed their TDS return correctly, this creates a mismatch that shows up against you.',
         'Tax, interest, or fee not paid: The system calculates that advance tax, self-assessment tax, interest under 234A/234B/234C, or late fees under 234F were short-paid or not paid.',
@@ -91,9 +91,9 @@ export const incomeTax1431Intimation: LearnPageConfig = {
       body: '',
       bullets: [
         'Ignoring the intimation: Even if you think it is wrong, you must respond. An unaddressed demand gets recovered from future refunds without warning.',
-        'Paying a demand that is clearly a TDS mismatch: If you can prove TDS was deducted, do not pay the demand - get the deductor to correct their return and then file a rectification.',
-        'Confusing 143(1) with a scrutiny notice: These are very different things. 143(1) is automated processing. 143(2) is a human officer selecting your case. Do not panic about 143(1) the way you would about 143(2).',
-        'Filing a revised return instead of a rectification: If there are no new facts to add and the error is purely in how the CPC processed your original return, a rectification (Section 154) is the right tool, not a revised return.',
+        'Paying a demand that is clearly a TDS mismatch: If you can prove TDS was deducted, do not pay the demand. Get the deductor to correct their return and then file a rectification.',
+        'Confusing 143(1) with a scrutiny notice: These are very different things. 143(1) is automated processing. 143(2) is a human officer selecting your case.',
+        'Filing a revised return instead of a rectification: If there are no new facts to add and the error is purely in how the CPC processed your original return, a rectification (Section 154) is the right tool.',
       ],
     },
   ],
@@ -101,7 +101,7 @@ export const incomeTax1431Intimation: LearnPageConfig = {
   faqs: [
     {
       q: 'I got a 143(1) intimation saying my return was processed with no demand and no refund. Do I need to do anything?',
-      a: "No action required. This just means the CPC agrees with your filed return. You can download this intimation and keep it for your records. It is essentially a clean bill of health for that year's return.",
+      a: "No action required. This just means the CPC agrees with your filed return. You can download this intimation and keep it for your records.",
     },
     {
       q: 'My 143(1) intimation shows a refund but I have not received the money. What is happening?',
@@ -119,5 +119,14 @@ export const incomeTax1431Intimation: LearnPageConfig = {
       q: 'How do I get a copy of my 143(1) intimation if I deleted the email?',
       a: 'Log into incometax.gov.in, go to e-File > Income Tax Returns > View Filed Returns, select the relevant assessment year, and download the intimation from the "View Details" section.',
     },
+    {
+      q: 'My 143(1) intimation shows a demand based on interest computation. The CPC calculated higher interest than I did. What happened?',
+      a: 'The CPC automatically calculates interest under Section 234A (late filing), 234B (advance tax shortfall), and 234C (deferred advance tax). If your computation differs, check the exact dates and amounts the CPC used versus yours. File a rectification if there is a genuine error in their calculation.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 143(1))', url: 'https://incometaxindia.gov.in', description: 'CPC processing and intimation provisions' },
+    { name: 'Income Tax Act, 1961 (Section 154)', url: 'https://incometaxindia.gov.in', description: 'Rectification of mistake apparent from the record' },
   ],
 };

@@ -5,7 +5,7 @@ export const gstDrc01aPreNotice: LearnPageConfig = {
   slug: 'gst-drc-01a-pre-notice',
   title: 'GST DRC-01A Notice: Pre-Show Cause Notice Intimation',
   seoTitle: 'GST DRC-01A Notice: What It Is and How to Respond (2025) | Ollvy',
-  seoDescription: 'Received a GST DRC-01A notice? This is a pre-demand intimation - not a formal demand yet. Respond within 30 days to avoid escalation to DRC-01.',
+  seoDescription: 'A DRC-01A is a pre-demand intimation, not a formal notice. Respond well here and the matter may close without a DRC-01 ever being issued. You have 30 days.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-drc-01a-pre-notice',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
@@ -23,8 +23,8 @@ export const gstDrc01aPreNotice: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'THIS IS NOT A DEMAND YET - BUT IT COULD BECOME ONE',
-      body: "DRC-01A is a relatively recent addition to the GST compliance toolkit, introduced to give taxpayers an informal opportunity to engage with the department before formal demand proceedings begin.\n\nHere is what has happened: the GST officer has done the calculation and determined that you owe tax. But before issuing the formal DRC-01 Show Cause Notice, they are required to first send you DRC-01A - essentially saying \"we think you owe Rs. X. Here is what we found. Tell us if we are wrong, or pay up.\"\n\nThis informal stage is genuinely valuable. Use it.",
+      heading: 'THIS IS NOT A DEMAND YET',
+      body: "DRC-01A is a relatively recent addition to the GST compliance toolkit, introduced to give taxpayers an informal opportunity to engage with the department before formal demand proceedings begin.\n\nHere is what has happened: the GST officer has done the calculation and determined that you owe tax. But before issuing the formal DRC-01 Show Cause Notice, they are required to first send you DRC-01A, essentially saying \"we think you owe Rs. X. Here is what we found. Tell us if we are wrong, or pay up.\"\n\nThis informal stage is genuinely valuable. Use it.",
       note: 'Source: Rule 142(1A), CGST Rules 2017.',
     },
     {
@@ -35,7 +35,7 @@ export const gstDrc01aPreNotice: LearnPageConfig = {
         'Option A - Pay the ascertained amount: If you review the notice and agree that the tax is due, pay it along with applicable interest through DRC-03 (voluntary payment challan). When you pay at the DRC-01A stage (before formal SCN), the penalty that would apply if you paid after DRC-01 is either nil or significantly reduced. Under Section 73, if you pay before the SCN, no penalty applies at all.',
         'Option B - Provide a representation: If you believe the amount is wrong (partially or fully), file a written representation in DRC-01A Part B explaining your position with supporting documents. If the officer agrees with your representation, they can close the matter without issuing DRC-01.',
       ],
-      note: 'The penalty protection at this stage is significant. Under Section 73 (non-fraud cases): paying during DRC-01A stage = nil penalty. Paying during DRC-01 stage = 10% penalty. Paying after DRC-07 demand order = 10-15% penalty. Under Section 74 (fraud): penalties are 100% at DRC-01 stage, so the relative benefit of early payment is even larger.',
+      note: 'The penalty protection at this stage is significant. Under Section 73 (non-fraud cases): paying during DRC-01A stage means nil penalty. Paying during DRC-01 stage means 10% penalty. Paying after DRC-07 demand order means 10-15% penalty. Under Section 74 (fraud): penalties are 100% at DRC-01 stage, so the relative benefit of early payment is even larger.',
     },
     {
       number: '03',
@@ -60,6 +60,11 @@ export const gstDrc01aPreNotice: LearnPageConfig = {
         'State clearly the amount (if any) you are paying voluntarily and provide the DRC-03 challan details',
       ],
     },
+    {
+      number: '05',
+      heading: 'HOW DRC-01A COMPARES TO DRC-01: THE COST DIFFERENCE',
+      body: 'Most businesses do not realise how much cheaper DRC-01A resolution is compared to waiting for DRC-01. The penalty structure makes early engagement financially rational.\n\nFor a Rs. 10 lakh demand under Section 73: paying at DRC-01A stage costs Rs. 10 lakh (tax) plus interest. Paying after DRC-07 is passed costs Rs. 10 lakh (tax) plus interest plus Rs. 1 lakh minimum penalty (10 percent). For Section 74 cases, the difference is even larger: DRC-01A stage carries 15 percent penalty, DRC-07 stage carries 100 percent.\n\nIf you agree the tax is due, paying at DRC-01A is almost always the right financial decision.',
+    },
   ],
 
   faqs: [
@@ -71,5 +76,14 @@ export const gstDrc01aPreNotice: LearnPageConfig = {
       q: 'I received DRC-01A for Rs. 8 lakh. If I pay it now via DRC-03, is the matter fully closed?',
       a: 'Not automatically. You pay via DRC-03 and inform the officer. The officer reviews and if satisfied, does not issue DRC-01 and closes the proceedings. Get a written acknowledgement or wait for the ASMT-12 or closure order before treating the matter as closed.',
     },
+    {
+      q: 'Can I negotiate the amount shown in DRC-01A?',
+      a: "DRC-01A is not a negotiation. It is the officer's calculation based on available data. You can challenge it with your own reconciliation and documents in your Part B representation. If the officer accepts your data, the amount is revised. If not, DRC-01 is issued for the original amount.",
+    },
+  ],
+
+  sources: [
+    { name: 'CGST Rules, 2017 (Rule 142(1A))', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Rule governing pre-notice intimation before formal show cause notice' },
+    { name: 'CGST Act, 2017 (Section 73)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Penalty provisions applicable at different stages of demand proceedings' },
   ],
 };

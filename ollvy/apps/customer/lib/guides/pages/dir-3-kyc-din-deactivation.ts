@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const dir3KycDinDeactivation: LearnPageConfig = {
   slug: 'dir-3-kyc-din-deactivation',
   title: 'DIR-3 KYC Notice: Director DIN Deactivation',
-  seoTitle: 'DIR-3 KYC Not Filed: DIN Deactivation Notice 2025 | Ollvy',
-  seoDescription: 'Got a notice about DIN deactivation due to DIR-3 KYC non-filing? Understand how to reactivate your Director Identification Number and what you cannot do while deactivated.',
+  seoTitle: 'DIN Deactivated: File DIR-3 KYC to Restore (2025) | Ollvy',
+  seoDescription: 'DIN deactivation blocks all director actions. File DIR-3 KYC with Rs. 5,000 late fee to restore. Annual KYC deadline is September 30. Use DIR-3 KYC-Web for renewals if details unchanged.',
   canonicalUrl: 'https://www.ollvy.com/guides/dir-3-kyc-din-deactivation',
   lastReviewed: 'March 2025',
   category: 'ROC Notice',
@@ -24,7 +24,7 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'YOUR DIRECTOR IDENTIFICATION NUMBER HAS BEEN DEACTIVATED',
+      heading: 'YOUR DIN HAS BEEN DEACTIVATED',
       body: 'Every director of an Indian company holds a Director Identification Number (DIN) issued by MCA. To keep this DIN active, you must file DIR-3 KYC (Know Your Customer verification) every year by September 30.\n\nIf you missed the September 30 deadline, the MCA system automatically deactivates your DIN. You will receive an intimation about this. Your DIN status on the MCA portal will show as "Deactivated due to non-filing of DIR-3 KYC."',
       note: 'Source: Rule 12A and 12B, Companies (Appointment and Qualification of Directors) Rules, 2014.',
     },
@@ -35,7 +35,7 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
       bullets: [
         'You cannot be reflected as an active director in any MCA filing',
         'Any MCA form you sign as director will be rejected if your DIN shows as deactivated',
-        "Annual returns (AOC-4, MGT-7) cannot be filed for your company if the sole director's DIN is deactivated - this creates a cascading annual filing default",
+        "Annual returns (AOC-4, MGT-7) cannot be filed for your company if the sole director's DIN is deactivated. This creates a cascading annual filing default",
         'Board resolutions and other company documents that require your DIN will be problematic',
         'Banks doing director due diligence will see the deactivated DIN as a compliance flag',
       ],
@@ -75,7 +75,16 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
     },
     {
       q: "My DIN was deactivated and now the company cannot file its annual returns. Who is responsible?",
-      a: "As the director whose DIN is deactivated, you are responsible for filing DIR-3 KYC to restore it. The company's filing obligations remain unchanged regardless of DIN status - so the company is also accumulating annual filing defaults while this is unresolved. Restore the DIN and then file all company returns together.",
+      a: "As the director whose DIN is deactivated, you are responsible for filing DIR-3 KYC to restore it. The company's filing obligations remain unchanged regardless of DIN status. Restore the DIN and then file all company returns together.",
     },
+    {
+      q: 'What documents do I need for DIR-3 KYC?',
+      a: 'PAN, Aadhaar, current address proof (utility bill, bank statement, or passport), mobile number for OTP, and email address for OTP. If filed through a CA/CS, their digital signature is also needed.',
+    },
+  ],
+
+  sources: [
+    { name: 'Companies (Appointment and Qualification of Directors) Rules, 2014 (Rule 12A, 12B)', url: 'https://www.mca.gov.in', description: 'DIR-3 KYC annual requirement' },
+    { name: 'MCA Portal', url: 'https://www.mca.gov.in', description: 'DIR-3 KYC filing and DIN status check' },
   ],
 };

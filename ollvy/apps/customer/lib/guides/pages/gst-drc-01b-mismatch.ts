@@ -5,7 +5,7 @@ export const gstDrc01bMismatch: LearnPageConfig = {
   slug: 'gst-drc-01b-mismatch',
   title: 'GST DRC-01B Notice: GSTR-1 vs GSTR-3B Liability Mismatch',
   seoTitle: 'GST DRC-01B Notice: GSTR-1 vs 3B Mismatch - How to Fix (2025) | Ollvy',
-  seoDescription: 'Got a GST DRC-01B notice about GSTR-1 and GSTR-3B mismatch? Understand why it was generated, how serious it is, and what to do within 7 days.',
+  seoDescription: 'A DRC-01B notice means the GST system found a mismatch between your GSTR-1 and GSTR-3B. You have 7 days to explain or pay the difference before it escalates to a formal DRC-01 demand.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-drc-01b-mismatch',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
@@ -25,7 +25,7 @@ export const gstDrc01bMismatch: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT IS DRC-01B AND WHY DOES IT EXIST',
-      body: "From 2022-23 onwards, the GST system automatically compares your GSTR-1 (invoice-level outward supply details) with your GSTR-3B (self-assessed tax payment summary) for every month. If the taxable value or tax liability in GSTR-3B is less than what you declared in GSTR-1, the system automatically generates a DRC-01B intimation.\n\nThis is a system-generated notice - no human officer has specifically reviewed your case. But it still demands a response and carries real consequences if ignored.",
+      body: "From 2022-23 onwards, the GST system automatically compares your GSTR-1 (invoice-level outward supply details) with your GSTR-3B (self-assessed tax payment summary) for every month. If the taxable value or tax liability in GSTR-3B is less than what you declared in GSTR-1, the system automatically generates a DRC-01B intimation.\n\nThis is a system-generated notice. No human officer has specifically reviewed your case. But it still demands a response and carries real consequences if ignored.",
       note: 'Source: Rule 88C, CGST Rules 2017, inserted by Notification 26/2022-CT dated 26.12.2022.',
     },
     {
@@ -54,6 +54,11 @@ export const gstDrc01bMismatch: LearnPageConfig = {
     },
     {
       number: '04',
+      heading: 'HOW TO PREVENT DRC-01B NOTICES IN FUTURE',
+      body: 'DRC-01B is a system check that runs automatically every month. Preventing it is straightforward if you reconcile before filing GSTR-3B.\n\nBefore filing GSTR-3B each month: verify that the taxable value and tax in your GSTR-3B matches what you declared in GSTR-1 for the same period. If there is a difference due to DRC-03 payment, credit notes, or timing, note it now rather than waiting for the system to flag it.\n\nIf you made a voluntary payment through DRC-03 for a prior period, always declare it in the next GSTR-3B filing so the portal can match it correctly.',
+    },
+    {
+      number: '05',
       heading: 'WHAT HAPPENS AFTER YOUR PART B RESPONSE',
       body: 'The outcome depends on whether the officer accepts your explanation.',
       bullets: [
@@ -65,7 +70,7 @@ export const gstDrc01bMismatch: LearnPageConfig = {
       note: 'A DRC-01B is significantly easier and cheaper to resolve than a DRC-01. The incentive to resolve it here is strong.',
     },
     {
-      number: '05',
+      number: '06',
       heading: 'HOW TO PREPARE YOUR PART B RESPONSE',
       body: 'A proper Part B response should include:',
       bullets: [
@@ -91,5 +96,10 @@ export const gstDrc01bMismatch: LearnPageConfig = {
       q: 'I received DRC-01B notices for 6 different months simultaneously. Do I respond to each separately?',
       a: 'Yes, each DRC-01B is for a specific month and must be responded to individually in its own Part B. The reasons may be the same across months - in that case, your responses will be similar - but each Part B must be filed.',
     },
+  ],
+
+  sources: [
+    { name: 'CGST Rules, 2017 (Rule 88C)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Rule governing GSTR-1 and GSTR-3B liability mismatch intimation' },
+    { name: 'Notification 26/2022-Central Tax', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Notification inserting Rule 88C into the CGST Rules' },
   ],
 };

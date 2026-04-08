@@ -65,7 +65,7 @@ export function AnalyticsClient({
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Top Services */}
-        <Card>
+        <Card className="overflow-hidden">
           <CardHeader>
             <CardTitle className="text-lg">Top Services (Last 30 Days)</CardTitle>
           </CardHeader>
@@ -95,7 +95,7 @@ export function AnalyticsClient({
         </Card>
 
         {/* Needs Attention */}
-        <Card>
+        <Card className="overflow-hidden">
           <CardHeader>
             <CardTitle className="text-lg">Needs Attention</CardTitle>
           </CardHeader>
@@ -136,7 +136,7 @@ export function AnalyticsClient({
       </div>
 
       {/* Recent Completed */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-lg">Recent Completed</CardTitle>
         </CardHeader>
@@ -175,9 +175,9 @@ export function AnalyticsClient({
 
 function MetricCard({ label, value }: { label: string; value: string | number }) {
   return (
-    <Card>
+    <Card className="overflow-hidden">
       <CardContent className="p-4">
-        <div className="text-2xl font-bold text-foreground">{value}</div>
+        <div className="text-xl md:text-2xl font-bold text-foreground truncate">{value}</div>
         <div className="text-xs text-muted-foreground">{label}</div>
       </CardContent>
     </Card>

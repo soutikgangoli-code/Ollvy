@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const gstGstr2bItcMismatch: LearnPageConfig = {
   slug: 'gst-gstr2b-itc-mismatch',
   title: 'GST ITC Mismatch Notice: GSTR-2B vs Claimed Input Tax Credit',
-  seoTitle: 'GST ITC Mismatch Notice 2025: GSTR-2B vs Claimed Credit | Ollvy',
-  seoDescription: 'Got a GST notice about Input Tax Credit mismatch between GSTR-2B and your claimed ITC? Understand why it happened and how to respond before it becomes a demand.',
+  seoTitle: 'GSTR-2B ITC Mismatch: How to Resolve Blocked Credit (2025) | Ollvy',
+  seoDescription: 'ITC claims exceeding your GSTR-2B are blocked under Section 16(2)(aa). Reconcile your purchase register with GSTR-2B every month before filing GSTR-3B to avoid demands.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-gstr2b-itc-mismatch',
   lastReviewed: 'March 2025',
   category: 'GST Notice',
@@ -25,7 +25,7 @@ export const gstGstr2bItcMismatch: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHY YOUR ITC CLAIM IS BEING QUESTIONED',
-      body: "Since the Finance Act 2022 amended Section 16(2)(aa) of the CGST Act, Input Tax Credit can only be availed if the invoice or debit note appears in your GSTR-2B. GSTR-2B is an auto-generated document showing all the ITC available to you based on what your suppliers have actually filed in their GSTR-1.\n\nThe problem: You may have received goods or services, paid for them, and have the invoice - but if your supplier did not file their GSTR-1 correctly, or filed it late, the credit will not appear in your GSTR-2B. And you claimed it anyway. That gap is what the department is now targeting.",
+      body: "Since the Finance Act 2022 amended Section 16(2)(aa) of the CGST Act, Input Tax Credit can only be availed if the invoice or debit note appears in your GSTR-2B. GSTR-2B is an auto-generated document showing all the ITC available to you based on what your suppliers have actually filed in their GSTR-1.\n\nThe problem: You may have received goods or services, paid for them, and have the invoice, but if your supplier did not file their GSTR-1 correctly, or filed it late, the credit will not appear in your GSTR-2B. And you claimed it anyway. That gap is what the department is now targeting.",
       note: 'Source: Section 16(2)(aa), CGST Act 2017 (inserted by Finance Act 2022, effective October 1, 2022).',
     },
     {
@@ -54,6 +54,11 @@ export const gstGstr2bItcMismatch: LearnPageConfig = {
     },
     {
       number: '04',
+      heading: 'HOW TO FOLLOW UP WITH NON-COMPLIANT SUPPLIERS',
+      body: 'When invoices are missing from GSTR-2B, the most effective first step is direct supplier follow-up. Most mismatches resolve when the supplier files their pending GSTR-1 or corrects an error in their next filing.\n\nDocument everything: keep records of your follow-up (emails, WhatsApp messages) showing you attempted to get the supplier to comply. This documentation matters if you ever face a demand notice for the claimed ITC.\n\nIf a supplier is consistently non-compliant, consider whether the relationship is worth the ITC risk. Buying from GST-compliant suppliers is the only way to guarantee clean ITC.',
+    },
+    {
+      number: '05',
       heading: 'WHAT TO DO GOING FORWARD',
       body: 'Beyond resolving the current notice, here is how to protect your ITC going forward:',
       bullets: [
@@ -74,5 +79,14 @@ export const gstGstr2bItcMismatch: LearnPageConfig = {
       q: 'I reversed the ITC mismatch amount in a subsequent month. Does this close the notice?',
       a: 'If you voluntarily reversed the ITC in the same year (or subsequent month) through a GSTR-3B reversal, this demonstrates that you are correcting the position. Include this reversal with challan details in your notice reply. Pay interest at 24% p.a. from the date of claiming incorrect ITC to the date of reversal (higher rate applies when ITC is reversed pursuant to demand).',
     },
+    {
+      q: 'I claimed ITC in GSTR-3B that was not in my GSTR-2B. Now I have received a notice. What do I do?',
+      a: 'Check whether the ITC has since appeared in a subsequent GSTR-2B. If it has, your claim may be justifiable with a reconciliation. If it has not, you need to reverse the excess claim in your next GSTR-3B with interest at 18 percent per annum from the date of the original claim.',
+    },
+  ],
+
+  sources: [
+    { name: 'CGST Act, 2017 (Section 16(2)(aa))', url: 'https://www.gst.gov.in', description: 'ITC eligibility condition tied to GSTR-2B availability' },
+    { name: 'CGST Rules, 2017 (Rule 36(4))', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Conditions for claiming ITC and reconciliation requirements' },
   ],
 };

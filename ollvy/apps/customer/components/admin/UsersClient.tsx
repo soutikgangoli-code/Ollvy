@@ -53,7 +53,7 @@ export function UsersClient({ users }: UsersClientProps) {
         />
       </div>
 
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-lg">
             All Users

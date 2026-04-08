@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Check, FileText, Calendar, MessageSquare, Clock, AlertTriangle, Circle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Check, FileText, Calendar, Clock, AlertTriangle, Circle } from 'lucide-react'
 
 // Mockup 1: Order Tracking - matches /orders/[id] page
 function OrderTrackingMockup() {
@@ -328,17 +328,6 @@ export function ProductShowcase() {
     setCurrentIndex(index)
   }, [itemsPerView])
 
-  // Infinite loop navigation
-  const handlePrev = () => {
-    const newIndex = currentIndex > 0 ? currentIndex - 1 : maxIndex
-    scrollToIndex(newIndex)
-  }
-
-  const handleNext = () => {
-    const newIndex = currentIndex < maxIndex ? currentIndex + 1 : 0
-    scrollToIndex(newIndex)
-  }
-
   return (
     <section id="product-showcase" className="py-12 md:py-16 lg:py-20 bg-background">
       <div className="container">
@@ -350,11 +339,11 @@ export function ProductShowcase() {
 
         {/* Carousel container */}
         <div className="relative">
-          {/* Scrollable carousel */}
+          {/* Scrollable carousel - draggable */}
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 md:gap-8"
+            className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 md:gap-8 cursor-grab active:cursor-grabbing"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {FEATURES.map((item, i) => (
@@ -372,38 +361,20 @@ export function ProductShowcase() {
             ))}
           </div>
 
-          {/* Mobile: Dot indicators */}
-          <div className="flex md:hidden justify-center gap-2 mt-6">
+          {/* Dot indicators - always show all 4 */}
+          <div className="flex justify-center gap-2 mt-6 md:mt-8">
             {FEATURES.map((_, i) => (
               <button
                 key={i}
                 onClick={() => scrollToIndex(i)}
-                className={`w-2 h-2 rounded-full transition-colors ${
+                className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full transition-all duration-200 ${
                   i === currentIndex
-                    ? 'bg-foreground'
-                    : 'bg-muted-foreground/30'
+                    ? 'bg-foreground scale-110'
+                    : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
                 }`}
                 aria-label={`Go to slide ${i + 1}`}
               />
             ))}
-          </div>
-
-          {/* Desktop: Arrow buttons below carousel */}
-          <div className="hidden md:flex justify-center gap-3 mt-8">
-            <button
-              onClick={handlePrev}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors"
-              aria-label="Previous"
-            >
-              <ChevronLeft className="h-5 w-5 text-foreground" />
-            </button>
-            <button
-              onClick={handleNext}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-background border border-border shadow-sm hover:bg-muted transition-colors"
-              aria-label="Next"
-            >
-              <ChevronRight className="h-5 w-5 text-foreground" />
-            </button>
           </div>
         </div>
       </div>

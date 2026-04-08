@@ -67,7 +67,7 @@ export function ChatsListClient({ conversations }: ChatsListClientProps) {
 
       {/* Conversations List */}
       {filteredConversations.length === 0 ? (
-        <Card>
+        <Card className="overflow-hidden">
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground">
               {searchQuery ? 'No conversations match your search.' : 'No conversations found.'}
@@ -82,7 +82,7 @@ export function ChatsListClient({ conversations }: ChatsListClientProps) {
               href={`/admin/orders/${conv.orderId}`}
               className="block"
             >
-              <Card className="hover:bg-muted/50 transition-colors cursor-pointer">
+              <Card className="overflow-hidden hover:bg-muted/50 transition-colors cursor-pointer">
                 <CardContent className="py-4 px-5">
                   <div className="flex items-center justify-between">
                     <div className="flex-1 min-w-0">

@@ -241,7 +241,7 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] 
                     </h4>
                     <div className="space-y-2">
                       {docs.map(doc => (
-                        <DocumentRow key={doc.id} doc={doc} />
+                        <DocumentRow key={doc.id} doc={doc} orderId={orderId} />
                       ))}
                     </div>
                   </div>
@@ -297,12 +297,21 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] 
                         <span className="text-sm text-muted-foreground flex-1 pr-4">
                           {answer.question_label}
                         </span>
-                        <span className={cn(
-                          "text-sm font-medium text-right max-w-[50%]",
-                          !answer.response_value ? "text-muted-foreground/50 italic" : "text-foreground"
-                        )}>
-                          {renderResponseValue(answer.response_value, answer.question_type, answer.options)}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className={cn(
+                            "text-sm font-medium text-right",
+                            !answer.response_value ? "text-muted-foreground/50 italic" : "text-foreground"
+                          )}>
+                            {renderResponseValue(answer.response_value, answer.question_type, answer.options)}
+                          </span>
+                          {answer.response_value == null && (
+                            <Link href={`/orders/${orderId}/questionnaire`}>
+                              <button className="shrink-0 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50 hover:bg-muted transition-colors">
+                                Answer
+                              </button>
+                            </Link>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -355,7 +364,7 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] 
 }
 
 // Document Row Component - for initial order_documents
-function DocumentRow({ doc }: { doc: Round0Data['initialDocs'][0] }) {
+function DocumentRow({ doc, orderId }: { doc: Round0Data['initialDocs'][0]; orderId: string }) {
   const [loading, setLoading] = useState(false)
 
   const handleView = async () => {
@@ -424,7 +433,7 @@ function DocumentRow({ doc }: { doc: Round0Data['initialDocs'][0] }) {
       </div>
       <div className="flex items-center gap-2 shrink-0">
         {getStatusBadge()}
-        {doc.file_url && (
+        {doc.file_url ? (
           <Button
             variant="ghost"
             size="sm"
@@ -438,6 +447,12 @@ function DocumentRow({ doc }: { doc: Round0Data['initialDocs'][0] }) {
               <Eye className="h-4 w-4" />
             )}
           </Button>
+        ) : (
+          <Link href={`/orders/${orderId}/documents`}>
+            <button className="shrink-0 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50 hover:bg-muted transition-colors">
+              Upload
+            </button>
+          </Link>
         )}
       </div>
     </div>
@@ -549,7 +564,8 @@ function WorkDocumentRow({
   const isToCustomer = doc.direction === 'to_customer'
 
   return (
-    <div className="flex items-center justify-between py-3 px-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-3 px-4 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors gap-1.5 sm:gap-0">
+      {/* Left: icon + filename - full width on mobile */}
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <div className={cn(
           "w-8 h-8 rounded-md border flex items-center justify-center shrink-0",
@@ -570,9 +586,10 @@ function WorkDocumentRow({
           )}
         </div>
       </div>
-      <div className="flex items-center gap-2 shrink-0">
+      {/* Right: tags + buttons - wraps below on mobile */}
+      <div className="flex items-center gap-2 flex-wrap sm:shrink-0 pl-11 sm:pl-0">
         {getTagBadge()}
-        {getStatusBadge()}
+        {doc.tag !== 'for_signing' && getStatusBadge()}
         {isToCustomer && doc.file_url && (
           <Button
             variant="ghost"

@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax148148aReopening: LearnPageConfig = {
   slug: 'income-tax-148-148a-reopening',
   title: 'Income Tax Section 148 / 148A Notice: Reopening of Assessment',
-  seoTitle: 'Income Tax 148 / 148A Notice 2025: How to Respond | Ollvy',
-  seoDescription: "Received a Section 148 or 148A income tax notice? The department wants to reopen a past year's assessment. Understand your rights, deadlines, and how to fight it.",
+  seoTitle: 'Section 148/148A Reassessment Notice: Your Defence Rights (2025) | Ollvy',
+  seoDescription: 'A 148A notice is your chance to stop reassessment before it starts. Reply within 7-30 days explaining why the alleged income did not escape assessment. Strong 148A replies close cases early.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-148-148a-reopening',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -25,7 +25,7 @@ export const incomeTax148148aReopening: LearnPageConfig = {
     {
       number: '01',
       heading: 'THE DEPARTMENT WANTS TO REOPEN YOUR PAST TAX RETURN - HERE IS WHAT THAT MEANS',
-      body: "A Section 148 notice means the income tax department believes that income chargeable to tax has \"escaped assessment\" in a prior year - meaning they think you earned taxable income that was not taxed at the time. They want to reopen that year's assessment and potentially raise a fresh demand.\n\nSince the Finance Act 2021, there is now a mandatory prior step: Section 148A. Before issuing the actual 148 notice, the department must first issue a Section 148A show cause notice, give you a chance to reply, and then pass an order deciding whether reopening is justified. Only after that order can they issue the 148 notice.\n\nThis is actually in your favour. Section 148A is your chance to kill the reopening at the very beginning, before it becomes a full-blown reassessment.",
+      body: "A Section 148 notice means the income tax department believes that income chargeable to tax has \"escaped assessment\" in a prior year, meaning they think you earned taxable income that was not taxed at the time. They want to reopen that year's assessment and potentially raise a fresh demand.\n\nSince the Finance Act 2021, there is now a mandatory prior step: Section 148A. Before issuing the actual 148 notice, the department must first issue a Section 148A show cause notice, give you a chance to reply, and then pass an order deciding whether reopening is justified. Only after that order can they issue the 148 notice.\n\nSection 148A is your chance to stop the reopening at the very beginning, before it becomes a full-blown reassessment.",
       note: 'Source: Sections 148, 148A, Income Tax Act, 1961, as amended by Finance Act 2021.',
     },
     {
@@ -38,7 +38,7 @@ export const incomeTax148148aReopening: LearnPageConfig = {
         'Step 3 - 148A(c): You reply with your explanation, documents, and arguments for why reopening is not justified.',
         'Step 4 - 148A(d): The officer passes an order. If they agree with you, the case is dropped. If not, they issue the formal Section 148 notice. This order must be approved by a Principal Commissioner or Commissioner if the escaped income is below Rs. 50 lakh for assessments more than 3 years old.',
       ],
-      note: 'The 7-day minimum is the floor - officers frequently set longer deadlines. But if you receive a 7-day window, request an extension immediately.',
+      note: 'The 7-day minimum is the floor. Officers frequently set longer deadlines. If you receive a 7-day window, request an extension immediately.',
     },
     {
       number: '03',
@@ -49,7 +49,7 @@ export const incomeTax148148aReopening: LearnPageConfig = {
         '3 to 5 years: Reopening is permitted only if the escaped income is Rs. 50 lakh or more (aggregate). The approval of a Principal Commissioner or above is required.',
         '5 to 10 years: Reopening is permitted only if the escaped income is Rs. 50 lakh or more AND the case involves specific serious categories: undisclosed foreign assets, discovered assets, specified false entries in accounts, etc. Again requires Principal Commissioner approval.',
         'Beyond 10 years: No reopening is possible under normal circumstances.',
-        'IMPORTANT: If you receive a 148 notice for a year older than 3 years, verify the grounds very carefully. The law sets specific conditions for older reopenings and non-compliance with those conditions is a complete defence.',
+        'If you receive a 148 notice for a year older than 3 years, verify the grounds very carefully. The law sets specific conditions for older reopenings and non-compliance with those conditions is a complete defence.',
       ],
       note: 'Source: Section 149, Income Tax Act, 1961, as amended by Finance Act 2021.',
     },
@@ -110,7 +110,17 @@ export const incomeTax148148aReopening: LearnPageConfig = {
     },
     {
       q: 'I filed my original ITR and the income was fully declared. Why am I still getting a 148A?',
-      a: "This happens. The department's system sometimes generates notices based on third-party data without cross-checking the original ITR. In your 148A reply, simply point to the exact line in your original ITR where the income appears. Attach your original ITR acknowledgement. Most cases like this close at the 148A stage.",
+      a: "The department's system sometimes generates notices based on third-party data without cross-checking the original ITR. In your 148A reply, point to the exact line in your original ITR where the income appears. Attach your original ITR acknowledgement. Most cases like this close at the 148A stage.",
     },
+    {
+      q: 'My 148A notice mentions income from property sale. I did report this in my ITR. How do I prove it?',
+      a: "Point to Schedule CG (capital gains) in your original ITR. Quote the exact figures for sale consideration, cost of acquisition, and capital gain. Attach the computation worksheet and the ITR acknowledgement showing these figures.",
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 148)', url: 'https://incometaxindia.gov.in', description: 'Reassessment notice provision' },
+    { name: 'Income Tax Act, 1961 (Section 148A)', url: 'https://incometaxindia.gov.in', description: 'Show cause notice before issuing 148' },
+    { name: 'Income Tax Act, 1961 (Section 149)', url: 'https://incometaxindia.gov.in', description: 'Time limits for reassessment' },
   ],
 };

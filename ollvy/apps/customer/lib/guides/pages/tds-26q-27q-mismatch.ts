@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const tds26q27qMismatch: LearnPageConfig = {
   slug: 'tds-26q-27q-mismatch',
   title: 'TDS Mismatch Notice: 26Q / 27Q Return vs Actual Deposits',
-  seoTitle: 'TDS 26Q / 27Q Mismatch Notice 2025: How to Correct and Respond | Ollvy',
-  seoDescription: 'Got a TDS mismatch notice about 26Q or 27Q discrepancies? Your TDS return does not match deposits. Understand how to correct and what the consequences are.',
+  seoTitle: 'TDS 26Q/27Q Mismatch: File Correction Return on TRACES (2025) | Ollvy',
+  seoDescription: 'A TDS mismatch notice means your 26Q or 27Q return does not match challan deposits. File a correction return on TRACES to link challans correctly. Wrong deductee PAN blocks their TDS credit.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-26q-27q-mismatch',
   lastReviewed: 'March 2025',
   category: 'TDS Notice',
@@ -24,7 +24,7 @@ export const tds26q27qMismatch: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT IS A TDS MISMATCH AND WHY IT HAPPENS',
-      body: 'Your TDS return (Form 26Q for domestic non-salary payments, Form 27Q for foreign payments) declares the deductions made and deposited. The TRACES system compares this against actual challan deposits using BSR codes and challan serial numbers.\n\nMismatches arise when: the challan details entered in the TDS return do not match the actual challan; TDS was deposited but not linked to the correct quarter in the return; payments were made but the TDS return was filed with incorrect PAN of the deductee; or TDS was deducted but deposited in a different quarter than the return shows.',
+      body: 'Your TDS return (Form 26Q for domestic non-salary payments, Form 27Q for foreign payments) declares the deductions made and deposited. The TRACES system compares this against actual challan deposits using BSR codes and challan serial numbers.\n\nMismatches arise when the challan details entered in the TDS return do not match the actual challan, when TDS was deposited but not linked to the correct quarter in the return, when payments were made but the TDS return was filed with incorrect PAN of the deductee, or when TDS was deducted but deposited in a different quarter than the return shows.',
       note: 'Source: Sections 200, 200A, Income Tax Act, 1961. TRACES processing rules.',
     },
     {
@@ -47,7 +47,7 @@ export const tds26q27qMismatch: LearnPageConfig = {
       bullets: [
         'Interest for late deduction: 1% per month from due date of deduction to date of actual deduction',
         'Interest for late deposit: 1.5% per month from date of deduction to date of deposit',
-        'If the mismatch is because TDS was deducted but challan was entered incorrectly: the actual deposit exists but is just linked wrong. In this case, no tax interest should arise once the correction is made - but verify.',
+        'If the mismatch is because TDS was deducted but challan was entered incorrectly: the actual deposit exists but is just linked wrong. In this case, no tax interest should arise once the correction is made.',
         'If TDS was genuinely deposited late: Interest applies and must be paid via a fresh challan. Include this challan in your correction return.',
       ],
     },
@@ -60,7 +60,16 @@ export const tds26q27qMismatch: LearnPageConfig = {
     },
     {
       q: 'My correction TDS return has been rejected by TRACES. What do I do?',
-      a: 'Rejection reasons are shown in the processing status. Common reasons: the original return is too old for online correction (needs to be submitted offline to the TIN facilitation centre), or there is a mismatch in the KYC details of the TAN. Identify the specific rejection reason and address it - the TRACES helpline (1800 103 0344) can assist.',
+      a: 'Rejection reasons are shown in the processing status. Common reasons: the original return is too old for online correction (needs to be submitted offline to the TIN facilitation centre), or there is a mismatch in the KYC details of the TAN. The TRACES helpline (1800 103 0344) can assist.',
     },
+    {
+      q: 'How long does TRACES take to process a correction return?',
+      a: 'Correction returns are typically processed within 3-7 working days. Check the processing status on TRACES after this period. If the status shows "processed with defaults," review the Justification Report for remaining issues.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 200)', url: 'https://incometaxindia.gov.in', description: 'TDS return filing requirements' },
+    { name: 'TRACES Portal', url: 'https://www.tdscpc.gov.in', description: 'TDS return correction and justification report' },
   ],
 };

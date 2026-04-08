@@ -15,6 +15,7 @@ import { EligibilityTool } from './tools/EligibilityTool';
 import { PenaltyTool } from './tools/PenaltyTool';
 import { ComparisonTool } from './tools/ComparisonTool';
 import { DeadlineTracker } from './tools/DeadlineTracker';
+import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions';
 
 export function LearnPage({ page, ctaService, secondaryService }: {
   page: LearnPageConfig;
@@ -71,6 +72,12 @@ export function LearnPage({ page, ctaService, secondaryService }: {
             </div>
           </div>
         )}
+
+        {/* Last Reviewed / Sources */}
+        <ToolLastReviewed
+          lastReviewed={page.lastReviewed}
+          sources={page.sources ?? []}
+        />
 
         {/* Service CTA */}
         <LearnServiceCTA

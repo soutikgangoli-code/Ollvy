@@ -8,6 +8,7 @@ import { getClient } from '@/lib/supabase'
 import { getSignedUrl } from '@/lib/storage'
 import { DocumentUploadWizard, DocumentPreview } from '@/components/documents'
 import { ArrowLeft } from 'lucide-react'
+import { logCustomerDocumentUpload } from '../actions'
 
 interface Document {
   id: string
@@ -99,6 +100,9 @@ export function DocumentsPageClient({ order, initialDocuments }: DocumentsPageCl
     if (updateResult && !updateResult.success) {
       throw new Error(updateResult.error || 'Failed to update document')
     }
+
+    // Log to activity log
+    await logCustomerDocumentUpload(order.id, file.name)
 
     // Refresh documents
     await fetchDocuments()

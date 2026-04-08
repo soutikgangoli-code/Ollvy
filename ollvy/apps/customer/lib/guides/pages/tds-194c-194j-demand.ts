@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const tds194c194jDemand: LearnPageConfig = {
   slug: 'tds-194c-194j-demand',
   title: 'TDS Demand Notice: Section 194C (Contractors) and 194J (Professional Fees)',
-  seoTitle: 'TDS 194C and 194J Demand Notice 2025: What to Do | Ollvy',
-  seoDescription: 'Received a TDS demand for contractor payments (194C) or professional fees (194J)? Understand the thresholds, when TDS applies, and how to regularise.',
+  seoTitle: 'Section 194C and 194J TDS Demand: Thresholds and Rates (2025) | Ollvy',
+  seoDescription: '194C applies to contractor payments above Rs. 30,000 (1-2 percent). 194J applies to professional fees above Rs. 30,000 (10 percent or 2 percent for technical services). Non-deduction disallows 30 percent of the expense.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-194c-194j-demand',
   lastReviewed: 'March 2025',
   category: 'TDS Notice',
@@ -24,7 +24,7 @@ export const tds194c194jDemand: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHY 194C AND 194J GENERATE SO MANY DEMANDS',
-      body: 'Sections 194C and 194J are the two TDS provisions most frequently defaulted by SMEs - because the payments they cover are the most common in everyday business: contractor/vendor fees and professional service fees. The thresholds are low, the applicable cases are broad, and many businesses simply are not aware of them.',
+      body: 'Sections 194C and 194J are the two TDS provisions most frequently defaulted by SMEs because the payments they cover are the most common in everyday business: contractor/vendor fees and professional service fees. The thresholds are low, the applicable cases are broad, and many businesses are not aware of them.',
       note: 'Source: Sections 194C and 194J, Income Tax Act, 1961.',
     },
     {
@@ -49,7 +49,7 @@ export const tds194c194jDemand: LearnPageConfig = {
         'Royalty payments and non-compete fees',
         'TDS rate: 10% on professional and technical services, royalty, and non-compete fees. However, technical services (where no professional qualification is involved) attract a reduced rate of 2% under an amendment effective April 1, 2020.',
         'Threshold: Rs. 30,000 per year to the same person. Below this, no TDS.',
-        'Important: If the vendor provides you a GST invoice for "professional services" and the annual amount exceeds Rs. 30,000, you must deduct TDS before making payment.',
+        'If the vendor provides you a GST invoice for "professional services" and the annual amount exceeds Rs. 30,000, you must deduct TDS before making payment.',
       ],
     },
     {
@@ -73,7 +73,17 @@ export const tds194c194jDemand: LearnPageConfig = {
     },
     {
       q: 'My vendor insists I should not deduct TDS because they "already pay tax." How do I handle this?',
-      a: "TDS is your statutory obligation, not the vendor's choice. You can inform the vendor that TDS is mandated by law regardless of their tax situation. If they have a nil TDS certificate from their Assessing Officer under Section 197, ask them to provide it. Without that, you must deduct. The vendor can claim the TDS as credit against their own tax liability.",
+      a: "TDS is your statutory obligation. If the vendor has a nil TDS certificate from their Assessing Officer under Section 197, ask them to provide it. Without that, you must deduct. The vendor can claim the TDS as credit against their own tax liability.",
     },
+    {
+      q: 'Does TDS apply to one-time payments below the threshold?',
+      a: 'For 194C, if a single payment exceeds Rs. 30,000, TDS applies even if it is a one-time payment. For 194J, the threshold is Rs. 30,000 per year to the same person. Track aggregate payments to each vendor through the year.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 194C)', url: 'https://incometaxindia.gov.in', description: 'TDS on contractor payments' },
+    { name: 'Income Tax Act, 1961 (Section 194J)', url: 'https://incometaxindia.gov.in', description: 'TDS on professional and technical fees' },
+    { name: 'Income Tax Act, 1961 (Section 40(a)(ia))', url: 'https://incometaxindia.gov.in', description: 'Disallowance for non-deduction of TDS' },
   ],
 };

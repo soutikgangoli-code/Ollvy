@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax271Penalty: LearnPageConfig = {
   slug: 'income-tax-271-penalty',
   title: 'Income Tax Section 271 Penalty Notice: Penalty for Non-Compliance or Concealment',
-  seoTitle: 'Income Tax Section 271 Penalty Notice 2025: How to Respond | Ollvy',
-  seoDescription: 'Received a Section 271(1)(b) or 271(1)(c) income tax penalty notice? Understand the difference, the amount at stake, and your best response strategy.',
+  seoTitle: 'Section 271 Penalty: Non-Compliance vs Concealment (2025) | Ollvy',
+  seoDescription: '271(1)(b) penalty is Rs. 10,000 for non-response. 271(1)(c) penalty is 100-300 percent of tax on concealed income. Show "reasonable cause" or "bonafide belief" to contest.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-271-penalty',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -47,8 +47,8 @@ export const incomeTax271Penalty: LearnPageConfig = {
       heading: 'SECTION 271(1)(C): CONCEALMENT PENALTY - THE SERIOUS ONE',
       body: 'Section 271(1)(c) is initiated when the assessing officer believes you either concealed income or furnished incorrect particulars in your return. This is the penalty that can be 100% to 300% of the tax on the concealed amount.',
       bullets: [
-        'When is it triggered: Income that was discovered during scrutiny or reassessment that was not in your original return. Incorrect claims (deductions, exemptions) that were found to be wrong.',
-        'Key distinction - what is and is not "concealment": Deliberate concealment (not declaring cash income, suppressing business receipts, claiming false deductions) = clear 271(1)(c) territory. Genuine bonafide disputes about characterisation of income, valuation differences, legal interpretations = arguable that this is not concealment.',
+        'When is it triggered: Income discovered during scrutiny or reassessment that was not in your original return. Incorrect claims (deductions, exemptions) that were found to be wrong.',
+        'Key distinction: Deliberate concealment (not declaring cash income, suppressing business receipts, claiming false deductions) is clear 271(1)(c) territory. Genuine bonafide disputes about characterisation of income, valuation differences, or legal interpretations are arguable as not being concealment.',
         'The "bonafide belief" defence: If you disclosed all material facts and took a particular legal position in good faith (even if later found to be wrong), this is generally NOT concealment. Courts have consistently held that legitimate tax positions, even if incorrect, do not attract 271(1)(c).',
         'Immunity under Section 270AA: If you agree with the assessment and pay the tax and interest within the time allowed, you can file an application under Section 270AA for immunity from 271(1)(c) penalty. This is available for non-fraud cases under Section 270A.',
       ],
@@ -75,7 +75,16 @@ export const incomeTax271Penalty: LearnPageConfig = {
     },
     {
       q: 'Can both the assessment and the penalty be appealed simultaneously?',
-      a: 'Yes. And typically, if the underlying assessment is overturned in appeal, the penalty notice falls automatically. Appeal the assessment first if you have strong grounds - a successful assessment appeal often eliminates the penalty entirely.',
+      a: 'Yes. If the underlying assessment is overturned in appeal, the penalty notice falls automatically. Appeal the assessment first if you have strong grounds.',
     },
+    {
+      q: 'What is the Section 270AA immunity option?',
+      a: 'Under Section 270AA, if you accept the assessment order and pay the tax and interest within the specified time, you can apply for immunity from penalty. This is available for non-fraud cases under Section 270A. Apply within one month of paying the tax.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 271)', url: 'https://incometaxindia.gov.in', description: 'Penalty for concealment and non-compliance' },
+    { name: 'Income Tax Act, 1961 (Section 270AA)', url: 'https://incometaxindia.gov.in', description: 'Immunity from penalty provision' },
   ],
 };

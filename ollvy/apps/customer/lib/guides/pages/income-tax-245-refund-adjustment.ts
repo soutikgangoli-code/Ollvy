@@ -4,8 +4,8 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax245RefundAdjustment: LearnPageConfig = {
   slug: 'income-tax-245-refund-adjustment',
   title: 'Income Tax Section 245 Notice: Your Refund Has Been Adjusted',
-  seoTitle: 'Income Tax Section 245 Notice: Refund Adjusted Against Demand | Ollvy',
-  seoDescription: 'Got a Section 245 intimation saying your refund was adjusted against an old demand? Understand what demand is being set off, whether it is correct, and how to object.',
+  seoTitle: 'Section 245 Refund Adjustment: Object Within 30 Days (2025) | Ollvy',
+  seoDescription: 'A Section 245 notice says your refund will be adjusted against an old demand. You have 30 days to object. Check if the demand was already paid or is under appeal.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-245-refund-adjustment',
   lastReviewed: 'March 2025',
   category: 'Income Tax Notice',
@@ -25,7 +25,7 @@ export const incomeTax245RefundAdjustment: LearnPageConfig = {
     {
       number: '01',
       heading: 'YOU WERE EXPECTING A REFUND. INSTEAD YOU GOT THIS NOTICE.',
-      body: "Section 245 of the Income Tax Act allows the department to adjust (set off) your income tax refund against any outstanding tax demand - from any prior year - without going to court.\n\nBefore doing this, the law requires them to give you a notice under Section 245 and at least 30 days to respond. This is your window to either accept the adjustment (if the demand is correct) or object to it (if you dispute the demand or the demand has already been paid or appealed).",
+      body: "Section 245 of the Income Tax Act allows the department to adjust (set off) your income tax refund against any outstanding tax demand from any prior year without going to court.\n\nBefore doing this, the law requires them to give you a notice under Section 245 and at least 30 days to respond. This is your window to either accept the adjustment (if the demand is correct) or object to it (if you dispute the demand or the demand has already been paid or appealed).",
       note: 'Source: Section 245, Income Tax Act, 1961.',
     },
     {
@@ -47,7 +47,7 @@ export const incomeTax245RefundAdjustment: LearnPageConfig = {
       bullets: [
         'Log in to the income tax portal and go to Pending Actions > Response to Outstanding Demand. You will see all demands against your PAN with details of the order that created them.',
         'Download the demand order (143(1) intimation, 143(3) assessment order, or whichever order created the demand) and review it.',
-        'Determine if the demand is: (a) Correct and unpaid - in which case the adjustment is fair and you can agree, (b) Already paid but not mapped - in which case upload the challan proof and respond "Demand paid, challan details attached," (c) Being appealed - respond "Demand disputed, appeal filed, stay application submitted," (d) Wrong - a TDS mismatch, arithmetic error, or legally incorrect demand - file a rectification under Section 154 and simultaneously respond to the 245 notice.',
+        'Determine if the demand is: (a) Correct and unpaid, in which case the adjustment is fair and you can agree, (b) Already paid but not mapped, in which case upload the challan proof and respond "Demand paid, challan details attached," (c) Being appealed, respond "Demand disputed, appeal filed, stay application submitted," (d) Wrong due to a TDS mismatch, arithmetic error, or legally incorrect demand, file a rectification under Section 154 and simultaneously respond to the 245 notice.',
         'File your response on the portal within 30 days. Even a response of "disagree" preserves your position and buys you time to resolve the underlying demand.',
       ],
       note: 'If you are in a time crunch and cannot resolve the underlying demand within 30 days, at minimum file your response stating that you dispute the demand and will provide documentation. This protects you from the automatic adjustment.',
@@ -92,7 +92,16 @@ export const incomeTax245RefundAdjustment: LearnPageConfig = {
     },
     {
       q: 'I have Section 245 notices across multiple assessment years. How do I prioritise?',
-      a: 'Start with the one where the refund being adjusted is largest - that is the most financially urgent. But address all of them. Outstanding demands from multiple years can compound interest simultaneously.',
+      a: 'Start with the one where the refund being adjusted is largest. But address all of them. Outstanding demands from multiple years can compound interest simultaneously.',
     },
+    {
+      q: 'The demand being adjusted is from 8 years ago. Is there any time limit?',
+      a: 'There is no statutory time limit on adjusting old demands against new refunds. However, if the demand is from very old years and you believe it should have been written off or time-barred for recovery, raise this point in your response.',
+    },
+  ],
+
+  sources: [
+    { name: 'Income Tax Act, 1961 (Section 245)', url: 'https://incometaxindia.gov.in', description: 'Set off of refund against outstanding demand' },
+    { name: 'Income Tax Portal', url: 'https://incometaxindia.gov.in', description: 'Outstanding demand response filing' },
   ],
 };

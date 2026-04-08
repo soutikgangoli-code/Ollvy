@@ -90,7 +90,7 @@ export function SearchClient({ results, query }: SearchClientProps) {
       )}
 
       {/* Results list */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-lg">
             Search Results

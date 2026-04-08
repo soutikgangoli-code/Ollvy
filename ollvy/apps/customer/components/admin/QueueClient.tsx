@@ -376,14 +376,14 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
             <button
               key={bucket}
               onClick={() => setSelectedBucket(bucket === selectedBucket ? 'all' : bucket)}
-              className={`p-4 rounded-lg border-2 text-left transition-all ${
+              className={`p-4 rounded-lg border-2 text-left transition-all overflow-hidden ${
                 selectedBucket === bucket
                   ? 'ring-2 ring-primary ring-offset-2'
                   : ''
               } ${config.color}`}
             >
-              <div className="text-2xl font-bold text-foreground">{count}</div>
-              <div className="text-sm text-muted-foreground">{config.label}</div>
+              <div className="text-xl md:text-2xl font-bold text-foreground">{count}</div>
+              <div className="text-sm text-muted-foreground truncate">{config.label}</div>
             </button>
           )
         })}
@@ -394,7 +394,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
         <Button
           variant={selectedBucket === 'all' ? 'default' : 'outline'}
           onClick={() => setSelectedBucket('all')}
-          className="min-w-[140px]"
+          className="shrink-0"
         >
           All Active ({visibleOrders.length})
         </Button>
@@ -420,7 +420,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[340px] p-4" align="start">
+          <PopoverContent className="w-[90vw] max-w-[340px] p-4" align="start">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h4 className="font-medium text-sm">Filters</h4>
@@ -639,7 +639,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
       </div>
 
       {/* Orders List */}
-      <Card>
+      <Card className="overflow-hidden">
         <CardHeader>
           <CardTitle className="text-lg">
             {selectedBucket === 'all' ? 'All Active Orders' : BUCKET_CONFIG[selectedBucket].label}
@@ -791,7 +791,7 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
 
       {/* Floating confirmation bar for bulk assignment */}
       {selectedAdmin && selectedOrderIds.size > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4 flex items-center justify-between shadow-lg z-50">
+        <div className="fixed bottom-0 left-0 right-0 bg-background border-t p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-lg z-50">
           <span className="text-sm font-medium">
             {selectedOrderIds.size} order{selectedOrderIds.size !== 1 ? 's' : ''} selected
             to assign to {selectedAdmin.name}
