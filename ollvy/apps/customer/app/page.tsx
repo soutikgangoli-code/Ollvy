@@ -331,6 +331,58 @@ export default async function LandingPage() {
     sameAs: [],
   }
 
+  // WebSite schema with SearchAction (enables sitelinks searchbox in Google)
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Ollvy',
+    url: 'https://www.ollvy.com',
+    description: 'Company Registration, GST & Compliance Services in India with verified CAs',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Ollvy',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://www.ollvy.com/logo.png',
+      },
+    },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: 'https://www.ollvy.com/services?q={search_term_string}',
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  }
+
+  // ItemList schema for popular services (shows as carousel in Google)
+  const servicesItemListJsonLd = popularServices.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Popular Compliance Services',
+    description: 'Most popular business registration and compliance services on Ollvy',
+    itemListElement: popularServices.slice(0, 6).map((service, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Service',
+        name: service.name,
+        description: service.description,
+        url: `https://www.ollvy.com/services/${service.slug}`,
+        provider: {
+          '@type': 'Organization',
+          name: 'Ollvy',
+        },
+        offers: {
+          '@type': 'Offer',
+          price: service.ollvyFee.toString(),
+          priceCurrency: 'INR',
+        },
+      },
+    })),
+  } : null
+
   return (
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
       <script
@@ -345,6 +397,16 @@ export default async function LandingPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
+      {servicesItemListJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesItemListJsonLd) }}
+        />
+      )}
       <NavbarServer />
 
       {/* Main content with padding for fixed navbar */}

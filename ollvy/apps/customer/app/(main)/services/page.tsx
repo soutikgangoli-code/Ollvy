@@ -112,8 +112,29 @@ function generateServicesSchema(services: ServicePackage[]) {
     itemListElement: services.map((service, index) => ({
       '@type': 'ListItem',
       position: index + 1,
-      name: service.name,
-      url: `https://www.ollvy.com/services/${service.slug}`,
+      item: {
+        '@type': 'Service',
+        name: service.name,
+        description: service.short_description,
+        url: `https://www.ollvy.com/services/${service.slug}`,
+        provider: {
+          '@type': 'Organization',
+          name: 'Ollvy',
+        },
+        offers: {
+          '@type': 'Offer',
+          price: Math.round(service.price_base_paisa / 100).toString(),
+          priceCurrency: 'INR',
+          availability: 'https://schema.org/InStock',
+        },
+        ...(service.avg_rating && service.rating_count >= 10 ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: service.avg_rating.toFixed(1),
+            reviewCount: service.rating_count,
+          },
+        } : {}),
+      },
     })),
   }
 }

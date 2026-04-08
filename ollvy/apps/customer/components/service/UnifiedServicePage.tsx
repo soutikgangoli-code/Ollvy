@@ -2,9 +2,9 @@
 
 import { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react'
 import Link from 'next/link'
-import Script from 'next/script'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { servicesBySlug } from '@/lib/services/data'
+import { fallbackReviews, defaultFallbackReviews } from '@/lib/data/fallback-reviews'
 import { BookingPanel } from './BookingPanel'
 import { ProcessStepper } from './ProcessStepper'
 import { ExplainerStepper } from './ExplainerStepper'
@@ -55,72 +55,6 @@ const documentChecklistPaths: Record<string, string> = {
   'business-itr': '/tools/documents/business-itr',
   'cloud-kitchen-setup': '/tools/documents/fssai',
 }
-
-// Service-specific fallback reviews when no real reviews exist
-const fallbackReviews: Record<string, Array<{rating: number, comment: string, date: string}>> = {
-  'gst-registration': [
-    { rating: 5, comment: 'Done in 6 days. They caught a document issue before filing that I would never have noticed. Tracked everything on the app.', date: 'March 2026' },
-    { rating: 5, comment: 'Officer asked for something extra and it was handled without me being involved. Saw it resolved on the dashboard.', date: 'February 2026' },
-  ],
-  'pvt-ltd-incorporation': [
-    { rating: 5, comment: 'Company registered in 12 days. They spotted a problem with my documents before submitting - saved at least a week of delay.', date: 'April 2026' },
-    { rating: 4, comment: 'Could see exactly where things stood every day without calling anyone. Got what I actually needed in the MOA, not a standard template.', date: 'February 2026' },
-  ],
-  'llp-incorporation': [
-    { rating: 5, comment: 'Three partners, three different cities. The whole thing worked without confusion. Agreement matched what we had actually agreed on.', date: 'March 2026' },
-    { rating: 5, comment: 'Got the registration done before a client deadline we had. App showed every step as it moved forward.', date: 'February 2026' },
-  ],
-  'msme-registration': [
-    { rating: 5, comment: 'Certificate came the same day. Took it to the bank the next morning.', date: 'March 2026' },
-    { rating: 5, comment: 'Needed it for a tender. Finished faster than I expected and no back and forth.', date: 'April 2026' },
-  ],
-  'trademark-registration': [
-    { rating: 5, comment: 'They checked for similar marks before filing and found one. Changed our approach before spending the government fee. Good catch.', date: 'March 2026' },
-    { rating: 4, comment: 'Registry came back with a question and it was answered the next day. That was part of the price - no extra charge.', date: 'February 2026' },
-  ],
-  'gst-monthly-50l': [
-    { rating: 5, comment: 'Filed on time every month. I send the data, rest is done. Summary in the app tells me what was filed.', date: 'March 2026' },
-    { rating: 5, comment: 'Switched from a CA who missed the deadline. Not happened once here. No calls needed.', date: 'February 2026' },
-  ],
-  'business-itr': [
-    { rating: 5, comment: 'CA found we had been calculating something wrong for two years. Fixed it before filing. Draft was shared before anything was submitted.', date: 'March 2026' },
-    { rating: 5, comment: 'Reviewed the full draft, approved it, filed same day. Confirmation was on the app within hours.', date: 'February 2026' },
-  ],
-  'mca-annual-filing': [
-    { rating: 5, comment: 'We were already late. They told me the exact penalty before starting, not after. Both filings done same day.', date: 'April 2026' },
-    { rating: 4, comment: 'They caught something from last year we had not reported. Sorted before it became a problem.', date: 'March 2026' },
-  ],
-  'cloud-kitchen-setup': [
-    { rating: 5, comment: 'All three licences handled together. Got a checklist of what the inspector would check. Everything was in order when they came. On Swiggy in 3 weeks.', date: 'March 2026' },
-    { rating: 5, comment: 'Knew exactly which licences we needed before paying anything. No wrong filings, no starting over.', date: 'February 2026' },
-  ],
-  'tds-monthly-compliance': [
-    { rating: 5, comment: 'Challans ready before the 7th every month. I pay, they file. Salary certificates were ready well before the June deadline.', date: 'April 2026' },
-    { rating: 5, comment: 'Caught wrong rates on some payments in the first month itself. Fixed before it became a bigger issue.', date: 'March 2026' },
-  ],
-  'gst-cancellation': [
-    { rating: 5, comment: 'Told me what I would owe before we started. No surprise bill after filing. Clean exit.', date: 'March 2026' },
-    { rating: 5, comment: 'Had several months of unfiled returns. All cleared and cancellation done in less than two weeks.', date: 'February 2026' },
-  ],
-  'gst-revocation': [
-    { rating: 5, comment: 'Had less than a month to fix this. All returns filed in time, registration restored. Exact cost told before we started.', date: 'April 2026' },
-    { rating: 5, comment: 'Knew what it would cost before committing. App showed where things stood throughout.', date: 'March 2026' },
-  ],
-  'din-reactivation': [
-    { rating: 5, comment: 'Missed KYC for 2 years. Penalty explained before starting, both years sorted in one go, back to active in 8 days.', date: 'March 2026' },
-    { rating: 5, comment: 'They flagged a phone number issue before starting so we could fix it first. Saved days of going back and forth mid-process.', date: 'February 2026' },
-  ],
-  'company-name-change': [
-    { rating: 5, comment: 'Name checked before we paid anything. New certificate in 18 days. They also reminded us what else needed updating - we had not thought of that.', date: 'April 2026' },
-    { rating: 4, comment: 'Tracked the MCA status on the app without having to ask anyone. Smooth from start to finish.', date: 'March 2026' },
-  ],
-}
-
-// Default fallback for services not in the list
-const defaultFallbackReviews = [
-  { rating: 5, comment: 'Done before the deadline. Tracked every stage on the app without following up.', date: 'March 2026' },
-  { rating: 4, comment: 'They flagged something before filing that I would have missed. No surprises.', date: 'February 2026' },
-]
 
 interface UnifiedServicePageProps {
   service: DBServiceConfig
@@ -546,69 +480,8 @@ export function UnifiedServicePage({
     }
   }, [heroVisible])
 
-  // JSON-LD structured data for Service
-  const serviceJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Service',
-    name: service.name,
-    description: service.tagline,
-    url: service.canonicalUrl,
-    provider: {
-      '@type': 'Organization',
-      name: 'Ollvy Technologies Private Limited',
-      url: 'https://www.ollvy.com',
-    },
-    areaServed: {
-      '@type': 'Country',
-      name: 'India',
-    },
-    offers: {
-      '@type': 'Offer',
-      price: totalFee.toString(),
-      priceCurrency: 'INR',
-      availability: 'https://schema.org/InStock',
-    },
-    ...(service.avgRating && service.totalRatings >= 10
-      ? {
-          aggregateRating: {
-            '@type': 'AggregateRating',
-            ratingValue: service.avgRating.toFixed(1),
-            reviewCount: service.totalRatings,
-          },
-        }
-      : {}),
-  }
-
-  // FAQ JSON-LD structured data (use static config FAQs if available, fallback to DB)
-  const faqSource = staticConfig?.faqs ?? service.faqs
-  const faqJsonLd = faqSource.length > 0 ? {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqSource.map(faq => ({
-      '@type': 'Question',
-      name: faq.q,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.a,
-      },
-    })),
-  } : null
-
   return (
     <>
-      <Script
-        id="service-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
-      />
-      {faqJsonLd && (
-        <Script
-          id="faq-jsonld"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
-
       {/* Sticky top bar - replaces navbar when hero scrolls out */}
       <div
         className={cn(
@@ -1299,7 +1172,7 @@ export function UnifiedServicePage({
                             "{review.comment}"
                           </p>
                           <p className="text-xs text-muted-foreground mt-3">
-                            - Verified customer
+                            - {review.name}
                           </p>
                         </Card>
                       ))}

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
-import { type ToolPageConfig, generateToolFAQSchema, generateToolBreadcrumbSchema } from '@/lib/tools/types'
+import { type ToolPageConfig, generateToolFAQSchema, generateToolBreadcrumbSchema, generateSoftwareApplicationSchema, generateToolHowToSchema } from '@/lib/tools/types'
 import { PenaltyCalculatorSelector } from '@/components/penalty-calculator/PenaltyCalculatorSelector'
 import { penaltyCalculators } from '@/components/penalty-calculator/penalty-calculator-data'
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
@@ -152,6 +152,8 @@ function RelatedLinks({ config }: { config: ToolPageConfig }) {
 export function ToolPageWrapper({ config, children, showCalculatorSelector }: ToolPageWrapperProps) {
   const faqSchema = generateToolFAQSchema(config)
   const breadcrumbSchema = generateToolBreadcrumbSchema(config.category, config.title, config.canonicalUrl)
+  const softwareAppSchema = generateSoftwareApplicationSchema(config)
+  const howToSchema = generateToolHowToSchema(config)
 
   // Get the current calculator info for the selector
   const currentCalculator = showCalculatorSelector
@@ -170,6 +172,16 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
+        />
+        {howToSchema && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+          />
+        )}
 
         {/* Header with H1 - Centered like Document pages */}
         <header className="mb-12 text-center">

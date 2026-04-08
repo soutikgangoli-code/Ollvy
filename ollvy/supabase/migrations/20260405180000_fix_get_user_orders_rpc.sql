@@ -79,6 +79,11 @@ BEGIN
     WHERE o.user_id = v_user_id
       -- REMOVED: AND o.razorpay_payment_id IS NOT NULL (was hiding valid orders)
       AND (p_statuses IS NULL OR o.status = ANY(p_statuses))
+      AND (
+        o.status NOT IN ('pending_assignment', 'waitlisted', 'in_progress')
+        OR o.paid_at IS NOT NULL
+        OR o.retainer_subscription_id IS NOT NULL
+      )
   ) subquery;
 
   RETURN v_orders;

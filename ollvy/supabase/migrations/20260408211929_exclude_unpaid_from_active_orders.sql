@@ -1,5 +1,6 @@
--- Fix get_user_orders RPC to handle auth_user_id mismatch
--- If user not found by auth_user_id, try finding by email and link accounts
+-- Exclude unpaid one-time orders from Active tab in get_user_orders RPC.
+-- Retainer orders (retainer_subscription_id IS NOT NULL) are exempted because
+-- their payment is tracked via subscription webhooks, not paid_at.
 
 CREATE OR REPLACE FUNCTION get_user_orders(
   p_statuses TEXT[] DEFAULT NULL
@@ -17,18 +18,15 @@ BEGIN
 
   -- If not found, try finding by email and link the account
   IF v_user_id IS NULL THEN
-    -- Get email from auth.users
     SELECT email INTO v_auth_email
     FROM auth.users
     WHERE id = auth.uid();
 
-    -- Try to find user by email
     IF v_auth_email IS NOT NULL THEN
       SELECT id INTO v_user_id
       FROM users
       WHERE email = v_auth_email;
 
-      -- If found by email, link the auth_user_id
       IF v_user_id IS NOT NULL THEN
         UPDATE users
         SET auth_user_id = auth.uid(),

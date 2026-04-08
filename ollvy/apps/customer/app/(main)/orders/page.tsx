@@ -50,7 +50,7 @@ export default async function OrdersPage() {
         const activeStatuses = ['pending_assignment', 'waitlisted', 'in_progress']
         const completedStatuses = ['completed', 'disputed']
 
-        const active = orders.filter(o => activeStatuses.includes(o.status)) as Order[]
+        const active = orders.filter(o => activeStatuses.includes(o.status) && (o.paid_at || o.retainer_subscription_id)) as Order[]
         // Only show cancelled orders that were actually paid (not abandoned payment attempts)
         const cancelledPaid = orders.filter(o => o.status === 'cancelled' && o.paid_at !== null)
         const completed = [...orders.filter(o => completedStatuses.includes(o.status)), ...cancelledPaid].slice(0, 20) as Order[]

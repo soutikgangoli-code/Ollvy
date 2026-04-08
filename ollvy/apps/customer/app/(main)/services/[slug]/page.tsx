@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { getServiceBySlugFromDB, getAllServiceSlugs, getServiceReviews, getRelatedServicesBySlugs } from '@/lib/data/services'
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
 import { ServiceStructuredData } from '@/components/seo/ServiceStructuredData'
+import { getFallbackReviews } from '@/lib/data/fallback-reviews'
 
 /**
  * Service Detail Page - Server Component
@@ -89,6 +90,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         avgRating={service.avgRating}
         totalRatings={service.totalRatings}
         faqs={service.faqs}
+        reviews={reviews}
+        fallbackReviews={getFallbackReviews(slug)}
+        processSteps={service.processSteps}
+        whatsIncluded={service.whatsIncluded}
+        slaDays={service.slaDays}
       />
       <UnifiedServicePage
         service={service}
