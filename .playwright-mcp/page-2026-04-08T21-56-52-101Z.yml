@@ -1,0 +1,395 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - paragraph [ref=e40]: FREE TOOLS
+          - heading "Business Tools" [level=1] [ref=e41]
+          - paragraph [ref=e42]: Free tools to help you understand compliance requirements and calculate penalties for missed deadlines.
+        - generic [ref=e43]:
+          - generic [ref=e44]:
+            - img [ref=e46]
+            - heading "Document Checklists" [level=2] [ref=e49]
+          - paragraph [ref=e50]: Know exactly what documents you need before starting your registration process.
+          - generic [ref=e51]:
+            - link "Documents for Private Limited Company Complete checklist of documents needed to register a Private Limited Company in India" [ref=e52] [cursor=pointer]:
+              - /url: /tools/documents/private-limited-company
+              - generic [ref=e54]:
+                - heading "Documents for Private Limited Company" [level=3] [ref=e55]:
+                  - generic [ref=e56]: Documents for Private Limited Company
+                  - img [ref=e57]
+                - paragraph [ref=e59]: Complete checklist of documents needed to register a Private Limited Company in India
+            - link "Documents for LLP Registration All documents required to incorporate a Limited Liability Partnership" [ref=e60] [cursor=pointer]:
+              - /url: /tools/documents/llp
+              - generic [ref=e62]:
+                - heading "Documents for LLP Registration" [level=3] [ref=e63]:
+                  - generic [ref=e64]: Documents for LLP Registration
+                  - img [ref=e65]
+                - paragraph [ref=e67]: All documents required to incorporate a Limited Liability Partnership
+            - link "Documents for Partnership Firm Documents needed to create a Partnership Deed and register your firm" [ref=e68] [cursor=pointer]:
+              - /url: /tools/documents/partnership
+              - generic [ref=e70]:
+                - heading "Documents for Partnership Firm" [level=3] [ref=e71]:
+                  - generic [ref=e72]: Documents for Partnership Firm
+                  - img [ref=e73]
+                - paragraph [ref=e75]: Documents needed to create a Partnership Deed and register your firm
+            - link "Documents for Sole Proprietorship Documents required for sole proprietorship registration and compliance" [ref=e76] [cursor=pointer]:
+              - /url: /tools/documents/sole-proprietor
+              - generic [ref=e78]:
+                - heading "Documents for Sole Proprietorship" [level=3] [ref=e79]:
+                  - generic [ref=e80]: Documents for Sole Proprietorship
+                  - img [ref=e81]
+                - paragraph [ref=e83]: Documents required for sole proprietorship registration and compliance
+            - link "Documents for GST Registration Complete document checklist for GST registration as a sole proprietor or business" [ref=e84] [cursor=pointer]:
+              - /url: /tools/documents/gst-registration
+              - generic [ref=e86]:
+                - heading "Documents for GST Registration" [level=3] [ref=e87]:
+                  - generic [ref=e88]: Documents for GST Registration
+                  - img [ref=e89]
+                - paragraph [ref=e91]: Complete document checklist for GST registration as a sole proprietor or business
+            - link "Documents for Individual ITR Filing Documents needed to file individual income tax return in India" [ref=e92] [cursor=pointer]:
+              - /url: /tools/documents/individual-itr
+              - generic [ref=e94]:
+                - heading "Documents for Individual ITR Filing" [level=3] [ref=e95]:
+                  - generic [ref=e96]: Documents for Individual ITR Filing
+                  - img [ref=e97]
+                - paragraph [ref=e99]: Documents needed to file individual income tax return in India
+            - link "Documents for Business ITR Filing Documents required for business income tax return filing" [ref=e100] [cursor=pointer]:
+              - /url: /tools/documents/business-itr
+              - generic [ref=e102]:
+                - heading "Documents for Business ITR Filing" [level=3] [ref=e103]:
+                  - generic [ref=e104]: Documents for Business ITR Filing
+                  - img [ref=e105]
+                - paragraph [ref=e107]: Documents required for business income tax return filing
+            - link "Documents for Trademark Registration Complete document checklist for trademark registration in India" [ref=e108] [cursor=pointer]:
+              - /url: /tools/documents/trademark
+              - generic [ref=e110]:
+                - heading "Documents for Trademark Registration" [level=3] [ref=e111]:
+                  - generic [ref=e112]: Documents for Trademark Registration
+                  - img [ref=e113]
+                - paragraph [ref=e115]: Complete document checklist for trademark registration in India
+        - generic [ref=e116]:
+          - generic [ref=e117]:
+            - img [ref=e119]
+            - heading "Penalty Calculators" [level=2] [ref=e121]
+          - paragraph [ref=e122]: Calculate the real cost of missing compliance deadlines based on Indian law.
+          - generic [ref=e123]:
+            - link "GST Late Filing Penalty Calculator Calculate penalties and interest for delayed GST return filing (GSTR-3B, GSTR-1)" [ref=e124] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/gst-late-filing
+              - generic [ref=e126]:
+                - heading "GST Late Filing Penalty Calculator" [level=3] [ref=e127]:
+                  - generic [ref=e128]: GST Late Filing Penalty Calculator
+                  - img [ref=e129]
+                - paragraph [ref=e131]: Calculate penalties and interest for delayed GST return filing (GSTR-3B, GSTR-1)
+            - link "GST Demand Notice Calculator Calculate interest and penalties on GST demand notices under Section 73/74" [ref=e132] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/gst-demand-notice
+              - generic [ref=e134]:
+                - heading "GST Demand Notice Calculator" [level=3] [ref=e135]:
+                  - generic [ref=e136]: GST Demand Notice Calculator
+                  - img [ref=e137]
+                - paragraph [ref=e139]: Calculate interest and penalties on GST demand notices under Section 73/74
+            - link "ITR Late Filing Penalty Calculator Calculate late filing fees and interest for delayed Income Tax Return filing" [ref=e140] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/itr-late-filing
+              - generic [ref=e142]:
+                - heading "ITR Late Filing Penalty Calculator" [level=3] [ref=e143]:
+                  - generic [ref=e144]: ITR Late Filing Penalty Calculator
+                  - img [ref=e145]
+                - paragraph [ref=e147]: Calculate late filing fees and interest for delayed Income Tax Return filing
+            - link "MCA Annual Filing Penalty Calculator Calculate penalties for delayed ROC filing (AOC-4, MGT-7) for companies" [ref=e148] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/mca-annual-filing
+              - generic [ref=e150]:
+                - heading "MCA Annual Filing Penalty Calculator" [level=3] [ref=e151]:
+                  - generic [ref=e152]: MCA Annual Filing Penalty Calculator
+                  - img [ref=e153]
+                - paragraph [ref=e155]: Calculate penalties for delayed ROC filing (AOC-4, MGT-7) for companies
+            - link "Director KYC Penalty Calculator Calculate the penalty for delayed DIR-3 KYC filing and DIN deactivation" [ref=e156] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/director-kyc
+              - generic [ref=e158]:
+                - heading "Director KYC Penalty Calculator" [level=3] [ref=e159]:
+                  - generic [ref=e160]: Director KYC Penalty Calculator
+                  - img [ref=e161]
+                - paragraph [ref=e163]: Calculate the penalty for delayed DIR-3 KYC filing and DIN deactivation
+            - link "TDS Late Filing Penalty Calculator Calculate penalties for delayed TDS return filing and late TDS payment" [ref=e164] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/tds-late-filing
+              - generic [ref=e166]:
+                - heading "TDS Late Filing Penalty Calculator" [level=3] [ref=e167]:
+                  - generic [ref=e168]: TDS Late Filing Penalty Calculator
+                  - img [ref=e169]
+                - paragraph [ref=e171]: Calculate penalties for delayed TDS return filing and late TDS payment
+            - link "Professional Tax Penalty Calculator Calculate penalties for delayed professional tax registration and payment" [ref=e172] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/professional-tax-penalty
+              - generic [ref=e174]:
+                - heading "Professional Tax Penalty Calculator" [level=3] [ref=e175]:
+                  - generic [ref=e176]: Professional Tax Penalty Calculator
+                  - img [ref=e177]
+                - paragraph [ref=e179]: Calculate penalties for delayed professional tax registration and payment
+            - link "PF/ESIC Penalty Calculator Calculate penalties for delayed PF and ESIC contributions and returns" [ref=e180] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/pf-esic-penalty
+              - generic [ref=e182]:
+                - heading "PF/ESIC Penalty Calculator" [level=3] [ref=e183]:
+                  - generic [ref=e184]: PF/ESIC Penalty Calculator
+                  - img [ref=e185]
+                - paragraph [ref=e187]: Calculate penalties for delayed PF and ESIC contributions and returns
+            - link "Shops & Establishment Penalty Calculator Calculate penalties for Shops & Establishment Act non-compliance" [ref=e188] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - generic [ref=e190]:
+                - heading "Shops & Establishment Penalty Calculator" [level=3] [ref=e191]:
+                  - generic [ref=e192]: Shops & Establishment Penalty Calculator
+                  - img [ref=e193]
+                - paragraph [ref=e195]: Calculate penalties for Shops & Establishment Act non-compliance
+            - link "Startup DPIIT Compliance Calculator Calculate penalties for DPIIT-recognized startup compliance lapses" [ref=e196] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/startup-dpiit-compliance
+              - generic [ref=e198]:
+                - heading "Startup DPIIT Compliance Calculator" [level=3] [ref=e199]:
+                  - generic [ref=e200]: Startup DPIIT Compliance Calculator
+                  - img [ref=e201]
+                - paragraph [ref=e203]: Calculate penalties for DPIIT-recognized startup compliance lapses
+    - contentinfo [ref=e204]:
+      - generic [ref=e205]:
+        - generic [ref=e206]:
+          - generic [ref=e207]:
+            - link "Ollvy" [ref=e208] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e209]: You run your business. We handle the rest.
+            - generic [ref=e210]:
+              - link "LinkedIn" [ref=e211] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e212]
+              - link "Twitter" [ref=e216] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e217]
+          - generic [ref=e219]:
+            - link "Calculators" [ref=e220] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e221]:
+              - listitem [ref=e222]:
+                - link "GST Late Filing" [ref=e223] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e224]:
+                - link "GST Demand Notice" [ref=e225] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e226]:
+                - link "ITR Late Filing" [ref=e227] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e228]:
+                - link "TDS Late Filing" [ref=e229] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e230]:
+                - link "MCA Annual Filing" [ref=e231] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e232]:
+                - link "Director KYC" [ref=e233] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e234]:
+                - link "PF/ESIC Penalty" [ref=e235] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e236]:
+                - link "Professional Tax" [ref=e237] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e238]:
+                - link "Shops & Establishment" [ref=e239] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e240]:
+                - link "Startup DPIIT" [ref=e241] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e242]:
+            - link "Checklists" [ref=e243] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e244]:
+              - listitem [ref=e245]:
+                - link "Pvt Ltd Documents" [ref=e246] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e247]:
+                - link "LLP Documents" [ref=e248] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e249]:
+                - link "Partnership Documents" [ref=e250] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e251]:
+                - link "Sole Proprietor" [ref=e252] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e253]:
+                - link "GST Registration" [ref=e254] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e255]:
+                - link "Individual ITR" [ref=e256] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e257]:
+                - link "Business ITR" [ref=e258] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e259]:
+                - link "Trademark" [ref=e260] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e261]:
+            - link "Services" [ref=e262] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e263]:
+              - listitem [ref=e264]:
+                - link "Pvt Ltd Registration" [ref=e265] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e266]:
+                - link "LLP Registration" [ref=e267] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e268]:
+                - link "GST Registration" [ref=e269] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e270]:
+                - link "GST Monthly Filing" [ref=e271] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e272]:
+                - link "GST Cancellation" [ref=e273] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e274]:
+                - link "GST Revocation" [ref=e275] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e276]:
+                - link "Trademark Registration" [ref=e277] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e278]:
+                - link "MSME Registration" [ref=e279] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e280]:
+                - link "Cloud Kitchen Setup" [ref=e281] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e282]:
+                - link "Business ITR Filing" [ref=e283] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e284]:
+                - link "Annual Compliance" [ref=e285] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e286]:
+                - link "TDS Compliance" [ref=e287] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e288]:
+                - link "Company Name Change" [ref=e289] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e290]:
+                - link "DIN Reactivation" [ref=e291] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e292]:
+                - link "All Services" [ref=e293] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e294]:
+            - paragraph [ref=e295]: Deadlines
+            - list [ref=e296]:
+              - listitem [ref=e297]:
+                - link "Director KYC 2026" [ref=e298] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e299]:
+                - link "Business ITR 2026" [ref=e300] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e301]:
+                - link "GSTR-9 2026" [ref=e302] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e303]:
+                - link "TDS Return Q1 2027" [ref=e304] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e305]:
+                - link "Business ITR 2027" [ref=e306] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e307]:
+                - link "GSTR-9 2027" [ref=e308] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e309]:
+            - link "Guides" [ref=e310] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e311]:
+              - listitem [ref=e312]:
+                - link "Do I Need GST?" [ref=e313] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e314]:
+                - link "Pvt Ltd vs LLP" [ref=e315] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e316]:
+                - link "Which ITR Form?" [ref=e317] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e318]:
+                - link "DPIIT Recognition" [ref=e319] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e320]:
+                - link "All Guides" [ref=e321] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e322]:
+            - link "Notice Help" [ref=e323] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e324]:
+              - listitem [ref=e325]:
+                - link "GST DRC-01 Notice" [ref=e326] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e327]:
+                - link "GST ASMT-10 Notice" [ref=e328] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e329]:
+                - link "IT 143(1) Intimation" [ref=e330] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e331]:
+                - link "IT 148/148A Notice" [ref=e332] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e333]:
+                - link "TDS Short Deduction" [ref=e334] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e335]:
+            - paragraph [ref=e336]: Legal
+            - list [ref=e337]:
+              - listitem [ref=e338]:
+                - link "Privacy Policy" [ref=e339] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e340]:
+                - link "Terms of Service" [ref=e341] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e342]:
+                - link "Cancellation Policy" [ref=e343] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e344]:
+                - link "Refund Policy" [ref=e345] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e346]:
+                - link "Contact" [ref=e347] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e349]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e355] [cursor=pointer]:
+    - img [ref=e356]
+  - alert [ref=e359]

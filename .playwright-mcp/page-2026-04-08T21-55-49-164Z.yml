@@ -1,0 +1,725 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - navigation "Breadcrumb" [ref=e40]:
+            - link "Tools" [ref=e41] [cursor=pointer]:
+              - /url: /tools
+            - img [ref=e42]
+            - link "Documents" [ref=e44] [cursor=pointer]:
+              - /url: /tools/documents
+            - img [ref=e45]
+            - generic [ref=e47]: Private Limited Company
+          - paragraph [ref=e48]: Complete Guide & Document Checklist
+          - heading "How to Register a Private Limited Company" [level=1] [ref=e49]
+          - combobox [ref=e51] [cursor=pointer]:
+            - generic: "Switch guide: Private Limited Company"
+            - img [ref=e52]
+          - paragraph [ref=e54]: Step-by-step process, required documents checklist, costs, timeline, and frequently asked questions
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - paragraph [ref=e58]:
+              - img [ref=e59]
+              - text: Timeline
+            - generic [ref=e62]:
+              - paragraph [ref=e63]: 7-15
+              - paragraph [ref=e64]: working days
+          - generic [ref=e66]:
+            - paragraph [ref=e67]:
+              - img [ref=e68]
+              - text: Government Fee
+            - paragraph [ref=e72]: Rs. 1,500-15,000 (based on authorised capital)
+        - generic [ref=e73]:
+          - paragraph [ref=e74]: A Private Limited Company is the most popular choice for startups in India. You get limited liability (your personal assets stay protected), a separate legal identity, and the credibility that makes it easier to raise funding and win larger clients.
+          - paragraph [ref=e75]: Everything happens online through the MCA portal at mca.gov.in using the SPICe+ form. When you're done, you'll have a Certificate of Incorporation, CIN, PAN, and TAN - all from one application. The whole process takes 7-15 working days, depending on how clean your documents are and how busy the MCA is.
+        - generic [ref=e77]:
+          - paragraph [ref=e78]: Registering a Private Limited Company requires documents from all directors and shareholders, plus proof of the registered office address. Missing or mismatched documents are the most common cause of delays and MCA rejections - getting everything right before filing saves weeks.
+          - paragraph [ref=e79]: The key documents are PAN and Aadhaar for all directors (the names must match exactly across both), address proof not older than 2 months, a registered office address with a utility bill, and an NOC from the property owner if the premises is rented. For the company itself, you need to decide on the proposed name (3 options recommended) and the business activities - these determine how the MOA is drafted.
+          - paragraph [ref=e80]: DSC (Digital Signature Certificate) is required for all directors and is arranged as part of the incorporation process. It requires video verification and takes 2-3 working days. DIN (Director Identification Number) is included in the SPICe+ filing - no separate application needed.
+          - paragraph [ref=e81]: Use this checklist to verify every document before submission. A single mismatch between the name on PAN and the name on Aadhaar will cause MCA to raise a query, adding 5-7 days to the timeline.
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - paragraph [ref=e85]: "19"
+              - paragraph [ref=e86]: Total Documents
+            - generic [ref=e88]:
+              - paragraph [ref=e89]: "14"
+              - paragraph [ref=e90]: Required
+            - generic [ref=e92]:
+              - paragraph [ref=e93]: "5"
+              - paragraph [ref=e94]: Ollvy Handles
+          - button "Export List" [ref=e95] [cursor=pointer]:
+            - img
+            - text: Export List
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - generic [ref=e98]:
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - generic [ref=e101]: "01"
+                  - heading "Identity Documents" [level=2] [ref=e102]
+                - paragraph [ref=e103]: Required for all proposed directors
+              - generic [ref=e104]:
+                - generic [ref=e106] [cursor=pointer]:
+                  - img [ref=e108]
+                  - generic [ref=e111]:
+                    - generic [ref=e112]:
+                      - heading "PAN Card" [level=3] [ref=e113]
+                      - generic [ref=e114]: REQ
+                    - paragraph [ref=e115]: of all directors and shareholders (minimum 2 directors, 2 shareholders)
+                  - img [ref=e116]
+                - generic [ref=e119] [cursor=pointer]:
+                  - img [ref=e121]
+                  - generic [ref=e124]:
+                    - generic [ref=e125]:
+                      - heading "Aadhaar Card" [level=3] [ref=e126]
+                      - generic [ref=e127]: REQ
+                    - paragraph [ref=e128]: of all directors and shareholders - must be linked with mobile number for OTP verification
+                  - img [ref=e129]
+                - generic [ref=e132] [cursor=pointer]:
+                  - img [ref=e134]
+                  - generic [ref=e137]:
+                    - generic [ref=e138]:
+                      - heading "Passport-Size Photographs" [level=3] [ref=e139]
+                      - generic [ref=e140]: REQ
+                    - paragraph [ref=e141]: recent photo of each director, JPEG format, white background preferred
+                  - img [ref=e142]
+                - generic [ref=e145] [cursor=pointer]:
+                  - img [ref=e147]
+                  - generic [ref=e150]:
+                    - generic [ref=e151]:
+                      - heading "Specimen Signature" [level=3] [ref=e152]
+                      - generic [ref=e153]: REQ
+                    - paragraph [ref=e154]: for DSC application - signature on plain white paper, scanned clearly
+                  - img [ref=e155]
+            - generic [ref=e157]:
+              - generic [ref=e158]:
+                - generic [ref=e159]:
+                  - generic [ref=e160]: "02"
+                  - heading "Director Address Proof" [level=2] [ref=e161]
+                - paragraph [ref=e162]: Any one document per director - must be recent
+              - generic [ref=e163]:
+                - generic [ref=e165] [cursor=pointer]:
+                  - img [ref=e167]
+                  - generic [ref=e170]:
+                    - heading "Utility Bill" [level=3] [ref=e172]
+                    - paragraph [ref=e173]: electricity, gas, water, or telephone bill - not older than 60 days
+                  - img [ref=e174]
+                - generic [ref=e177] [cursor=pointer]:
+                  - img [ref=e179]
+                  - generic [ref=e181]:
+                    - heading "Bank Statement" [level=3] [ref=e183]
+                    - paragraph [ref=e184]: savings or current account - first page showing name and address, not older than 60 days
+                  - img [ref=e185]
+                - generic [ref=e188] [cursor=pointer]:
+                  - img [ref=e190]
+                  - generic [ref=e192]:
+                    - heading "Passport" [level=3] [ref=e194]
+                    - paragraph [ref=e195]: valid passport - mandatory for foreign directors, optional alternative for Indian directors
+                  - img [ref=e196]
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - generic [ref=e200]:
+                  - generic [ref=e201]: "03"
+                  - heading "Registered Office Documents" [level=2] [ref=e202]
+                - paragraph [ref=e203]: Where your company will be officially registered
+              - generic [ref=e204]:
+                - generic [ref=e206] [cursor=pointer]:
+                  - img [ref=e208]
+                  - generic [ref=e212]:
+                    - generic [ref=e213]:
+                      - heading "Registered Office Address Proof" [level=3] [ref=e214]
+                      - generic [ref=e215]: REQ
+                    - paragraph [ref=e216]: utility bill for the office address - electricity, telephone, gas - not older than 60 days
+                  - img [ref=e217]
+                - generic [ref=e220] [cursor=pointer]:
+                  - img [ref=e222]
+                  - generic [ref=e225]:
+                    - heading "Rent Agreement" [level=3] [ref=e227]
+                    - paragraph [ref=e228]: only if office premises are rented - not required for own property
+                  - img [ref=e229]
+                - generic [ref=e232] [cursor=pointer]:
+                  - img [ref=e234]
+                  - generic [ref=e238]:
+                    - generic [ref=e239]:
+                      - heading "NOC from Property Owner" [level=3] [ref=e240]
+                      - generic [ref=e241]: REQ
+                      - generic [ref=e242]: OLLVY
+                    - paragraph [ref=e243]: No Objection Certificate from property owner - Ollvy prepares this for you
+                  - img [ref=e244]
+            - generic [ref=e246]:
+              - generic [ref=e247]:
+                - generic [ref=e248]:
+                  - generic [ref=e249]: "04"
+                  - heading "Company Details" [level=2] [ref=e250]
+                - paragraph [ref=e251]: Information needed to draft your incorporation documents
+              - generic [ref=e252]:
+                - generic [ref=e254] [cursor=pointer]:
+                  - img [ref=e256]
+                  - generic [ref=e259]:
+                    - generic [ref=e260]:
+                      - heading "Proposed Company Names (3 options)" [level=3] [ref=e261]
+                      - generic [ref=e262]: REQ
+                    - paragraph [ref=e263]: in order of preference - first available name is reserved by MCA
+                  - img [ref=e264]
+                - generic [ref=e267] [cursor=pointer]:
+                  - img [ref=e269]
+                  - generic [ref=e272]:
+                    - generic [ref=e273]:
+                      - heading "Business Activity Description" [level=3] [ref=e274]
+                      - generic [ref=e275]: REQ
+                    - paragraph [ref=e276]: what your company will do - must match an MCA NIC code
+                  - img [ref=e277]
+                - generic [ref=e280] [cursor=pointer]:
+                  - img [ref=e282]
+                  - generic [ref=e285]:
+                    - generic [ref=e286]:
+                      - heading "Authorized Capital Details" [level=3] [ref=e287]
+                      - generic [ref=e288]: REQ
+                    - paragraph [ref=e289]: minimum ₹1 authorised capital - no minimum paid-up capital required
+                  - img [ref=e290]
+                - generic [ref=e293] [cursor=pointer]:
+                  - img [ref=e295]
+                  - generic [ref=e300]:
+                    - heading "Shareholder Details" [level=3] [ref=e302]
+                    - paragraph [ref=e303]: name, address, PAN, and number of shares for each shareholder
+                  - img [ref=e304]
+            - generic [ref=e306]:
+              - generic [ref=e307]:
+                - generic [ref=e308]:
+                  - generic [ref=e309]: "05"
+                  - heading "Digital & Legal" [level=2] [ref=e310]
+                - paragraph [ref=e311]: Ollvy handles these - no action needed from you
+              - generic [ref=e312]:
+                - generic [ref=e314] [cursor=pointer]:
+                  - img [ref=e316]
+                  - generic [ref=e318]:
+                    - generic [ref=e319]:
+                      - heading "Digital Signature Certificate (DSC)" [level=3] [ref=e320]
+                      - generic [ref=e321]: REQ
+                      - generic [ref=e322]: OLLVY
+                    - paragraph [ref=e323]: Class 3 DSC - mandatory for all directors and subscribers to MOA and AOA
+                  - img [ref=e324]
+                - generic [ref=e327] [cursor=pointer]:
+                  - img [ref=e329]
+                  - generic [ref=e332]:
+                    - generic [ref=e333]:
+                      - heading "Director Identification Number (DIN)" [level=3] [ref=e334]
+                      - generic [ref=e335]: REQ
+                      - generic [ref=e336]: OLLVY
+                    - paragraph [ref=e337]: unique 8-digit number for every director - obtained as part of SPICe+ filing
+                  - img [ref=e338]
+                - generic [ref=e341] [cursor=pointer]:
+                  - img [ref=e343]
+                  - generic [ref=e346]:
+                    - generic [ref=e347]:
+                      - heading "MOA and AOA" [level=3] [ref=e348]
+                      - generic [ref=e349]: REQ
+                      - generic [ref=e350]: OLLVY
+                    - paragraph [ref=e351]: Memorandum and Articles of Association - Ollvy drafts both
+                  - img [ref=e352]
+                - generic [ref=e355] [cursor=pointer]:
+                  - img [ref=e357]
+                  - generic [ref=e360]:
+                    - generic [ref=e361]:
+                      - heading "Director Consent Forms" [level=3] [ref=e362]
+                      - generic [ref=e363]: REQ
+                      - generic [ref=e364]: OLLVY
+                    - paragraph [ref=e365]: DIR-2, INC-9 declarations - Ollvy prepares, you sign digitally
+                  - img [ref=e366]
+                - generic [ref=e369] [cursor=pointer]:
+                  - img [ref=e371]
+                  - generic [ref=e374]:
+                    - generic [ref=e375]:
+                      - heading "Email ID and Mobile Number" [level=3] [ref=e376]
+                      - generic [ref=e377]: REQ
+                    - paragraph [ref=e378]: unique email and mobile for each director - used for MCA OTP authentication
+                  - img [ref=e379]
+            - generic [ref=e381]:
+              - generic [ref=e382]:
+                - generic [ref=e383]: REQ
+                - generic [ref=e384]: Required document
+              - generic [ref=e385]:
+                - generic [ref=e386]: OLLVY
+                - generic [ref=e387]: We handle this
+          - generic [ref=e389]:
+            - generic [ref=e390]:
+              - generic [ref=e391]:
+                - img [ref=e393]
+                - generic [ref=e396]:
+                  - heading "PAN Card" [level=3] [ref=e397]
+                  - paragraph [ref=e398]: Identity Documents
+              - button [ref=e399] [cursor=pointer]:
+                - img [ref=e400]
+            - generic [ref=e403]:
+              - generic [ref=e405]: REQUIRED
+              - generic [ref=e406]:
+                - heading "What is this?" [level=4] [ref=e407]
+                - paragraph [ref=e408]: PAN is a 10-character alphanumeric identifier issued by the Income Tax Department. It is mandatory for all MCA filings. For foreign nationals acting as directors, a passport serves in lieu of PAN.
+              - generic [ref=e409]:
+                - heading "How to get it" [level=4] [ref=e410]
+                - paragraph [ref=e411]: Take a clear, well-lit photo of the front of the physical card. All 10 PAN characters must be legible. If you do not have a PAN, apply at incometax.gov.in.
+              - generic [ref=e413]:
+                - img [ref=e414]
+                - generic [ref=e416]:
+                  - heading "Common Issues" [level=4] [ref=e417]
+                  - paragraph [ref=e418]: Name mismatch between PAN and Aadhaar is the most common rejection reason. "Rajesh Kumar Singh" on PAN vs "R K Singh" on Aadhaar causes rejection. Verify both documents match before submitting. Also check PAN-Aadhaar linkage at incometax.gov.in - an inoperative PAN causes rejection.
+              - generic [ref=e419]:
+                - heading "Requirements" [level=4] [ref=e420]
+                - list [ref=e421]:
+                  - listitem [ref=e422]:
+                    - generic [ref=e423]: "01"
+                    - generic [ref=e424]: Clear, coloured scan of original PAN card - not a photocopy of a photocopy
+                  - listitem [ref=e425]:
+                    - generic [ref=e426]: "02"
+                    - generic [ref=e427]: All 10 characters of PAN number must be legible in the scan
+                  - listitem [ref=e428]:
+                    - generic [ref=e429]: "03"
+                    - generic [ref=e430]: Name on PAN must exactly match name on Aadhaar card
+                  - listitem [ref=e431]:
+                    - generic [ref=e432]: "04"
+                    - generic [ref=e433]: "For foreign nationals: passport is accepted in lieu of PAN"
+                  - listitem [ref=e434]:
+                    - generic [ref=e435]: "05"
+                    - generic [ref=e436]: If PAN is not linked with Aadhaar, link it before submission - inoperative PAN causes rejection
+                  - listitem [ref=e437]:
+                    - generic [ref=e438]: "06"
+                    - generic [ref=e439]: Corporate shareholders must provide the company PAN, not a director's personal PAN
+        - generic [ref=e440]:
+          - generic [ref=e442]:
+            - generic [ref=e443]: "01"
+            - heading "Who needs this?" [level=2] [ref=e444]
+          - generic [ref=e445]:
+            - generic [ref=e447]:
+              - img [ref=e449]
+              - paragraph [ref=e453]: You're planning to raise venture capital, angel investment, or institutional funding
+            - generic [ref=e455]:
+              - img [ref=e457]
+              - paragraph [ref=e461]: You want to protect your personal assets from business liabilities
+            - generic [ref=e463]:
+              - img [ref=e465]
+              - paragraph [ref=e469]: You're building a team and want to offer ESOPs (Employee Stock Options)
+            - generic [ref=e471]:
+              - img [ref=e473]
+              - paragraph [ref=e477]: You need a formal structure to sign large contracts or bid for government tenders
+            - generic [ref=e479]:
+              - img [ref=e481]
+              - paragraph [ref=e485]: You're selling on e-commerce platforms that require company registration
+            - generic [ref=e487]:
+              - img [ref=e489]
+              - paragraph [ref=e493]: You have multiple co-founders and need clear equity ownership documentation
+        - generic [ref=e494]:
+          - generic [ref=e496]:
+            - generic [ref=e497]: "02"
+            - heading "Step-by-step process" [level=2] [ref=e498]
+          - generic [ref=e499]:
+            - generic [ref=e501]:
+              - generic [ref=e503]: "1"
+              - generic [ref=e504]:
+                - heading "Get Digital Signature Certificates (DSC) for all directors" [level=3] [ref=e505]
+                - paragraph [ref=e506]: Every proposed director needs a Class 3 DSC from a government-approved certifying authority. You'll use this to sign all MCA filings electronically. Takes 1-2 days to get.
+            - generic [ref=e508]:
+              - generic [ref=e510]: "2"
+              - generic [ref=e511]:
+                - heading "Apply for Director Identification Numbers (DIN)" [level=3] [ref=e512]
+                - paragraph [ref=e513]: DIN is a unique ID for each director. Good news - for new companies, you can get DIN directly through the SPICe+ form without a separate application.
+            - generic [ref=e515]:
+              - generic [ref=e517]: "3"
+              - generic [ref=e518]:
+                - heading "Reserve your company name" [level=3] [ref=e519]
+                - paragraph [ref=e520]: Use MCA's RUN service or SPICe+ Part A to check and reserve your name. It must end with "Private Limited" and can't be identical or too similar to existing companies or trademarks.
+            - generic [ref=e522]:
+              - generic [ref=e524]: "4"
+              - generic [ref=e525]:
+                - heading "Draft the Memorandum and Articles of Association" [level=3] [ref=e526]
+                - paragraph [ref=e527]: The MOA defines what your company does; the AOA sets internal rules for how it runs. You can use MCA's standard templates (Table F) or have a professional draft custom documents for your business.
+            - generic [ref=e529]:
+              - generic [ref=e531]: "5"
+              - generic [ref=e532]:
+                - heading "File SPICe+ Part B on the MCA portal" [level=3] [ref=e533]
+                - paragraph [ref=e534]: Fill in company details, director info, registered office address, capital details, and attach your MOA, AOA, address proof, and ID documents for all directors and shareholders.
+            - generic [ref=e536]:
+              - generic [ref=e538]: "6"
+              - generic [ref=e539]:
+                - heading "Submit AGILE-PRO for linked registrations" [level=3] [ref=e540]
+                - paragraph [ref=e541]: Along with SPICe+, file AGILE-PRO to simultaneously get GSTIN, EPFO registration, ESIC registration, Professional Tax (where applicable), and even a bank account with select banks.
+            - generic [ref=e543]:
+              - generic [ref=e545]: "7"
+              - generic [ref=e546]:
+                - heading "Receive your Certificate of Incorporation" [level=3] [ref=e547]
+                - paragraph [ref=e548]: After MCA approves everything, you get your Certificate of Incorporation with CIN, plus PAN and TAN from the Income Tax Department. Your company is now officially registered.
+        - generic [ref=e549]:
+          - generic [ref=e550]:
+            - generic [ref=e551]: "03"
+            - heading "Frequently Asked Questions" [level=2] [ref=e552]
+          - generic [ref=e553]:
+            - generic [ref=e554]:
+              - heading "What's the minimum number of directors and shareholders?" [level=3] [ref=e555]
+              - paragraph [ref=e556]: You need at least 2 directors and 2 shareholders, with a maximum of 200 shareholders. The same person can be both a director and shareholder. At least one director must be an Indian resident - meaning they've spent at least 182 days in India in the previous calendar year.
+            - generic [ref=e557]:
+              - heading "What's the minimum capital required?" [level=3] [ref=e558]
+              - paragraph [ref=e559]: Technically, there's no minimum anymore - you can start a company with Rs. 1 as paid-up capital. Practically, most founders start with Rs. 1 lakh. Keep in mind that government stamp duty is based on your authorised capital, so don't set it higher than necessary.
+            - generic [ref=e560]:
+              - heading "Can foreigners be directors or shareholders?" [level=3] [ref=e561]
+              - paragraph [ref=e562]: Yes, foreign nationals can be both directors and shareholders. The key requirement is that at least one director must be an Indian resident. Foreign directors need a DSC and must provide apostilled or notarised identity and address documents.
+            - generic [ref=e563]:
+              - heading "What annual compliance do I need to handle after incorporation?" [level=3] [ref=e564]
+              - paragraph [ref=e565]: You'll need to file annual financial statements (Form AOC-4) and annual returns (Form MGT-7) with MCA, hold at least 4 board meetings per year, get a statutory audit done, and file income tax returns. If you're GST-registered, add those filings too. Non-compliance leads to significant penalties.
+            - generic [ref=e566]:
+              - heading "How do I convert my sole proprietorship or partnership to a Pvt Ltd?" [level=3] [ref=e567]
+              - paragraph [ref=e568]: There's no direct conversion. You'd register a fresh Pvt Ltd company and then transfer business assets, contracts, and liabilities to the new entity. The fresh registration takes 7-15 days. Work with a professional on the legal and tax aspects of the transfer.
+        - generic [ref=e569]:
+          - generic [ref=e570]:
+            - generic [ref=e571]: "04"
+            - img [ref=e573]
+            - heading "Common mistakes to avoid" [level=2] [ref=e575]
+          - list [ref=e576]:
+            - listitem [ref=e577]:
+              - generic [ref=e578]: "01"
+              - generic [ref=e579]: Proposing a name too similar to an existing company or registered trademark - instant rejection
+            - listitem [ref=e580]:
+              - generic [ref=e581]: "02"
+              - generic [ref=e582]: Not checking RBI approval requirements before adding foreign nationals as directors or shareholders
+            - listitem [ref=e583]:
+              - generic [ref=e584]: "03"
+              - generic [ref=e585]: Setting authorised capital higher than needed - you pay stamp duty on this amount
+            - listitem [ref=e586]:
+              - generic [ref=e587]: "04"
+              - generic [ref=e588]: Drafting MOA business objects too narrowly, limiting what your company can do later
+            - listitem [ref=e589]:
+              - generic [ref=e590]: "05"
+              - generic [ref=e591]: Missing the registered office verification deadline (30 days from incorporation)
+            - listitem [ref=e592]:
+              - generic [ref=e593]: "06"
+              - generic [ref=e594]: Skipping the first board meeting, which must happen within 30 days of incorporation
+            - listitem [ref=e595]:
+              - generic [ref=e596]: "07"
+              - generic [ref=e597]: Not opening a business bank account and depositing share capital on time
+        - generic [ref=e598]:
+          - generic [ref=e599]:
+            - generic [ref=e600]: "05"
+            - heading "Related services" [level=2] [ref=e601]
+          - generic [ref=e602]:
+            - link "Company GST Registration" [ref=e603] [cursor=pointer]:
+              - /url: /services/gst-registration
+              - generic [ref=e604]: Company GST Registration
+              - img [ref=e605]
+            - link "MCA Annual Filing (ROC)" [ref=e607] [cursor=pointer]:
+              - /url: /services/mca-annual-filing
+              - generic [ref=e608]: MCA Annual Filing (ROC)
+              - img [ref=e609]
+            - link "Statutory Audit" [ref=e611] [cursor=pointer]:
+              - /url: /services/statutory-audit
+              - generic [ref=e612]: Statutory Audit
+              - img [ref=e613]
+            - link "Trademark Registration" [ref=e615] [cursor=pointer]:
+              - /url: /tools/documents/trademark
+              - generic [ref=e616]: Trademark Registration
+              - img [ref=e617]
+        - generic [ref=e619]:
+          - heading "Ready to incorporate your company?" [level=3] [ref=e620]
+          - paragraph [ref=e621]: Get started with Ollvy. We handle DSC, DIN, name approval, and all MCA filings. Most companies are incorporated within 7-10 days.
+          - link "Start Company Registration" [ref=e622] [cursor=pointer]:
+            - /url: /services/pvt-ltd-incorporation
+            - text: Start Company Registration
+            - img
+          - paragraph [ref=e623]:
+            - link "Calculate MCA filing penalty" [ref=e624] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/mca-annual-filing
+              - text: Calculate MCA filing penalty
+              - img [ref=e625]
+        - generic [ref=e627]:
+          - generic [ref=e628]:
+            - generic [ref=e629]: "06"
+            - heading "More Questions" [level=2] [ref=e630]
+          - generic [ref=e631]:
+            - generic [ref=e632]:
+              - heading "Can I use my home address as the registered office for a Pvt Ltd company?" [level=3] [ref=e633]
+              - paragraph [ref=e634]: Yes. A residential address is fully legal as a registered office under the Companies Act. You need an electricity bill for that address and, if you are a tenant, a No Objection Certificate (NOC) from the property owner.
+            - generic [ref=e635]:
+              - heading "What if the name on PAN and Aadhaar are different?" [level=3] [ref=e636]
+              - paragraph [ref=e637]: MCA will raise a query and the application will stall until the mismatch is resolved. You need to update either your PAN (through the income tax portal) or your Aadhaar (at an enrolment centre) to make them match before filing.
+            - generic [ref=e638]:
+              - heading "Do I need a separate DIN application before filing for incorporation?" [level=3] [ref=e639]
+              - paragraph [ref=e640]: No. Director Identification Number is included in the SPICe+ incorporation form and is applied for simultaneously. You do not need a separate DIR-3 application. Only directors who already have a DIN from a previous directorship need to provide their existing DIN.
+            - generic [ref=e641]:
+              - heading "What documents does a foreign national director need?" [level=3] [ref=e642]
+              - paragraph [ref=e643]: Passport (notarised and apostilled if from a foreign country), overseas address proof notarised by a notary public, and a photograph. The foreign director must also complete DSC video verification. At least one director must be an Indian resident.
+            - generic [ref=e644]:
+              - heading "How recent must the address proof be?" [level=3] [ref=e645]
+              - paragraph [ref=e646]: Bank statements and utility bills must not be older than 2 months from the date of filing. This is a strict requirement. If you are filing in April, documents dated before February will be rejected.
+        - generic [ref=e647]:
+          - heading "How we reviewed this page" [level=3] [ref=e648]
+          - paragraph [ref=e649]: The penalty amounts, deadlines, and regulatory requirements on this page are sourced directly from official government portals. We do not use secondary sources. When regulations change, we update the page.
+          - generic [ref=e650]:
+            - button "sources" [ref=e651] [cursor=pointer]:
+              - img [ref=e652]
+              - text: sources
+            - button "history" [ref=e655] [cursor=pointer]:
+              - img [ref=e656]
+              - text: history
+          - list [ref=e661]:
+            - listitem [ref=e662]:
+              - generic [ref=e664]:
+                - link "Companies Act 2013 - MCA ↗" [ref=e665] [cursor=pointer]:
+                  - /url: https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/acts.html
+                  - text: Companies Act 2013 - MCA
+                  - generic [ref=e666]: ↗
+                - paragraph [ref=e667]: Ministry of Corporate Affairs - Companies Act 2013 and related rules
+            - listitem [ref=e668]:
+              - generic [ref=e670]:
+                - link "MCA Company Registration Portal ↗" [ref=e671] [cursor=pointer]:
+                  - /url: https://www.mca.gov.in/MinistryV2/companyregistration.html
+                  - text: MCA Company Registration Portal
+                  - generic [ref=e672]: ↗
+                - paragraph [ref=e673]: Official MCA page for company incorporation process and SPICe+ form
+    - contentinfo [ref=e674]:
+      - generic [ref=e675]:
+        - generic [ref=e676]:
+          - generic [ref=e677]:
+            - link "Ollvy" [ref=e678] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e679]: You run your business. We handle the rest.
+            - generic [ref=e680]:
+              - link "LinkedIn" [ref=e681] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e682]
+              - link "Twitter" [ref=e686] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e687]
+          - generic [ref=e689]:
+            - link "Calculators" [ref=e690] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e691]:
+              - listitem [ref=e692]:
+                - link "GST Late Filing" [ref=e693] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e694]:
+                - link "GST Demand Notice" [ref=e695] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e696]:
+                - link "ITR Late Filing" [ref=e697] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e698]:
+                - link "TDS Late Filing" [ref=e699] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e700]:
+                - link "MCA Annual Filing" [ref=e701] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e702]:
+                - link "Director KYC" [ref=e703] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e704]:
+                - link "PF/ESIC Penalty" [ref=e705] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e706]:
+                - link "Professional Tax" [ref=e707] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e708]:
+                - link "Shops & Establishment" [ref=e709] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e710]:
+                - link "Startup DPIIT" [ref=e711] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e712]:
+            - link "Checklists" [ref=e713] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e714]:
+              - listitem [ref=e715]:
+                - link "Pvt Ltd Documents" [ref=e716] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e717]:
+                - link "LLP Documents" [ref=e718] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e719]:
+                - link "Partnership Documents" [ref=e720] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e721]:
+                - link "Sole Proprietor" [ref=e722] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e723]:
+                - link "GST Registration" [ref=e724] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e725]:
+                - link "Individual ITR" [ref=e726] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e727]:
+                - link "Business ITR" [ref=e728] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e729]:
+                - link "Trademark" [ref=e730] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e731]:
+            - link "Services" [ref=e732] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e733]:
+              - listitem [ref=e734]:
+                - link "Pvt Ltd Registration" [ref=e735] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e736]:
+                - link "LLP Registration" [ref=e737] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e738]:
+                - link "GST Registration" [ref=e739] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e740]:
+                - link "GST Monthly Filing" [ref=e741] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e742]:
+                - link "GST Cancellation" [ref=e743] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e744]:
+                - link "GST Revocation" [ref=e745] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e746]:
+                - link "Trademark Registration" [ref=e747] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e748]:
+                - link "MSME Registration" [ref=e749] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e750]:
+                - link "Cloud Kitchen Setup" [ref=e751] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e752]:
+                - link "Business ITR Filing" [ref=e753] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e754]:
+                - link "Annual Compliance" [ref=e755] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e756]:
+                - link "TDS Compliance" [ref=e757] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e758]:
+                - link "Company Name Change" [ref=e759] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e760]:
+                - link "DIN Reactivation" [ref=e761] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e762]:
+                - link "All Services" [ref=e763] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e764]:
+            - paragraph [ref=e765]: Deadlines
+            - list [ref=e766]:
+              - listitem [ref=e767]:
+                - link "Director KYC 2026" [ref=e768] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e769]:
+                - link "Business ITR 2026" [ref=e770] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e771]:
+                - link "GSTR-9 2026" [ref=e772] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e773]:
+                - link "TDS Return Q1 2027" [ref=e774] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e775]:
+                - link "Business ITR 2027" [ref=e776] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e777]:
+                - link "GSTR-9 2027" [ref=e778] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e779]:
+            - link "Guides" [ref=e780] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e781]:
+              - listitem [ref=e782]:
+                - link "Do I Need GST?" [ref=e783] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e784]:
+                - link "Pvt Ltd vs LLP" [ref=e785] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e786]:
+                - link "Which ITR Form?" [ref=e787] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e788]:
+                - link "DPIIT Recognition" [ref=e789] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e790]:
+                - link "All Guides" [ref=e791] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e792]:
+            - link "Notice Help" [ref=e793] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e794]:
+              - listitem [ref=e795]:
+                - link "GST DRC-01 Notice" [ref=e796] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e797]:
+                - link "GST ASMT-10 Notice" [ref=e798] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e799]:
+                - link "IT 143(1) Intimation" [ref=e800] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e801]:
+                - link "IT 148/148A Notice" [ref=e802] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e803]:
+                - link "TDS Short Deduction" [ref=e804] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e805]:
+            - paragraph [ref=e806]: Legal
+            - list [ref=e807]:
+              - listitem [ref=e808]:
+                - link "Privacy Policy" [ref=e809] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e810]:
+                - link "Terms of Service" [ref=e811] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e812]:
+                - link "Cancellation Policy" [ref=e813] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e814]:
+                - link "Refund Policy" [ref=e815] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e816]:
+                - link "Contact" [ref=e817] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e819]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e825] [cursor=pointer]:
+    - img [ref=e826]
+  - alert [ref=e829]

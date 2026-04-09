@@ -1,0 +1,54 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e6] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e7]:
+      - img [ref=e8]
+    - generic [ref=e11]:
+      - button "Open issues overlay" [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]: "0"
+          - generic [ref=e15]: "1"
+        - generic [ref=e16]: Issue
+      - button "Collapse issues badge" [ref=e17]:
+        - img [ref=e18]
+  - generic [ref=e21]:
+    - generic [ref=e22]: "404"
+    - heading "Page not found" [level=1] [ref=e23]
+    - paragraph [ref=e24]: The page you are looking for does not exist or has been moved.
+    - generic [ref=e25]:
+      - link "Back to home" [ref=e26] [cursor=pointer]:
+        - /url: /
+        - img
+        - text: Back to home
+      - link "Browse services" [ref=e27] [cursor=pointer]:
+        - /url: /services
+        - img
+        - text: Browse services
+    - generic [ref=e28]:
+      - paragraph [ref=e29]: Popular services
+      - generic [ref=e30]:
+        - link "Private Limited Registration" [ref=e31] [cursor=pointer]:
+          - /url: /services/private-limited-company-registration
+          - generic [ref=e32]: Private Limited Registration
+          - img [ref=e33]
+        - link "GST Registration" [ref=e35] [cursor=pointer]:
+          - /url: /services/gst-registration
+          - generic [ref=e36]: GST Registration
+          - img [ref=e37]
+        - link "Trademark Registration" [ref=e39] [cursor=pointer]:
+          - /url: /services/trademark-registration
+          - generic [ref=e40]: Trademark Registration
+          - img [ref=e41]
+        - link "FSSAI License" [ref=e43] [cursor=pointer]:
+          - /url: /services/fssai-license
+          - generic [ref=e44]: FSSAI License
+          - img [ref=e45]
+    - generic [ref=e47]:
+      - link "Read Guides" [ref=e48] [cursor=pointer]:
+        - /url: /guides
+      - link "Free Tools" [ref=e49] [cursor=pointer]:
+        - /url: /tools
+      - link "Service Bundles" [ref=e50] [cursor=pointer]:
+        - /url: /services?filter=bundles
+  - region "Notifications (F8)":
+    - list
+  - alert [ref=e51]

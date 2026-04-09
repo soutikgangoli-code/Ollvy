@@ -1,0 +1,49 @@
+[    1457ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@15.5.14_@opentelemetry+api@1.9.1_react-dom@18.3.1_react@18.2.0__react@18.2.0/node_modules/next/dist/compiled/react-dom/cjs/react-dom-client.development.js:25630
+[    1493ms] [LOG] [PostHog.js] set_config {config: Object, oldConfig: Object, newConfig: Object} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1493ms] [LOG] [PostHog.js] Persistence loaded localStorage+cookie {$device_id: 019d5401-510f-7d21-a410-204e78f58700, distinct_id: 019d5401-510f-7d21-a410-204e78f58700, $sesid: Array(3), $initial_person_info: Object, $user_state: anonymous} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1497ms] [LOG] [PostHog.js] Persistence loaded sessionStorage {} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1497ms] [LOG] [PostHog.js] Initializing extensions synchronously @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1498ms] [LOG] [PostHog.js] Starting in debug mode {this: _n, config: Object, thisC: Object, p: Object, s: Object} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1498ms] [LOG] You're now in debug mode. All calls to PostHog will be logged in your console.
+You can disable this with `posthog.debug(false)`. @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1498ms] [LOG] [PostHog.js] Persistence loaded sessionStorage {$sdk_debug_extensions_init_method: synchronous, $sdk_debug_extensions_init_time_ms: 1} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1498ms] [LOG] [PostHog.js] set_config {config: Object, oldConfig: Object, newConfig: Object} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1600ms] [LOG] [GTM Event] clear_ecommerce {ecommerce: null} @ webpack-internal:///(app-pages-browser)/./lib/hooks/useGTM.ts:17
+[    1601ms] [LOG] [GTM Event] view_item {ecommerce: Object} @ webpack-internal:///(app-pages-browser)/./lib/hooks/useGTM.ts:17
+[    1602ms] [LOG] [AuthProvider] Mounting, starting hydration @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:27
+[    1603ms] [LOG] [auth-store] isFreshLogin: false URL: http://localhost:3000/services/gst-registration @ webpack-internal:///(app-pages-browser)/./lib/stores/auth-store.ts:206
+[    1603ms] [LOG] [auth-store] refreshSession starting @ webpack-internal:///(app-pages-browser)/./lib/stores/auth-store.ts:210
+[    1643ms] [LOG] [PostHog.js] [SessionId] new session ID generated {sessionId: 019d6f02-0ece-7445-bd7b-35b073b9bf14, windowId: 019d6f02-0ece-7445-bd7b-35b1a9d8dd4b, changeReason: Object} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1644ms] [LOG] [PostHog.js] send "$pageview" {uuid: 019d6f02-0ecc-79f5-a2e0-e1c2c941a651, event: $pageview, properties: Object, timestamp: Thu Apr 09 2026 03:01:39 GMT+0530 (India Standard Time)} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    1660ms] [LOG] [auth-store] getSession result: no session @ webpack-internal:///(app-pages-browser)/./lib/stores/auth-store.ts:214
+[    1665ms] [LOG] [AuthProvider] Initial hydration complete @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:32
+[    1665ms] [LOG] [AuthProvider] Auth event: INITIAL_SESSION @ webpack-internal:///(app-pages-browser)/./components/providers/AuthProvider.tsx:38
+[    2473ms] [LOG] [PostHog.js] Persistence loaded sessionStorage {$sdk_debug_extensions_init_method: synchronous, $sdk_debug_extensions_init_time_ms: 1, $referrer: $direct, $referring_domain: $direct} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    2473ms] [LOG] [PostHog.js] set_config {config: Object, oldConfig: Object, newConfig: Object} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    2474ms] [LOG] [PostHog.js] [SessionRecording] starting @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    2474ms] [LOG] [PostHog.js] [Surveys] flags response received, isSurveysEnabled: false @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    2474ms] [LOG] [PostHog.js] [Heatmaps] starting... @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    2475ms] [LOG] [PostHog.js] [Web Vitals] enabled, starting... @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    3051ms] [LOG] [PostHog.js] [Surveys] Surveys loaded successfully @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    3052ms] [LOG] [PostHog.js] [Dead Clicks] starting... @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[    8433ms] [LOG] [PostHog.js] send "$web_vitals" {uuid: 019d6f02-2952-7468-9bdc-fa4bb9d6c2d2, event: $web_vitals, properties: Object, timestamp: Thu Apr 09 2026 03:01:45 GMT+0530 (India Standard Time)} @ webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/posthog-js@1.364.7/node_modules/posthog-js/dist/module.js:22
+[   48983ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[   49330ms] [LOG] [Fast Refresh] done in 346ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[   53791ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[   54084ms] [LOG] [Fast Refresh] done in 294ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  137773ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  138120ms] [LOG] [Fast Refresh] done in 346ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  143355ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  143580ms] [LOG] [Fast Refresh] done in 225ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  208823ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  209257ms] [LOG] [Fast Refresh] done in 434ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  216158ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  216322ms] [LOG] [Fast Refresh] done in 163ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  229002ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  229659ms] [LOG] [Fast Refresh] done in 657ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  255490ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  255890ms] [LOG] [Fast Refresh] done in 401ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  287774ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  288186ms] [LOG] [Fast Refresh] done in 412ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  293247ms] [LOG] [Fast Refresh] rebuilding @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0
+[  293559ms] [LOG] [Fast Refresh] done in 312ms @ https://us-assets.i.posthog.com/static/posthog-recorder.js?v=1.364.7:0

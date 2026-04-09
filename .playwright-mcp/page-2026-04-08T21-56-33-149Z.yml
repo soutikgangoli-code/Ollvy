@@ -1,0 +1,533 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e39]:
+          - link "All Guides" [ref=e40] [cursor=pointer]:
+            - /url: /guides
+            - img [ref=e41]
+            - text: All Guides
+          - heading "Do I Need GST Registration?" [level=1] [ref=e43]
+          - paragraph [ref=e44]: "Last reviewed: April 2026 · Sourced from official government portals"
+        - generic [ref=e45]:
+          - generic [ref=e47]:
+            - generic [ref=e48]:
+              - paragraph [ref=e49]: Quick check
+              - paragraph [ref=e50]: Is GST Registration Mandatory for You?
+            - generic [ref=e51]:
+              - paragraph [ref=e57]: What was your turnover in the last 12 months?
+              - generic [ref=e58]:
+                - button "Below Rs. 20 lakh" [ref=e59] [cursor=pointer]
+                - button "Rs. 20 lakh to Rs. 40 lakh" [ref=e60] [cursor=pointer]
+                - button "Above Rs. 40 lakh" [ref=e61] [cursor=pointer]
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - generic [ref=e65]: "01"
+              - heading "The Short Answer" [level=2] [ref=e66]
+            - paragraph [ref=e69]: "GST registration becomes mandatory the moment any of these are true:"
+            - table "GST Registration Thresholds by Business Type (FY 2025-26)" [ref=e71]:
+              - caption [ref=e72]: GST Registration Thresholds by Business Type (FY 2025-26)
+              - rowgroup [ref=e73]:
+                - row "Business Type Normal States Special Category States* Notes" [ref=e74]:
+                  - columnheader "Business Type" [ref=e75]
+                  - columnheader "Normal States" [ref=e76]
+                  - columnheader "Special Category States*" [ref=e77]
+                  - columnheader "Notes" [ref=e78]
+              - rowgroup [ref=e79]:
+                - row "Services Rs. 20 lakh Rs. 10 lakh Covers consulting, IT, freelancing, restaurants" [ref=e80]:
+                  - cell "Services" [ref=e81]
+                  - cell "Rs. 20 lakh" [ref=e82]
+                  - cell "Rs. 10 lakh" [ref=e83]
+                  - cell "Covers consulting, IT, freelancing, restaurants" [ref=e84]
+                - row "Goods only Rs. 40 lakh Rs. 20 lakh Only for businesses that exclusively supply goods" [ref=e85]:
+                  - cell "Goods only" [ref=e86]
+                  - cell "Rs. 40 lakh" [ref=e87]
+                  - cell "Rs. 20 lakh" [ref=e88]
+                  - cell "Only for businesses that exclusively supply goods" [ref=e89]
+                - row "Interstate supply Mandatory Mandatory No threshold - even one out-of-state sale triggers this" [ref=e90]:
+                  - cell "Interstate supply" [ref=e91]
+                  - cell "Mandatory" [ref=e92]
+                  - cell "Mandatory" [ref=e93]
+                  - cell "No threshold - even one out-of-state sale triggers this" [ref=e94]
+                - row "E-commerce sellers Mandatory Mandatory Amazon, Flipkart, Swiggy, Zomato - no exemption" [ref=e95]:
+                  - cell "E-commerce sellers" [ref=e96]
+                  - cell "Mandatory" [ref=e97]
+                  - cell "Mandatory" [ref=e98]
+                  - cell "Amazon, Flipkart, Swiggy, Zomato - no exemption" [ref=e99]
+                - row "Reverse charge payer Mandatory Mandatory Applies regardless of turnover" [ref=e100]:
+                  - cell "Reverse charge payer" [ref=e101]
+                  - cell "Mandatory" [ref=e102]
+                  - cell "Mandatory" [ref=e103]
+                  - cell "Applies regardless of turnover" [ref=e104]
+                - row "Exempt goods/services only Not required Not required e.g. fresh produce, core healthcare" [ref=e105]:
+                  - cell "Exempt goods/services only" [ref=e106]
+                  - cell "Not required" [ref=e107]
+                  - cell "Not required" [ref=e108]
+                  - cell "e.g. fresh produce, core healthcare" [ref=e109]
+            - list [ref=e110]:
+              - listitem [ref=e111]:
+                - generic [ref=e112]: •
+                - generic [ref=e113]: Your aggregate turnover crosses Rs. 20 lakh in a financial year (Rs. 10 lakh in special category states for services, Rs. 40 lakh for goods-only suppliers in most states)
+              - listitem [ref=e114]:
+                - generic [ref=e115]: •
+                - generic [ref=e116]: You make any interstate supply - even a single sale to a customer in another state
+              - listitem [ref=e117]:
+                - generic [ref=e118]: •
+                - generic [ref=e119]: You sell through any e-commerce platform - mandatory regardless of turnover
+              - listitem [ref=e120]:
+                - generic [ref=e121]: •
+                - generic [ref=e122]: You are liable to pay tax under reverse charge
+              - listitem [ref=e123]:
+                - generic [ref=e124]: •
+                - generic [ref=e125]: You are an agent of a registered supplier
+            - paragraph [ref=e126]: "Source: Section 22 and Section 24, Central Goods and Services Tax Act, 2017. *Special category states: Manipur, Mizoram, Nagaland, Tripura, Arunachal Pradesh, Sikkim, Meghalaya, Assam, Himachal Pradesh, Uttarakhand, J&K"
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - generic [ref=e130]: "02"
+              - 'heading "Interstate Supply: The Trigger Most People Miss" [level=2] [ref=e131]'
+            - paragraph [ref=e134]: If you provide services or sell goods to customers outside your state - even if your total turnover is Rs. 5 lakh - you need GST registration. There is no threshold for interstate supply.
+            - list [ref=e135]:
+              - listitem [ref=e136]:
+                - generic [ref=e137]: •
+                - generic [ref=e138]: You are a Mumbai-based freelancer building a website for a Delhi client - that is an interstate supply
+              - listitem [ref=e139]:
+                - generic [ref=e140]: •
+                - generic [ref=e141]: You sell handmade products to customers across India via your own website - interstate supply
+              - listitem [ref=e142]:
+                - generic [ref=e143]: •
+                - generic [ref=e144]: You provide consulting to companies in multiple states - interstate supply
+            - paragraph [ref=e145]: "Source: Section 24, CGST Act. One narrow exception: interstate supply of services below Rs. 20 lakh may be exempt under Notification 10/2017 Central Tax - but this does not apply to goods at all."
+          - generic [ref=e147]:
+            - generic [ref=e148]:
+              - generic [ref=e149]: "03"
+              - 'heading "E-commerce: No Threshold At All" [level=2] [ref=e150]'
+            - paragraph [ref=e153]: Selling through any e-commerce platform means mandatory registration from day one. No turnover threshold applies.
+            - list [ref=e154]:
+              - listitem [ref=e155]:
+                - generic [ref=e156]: •
+                - generic [ref=e157]: Amazon, Flipkart, Meesho, Myntra - any marketplace
+              - listitem [ref=e158]:
+                - generic [ref=e159]: •
+                - generic [ref=e160]: Swiggy, Zomato, Dunzo - any food or delivery platform
+              - listitem [ref=e161]:
+                - generic [ref=e162]: •
+                - generic [ref=e163]: Urban Company and similar service platforms
+              - listitem [ref=e164]:
+                - generic [ref=e165]: •
+                - generic [ref=e166]: Your own website if you use a payment gateway and ship to multiple states
+            - paragraph [ref=e167]: "Source: Section 24(ix), CGST Act 2017. The platform must deduct TCS from your sales - that mechanism only works with a GSTIN."
+          - generic [ref=e169]:
+            - generic [ref=e170]:
+              - generic [ref=e171]: "04"
+              - heading "When You Genuinely Do Not Need Gst" [level=2] [ref=e172]
+            - paragraph [ref=e175]: "You are exempt if all of these are true at the same time:"
+            - list [ref=e176]:
+              - listitem [ref=e177]:
+                - generic [ref=e178]: •
+                - generic [ref=e179]: Your aggregate turnover is below the threshold for your business type and state
+              - listitem [ref=e180]:
+                - generic [ref=e181]: •
+                - generic [ref=e182]: You make no interstate supply
+              - listitem [ref=e183]:
+                - generic [ref=e184]: •
+                - generic [ref=e185]: You sell through no e-commerce platform
+              - listitem [ref=e186]:
+                - generic [ref=e187]: •
+                - generic [ref=e188]: You are not liable to pay reverse charge
+              - listitem [ref=e189]:
+                - generic [ref=e190]: •
+                - generic [ref=e191]: You deal only in GST-exempt goods or services (fresh vegetables, certain healthcare, core education)
+              - listitem [ref=e192]:
+                - generic [ref=e193]: •
+                - generic [ref=e194]: You are engaged exclusively in agriculture
+            - paragraph [ref=e195]: Having a bank account, Udyam certificate, or shop licence does not automatically trigger GST registration. These are separate things.
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - generic [ref=e199]: "05"
+              - heading "Why Exempt Businesses Sometimes Register Anyway" [level=2] [ref=e200]
+            - paragraph [ref=e203]: Voluntary registration exists for practical reasons.
+            - list [ref=e204]:
+              - listitem [ref=e205]:
+                - generic [ref=e206]: •
+                - generic [ref=e207]: "Input Tax Credit: If you are registered, you can claim back the GST you pay on purchases and reduce your tax liability"
+              - listitem [ref=e208]:
+                - generic [ref=e209]: •
+                - generic [ref=e210]: "B2B credibility: Business clients can only claim ITC from registered suppliers - without your GSTIN, they absorb that tax as a cost"
+              - listitem [ref=e211]:
+                - generic [ref=e212]: •
+                - generic [ref=e213]: "Tender eligibility: Government tenders often require GSTIN as a baseline condition"
+              - listitem [ref=e214]:
+                - generic [ref=e215]: •
+                - generic [ref=e216]: "E-commerce readiness: If you plan to sell on Amazon or Flipkart in the future, you will need GSTIN anyway"
+              - listitem [ref=e217]:
+                - generic [ref=e218]: •
+                - generic [ref=e219]: "Loan applications: Banks increasingly ask for GST returns as income proof"
+            - paragraph [ref=e220]: Voluntary registration is under Section 25(3) of the CGST Act. Once you register voluntarily, all provisions of the Act apply, including return filing obligations.
+          - generic [ref=e222]:
+            - generic [ref=e223]:
+              - generic [ref=e224]: "06"
+              - heading "What Happens If You Do Not Register When You Should" [level=2] [ref=e225]
+            - list [ref=e226]:
+              - listitem [ref=e227]:
+                - generic [ref=e228]: •
+                - generic [ref=e229]: "Penalty: 100% of the tax due or Rs. 10,000, whichever is higher (Section 122)"
+              - listitem [ref=e230]:
+                - generic [ref=e231]: •
+                - generic [ref=e232]: "Interest: 18% per annum on unpaid tax from the date it was due"
+              - listitem [ref=e233]:
+                - generic [ref=e234]: •
+                - generic [ref=e235]: "No ITC recovery: You cannot claim back GST paid on purchases while you were unregistered"
+              - listitem [ref=e236]:
+                - generic [ref=e237]: •
+                - generic [ref=e238]: "Seizure: Goods can be seized if transported without valid GST documents"
+              - listitem [ref=e239]:
+                - generic [ref=e240]: •
+                - generic [ref=e241]: "Prosecution: Evasion above Rs. 2 crore can lead to arrest without warrant"
+            - paragraph [ref=e242]: "Use our penalty calculator for exact amounts: /tools/penalty-calculator/gst-late-filing"
+          - generic [ref=e243]:
+            - generic [ref=e244]:
+              - generic [ref=e245]: FAQ
+              - heading "Frequently Asked Questions" [level=2] [ref=e246]
+            - generic [ref=e247]:
+              - generic [ref=e248]:
+                - paragraph [ref=e249]: I am a freelancer earning Rs. 15 lakh per year. All my clients are in my state. Do I need GST?
+                - paragraph [ref=e250]: If all your clients are in the same state and your aggregate turnover is below Rs. 20 lakh, GST registration is not mandatory. But verify carefully - even one client in another state makes registration compulsory.
+              - generic [ref=e251]:
+                - paragraph [ref=e252]: What is the difference between aggregate turnover and taxable turnover?
+                - paragraph [ref=e253]: Aggregate turnover includes the total value of all taxable supplies, exempt supplies, exports, and interstate supplies - calculated on a PAN-India basis, not state-wise. Taxable turnover is only the portion subject to GST. For determining the registration threshold, aggregate turnover is what matters.
+              - generic [ref=e254]:
+                - paragraph [ref=e255]: Can I register for GST even if I am below the threshold?
+                - paragraph [ref=e256]: Yes. Section 25(3) allows voluntary registration. Once registered, you can issue tax invoices, collect GST, and claim input tax credit. Many small businesses register voluntarily for credibility and to work with larger clients.
+              - generic [ref=e257]:
+                - paragraph [ref=e258]: I sell on Instagram and WhatsApp. Is that e-commerce?
+                - paragraph [ref=e259]: No. Selling directly via social media is not e-commerce under GST law. The e-commerce provision applies only when you sell through a platform that facilitates the transaction (like Amazon or Swiggy). Direct social selling is treated like any other direct sale.
+              - generic [ref=e260]:
+                - paragraph [ref=e261]: What happens if I cross the threshold mid-year?
+                - paragraph [ref=e262]: You must apply for GST registration within 30 days of crossing the threshold. GST liability starts from the date you became liable, not the date you registered. Late registration means you owe GST on all supplies made after crossing the threshold.
+          - generic [ref=e263]:
+            - heading "How we reviewed this page" [level=3] [ref=e264]
+            - paragraph [ref=e265]: The penalty amounts, deadlines, and regulatory requirements on this page are sourced directly from official government portals. We do not use secondary sources. When regulations change, we update the page.
+            - generic [ref=e266]:
+              - button "sources" [ref=e267] [cursor=pointer]:
+                - img [ref=e268]
+                - text: sources
+              - button "history" [ref=e271] [cursor=pointer]:
+                - img [ref=e272]
+                - text: history
+            - paragraph [ref=e277]: Sources will be added soon.
+          - generic [ref=e278]:
+            - paragraph [ref=e279]: Book this service on Ollvy
+            - generic [ref=e281]:
+              - generic [ref=e282]:
+                - heading "GST Registration" [level=3] [ref=e283]
+                - generic [ref=e285]: ₹8,999
+                - generic [ref=e286]:
+                  - img [ref=e287]
+                  - generic [ref=e290]: Guaranteed by 20 Apr
+              - link "Book Now →" [ref=e291] [cursor=pointer]:
+                - /url: /services/gst-registration
+            - paragraph [ref=e292]:
+              - text: Want to do it yourself?
+              - link "Apply directly on GSTN portal →" [ref=e293] [cursor=pointer]:
+                - /url: https://reg.gst.gov.in/registration/
+          - generic [ref=e294]:
+            - paragraph [ref=e295]: Helpful tools
+            - generic [ref=e296]:
+              - link "GST Late Filing Penalty Calculator Calculate GSTR-1, GSTR-3B, GSTR-9 penalties" [ref=e297] [cursor=pointer]:
+                - /url: /tools/penalty-calculator/gst-late-filing
+                - generic [ref=e298]:
+                  - paragraph [ref=e299]: GST Late Filing Penalty Calculator
+                  - paragraph [ref=e300]: Calculate GSTR-1, GSTR-3B, GSTR-9 penalties
+                - img [ref=e301]
+              - link "GST Registration Documents Documents required for GSTIN" [ref=e303] [cursor=pointer]:
+                - /url: /tools/documents/gst-registration
+                - generic [ref=e304]:
+                  - paragraph [ref=e305]: GST Registration Documents
+                  - paragraph [ref=e306]: Documents required for GSTIN
+                - img [ref=e307]
+          - generic [ref=e309]:
+            - generic [ref=e310]:
+              - paragraph [ref=e311]: Related guides
+              - generic [ref=e312]:
+                - 'link "Private Limited Company vs LLP: Which Should You Choose? Incorporation · Last reviewed April 2026" [ref=e313] [cursor=pointer]':
+                  - /url: /guides/pvt-ltd-vs-llp
+                  - generic [ref=e314]:
+                    - paragraph [ref=e315]: "Private Limited Company vs LLP: Which Should You Choose?"
+                    - paragraph [ref=e316]: Incorporation · Last reviewed April 2026
+                  - img [ref=e317]
+                - link "Do I Need to File an Income Tax Return? Tax · Last reviewed April 2026" [ref=e319] [cursor=pointer]:
+                  - /url: /guides/do-i-need-to-file-itr
+                  - generic [ref=e320]:
+                    - paragraph [ref=e321]: Do I Need to File an Income Tax Return?
+                    - paragraph [ref=e322]: Tax · Last reviewed April 2026
+                  - img [ref=e323]
+                - link "Is MSME / Udyam Registration Worth It? Registration · Last reviewed April 2026" [ref=e325] [cursor=pointer]:
+                  - /url: /guides/is-msme-registration-worth-it
+                  - generic [ref=e326]:
+                    - paragraph [ref=e327]: Is MSME / Udyam Registration Worth It?
+                    - paragraph [ref=e328]: Registration · Last reviewed April 2026
+                  - img [ref=e329]
+            - generic [ref=e331]:
+              - paragraph [ref=e332]: Related services
+              - generic [ref=e333]:
+                - link "GST Registration ₹8,999 · 7 days" [ref=e334] [cursor=pointer]:
+                  - /url: /services/gst-registration
+                  - generic [ref=e335]:
+                    - paragraph [ref=e336]: GST Registration
+                    - paragraph [ref=e337]: ₹8,999 · 7 days
+                  - img [ref=e338]
+                - link "GST Monthly Filing ₹2,999 · 0 days" [ref=e340] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+                  - generic [ref=e341]:
+                    - paragraph [ref=e342]: GST Monthly Filing
+                    - paragraph [ref=e343]: ₹2,999 · 0 days
+                  - img [ref=e344]
+    - contentinfo [ref=e346]:
+      - generic [ref=e347]:
+        - generic [ref=e348]:
+          - generic [ref=e349]:
+            - link "Ollvy" [ref=e350] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e351]: You run your business. We handle the rest.
+            - generic [ref=e352]:
+              - link "LinkedIn" [ref=e353] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e354]
+              - link "Twitter" [ref=e358] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e359]
+          - generic [ref=e361]:
+            - link "Calculators" [ref=e362] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e363]:
+              - listitem [ref=e364]:
+                - link "GST Late Filing" [ref=e365] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e366]:
+                - link "GST Demand Notice" [ref=e367] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e368]:
+                - link "ITR Late Filing" [ref=e369] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e370]:
+                - link "TDS Late Filing" [ref=e371] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e372]:
+                - link "MCA Annual Filing" [ref=e373] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e374]:
+                - link "Director KYC" [ref=e375] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e376]:
+                - link "PF/ESIC Penalty" [ref=e377] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e378]:
+                - link "Professional Tax" [ref=e379] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e380]:
+                - link "Shops & Establishment" [ref=e381] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e382]:
+                - link "Startup DPIIT" [ref=e383] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e384]:
+            - link "Checklists" [ref=e385] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e386]:
+              - listitem [ref=e387]:
+                - link "Pvt Ltd Documents" [ref=e388] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e389]:
+                - link "LLP Documents" [ref=e390] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e391]:
+                - link "Partnership Documents" [ref=e392] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e393]:
+                - link "Sole Proprietor" [ref=e394] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e395]:
+                - link "GST Registration" [ref=e396] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e397]:
+                - link "Individual ITR" [ref=e398] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e399]:
+                - link "Business ITR" [ref=e400] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e401]:
+                - link "Trademark" [ref=e402] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e403]:
+            - link "Services" [ref=e404] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e405]:
+              - listitem [ref=e406]:
+                - link "Pvt Ltd Registration" [ref=e407] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e408]:
+                - link "LLP Registration" [ref=e409] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e410]:
+                - link "GST Registration" [ref=e411] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e412]:
+                - link "GST Monthly Filing" [ref=e413] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e414]:
+                - link "GST Cancellation" [ref=e415] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e416]:
+                - link "GST Revocation" [ref=e417] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e418]:
+                - link "Trademark Registration" [ref=e419] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e420]:
+                - link "MSME Registration" [ref=e421] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e422]:
+                - link "Cloud Kitchen Setup" [ref=e423] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e424]:
+                - link "Business ITR Filing" [ref=e425] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e426]:
+                - link "Annual Compliance" [ref=e427] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e428]:
+                - link "TDS Compliance" [ref=e429] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e430]:
+                - link "Company Name Change" [ref=e431] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e432]:
+                - link "DIN Reactivation" [ref=e433] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e434]:
+                - link "All Services" [ref=e435] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e436]:
+            - paragraph [ref=e437]: Deadlines
+            - list [ref=e438]:
+              - listitem [ref=e439]:
+                - link "Director KYC 2026" [ref=e440] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e441]:
+                - link "Business ITR 2026" [ref=e442] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e443]:
+                - link "GSTR-9 2026" [ref=e444] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e445]:
+                - link "TDS Return Q1 2027" [ref=e446] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e447]:
+                - link "Business ITR 2027" [ref=e448] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e449]:
+                - link "GSTR-9 2027" [ref=e450] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e451]:
+            - link "Guides" [ref=e452] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e453]:
+              - listitem [ref=e454]:
+                - link "Do I Need GST?" [ref=e455] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e456]:
+                - link "Pvt Ltd vs LLP" [ref=e457] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e458]:
+                - link "Which ITR Form?" [ref=e459] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e460]:
+                - link "DPIIT Recognition" [ref=e461] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e462]:
+                - link "All Guides" [ref=e463] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e464]:
+            - link "Notice Help" [ref=e465] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e466]:
+              - listitem [ref=e467]:
+                - link "GST DRC-01 Notice" [ref=e468] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e469]:
+                - link "GST ASMT-10 Notice" [ref=e470] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e471]:
+                - link "IT 143(1) Intimation" [ref=e472] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e473]:
+                - link "IT 148/148A Notice" [ref=e474] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e475]:
+                - link "TDS Short Deduction" [ref=e476] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e477]:
+            - paragraph [ref=e478]: Legal
+            - list [ref=e479]:
+              - listitem [ref=e480]:
+                - link "Privacy Policy" [ref=e481] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e482]:
+                - link "Terms of Service" [ref=e483] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e484]:
+                - link "Cancellation Policy" [ref=e485] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e486]:
+                - link "Refund Policy" [ref=e487] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e488]:
+                - link "Contact" [ref=e489] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e491]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e497] [cursor=pointer]:
+    - img [ref=e498]
+  - alert [ref=e501]

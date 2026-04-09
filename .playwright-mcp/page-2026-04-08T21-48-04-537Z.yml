@@ -1,0 +1,461 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - navigation "Breadcrumb" [ref=e40]:
+            - link "Tools" [ref=e41] [cursor=pointer]:
+              - /url: /tools
+            - img [ref=e42]
+            - link "Penalty Calculators" [ref=e44] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - img [ref=e45]
+            - generic [ref=e47]: GST Late Filing Penalty Calculator
+          - paragraph [ref=e48]: Penalty Calculator
+          - heading "GST Late Filing Penalty Calculator" [level=1] [ref=e49]
+          - combobox [ref=e51] [cursor=pointer]:
+            - generic: "Switch calculator: GST Late Filing"
+            - img [ref=e52]
+          - paragraph [ref=e54]: Calculate exact penalties, interest, and late fees based on Indian compliance law
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]:
+                - text: Return Type
+                - combobox [ref=e60] [cursor=pointer]:
+                  - generic: GSTR-3B (Summary)
+                  - img [ref=e61]
+              - generic [ref=e63]:
+                - generic [ref=e64]:
+                  - text: Nil Return?
+                  - paragraph [ref=e65]: Half the daily rate, capped at Rs. 500
+                - switch [ref=e66] [cursor=pointer]
+              - generic [ref=e67]:
+                - generic [ref=e68]:
+                  - generic [ref=e69]:
+                    - generic [ref=e70]: Annual Turnover
+                    - generic [ref=e71]:
+                      - generic [ref=e72]: ₹1 Cr
+                      - textbox "₹1 Cr" [ref=e73]
+                  - slider [ref=e78]
+                  - generic [ref=e79]:
+                    - generic [ref=e80]: 1 L
+                    - generic [ref=e81]: 10 L
+                    - generic [ref=e82]: 1 Cr
+                    - generic [ref=e83]: 10 Cr
+                    - generic [ref=e84]: 100 Cr
+                - generic [ref=e85]: QRMP Eligible
+              - generic [ref=e86]:
+                - generic [ref=e87]:
+                  - generic [ref=e88]:
+                    - generic [ref=e89]: Days Late
+                    - generic [ref=e90]:
+                      - generic [ref=e91]: 30d (1mo)
+                      - spinbutton [ref=e92]
+                  - slider [ref=e97]
+                  - generic [ref=e98]:
+                    - generic [ref=e99]: 7d
+                    - generic [ref=e100]: 30d
+                    - generic [ref=e101]: 60d
+                    - generic [ref=e102]: 90d
+                    - generic [ref=e103]: 180d
+                    - generic [ref=e104]: 270d
+                    - generic [ref=e105]: 1y
+                - paragraph [ref=e106]: "Due date: 20th of the following month"
+            - heading "Advanced options" [level=3] [ref=e109]:
+              - button "Advanced options" [ref=e110] [cursor=pointer]:
+                - generic [ref=e111]:
+                  - img [ref=e112]
+                  - text: Advanced options
+                - img [ref=e113]
+          - generic [ref=e116]:
+            - generic [ref=e117]:
+              - generic [ref=e118]:
+                - generic [ref=e119]: Total Penalty
+                - generic [ref=e120]: 9 April 2026
+              - paragraph [ref=e121]: ₹1,500
+            - generic [ref=e124]:
+              - generic [ref=e125]:
+                - generic [ref=e126]:
+                  - generic [ref=e127]: Late Filing Fee
+                  - generic [ref=e129]: Sec 47
+                - generic [ref=e130]: ₹1,500
+              - generic [ref=e131]:
+                - generic [ref=e132]:
+                  - generic [ref=e133]: CGST
+                  - generic [ref=e134]: ₹750
+                - generic [ref=e135]:
+                  - generic [ref=e136]: SGST
+                  - generic [ref=e137]: ₹750
+            - generic [ref=e138]:
+              - generic [ref=e139]:
+                - generic [ref=e140]: Total
+                - generic [ref=e141]: ₹1,500
+              - generic [ref=e142]:
+                - paragraph [ref=e143]: "Due: 20th of the following month"
+                - paragraph [ref=e144]: Section 47, CGST Act 2017 (late fee) + Section 50 (interest on unpaid tax)
+            - generic [ref=e146]:
+              - img [ref=e147]
+              - generic [ref=e149]:
+                - paragraph [ref=e150]: QRMP eligible
+                - paragraph [ref=e151]: Your turnover qualifies for QRMP - quarterly returns, monthly tax payments. Cuts filing work by two-thirds.
+            - generic [ref=e152]:
+              - link "File Now and Stop the Meter" [ref=e153] [cursor=pointer]:
+                - /url: /services/gst-monthly
+                - text: File Now and Stop the Meter
+                - img
+              - button "Download PDF" [ref=e154] [cursor=pointer]:
+                - img
+                - text: Download PDF
+              - link "GST registration documents" [ref=e155] [cursor=pointer]:
+                - /url: /tools/documents/gst-registration
+                - text: GST registration documents
+                - img [ref=e156]
+            - paragraph [ref=e159]: Estimate only. Actual penalties may vary. Consult a qualified professional.
+        - generic [ref=e160]:
+          - paragraph [ref=e161]: Missing a GST return filing deadline costs money every day. This calculator tells you exactly how much.
+          - paragraph [ref=e162]: Late fee for GSTR-1 and GSTR-3B is Rs. 50 per day per return for non-nil returns (Rs. 25 CGST + Rs. 25 SGST) under Section 47 of the CGST Act, 2017, as revised by CBIC Notification 19/2021. For nil returns - months with no sales - the rate drops to Rs. 20 per day, capped at Rs. 500 per return.
+          - paragraph [ref=e163]: For GSTR-9 (the annual return), the rate is Rs. 200 per day, but the total is capped at 0.50% of your annual turnover (0.25% CGST + 0.25% SGST) under Section 47(2) of the CGST Act.
+          - paragraph [ref=e164]: If you also have outstanding tax that has not been paid, interest accrues separately at 18% per annum on that amount under Section 50. Interest is not capped - it compounds daily until the tax is actually paid.
+          - paragraph [ref=e165]: Select your return type, enter how many days late you are, and add any outstanding tax liability to see your full exposure. The calculator separates late fee from interest so you know what is fixed and what is still growing.
+        - generic [ref=e166]:
+          - generic [ref=e167]:
+            - generic [ref=e168]: "02"
+            - heading "How to Use This Calculator" [level=2] [ref=e169]
+          - generic [ref=e170]:
+            - paragraph [ref=e172]: "What the numbers mean:"
+            - paragraph [ref=e173]: Late fee is fixed once you file - it stops the moment the return is submitted. The amount shown is what you owe today.
+            - paragraph [ref=e174]: Interest on unpaid tax continues to grow every day until the tax is paid - filing the return alone does not stop it. If you have outstanding tax, pay it and file simultaneously.
+            - paragraph [ref=e176]: "Turnover-based caps for GSTR-1 and GSTR-3B:"
+            - paragraph [ref=e177]: "-Turnover up to Rs. 1.5 crore: Rs. 2,000 per return"
+            - paragraph [ref=e178]: "-Turnover Rs. 1.5 crore to Rs. 5 crore: Rs. 5,000 per return"
+            - paragraph [ref=e179]: "-Turnover above Rs. 5 crore: Rs. 10,000 per return"
+            - paragraph [ref=e180]: These caps were introduced by CBIC Notification 19/2021. The calculator applies the standard Rs. 5,000 cap as a conservative estimate - check the exact cap for your AATO.
+            - generic [ref=e181]:
+              - paragraph [ref=e182]: "Next step:"
+              - paragraph [ref=e183]: File the return immediately. The late fee is payable in cash only - you cannot use ITC from your credit ledger to pay it.
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - generic [ref=e186]: "03"
+            - heading "Frequently Asked Questions" [level=2] [ref=e187]
+          - generic [ref=e188]:
+            - generic [ref=e189]:
+              - heading "What is the late fee for GSTR-3B?" [level=3] [ref=e190]
+              - paragraph [ref=e191]: Rs. 50 per day per return for non-nil returns (Rs. 25 CGST + Rs. 25 SGST), capped at Rs. 10,000 per return for turnover above Rs. 5 crore. Rs. 20 per day for nil returns, capped at Rs. 500. Rates per CBIC Notification 19/2021, effective June 2021.
+            - generic [ref=e192]:
+              - heading "Is the late fee different for nil returns?" [level=3] [ref=e193]
+              - paragraph [ref=e194]: Yes. If you had no sales in the period and are filing a nil return, the late fee is Rs. 20 per day (Rs. 10 CGST + Rs. 10 SGST), capped at Rs. 500 per return. This is significantly lower than the Rs. 50/day rate for non-nil returns.
+            - generic [ref=e195]:
+              - heading "What is the late fee for GSTR-9 (annual return)?" [level=3] [ref=e196]
+              - paragraph [ref=e197]: Rs. 200 per day (Rs. 100 CGST + Rs. 100 SGST), capped at 0.50% of your annual turnover in the state. The 0.50% is the combined cap - 0.25% per Act under Section 47(2) of the CGST Act. GSTR-9 is mandatory only above Rs. 2 crore annual turnover.
+            - generic [ref=e198]:
+              - heading "Can I pay the late fee using ITC from my credit ledger?" [level=3] [ref=e199]
+              - paragraph [ref=e200]: No. Late fees must be paid in cash from your electronic cash ledger. You cannot use Input Tax Credit to pay GST late fees. This is explicitly stated in the GST law - ITC can only offset tax liability, not fees or penalties.
+            - generic [ref=e201]:
+              - heading "What happens if I do not file GST returns for 6 months?" [level=3] [ref=e202]
+              - paragraph [ref=e203]: After 6 consecutive months of non-filing, the GST portal suspends your GSTIN. You cannot generate e-way bills or file new returns until all pending returns are filed. After suspension, the department can initiate suo-moto cancellation of your GST registration.
+            - generic [ref=e204]:
+              - heading "Does interest apply even if I file on time but have unpaid tax?" [level=3] [ref=e205]
+              - paragraph [ref=e206]: Yes. Section 50 of the CGST Act charges interest at 18% per annum on outstanding tax from the original due date, regardless of when you file the return. Filing on time stops the late fee but does not stop interest on unpaid tax.
+        - generic [ref=e207]:
+          - generic [ref=e208]:
+            - generic [ref=e209]: "04"
+            - heading "Related Tools" [level=2] [ref=e210]
+          - generic [ref=e211]:
+            - link "Gst Demand Notice" [ref=e212] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/gst-demand-notice
+              - generic [ref=e213]: Gst Demand Notice
+              - img [ref=e214]
+            - link "Tds Late Filing" [ref=e216] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/tds-late-filing
+              - generic [ref=e217]: Tds Late Filing
+              - img [ref=e218]
+            - link "Itr Late Filing" [ref=e220] [cursor=pointer]:
+              - /url: /tools/penalty-calculator/itr-late-filing
+              - generic [ref=e221]: Itr Late Filing
+              - img [ref=e222]
+            - link "Learn more" [ref=e224] [cursor=pointer]:
+              - /url: /learn/do-i-need-gst-registration
+              - generic [ref=e225]: Learn more
+              - img [ref=e226]
+        - generic [ref=e229]:
+          - paragraph [ref=e230]: Need help with gst compliance?
+          - paragraph [ref=e231]: Our team handles the paperwork so you can focus on your business.
+          - link "Get GST Returns Filed on Time" [ref=e232] [cursor=pointer]:
+            - /url: /services/gst-monthly-50l
+            - text: Get GST Returns Filed on Time
+            - img [ref=e233]
+        - generic [ref=e235]:
+          - heading "How we reviewed this page" [level=3] [ref=e236]
+          - paragraph [ref=e237]: The penalty amounts, deadlines, and regulatory requirements on this page are sourced directly from official government portals. We do not use secondary sources. When regulations change, we update the page.
+          - generic [ref=e238]:
+            - button "sources" [ref=e239] [cursor=pointer]:
+              - img [ref=e240]
+              - text: sources
+            - button "history" [ref=e243] [cursor=pointer]:
+              - img [ref=e244]
+              - text: history
+          - list [ref=e249]:
+            - listitem [ref=e250]:
+              - generic [ref=e252]:
+                - link "CBIC Notification 19/2021 - Late Fee Rates ↗" [ref=e253] [cursor=pointer]:
+                  - /url: https://www.cbic.gov.in/resources/htdocs-cbec/gst/notfctn-19-central-tax-english-2021.pdf
+                  - text: CBIC Notification 19/2021 - Late Fee Rates
+                  - generic [ref=e254]: ↗
+                - paragraph [ref=e255]: Official notification specifying revised late fee rates for GSTR-1 and GSTR-3B
+            - listitem [ref=e256]:
+              - generic [ref=e258]:
+                - link "CBIC GST Rates Portal ↗" [ref=e259] [cursor=pointer]:
+                  - /url: https://cbic-gst.gov.in/gst-goods-services-rates.html
+                  - text: CBIC GST Rates Portal
+                  - generic [ref=e260]: ↗
+                - paragraph [ref=e261]: Central Board of Indirect Customs and Taxes - GST rate information
+    - contentinfo [ref=e262]:
+      - generic [ref=e263]:
+        - generic [ref=e264]:
+          - generic [ref=e265]:
+            - link "Ollvy" [ref=e266] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e267]: You run your business. We handle the rest.
+            - generic [ref=e268]:
+              - link "LinkedIn" [ref=e269] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e270]
+              - link "Twitter" [ref=e274] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e275]
+          - generic [ref=e277]:
+            - link "Calculators" [ref=e278] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e279]:
+              - listitem [ref=e280]:
+                - link "GST Late Filing" [ref=e281] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e282]:
+                - link "GST Demand Notice" [ref=e283] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e284]:
+                - link "ITR Late Filing" [ref=e285] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e286]:
+                - link "TDS Late Filing" [ref=e287] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e288]:
+                - link "MCA Annual Filing" [ref=e289] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e290]:
+                - link "Director KYC" [ref=e291] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e292]:
+                - link "PF/ESIC Penalty" [ref=e293] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e294]:
+                - link "Professional Tax" [ref=e295] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e296]:
+                - link "Shops & Establishment" [ref=e297] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e298]:
+                - link "Startup DPIIT" [ref=e299] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e300]:
+            - link "Checklists" [ref=e301] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e302]:
+              - listitem [ref=e303]:
+                - link "Pvt Ltd Documents" [ref=e304] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e305]:
+                - link "LLP Documents" [ref=e306] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e307]:
+                - link "Partnership Documents" [ref=e308] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e309]:
+                - link "Sole Proprietor" [ref=e310] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e311]:
+                - link "GST Registration" [ref=e312] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e313]:
+                - link "Individual ITR" [ref=e314] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e315]:
+                - link "Business ITR" [ref=e316] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e317]:
+                - link "Trademark" [ref=e318] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e319]:
+            - link "Services" [ref=e320] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e321]:
+              - listitem [ref=e322]:
+                - link "Pvt Ltd Registration" [ref=e323] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e324]:
+                - link "LLP Registration" [ref=e325] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e326]:
+                - link "GST Registration" [ref=e327] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e328]:
+                - link "GST Monthly Filing" [ref=e329] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e330]:
+                - link "GST Cancellation" [ref=e331] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e332]:
+                - link "GST Revocation" [ref=e333] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e334]:
+                - link "Trademark Registration" [ref=e335] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e336]:
+                - link "MSME Registration" [ref=e337] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e338]:
+                - link "Cloud Kitchen Setup" [ref=e339] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e340]:
+                - link "Business ITR Filing" [ref=e341] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e342]:
+                - link "Annual Compliance" [ref=e343] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e344]:
+                - link "TDS Compliance" [ref=e345] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e346]:
+                - link "Company Name Change" [ref=e347] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e348]:
+                - link "DIN Reactivation" [ref=e349] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e350]:
+                - link "All Services" [ref=e351] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e352]:
+            - paragraph [ref=e353]: Deadlines
+            - list [ref=e354]:
+              - listitem [ref=e355]:
+                - link "Director KYC 2026" [ref=e356] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e357]:
+                - link "Business ITR 2026" [ref=e358] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e359]:
+                - link "GSTR-9 2026" [ref=e360] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e361]:
+                - link "TDS Return Q1 2027" [ref=e362] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e363]:
+                - link "Business ITR 2027" [ref=e364] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e365]:
+                - link "GSTR-9 2027" [ref=e366] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e367]:
+            - link "Guides" [ref=e368] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e369]:
+              - listitem [ref=e370]:
+                - link "Do I Need GST?" [ref=e371] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e372]:
+                - link "Pvt Ltd vs LLP" [ref=e373] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e374]:
+                - link "Which ITR Form?" [ref=e375] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e376]:
+                - link "DPIIT Recognition" [ref=e377] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e378]:
+                - link "All Guides" [ref=e379] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e380]:
+            - link "Notice Help" [ref=e381] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e382]:
+              - listitem [ref=e383]:
+                - link "GST DRC-01 Notice" [ref=e384] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e385]:
+                - link "GST ASMT-10 Notice" [ref=e386] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e387]:
+                - link "IT 143(1) Intimation" [ref=e388] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e389]:
+                - link "IT 148/148A Notice" [ref=e390] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e391]:
+                - link "TDS Short Deduction" [ref=e392] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e393]:
+            - paragraph [ref=e394]: Legal
+            - list [ref=e395]:
+              - listitem [ref=e396]:
+                - link "Privacy Policy" [ref=e397] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e398]:
+                - link "Terms of Service" [ref=e399] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e400]:
+                - link "Cancellation Policy" [ref=e401] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e402]:
+                - link "Refund Policy" [ref=e403] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e404]:
+                - link "Contact" [ref=e405] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e407]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e413] [cursor=pointer]:
+    - img [ref=e414]
+  - alert [ref=e417]

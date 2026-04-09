@@ -1,0 +1,580 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e37]:
+        - heading "All Services" [level=1] [ref=e38]
+        - paragraph [ref=e39]: Fixed-price compliance packages with transparent pricing.
+      - generic [ref=e40]:
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - img [ref=e44]
+            - textbox "Search for GST filing, company registration..." [ref=e47]
+            - generic [ref=e49]:
+              - generic [ref=e50]: ⌘
+              - text: K
+          - generic [ref=e51]:
+            - button "All" [ref=e52] [cursor=pointer]
+            - button "Starting Out" [ref=e53] [cursor=pointer]
+            - button "Tax Filing" [ref=e54] [cursor=pointer]
+            - button "GST & Payments" [ref=e55] [cursor=pointer]
+            - button "Investors" [ref=e56] [cursor=pointer]
+            - button "Import/Export" [ref=e57] [cursor=pointer]
+            - button "Bundles" [ref=e58] [cursor=pointer]
+            - button "Cloud Kitchen" [ref=e59] [cursor=pointer]
+        - paragraph [ref=e61]: 14 services found
+        - generic [ref=e62]:
+          - link "Business Registration GST Registration Get your GSTIN within 7 working days. CA assigned same day, ARN shared within 24 hours of filing. Ollvy fee ₹1,499 Total ₹1,499 Guaranteed by 20 Apr Urgent" [ref=e63] [cursor=pointer]:
+            - /url: /services/gst-registration
+            - generic [ref=e64]:
+              - generic [ref=e66]:
+                - generic [ref=e67]: Business Registration
+                - img [ref=e68]
+              - generic [ref=e71]:
+                - heading "GST Registration" [level=3] [ref=e72]
+                - paragraph [ref=e73]: Get your GSTIN within 7 working days. CA assigned same day, ARN shared within 24 hours of filing.
+              - generic [ref=e75]:
+                - generic [ref=e76]:
+                  - generic [ref=e77]: Ollvy fee
+                  - generic [ref=e78]: ₹1,499
+                - generic [ref=e79]:
+                  - generic [ref=e80]: Total
+                  - generic [ref=e81]: ₹1,499
+              - generic [ref=e83]:
+                - generic [ref=e85]:
+                  - img [ref=e86]
+                  - text: Guaranteed by 20 Apr
+                - generic [ref=e90]: Urgent
+          - link "Business Registration Private Limited Company Registration Incorporate your Private Limited Company with full MCA compliance - DSC, DIN, MOA/AOA, PAN, TAN included. Ollvy fee ₹5,999 Govt fee ₹7,999 Starting from ₹13,998 Includes 10-15 working days govt processing Guaranteed by 30 Apr Urgent" [ref=e91] [cursor=pointer]:
+            - /url: /services/pvt-ltd-incorporation
+            - generic [ref=e92]:
+              - generic [ref=e94]:
+                - generic [ref=e95]: Business Registration
+                - img [ref=e96]
+              - generic [ref=e99]:
+                - heading "Private Limited Company Registration" [level=3] [ref=e100]
+                - paragraph [ref=e101]: Incorporate your Private Limited Company with full MCA compliance - DSC, DIN, MOA/AOA, PAN, TAN included.
+              - generic [ref=e103]:
+                - generic [ref=e104]:
+                  - generic [ref=e105]: Ollvy fee
+                  - generic [ref=e106]: ₹5,999
+                - generic [ref=e107]:
+                  - generic [ref=e108]: Govt fee
+                  - generic [ref=e109]: ₹7,999
+                - generic [ref=e110]:
+                  - generic [ref=e111]: Starting from
+                  - generic [ref=e112]: ₹13,998
+              - generic [ref=e113]:
+                - paragraph [ref=e114]: Includes 10-15 working days govt processing
+                - generic [ref=e115]:
+                  - generic [ref=e117]:
+                    - img [ref=e118]
+                    - text: Guaranteed by 30 Apr
+                  - generic [ref=e122]: Urgent
+          - link "Business Registration LLP Incorporation Register your Limited Liability Partnership with MCA. DPIN, DSC, LLP Agreement, and PAN included. Ollvy fee ₹4,999 Govt fee ₹5,000 Starting from ₹9,999 Guaranteed by 27 Apr Urgent" [ref=e123] [cursor=pointer]:
+            - /url: /services/llp-incorporation
+            - generic [ref=e124]:
+              - generic [ref=e126]:
+                - generic [ref=e127]: Business Registration
+                - img [ref=e128]
+              - generic [ref=e131]:
+                - heading "LLP Incorporation" [level=3] [ref=e132]
+                - paragraph [ref=e133]: Register your Limited Liability Partnership with MCA. DPIN, DSC, LLP Agreement, and PAN included.
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e137]: Ollvy fee
+                  - generic [ref=e138]: ₹4,999
+                - generic [ref=e139]:
+                  - generic [ref=e140]: Govt fee
+                  - generic [ref=e141]: ₹5,000
+                - generic [ref=e142]:
+                  - generic [ref=e143]: Starting from
+                  - generic [ref=e144]: ₹9,999
+              - generic [ref=e146]:
+                - generic [ref=e148]:
+                  - img [ref=e149]
+                  - text: Guaranteed by 27 Apr
+                - generic [ref=e153]: Urgent
+          - link "Business Registration MSME/Udyam Registration Udyam registration certificate in 2 working days. Unlocks priority sector lending, 45-day payment protection, and government procurement preference. Ollvy fee ₹299 Total ₹299 Guaranteed by 13 Apr" [ref=e154] [cursor=pointer]:
+            - /url: /services/msme-registration
+            - generic [ref=e155]:
+              - generic [ref=e157]:
+                - generic [ref=e158]: Business Registration
+                - img [ref=e159]
+              - generic [ref=e162]:
+                - heading "MSME/Udyam Registration" [level=3] [ref=e163]
+                - paragraph [ref=e164]: Udyam registration certificate in 2 working days. Unlocks priority sector lending, 45-day payment protection, and government procurement preference.
+              - generic [ref=e166]:
+                - generic [ref=e167]:
+                  - generic [ref=e168]: Ollvy fee
+                  - generic [ref=e169]: ₹299
+                - generic [ref=e170]:
+                  - generic [ref=e171]: Total
+                  - generic [ref=e172]: ₹299
+              - generic [ref=e176]:
+                - img [ref=e177]
+                - text: Guaranteed by 13 Apr
+          - link "Trademark & IP Trademark Registration Trademark application filed within 7 days. Includes search, class guidance, and examiner objection response. Ollvy fee ₹2,999 Govt fee ₹4,500 Starting from ₹7,499 Includes 12-18 months govt processing Guaranteed by October 2027" [ref=e180] [cursor=pointer]:
+            - /url: /services/trademark-registration
+            - generic [ref=e181]:
+              - generic [ref=e183]:
+                - generic [ref=e184]: Trademark & IP
+                - img [ref=e185]
+              - generic [ref=e188]:
+                - heading "Trademark Registration" [level=3] [ref=e189]
+                - paragraph [ref=e190]: Trademark application filed within 7 days. Includes search, class guidance, and examiner objection response.
+              - generic [ref=e192]:
+                - generic [ref=e193]:
+                  - generic [ref=e194]: Ollvy fee
+                  - generic [ref=e195]: ₹2,999
+                - generic [ref=e196]:
+                  - generic [ref=e197]: Govt fee
+                  - generic [ref=e198]: ₹4,500
+                - generic [ref=e199]:
+                  - generic [ref=e200]: Starting from
+                  - generic [ref=e201]: ₹7,499
+              - generic [ref=e202]:
+                - paragraph [ref=e203]: Includes 12-18 months govt processing
+                - generic [ref=e206]:
+                  - img [ref=e207]
+                  - text: Guaranteed by October 2027
+          - link "Ongoing Compliance GST Monthly Filing - Up to ₹50L Monthly GST return filing - GSTR-1 and GSTR-3B filed on time, with ITC reconciliation each cycle. Ollvy fee ₹2,999/mo Total ₹2,999/mo Recurring monthly service Urgent Up to ₹50L/year" [ref=e210] [cursor=pointer]:
+            - /url: /services/gst-monthly
+            - generic [ref=e211]:
+              - generic [ref=e213]:
+                - generic [ref=e214]: Ongoing Compliance
+                - img [ref=e215]
+              - generic [ref=e218]:
+                - heading "GST Monthly Filing - Up to ₹50L" [level=3] [ref=e219]
+                - paragraph [ref=e220]: Monthly GST return filing - GSTR-1 and GSTR-3B filed on time, with ITC reconciliation each cycle.
+              - generic [ref=e222]:
+                - generic [ref=e223]:
+                  - generic [ref=e224]: Ollvy fee
+                  - generic [ref=e225]: ₹2,999/mo
+                - generic [ref=e226]:
+                  - generic [ref=e227]: Total
+                  - generic [ref=e228]: ₹2,999/mo
+              - generic [ref=e229]:
+                - paragraph [ref=e230]: Recurring monthly service
+                - generic [ref=e232]:
+                  - generic [ref=e233]: Urgent
+                  - generic [ref=e234]: Up to ₹50L/year
+          - link "Tax & Compliance Business ITR Filing Annual income tax return filing for companies and LLPs. Includes depreciation review, computation, and draft approval before filing. Ollvy fee ₹4,999 Total ₹4,999 Guaranteed by 23 Apr Urgent" [ref=e235] [cursor=pointer]:
+            - /url: /services/business-itr
+            - generic [ref=e236]:
+              - generic [ref=e238]:
+                - generic [ref=e239]: Tax & Compliance
+                - img [ref=e240]
+              - generic [ref=e243]:
+                - heading "Business ITR Filing" [level=3] [ref=e244]
+                - paragraph [ref=e245]: Annual income tax return filing for companies and LLPs. Includes depreciation review, computation, and draft approval before filing.
+              - generic [ref=e247]:
+                - generic [ref=e248]:
+                  - generic [ref=e249]: Ollvy fee
+                  - generic [ref=e250]: ₹4,999
+                - generic [ref=e251]:
+                  - generic [ref=e252]: Total
+                  - generic [ref=e253]: ₹4,999
+              - generic [ref=e255]:
+                - generic [ref=e257]:
+                  - img [ref=e258]
+                  - text: Guaranteed by 23 Apr
+                - generic [ref=e262]: Urgent
+          - link "Ongoing Compliance MCA Annual Filing Annual ROC compliance for Pvt Ltd - AOC-4 (financial statements) and MGT-7 (annual return) filed together. Ollvy fee ₹2,999 Govt fee ₹600 Total ₹3,599 Guaranteed by 20 Apr Urgent" [ref=e263] [cursor=pointer]:
+            - /url: /services/mca-annual-filing
+            - generic [ref=e264]:
+              - generic [ref=e266]:
+                - generic [ref=e267]: Ongoing Compliance
+                - img [ref=e268]
+              - generic [ref=e271]:
+                - heading "MCA Annual Filing" [level=3] [ref=e272]
+                - paragraph [ref=e273]: Annual ROC compliance for Pvt Ltd - AOC-4 (financial statements) and MGT-7 (annual return) filed together.
+              - generic [ref=e275]:
+                - generic [ref=e276]:
+                  - generic [ref=e277]: Ollvy fee
+                  - generic [ref=e278]: ₹2,999
+                - generic [ref=e279]:
+                  - generic [ref=e280]: Govt fee
+                  - generic [ref=e281]: ₹600
+                - generic [ref=e282]:
+                  - generic [ref=e283]: Total
+                  - generic [ref=e284]: ₹3,599
+              - generic [ref=e286]:
+                - generic [ref=e288]:
+                  - img [ref=e289]
+                  - text: Guaranteed by 20 Apr
+                - generic [ref=e293]: Urgent
+          - link "Bundle Cloud Kitchen Setup Complete licensing for delivery-only food operations - FSSAI State License, GST Registration, and local trade/health licence coordinated together. Includes GST Registration Shop & Establishment Trade License / Eating House Starting at ₹19,999 Guaranteed by 11 Jun" [ref=e294] [cursor=pointer]:
+            - /url: /services/cloud-kitchen-setup
+            - generic [ref=e295]:
+              - generic [ref=e297]:
+                - generic [ref=e298]: Bundle
+                - img [ref=e299]
+              - generic [ref=e302]:
+                - heading "Cloud Kitchen Setup" [level=3] [ref=e303]
+                - paragraph [ref=e304]: Complete licensing for delivery-only food operations - FSSAI State License, GST Registration, and local trade/health licence coordinated together.
+              - generic [ref=e305]:
+                - paragraph [ref=e306]: Includes
+                - generic [ref=e307]:
+                  - generic [ref=e308]: GST Registration
+                  - generic [ref=e309]: Shop & Establishment
+                  - generic [ref=e310]: Trade License / Eating House
+              - generic [ref=e313]:
+                - generic [ref=e314]: Starting at
+                - generic [ref=e315]: ₹19,999
+              - generic [ref=e319]:
+                - img [ref=e320]
+                - text: Guaranteed by 11 Jun
+          - link "Tax & Compliance TDS Monthly Compliance Monthly TDS calculation, challan preparation, and quarterly return filing for all payment types. Ollvy fee ₹999/mo Total ₹999/mo Recurring monthly service Urgent" [ref=e323] [cursor=pointer]:
+            - /url: /services/tds-monthly-compliance
+            - generic [ref=e324]:
+              - generic [ref=e326]:
+                - generic [ref=e327]: Tax & Compliance
+                - img [ref=e328]
+              - generic [ref=e331]:
+                - heading "TDS Monthly Compliance" [level=3] [ref=e332]
+                - paragraph [ref=e333]: Monthly TDS calculation, challan preparation, and quarterly return filing for all payment types.
+              - generic [ref=e335]:
+                - generic [ref=e336]:
+                  - generic [ref=e337]: Ollvy fee
+                  - generic [ref=e338]: ₹999/mo
+                - generic [ref=e339]:
+                  - generic [ref=e340]: Total
+                  - generic [ref=e341]: ₹999/mo
+              - generic [ref=e342]:
+                - paragraph [ref=e343]: Recurring monthly service
+                - generic [ref=e346]: Urgent
+          - link "Tax & Compliance GST Cancellation GST registration cancellation with GSTR-10 (final return) and ITC reversal handled. Ollvy fee ₹999 Total ₹999 Guaranteed by 30 Apr" [ref=e347] [cursor=pointer]:
+            - /url: /services/gst-cancellation
+            - generic [ref=e348]:
+              - generic [ref=e350]:
+                - generic [ref=e351]: Tax & Compliance
+                - img [ref=e352]
+              - generic [ref=e355]:
+                - heading "GST Cancellation" [level=3] [ref=e356]
+                - paragraph [ref=e357]: GST registration cancellation with GSTR-10 (final return) and ITC reversal handled.
+              - generic [ref=e359]:
+                - generic [ref=e360]:
+                  - generic [ref=e361]: Ollvy fee
+                  - generic [ref=e362]: ₹999
+                - generic [ref=e363]:
+                  - generic [ref=e364]: Total
+                  - generic [ref=e365]: ₹999
+              - generic [ref=e369]:
+                - img [ref=e370]
+                - text: Guaranteed by 30 Apr
+          - link "Tax & Compliance GST Revocation Revoke a suo-moto GST cancellation - pending returns filed, REG-21 submitted, registration restored. Ollvy fee ₹2,499 Total ₹2,499 Guaranteed by 23 Apr Urgent" [ref=e373] [cursor=pointer]:
+            - /url: /services/gst-revocation
+            - generic [ref=e374]:
+              - generic [ref=e376]:
+                - generic [ref=e377]: Tax & Compliance
+                - img [ref=e378]
+              - generic [ref=e381]:
+                - heading "GST Revocation" [level=3] [ref=e382]
+                - paragraph [ref=e383]: Revoke a suo-moto GST cancellation - pending returns filed, REG-21 submitted, registration restored.
+              - generic [ref=e385]:
+                - generic [ref=e386]:
+                  - generic [ref=e387]: Ollvy fee
+                  - generic [ref=e388]: ₹2,499
+                - generic [ref=e389]:
+                  - generic [ref=e390]: Total
+                  - generic [ref=e391]: ₹2,499
+              - generic [ref=e393]:
+                - generic [ref=e395]:
+                  - img [ref=e396]
+                  - text: Guaranteed by 23 Apr
+                - generic [ref=e400]: Urgent
+          - link "Ongoing Compliance DIN Reactivation Reactivate a deactivated Director Identification Number - pending KYC filed, DIR-3C application submitted, DIN restored. Ollvy fee ₹1,999 Govt fee ₹5,000 Total ₹6,999 Guaranteed by 23 Apr Urgent" [ref=e401] [cursor=pointer]:
+            - /url: /services/din-reactivation
+            - generic [ref=e402]:
+              - generic [ref=e404]:
+                - generic [ref=e405]: Ongoing Compliance
+                - img [ref=e406]
+              - generic [ref=e409]:
+                - heading "DIN Reactivation" [level=3] [ref=e410]
+                - paragraph [ref=e411]: Reactivate a deactivated Director Identification Number - pending KYC filed, DIR-3C application submitted, DIN restored.
+              - generic [ref=e413]:
+                - generic [ref=e414]:
+                  - generic [ref=e415]: Ollvy fee
+                  - generic [ref=e416]: ₹1,999
+                - generic [ref=e417]:
+                  - generic [ref=e418]: Govt fee
+                  - generic [ref=e419]: ₹5,000
+                - generic [ref=e420]:
+                  - generic [ref=e421]: Total
+                  - generic [ref=e422]: ₹6,999
+              - generic [ref=e424]:
+                - generic [ref=e426]:
+                  - img [ref=e427]
+                  - text: Guaranteed by 23 Apr
+                - generic [ref=e431]: Urgent
+          - link "Ongoing Compliance Company Name Change Company name change with MCA - name availability search, special resolution, RUN filing, INC-24, and new Certificate of Incorporation. Ollvy fee ₹4,999 Govt fee ₹3,000 Total ₹7,999 Guaranteed by 7 May" [ref=e432] [cursor=pointer]:
+            - /url: /services/company-name-change
+            - generic [ref=e433]:
+              - generic [ref=e435]:
+                - generic [ref=e436]: Ongoing Compliance
+                - img [ref=e437]
+              - generic [ref=e440]:
+                - heading "Company Name Change" [level=3] [ref=e441]
+                - paragraph [ref=e442]: Company name change with MCA - name availability search, special resolution, RUN filing, INC-24, and new Certificate of Incorporation.
+              - generic [ref=e444]:
+                - generic [ref=e445]:
+                  - generic [ref=e446]: Ollvy fee
+                  - generic [ref=e447]: ₹4,999
+                - generic [ref=e448]:
+                  - generic [ref=e449]: Govt fee
+                  - generic [ref=e450]: ₹3,000
+                - generic [ref=e451]:
+                  - generic [ref=e452]: Total
+                  - generic [ref=e453]: ₹7,999
+              - generic [ref=e457]:
+                - img [ref=e458]
+                - text: Guaranteed by 7 May
+    - contentinfo [ref=e461]:
+      - generic [ref=e462]:
+        - generic [ref=e463]:
+          - generic [ref=e464]:
+            - link "Ollvy" [ref=e465] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e466]: You run your business. We handle the rest.
+            - generic [ref=e467]:
+              - link "LinkedIn" [ref=e468] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e469]
+              - link "Twitter" [ref=e473] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e474]
+          - generic [ref=e476]:
+            - link "Calculators" [ref=e477] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e478]:
+              - listitem [ref=e479]:
+                - link "GST Late Filing" [ref=e480] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e481]:
+                - link "GST Demand Notice" [ref=e482] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e483]:
+                - link "ITR Late Filing" [ref=e484] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e485]:
+                - link "TDS Late Filing" [ref=e486] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e487]:
+                - link "MCA Annual Filing" [ref=e488] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e489]:
+                - link "Director KYC" [ref=e490] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e491]:
+                - link "PF/ESIC Penalty" [ref=e492] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e493]:
+                - link "Professional Tax" [ref=e494] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e495]:
+                - link "Shops & Establishment" [ref=e496] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e497]:
+                - link "Startup DPIIT" [ref=e498] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e499]:
+            - link "Checklists" [ref=e500] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e501]:
+              - listitem [ref=e502]:
+                - link "Pvt Ltd Documents" [ref=e503] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e504]:
+                - link "LLP Documents" [ref=e505] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e506]:
+                - link "Partnership Documents" [ref=e507] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e508]:
+                - link "Sole Proprietor" [ref=e509] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e510]:
+                - link "GST Registration" [ref=e511] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e512]:
+                - link "Individual ITR" [ref=e513] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e514]:
+                - link "Business ITR" [ref=e515] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e516]:
+                - link "Trademark" [ref=e517] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e518]:
+            - link "Services" [ref=e519] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e520]:
+              - listitem [ref=e521]:
+                - link "Pvt Ltd Registration" [ref=e522] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e523]:
+                - link "LLP Registration" [ref=e524] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e525]:
+                - link "GST Registration" [ref=e526] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e527]:
+                - link "GST Monthly Filing" [ref=e528] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e529]:
+                - link "GST Cancellation" [ref=e530] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e531]:
+                - link "GST Revocation" [ref=e532] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e533]:
+                - link "Trademark Registration" [ref=e534] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e535]:
+                - link "MSME Registration" [ref=e536] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e537]:
+                - link "Cloud Kitchen Setup" [ref=e538] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e539]:
+                - link "Business ITR Filing" [ref=e540] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e541]:
+                - link "Annual Compliance" [ref=e542] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e543]:
+                - link "TDS Compliance" [ref=e544] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e545]:
+                - link "Company Name Change" [ref=e546] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e547]:
+                - link "DIN Reactivation" [ref=e548] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e549]:
+                - link "All Services" [ref=e550] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e551]:
+            - paragraph [ref=e552]: Deadlines
+            - list [ref=e553]:
+              - listitem [ref=e554]:
+                - link "Director KYC 2026" [ref=e555] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e556]:
+                - link "Business ITR 2026" [ref=e557] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e558]:
+                - link "GSTR-9 2026" [ref=e559] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e560]:
+                - link "TDS Return Q1 2027" [ref=e561] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e562]:
+                - link "Business ITR 2027" [ref=e563] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e564]:
+                - link "GSTR-9 2027" [ref=e565] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e566]:
+            - link "Guides" [ref=e567] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e568]:
+              - listitem [ref=e569]:
+                - link "Do I Need GST?" [ref=e570] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e571]:
+                - link "Pvt Ltd vs LLP" [ref=e572] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e573]:
+                - link "Which ITR Form?" [ref=e574] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e575]:
+                - link "DPIIT Recognition" [ref=e576] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e577]:
+                - link "All Guides" [ref=e578] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e579]:
+            - link "Notice Help" [ref=e580] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e581]:
+              - listitem [ref=e582]:
+                - link "GST DRC-01 Notice" [ref=e583] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e584]:
+                - link "GST ASMT-10 Notice" [ref=e585] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e586]:
+                - link "IT 143(1) Intimation" [ref=e587] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e588]:
+                - link "IT 148/148A Notice" [ref=e589] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e590]:
+                - link "TDS Short Deduction" [ref=e591] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e592]:
+            - paragraph [ref=e593]: Legal
+            - list [ref=e594]:
+              - listitem [ref=e595]:
+                - link "Privacy Policy" [ref=e596] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e597]:
+                - link "Terms of Service" [ref=e598] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e599]:
+                - link "Cancellation Policy" [ref=e600] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e601]:
+                - link "Refund Policy" [ref=e602] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e603]:
+                - link "Contact" [ref=e604] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e606]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e612] [cursor=pointer]:
+    - img [ref=e613]
+  - alert [ref=e616]

@@ -1,0 +1,341 @@
+- generic:
+  - generic:
+    - banner:
+      - generic:
+        - generic:
+          - link:
+            - /url: /
+            - text: Ollvy
+          - navigation:
+            - link:
+              - /url: /services
+              - text: Services
+            - link:
+              - /url: /guides
+              - text: Guides
+            - button:
+              - generic: Tools
+              - img
+        - generic:
+          - button:
+            - img
+            - generic: Toggle theme
+          - button:
+            - img
+            - generic: Search Services
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button: Sign in
+    - navigation:
+      - link:
+        - /url: /services/pvt-ltd-incorporation
+        - text: Private Limited Company Registration
+      - link:
+        - /url: /services/gst-registration
+        - text: GST Registration
+      - link:
+        - /url: /services/trademark-registration
+        - text: Trademark Registration
+      - link:
+        - /url: /services/llp-incorporation
+        - text: LLP Registration
+      - link:
+        - /url: /services/msme-registration
+        - text: MSME Udyam Registration
+      - link:
+        - /url: /services/business-itr
+        - text: Business ITR Filing
+      - link:
+        - /url: /services/gst-monthly
+        - text: GST Monthly Filing
+      - link:
+        - /url: /services/cloud-kitchen-setup
+        - text: Cloud Kitchen Setup
+    - main
+    - contentinfo:
+      - generic:
+        - generic:
+          - generic:
+            - link:
+              - /url: /
+              - text: Ollvy
+            - paragraph: You run your business. We handle the rest.
+            - generic:
+              - link:
+                - /url: https://linkedin.com/company/ollvy
+                - img
+              - link:
+                - /url: https://twitter.com/ollvy
+                - img
+          - generic:
+            - link:
+              - /url: /tools/penalty-calculator
+              - text: Calculators
+            - list:
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+                  - text: GST Late Filing
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+                  - text: GST Demand Notice
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+                  - text: ITR Late Filing
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+                  - text: TDS Late Filing
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+                  - text: MCA Annual Filing
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/director-kyc
+                  - text: Director KYC
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+                  - text: PF/ESIC Penalty
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+                  - text: Professional Tax
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+                  - text: Shops & Establishment
+              - listitem:
+                - link:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+                  - text: Startup DPIIT
+          - generic:
+            - link:
+              - /url: /tools/documents
+              - text: Checklists
+            - list:
+              - listitem:
+                - link:
+                  - /url: /tools/documents/private-limited-company
+                  - text: Pvt Ltd Documents
+              - listitem:
+                - link:
+                  - /url: /tools/documents/llp
+                  - text: LLP Documents
+              - listitem:
+                - link:
+                  - /url: /tools/documents/partnership
+                  - text: Partnership Documents
+              - listitem:
+                - link:
+                  - /url: /tools/documents/sole-proprietor
+                  - text: Sole Proprietor
+              - listitem:
+                - link:
+                  - /url: /tools/documents/gst-registration
+                  - text: GST Registration
+              - listitem:
+                - link:
+                  - /url: /tools/documents/individual-itr
+                  - text: Individual ITR
+              - listitem:
+                - link:
+                  - /url: /tools/documents/business-itr
+                  - text: Business ITR
+              - listitem:
+                - link:
+                  - /url: /tools/documents/trademark
+                  - text: Trademark
+          - generic:
+            - link:
+              - /url: /services
+              - text: Services
+            - list:
+              - listitem:
+                - link:
+                  - /url: /services/pvt-ltd-incorporation
+                  - text: Pvt Ltd Registration
+              - listitem:
+                - link:
+                  - /url: /services/llp-incorporation
+                  - text: LLP Registration
+              - listitem:
+                - link:
+                  - /url: /services/gst-registration
+                  - text: GST Registration
+              - listitem:
+                - link:
+                  - /url: /services/gst-monthly
+                  - text: GST Monthly Filing
+              - listitem:
+                - link:
+                  - /url: /services/gst-cancellation
+                  - text: GST Cancellation
+              - listitem:
+                - link:
+                  - /url: /services/gst-revocation
+                  - text: GST Revocation
+              - listitem:
+                - link:
+                  - /url: /services/trademark-registration
+                  - text: Trademark Registration
+              - listitem:
+                - link:
+                  - /url: /services/msme-registration
+                  - text: MSME Registration
+              - listitem:
+                - link:
+                  - /url: /services/cloud-kitchen-setup
+                  - text: Cloud Kitchen Setup
+              - listitem:
+                - link:
+                  - /url: /services/business-itr
+                  - text: Business ITR Filing
+              - listitem:
+                - link:
+                  - /url: /services/mca-annual-filing
+                  - text: Annual Compliance
+              - listitem:
+                - link:
+                  - /url: /services/tds-monthly-compliance
+                  - text: TDS Compliance
+              - listitem:
+                - link:
+                  - /url: /services/company-name-change
+                  - text: Company Name Change
+              - listitem:
+                - link:
+                  - /url: /services/din-reactivation
+                  - text: DIN Reactivation
+              - listitem:
+                - link:
+                  - /url: /services
+                  - text: All Services
+          - generic:
+            - paragraph: Deadlines
+            - list:
+              - listitem:
+                - link:
+                  - /url: /director-kyc-2026
+                  - text: Director KYC 2026
+              - listitem:
+                - link:
+                  - /url: /itr-2026
+                  - text: Business ITR 2026
+              - listitem:
+                - link:
+                  - /url: /gst-annual-2026
+                  - text: GSTR-9 2026
+              - listitem:
+                - link:
+                  - /url: /tds-return-q1-2027
+                  - text: TDS Return Q1 2027
+              - listitem:
+                - link:
+                  - /url: /itr-2027
+                  - text: Business ITR 2027
+              - listitem:
+                - link:
+                  - /url: /gst-annual-2027
+                  - text: GSTR-9 2027
+          - generic:
+            - link:
+              - /url: /guides
+              - text: Guides
+            - list:
+              - listitem:
+                - link:
+                  - /url: /guides/do-i-need-gst-registration
+                  - text: Do I Need GST?
+              - listitem:
+                - link:
+                  - /url: /guides/pvt-ltd-vs-llp
+                  - text: Pvt Ltd vs LLP
+              - listitem:
+                - link:
+                  - /url: /guides/which-itr-form-should-i-use
+                  - text: Which ITR Form?
+              - listitem:
+                - link:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+                  - text: DPIIT Recognition
+              - listitem:
+                - link:
+                  - /url: /guides
+                  - text: All Guides
+          - generic:
+            - link:
+              - /url: /guides
+              - text: Notice Help
+            - list:
+              - listitem:
+                - link:
+                  - /url: /guides/gst-drc-01-notice
+                  - text: GST DRC-01 Notice
+              - listitem:
+                - link:
+                  - /url: /guides/gst-asmt-10-notice
+                  - text: GST ASMT-10 Notice
+              - listitem:
+                - link:
+                  - /url: /guides/income-tax-143-1-intimation
+                  - text: IT 143(1) Intimation
+              - listitem:
+                - link:
+                  - /url: /guides/income-tax-148-148a-reopening
+                  - text: IT 148/148A Notice
+              - listitem:
+                - link:
+                  - /url: /guides/tds-short-deduction-notice
+                  - text: TDS Short Deduction
+          - generic:
+            - paragraph: Legal
+            - list:
+              - listitem:
+                - link:
+                  - /url: /privacy
+                  - text: Privacy Policy
+              - listitem:
+                - link:
+                  - /url: /terms
+                  - text: Terms of Service
+              - listitem:
+                - link:
+                  - /url: /cancellation
+                  - text: Cancellation Policy
+              - listitem:
+                - link:
+                  - /url: /refunds
+                  - text: Refund Policy
+              - listitem:
+                - link:
+                  - /url: mailto:support@ollvy.com
+                  - text: Contact
+        - generic:
+          - paragraph: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - list
+  - button "Open Next.js Dev Tools" [ref=e668] [cursor=pointer]:
+    - img [ref=e669]
+  - alert: Company Registration & GST Services in India | Ollvy
+  - dialog "Sign in to continue" [ref=e674]:
+    - generic [ref=e675]:
+      - heading "Sign in to continue" [level=2] [ref=e676]
+      - paragraph [ref=e677]: Sign in with your Google account to get started
+    - generic [ref=e678]:
+      - button "Continue with Google" [active] [ref=e679] [cursor=pointer]:
+        - img
+        - text: Continue with Google
+      - paragraph [ref=e680]:
+        - text: By continuing, you agree to our
+        - link "Terms of Service" [ref=e681] [cursor=pointer]:
+          - /url: /terms
+        - text: and
+        - link "Privacy Policy" [ref=e682] [cursor=pointer]:
+          - /url: /privacy
+    - button "Close" [ref=e683] [cursor=pointer]:
+      - img [ref=e684]
+      - generic [ref=e687]: Close

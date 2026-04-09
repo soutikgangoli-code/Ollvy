@@ -1,0 +1,199 @@
+CLAUDE CODE INSTRUCTION - BUSINESS PAN SERVICE
+Copy is complete. Do not write a single word of copy yourself.
+All text comes from the files referenced below or is pasted directly here.
+Your job is implementation only.
+
+────────────────────────────────────────────────────────────────
+STEP 1 - DATABASE: Create migration file and push
+────────────────────────────────────────────────────────────────
+
+Create the file:
+supabase/migrations/20260409000002_add_business_pan_service.sql
+
+Paste the exact SQL from:
+/mnt/user-data/outputs/services/business-pan-migration.sql
+
+Then run:
+supabase db push
+
+Verify:
+SELECT slug, name, base_price, is_active FROM service_packages WHERE slug = 'business-pan';
+
+────────────────────────────────────────────────────────────────
+STEP 2 - FALLBACK SLUGS: Add to service data
+────────────────────────────────────────────────────────────────
+
+In lib/data/services.ts, find FALLBACK_SERVICE_SLUGS array.
+Add 'business-pan' to the list.
+
+────────────────────────────────────────────────────────────────
+STEP 3 - REVIEWS: Add fallback reviews
+────────────────────────────────────────────────────────────────
+
+In UnifiedServicePage.tsx, find the fallbackReviews object.
+Add this entry exactly:
+
+'business-pan': [
+  { rating: 5, comment: 'PAN allotment letter in 5 days. Needed it urgently for bank account opening. CA handled everything after I uploaded the documents.', date: 'March 2026' },
+  { rating: 5, comment: 'Just incorporated our LLP and needed PAN fast. Acknowledgement number came the same day they submitted. Bank accepted it immediately.', date: 'April 2026' },
+],
+
+────────────────────────────────────────────────────────────────
+STEP 4 - ROUTING: No eligibility page for this service
+────────────────────────────────────────────────────────────────
+
+In both UnifiedServicePage.tsx and BookingPanel.tsx, the priceVariesByQuestionnaire list controls which services go through /eligibility first. 'business-pan' must NOT be in this list. It goes directly to /checkout/business-pan. Confirm this is the case - do not add it.
+
+────────────────────────────────────────────────────────────────
+STEP 5 - QUESTIONNAIRE: Add post-payment questions
+────────────────────────────────────────────────────────────────
+
+Find where post-payment questionnaire questions are defined for other services. Add the following 11 questions for slug 'business-pan'. These appear AFTER payment, not before.
+
+Question 1:
+- key: 'entity_type'
+- label: 'What type of business entity are you registering PAN for?'
+- type: 'select'
+- required: true
+- options: [
+    { value: 'pvt_ltd', label: 'Private Limited Company' },
+    { value: 'llp', label: 'Limited Liability Partnership (LLP)' },
+    { value: 'opc', label: 'One Person Company (OPC)' },
+    { value: 'partnership', label: 'Partnership Firm' },
+    { value: 'proprietorship', label: 'Sole Proprietorship' },
+    { value: 'trust', label: 'Trust' },
+    { value: 'society', label: 'Society or Association' },
+  ]
+- help: 'This determines which form and supporting documents are required.'
+
+Question 2:
+- key: 'entity_name'
+- label: 'Full name of the business entity as registered'
+- type: 'text'
+- required: true
+- placeholder: 'Exactly as it appears on your Certificate of Incorporation or registration document'
+- help: 'Must match your incorporation certificate exactly, including punctuation.'
+
+Question 3:
+- key: 'date_of_incorporation'
+- label: 'Date of incorporation or registration'
+- type: 'date'
+- required: true
+- help: 'For companies and LLPs, this is the date on your Certificate of Incorporation from MCA.'
+
+Question 4:
+- key: 'registered_office_address'
+- label: 'Registered office address (full)'
+- type: 'textarea'
+- required: true
+- placeholder: 'Flat/Shop No, Building Name, Street, Area, City, State, PIN'
+- help: 'Must match the address proof you upload. Include PIN code.'
+
+Question 5:
+- key: 'state_of_registration'
+- label: 'State where the business is registered'
+- type: 'select'
+- required: true
+- options: all 36 Indian states and UTs (use the same list already in the codebase for other state dropdowns)
+
+Question 6:
+- key: 'nature_of_business'
+- label: 'Nature of business (brief description)'
+- type: 'text'
+- required: true
+- placeholder: 'e.g. Software development and IT services, Trading in electronic goods'
+- help: 'A short description of what the business does. Appears on the PAN application.'
+
+Question 7:
+- key: 'authorised_signatory_name'
+- label: 'Name of authorised signatory (director, partner, or proprietor)'
+- type: 'text'
+- required: true
+- placeholder: 'Full name as on Aadhaar or PAN'
+- help: 'The person who will sign the PAN application. Must be a director, designated partner, or proprietor.'
+
+Question 8:
+- key: 'authorised_signatory_pan'
+- label: 'PAN of the authorised signatory'
+- type: 'text'
+- required: true
+- placeholder: 'e.g. ABCDE1234F'
+- help: 'The individual PAN of the person signing the application. Required by NSDL for verification.'
+
+Question 9:
+- key: 'cin_llpin'
+- label: 'CIN (for companies) or LLPIN (for LLPs)'
+- type: 'text'
+- required: false
+- placeholder: 'e.g. U72900DL2024PTC123456 or AAC-1234'
+- help: 'Not required for partnerships or proprietorships. Leave blank if not applicable.'
+
+Question 10:
+- key: 'email_for_epan'
+- label: 'Email address where e-PAN should be delivered'
+- type: 'email'
+- required: true
+- placeholder: 'company email preferred'
+- help: 'NSDL sends the e-PAN PDF to this address. Use the company email if possible.'
+
+Question 11:
+- key: 'mobile_for_otp'
+- label: 'Mobile number for OTP verification during filing'
+- type: 'tel'
+- required: true
+- placeholder: '10-digit mobile number'
+- help: 'NSDL requires OTP verification during application. Must be accessible during the filing process.'
+
+────────────────────────────────────────────────────────────────
+STEP 6 - DOCUMENT CHECKLIST PAGE: Create the tool page
+────────────────────────────────────────────────────────────────
+
+Read the complete config from:
+/mnt/user-data/outputs/services/business-pan-checklist.ts
+
+Add this config to lib/tools/document-checklist-pages.ts exactly as written. Do not paraphrase or shorten any description.
+
+Create the page file:
+app/tools/documents/business-pan/page.tsx
+
+Follow the exact same pattern as app/tools/documents/gst-registration/page.tsx. Import the config and render it with the same components.
+
+────────────────────────────────────────────────────────────────
+STEP 7 - GUIDE PAGE: Create the learn page
+────────────────────────────────────────────────────────────────
+
+Read the complete config from:
+/mnt/user-data/outputs/services/business-pan-guide.ts
+
+Add this config to lib/guides/pages.ts in the LEARN_PAGES array exactly as written. Do not change any copy.
+
+The guide page renders automatically via app/guides/[slug]/page.tsx - no new page file needed.
+
+────────────────────────────────────────────────────────────────
+STEP 8 - SITEMAP: Confirm inclusion
+────────────────────────────────────────────────────────────────
+
+Check app/sitemap.ts:
+1. If service pages are fetched dynamically from DB, 'business-pan' appears automatically once the DB row is inserted. Confirm this.
+2. If there is a static list of tool pages, add '/tools/documents/business-pan' to it.
+3. The guide page at '/guides/what-is-business-pan' should be included automatically if guides are fetched dynamically. Confirm this.
+
+────────────────────────────────────────────────────────────────
+STEP 9 - HOMEPAGE: Confirm appearance in services list
+────────────────────────────────────────────────────────────────
+
+Check ServicesSimplified.tsx and ServiceGrid.tsx. If services are fetched from DB with is_featured = true, 'business-pan' will appear automatically. If there is a static list, add 'business-pan' to it.
+
+────────────────────────────────────────────────────────────────
+STEP 10 - VERIFICATION
+────────────────────────────────────────────────────────────────
+
+Run tsc --noEmit. Must pass with zero errors.
+
+Then confirm these routes exist and will resolve:
+- /services/business-pan (service page with correct price, variants, included, excluded, FAQs, reviews, timeline)
+- /tools/documents/business-pan (checklist with 3 sections and 5 FAQs)
+- /guides/what-is-business-pan (guide with 5 sections and 6 FAQs and ToolLastReviewed at bottom)
+- /checkout/business-pan (direct checkout, no eligibility redirect)
+
+Report what was implemented and any issues. Do not start the dev server.

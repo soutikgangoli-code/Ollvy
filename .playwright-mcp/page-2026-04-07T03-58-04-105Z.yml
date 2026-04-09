@@ -1,0 +1,480 @@
+- generic [ref=e43]:
+  - generic [ref=e44]:
+    - banner [ref=e45]:
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - link "Ollvy" [ref=e48] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e49]:
+            - link "Services" [ref=e50] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e51] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e52] [cursor=pointer]:
+              - generic [ref=e53]: Tools
+              - img [ref=e54]
+        - generic [ref=e56]:
+          - button "Toggle theme" [ref=e57] [cursor=pointer]:
+            - img [ref=e58]
+            - generic [ref=e60]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e61] [cursor=pointer]:
+            - img [ref=e62]
+            - generic [ref=e65]: Search Services
+            - generic [ref=e66]:
+              - generic [ref=e67]: ⌘
+              - text: K
+          - button "Sign in" [ref=e68] [cursor=pointer]
+    - navigation "Popular services" [ref=e69]:
+      - link "Private Limited Company Registration" [ref=e70] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e71] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e72] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e73] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e74] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e75] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e76] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e77] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e78]:
+      - generic [ref=e80]:
+        - generic [ref=e81]:
+          - link "Back to Service" [ref=e82] [cursor=pointer]:
+            - /url: /services/cloud-kitchen-setup
+            - img [ref=e83]
+            - text: Back to Service
+          - heading "Checkout" [level=1] [ref=e85]
+          - paragraph [ref=e86]: Cloud Kitchen Setup
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - generic [ref=e92]:
+                  - generic [ref=e93]: "01"
+                  - generic [ref=e94]: Review & Pay
+                - generic [ref=e98]:
+                  - generic [ref=e99]: "02"
+                  - generic [ref=e100]: Upload Documents
+                - generic [ref=e104]:
+                  - generic [ref=e105]: "03"
+                  - generic [ref=e106]: Track Progress
+              - paragraph [ref=e107]: You'll upload documents in Step 2, after payment. No documents needed to proceed.
+            - generic [ref=e108]:
+              - generic [ref=e109]:
+                - paragraph [ref=e110]: TIMELINE
+                - heading "Your Filing Journey" [level=3] [ref=e111]
+                - paragraph [ref=e112]: Projected from today - starts when you pay
+              - img [ref=e114]:
+                - generic [ref=e119]: "1"
+                - generic [ref=e122]: "2"
+                - generic [ref=e125]: "3"
+                - generic [ref=e128]: "4"
+                - generic [ref=e131]: "5"
+                - generic [ref=e134]: "6"
+                - generic [ref=e25] [cursor=pointer]:
+                  - paragraph [ref=e26]: Business details and kitchen address
+                  - paragraph [ref=e27]: Day 0
+                - generic [ref=e28] [cursor=pointer]:
+                  - paragraph [ref=e29]: Upload documents through the app
+                  - paragraph [ref=e30]: Day 0-2
+                - generic [ref=e31] [cursor=pointer]:
+                  - paragraph [ref=e32]: FSSAI application filed
+                  - paragraph [ref=e33]: Day 2-5
+                - generic [ref=e34] [cursor=pointer]:
+                  - paragraph [ref=e35]: GST registration filed (if not already registered)
+                  - paragraph [ref=e36]: Day 2-5
+                - generic [ref=e37] [cursor=pointer]:
+                  - paragraph [ref=e38]: Local trade/health licence application
+                  - paragraph [ref=e39]: Day 3-7
+                - generic [ref=e40] [cursor=pointer]:
+                  - paragraph [ref=e41]: Inspection coordinated (FSSAI State/Central)
+                  - paragraph [ref=e42]: Day 7-14
+              - paragraph [ref=e136]: "Note: Government processing times are outside Ollvy's control. We proactively follow up on your behalf."
+            - generic [ref=e137]:
+              - generic [ref=e138]:
+                - paragraph [ref=e139]: DOCUMENTS
+                - heading "Documents You'll Need" [level=3] [ref=e140]
+                - paragraph [ref=e141]: Keep these ready - your CA will guide you through each one
+              - generic [ref=e145]:
+                - tablist [ref=e147]:
+                  - tab "Pvt Ltd" [selected] [ref=e148] [cursor=pointer]
+                  - tab "LLP" [ref=e149] [cursor=pointer]
+                  - tab "Sole Prop" [ref=e150] [cursor=pointer]
+                  - tab "Partnership" [ref=e151] [cursor=pointer]
+                  - tab "Personal ITR" [ref=e152] [cursor=pointer]
+                  - tab "Trademark" [ref=e153] [cursor=pointer]
+                  - tab "Biz ITR" [ref=e154] [cursor=pointer]
+                - tabpanel "Pvt Ltd" [ref=e155]:
+                  - generic [ref=e156]:
+                    - generic [ref=e157]:
+                      - generic [ref=e158]: Key Documents
+                      - generic [ref=e159]: 19 total
+                    - list [ref=e160]:
+                      - listitem [ref=e161]:
+                        - img [ref=e163]
+                        - generic [ref=e166]: PAN Card
+                      - listitem [ref=e167]:
+                        - img [ref=e169]
+                        - generic [ref=e172]: Aadhaar Card
+                      - listitem [ref=e173]:
+                        - img [ref=e175]
+                        - generic [ref=e178]: Passport-Size Photographs
+                      - listitem [ref=e179]:
+                        - img [ref=e181]
+                        - generic [ref=e184]: Specimen Signature
+                      - listitem [ref=e185]:
+                        - img [ref=e187]
+                        - generic [ref=e191]: Registered Office Address Proof
+                    - button "View complete checklist" [ref=e193] [cursor=pointer]:
+                      - text: View complete checklist
+                      - img [ref=e194]
+            - generic [ref=e196]:
+              - generic [ref=e197]:
+                - paragraph [ref=e198]: SCOPE OF WORK
+                - heading "What's Included in Your Order" [level=3] [ref=e199]
+                - paragraph [ref=e200]: Review the scope before you proceed to payment
+              - generic [ref=e201]:
+                - generic [ref=e202]:
+                  - generic [ref=e204]:
+                    - generic [ref=e205]:
+                      - heading "What's Included" [level=4] [ref=e206]
+                      - paragraph [ref=e207]: Everything covered in your Cloud Kitchen Setup order. Review the deliverables before proceeding.
+                    - generic [ref=e209]:
+                      - generic [ref=e210]:
+                        - img [ref=e212]
+                        - generic [ref=e214]: FSSAI State Licence
+                      - generic [ref=e215]:
+                        - img [ref=e217]
+                        - generic [ref=e219]: Shop & Establishment Registration
+                      - generic [ref=e220]:
+                        - img [ref=e222]
+                        - generic [ref=e224]: Trade Licence / Eating House Licence
+                  - generic [ref=e231]:
+                    - generic [ref=e232]:
+                      - heading "What's Not Included" [level=4] [ref=e233]
+                      - paragraph [ref=e234]: These items are available as add-ons or separate services if needed.
+                    - generic [ref=e236]:
+                      - generic [ref=e237]:
+                        - img [ref=e239]
+                        - generic [ref=e242]: Fire NOC
+                      - generic [ref=e243]:
+                        - img [ref=e245]
+                        - generic [ref=e248]: Pollution NOC
+                      - generic [ref=e249]:
+                        - img [ref=e251]
+                        - generic [ref=e254]: FSSAI Central Licence (above Rs. 20 crore turnover)
+                      - generic [ref=e255]:
+                        - img [ref=e257]
+                        - generic [ref=e260]: Swiggy or Zomato onboarding
+                      - generic [ref=e261]:
+                        - img [ref=e263]
+                        - generic [ref=e266]: Premises search or rental
+                      - generic [ref=e267]:
+                        - img [ref=e269]
+                        - generic [ref=e272]: Kitchen equipment procurement
+                - generic [ref=e273]:
+                  - button [ref=e274] [cursor=pointer]
+                  - button [ref=e275] [cursor=pointer]
+            - generic [ref=e276]:
+              - generic [ref=e277]:
+                - paragraph [ref=e278]: ADD-ONS
+                - heading "Frequently added at this step" [level=3] [ref=e279]
+                - paragraph [ref=e280]: Most founders need at least one of these within 30 days of incorporating
+              - generic [ref=e281]:
+                - generic [ref=e283]:
+                  - generic [ref=e284]:
+                    - generic [ref=e285]:
+                      - heading "GST Registration" [level=4] [ref=e286]
+                      - generic [ref=e287]: ₹8,999
+                    - paragraph [ref=e288]: GSTIN in 7 working days. Required for Swiggy/Zomato.
+                  - button "Add" [active] [ref=e537] [cursor=pointer]:
+                    - img [ref=e538]
+                    - text: Add
+                - generic [ref=e294]:
+                  - generic [ref=e295]:
+                    - generic [ref=e296]:
+                      - heading "Shop & Establishment" [level=4] [ref=e297]
+                      - generic [ref=e298]: ₹5,199
+                    - paragraph [ref=e299]: Labour department registration. 5-7 working days.
+                  - button "Added" [ref=e301] [cursor=pointer]:
+                    - img [ref=e302]
+                    - text: Added
+                - generic [ref=e305]:
+                  - generic [ref=e306]:
+                    - generic [ref=e307]:
+                      - heading "Trade License / Eating House" [level=4] [ref=e308]
+                      - generic [ref=e309]: ₹9,999
+                    - paragraph [ref=e310]: Municipal corporation license. 15-30 working days.
+                  - button "Added" [ref=e312] [cursor=pointer]:
+                    - img [ref=e313]
+                    - text: Added
+          - generic [ref=e316]:
+            - generic [ref=e317]:
+              - generic [ref=e318]:
+                - img [ref=e319]
+                - paragraph [ref=e322]: Guaranteed by 9 Jun
+              - generic [ref=e325]: Free if not delivered by 9 Jun
+            - generic [ref=e326]:
+              - paragraph [ref=e327]: Total to pay now
+              - paragraph [ref=e328]: ₹43,633
+            - generic [ref=e329]:
+              - generic [ref=e330]:
+                - generic [ref=e331]:
+                  - img [ref=e333]
+                  - generic [ref=e336]:
+                    - paragraph [ref=e337]: FSSAI State License
+                    - paragraph [ref=e338]: Service fee
+                - generic [ref=e339]: ₹22,099
+              - generic [ref=e340]:
+                - generic [ref=e341]:
+                  - img [ref=e343]
+                  - generic [ref=e346]:
+                    - paragraph [ref=e347]: Shop & Establishment
+                    - paragraph [ref=e348]: Service fee
+                - generic [ref=e349]: ₹5,199
+              - generic [ref=e350]:
+                - generic [ref=e351]:
+                  - img [ref=e353]
+                  - generic [ref=e356]:
+                    - paragraph [ref=e357]: Trade License / Eating House
+                    - paragraph [ref=e358]: Service fee
+                - generic [ref=e359]: ₹9,999
+              - generic [ref=e370]:
+                - generic [ref=e371]:
+                  - generic [ref=e373]: GST
+                  - paragraph [ref=e374]: GST (18%)
+                - generic [ref=e375]: ₹6,336
+              - generic [ref=e376]:
+                - generic [ref=e377]: Total Amount
+                - generic [ref=e378]: ₹43,633
+            - generic [ref=e379]:
+              - paragraph [ref=e380]: HAVE A PROMO CODE?
+              - generic [ref=e381]:
+                - textbox "Enter code" [ref=e382]
+                - button "Apply" [disabled]
+            - button "Pay ₹43,633" [ref=e539] [cursor=pointer]
+            - paragraph [ref=e384]: GST-compliant invoice generated at checkout
+            - generic [ref=e385]:
+              - paragraph [ref=e386]: Questions about documents, process, or price?
+              - generic [ref=e387]:
+                - link "WhatsApp" [ref=e388] [cursor=pointer]:
+                  - /url: https://wa.me/919217065577?text=Hi%2C%20I%20have%20a%20question%20about%20Cloud%20Kitchen%20Setup
+                  - img
+                  - text: WhatsApp
+                - link "Call" [ref=e389] [cursor=pointer]:
+                  - /url: tel:+919217065577
+                  - img
+                  - text: Call
+    - contentinfo [ref=e390]:
+      - generic [ref=e391]:
+        - generic [ref=e392]:
+          - generic [ref=e393]:
+            - link "Ollvy" [ref=e394] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e395]: You run your business. We handle the rest.
+            - generic [ref=e396]:
+              - link "LinkedIn" [ref=e397] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e398]
+              - link "Twitter" [ref=e402] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e403]
+          - generic [ref=e405]:
+            - link "Calculators" [ref=e406] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e407]:
+              - listitem [ref=e408]:
+                - link "GST Late Filing" [ref=e409] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e410]:
+                - link "GST Demand Notice" [ref=e411] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e412]:
+                - link "ITR Late Filing" [ref=e413] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e414]:
+                - link "TDS Late Filing" [ref=e415] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e416]:
+                - link "MCA Annual Filing" [ref=e417] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e418]:
+                - link "Director KYC" [ref=e419] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e420]:
+                - link "PF/ESIC Penalty" [ref=e421] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e422]:
+                - link "Professional Tax" [ref=e423] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e424]:
+                - link "Shops & Establishment" [ref=e425] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e426]:
+                - link "Startup DPIIT" [ref=e427] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e428]:
+            - link "Checklists" [ref=e429] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e430]:
+              - listitem [ref=e431]:
+                - link "Pvt Ltd Documents" [ref=e432] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e433]:
+                - link "LLP Documents" [ref=e434] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e435]:
+                - link "Partnership Documents" [ref=e436] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e437]:
+                - link "Sole Proprietor" [ref=e438] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e439]:
+                - link "GST Registration" [ref=e440] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e441]:
+                - link "Individual ITR" [ref=e442] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e443]:
+                - link "Business ITR" [ref=e444] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e445]:
+                - link "Trademark" [ref=e446] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e447]:
+            - link "Services" [ref=e448] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e449]:
+              - listitem [ref=e450]:
+                - link "Pvt Ltd Registration" [ref=e451] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e452]:
+                - link "LLP Registration" [ref=e453] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e454]:
+                - link "GST Registration" [ref=e455] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e456]:
+                - link "GST Monthly Filing" [ref=e457] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e458]:
+                - link "GST Cancellation" [ref=e459] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e460]:
+                - link "GST Revocation" [ref=e461] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e462]:
+                - link "Trademark Registration" [ref=e463] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e464]:
+                - link "MSME Registration" [ref=e465] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e466]:
+                - link "Cloud Kitchen Setup" [ref=e467] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e468]:
+                - link "Business ITR Filing" [ref=e469] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e470]:
+                - link "Annual Compliance" [ref=e471] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e472]:
+                - link "TDS Compliance" [ref=e473] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e474]:
+                - link "Company Name Change" [ref=e475] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e476]:
+                - link "DIN Reactivation" [ref=e477] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e478]:
+                - link "All Services" [ref=e479] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e480]:
+            - paragraph [ref=e481]: Deadlines
+            - list [ref=e482]:
+              - listitem [ref=e483]:
+                - link "Director KYC 2026" [ref=e484] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e485]:
+                - link "Business ITR 2026" [ref=e486] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e487]:
+                - link "GSTR-9 2026" [ref=e488] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e489]:
+                - link "TDS Return Q1 2027" [ref=e490] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e491]:
+                - link "Business ITR 2027" [ref=e492] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e493]:
+                - link "GSTR-9 2027" [ref=e494] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e495]:
+            - link "Guides" [ref=e496] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e497]:
+              - listitem [ref=e498]:
+                - link "Do I Need GST?" [ref=e499] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e500]:
+                - link "Pvt Ltd vs LLP" [ref=e501] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e502]:
+                - link "Which ITR Form?" [ref=e503] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e504]:
+                - link "DPIIT Recognition" [ref=e505] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e506]:
+                - link "All Guides" [ref=e507] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e508]:
+            - link "Notice Help" [ref=e509] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e510]:
+              - listitem [ref=e511]:
+                - link "GST DRC-01 Notice" [ref=e512] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e513]:
+                - link "GST ASMT-10 Notice" [ref=e514] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e515]:
+                - link "IT 143(1) Intimation" [ref=e516] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e517]:
+                - link "IT 148/148A Notice" [ref=e518] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e519]:
+                - link "TDS Short Deduction" [ref=e520] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e521]:
+            - paragraph [ref=e522]: Legal
+            - list [ref=e523]:
+              - listitem [ref=e524]:
+                - link "Privacy Policy" [ref=e525] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e526]:
+                - link "Terms of Service" [ref=e527] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e528]:
+                - link "Cancellation Policy" [ref=e529] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e530]:
+                - link "Refund Policy" [ref=e531] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e532]:
+                - link "Contact" [ref=e533] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e535]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e6] [cursor=pointer]:
+    - img [ref=e7]
+  - alert [ref=e536]

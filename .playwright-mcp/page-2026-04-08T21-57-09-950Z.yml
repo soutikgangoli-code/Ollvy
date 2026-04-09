@@ -1,0 +1,330 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - paragraph [ref=e40]: DOCUMENT CHECKLISTS
+          - heading "What Documents Do You Need?" [level=1] [ref=e41]
+          - paragraph [ref=e42]: Know exactly what documents you need before starting your business registration. Click on any option below to see the complete checklist.
+        - generic [ref=e43]:
+          - link "Documents for Private Limited Company Complete checklist of documents needed to register a Private Limited Company in India. Includes director KYC, registered office proof, and more." [ref=e44] [cursor=pointer]:
+            - /url: /tools/documents/private-limited-company
+            - generic [ref=e46]:
+              - img [ref=e48]
+              - generic [ref=e52]:
+                - heading "Documents for Private Limited Company" [level=3] [ref=e53]:
+                  - generic [ref=e54]: Documents for Private Limited Company
+                  - img [ref=e55]
+                - paragraph [ref=e57]: Complete checklist of documents needed to register a Private Limited Company in India. Includes director KYC, registered office proof, and more.
+          - link "Documents for LLP Registration All documents required to incorporate a Limited Liability Partnership. Partner identity, office proof, and LLP agreement requirements." [ref=e58] [cursor=pointer]:
+            - /url: /tools/documents/llp
+            - generic [ref=e60]:
+              - img [ref=e62]
+              - generic [ref=e67]:
+                - heading "Documents for LLP Registration" [level=3] [ref=e68]:
+                  - generic [ref=e69]: Documents for LLP Registration
+                  - img [ref=e70]
+                - paragraph [ref=e72]: All documents required to incorporate a Limited Liability Partnership. Partner identity, office proof, and LLP agreement requirements.
+          - link "Documents for Partnership Firm Documents needed to create a Partnership Deed and register your firm. Partner details, business premises, and deed requirements." [ref=e73] [cursor=pointer]:
+            - /url: /tools/documents/partnership
+            - generic [ref=e75]:
+              - img [ref=e77]
+              - generic [ref=e82]:
+                - heading "Documents for Partnership Firm" [level=3] [ref=e83]:
+                  - generic [ref=e84]: Documents for Partnership Firm
+                  - img [ref=e85]
+                - paragraph [ref=e87]: Documents needed to create a Partnership Deed and register your firm. Partner details, business premises, and deed requirements.
+          - link "Documents for Sole Proprietorship / GST Complete document checklist for GST registration as a sole proprietor. Identity, address proof, bank details, and business registration." [ref=e88] [cursor=pointer]:
+            - /url: /tools/documents/sole-proprietor
+            - generic [ref=e90]:
+              - img [ref=e92]
+              - generic [ref=e95]:
+                - heading "Documents for Sole Proprietorship / GST" [level=3] [ref=e96]:
+                  - generic [ref=e97]: Documents for Sole Proprietorship / GST
+                  - img [ref=e98]
+                - paragraph [ref=e100]: Complete document checklist for GST registration as a sole proprietor. Identity, address proof, bank details, and business registration.
+          - link "Documents for GST Registration Everything you need for GST registration for any business type. PAN, Aadhaar, address proof, bank account details." [ref=e101] [cursor=pointer]:
+            - /url: /tools/documents/gst-registration
+            - generic [ref=e103]:
+              - img [ref=e105]
+              - generic [ref=e108]:
+                - heading "Documents for GST Registration" [level=3] [ref=e109]:
+                  - generic [ref=e110]: Documents for GST Registration
+                  - img [ref=e111]
+                - paragraph [ref=e113]: Everything you need for GST registration for any business type. PAN, Aadhaar, address proof, bank account details.
+          - link "Documents for Individual ITR Filing Form 16, bank statements, investment proofs, and capital gains documents for personal income tax return filing." [ref=e114] [cursor=pointer]:
+            - /url: /tools/documents/individual-itr
+            - generic [ref=e116]:
+              - img [ref=e118]
+              - generic [ref=e121]:
+                - heading "Documents for Individual ITR Filing" [level=3] [ref=e122]:
+                  - generic [ref=e123]: Documents for Individual ITR Filing
+                  - img [ref=e124]
+                - paragraph [ref=e126]: Form 16, bank statements, investment proofs, and capital gains documents for personal income tax return filing.
+          - link "Documents for Business ITR Filing Audited financials, Form 26AS, GST returns, and compliance documents for company/LLP income tax return." [ref=e127] [cursor=pointer]:
+            - /url: /tools/documents/business-itr
+            - generic [ref=e129]:
+              - img [ref=e131]
+              - generic [ref=e134]:
+                - heading "Documents for Business ITR Filing" [level=3] [ref=e135]:
+                  - generic [ref=e136]: Documents for Business ITR Filing
+                  - img [ref=e137]
+                - paragraph [ref=e139]: Audited financials, Form 26AS, GST returns, and compliance documents for company/LLP income tax return.
+          - link "Documents for Trademark Registration Brand name, logo, applicant identity, and business documents needed to register and protect your trademark." [ref=e140] [cursor=pointer]:
+            - /url: /tools/documents/trademark
+            - generic [ref=e142]:
+              - img [ref=e144]
+              - generic [ref=e146]:
+                - heading "Documents for Trademark Registration" [level=3] [ref=e147]:
+                  - generic [ref=e148]: Documents for Trademark Registration
+                  - img [ref=e149]
+                - paragraph [ref=e151]: Brand name, logo, applicant identity, and business documents needed to register and protect your trademark.
+    - contentinfo [ref=e152]:
+      - generic [ref=e153]:
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - link "Ollvy" [ref=e156] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e157]: You run your business. We handle the rest.
+            - generic [ref=e158]:
+              - link "LinkedIn" [ref=e159] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e160]
+              - link "Twitter" [ref=e164] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e165]
+          - generic [ref=e167]:
+            - link "Calculators" [ref=e168] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e169]:
+              - listitem [ref=e170]:
+                - link "GST Late Filing" [ref=e171] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e172]:
+                - link "GST Demand Notice" [ref=e173] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e174]:
+                - link "ITR Late Filing" [ref=e175] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e176]:
+                - link "TDS Late Filing" [ref=e177] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e178]:
+                - link "MCA Annual Filing" [ref=e179] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e180]:
+                - link "Director KYC" [ref=e181] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e182]:
+                - link "PF/ESIC Penalty" [ref=e183] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e184]:
+                - link "Professional Tax" [ref=e185] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e186]:
+                - link "Shops & Establishment" [ref=e187] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e188]:
+                - link "Startup DPIIT" [ref=e189] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e190]:
+            - link "Checklists" [ref=e191] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e192]:
+              - listitem [ref=e193]:
+                - link "Pvt Ltd Documents" [ref=e194] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e195]:
+                - link "LLP Documents" [ref=e196] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e197]:
+                - link "Partnership Documents" [ref=e198] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e199]:
+                - link "Sole Proprietor" [ref=e200] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e201]:
+                - link "GST Registration" [ref=e202] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e203]:
+                - link "Individual ITR" [ref=e204] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e205]:
+                - link "Business ITR" [ref=e206] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e207]:
+                - link "Trademark" [ref=e208] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e209]:
+            - link "Services" [ref=e210] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e211]:
+              - listitem [ref=e212]:
+                - link "Pvt Ltd Registration" [ref=e213] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e214]:
+                - link "LLP Registration" [ref=e215] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e216]:
+                - link "GST Registration" [ref=e217] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e218]:
+                - link "GST Monthly Filing" [ref=e219] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e220]:
+                - link "GST Cancellation" [ref=e221] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e222]:
+                - link "GST Revocation" [ref=e223] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e224]:
+                - link "Trademark Registration" [ref=e225] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e226]:
+                - link "MSME Registration" [ref=e227] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e228]:
+                - link "Cloud Kitchen Setup" [ref=e229] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e230]:
+                - link "Business ITR Filing" [ref=e231] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e232]:
+                - link "Annual Compliance" [ref=e233] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e234]:
+                - link "TDS Compliance" [ref=e235] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e236]:
+                - link "Company Name Change" [ref=e237] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e238]:
+                - link "DIN Reactivation" [ref=e239] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e240]:
+                - link "All Services" [ref=e241] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e242]:
+            - paragraph [ref=e243]: Deadlines
+            - list [ref=e244]:
+              - listitem [ref=e245]:
+                - link "Director KYC 2026" [ref=e246] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e247]:
+                - link "Business ITR 2026" [ref=e248] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e249]:
+                - link "GSTR-9 2026" [ref=e250] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e251]:
+                - link "TDS Return Q1 2027" [ref=e252] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e253]:
+                - link "Business ITR 2027" [ref=e254] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e255]:
+                - link "GSTR-9 2027" [ref=e256] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e257]:
+            - link "Guides" [ref=e258] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e259]:
+              - listitem [ref=e260]:
+                - link "Do I Need GST?" [ref=e261] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e262]:
+                - link "Pvt Ltd vs LLP" [ref=e263] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e264]:
+                - link "Which ITR Form?" [ref=e265] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e266]:
+                - link "DPIIT Recognition" [ref=e267] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e268]:
+                - link "All Guides" [ref=e269] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e270]:
+            - link "Notice Help" [ref=e271] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e272]:
+              - listitem [ref=e273]:
+                - link "GST DRC-01 Notice" [ref=e274] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e275]:
+                - link "GST ASMT-10 Notice" [ref=e276] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e277]:
+                - link "IT 143(1) Intimation" [ref=e278] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e279]:
+                - link "IT 148/148A Notice" [ref=e280] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e281]:
+                - link "TDS Short Deduction" [ref=e282] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e283]:
+            - paragraph [ref=e284]: Legal
+            - list [ref=e285]:
+              - listitem [ref=e286]:
+                - link "Privacy Policy" [ref=e287] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e288]:
+                - link "Terms of Service" [ref=e289] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e290]:
+                - link "Cancellation Policy" [ref=e291] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e292]:
+                - link "Refund Policy" [ref=e293] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e294]:
+                - link "Contact" [ref=e295] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e297]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e303] [cursor=pointer]:
+    - img [ref=e304]
+  - alert [ref=e307]

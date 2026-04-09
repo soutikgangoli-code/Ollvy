@@ -1,0 +1,412 @@
+CLAUDE CODE INSTRUCTION - NOTICE PAGES FULL UPDATE
+
+Two tasks. Do them in order.
+
+────────────────────────────────────────────────────────────────
+TASK 1 - ADD TOOLLASTREVIEWD TO NOTICE PAGE RENDERER
+────────────────────────────────────────────────────────────────
+
+In `app/guides/[slug]/page.tsx` (the notice page renderer):
+
+1. Import `ToolLastReviewed` from `components/tools/DocumentPageToolExtensions`
+
+2. Add `sources?: Array<{ name: string; url: string; description: string }>` 
+   to the `LearnPageConfig` interface in `lib/guides/types.ts` (or wherever 
+   the interface lives)
+
+3. At the bottom of the page render, after the FAQs section and before any 
+   existing related links, add:
+
+   <ToolLastReviewed
+     lastReviewed={page.lastReviewed}
+     sources={page.sources ?? []}
+   />
+
+4. Run `tsc --noEmit` to confirm no type errors.
+
+────────────────────────────────────────────────────────────────
+TASK 2 - REPLACE ALL 24 NOTICE PAGE CONFIG FILES
+────────────────────────────────────────────────────────────────
+
+Replace the content of each notice page file listed below with the 
+rewritten versions. For each file, replace ONLY the fields that are 
+provided in the rewrite: seoTitle, seoDescription, sections, faqs, 
+and sources. Do NOT change: slug, title, category, severity, deadline, 
+deadlineNote, relatedServiceSlugs, relatedTools, ctaServiceSlug, 
+ctaSecondarySlug, canonicalUrl, or lastReviewed.
+
+────────────────────────
+GST NOTICES (1-9)
+────────────────────────
+
+FILE: lib/guides/pages/gst-drc-01-notice.ts
+- seoTitle: 'GST DRC-01 Notice: What It Is and How to Reply (2025) | Ollvy'
+- seoDescription: 'A DRC-01 is a formal GST tax demand. You have 30 days to reply before the officer passes an order without hearing your side. Understand Section 73 vs 74 and how to respond.'
+- Replace section 01 heading with: 'WHAT A DRC-01 IS AND WHY YOU GOT IT'
+- Remove "FIRST, TAKE A BREATH -" from section 01 heading
+- Remove all em dashes from all body text
+- Remove "Here is the important part" wherever it appears
+- Add new section between existing sections 04 and 05 (the personal hearing section):
+  heading: 'PAY BEFORE REPLYING: WHEN THIS IS THE RIGHT MOVE'
+  body: 'If the case is under Section 73 and you agree the tax is due, paying the full demand plus interest within 30 days of the SCN means zero penalty. Section 73(8) is explicit: "no penalty shall be payable and all proceedings shall be deemed to be concluded." This is the cheapest and fastest resolution path if you accept the liability.\n\nIf the case is under Section 74 (fraud allegation), paying within 30 days of the SCN reduces the penalty from 100 percent to 15 percent. Do not pay under Section 74 without professional advice. If the fraud allegation itself can be challenged, your reply should challenge the Section 74 classification before you pay anything.'
+  note: 'Partial payment is also an option. Pay what you agree with, state it clearly in your DRC-06 reply with challan details, and contest the rest.'
+- Add sources array:
+  [
+    { name: 'CGST Act, 2017 (Section 73 and 74)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Primary legislation governing GST demand and recovery proceedings' },
+    { name: 'CGST Rules, 2017 (Rule 142)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Rules for service of show cause notice and reply procedure' }
+  ]
+
+FILE: lib/guides/pages/gst-drc-01a-pre-notice.ts
+- seoTitle: 'GST DRC-01A Notice: What It Is and How to Respond (2025) | Ollvy'
+- seoDescription: 'A DRC-01A is a pre-demand intimation, not a formal notice. Respond well here and the matter may close without a DRC-01 ever being issued. You have 30 days.'
+- Remove all em dashes from all body text
+- Change section 01 heading to: 'THIS IS NOT A DEMAND YET'
+- Add new section at position 05 (after existing section 04):
+  heading: 'HOW DRC-01A COMPARES TO DRC-01: THE COST DIFFERENCE'
+  body: 'Most businesses do not realise how much cheaper DRC-01A resolution is compared to waiting for DRC-01. The penalty structure makes early engagement financially rational.\n\nFor a Rs. 10 lakh demand under Section 73: paying at DRC-01A stage costs Rs. 10 lakh (tax) plus interest. Paying after DRC-07 is passed costs Rs. 10 lakh (tax) plus interest plus Rs. 1 lakh minimum penalty (10 percent). For Section 74 cases, the difference is even larger: DRC-01A stage carries 15 percent penalty, DRC-07 stage carries 100 percent.\n\nIf you agree the tax is due, paying at DRC-01A is almost always the right financial decision.'
+- Add FAQ: q: 'Can I negotiate the amount shown in DRC-01A?', a: 'DRC-01A is not a negotiation. It is the officer\'s calculation based on available data. You can challenge it with your own reconciliation and documents in your Part B representation. If the officer accepts your data, the amount is revised. If not, DRC-01 is issued for the original amount.'
+- Add sources:
+  [
+    { name: 'CGST Rules, 2017 (Rule 142(1A))', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Rule governing pre-notice intimation before formal show cause notice' },
+    { name: 'CGST Act, 2017 (Section 73)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Penalty provisions applicable at different stages of demand proceedings' }
+  ]
+
+FILE: lib/guides/pages/gst-drc-01b-mismatch.ts
+- seoTitle: 'GST DRC-01B Notice: GSTR-1 vs 3B Mismatch - How to Fix (2025) | Ollvy'
+- seoDescription: 'A DRC-01B notice means the GST system found a mismatch between your GSTR-1 and GSTR-3B. You have 7 days to explain or pay the difference before it escalates to a formal DRC-01 demand.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'HOW TO PREVENT DRC-01B NOTICES IN FUTURE'
+  body: 'DRC-01B is a system check that runs automatically every month. Preventing it is straightforward if you reconcile before filing GSTR-3B.\n\nBefore filing GSTR-3B each month: verify that the taxable value and tax in your GSTR-3B matches what you declared in GSTR-1 for the same period. If there is a difference due to DRC-03 payment, credit notes, or timing, note it now rather than waiting for the system to flag it.\n\nIf you made a voluntary payment through DRC-03 for a prior period, always declare it in the next GSTR-3B filing so the portal can match it correctly.'
+- Add sources:
+  [
+    { name: 'CGST Rules, 2017 (Rule 88C)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Rule governing GSTR-1 and GSTR-3B liability mismatch intimation' },
+    { name: 'Notification 26/2022-Central Tax', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Notification inserting Rule 88C into the CGST Rules' }
+  ]
+
+FILE: lib/guides/pages/gst-asmt-10-notice.ts
+- seoTitle: 'GST ASMT-10 Notice: How to Reply and What It Means (2025) | Ollvy'
+- seoDescription: 'A GST ASMT-10 notice means an officer found a discrepancy in your returns. You have 15 days to reply in Form ASMT-11. No reply leads to a best judgment assessment under Section 62.'
+- Remove all em dashes from all body text
+- In section 03, replace "Here is how the path forks based on your reply:" with "The outcome depends on your reply:"
+- Add new section between existing sections 04 and 05:
+  heading: 'WHAT VOLUNTARY PAYMENT AT ASMT-10 STAGE SAVES YOU'
+  body: 'If you agree that some or all of the discrepancy represents genuine underpaid tax, paying it voluntarily through DRC-03 before or alongside your ASMT-11 reply has real financial advantages.\n\nAt the ASMT-10 stage, before formal demand proceedings begin, there is no mandatory penalty. If the matter progresses to DRC-01A and you pay there, the same applies for non-fraud cases. Once DRC-01 is issued, a minimum 10 percent penalty applies under Section 73.\n\nPaying early also demonstrates compliance intent, which influences how officers approach your case at every subsequent stage.'
+- Add sources:
+  [
+    { name: 'CGST Act, 2017 (Section 61)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Scrutiny of returns provision under which ASMT-10 is issued' },
+    { name: 'CGST Rules, 2017 (Rule 99)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Procedure for scrutiny of returns and reply in Form ASMT-11' }
+  ]
+
+FILE: lib/guides/pages/gst-asmt-14-best-judgment.ts
+- seoTitle: 'GST ASMT-14 Notice: Best Judgment Assessment Explained (2025) | Ollvy'
+- seoDescription: 'A GST ASMT-14 is a best judgment assessment issued when ASMT-10 was not replied to. Filing all pending returns within 30 days withdraws the assessment under Section 62(2).'
+- Remove all em dashes from all body text
+- Add new section between existing sections 02 and 03:
+  heading: 'CALCULATING WHAT YOU OWE TO FILE RETURNS AND CLOSE THIS'
+  body: 'To file pending returns and trigger Section 62(2) withdrawal, you need to pay:\n\nPending tax: the actual GST liability for each unfiled period based on your outward supplies and eligible ITC.\n\nInterest under Section 50: 18 percent per annum from the original due date of each return to the date of actual payment. This is calculated separately for each month.\n\nLate fees: for GSTR-3B, the late fee is Rs. 50 per day for returns with a tax liability (Rs. 25 CGST plus Rs. 25 SGST), capped at Rs. 10,000 per return. For nil returns, it is Rs. 20 per day, capped at Rs. 500.\n\nGet a CA to calculate the exact amount before filing so there are no surprises.'
+- Add FAQ: q: 'The 30-day window has passed. What are my options now?', a: 'You can still file the pending returns but the Section 62(2) automatic withdrawal no longer applies. You must appeal the ASMT-14 order to the Appellate Authority within 3 months of the assessment order. Pay 10 percent of the disputed tax as pre-deposit. File the pending returns simultaneously to show compliance intent.'
+- Add sources:
+  [
+    { name: 'CGST Act, 2017 (Section 62)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Best judgment assessment of non-filers and withdrawal provision under Section 62(2)' },
+    { name: 'CGST Rules, 2017 (Rule 100)', url: 'https://tutorial.gst.gov.in/downloads/news/cgst_act_updated_till_jan_2024.pdf', description: 'Procedure for best judgment assessment under Section 62' }
+  ]
+
+FILE: lib/guides/pages/gst-reg-17-cancellation-notice.ts
+- seoTitle: 'GST REG-17 Cancellation Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A GST REG-17 notice means your registration may be cancelled. You have 7 working days to reply in Form REG-18. No reply results in a REG-19 cancellation order.'
+- Remove all em dashes from all body text
+- Change section 01 heading to: 'YOUR GST REGISTRATION IS AT RISK'
+- Add new section between existing sections 02 and 03:
+  heading: 'THE BUSINESS IMPACT OF GSTIN CANCELLATION'
+  body: 'This is why replying within 7 days matters so much.'
+  bullets: [
+    'You cannot issue tax invoices or collect GST from the date of cancellation',
+    'Your customers cannot claim ITC on invoices you issued after suspension or cancellation',
+    'If your GSTIN shows as "cancelled" on the GST portal, clients may retroactively question invoices from the period before cancellation',
+    'Government tenders, e-commerce platforms, and corporate procurement processes require an active GSTIN',
+    'Banking and loan facilities tied to your GSTIN can be affected'
+  ]
+- Add sources:
+  [
+    { name: 'CGST Act, 2017 (Section 29(2))', url: 'https://www.gst.gov.in', description: 'Cancellation of registration by proper officer' },
+    { name: 'CGST Rules, 2017 (Rule 22)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Procedure for cancellation of registration and REG-18 reply' }
+  ]
+
+FILE: lib/guides/pages/gst-reg-31-suspension.ts
+- seoTitle: 'GST REG-31 Suspension Notice: What to Do Now (2025) | Ollvy'
+- seoDescription: 'A GST REG-31 notice means your registration is suspended. You cannot issue invoices or claim ITC while suspended. REG-17 cancellation notice follows within 30 days if you do not act.'
+- Remove all em dashes from all body text
+- Change section 01 heading to: 'YOUR GSTIN IS SUSPENDED'
+- Add new section between existing sections 04 and 05:
+  heading: 'THE IMPACT ON YOUR CUSTOMERS WHILE YOU ARE SUSPENDED'
+  body: 'Every day your GSTIN is suspended, your customers are affected. Invoices issued during suspension are not valid tax invoices. Your customers cannot claim ITC on them.\n\nIf you supply to GST-registered businesses and your GSTIN shows as "suspended" on the portal, your customers may refuse to accept invoices or put payments on hold until the suspension is resolved. For B2B businesses, this can cause immediate cash flow disruption.\n\nThe faster you resolve the suspension, the smaller this impact is.'
+- Add FAQ: q: 'I filed all pending returns. How long before the suspension is lifted?', a: 'If the suspension was due to non-filing and there are no other grounds for cancellation, the officer should revoke it after verifying your returns. This typically takes a few days to 2 weeks. Follow up with the jurisdictional officer if it is not lifted within 7 working days of filing.'
+- Add sources:
+  [
+    { name: 'CGST Rules, 2017 (Rule 21A)', url: 'https://www.gst.gov.in', description: 'Suspension of registration provision and automatic revocation rule' },
+    { name: 'CBIC GST Portal', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Official GST compliance and notice tracking portal' }
+  ]
+
+FILE: lib/guides/pages/gst-gstr2b-itc-mismatch.ts
+- seoTitle: 'GSTR-2B ITC Mismatch: How to Resolve Blocked Credit (2025) | Ollvy'
+- seoDescription: 'ITC claims exceeding your GSTR-2B are blocked under Section 16(2)(aa). Reconcile your purchase register with GSTR-2B every month before filing GSTR-3B to avoid demands.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'HOW TO FOLLOW UP WITH NON-COMPLIANT SUPPLIERS'
+  body: 'When invoices are missing from GSTR-2B, the most effective first step is direct supplier follow-up. Most mismatches resolve when the supplier files their pending GSTR-1 or corrects an error in their next filing.\n\nDocument everything: keep records of your follow-up (emails, WhatsApp messages) showing you attempted to get the supplier to comply. This documentation matters if you ever face a demand notice for the claimed ITC.\n\nIf a supplier is consistently non-compliant, consider whether the relationship is worth the ITC risk. Buying from GST-compliant suppliers is the only way to guarantee clean ITC.'
+- Add FAQ: q: 'I claimed ITC in GSTR-3B that was not in my GSTR-2B. Now I have received a notice. What do I do?', a: 'Check whether the ITC has since appeared in a subsequent GSTR-2B. If it has, your claim may be justifiable with a reconciliation. If it has not, you need to reverse the excess claim in your next GSTR-3B with interest at 18 percent per annum from the date of the original claim.'
+- Add sources:
+  [
+    { name: 'CGST Act, 2017 (Section 16(2)(aa))', url: 'https://www.gst.gov.in', description: 'ITC eligibility condition tied to GSTR-2B availability' },
+    { name: 'CGST Rules, 2017 (Rule 36(4))', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'Conditions for claiming ITC and reconciliation requirements' }
+  ]
+
+FILE: lib/guides/pages/gst-gstr9-annual-return-mismatch.ts
+- seoTitle: 'GSTR-9 Annual Return Mismatch: How to Reconcile (2025) | Ollvy'
+- seoDescription: 'Discrepancies between your GSTR-9 annual return and monthly filings trigger ASMT-10 scrutiny notices. Reconcile before filing and pay any difference through DRC-03 to avoid demands.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 02 and 03:
+  heading: 'RECONCILING GSTR-9 WITH YOUR AUDITED FINANCIALS'
+  body: 'GSTR-9 must align with your audited financial statements. The turnover in your GSTR-9 should match the turnover in your P&L. Any difference needs a clear explanation: goods returned, export turnover excluded from GST, advance receipts treated differently.\n\nBefore filing GSTR-9, run a side-by-side comparison of your GSTR-1 total taxable value, your GSTR-3B total taxable value, and your audited turnover. Any difference between these three numbers needs to be documented with a reconciliation note, even if the difference is zero. Auditors and tax officers both look at this comparison.'
+- Add FAQ: q: 'Do I need to file GSTR-9C (reconciliation statement) as well?', a: 'GSTR-9C is mandatory for taxpayers with annual aggregate turnover above Rs. 5 crore. It is a reconciliation between the annual returns filed and the audited financial statements. If your turnover is below Rs. 5 crore, GSTR-9C is optional.'
+- Add sources:
+  [
+    { name: 'CGST Act, 2017 (Section 44)', url: 'https://www.gst.gov.in', description: 'Annual return filing requirement and provisions' },
+    { name: 'CGST Rules, 2017 (Rule 80)', url: 'https://cbic-gst.gov.in/gst-goods-services-rates.html', description: 'GSTR-9 form, reconciliation tables, and filing procedure' }
+  ]
+
+────────────────────────
+INCOME TAX NOTICES (10-19)
+────────────────────────
+
+FILE: lib/guides/pages/income-tax-143-1-intimation.ts
+- seoTitle: 'Income Tax 143(1) Intimation Explained (2025) | Ollvy'
+- seoDescription: 'A 143(1) intimation confirms your return has been processed by the CPC. If there is a tax demand, verify the computation and pay or file a rectification request within 30 days.'
+- Change section 01 heading to: 'WHAT A 143(1) INTIMATION ACTUALLY IS'
+- Remove all em dashes from all body text
+- Add new section between existing sections 04 and 05:
+  heading: 'THE DIFFERENCE BETWEEN 143(1) AND A SCRUTINY NOTICE'
+  body: 'Many taxpayers confuse 143(1) with a scrutiny notice and panic unnecessarily. The distinction is important.\n\nA 143(1) intimation is automated. The CPC processes millions of returns using software. No officer has specifically reviewed your case. Adjustments are made based on data mismatches and arithmetic checks.\n\nA 143(2) scrutiny notice means a human Assessing Officer has selected your return for detailed examination. That is a different matter entirely and requires professional help.\n\nIf what you received says "143(1)" at the top, you are dealing with a processing adjustment, not a scrutiny.'
+- Add FAQ: q: 'The adjustment seems wrong but the amount is small. Should I still file a rectification?', a: 'Yes, especially if the adjustment involves a wrong TDS credit or an incorrect disallowance. Small errors can affect future assessments. Filing a rectification is free and straightforward.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 143(1))', url: 'https://www.incometax.gov.in', description: 'Processing of returns by CPC and intimation to taxpayer' },
+    { name: 'Income Tax e-Filing Portal', url: 'https://eportal.incometax.gov.in', description: 'Official portal for filing rectification requests and checking intimation status' }
+  ]
+
+FILE: lib/guides/pages/income-tax-143-2-scrutiny.ts
+- seoTitle: 'Income Tax 143(2) Scrutiny Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A 143(2) notice means your return has been selected for detailed examination by an Assessing Officer. Respond within the deadline. Missing it leads to an adverse assessment under 143(3).'
+- Remove all em dashes from all body text
+- Add new section between existing sections 02 and 03:
+  heading: 'WHAT DOCUMENTS YOU NEED TO PREPARE'
+  body: 'The moment you receive a 143(2) notice, start compiling these regardless of what the notice specifically asks for:\n\nBooks of accounts for the relevant assessment year. Bank statements for all accounts. Income proofs: salary slips, business invoices, rental agreements, investment statements. Deduction proofs: 80C receipts, home loan certificates, medical insurance premiums. Form 26AS and AIS for the relevant year. Any contracts, agreements, or correspondence related to large transactions.\n\nHaving these ready before the first hearing significantly reduces the back-and-forth and shortens the process.'
+- Add FAQ: q: 'How long does the scrutiny process take?', a: 'Scrutiny assessments must be completed within 12 months from the end of the assessment year. For cases involving international transactions, the limit is 24 months. In practice, most cases are resolved within 6 to 18 months.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 143(2) and 143(3))', url: 'https://www.incometax.gov.in', description: 'Scrutiny assessment notice issuance and assessment order provisions' },
+    { name: 'Income Tax e-Filing Portal (e-Proceedings)', url: 'https://eportal.incometax.gov.in', description: 'Portal for responding to scrutiny notices and submitting documents' }
+  ]
+
+FILE: lib/guides/pages/income-tax-142-1-notice.ts
+- seoTitle: 'Income Tax 142(1) Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A 142(1) notice is a request for specific information or documents from the Assessing Officer. Ignoring it leads to a best judgment assessment under Section 144 and a Rs. 10,000 penalty.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'HOW A 142(1) NOTICE FITS INTO THE ASSESSMENT TIMELINE'
+  body: 'A 142(1) notice is almost always a precursor to something larger. Understanding where it sits in the assessment process helps you prioritise your response.\n\nIf you have not filed a return: the notice gives you a final opportunity before the AO does a best judgment assessment based on third-party data. Filing at this stage, even late, is almost always better than letting the AO assess you.\n\nIf you have filed a return: the notice means the AO is examining something specific. This is either a pre-step to a 143(2) scrutiny notice or a standalone inquiry. A complete, well-documented response often ends the matter here without escalating to formal scrutiny.'
+- Add FAQ: q: 'I received a 142(1) notice but I never got a 143(2) notice. Is that normal?', a: 'Yes. A 142(1) notice can be issued before 143(2) as a pre-scrutiny inquiry, or independently for non-filers. You do not need to have received a 143(2) notice first.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 142(1))', url: 'https://www.incometax.gov.in', description: 'Information request provision before assessment' },
+    { name: 'Income Tax Act, 1961 (Section 144 and 272A)', url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf', description: 'Best judgment assessment and penalty for non-compliance with 142(1)' }
+  ]
+
+FILE: lib/guides/pages/income-tax-148-148a-reopening.ts
+- seoTitle: 'Income Tax 148/148A Reopening Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A 148A notice means the Income Tax department wants to reopen your past assessment for income it believes escaped tax. Your response to 148A is your best chance to stop it.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'COMMON GROUNDS TO CHALLENGE A REOPENING'
+  body: 'Reopening is not automatic just because the AO suspects something. There are well-established grounds on which reopenings are regularly quashed by courts and tribunals.\n\nChange of opinion: if the AO reviewed the same material during the original assessment and is now reconsidering the same facts, reopening is not valid.\n\nTime-barred: if the notice falls outside the 3-year or 10-year limit, it can be challenged on this ground alone.\n\nNo tangible new material: the AO must have specific new information that was not available during the original assessment. A mere suspicion or tip without supporting evidence is insufficient.\n\nInadequate reasons in 148A(d) order: the AO must give detailed reasons for proceeding. A generic or boilerplate order can be challenged.'
+- Add FAQ: q: 'The 148A notice mentions a large cash deposit in my bank. I can explain it. Should I respond or wait?', a: 'Respond immediately with full documentation. A well-documented 148A response (bank statements, source of funds, filed return showing the income) often stops the reopening at this stage without a 148 notice being issued.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Sections 147, 148, 148A)', url: 'https://www.incometax.gov.in', description: 'Reassessment provisions as amended by Finance Act 2021' },
+    { name: 'Finance Act 2021', url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf', description: 'Amendment introducing the mandatory 148A pre-notice requirement' }
+  ]
+
+FILE: lib/guides/pages/income-tax-139-9-defective-return.ts
+- seoTitle: 'Income Tax 139(9) Defective Return Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A 139(9) defective return notice means your ITR has technical errors. If you do not respond within 15 days, your return is treated as invalid, as if you never filed.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'HOW TO AVOID A DEFECTIVE RETURN NOTICE IN FUTURE'
+  body: 'Most defective return notices are caused by the same few errors year after year. Here is how to avoid them.\n\nUse the correct ITR form: the form depends on your income sources. ITR-1 is only for salaried individuals with income below Rs. 50 lakh and no capital gains. If you have capital gains, rental income from more than one property, or foreign income, you need ITR-2 or ITR-3.\n\nAttach all schedules: if you have a business, the P&L and Balance Sheet are mandatory. If you have foreign assets, Schedule FA is mandatory regardless of whether there was income from those assets.\n\nVerify bank details: wrong account numbers delay refunds and trigger defective return notices.\n\nReconcile TDS with Form 26AS before filing: TDS mismatches are one of the most common triggers for CPC adjustments and defective notices.'
+- Add FAQ: q: 'I got a defective notice for using ITR-1 when I should have used ITR-2. How do I fix this?', a: 'File a revised return using ITR-2 if you are within the December 31 deadline. If not, respond to the defective notice through e-Proceedings, select "Return Data Correction," and upload the correct ITR-2.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 139(9))', url: 'https://www.incometax.gov.in', description: 'Defective return notice provisions and response procedure' },
+    { name: 'Income Tax e-Filing Portal', url: 'https://eportal.incometax.gov.in', description: 'Portal for responding to defective return notices via e-Proceedings' }
+  ]
+
+FILE: lib/guides/pages/income-tax-156-demand.ts
+- seoTitle: 'Income Tax 156 Demand Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'An Income Tax 156 demand notice means you owe tax following an assessment order. Verify the computation before paying. Unpaid demands attract interest at 1 percent per month.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 02 and 03:
+  heading: 'HOW INTEREST IS CALCULATED ON UNPAID DEMANDS'
+  body: 'Interest on unpaid demands under Section 220(2) is 1 percent per month or part of a month. There is no cap. This accrues from the day after the 30-day due date until the date of payment.\n\nOn a Rs. 10 lakh demand unpaid for 12 months, the interest alone is Rs. 1.20 lakh. On a Rs. 50 lakh demand, it is Rs. 6 lakh per year.\n\nIf you are filing an appeal, paying 20 percent of the demand upfront and requesting a stay on the rest stops interest from accruing on the stayed portion.'
+- Add FAQ: q: 'Can I pay part of the demand now and the rest later?', a: 'Yes, but interest continues to accrue on the unpaid portion. If you are filing an appeal, pay 20 percent of the total demand and request a stay on the remaining 80 percent. This stops recovery action on the stayed amount while your appeal is pending.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 156)', url: 'https://www.incometax.gov.in', description: 'Demand notice issuance following assessment orders' },
+    { name: 'Income Tax Act, 1961 (Section 220(2))', url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf', description: 'Interest on delayed payment of tax demands at 1 percent per month' }
+  ]
+
+FILE: lib/guides/pages/income-tax-245-refund-adjustment.ts
+- seoTitle: 'Income Tax 245 Refund Adjustment Notice: What to Do (2025) | Ollvy'
+- seoDescription: 'A 245 notice means your Income Tax refund is being adjusted against a pending demand. Verify the underlying demand within 30 days or the adjustment happens automatically.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'HOW TO TRACE OLD DEMANDS YOU DO NOT RECOGNISE'
+  body: 'If the notice refers to a demand from several years ago that you do not recognise, here is how to trace it.\n\nCheck Form 26AS for TDS credits for that year on the e-filing portal. Pull up old returns from the e-filing portal under e-File > Income Tax Returns > View Filed Returns.\n\nIf the demand relates to an assessment order, search your records for the relevant year\'s 143(3) or 144 order. If it was appealed and won, locate the appellate order and submit it as proof.\n\nIf the demand seems to be a system error (showing as outstanding despite being paid), locate the old payment challan and submit it as evidence.'
+- Add FAQ: q: 'The adjustment notice is for a demand I paid last year. How do I prove it?', a: 'Locate the payment challan from your bank records or from the e-filing portal under e-Pay Tax > Payment History. Submit the challan number, BSR code, and date as part of your "No" response. The CPC will verify the payment and release your refund.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 245)', url: 'https://www.incometax.gov.in', description: 'Set-off of refunds against outstanding demands' },
+    { name: 'Income Tax e-Filing Portal', url: 'https://eportal.incometax.gov.in', description: 'Portal for responding to 245 notices under Pending Actions' }
+  ]
+
+FILE: lib/guides/pages/income-tax-271-penalty.ts
+- seoTitle: 'Income Tax 271/270A Penalty Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A penalty notice under Section 271 or 270A is separate from your assessment. Even if you paid the tax, you must respond. Penalty is not automatic and can be challenged.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 02 and 03:
+  heading: 'THE DIFFERENCE BETWEEN UNDER-REPORTING AND MISREPORTING'
+  body: 'Section 270A distinguishes between two categories of penalty, and the difference in rates is significant.\n\nUnder-reporting (50 percent penalty): applies when income declared is less than income assessed, typically because of a missed income source, wrong deduction claim, or an item the AO has added. This is the more common situation.\n\nMisreporting (200 percent penalty): applies to specific aggravated situations: misrepresentation or suppression of facts, failure to record investments in books, claiming false entries, or failure to report international transactions. The AO must specifically establish misreporting to apply the higher rate.\n\nIf the penalty notice does not clearly specify which category applies, challenge the specificity of the notice itself.'
+- Add FAQ: q: 'I received both an assessment order and a penalty notice. Do I respond to both?', a: 'Yes, but separately. The assessment order is challenged through an appeal to CIT(Appeals). The penalty is challenged through a separate appeal or response. If you win the assessment appeal, the penalty typically follows. Always coordinate both with your CA.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Sections 270A and 271(1)(c))', url: 'https://www.incometax.gov.in', description: 'Penalty provisions for under-reporting and misreporting of income' },
+    { name: 'Supreme Court: Dilip Shroff vs JCIT', url: 'https://incometaxindia.gov.in', description: 'Landmark judgment establishing that penalty is not automatic on additions' }
+  ]
+
+FILE: lib/guides/pages/income-tax-131-summons.ts
+- seoTitle: 'Income Tax 131 Summons: What to Do (2025) | Ollvy'
+- seoDescription: 'A 131 summons is a legal order requiring you to appear before the Income Tax officer or produce documents. Ignoring it is a prosecutable offence. You must respond.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'WHAT TO DO IF YOU ARE BEING SUMMONED AS A WITNESS'
+  body: 'Being summoned as a witness in someone else\'s case is different from being summoned as a taxpayer under investigation. As a witness, you are required to answer questions truthfully and produce documents related to the transactions the officer is investigating.\n\nYou are not obligated to make any admission that might expose you to tax liability. If questions are directed at your own tax affairs, consult a lawyer before answering. You have the right to be accompanied by your authorised representative.\n\nDo not discuss the summons with the person under investigation before appearing. This can be construed as coordination and may create complications.'
+- Add FAQ: q: 'The summons is related to a transaction from 8 years ago. How do I get records that old?', a: 'Check your bank statements (most banks keep records for 7 to 10 years and can provide certified copies). Check your email archives for invoices and contracts. Contact counterparties to the transaction for their records. If records genuinely do not exist, explain this clearly when you appear.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 131)', url: 'https://www.incometax.gov.in', description: 'Power to take evidence, enforce attendance, and compel production of documents' },
+    { name: 'Income Tax Act, 1961 (Section 272A and 276D)', url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf', description: 'Penalty and prosecution for failure to comply with a 131 summons' }
+  ]
+
+FILE: lib/guides/pages/income-tax-ais-sft-notice.ts
+- seoTitle: 'Income Tax AIS/SFT Mismatch Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'An AIS or SFT mismatch notice means the department found high-value transactions you may not have declared. Respond within the deadline or the case may be selected for scrutiny.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 04 and 05:
+  heading: 'HOW AIS MISMATCHES LEAD TO SCRUTINY SELECTION'
+  body: 'AIS mismatches are one of the primary inputs for CASS (Computer Assisted Scrutiny Selection). The system flags returns where declared income is significantly below what AIS data suggests.\n\nIf you respond to an AIS mismatch notice correctly and reconcile the difference, the flag is cleared and your return is less likely to be selected for scrutiny. If you ignore it, the mismatch remains and your return is at higher risk of being selected for 143(2) scrutiny in the next assessment cycle.'
+- Add FAQ: q: 'AIS shows Rs. 5 lakh of interest income but I only received Rs. 3 lakh. What happened?', a: 'This often happens when fixed deposits are renewed: the bank reports the full interest credited including interest on the renewed FD, but you may have only received the net interest after TDS. Check your bank passbook or FD statement against the AIS entry and submit feedback if there is a genuine discrepancy.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 285BA)', url: 'https://www.incometax.gov.in', description: 'Statement of Financial Transactions reporting requirement' },
+    { name: 'Income Tax Rules (Rule 114E)', url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf', description: 'High-value transactions required to be reported in SFT' }
+  ]
+
+────────────────────────
+TDS NOTICES (20-22)
+────────────────────────
+
+FILE: lib/guides/pages/tds-short-deduction-notice.ts
+- seoTitle: 'TDS Short Deduction Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A TDS short deduction notice means you deducted less TDS than required. Interest at 1 percent per month accrues from the original deduction date. Verify and respond promptly.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 02 and 03:
+  heading: 'HOW TDS RATES ARE DETERMINED AND WHERE ERRORS COMMONLY OCCUR'
+  body: 'The most common source of short deduction notices is applying 194C rates (1 to 2 percent) to payments that should have been deducted under 194J (10 percent). This happens when the nature of service is misclassified.\n\nOther frequent errors: deducting TDS on the net amount after GST instead of the gross invoice value (TDS must be on the total payment including GST in most cases), failing to deduct on part payments when the annual aggregate exceeds the threshold, and using outdated rate charts (rates change with Finance Acts).\n\nMaintain a TDS rate card that is updated after every Union Budget.'
+- Add FAQ: q: 'The short deduction is from 3 years ago. Is there any time limit on how far back they can go?', a: 'The department can issue a notice for short deduction within 7 years from the end of the financial year in which the payment was made. So a payment made in FY 2020-21 can be assessed up to FY 2027-28.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Section 201)', url: 'https://www.incometax.gov.in', description: 'Consequences of failure to deduct or pay TDS' },
+    { name: 'Income Tax Act, 1961 (Sections 192 to 196)', url: 'https://incometaxindia.gov.in/acts/income-tax-act-1961.pdf', description: 'TDS provisions for different payment types and applicable rates' }
+  ]
+
+FILE: lib/guides/pages/tds-26q-27q-mismatch.ts
+- seoTitle: 'TDS 26Q/27Q Mismatch Notice: How to Resolve (2025) | Ollvy'
+- seoDescription: 'A 26Q or 27Q mismatch means your TDS return and challan payments do not match. File a correction return on TRACES to fix it. Unresolved mismatches block your deductees\' Form 26AS credit.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 04 and 05:
+  heading: 'CHECKING CORRECTION STATUS AND DEDUCTEE IMPACT'
+  body: 'After filing a correction return, check TRACES after 3 to 5 working days. The correction should reflect in the deductee\'s Form 26AS within 7 to 14 days after processing.\n\nIf a deductee has already filed their return without the TDS credit, they will need to file a revised return after the mismatch is resolved and the credit appears in their 26AS.\n\nFor high-value deductees (employees, large vendors), proactively inform them of the timeline so they can plan their return filing accordingly.'
+- Add FAQ: q: 'My deductee is threatening to take action because TDS is not reflecting in their 26AS. What do I tell them?', a: 'Acknowledge the issue, share the correction return acknowledgement number, and give them a realistic timeline (7 to 14 days after correction processing). If the delay has caused them to miss their return filing deadline, advise them to file their return claiming the TDS credit anyway and revise once it reflects.'
+- Add sources:
+  [
+    { name: 'TRACES Portal', url: 'https://www.tdscpc.gov.in', description: 'Official portal for TDS correction returns, challan verification, and Form 26AS' },
+    { name: 'Income Tax Act, 1961 (Sections 200 and 200A)', url: 'https://www.incometax.gov.in', description: 'TDS return filing requirement and processing of TDS statements' }
+  ]
+
+FILE: lib/guides/pages/tds-194c-194j-demand.ts
+- seoTitle: 'TDS 194C vs 194J Demand Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'A 194C vs 194J TDS demand arises when the department classifies your payment differently. The rate difference (1-2 percent vs 10 percent) creates large demand amounts. Here is how to respond.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 01 and 02:
+  heading: 'HOW TO DETERMINE THE CORRECT SECTION FOR YOUR PAYMENT'
+  body: 'The correct section depends on the nature of the service, not what the vendor calls themselves or what the contract says.\n\nAsk these questions about each payment:\n\nDoes it involve application of mind, skill, or expertise by a professional or technical expert? If yes, it is likely 194J.\n\nIs it primarily a labour or material contract with a defined output? If yes, it is likely 194C.\n\nIs the service defined by a deliverable (like a software product) or by a process (like IT consulting)? Deliverable-based contracts lean 194C, process-based lean 194J.\n\nFor recurring large payments, get an advance ruling from the department to avoid uncertainty.'
+- Add FAQ: q: 'We have been paying the same vendor under 194C for 3 years. Now we got a demand for all 3 years under 194J. What are our options?', a: 'First verify whether 194J actually applies based on the nature of the service. If it does, pay the shortfall with interest. If you genuinely believe 194C is correct, respond with a detailed legal argument and documentation. For a 3-year demand, the interest alone can be significant, so a professional reply is worth the cost.'
+- Add sources:
+  [
+    { name: 'Income Tax Act, 1961 (Sections 194C and 194J)', url: 'https://www.incometax.gov.in', description: 'TDS on contractor payments and professional or technical services' },
+    { name: 'CBDT Circular No. 715', url: 'https://incometaxindia.gov.in', description: 'CBDT guidance on distinguishing technical and professional services for TDS' }
+  ]
+
+────────────────────────
+ROC NOTICES (23-24)
+────────────────────────
+
+FILE: lib/guides/pages/roc-annual-filing-default-notice.ts
+- seoTitle: 'ROC Annual Filing Default Notice: How to Respond (2025) | Ollvy'
+- seoDescription: 'An ROC default notice means your company has not filed AOC-4 or MGT-7 on time. Penalties of Rs. 100 to 200 per day apply with no cap. Directors risk disqualification after 3 years of default.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 03 and 04:
+  heading: 'CALCULATING THE EXACT PENALTY BEFORE FILING'
+  body: 'Before filing overdue returns, calculate the exact additional fee so you are not surprised. The MCA portal calculates fees automatically based on delay, but you can estimate it yourself.\n\nFor each form: count the number of days from the due date to today. Multiply by Rs. 100 or Rs. 200 depending on your company category. Add the standard filing fee.\n\nFor a company that has defaulted for 2 years on both AOC-4 and MGT-7, the additional fees alone can exceed Rs. 2 to 3 lakh. Get this number from your CS before committing to the filing so you can arrange the funds.'
+- Add FAQ: q: 'The company has been struck off by ROC. Can we revive it?', a: 'Yes. A struck-off company can be revived by filing an application to the National Company Law Tribunal (NCLT) within 20 years of strike-off. The process requires filing all pending returns and paying all dues. For recently struck-off companies (within 3 years), the ROC itself can restore the company.'
+- Add sources:
+  [
+    { name: 'Companies Act, 2013 (Sections 92, 129, 137)', url: 'https://www.mca.gov.in', description: 'Annual return and financial statement filing requirements for companies' },
+    { name: 'Companies Act, 2013 (Section 164(2))', url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/acts.html', description: 'Director disqualification for companies with continuous filing defaults' }
+  ]
+
+FILE: lib/guides/pages/dir-3-kyc-din-deactivation.ts
+- seoTitle: 'DIR-3 KYC Not Filed: DIN Deactivation Notice 2025 | Ollvy'
+- seoDescription: 'Your DIN has been deactivated due to non-filing of DIR-3 KYC. You cannot sign any company documents or file MCA forms until it is restored. File with Rs. 5,000 late fee to reactivate.'
+- Remove all em dashes from all body text
+- Add new section between existing sections 04 and 05 (after the KYC-Web vs eForm section):
+  heading: 'THE CASCADING EFFECT OF A DEACTIVATED DIN'
+  body: 'A deactivated DIN does not just affect you. If you are a director in multiple companies, each company is affected.\n\nFor companies where you are the sole director, annual filings become impossible until your DIN is restored. This means those companies begin accumulating ROC filing defaults (Rs. 100 to 200 per day per form) on top of your existing DIN issue.\n\nFor companies where there are multiple directors, the other directors can continue filing. But your deactivated DIN still needs to be restored to remain on the MCA records as an active director.\n\nRestore the DIN and file all company annual returns together to avoid a larger penalty accumulation.'
+- Add FAQ: q: 'My Aadhaar mobile number is different from what is registered with MCA. How do I file KYC-Web?', a: 'You cannot use KYC-Web if your registered mobile has changed. You need to file the full DIR-3 KYC eForm instead, updating your mobile number in the process. This requires a CA or CS digital signature.'
+- Add sources:
+  [
+    { name: 'Companies (Appointment and Qualification of Directors) Rules, 2014 (Rule 12A and 12B)', url: 'https://www.mca.gov.in', description: 'DIR-3 KYC annual filing requirement and late fee of Rs. 5,000' },
+    { name: 'MCA Portal', url: 'https://www.mca.gov.in/MinistryV2/din.html', description: 'Official portal for DIR-3 KYC filing and DIN status verification' }
+  ]
+
+────────────────────────
+FINAL VERIFICATION
+────────────────────────
+
+After all 24 files are updated:
+
+1. Run `tsc --noEmit`
+2. Check 3 notice pages in the browser: one GST, one Income Tax, one ROC
+3. Confirm ToolLastReviewed renders at the bottom with Sources and History tabs
+4. Confirm no em dashes appear in any section body text
+5. Confirm new sections appear in the middle of each page, not at top or bottom

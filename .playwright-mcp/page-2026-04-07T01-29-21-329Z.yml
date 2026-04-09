@@ -1,0 +1,682 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - link "Ollvy":
+                - /url: /
+              - generic: "|"
+              - generic: Trademark
+            - tablist:
+              - tab "Process" [selected]
+              - tab "What's Included"
+              - tab "Why Ollvy"
+              - tab "Risks"
+              - tab "Reviews"
+              - tab "FAQs"
+      - main [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - heading "Trademark Registration" [level=1] [ref=e41]
+            - paragraph [ref=e42]: Protect your brand name. 10-year protection. Nationwide.
+            - generic [ref=e43]:
+              - paragraph [ref=e45]:
+                - img [ref=e46]
+                - text: Guaranteed by September 2027
+              - link "Check Eligibility & Price" [ref=e49] [cursor=pointer]:
+                - /url: /checkout/242b83a8-1429-4966-9ad6-300ffe571cd3/eligibility
+            - generic [ref=e50]:
+              - generic [ref=e51]: For Businesses wanting brand protection
+              - generic [ref=e52]: Type One-time
+              - generic [ref=e53]: Turnaround 7 days
+          - tablist [ref=e54]:
+            - generic [ref=e56]:
+              - tab "Process" [selected] [ref=e57] [cursor=pointer]
+              - tab "What's Included" [ref=e58] [cursor=pointer]
+              - tab "Why Ollvy" [ref=e59] [cursor=pointer]
+              - tab "Risks" [ref=e60] [cursor=pointer]
+              - tab "Reviews" [ref=e61] [cursor=pointer]
+              - tab "FAQs" [ref=e62] [cursor=pointer]
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - paragraph [ref=e68]: THE PROCESS
+              - heading "How Ollvy registers your Trademark" [level=2] [ref=e69]
+              - generic [ref=e70]:
+                - generic [ref=e73]:
+                  - button "Step 1" [ref=e74] [cursor=pointer]
+                  - button "Step 2" [ref=e75] [cursor=pointer]
+                  - button "Step 3" [ref=e76] [cursor=pointer]
+                  - button "Step 4" [ref=e77] [cursor=pointer]
+                  - button "Step 5" [ref=e78] [cursor=pointer]
+                - generic [ref=e79]:
+                  - img [ref=e81]
+                  - generic [ref=e84]:
+                    - heading "Tell us your brand name and category" [level=3] [ref=e85]
+                    - generic [ref=e86]: Day 0
+                  - paragraph [ref=e87]: Trademark attorney assigned within 4 hours. You provide the mark (word, logo, or both), the classes you want to protect, and your business details. Preliminary search started immediately.
+                  - paragraph [ref=e90]: Attorney assigned, search started
+                - generic [ref=e91]:
+                  - button "Previous Step" [disabled]:
+                    - img
+                    - text: Previous Step
+                  - button "Next Step" [ref=e92] [cursor=pointer]:
+                    - text: Next Step
+                    - img
+              - generic [ref=e93]:
+                - button "What is Trademark Registration?" [ref=e95] [cursor=pointer]:
+                  - text: What is Trademark Registration?
+                  - img [ref=e96]
+                - generic [ref=e98]:
+                  - generic [ref=e100]:
+                    - button [ref=e101] [cursor=pointer]: What it is
+                    - button [ref=e102] [cursor=pointer]: Why you need it
+                    - button [ref=e103] [cursor=pointer]: What happens without it
+                  - paragraph [ref=e106]: Trademark registration gives you exclusive rights to use your brand name, logo, or tagline for a specific category of goods or services across India for 10 years (renewable indefinitely). Registered under the Trade Marks Act, 1999, it lets you use the R symbol and take legal action against infringers.
+                  - button [ref=e108] [cursor=pointer]:
+                    - text: Next Step
+                    - img
+            - generic [ref=e109]:
+              - paragraph [ref=e110]: WHAT YOU GET
+              - heading "Everything included" [level=2] [ref=e111]
+              - paragraph [ref=e112]: What your CA handles on your behalf. Nothing hidden.
+              - generic [ref=e113]:
+                - generic [ref=e116]:
+                  - img [ref=e118]
+                  - generic [ref=e120]:
+                    - heading "Trademark search before filing" [level=3] [ref=e121]
+                    - paragraph [ref=e122]: Attorney searches the Registry before we spend your government fee. If your exact mark is already registered in your class, we tell you upfront.
+                    - generic [ref=e123]:
+                      - generic [ref=e124]:
+                        - paragraph [ref=e125]: Without Ollvy
+                        - paragraph [ref=e126]: File without searching, wait months, get rejected
+                      - generic [ref=e127]:
+                        - paragraph [ref=e128]: With Ollvy
+                        - paragraph [ref=e129]: Search first, modify if needed, then file
+                - generic [ref=e132]:
+                  - img [ref=e134]
+                  - generic [ref=e136]:
+                    - heading "Class selection guidance" [level=3] [ref=e137]
+                    - paragraph [ref=e138]: Trademarks are registered per class (45 classes under the Nice Classification). Attorney recommends only the classes you actually need - we do not push unnecessary filings.
+                - generic [ref=e141]:
+                  - img [ref=e143]
+                  - generic [ref=e145]:
+                    - heading "Examiner objection response included" [level=3] [ref=e146]
+                    - paragraph [ref=e147]: If the Trademark Examiner raises objections (common for descriptive marks), your attorney responds. Included in the service - not a separate charge.
+                    - generic [ref=e148]:
+                      - generic [ref=e149]:
+                        - paragraph [ref=e150]: Without Ollvy
+                        - paragraph [ref=e151]: Objection raised, you pay extra to respond
+                      - generic [ref=e152]:
+                        - paragraph [ref=e153]: With Ollvy
+                        - paragraph [ref=e154]: Objection response included in service
+                - generic [ref=e157]:
+                  - img [ref=e159]
+                  - generic [ref=e161]:
+                    - heading "Renewal reminder" [level=3] [ref=e162]
+                    - paragraph [ref=e163]: Trademark expires 10 years from filing date. Renewal reminder added to your compliance calendar 6 months before expiry.
+            - generic [ref=e164]:
+              - paragraph [ref=e165]: GOVERNMENT FEES
+              - heading "Official fees paid to the government" [level=2] [ref=e166]
+              - paragraph [ref=e167]: These fees are collected by Ollvy and remitted in full to the relevant government authority.
+              - table "Government Fees - Trademark Registration in India (2025)" [ref=e169]:
+                - caption [ref=e170]: Government Fees - Trademark Registration in India (2025)
+                - rowgroup [ref=e171]:
+                  - row "Applicant Type New Application (per class) Renewal (per class) Notes" [ref=e172]:
+                    - columnheader "Applicant Type" [ref=e173]
+                    - columnheader "New Application (per class)" [ref=e174]
+                    - columnheader "Renewal (per class)" [ref=e175]
+                    - columnheader "Notes" [ref=e176]
+                - rowgroup [ref=e177]:
+                  - row "Individual / Startup / Small Entity Rs. 4,500 Rs. 9,000 As defined under Trademark Rules 2017; 10% reduction for e-filing" [ref=e178]:
+                    - cell "Individual / Startup / Small Entity" [ref=e179]
+                    - cell "Rs. 4,500" [ref=e180]
+                    - cell "Rs. 9,000" [ref=e181]
+                    - cell "As defined under Trademark Rules 2017; 10% reduction for e-filing" [ref=e182]
+                  - row "Company, LLP, or other entity Rs. 9,000 Rs. 10,000 Per class; 10% reduction for e-filing" [ref=e183]:
+                    - cell "Company, LLP, or other entity" [ref=e184]
+                    - cell "Rs. 9,000" [ref=e185]
+                    - cell "Rs. 10,000" [ref=e186]
+                    - cell "Per class; 10% reduction for e-filing" [ref=e187]
+                  - row "Expedited examination (optional) Rs. 20,000 (small) / Rs. 40,000 (others) N/A Faster review, not faster registration" [ref=e188]:
+                    - cell "Expedited examination (optional)" [ref=e189]
+                    - cell "Rs. 20,000 (small) / Rs. 40,000 (others)" [ref=e190]
+                    - cell "N/A" [ref=e191]
+                    - cell "Faster review, not faster registration" [ref=e192]
+            - generic [ref=e193]:
+              - paragraph [ref=e194]: DOCUMENTS REQUIRED
+              - heading "Documents you will need to provide" [level=2] [ref=e195]
+              - paragraph [ref=e196]: Prepare these documents before starting the process.
+              - table "Documents Required - Trademark Registration" [ref=e198]:
+                - caption [ref=e199]: Documents Required - Trademark Registration
+                - rowgroup [ref=e200]:
+                  - row "Document Required For Notes" [ref=e201]:
+                    - columnheader "Document" [ref=e202]
+                    - columnheader "Required For" [ref=e203]
+                    - columnheader "Notes" [ref=e204]
+                - rowgroup [ref=e205]:
+                  - row "PAN card All applicants Identity and address verification" [ref=e206]:
+                    - cell "PAN card" [ref=e207]
+                    - cell "All applicants" [ref=e208]
+                    - cell "Identity and address verification" [ref=e209]
+                  - row "Aadhaar or address proof Individual applicants Any government-issued address proof" [ref=e210]:
+                    - cell "Aadhaar or address proof" [ref=e211]
+                    - cell "Individual applicants" [ref=e212]
+                    - cell "Any government-issued address proof" [ref=e213]
+                  - row "Logo file Logo trademark applications JPG format; minimum 8cm x 8cm; black mark on white background" [ref=e214]:
+                    - cell "Logo file" [ref=e215]
+                    - cell "Logo trademark applications" [ref=e216]
+                    - cell "JPG format; minimum 8cm x 8cm; black mark on white background" [ref=e217]
+                  - row "Certificate of Incorporation Company or LLP applicants Proof of entity registration" [ref=e218]:
+                    - cell "Certificate of Incorporation" [ref=e219]
+                    - cell "Company or LLP applicants" [ref=e220]
+                    - cell "Proof of entity registration" [ref=e221]
+                  - row "Board resolution or POA Company or LLP applicants Authorising the filing" [ref=e222]:
+                    - cell "Board resolution or POA" [ref=e223]
+                    - cell "Company or LLP applicants" [ref=e224]
+                    - cell "Authorising the filing" [ref=e225]
+                  - row "MSME / Startup certificate For reduced govt fee Udyam certificate or DPIIT recognition certificate" [ref=e226]:
+                    - cell "MSME / Startup certificate" [ref=e227]
+                    - cell "For reduced govt fee" [ref=e228]
+                    - cell "Udyam certificate or DPIIT recognition certificate" [ref=e229]
+                  - row "User affidavit If claiming prior use date States date of first use in commerce in India" [ref=e230]:
+                    - cell "User affidavit" [ref=e231]
+                    - cell "If claiming prior use date" [ref=e232]
+                    - cell "States date of first use in commerce in India" [ref=e233]
+              - link "See full document checklist" [ref=e235] [cursor=pointer]:
+                - /url: /tools/documents/trademark
+                - text: See full document checklist
+                - img [ref=e236]
+            - generic [ref=e238]:
+              - generic [ref=e240]: Ollvy Guided
+              - heading "We file correctly. Not just on time." [level=2] [ref=e241]:
+                - text: We file correctly.
+                - text: Not just on time.
+              - paragraph [ref=e242]: Most CAs submit what you give them and hope for the best. Ollvy reviews your documents before filing - not after a notice arrives.
+              - generic [ref=e243]:
+                - generic [ref=e244]:
+                  - paragraph [ref=e245]: Others
+                  - paragraph [ref=e246]: Take your documents as-is. Submit the application. If there's a query or rejection, it's your problem.
+                - generic [ref=e247]:
+                  - paragraph [ref=e248]: Ollvy
+                  - paragraph [ref=e249]: Review every document before filing. Catch mismatches, expired items, and format issues. Then file.
+              - generic [ref=e250]:
+                - heading "We catch compliance gaps before regulators do." [level=3] [ref=e251]
+                - generic [ref=e252]:
+                  - generic [ref=e253]:
+                    - generic [ref=e255]: "1"
+                    - paragraph [ref=e256]: we review
+                    - paragraph [ref=e257]: your documents
+                    - paragraph [ref=e258]: Every upload checked before anything is filed
+                  - generic [ref=e259]:
+                    - generic [ref=e261]: "2"
+                    - paragraph [ref=e262]: we flag
+                    - paragraph [ref=e263]: the risks
+                    - paragraph [ref=e264]: Issues identified - expiry dates, mismatches, format errors
+                  - generic [ref=e265]:
+                    - generic [ref=e267]: "3"
+                    - paragraph [ref=e268]: we fix
+                    - paragraph [ref=e269]: if possible
+                    - paragraph [ref=e270]: Fixable issues resolved before filing, not after
+                  - generic [ref=e271]:
+                    - generic [ref=e273]: "4"
+                    - paragraph [ref=e274]: we file
+                    - paragraph [ref=e275]: correctly
+                    - paragraph [ref=e276]: Clean submission - lower chance of officer query
+            - generic [ref=e278]:
+              - heading "We handle the messy situations too." [level=2] [ref=e279]
+              - paragraph [ref=e280]: The situations most CAs decline or overcharge for.
+              - generic [ref=e281]:
+                - generic [ref=e282]:
+                  - generic [ref=e283]: F
+                  - generic [ref=e284]:
+                    - paragraph [ref=e285]: First trademark
+                    - paragraph [ref=e286]: Never registered before. We explain classes, search, and the full process.
+                - generic [ref=e287]:
+                  - generic [ref=e288]: L
+                  - generic [ref=e289]:
+                    - paragraph [ref=e290]: Logo and word mark
+                    - paragraph [ref=e291]: You want to protect both. Two separate applications needed. We handle both.
+                - generic [ref=e292]:
+                  - generic [ref=e293]: M
+                  - generic [ref=e294]:
+                    - paragraph [ref=e295]: Multiple classes
+                    - paragraph [ref=e296]: Tech, retail, and services. Each class is a separate application and a separate government fee.
+                - generic [ref=e297]:
+                  - generic [ref=e298]: A
+                  - generic [ref=e299]:
+                    - paragraph [ref=e300]: Already using the name
+                    - paragraph [ref=e301]: You have been using the brand for years without registration. File now before someone else does.
+            - generic [ref=e303]:
+              - heading "What could go wrong with Trademark" [level=2] [ref=e304]
+              - paragraph [ref=e305]: These are the risks. We handle most of them, but you should know what they are.
+              - generic [ref=e306]:
+                - generic [ref=e307]:
+                  - img [ref=e309]
+                  - generic [ref=e312]:
+                    - heading "Similar mark already exists" [level=3] [ref=e313]
+                    - paragraph [ref=e314]: If a similar mark is already registered in your class, the Examiner will reject your application. Our search catches most conflicts, but pending applications that are not yet published cannot be seen. If rejected, we help you appeal or modify.
+                - generic [ref=e315]:
+                  - img [ref=e317]
+                  - generic [ref=e320]:
+                    - heading "Government processing takes 12-18 months" [level=3] [ref=e321]
+                    - paragraph [ref=e322]: The 7-day timeline is for filing. Examination, publication, and certificate issuance are government-side. We track and update you but cannot speed up the Registry.
+                - generic [ref=e323]:
+                  - img [ref=e325]
+                  - generic [ref=e327]:
+                    - heading "Opposition during publication" [level=3] [ref=e328]
+                    - paragraph [ref=e329]: After examination, your mark is published for 4 months. Anyone can file an opposition. If opposed, it becomes a formal legal proceeding. Opposition response is a separate service and is rare - happens in under 5% of cases.
+            - generic [ref=e330]:
+              - paragraph [ref=e331]: NEXT STEPS
+              - heading "What Trademark unlocks" [level=2] [ref=e332]
+              - paragraph [ref=e333]: Services that become available or mandatory after completion.
+              - generic [ref=e334]:
+                - generic [ref=e335]:
+                  - generic [ref=e336]:
+                    - generic [ref=e337]:
+                      - generic [ref=e338]:
+                        - heading "Trademark Renewal" [level=4] [ref=e339]
+                        - generic [ref=e340]: Required
+                      - paragraph [ref=e341]: Due every 10 years.
+                    - generic [ref=e342]: ₹4,999 + govt fee
+                  - link "Learn more" [ref=e343] [cursor=pointer]:
+                    - /url: /services/trademark-renewal
+                    - text: Learn more
+                    - img [ref=e344]
+                - generic [ref=e346]:
+                  - generic [ref=e347]:
+                    - generic [ref=e348]:
+                      - heading "Copyright Registration" [level=4] [ref=e350]
+                      - paragraph [ref=e351]: Protect creative works - code, designs, content.
+                    - generic [ref=e352]: ₹3,499
+                  - link "Learn more" [ref=e353] [cursor=pointer]:
+                    - /url: /services/copyright-registration
+                    - text: Learn more
+                    - img [ref=e354]
+            - generic [ref=e356]:
+              - paragraph [ref=e357]: CUSTOMER REVIEWS
+              - heading "What customers say about Trademark" [level=2] [ref=e358]
+              - generic [ref=e359]:
+                - generic [ref=e360]: ✓ Search before filing
+                - generic [ref=e361]: ✓ Attorney was clear
+                - generic [ref=e362]: ✓ Application in 5 days
+                - generic [ref=e363]: ✓ Certificate received
+              - generic [ref=e364]:
+                - generic [ref=e365]:
+                  - generic [ref=e366]:
+                    - img [ref=e367]
+                    - img [ref=e369]
+                    - img [ref=e371]
+                    - img [ref=e373]
+                    - img [ref=e375]
+                    - generic [ref=e377]: March 2025
+                  - paragraph [ref=e378]: "\"Very smooth process. The CS assigned was responsive and explained every step. Got my certificate within the promised timeframe.\""
+                  - paragraph [ref=e379]: "- Verified customer"
+                - generic [ref=e380]:
+                  - generic [ref=e381]:
+                    - img [ref=e382]
+                    - img [ref=e384]
+                    - img [ref=e386]
+                    - img [ref=e388]
+                    - img [ref=e390]
+                    - generic [ref=e392]: February 2025
+                  - paragraph [ref=e393]: "\"No surprises on fees, everything was explained upfront. The dashboard made tracking easy.\""
+                  - paragraph [ref=e394]: "- Verified customer"
+            - generic [ref=e395]:
+              - paragraph [ref=e396]: COMMON QUESTIONS
+              - heading "Frequently asked questions" [level=2] [ref=e397]
+              - generic [ref=e398]:
+                - heading "What can I trademark?" [level=3] [ref=e400]:
+                  - button "What can I trademark?" [ref=e401] [cursor=pointer]:
+                    - text: What can I trademark?
+                    - img [ref=e402]
+                - heading "How long does protection last?" [level=3] [ref=e405]:
+                  - button "How long does protection last?" [ref=e406] [cursor=pointer]:
+                    - text: How long does protection last?
+                    - img [ref=e407]
+                - heading "Why does registration take 12-18 months?" [level=3] [ref=e410]:
+                  - button "Why does registration take 12-18 months?" [ref=e411] [cursor=pointer]:
+                    - text: Why does registration take 12-18 months?
+                    - img [ref=e412]
+                - heading "Can I use the R symbol after filing?" [level=3] [ref=e415]:
+                  - button "Can I use the R symbol after filing?" [ref=e416] [cursor=pointer]:
+                    - text: Can I use the R symbol after filing?
+                    - img [ref=e417]
+                - heading "What documents do I need?" [level=3] [ref=e420]:
+                  - button "What documents do I need?" [ref=e421] [cursor=pointer]:
+                    - text: What documents do I need?
+                    - img [ref=e422]
+                - heading "What if I need multiple classes?" [level=3] [ref=e425]:
+                  - button "What if I need multiple classes?" [ref=e426] [cursor=pointer]:
+                    - text: What if I need multiple classes?
+                    - img [ref=e427]
+            - generic [ref=e430]:
+              - heading "Services you'll need next" [level=2] [ref=e431]
+              - paragraph [ref=e432]: These services often go with what you're booking.
+              - link "Pvt Ltd Your company, incorporated. Separate legal entity, limited liability, ready for investment. ₹13,998 By 28 Apr" [ref=e434] [cursor=pointer]:
+                - /url: /services/pvt-ltd-incorporation
+                - generic [ref=e435]:
+                  - generic [ref=e436]:
+                    - generic [ref=e437]:
+                      - heading "Pvt Ltd" [level=3] [ref=e438]
+                      - paragraph [ref=e439]: Your company, incorporated. Separate legal entity, limited liability, ready for investment.
+                    - img [ref=e440]
+                  - generic [ref=e442]:
+                    - generic [ref=e443]: ₹13,998
+                    - generic [ref=e444]:
+                      - img [ref=e445]
+                      - text: By 28 Apr
+            - generic [ref=e448]:
+              - heading "How we reviewed this page" [level=3] [ref=e449]
+              - paragraph [ref=e450]: The penalty amounts, deadlines, and regulatory requirements on this page are sourced directly from official government portals. We do not use secondary sources. When regulations change, we update the page.
+              - generic [ref=e451]:
+                - button "sources" [ref=e452] [cursor=pointer]:
+                  - img [ref=e453]
+                  - text: sources
+                - button "history" [ref=e456] [cursor=pointer]:
+                  - img [ref=e457]
+                  - text: history
+              - list [ref=e461]:
+                - listitem [ref=e462]:
+                  - generic [ref=e464]:
+                    - link "IP India" [ref=e465] [cursor=pointer]:
+                      - /url: https://ipindia.gov.in
+                      - text: IP India
+                      - img [ref=e466]
+                    - paragraph [ref=e470]: Official Trademark Registry and search portal
+                - listitem [ref=e471]:
+                  - generic [ref=e473]:
+                    - link "Trade Marks Act, 1999" [ref=e474] [cursor=pointer]:
+                      - /url: https://www.indiacode.nic.in/bitstream/123456789/15427/1/the_trade_marks_act,_1999.pdf
+                      - text: Trade Marks Act, 1999
+                      - img [ref=e475]
+                    - paragraph [ref=e479]: "Section 18: Application. Section 25: Duration."
+          - complementary [ref=e480]:
+            - generic [ref=e481]:
+              - generic [ref=e483]:
+                - img [ref=e484]
+                - paragraph [ref=e487]: Guaranteed by September 2027
+              - generic [ref=e488]:
+                - paragraph [ref=e489]: Starting from
+                - paragraph [ref=e490]: ₹7,499
+              - generic [ref=e491]:
+                - generic [ref=e492]:
+                  - generic [ref=e493]:
+                    - img [ref=e495]
+                    - generic [ref=e498]:
+                      - paragraph [ref=e499]: Trademark
+                      - paragraph [ref=e500]: Service fee
+                  - generic [ref=e501]: ₹7,499
+                - generic [ref=e502]:
+                  - generic [ref=e503]: Total Amount
+                  - generic [ref=e504]: ₹7,499
+              - link "Check Eligibility & Price" [ref=e505] [cursor=pointer]:
+                - /url: /checkout/242b83a8-1429-4966-9ad6-300ffe571cd3/eligibility
+              - paragraph [ref=e506]: GST-compliant invoice generated at checkout
+              - generic [ref=e507]:
+                - paragraph [ref=e508]: Questions about documents, process, or price?
+                - generic [ref=e509]:
+                  - link "WhatsApp" [ref=e510] [cursor=pointer]:
+                    - /url: https://wa.me/919217065577?text=Hi%2C%20I%20have%20a%20question%20about%20Trademark%20Registration
+                    - img
+                    - text: WhatsApp
+                  - link "Call" [ref=e511] [cursor=pointer]:
+                    - /url: tel:+919217065577
+                    - img
+                    - text: Call
+        - generic [ref=e513]:
+          - heading "Get Trademark done now" [level=2] [ref=e514]
+          - paragraph [ref=e515]: Fixed price. Verified CA. Done within 7 working days.
+          - link "Check Eligibility & Price" [ref=e516] [cursor=pointer]:
+            - /url: /checkout/242b83a8-1429-4966-9ad6-300ffe571cd3/eligibility
+    - contentinfo [ref=e517]:
+      - generic [ref=e518]:
+        - generic [ref=e519]:
+          - generic [ref=e520]:
+            - link "Ollvy" [ref=e521] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e522]: You run your business. We handle the rest.
+            - generic [ref=e523]:
+              - link "LinkedIn" [ref=e524] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e525]
+              - link "Twitter" [ref=e529] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e530]
+          - generic [ref=e532]:
+            - link "Calculators" [ref=e533] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e534]:
+              - listitem [ref=e535]:
+                - link "GST Late Filing" [ref=e536] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e537]:
+                - link "GST Demand Notice" [ref=e538] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e539]:
+                - link "ITR Late Filing" [ref=e540] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e541]:
+                - link "TDS Late Filing" [ref=e542] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e543]:
+                - link "MCA Annual Filing" [ref=e544] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e545]:
+                - link "Director KYC" [ref=e546] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e547]:
+                - link "PF/ESIC Penalty" [ref=e548] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e549]:
+                - link "Professional Tax" [ref=e550] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e551]:
+                - link "Shops & Establishment" [ref=e552] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e553]:
+                - link "Startup DPIIT" [ref=e554] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e555]:
+            - link "Checklists" [ref=e556] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e557]:
+              - listitem [ref=e558]:
+                - link "Pvt Ltd Documents" [ref=e559] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e560]:
+                - link "LLP Documents" [ref=e561] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e562]:
+                - link "Partnership Documents" [ref=e563] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e564]:
+                - link "Sole Proprietor" [ref=e565] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e566]:
+                - link "GST Registration" [ref=e567] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e568]:
+                - link "Individual ITR" [ref=e569] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e570]:
+                - link "Business ITR" [ref=e571] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e572]:
+                - link "Trademark" [ref=e573] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e574]:
+            - link "Services" [ref=e575] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e576]:
+              - listitem [ref=e577]:
+                - link "Pvt Ltd Registration" [ref=e578] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e579]:
+                - link "LLP Registration" [ref=e580] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e581]:
+                - link "GST Registration" [ref=e582] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e583]:
+                - link "GST Monthly Filing" [ref=e584] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e585]:
+                - link "GST Cancellation" [ref=e586] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e587]:
+                - link "GST Revocation" [ref=e588] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e589]:
+                - link "Trademark Registration" [ref=e590] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e591]:
+                - link "MSME Registration" [ref=e592] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e593]:
+                - link "Cloud Kitchen Setup" [ref=e594] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e595]:
+                - link "Business ITR Filing" [ref=e596] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e597]:
+                - link "Annual Compliance" [ref=e598] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e599]:
+                - link "TDS Compliance" [ref=e600] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e601]:
+                - link "Company Name Change" [ref=e602] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e603]:
+                - link "DIN Reactivation" [ref=e604] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e605]:
+                - link "All Services" [ref=e606] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e607]:
+            - paragraph [ref=e608]: Deadlines
+            - list [ref=e609]:
+              - listitem [ref=e610]:
+                - link "Director KYC 2026" [ref=e611] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e612]:
+                - link "Business ITR 2026" [ref=e613] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e614]:
+                - link "GSTR-9 2026" [ref=e615] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e616]:
+                - link "TDS Return Q1 2027" [ref=e617] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e618]:
+                - link "Business ITR 2027" [ref=e619] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e620]:
+                - link "GSTR-9 2027" [ref=e621] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e622]:
+            - link "Guides" [ref=e623] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e624]:
+              - listitem [ref=e625]:
+                - link "Do I Need GST?" [ref=e626] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e627]:
+                - link "Pvt Ltd vs LLP" [ref=e628] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e629]:
+                - link "Which ITR Form?" [ref=e630] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e631]:
+                - link "DPIIT Recognition" [ref=e632] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e633]:
+                - link "All Guides" [ref=e634] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e635]:
+            - link "Notice Help" [ref=e636] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e637]:
+              - listitem [ref=e638]:
+                - link "GST DRC-01 Notice" [ref=e639] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e640]:
+                - link "GST ASMT-10 Notice" [ref=e641] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e642]:
+                - link "IT 143(1) Intimation" [ref=e643] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e644]:
+                - link "IT 148/148A Notice" [ref=e645] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e646]:
+                - link "TDS Short Deduction" [ref=e647] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e648]:
+            - paragraph [ref=e649]: Legal
+            - list [ref=e650]:
+              - listitem [ref=e651]:
+                - link "Privacy Policy" [ref=e652] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e653]:
+                - link "Terms of Service" [ref=e654] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e655]:
+                - link "Cancellation Policy" [ref=e656] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e657]:
+                - link "Refund Policy" [ref=e658] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e659]:
+                - link "Contact" [ref=e660] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e662]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e668] [cursor=pointer]:
+    - img [ref=e669]
+  - alert [ref=e672]

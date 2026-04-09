@@ -1,0 +1,615 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - link "Ollvy" [ref=e6] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=e7]:
+            - link "Services" [ref=e8] [cursor=pointer]:
+              - /url: /services
+            - link "Guides" [ref=e9] [cursor=pointer]:
+              - /url: /guides
+            - button "Tools" [ref=e10] [cursor=pointer]:
+              - generic [ref=e11]: Tools
+              - img [ref=e12]
+        - generic [ref=e14]:
+          - button "Toggle theme" [ref=e15] [cursor=pointer]:
+            - img [ref=e16]
+            - generic [ref=e18]: Toggle theme
+          - button "Search Services ⌘ K" [ref=e19] [cursor=pointer]:
+            - img [ref=e20]
+            - generic [ref=e23]: Search Services
+            - generic [ref=e24]:
+              - generic [ref=e25]: ⌘
+              - text: K
+          - button "Sign in" [ref=e26] [cursor=pointer]
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e39]:
+          - heading "Business Compliance Guides" [level=1] [ref=e40]
+          - paragraph [ref=e41]: Free, detailed guides to Indian business compliance. Each guide includes interactive tools, exact costs, and step-by-step processes. No filler. Sourced from official government portals.
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Company Registration" [level=2] [ref=e44]
+            - 'link "Private Limited Company vs LLP: Which Should You Choose? Compare Private Limited Company and LLP in India. Understand compliance costs, tax implications, liability protection, and which is better for your business. Last reviewed: April 2026Includes decision tool" [ref=e46] [cursor=pointer]':
+              - /url: /guides/pvt-ltd-vs-llp
+              - generic [ref=e47]:
+                - 'heading "Private Limited Company vs LLP: Which Should You Choose?" [level=3] [ref=e48]'
+                - paragraph [ref=e49]: Compare Private Limited Company and LLP in India. Understand compliance costs, tax implications, liability protection, and which is better for your business.
+                - paragraph [ref=e50]:
+                  - text: "Last reviewed: April 2026"
+                  - generic [ref=e51]: Includes decision tool
+              - img [ref=e52]
+          - generic [ref=e54]:
+            - heading "Startups" [level=2] [ref=e55]
+            - 'link "Should I Get DPIIT Startup Recognition? Decide if DPIIT Startup Recognition is right for your company. Covers eligibility, angel tax exemption, 3-year tax holiday, patent benefits, and how to apply. Last reviewed: April 2026Includes eligibility checker" [ref=e57] [cursor=pointer]':
+              - /url: /guides/should-i-get-dpiit-startup-recognition
+              - generic [ref=e58]:
+                - heading "Should I Get DPIIT Startup Recognition?" [level=3] [ref=e59]
+                - paragraph [ref=e60]: Decide if DPIIT Startup Recognition is right for your company. Covers eligibility, angel tax exemption, 3-year tax holiday, patent benefits, and how to apply.
+                - paragraph [ref=e61]:
+                  - text: "Last reviewed: April 2026"
+                  - generic [ref=e62]: Includes eligibility checker
+              - img [ref=e63]
+          - generic [ref=e65]:
+            - heading "Licensing" [level=2] [ref=e66]
+            - 'link "Do I Need an FSSAI Licence? Find out if FSSAI registration or licence is mandatory for your food business in India. Covers restaurants, cloud kitchens, home cooks, manufacturers, and importers. Last reviewed: April 2026Includes eligibility checker" [ref=e68] [cursor=pointer]':
+              - /url: /guides/do-i-need-fssai-license
+              - generic [ref=e69]:
+                - heading "Do I Need an FSSAI Licence?" [level=3] [ref=e70]
+                - paragraph [ref=e71]: Find out if FSSAI registration or licence is mandatory for your food business in India. Covers restaurants, cloud kitchens, home cooks, manufacturers, and importers.
+                - paragraph [ref=e72]:
+                  - text: "Last reviewed: April 2026"
+                  - generic [ref=e73]: Includes eligibility checker
+              - img [ref=e74]
+          - generic [ref=e76]:
+            - heading "Tax" [level=2] [ref=e77]
+            - generic [ref=e78]:
+              - 'link "Do I Need GST Registration? Find out if GST registration is mandatory for your business in India. Covers turnover thresholds, exemptions, interstate supply rules, and e-commerce. Last reviewed: April 2026Includes eligibility checker" [ref=e79] [cursor=pointer]':
+                - /url: /guides/do-i-need-gst-registration
+                - generic [ref=e80]:
+                  - heading "Do I Need GST Registration?" [level=3] [ref=e81]
+                  - paragraph [ref=e82]: Find out if GST registration is mandatory for your business in India. Covers turnover thresholds, exemptions, interstate supply rules, and e-commerce.
+                  - paragraph [ref=e83]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e84]: Includes eligibility checker
+                - img [ref=e85]
+              - 'link "Do I Need to File an Income Tax Return? Check if ITR filing is mandatory for you in India. Covers salaried, freelancers, business owners, and NRIs - with 2025-26 thresholds and exemptions. Last reviewed: April 2026Includes eligibility checker" [ref=e87] [cursor=pointer]':
+                - /url: /guides/do-i-need-to-file-itr
+                - generic [ref=e88]:
+                  - heading "Do I Need to File an Income Tax Return?" [level=3] [ref=e89]
+                  - paragraph [ref=e90]: Check if ITR filing is mandatory for you in India. Covers salaried, freelancers, business owners, and NRIs - with 2025-26 thresholds and exemptions.
+                  - paragraph [ref=e91]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e92]: Includes eligibility checker
+                - img [ref=e93]
+              - 'link "Do I Need Professional Tax Registration? Find out if Professional Tax applies to your business or profession in India. State-wise thresholds, who must register, and employer vs self-employed obligations. Last reviewed: April 2026Includes eligibility checker" [ref=e95] [cursor=pointer]':
+                - /url: /guides/do-i-need-professional-tax-registration
+                - generic [ref=e96]:
+                  - heading "Do I Need Professional Tax Registration?" [level=3] [ref=e97]
+                  - paragraph [ref=e98]: Find out if Professional Tax applies to your business or profession in India. State-wise thresholds, who must register, and employer vs self-employed obligations.
+                  - paragraph [ref=e99]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e100]: Includes eligibility checker
+                - img [ref=e101]
+              - 'link "Which ITR Form Should I Use? Find out which Income Tax Return form applies to you in India for FY 2024-25. ITR-1, ITR-2, ITR-3, ITR-4, ITR-5, ITR-6, ITR-7 - clear eligibility explained. Last reviewed: April 2026Includes decision tool" [ref=e103] [cursor=pointer]':
+                - /url: /guides/which-itr-form-should-i-use
+                - generic [ref=e104]:
+                  - heading "Which ITR Form Should I Use?" [level=3] [ref=e105]
+                  - paragraph [ref=e106]: Find out which Income Tax Return form applies to you in India for FY 2024-25. ITR-1, ITR-2, ITR-3, ITR-4, ITR-5, ITR-6, ITR-7 - clear eligibility explained.
+                  - paragraph [ref=e107]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e108]: Includes decision tool
+                - img [ref=e109]
+          - generic [ref=e111]:
+            - heading "Compliance" [level=2] [ref=e112]
+            - generic [ref=e113]:
+              - 'link "When Does PF Registration Become Mandatory? Find out when Provident Fund (EPFO) registration becomes mandatory for your business in India. Covers employee threshold, penalties, and voluntary registration. Last reviewed: April 2026Includes eligibility checker" [ref=e114] [cursor=pointer]':
+                - /url: /guides/when-does-pf-registration-become-mandatory
+                - generic [ref=e115]:
+                  - heading "When Does PF Registration Become Mandatory?" [level=3] [ref=e116]
+                  - paragraph [ref=e117]: Find out when Provident Fund (EPFO) registration becomes mandatory for your business in India. Covers employee threshold, penalties, and voluntary registration.
+                  - paragraph [ref=e118]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e119]: Includes eligibility checker
+                - img [ref=e120]
+              - 'link "When Does ESI Registration Become Mandatory? Understand when ESIC registration becomes mandatory for your business in India. Employee threshold, salary limit, covered industries, and non-compliance penalties. Last reviewed: April 2026Includes eligibility checker" [ref=e122] [cursor=pointer]':
+                - /url: /guides/when-does-esi-registration-become-mandatory
+                - generic [ref=e123]:
+                  - heading "When Does ESI Registration Become Mandatory?" [level=3] [ref=e124]
+                  - paragraph [ref=e125]: Understand when ESIC registration becomes mandatory for your business in India. Employee threshold, salary limit, covered industries, and non-compliance penalties.
+                  - paragraph [ref=e126]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e127]: Includes eligibility checker
+                - img [ref=e128]
+          - generic [ref=e130]:
+            - heading "Registration" [level=2] [ref=e131]
+            - generic [ref=e132]:
+              - 'link "Do I Need Trademark Registration? Find out if trademark registration makes sense for your brand in India. Understand protection, costs, enforcement, and when to prioritise it in 2025. Last reviewed: April 2026Includes eligibility checker" [ref=e133] [cursor=pointer]':
+                - /url: /guides/do-i-need-trademark-registration
+                - generic [ref=e134]:
+                  - heading "Do I Need Trademark Registration?" [level=3] [ref=e135]
+                  - paragraph [ref=e136]: Find out if trademark registration makes sense for your brand in India. Understand protection, costs, enforcement, and when to prioritise it in 2025.
+                  - paragraph [ref=e137]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e138]: Includes eligibility checker
+                - img [ref=e139]
+              - 'link "Do I Need Shop and Establishment Registration? Find out if your business needs Shop and Establishment registration in India. Covers shops, offices, restaurants, and home-based businesses - state-wise rules 2025. Last reviewed: April 2026Includes eligibility checker" [ref=e141] [cursor=pointer]':
+                - /url: /guides/do-i-need-shop-establishment-registration
+                - generic [ref=e142]:
+                  - heading "Do I Need Shop and Establishment Registration?" [level=3] [ref=e143]
+                  - paragraph [ref=e144]: Find out if your business needs Shop and Establishment registration in India. Covers shops, offices, restaurants, and home-based businesses - state-wise rules 2025.
+                  - paragraph [ref=e145]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e146]: Includes eligibility checker
+                - img [ref=e147]
+              - 'link "Is MSME / Udyam Registration Worth It? Find out if Udyam (MSME) registration makes sense for your business. Covers benefits, eligibility, credit access, government tenders, and what you actually get. Last reviewed: April 2026Includes eligibility checker" [ref=e149] [cursor=pointer]':
+                - /url: /guides/is-msme-registration-worth-it
+                - generic [ref=e150]:
+                  - heading "Is MSME / Udyam Registration Worth It?" [level=3] [ref=e151]
+                  - paragraph [ref=e152]: Find out if Udyam (MSME) registration makes sense for your business. Covers benefits, eligibility, credit access, government tenders, and what you actually get.
+                  - paragraph [ref=e153]:
+                    - text: "Last reviewed: April 2026"
+                    - generic [ref=e154]: Includes eligibility checker
+                - img [ref=e155]
+          - generic [ref=e157]:
+            - heading "TDS Filing Deadlines" [level=2] [ref=e158]
+            - generic [ref=e159]:
+              - 'link "TDS Return Q4 FY2025-26: Filing Guide and Due Date Complete guide to filing TDS Return for Q4 (Jan-Mar 2026) of FY2025-26. Due date is May 31, 2026. Learn about Form 24Q, 26Q, 27Q requirements and avoid late filing penalties. Last reviewed: April 2026" [ref=e160] [cursor=pointer]':
+                - /url: /guides/tds-return-q4-fy2025-26
+                - generic [ref=e161]:
+                  - 'heading "TDS Return Q4 FY2025-26: Filing Guide and Due Date" [level=3] [ref=e162]'
+                  - paragraph [ref=e163]: Complete guide to filing TDS Return for Q4 (Jan-Mar 2026) of FY2025-26. Due date is May 31, 2026. Learn about Form 24Q, 26Q, 27Q requirements and avoid late filing penalties.
+                  - paragraph [ref=e164]: "Last reviewed: April 2026"
+                - img [ref=e165]
+              - 'link "TDS Return Q1 FY2026-27: Filing Guide and Due Date Complete guide to filing TDS Return for Q1 (Apr-Jun 2026) of FY2026-27. Due date is July 31, 2026. Learn about Form 24Q, 26Q, 27Q requirements and avoid late filing penalties. Last reviewed: April 2026" [ref=e167] [cursor=pointer]':
+                - /url: /guides/tds-return-q1-fy2026-27
+                - generic [ref=e168]:
+                  - 'heading "TDS Return Q1 FY2026-27: Filing Guide and Due Date" [level=3] [ref=e169]'
+                  - paragraph [ref=e170]: Complete guide to filing TDS Return for Q1 (Apr-Jun 2026) of FY2026-27. Due date is July 31, 2026. Learn about Form 24Q, 26Q, 27Q requirements and avoid late filing penalties.
+                  - paragraph [ref=e171]: "Last reviewed: April 2026"
+                - img [ref=e172]
+              - 'link "TDS Return Q2 FY2026-27: Filing Guide and Due Date Complete guide to filing TDS Return for Q2 (Jul-Sep 2026) of FY2026-27. Due date is October 31, 2026. Learn about Form 24Q, 26Q, 27Q requirements and avoid late filing penalties. Last reviewed: April 2026" [ref=e174] [cursor=pointer]':
+                - /url: /guides/tds-return-q2-fy2026-27
+                - generic [ref=e175]:
+                  - 'heading "TDS Return Q2 FY2026-27: Filing Guide and Due Date" [level=3] [ref=e176]'
+                  - paragraph [ref=e177]: Complete guide to filing TDS Return for Q2 (Jul-Sep 2026) of FY2026-27. Due date is October 31, 2026. Learn about Form 24Q, 26Q, 27Q requirements and avoid late filing penalties.
+                  - paragraph [ref=e178]: "Last reviewed: April 2026"
+                - img [ref=e179]
+          - generic [ref=e181]:
+            - heading "Income Tax Filing Deadlines" [level=2] [ref=e182]
+            - 'link "Business ITR FY2025-26: Filing Guide and Due Date Complete guide to filing Business Income Tax Return for FY2025-26 (AY2026-27). Due date is October 31, 2026 for companies and audit cases. Learn about ITR-6, ITR-5, and ITR-3 requirements. Last reviewed: April 2026" [ref=e184] [cursor=pointer]':
+              - /url: /guides/business-itr-fy2025-26
+              - generic [ref=e185]:
+                - 'heading "Business ITR FY2025-26: Filing Guide and Due Date" [level=3] [ref=e186]'
+                - paragraph [ref=e187]: Complete guide to filing Business Income Tax Return for FY2025-26 (AY2026-27). Due date is October 31, 2026 for companies and audit cases. Learn about ITR-6, ITR-5, and ITR-3 requirements.
+                - paragraph [ref=e188]: "Last reviewed: April 2026"
+              - img [ref=e189]
+          - generic [ref=e191]:
+            - heading "ROC Filing Deadlines" [level=2] [ref=e192]
+            - 'link "Director KYC 2026: New Triennial Filing Rules Director KYC filing rules have changed to triennial (every 3 years) from FY2025-26. Last annual filing was September 30, 2025. Next due date is June 30, 2028. Understand the new DIR-3 KYC requirements. Last reviewed: April 2026" [ref=e194] [cursor=pointer]':
+              - /url: /guides/director-kyc-2026
+              - generic [ref=e195]:
+                - 'heading "Director KYC 2026: New Triennial Filing Rules" [level=3] [ref=e196]'
+                - paragraph [ref=e197]: Director KYC filing rules have changed to triennial (every 3 years) from FY2025-26. Last annual filing was September 30, 2025. Next due date is June 30, 2028. Understand the new DIR-3 KYC requirements.
+                - paragraph [ref=e198]: "Last reviewed: April 2026"
+              - img [ref=e199]
+          - generic [ref=e201]:
+            - heading "GST Filing Deadlines" [level=2] [ref=e202]
+            - 'link "GSTR-9 Annual Return FY2025-26: Filing Guide and Due Date Complete guide to filing GSTR-9 Annual Return for FY2025-26. Due date is December 31, 2026. Learn about eligibility, documents required, reconciliation process, and penalties for late filing. Last reviewed: April 2026" [ref=e204] [cursor=pointer]':
+              - /url: /guides/gstr-9-fy2025-26
+              - generic [ref=e205]:
+                - 'heading "GSTR-9 Annual Return FY2025-26: Filing Guide and Due Date" [level=3] [ref=e206]'
+                - paragraph [ref=e207]: Complete guide to filing GSTR-9 Annual Return for FY2025-26. Due date is December 31, 2026. Learn about eligibility, documents required, reconciliation process, and penalties for late filing.
+                - paragraph [ref=e208]: "Last reviewed: April 2026"
+              - img [ref=e209]
+          - generic [ref=e211]:
+            - heading "GST Notices" [level=2] [ref=e212]
+            - generic [ref=e213]:
+              - 'link "GST DRC-01 Notice: What It Means and What to Do A DRC-01 is a formal GST tax demand. You have 30 days to reply before the officer passes an order without hearing your side. Understand Section 73 vs 74 and how to respond. Last reviewed: March 2025" [ref=e214] [cursor=pointer]':
+                - /url: /guides/gst-drc-01-notice
+                - generic [ref=e215]:
+                  - 'heading "GST DRC-01 Notice: What It Means and What to Do" [level=3] [ref=e216]'
+                  - paragraph [ref=e217]: A DRC-01 is a formal GST tax demand. You have 30 days to reply before the officer passes an order without hearing your side. Understand Section 73 vs 74 and how to respond.
+                  - paragraph [ref=e218]: "Last reviewed: March 2025"
+                - img [ref=e219]
+              - 'link "GST DRC-01A Notice: Pre-Show Cause Notice Intimation A DRC-01A is a pre-demand intimation, not a formal notice. Respond well here and the matter may close without a DRC-01 ever being issued. You have 30 days. Last reviewed: March 2025" [ref=e221] [cursor=pointer]':
+                - /url: /guides/gst-drc-01a-pre-notice
+                - generic [ref=e222]:
+                  - 'heading "GST DRC-01A Notice: Pre-Show Cause Notice Intimation" [level=3] [ref=e223]'
+                  - paragraph [ref=e224]: A DRC-01A is a pre-demand intimation, not a formal notice. Respond well here and the matter may close without a DRC-01 ever being issued. You have 30 days.
+                  - paragraph [ref=e225]: "Last reviewed: March 2025"
+                - img [ref=e226]
+              - 'link "GST DRC-01B Notice: GSTR-1 vs GSTR-3B Liability Mismatch A DRC-01B notice means the GST system found a mismatch between your GSTR-1 and GSTR-3B. You have 7 days to explain or pay the difference before it escalates to a formal DRC-01 demand. Last reviewed: March 2025" [ref=e228] [cursor=pointer]':
+                - /url: /guides/gst-drc-01b-mismatch
+                - generic [ref=e229]:
+                  - 'heading "GST DRC-01B Notice: GSTR-1 vs GSTR-3B Liability Mismatch" [level=3] [ref=e230]'
+                  - paragraph [ref=e231]: A DRC-01B notice means the GST system found a mismatch between your GSTR-1 and GSTR-3B. You have 7 days to explain or pay the difference before it escalates to a formal DRC-01 demand.
+                  - paragraph [ref=e232]: "Last reviewed: March 2025"
+                - img [ref=e233]
+              - 'link "GST ASMT-10 Scrutiny Notice: What It Means and How to Reply A GST ASMT-10 notice means an officer found a discrepancy in your returns. You have 15 days to reply in Form ASMT-11. No reply leads to a best judgment assessment under Section 62. Last reviewed: March 2025" [ref=e235] [cursor=pointer]':
+                - /url: /guides/gst-asmt-10-notice
+                - generic [ref=e236]:
+                  - 'heading "GST ASMT-10 Scrutiny Notice: What It Means and How to Reply" [level=3] [ref=e237]'
+                  - paragraph [ref=e238]: A GST ASMT-10 notice means an officer found a discrepancy in your returns. You have 15 days to reply in Form ASMT-11. No reply leads to a best judgment assessment under Section 62.
+                  - paragraph [ref=e239]: "Last reviewed: March 2025"
+                - img [ref=e240]
+              - 'link "GST ASMT-14 Notice: Best Judgment Assessment A GST ASMT-14 is a best judgment assessment issued when ASMT-10 was not replied to. Filing all pending returns within 30 days withdraws the assessment under Section 62(2). Last reviewed: March 2025" [ref=e242] [cursor=pointer]':
+                - /url: /guides/gst-asmt-14-best-judgment
+                - generic [ref=e243]:
+                  - 'heading "GST ASMT-14 Notice: Best Judgment Assessment" [level=3] [ref=e244]'
+                  - paragraph [ref=e245]: A GST ASMT-14 is a best judgment assessment issued when ASMT-10 was not replied to. Filing all pending returns within 30 days withdraws the assessment under Section 62(2).
+                  - paragraph [ref=e246]: "Last reviewed: March 2025"
+                - img [ref=e247]
+              - 'link "GST REG-17 Notice: Your GST Registration May Be Cancelled A GST REG-17 notice means your registration may be cancelled. You have 7 working days to reply in Form REG-18. No reply results in a REG-19 cancellation order. Last reviewed: March 2025" [ref=e249] [cursor=pointer]':
+                - /url: /guides/gst-reg-17-cancellation-notice
+                - generic [ref=e250]:
+                  - 'heading "GST REG-17 Notice: Your GST Registration May Be Cancelled" [level=3] [ref=e251]'
+                  - paragraph [ref=e252]: A GST REG-17 notice means your registration may be cancelled. You have 7 working days to reply in Form REG-18. No reply results in a REG-19 cancellation order.
+                  - paragraph [ref=e253]: "Last reviewed: March 2025"
+                - img [ref=e254]
+              - 'link "GST REG-31 Notice: Your GST Registration Has Been Suspended A GST REG-31 notice means your registration is suspended. You cannot issue invoices or claim ITC while suspended. REG-17 cancellation notice follows within 30 days if you do not act. Last reviewed: March 2025" [ref=e256] [cursor=pointer]':
+                - /url: /guides/gst-reg-31-suspension
+                - generic [ref=e257]:
+                  - 'heading "GST REG-31 Notice: Your GST Registration Has Been Suspended" [level=3] [ref=e258]'
+                  - paragraph [ref=e259]: A GST REG-31 notice means your registration is suspended. You cannot issue invoices or claim ITC while suspended. REG-17 cancellation notice follows within 30 days if you do not act.
+                  - paragraph [ref=e260]: "Last reviewed: March 2025"
+                - img [ref=e261]
+              - 'link "GST ITC Mismatch Notice: GSTR-2B vs Claimed Input Tax Credit ITC claims exceeding your GSTR-2B are blocked under Section 16(2)(aa). Reconcile your purchase register with GSTR-2B every month before filing GSTR-3B to avoid demands. Last reviewed: March 2025" [ref=e263] [cursor=pointer]':
+                - /url: /guides/gst-gstr2b-itc-mismatch
+                - generic [ref=e264]:
+                  - 'heading "GST ITC Mismatch Notice: GSTR-2B vs Claimed Input Tax Credit" [level=3] [ref=e265]'
+                  - paragraph [ref=e266]: ITC claims exceeding your GSTR-2B are blocked under Section 16(2)(aa). Reconcile your purchase register with GSTR-2B every month before filing GSTR-3B to avoid demands.
+                  - paragraph [ref=e267]: "Last reviewed: March 2025"
+                - img [ref=e268]
+              - 'link "GST Annual Return Mismatch Notice: GSTR-9 vs GSTR-3B Discrepancy GSTR-9 discrepancies often trigger ASMT-10 scrutiny. Prepare a full year reconciliation matching GSTR-9 lines to GSTR-3B. GSTR-9 cannot be amended after filing. Last reviewed: March 2025" [ref=e270] [cursor=pointer]':
+                - /url: /guides/gst-gstr9-annual-return-mismatch
+                - generic [ref=e271]:
+                  - 'heading "GST Annual Return Mismatch Notice: GSTR-9 vs GSTR-3B Discrepancy" [level=3] [ref=e272]'
+                  - paragraph [ref=e273]: GSTR-9 discrepancies often trigger ASMT-10 scrutiny. Prepare a full year reconciliation matching GSTR-9 lines to GSTR-3B. GSTR-9 cannot be amended after filing.
+                  - paragraph [ref=e274]: "Last reviewed: March 2025"
+                - img [ref=e275]
+          - generic [ref=e277]:
+            - heading "Income Tax Notices" [level=2] [ref=e278]
+            - generic [ref=e279]:
+              - 'link "Income Tax Section 143(1) Intimation: What It Means A 143(1) intimation shows the CPC processing result: demand raised, refund due, or no adjustment. TDS mismatch is the most common demand trigger. File Section 154 rectification to fix errors. Last reviewed: March 2025" [ref=e280] [cursor=pointer]':
+                - /url: /guides/income-tax-143-1-intimation
+                - generic [ref=e281]:
+                  - 'heading "Income Tax Section 143(1) Intimation: What It Means" [level=3] [ref=e282]'
+                  - paragraph [ref=e283]: "A 143(1) intimation shows the CPC processing result: demand raised, refund due, or no adjustment. TDS mismatch is the most common demand trigger. File Section 154 rectification to fix errors."
+                  - paragraph [ref=e284]: "Last reviewed: March 2025"
+                - img [ref=e285]
+              - 'link "Income Tax Section 143(2) Scrutiny Notice: A Human is Reviewing Your Return A 143(2) notice means your return was selected for detailed scrutiny. The process runs 12-18 months through the faceless assessment system. Engage a CA from day one. Last reviewed: March 2025" [ref=e287] [cursor=pointer]':
+                - /url: /guides/income-tax-143-2-scrutiny
+                - generic [ref=e288]:
+                  - 'heading "Income Tax Section 143(2) Scrutiny Notice: A Human is Reviewing Your Return" [level=3] [ref=e289]'
+                  - paragraph [ref=e290]: A 143(2) notice means your return was selected for detailed scrutiny. The process runs 12-18 months through the faceless assessment system. Engage a CA from day one.
+                  - paragraph [ref=e291]: "Last reviewed: March 2025"
+                - img [ref=e292]
+              - 'link "Income Tax Section 142(1) Notice: What the Department is Asking For A 142(1) notice has two purposes: asking you to file a return (142(1)(i)) or produce documents during scrutiny (142(1)(ii)). Non-compliance attracts Rs. 10,000 penalty per notice under 271(1)(b). Last reviewed: March 2025" [ref=e294] [cursor=pointer]':
+                - /url: /guides/income-tax-142-1-notice
+                - generic [ref=e295]:
+                  - 'heading "Income Tax Section 142(1) Notice: What the Department is Asking For" [level=3] [ref=e296]'
+                  - paragraph [ref=e297]: "A 142(1) notice has two purposes: asking you to file a return (142(1)(i)) or produce documents during scrutiny (142(1)(ii)). Non-compliance attracts Rs. 10,000 penalty per notice under 271(1)(b)."
+                  - paragraph [ref=e298]: "Last reviewed: March 2025"
+                - img [ref=e299]
+              - 'link "Income Tax Section 148 / 148A Notice: Reopening of Assessment A 148A notice is your chance to stop reassessment before it starts. Reply within 7-30 days explaining why the alleged income did not escape assessment. Strong 148A replies close cases early. Last reviewed: March 2025" [ref=e301] [cursor=pointer]':
+                - /url: /guides/income-tax-148-148a-reopening
+                - generic [ref=e302]:
+                  - 'heading "Income Tax Section 148 / 148A Notice: Reopening of Assessment" [level=3] [ref=e303]'
+                  - paragraph [ref=e304]: A 148A notice is your chance to stop reassessment before it starts. Reply within 7-30 days explaining why the alleged income did not escape assessment. Strong 148A replies close cases early.
+                  - paragraph [ref=e305]: "Last reviewed: March 2025"
+                - img [ref=e306]
+              - 'link "Income Tax Section 139(9) Notice: Defective Return A 139(9) notice means your ITR has a structural defect. Fix it within 15 days or your return becomes invalid. Common defects: wrong ITR form, missing schedules, or audit report not filed. Last reviewed: March 2025" [ref=e308] [cursor=pointer]':
+                - /url: /guides/income-tax-139-9-defective-return
+                - generic [ref=e309]:
+                  - 'heading "Income Tax Section 139(9) Notice: Defective Return" [level=3] [ref=e310]'
+                  - paragraph [ref=e311]: "A 139(9) notice means your ITR has a structural defect. Fix it within 15 days or your return becomes invalid. Common defects: wrong ITR form, missing schedules, or audit report not filed."
+                  - paragraph [ref=e312]: "Last reviewed: March 2025"
+                - img [ref=e313]
+              - 'link "Income Tax Section 156 Notice of Demand: Tax Has Been Assessed and is Now Due A Section 156 notice is the formal demand for tax determined in an assessment order. Pay within 30 days, or interest at 1 percent per month starts. Appeal requires 20 percent pre-deposit for stay. Last reviewed: March 2025" [ref=e315] [cursor=pointer]':
+                - /url: /guides/income-tax-156-demand
+                - generic [ref=e316]:
+                  - 'heading "Income Tax Section 156 Notice of Demand: Tax Has Been Assessed and is Now Due" [level=3] [ref=e317]'
+                  - paragraph [ref=e318]: A Section 156 notice is the formal demand for tax determined in an assessment order. Pay within 30 days, or interest at 1 percent per month starts. Appeal requires 20 percent pre-deposit for stay.
+                  - paragraph [ref=e319]: "Last reviewed: March 2025"
+                - img [ref=e320]
+              - 'link "Income Tax Section 245 Notice: Your Refund Has Been Adjusted A Section 245 notice says your refund will be adjusted against an old demand. You have 30 days to object. Check if the demand was already paid or is under appeal. Last reviewed: March 2025" [ref=e322] [cursor=pointer]':
+                - /url: /guides/income-tax-245-refund-adjustment
+                - generic [ref=e323]:
+                  - 'heading "Income Tax Section 245 Notice: Your Refund Has Been Adjusted" [level=3] [ref=e324]'
+                  - paragraph [ref=e325]: A Section 245 notice says your refund will be adjusted against an old demand. You have 30 days to object. Check if the demand was already paid or is under appeal.
+                  - paragraph [ref=e326]: "Last reviewed: March 2025"
+                - img [ref=e327]
+              - 'link "Income Tax Section 271 Penalty Notice: Penalty for Non-Compliance or Concealment 271(1)(b) penalty is Rs. 10,000 for non-response. 271(1)(c) penalty is 100-300 percent of tax on concealed income. Show \"reasonable cause\" or \"bonafide belief\" to contest. Last reviewed: March 2025" [ref=e329] [cursor=pointer]':
+                - /url: /guides/income-tax-271-penalty
+                - generic [ref=e330]:
+                  - 'heading "Income Tax Section 271 Penalty Notice: Penalty for Non-Compliance or Concealment" [level=3] [ref=e331]'
+                  - paragraph [ref=e332]: 271(1)(b) penalty is Rs. 10,000 for non-response. 271(1)(c) penalty is 100-300 percent of tax on concealed income. Show "reasonable cause" or "bonafide belief" to contest.
+                  - paragraph [ref=e333]: "Last reviewed: March 2025"
+                - img [ref=e334]
+              - 'link "Income Tax Section 131 Summons: What to Do When You Are Called In A Section 131 summons requires your personal attendance for examination on oath. Non-compliance is a criminal offence under Section 131(1A). Take a CA or advocate with you. Last reviewed: March 2025" [ref=e336] [cursor=pointer]':
+                - /url: /guides/income-tax-131-summons
+                - generic [ref=e337]:
+                  - 'heading "Income Tax Section 131 Summons: What to Do When You Are Called In" [level=3] [ref=e338]'
+                  - paragraph [ref=e339]: A Section 131 summons requires your personal attendance for examination on oath. Non-compliance is a criminal offence under Section 131(1A). Take a CA or advocate with you.
+                  - paragraph [ref=e340]: "Last reviewed: March 2025"
+                - img [ref=e341]
+              - 'link "Income Tax AIS / SFT High-Value Transaction Notice AIS now shows every high-value transaction to the department. If your ITR does not reflect a transaction in your AIS, expect a notice. Respond proactively before it becomes a 148A. Last reviewed: March 2025" [ref=e343] [cursor=pointer]':
+                - /url: /guides/income-tax-ais-sft-notice
+                - generic [ref=e344]:
+                  - heading "Income Tax AIS / SFT High-Value Transaction Notice" [level=3] [ref=e345]
+                  - paragraph [ref=e346]: AIS now shows every high-value transaction to the department. If your ITR does not reflect a transaction in your AIS, expect a notice. Respond proactively before it becomes a 148A.
+                  - paragraph [ref=e347]: "Last reviewed: March 2025"
+                - img [ref=e348]
+          - generic [ref=e350]:
+            - heading "TDS Notices" [level=2] [ref=e351]
+            - generic [ref=e352]:
+              - 'link "TDS Short Deduction or Non-Deduction Notice from TRACES TRACES detected TDS short or non-deduction. Interest runs at 1-1.5 percent per month. Section 40(a)(ia) disallows 30 percent of the expense. File a correction return after depositing the shortfall. Last reviewed: March 2025" [ref=e353] [cursor=pointer]':
+                - /url: /guides/tds-short-deduction-notice
+                - generic [ref=e354]:
+                  - heading "TDS Short Deduction or Non-Deduction Notice from TRACES" [level=3] [ref=e355]
+                  - paragraph [ref=e356]: TRACES detected TDS short or non-deduction. Interest runs at 1-1.5 percent per month. Section 40(a)(ia) disallows 30 percent of the expense. File a correction return after depositing the shortfall.
+                  - paragraph [ref=e357]: "Last reviewed: March 2025"
+                - img [ref=e358]
+              - 'link "TDS Mismatch Notice: 26Q / 27Q Return vs Actual Deposits A TDS mismatch notice means your 26Q or 27Q return does not match challan deposits. File a correction return on TRACES to link challans correctly. Wrong deductee PAN blocks their TDS credit. Last reviewed: March 2025" [ref=e360] [cursor=pointer]':
+                - /url: /guides/tds-26q-27q-mismatch
+                - generic [ref=e361]:
+                  - 'heading "TDS Mismatch Notice: 26Q / 27Q Return vs Actual Deposits" [level=3] [ref=e362]'
+                  - paragraph [ref=e363]: A TDS mismatch notice means your 26Q or 27Q return does not match challan deposits. File a correction return on TRACES to link challans correctly. Wrong deductee PAN blocks their TDS credit.
+                  - paragraph [ref=e364]: "Last reviewed: March 2025"
+                - img [ref=e365]
+              - 'link "TDS Demand Notice: Section 194C (Contractors) and 194J (Professional Fees) 194C applies to contractor payments above Rs. 30,000 (1-2 percent). 194J applies to professional fees above Rs. 30,000 (10 percent or 2 percent for technical services). Non-deduction disallows 30 percent of the expense. Last reviewed: March 2025" [ref=e367] [cursor=pointer]':
+                - /url: /guides/tds-194c-194j-demand
+                - generic [ref=e368]:
+                  - 'heading "TDS Demand Notice: Section 194C (Contractors) and 194J (Professional Fees)" [level=3] [ref=e369]'
+                  - paragraph [ref=e370]: 194C applies to contractor payments above Rs. 30,000 (1-2 percent). 194J applies to professional fees above Rs. 30,000 (10 percent or 2 percent for technical services). Non-deduction disallows 30 percent of the expense.
+                  - paragraph [ref=e371]: "Last reviewed: March 2025"
+                - img [ref=e372]
+          - generic [ref=e374]:
+            - heading "ROC Notices" [level=2] [ref=e375]
+            - generic [ref=e376]:
+              - 'link "ROC / MCA Show Cause Notice for Annual Filing Default Three consecutive years of non-filing disqualifies all directors under Section 164(2). File AOC-4 and MGT-7 immediately. Penalties accumulate at Rs. 100 per day. Use CFSS amnesty if available. Last reviewed: March 2025" [ref=e377] [cursor=pointer]':
+                - /url: /guides/roc-annual-filing-default-notice
+                - generic [ref=e378]:
+                  - heading "ROC / MCA Show Cause Notice for Annual Filing Default" [level=3] [ref=e379]
+                  - paragraph [ref=e380]: Three consecutive years of non-filing disqualifies all directors under Section 164(2). File AOC-4 and MGT-7 immediately. Penalties accumulate at Rs. 100 per day. Use CFSS amnesty if available.
+                  - paragraph [ref=e381]: "Last reviewed: March 2025"
+                - img [ref=e382]
+              - 'link "DIR-3 KYC Notice: Director DIN Deactivation DIN deactivation blocks all director actions. File DIR-3 KYC with Rs. 5,000 late fee to restore. Annual KYC deadline is September 30. Use DIR-3 KYC-Web for renewals if details unchanged. Last reviewed: March 2025" [ref=e384] [cursor=pointer]':
+                - /url: /guides/dir-3-kyc-din-deactivation
+                - generic [ref=e385]:
+                  - 'heading "DIR-3 KYC Notice: Director DIN Deactivation" [level=3] [ref=e386]'
+                  - paragraph [ref=e387]: DIN deactivation blocks all director actions. File DIR-3 KYC with Rs. 5,000 late fee to restore. Annual KYC deadline is September 30. Use DIR-3 KYC-Web for renewals if details unchanged.
+                  - paragraph [ref=e388]: "Last reviewed: March 2025"
+                - img [ref=e389]
+        - paragraph [ref=e393]:
+          - text: Need help with a specific compliance issue?
+          - link "Browse all services →" [ref=e394] [cursor=pointer]:
+            - /url: /services
+    - contentinfo [ref=e395]:
+      - generic [ref=e396]:
+        - generic [ref=e397]:
+          - generic [ref=e398]:
+            - link "Ollvy" [ref=e399] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e400]: You run your business. We handle the rest.
+            - generic [ref=e401]:
+              - link "LinkedIn" [ref=e402] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e403]
+              - link "Twitter" [ref=e407] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e408]
+          - generic [ref=e410]:
+            - link "Calculators" [ref=e411] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e412]:
+              - listitem [ref=e413]:
+                - link "GST Late Filing" [ref=e414] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e415]:
+                - link "GST Demand Notice" [ref=e416] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e417]:
+                - link "ITR Late Filing" [ref=e418] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e419]:
+                - link "TDS Late Filing" [ref=e420] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e421]:
+                - link "MCA Annual Filing" [ref=e422] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e423]:
+                - link "Director KYC" [ref=e424] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e425]:
+                - link "PF/ESIC Penalty" [ref=e426] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e427]:
+                - link "Professional Tax" [ref=e428] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e429]:
+                - link "Shops & Establishment" [ref=e430] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e431]:
+                - link "Startup DPIIT" [ref=e432] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e433]:
+            - link "Checklists" [ref=e434] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e435]:
+              - listitem [ref=e436]:
+                - link "Pvt Ltd Documents" [ref=e437] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e438]:
+                - link "LLP Documents" [ref=e439] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e440]:
+                - link "Partnership Documents" [ref=e441] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e442]:
+                - link "Sole Proprietor" [ref=e443] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e444]:
+                - link "GST Registration" [ref=e445] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e446]:
+                - link "Individual ITR" [ref=e447] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e448]:
+                - link "Business ITR" [ref=e449] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e450]:
+                - link "Trademark" [ref=e451] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e452]:
+            - link "Services" [ref=e453] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e454]:
+              - listitem [ref=e455]:
+                - link "Pvt Ltd Registration" [ref=e456] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e457]:
+                - link "LLP Registration" [ref=e458] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e459]:
+                - link "GST Registration" [ref=e460] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e461]:
+                - link "GST Monthly Filing" [ref=e462] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e463]:
+                - link "GST Cancellation" [ref=e464] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e465]:
+                - link "GST Revocation" [ref=e466] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e467]:
+                - link "Trademark Registration" [ref=e468] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e469]:
+                - link "MSME Registration" [ref=e470] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e471]:
+                - link "Cloud Kitchen Setup" [ref=e472] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e473]:
+                - link "Business ITR Filing" [ref=e474] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e475]:
+                - link "Annual Compliance" [ref=e476] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e477]:
+                - link "TDS Compliance" [ref=e478] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e479]:
+                - link "Company Name Change" [ref=e480] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e481]:
+                - link "DIN Reactivation" [ref=e482] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e483]:
+                - link "All Services" [ref=e484] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e485]:
+            - paragraph [ref=e486]: Deadlines
+            - list [ref=e487]:
+              - listitem [ref=e488]:
+                - link "Director KYC 2026" [ref=e489] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e490]:
+                - link "Business ITR 2026" [ref=e491] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e492]:
+                - link "GSTR-9 2026" [ref=e493] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e494]:
+                - link "TDS Return Q1 2027" [ref=e495] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e496]:
+                - link "Business ITR 2027" [ref=e497] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e498]:
+                - link "GSTR-9 2027" [ref=e499] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e500]:
+            - link "Guides" [ref=e501] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e502]:
+              - listitem [ref=e503]:
+                - link "Do I Need GST?" [ref=e504] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e505]:
+                - link "Pvt Ltd vs LLP" [ref=e506] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e507]:
+                - link "Which ITR Form?" [ref=e508] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e509]:
+                - link "DPIIT Recognition" [ref=e510] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e511]:
+                - link "All Guides" [ref=e512] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e513]:
+            - link "Notice Help" [ref=e514] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e515]:
+              - listitem [ref=e516]:
+                - link "GST DRC-01 Notice" [ref=e517] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e518]:
+                - link "GST ASMT-10 Notice" [ref=e519] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e520]:
+                - link "IT 143(1) Intimation" [ref=e521] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e522]:
+                - link "IT 148/148A Notice" [ref=e523] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e524]:
+                - link "TDS Short Deduction" [ref=e525] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e526]:
+            - paragraph [ref=e527]: Legal
+            - list [ref=e528]:
+              - listitem [ref=e529]:
+                - link "Privacy Policy" [ref=e530] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e531]:
+                - link "Terms of Service" [ref=e532] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e533]:
+                - link "Cancellation Policy" [ref=e534] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e535]:
+                - link "Refund Policy" [ref=e536] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e537]:
+                - link "Contact" [ref=e538] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e540]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e546] [cursor=pointer]:
+    - img [ref=e547]
+  - alert [ref=e550]

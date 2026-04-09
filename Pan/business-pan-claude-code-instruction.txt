@@ -1,0 +1,261 @@
+CLAUDE CODE INSTRUCTION - BUSINESS PAN SERVICE IMPLEMENTATION
+
+Implement a new service 'business-pan' across the entire app.
+Do all steps in order. Run tsc --noEmit after each major step.
+
+────────────────────────────────────────────────────────────────
+STEP 1 - SUPABASE: Insert the service package
+────────────────────────────────────────────────────────────────
+
+Run this SQL in Supabase:
+
+INSERT INTO service_packages (
+  slug, name, short_name, category,
+  base_price, govt_fee, gst_rate,
+  sla_working_days, is_active, is_featured, sort_order,
+  canonical_url, seo_title, seo_description,
+  whats_included, scope_excluded, workflow_stages,
+  variants, review_sources
+) VALUES (
+  'business-pan',
+  'Business PAN Registration',
+  'Business PAN',
+  'compliance',
+  99900,
+  10700,
+  18,
+  7,
+  true,
+  true,
+  15,
+  'https://www.ollvy.com/services/business-pan',
+  'Business PAN Registration for Company, LLP and Firm (2025) | Ollvy',
+  'Get your company or LLP PAN registered in 7 working days. Required for bank account opening, GST registration, and income tax filing. CA-handled, documents collected online.',
+  '[
+    {"title": "CA prepares and files Form 49A", "description": "All fields completed correctly for your entity type. NSDL portal submission handled end to end."},
+    {"title": "Acknowledgement number shared same day", "description": "NSDL acknowledgement number shared immediately on submission so you can track status yourself."},
+    {"title": "e-PAN delivered to your email", "description": "e-PAN sent the moment NSDL allots the number. Physical card delivered in 10 to 15 days."},
+    {"title": "PAN added to your compliance calendar", "description": "Linked to your Ollvy account for ITR and other filing deadlines from day one."}
+  ]'::jsonb,
+  ARRAY[
+    'GST registration (available separately)',
+    'TAN registration (available separately)',
+    'PAN corrections or changes after allotment',
+    'Duplicate PAN for lost physical card',
+    'Individual director PAN (each director needs a separate individual PAN)'
+  ],
+  '[
+    {"key": "document_collection", "label": "Document Collection", "description": "CA reviews your uploaded documents and confirms they are complete and valid for submission."},
+    {"key": "form_preparation", "label": "Form 49A Preparation", "description": "CA prepares Form 49A with your entity details, registered address, and signatory information."},
+    {"key": "application_submission", "label": "Application Submission", "description": "Form submitted to NSDL with supporting documents. Acknowledgement number shared with you."},
+    {"key": "nsdl_processing", "label": "NSDL Processing", "description": "Income Tax Department processes your application. This stage is governed by government timelines."},
+    {"key": "pan_delivered", "label": "PAN Delivered", "description": "e-PAN delivered to your email. Physical card dispatched to your registered office."}
+  ]'::jsonb,
+  '[
+    {"id": "pvt-ltd-llp-opc", "label": "Pvt Ltd / LLP / OPC", "sublabel": "Incorporated with MCA", "price_adjustment": 0, "default": true},
+    {"id": "partnership-proprietorship", "label": "Partnership / Proprietorship", "sublabel": "Registered firm or sole proprietorship", "price_adjustment": -20000}
+  ]'::jsonb,
+  '[
+    {"name": "Income Tax Department - PAN Application Guide", "url": "https://www.incometax.gov.in/iec/foportal/help/how-to-apply-for-pan", "description": "Official IT department guide for PAN application process"},
+    {"name": "NSDL e-Gov PAN Portal", "url": "https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html", "description": "NSDL portal where Form 49A applications are submitted"},
+    {"name": "Income Tax Act, 1961 (Section 139A)", "url": "https://www.incometax.gov.in", "description": "Statutory requirement for PAN for companies and LLPs"}
+  ]'::jsonb
+);
+
+Verify with:
+SELECT slug, name, base_price, is_active FROM service_packages WHERE slug = 'business-pan';
+
+────────────────────────────────────────────────────────────────
+STEP 2 - SERVICE DATA: Add to FALLBACK_SERVICE_SLUGS
+────────────────────────────────────────────────────────────────
+
+In lib/data/services.ts, find the FALLBACK_SERVICE_SLUGS array and add 'business-pan' to the list.
+
+Also find the reviews fallback object in UnifiedServicePage.tsx and add:
+
+'business-pan': [
+  { rating: 5, comment: 'PAN allotment letter in 5 days. Needed it urgently for bank account opening. CA handled everything after I uploaded the documents.', date: 'March 2026' },
+  { rating: 5, comment: 'Just incorporated our LLP and needed PAN fast. Acknowledgement number came the same day they submitted. Bank accepted it immediately.', date: 'April 2026' },
+],
+
+────────────────────────────────────────────────────────────────
+STEP 3 - QUESTIONNAIRE: Add questions config
+────────────────────────────────────────────────────────────────
+
+Find where questionnaire questions are defined for other services (likely in lib/questionnaire/ or a similar path).
+
+Add the following questions config for slug 'business-pan'. This service goes DIRECT to checkout (no pre-payment questionnaire). The questionnaire runs POST-payment.
+
+Questions:
+1. key: 'entity_type', label: 'What type of business entity are you registering PAN for?', type: 'select', required: true
+   options: Private Limited Company, LLP, OPC, Partnership Firm, Sole Proprietorship, Trust, Society
+
+2. key: 'entity_name', label: 'Full name of the business entity as registered', type: 'text', required: true
+   placeholder: 'Exactly as it appears on your Certificate of Incorporation or registration document'
+
+3. key: 'date_of_incorporation', label: 'Date of incorporation or registration', type: 'date', required: true
+
+4. key: 'registered_office_address', label: 'Registered office address (full)', type: 'textarea', required: true
+   placeholder: 'Flat/Shop No, Building Name, Street, Area, City, State, PIN'
+
+5. key: 'state_of_registration', label: 'State where the business is registered', type: 'select', required: true
+   options: all 36 Indian states and UTs
+
+6. key: 'nature_of_business', label: 'Nature of business (brief description)', type: 'text', required: true
+   placeholder: 'e.g. Software development and IT services'
+
+7. key: 'authorised_signatory_name', label: 'Name of authorised signatory', type: 'text', required: true
+
+8. key: 'authorised_signatory_pan', label: 'PAN of the authorised signatory', type: 'text', required: true
+   placeholder: 'e.g. ABCDE1234F'
+
+9. key: 'cin_llpin', label: 'CIN (for companies) or LLPIN (for LLPs)', type: 'text', required: false
+   placeholder: 'Leave blank if not applicable'
+
+10. key: 'email_for_epan', label: 'Email address where e-PAN should be delivered', type: 'email', required: true
+
+11. key: 'mobile_for_otp', label: 'Mobile number for OTP verification', type: 'tel', required: true
+
+────────────────────────────────────────────────────────────────
+STEP 4 - DOCUMENT CHECKLIST: Add to tool pages
+────────────────────────────────────────────────────────────────
+
+In lib/tools/document-checklist-pages.ts, add a new checklist config for 'business-pan'.
+
+slug: 'business-pan'
+title: 'Documents Required for Business PAN Registration'
+seoTitle: 'Documents for Business PAN Card Registration (2025) | Ollvy'
+seoDescription: 'Complete list of documents required for company, LLP, or firm PAN registration in India. Certificate of Incorporation, address proof, signatory details, and authorisation letter.'
+canonicalUrl: 'https://www.ollvy.com/tools/documents/business-pan'
+lastReviewed: 'March 2026'
+relatedServiceSlug: 'business-pan'
+
+Three sections:
+
+SECTION 1 - For Private Limited Company, OPC, or LLP:
+- Certificate of Incorporation (mandatory)
+- MOA and AOA (mandatory for Pvt Ltd and OPC)
+- LLP Agreement (mandatory for LLPs, instead of MOA/AOA)
+- Registered Office Address Proof - electricity/telephone/water bill or bank statement, under 2 months old (mandatory)
+- Board Resolution or Authorization Letter on company letterhead (mandatory, template provided after payment)
+- PAN of Authorised Signatory (mandatory)
+- Aadhaar of Authorised Signatory (mandatory)
+
+SECTION 2 - For Partnership Firm:
+- Partnership Deed (mandatory)
+- Certificate of Registration of Firm (optional, if registered)
+- Registered Office Address Proof (mandatory)
+- PAN of All Partners (mandatory)
+- Aadhaar of Managing Partner (mandatory)
+
+SECTION 3 - For Sole Proprietorship:
+- Any one business registration proof - GST, Shop and Establishment, MSME, or professional tax (mandatory)
+- Address proof of business premises (mandatory)
+- PAN of Proprietor (mandatory)
+- Aadhaar of Proprietor (mandatory)
+
+FAQs (6):
+1. Q: My company was just incorporated. Do I need PAN before bank account?
+   A: Yes. Banks require company PAN. Apply immediately. Banks also accept the NSDL acknowledgement letter while physical card is in transit.
+
+2. Q: Is company PAN different from director PAN?
+   A: Yes. Company is a separate legal entity. Needs its own PAN. Each director also has their own. Different numbers for different purposes.
+
+3. Q: How long does PAN registration take?
+   A: NSDL processes in 5 to 7 working days. e-PAN arrives by email within 48 hours of allotment. Physical card takes 10 to 15 additional days.
+
+4. Q: Can I use the acknowledgement number while waiting?
+   A: Yes. Banks and the GST portal accept it. We share the acknowledgement number the same day we submit.
+
+5. Q: My company already has PAN but I lost the card. Do I need to apply again?
+   A: No. This service is for new PAN only. For lost card, apply for duplicate PAN through NSDL separately.
+
+6. Q: Is company PAN required for GST registration?
+   A: Yes. GST portal links GSTIN to company PAN. Apply for PAN first, then GST.
+
+Sources:
+- Income Tax Department PAN Guide: https://www.incometax.gov.in/iec/foportal/help/how-to-apply-for-pan
+- NSDL Portal: https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html
+- Section 139A, Income Tax Act 1961: https://www.incometax.gov.in
+
+Also create the page at app/tools/documents/business-pan/page.tsx following the same pattern as other document checklist pages.
+
+────────────────────────────────────────────────────────────────
+STEP 5 - GUIDE PAGE: Add to guides
+────────────────────────────────────────────────────────────────
+
+In lib/guides/pages.ts, add a new guide page config:
+
+slug: 'what-is-business-pan'
+title: 'Business PAN: What It Is and Why Your Company Needs It'
+seoTitle: 'Business PAN Card for Company and LLP: Complete Guide (2025) | Ollvy'
+seoDescription: 'Every company, LLP, and firm needs a PAN before opening a bank account or registering for GST. Understand what business PAN is, who needs it, and how to get it.'
+canonicalUrl: 'https://www.ollvy.com/guides/what-is-business-pan'
+lastReviewed: 'March 2026'
+category: 'Income Tax Notice'
+ctaServiceSlug: 'business-pan'
+relatedServiceSlugs: ['business-pan', 'gst-registration', 'pvt-ltd-incorporation']
+
+5 sections:
+1. WHAT IS A BUSINESS PAN AND WHO NEEDS ONE - PAN is mandatory for all companies, LLPs, firms. Needed for bank account, GST, ITR. First compliance step after incorporation. Source: Section 139A Income Tax Act 1961.
+
+2. THE DIFFERENCE BETWEEN COMPANY PAN AND DIRECTOR PAN - Company is separate legal entity, needs its own PAN. Each director has their own individual PAN. MCA does not automatically issue PAN on incorporation.
+
+3. WHEN YOU NEED BUSINESS PAN - bank account opening, GST registration, ITR filing, TDS deduction, receiving payments where clients deduct TDS, government tenders, e-commerce platforms.
+
+4. HOW THE APPLICATION PROCESS WORKS - Form 49A on NSDL or UTI portal. Document prep, form completion, NSDL submission, acknowledgement, verification, e-PAN delivery. 5 to 7 working days. e-PAN arrives first, physical card 10 to 15 days after. Govt fee Rs. 107 for domestic physical delivery.
+
+5. COMMON REASONS FOR PAN APPLICATION REJECTION - name mismatch, outdated address proof, missing board resolution, invalid signatory PAN, blurry documents, incorrect CIN/LLPIN. Note: CA review before submission eliminates most rejection risk.
+
+5 FAQs:
+1. My company was incorporated yesterday. How urgently do I need PAN?
+   Apply within the first week. Cannot open bank account without PAN. Use acknowledgement letter for bank while PAN processes.
+
+2. Does an LLP need a different form?
+   No. Both use Form 49A. Different supporting documents. Same timeline.
+
+3. Can I use my personal PAN for business transactions?
+   No. Use NSDL acknowledgement number where required.
+
+4. Will company PAN be automatically linked to GST?
+   Yes. GSTIN is derived from company PAN. GST portal verifies PAN during registration.
+
+5. Does a proprietorship need a separate business PAN?
+   Not always. Individual PAN can be used. But if business name differs from personal name, a business PAN avoids confusion.
+
+Sources (same 3 as document checklist).
+
+────────────────────────────────────────────────────────────────
+STEP 6 - SITEMAP: Add to sitemap
+────────────────────────────────────────────────────────────────
+
+In app/sitemap.ts, confirm 'business-pan' is included in the service pages section. If it is fetched dynamically from the DB it will be included automatically once the DB row is inserted. If there is a static list, add 'business-pan' to it.
+
+Also add '/tools/documents/business-pan' to the tool pages section if that is a static list.
+
+────────────────────────────────────────────────────────────────
+STEP 7 - HOMEPAGE: Confirm it appears in services list
+────────────────────────────────────────────────────────────────
+
+Check how the homepage services list is populated (ServiceGrid or ServicesSimplified component). If it fetches from DB with is_featured = true, it will appear automatically. If it is a static list, add 'business-pan' to it.
+
+If is_featured = true in the DB insert is not enough, show me where to add it.
+
+────────────────────────────────────────────────────────────────
+STEP 8 - VERIFICATION
+────────────────────────────────────────────────────────────────
+
+After all steps:
+
+1. Run tsc --noEmit - must pass with zero errors
+2. Confirm these routes exist and resolve:
+   - /services/business-pan
+   - /tools/documents/business-pan
+   - /guides/what-is-business-pan
+   - /checkout/business-pan (direct, no eligibility page)
+3. Confirm 'business-pan' appears in the homepage services list
+4. Confirm the service page shows the correct price, variants, what's included, and what's not included
+5. Confirm the document checklist page has all three sections
+6. Confirm the guide page has all five sections and the ToolLastReviewed component at the bottom
+
+Do not start the dev server. Report what was implemented and any issues found.

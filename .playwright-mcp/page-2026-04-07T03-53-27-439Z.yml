@@ -1,0 +1,842 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner:
+      - generic:
+        - generic:
+          - link "Ollvy":
+            - /url: /
+          - navigation:
+            - link "Services":
+              - /url: /services
+            - link "Guides":
+              - /url: /guides
+            - button "Tools":
+              - generic: Tools
+              - img
+        - generic:
+          - button "Toggle theme":
+            - img
+            - generic: Toggle theme
+          - button "Search Services ⌘ K":
+            - img
+            - generic: Search Services
+            - generic:
+              - generic: ⌘
+              - text: K
+          - button "Sign in"
+    - navigation "Popular services" [ref=e27]:
+      - link "Private Limited Company Registration" [ref=e28] [cursor=pointer]:
+        - /url: /services/pvt-ltd-incorporation
+      - link "GST Registration" [ref=e29] [cursor=pointer]:
+        - /url: /services/gst-registration
+      - link "Trademark Registration" [ref=e30] [cursor=pointer]:
+        - /url: /services/trademark-registration
+      - link "LLP Registration" [ref=e31] [cursor=pointer]:
+        - /url: /services/llp-incorporation
+      - link "MSME Udyam Registration" [ref=e32] [cursor=pointer]:
+        - /url: /services/msme-registration
+      - link "Business ITR Filing" [ref=e33] [cursor=pointer]:
+        - /url: /services/business-itr
+      - link "GST Monthly Filing" [ref=e34] [cursor=pointer]:
+        - /url: /services/gst-monthly
+      - link "Cloud Kitchen Setup" [ref=e35] [cursor=pointer]:
+        - /url: /services/cloud-kitchen-setup
+    - main [ref=e36]:
+      - generic [ref=e873]:
+        - generic [ref=e874]:
+          - link "Ollvy" [ref=e875] [cursor=pointer]:
+            - /url: /
+          - generic [ref=e876]: "|"
+          - generic [ref=e877]: Cloud Kitchen
+        - tablist [ref=e878]:
+          - tab "Process" [ref=e879] [cursor=pointer]
+          - tab "What's Included" [ref=e880] [cursor=pointer]
+          - tab "Why Ollvy" [ref=e881] [cursor=pointer]
+          - tab "Risks" [ref=e882] [cursor=pointer]
+          - tab "Reviews" [ref=e883] [cursor=pointer]
+          - tab "FAQs" [selected] [ref=e884] [cursor=pointer]
+      - main [ref=e38]:
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - heading "Cloud Kitchen Setup" [level=1] [ref=e41]
+            - paragraph [ref=e42]: Every licence a cloud kitchen needs. One package. Done right.
+            - generic [ref=e43]:
+              - paragraph [ref=e45]:
+                - img [ref=e46]
+                - text: Guaranteed by 9 Jun
+              - link "Book Now" [ref=e49] [cursor=pointer]:
+                - /url: /checkout/4bef395d-195f-4660-a2a7-9690dd47f93e/eligibility
+            - generic [ref=e50]:
+              - generic [ref=e51]: For Cloud kitchens, dark kitchens, home bakers going commercial
+              - generic [ref=e52]: Type One-time
+              - generic [ref=e53]: Turnaround 45 days
+          - tablist [ref=e54]:
+            - generic [ref=e56]:
+              - tab "Process" [ref=e57] [cursor=pointer]
+              - tab "What's Included" [ref=e58] [cursor=pointer]
+              - tab "Why Ollvy" [ref=e59] [cursor=pointer]
+              - tab "Risks" [ref=e60] [cursor=pointer]
+              - tab "Reviews" [ref=e61] [cursor=pointer]
+              - tab "FAQs" [selected] [ref=e62] [cursor=pointer]
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - generic [ref=e67]:
+              - paragraph [ref=e68]: THE PROCESS
+              - heading "How Ollvy handles your Cloud Kitchen Setup" [level=2] [ref=e69]
+              - generic [ref=e70]:
+                - generic [ref=e73]:
+                  - button "Step 1" [ref=e74] [cursor=pointer]
+                  - button "Step 2" [ref=e75] [cursor=pointer]
+                  - button "Step 3" [ref=e76] [cursor=pointer]
+                  - button "Step 4" [ref=e77] [cursor=pointer]
+                  - button "Step 5" [ref=e78] [cursor=pointer]
+                  - button "Step 6" [ref=e79] [cursor=pointer]
+                  - button "Step 7" [ref=e80] [cursor=pointer]
+                - generic [ref=e81]:
+                  - img [ref=e83]
+                  - generic [ref=e86]:
+                    - heading "Business details and kitchen address" [level=3] [ref=e87]
+                    - generic [ref=e88]: Day 0
+                  - paragraph [ref=e89]: Turnover, kitchen area, menu category, GST status. We determine the correct FSSAI licence type and local authority requirements for your location.
+                  - paragraph [ref=e92]: Compliance expert assigned, licence types confirmed
+                - generic [ref=e93]:
+                  - button "Previous Step" [disabled]:
+                    - img
+                    - text: Previous Step
+                  - button "Next Step" [ref=e94] [cursor=pointer]:
+                    - text: Next Step
+                    - img
+              - generic [ref=e95]:
+                - button "What is Cloud Kitchen Setup?" [ref=e97] [cursor=pointer]:
+                  - text: What is Cloud Kitchen Setup?
+                  - img [ref=e98]
+                - generic [ref=e100]:
+                  - generic [ref=e102]:
+                    - button [ref=e103] [cursor=pointer]: What it is
+                    - button [ref=e104] [cursor=pointer]: Why you need it
+                    - button [ref=e105] [cursor=pointer]: What happens without it
+                  - paragraph [ref=e108]: "Cloud Kitchen Setup is a bundled service that handles all mandatory licences for a delivery-only commercial kitchen: FSSAI State License (or Central License based on turnover), GST Registration, and local trade/health licence from your municipal authority. Unlike a restaurant, you do not need a seating permit, but food safety and tax registrations apply in full."
+                  - button [ref=e110] [cursor=pointer]:
+                    - text: Next Step
+                    - img
+            - generic [ref=e111]:
+              - paragraph [ref=e112]: WHAT YOU GET
+              - heading "Everything included" [level=2] [ref=e113]
+              - paragraph [ref=e114]: What your CA handles on your behalf. Nothing hidden.
+              - generic [ref=e115]:
+                - generic [ref=e118]:
+                  - img [ref=e120]
+                  - generic [ref=e122]:
+                    - heading "FSSAI licence - correct type determined upfront" [level=3] [ref=e123]
+                    - paragraph [ref=e124]: Basic Registration (up to Rs 12 lakh turnover), State License (Rs 12 lakh to Rs 20 crore), or Central License (above Rs 20 crore or multi-state). We confirm the right type before you pay the government fee.
+                - generic [ref=e127]:
+                  - img [ref=e129]
+                  - generic [ref=e131]:
+                    - heading "GST registration" [level=3] [ref=e132]
+                    - paragraph [ref=e133]: Full GST registration process including CA assignment, document verification, and ARN tracking. Included in the bundle.
+                - generic [ref=e136]:
+                  - img [ref=e138]
+                  - generic [ref=e140]:
+                    - heading "Local trade/health licence" [level=3] [ref=e141]
+                    - paragraph [ref=e142]: Filed with your municipal authority. Requirements differ by city - Delhi, Mumbai, Bangalore each have different processes. We handle your specific city.
+                - generic [ref=e145]:
+                  - img [ref=e147]
+                  - generic [ref=e149]:
+                    - heading "Pre-inspection checklist" [level=3] [ref=e150]
+                    - paragraph [ref=e151]: "For State and Central FSSAI licences, we provide a checklist of what inspectors check: pest control certificate, water testing, equipment hygiene, food safety plan. Reduces the risk of inspection failure."
+                - generic [ref=e154]:
+                  - img [ref=e156]
+                  - generic [ref=e158]:
+                    - heading "Renewal tracking" [level=3] [ref=e159]
+                    - paragraph [ref=e160]: FSSAI licence is valid for 1-5 years (you choose at application). Renewal reminder added to your compliance calendar.
+            - generic [ref=e161]:
+              - paragraph [ref=e162]: GOVERNMENT FEES
+              - heading "Official fees paid to the government" [level=2] [ref=e163]
+              - paragraph [ref=e164]: These fees are collected by Ollvy and remitted in full to the relevant government authority.
+              - table "Government Fees - Cloud Kitchen Setup (All Licences)" [ref=e166]:
+                - caption [ref=e167]: Government Fees - Cloud Kitchen Setup (All Licences)
+                - rowgroup [ref=e168]:
+                  - row "Licence Government Fee Validity Notes" [ref=e169]:
+                    - columnheader "Licence" [ref=e170]
+                    - columnheader "Government Fee" [ref=e171]
+                    - columnheader "Validity" [ref=e172]
+                    - columnheader "Notes" [ref=e173]
+                - rowgroup [ref=e174]:
+                  - row "FSSAI Basic Registration Rs. 100/year 1-5 years Below Rs. 12 lakh annual turnover; no inspection" [ref=e175]:
+                    - cell "FSSAI Basic Registration" [ref=e176]
+                    - cell "Rs. 100/year" [ref=e177]
+                    - cell "1-5 years" [ref=e178]
+                    - cell "Below Rs. 12 lakh annual turnover; no inspection" [ref=e179]
+                  - row "FSSAI State Licence Rs. 2,000-7,500/year by category 1-5 years Rs. 12 lakh to Rs. 20 crore; inspection required" [ref=e180]:
+                    - cell "FSSAI State Licence" [ref=e181]
+                    - cell "Rs. 2,000-7,500/year by category" [ref=e182]
+                    - cell "1-5 years" [ref=e183]
+                    - cell "Rs. 12 lakh to Rs. 20 crore; inspection required" [ref=e184]
+                  - row "FSSAI Central Licence Rs. 7,500/year 1-5 years Above Rs. 20 crore or multi-state or importer/exporter" [ref=e185]:
+                    - cell "FSSAI Central Licence" [ref=e186]
+                    - cell "Rs. 7,500/year" [ref=e187]
+                    - cell "1-5 years" [ref=e188]
+                    - cell "Above Rs. 20 crore or multi-state or importer/exporter" [ref=e189]
+                  - row "GST Registration Nil Permanent Monthly filing obligations begin after registration" [ref=e190]:
+                    - cell "GST Registration" [ref=e191]
+                    - cell "Nil" [ref=e192]
+                    - cell "Permanent" [ref=e193]
+                    - cell "Monthly filing obligations begin after registration" [ref=e194]
+                  - row "Trade Licence - Delhi (MCD) Rs. 500-5,000 depending on area Annual Municipal Corporation of Delhi" [ref=e195]:
+                    - cell "Trade Licence - Delhi (MCD)" [ref=e196]
+                    - cell "Rs. 500-5,000 depending on area" [ref=e197]
+                    - cell "Annual" [ref=e198]
+                    - cell "Municipal Corporation of Delhi" [ref=e199]
+                  - row "Trade Licence - Mumbai (BMC) Rs. 1,000-10,000 by category Annual Brihanmumbai Municipal Corporation" [ref=e200]:
+                    - cell "Trade Licence - Mumbai (BMC)" [ref=e201]
+                    - cell "Rs. 1,000-10,000 by category" [ref=e202]
+                    - cell "Annual" [ref=e203]
+                    - cell "Brihanmumbai Municipal Corporation" [ref=e204]
+                  - row "Trade Licence - Bangalore (BBMP) Rs. 500-5,000 Annual Bruhat Bengaluru Mahanagara Palike" [ref=e205]:
+                    - cell "Trade Licence - Bangalore (BBMP)" [ref=e206]
+                    - cell "Rs. 500-5,000" [ref=e207]
+                    - cell "Annual" [ref=e208]
+                    - cell "Bruhat Bengaluru Mahanagara Palike" [ref=e209]
+            - generic [ref=e210]:
+              - paragraph [ref=e211]: DOCUMENTS REQUIRED
+              - heading "Documents you will need to provide" [level=2] [ref=e212]
+              - paragraph [ref=e213]: Prepare these documents before starting the process.
+              - table "Documents Required - Cloud Kitchen Setup" [ref=e215]:
+                - caption [ref=e216]: Documents Required - Cloud Kitchen Setup
+                - rowgroup [ref=e217]:
+                  - row "Document FSSAI GST Trade Licence" [ref=e218]:
+                    - columnheader "Document" [ref=e219]
+                    - columnheader "FSSAI" [ref=e220]
+                    - columnheader "GST" [ref=e221]
+                    - columnheader "Trade Licence" [ref=e222]
+                - rowgroup [ref=e223]:
+                  - row "PAN card (owner or entity) Yes Yes Yes" [ref=e224]:
+                    - cell "PAN card (owner or entity)" [ref=e225]
+                    - cell "Yes" [ref=e226]
+                    - cell "Yes" [ref=e227]
+                    - cell "Yes" [ref=e228]
+                  - row "Aadhaar card Yes Yes Yes" [ref=e229]:
+                    - cell "Aadhaar card" [ref=e230]
+                    - cell "Yes" [ref=e231]
+                    - cell "Yes" [ref=e232]
+                    - cell "Yes" [ref=e233]
+                  - row "Address proof (owner) Yes Yes Yes" [ref=e234]:
+                    - cell "Address proof (owner)" [ref=e235]
+                    - cell "Yes" [ref=e236]
+                    - cell "Yes" [ref=e237]
+                    - cell "Yes" [ref=e238]
+                  - row "Kitchen electricity bill Yes Yes (business address) Yes" [ref=e239]:
+                    - cell "Kitchen electricity bill" [ref=e240]
+                    - cell "Yes" [ref=e241]
+                    - cell "Yes (business address)" [ref=e242]
+                    - cell "Yes" [ref=e243]
+                  - row "Rent agreement or ownership proof Yes NOC if rented Yes" [ref=e244]:
+                    - cell "Rent agreement or ownership proof" [ref=e245]
+                    - cell "Yes" [ref=e246]
+                    - cell "NOC if rented" [ref=e247]
+                    - cell "Yes" [ref=e248]
+                  - row "Business registration proof If company/LLP If company/LLP Yes" [ref=e249]:
+                    - cell "Business registration proof" [ref=e250]
+                    - cell "If company/LLP" [ref=e251]
+                    - cell "If company/LLP" [ref=e252]
+                    - cell "Yes" [ref=e253]
+                  - row "Kitchen layout plan (to scale) State/Central only No Sometimes" [ref=e254]:
+                    - cell "Kitchen layout plan (to scale)" [ref=e255]
+                    - cell "State/Central only" [ref=e256]
+                    - cell "No" [ref=e257]
+                    - cell "Sometimes" [ref=e258]
+                  - row "Food safety plan State/Central only No No" [ref=e259]:
+                    - cell "Food safety plan" [ref=e260]
+                    - cell "State/Central only" [ref=e261]
+                    - cell "No" [ref=e262]
+                    - cell "No" [ref=e263]
+                  - row "Equipment list with make/model State/Central only No No" [ref=e264]:
+                    - cell "Equipment list with make/model" [ref=e265]
+                    - cell "State/Central only" [ref=e266]
+                    - cell "No" [ref=e267]
+                    - cell "No" [ref=e268]
+                  - row "Pest control certificate State/Central only No Sometimes" [ref=e269]:
+                    - cell "Pest control certificate" [ref=e270]
+                    - cell "State/Central only" [ref=e271]
+                    - cell "No" [ref=e272]
+                    - cell "Sometimes" [ref=e273]
+                  - row "Water test report State/Central only No No" [ref=e274]:
+                    - cell "Water test report" [ref=e275]
+                    - cell "State/Central only" [ref=e276]
+                    - cell "No" [ref=e277]
+                    - cell "No" [ref=e278]
+                  - row "Passport photo of proprietor/director Yes Yes Yes" [ref=e279]:
+                    - cell "Passport photo of proprietor/director" [ref=e280]
+                    - cell "Yes" [ref=e281]
+                    - cell "Yes" [ref=e282]
+                    - cell "Yes" [ref=e283]
+              - link "See full document checklist" [ref=e285] [cursor=pointer]:
+                - /url: /tools/documents/fssai
+                - text: See full document checklist
+                - img [ref=e286]
+            - generic [ref=e288]:
+              - generic [ref=e290]: Ollvy Guided
+              - heading "We file correctly. Not just on time." [level=2] [ref=e291]:
+                - text: We file correctly.
+                - text: Not just on time.
+              - paragraph [ref=e292]: Most CAs submit what you give them and hope for the best. Ollvy reviews your documents before filing - not after a notice arrives.
+              - generic [ref=e293]:
+                - generic [ref=e294]:
+                  - paragraph [ref=e295]: Without Ollvy
+                  - list [ref=e296]:
+                    - listitem [ref=e297]:
+                      - img [ref=e298]
+                      - generic [ref=e301]: Wrong FSSAI license type - Basic when State is needed. Swiggy rejects it on onboarding.
+                    - listitem [ref=e302]:
+                      - img [ref=e303]
+                      - generic [ref=e306]: GST registration at wrong address - GSTIN must match your kitchen address.
+                    - listitem [ref=e307]:
+                      - img [ref=e308]
+                      - generic [ref=e311]: FSSAI inspection failed - no prep. Dirty kitchen, missing layout, wrong documents.
+                    - listitem [ref=e312]:
+                      - img [ref=e313]
+                      - generic [ref=e316]: Missing Eating House License - Delhi requires police clearance separately.
+                    - listitem [ref=e317]:
+                      - img [ref=e318]
+                      - generic [ref=e321]: 3 months of back and forth. No single point of contact.
+                - generic [ref=e322]:
+                  - paragraph [ref=e323]: With Ollvy
+                  - list [ref=e324]:
+                    - listitem [ref=e325]:
+                      - img [ref=e326]
+                      - generic [ref=e328]: Correct license type confirmed before filing. Turnover question determines Basic vs State.
+                    - listitem [ref=e329]:
+                      - img [ref=e330]
+                      - generic [ref=e332]: GST address cross-checked with FSSAI address. Both applications use the same address.
+                    - listitem [ref=e333]:
+                      - img [ref=e334]
+                      - generic [ref=e336]: "Premises checklist sent before inspection. 7 days before: layout, cleanliness, document display."
+                    - listitem [ref=e337]:
+                      - img [ref=e338]
+                      - generic [ref=e340]: Eating House + Trade License both covered. City-specific requirements mapped.
+                    - listitem [ref=e341]:
+                      - img [ref=e342]
+                      - generic [ref=e344]: One professional, one WhatsApp. Direct contact throughout.
+              - generic [ref=e345]:
+                - heading "We catch compliance gaps before regulators do." [level=3] [ref=e346]
+                - generic [ref=e347]:
+                  - generic [ref=e348]:
+                    - generic [ref=e350]: "1"
+                    - paragraph [ref=e351]: we review
+                    - paragraph [ref=e352]: your documents
+                    - paragraph [ref=e353]: Every upload checked before anything is filed
+                  - generic [ref=e354]:
+                    - generic [ref=e356]: "2"
+                    - paragraph [ref=e357]: we flag
+                    - paragraph [ref=e358]: the risks
+                    - paragraph [ref=e359]: Issues identified - expiry dates, mismatches, format errors
+                  - generic [ref=e360]:
+                    - generic [ref=e362]: "3"
+                    - paragraph [ref=e363]: we fix
+                    - paragraph [ref=e364]: if possible
+                    - paragraph [ref=e365]: Fixable issues resolved before filing, not after
+                  - generic [ref=e366]:
+                    - generic [ref=e368]: "4"
+                    - paragraph [ref=e369]: we file
+                    - paragraph [ref=e370]: correctly
+                    - paragraph [ref=e371]: Clean submission - lower chance of officer query
+            - generic [ref=e373]:
+              - heading "We handle the messy situations too." [level=2] [ref=e374]
+              - paragraph [ref=e375]: The situations most CAs decline or overcharge for.
+              - generic [ref=e376]:
+                - generic [ref=e377]:
+                  - generic [ref=e378]: "N"
+                  - generic [ref=e379]:
+                    - paragraph [ref=e380]: New cloud kitchen, no existing licences
+                    - paragraph [ref=e381]: Starting from scratch. All three licences handled together.
+                - generic [ref=e382]:
+                  - generic [ref=e383]: H
+                  - generic [ref=e384]:
+                    - paragraph [ref=e385]: Home baker scaling to commercial
+                    - paragraph [ref=e386]: Moving from home to a commercial kitchen. State Licence now required.
+                - generic [ref=e387]:
+                  - generic [ref=e388]: A
+                  - generic [ref=e389]:
+                    - paragraph [ref=e390]: Already have GST, need FSSAI
+                    - paragraph [ref=e391]: Partial bundle - FSSAI and trade licence only.
+                - generic [ref=e392]:
+                  - generic [ref=e393]: M
+                  - generic [ref=e394]:
+                    - paragraph [ref=e395]: Multi-city expansion
+                    - paragraph [ref=e396]: New kitchen location in a new city. Fresh local licences required for each location.
+            - generic [ref=e398]:
+              - heading "What could go wrong with Cloud Kitchen" [level=2] [ref=e399]
+              - paragraph [ref=e400]: These are the risks. We handle most of them, but you should know what they are.
+              - generic [ref=e401]:
+                - generic [ref=e402]:
+                  - img [ref=e404]
+                  - generic [ref=e406]:
+                    - heading "FSSAI inspection failure" [level=3] [ref=e407]
+                    - paragraph [ref=e408]: "State and Central licences require physical inspection. Common failure points: no pest control certificate, missing water quality test, equipment without hygiene labels. Our pre-inspection checklist addresses all of these."
+                - generic [ref=e409]:
+                  - img [ref=e411]
+                  - generic [ref=e414]:
+                    - heading "Wrong FSSAI licence type" [level=3] [ref=e415]
+                    - paragraph [ref=e416]: Applying for Basic Registration when you need a State Licence gets rejected. We verify your turnover and operation type before filing.
+                - generic [ref=e417]:
+                  - img [ref=e419]
+                  - generic [ref=e421]:
+                    - heading "GST Aadhaar OTP failure" [level=3] [ref=e422]
+                    - paragraph [ref=e423]: GST registration requires Aadhaar-based authentication. If your linked mobile is inactive, OTP fails. We verify this before filing.
+            - generic [ref=e424]:
+              - paragraph [ref=e425]: NEXT STEPS
+              - heading "What Cloud Kitchen unlocks" [level=2] [ref=e426]
+              - paragraph [ref=e427]: Services that become available or mandatory after completion.
+              - generic [ref=e428]:
+                - generic [ref=e429]:
+                  - generic [ref=e430]:
+                    - generic [ref=e431]:
+                      - generic [ref=e432]:
+                        - heading "List on Swiggy and Zomato" [level=4] [ref=e433]
+                        - generic [ref=e434]: Required
+                      - paragraph [ref=e435]: Both platforms require FSSAI number during onboarding. Submit immediately after certificate is issued.
+                    - generic [ref=e436]: Free
+                  - link "Learn more" [ref=e437] [cursor=pointer]:
+                    - /url: /services
+                    - text: Learn more
+                    - img [ref=e438]
+                - generic [ref=e440]:
+                  - generic [ref=e441]:
+                    - generic [ref=e442]:
+                      - generic [ref=e443]:
+                        - heading "GST Monthly Filing" [level=4] [ref=e444]
+                        - generic [ref=e445]: Required
+                      - paragraph [ref=e446]: Once GST is registered, monthly returns are due by the 20th. Missing one means TCS deducted by Swiggy stays stuck.
+                    - generic [ref=e447]: ₹2,999/month
+                  - link "Learn more" [ref=e448] [cursor=pointer]:
+                    - /url: /services/gst-monthly-filing
+                    - text: Learn more
+                    - img [ref=e449]
+                - generic [ref=e451]:
+                  - generic [ref=e452]:
+                    - generic [ref=e453]:
+                      - heading "Trademark Registration" [level=4] [ref=e455]
+                      - paragraph [ref=e456]: Competitors can register your cloud kitchen brand name on Swiggy once you scale. File early.
+                    - generic [ref=e457]: ₹14,999
+                  - link "Learn more" [ref=e458] [cursor=pointer]:
+                    - /url: /services/trademark-word-mark
+                    - text: Learn more
+                    - img [ref=e459]
+                - generic [ref=e461]:
+                  - generic [ref=e462]:
+                    - generic [ref=e463]:
+                      - generic [ref=e464]:
+                        - heading "FSSAI Annual Return" [level=4] [ref=e465]
+                        - generic [ref=e466]: Required
+                      - paragraph [ref=e467]: "FSSAI-licensed businesses must file an annual return every May 31. Penalty: ₹100/day for late filing."
+                    - generic [ref=e468]: ₹2,999/yr
+                  - link "Learn more" [ref=e469] [cursor=pointer]:
+                    - /url: /services/fssai-annual-return
+                    - text: Learn more
+                    - img [ref=e470]
+            - generic [ref=e472]:
+              - paragraph [ref=e473]: CUSTOMER REVIEWS
+              - heading "What customers say about Cloud Kitchen" [level=2] [ref=e474]
+              - generic [ref=e475]:
+                - generic [ref=e476]: Quick
+                - generic [ref=e477]: Transparent
+                - generic [ref=e478]: Professional
+                - generic [ref=e479]: No surprises
+                - generic [ref=e480]: Single contact
+              - generic [ref=e481]:
+                - generic [ref=e482]:
+                  - generic [ref=e483]:
+                    - img [ref=e484]
+                    - img [ref=e486]
+                    - img [ref=e488]
+                    - img [ref=e490]
+                    - img [ref=e492]
+                    - generic [ref=e494]: March 2026
+                  - paragraph [ref=e495]: "\"All three licences handled together. Got a checklist of what the inspector would check. Everything was in order when they came. On Swiggy in 3 weeks.\""
+                  - paragraph [ref=e496]: "- Verified customer"
+                - generic [ref=e497]:
+                  - generic [ref=e498]:
+                    - img [ref=e499]
+                    - img [ref=e501]
+                    - img [ref=e503]
+                    - img [ref=e505]
+                    - img [ref=e507]
+                    - generic [ref=e509]: February 2026
+                  - paragraph [ref=e510]: "\"Knew exactly which licences we needed before paying anything. No wrong filings, no starting over.\""
+                  - paragraph [ref=e511]: "- Verified customer"
+            - generic [ref=e512]:
+              - paragraph [ref=e513]: COMMON QUESTIONS
+              - heading "Frequently asked questions" [level=2] [ref=e514]
+              - generic [ref=e515]:
+                - heading "Do I need FSSAI even for a small kitchen?" [level=3] [ref=e517]:
+                  - button "Do I need FSSAI even for a small kitchen?" [ref=e518] [cursor=pointer]:
+                    - text: Do I need FSSAI even for a small kitchen?
+                    - img [ref=e519]
+                - heading "Can I list on Swiggy or Zomato before getting licences?" [level=3] [ref=e522]:
+                  - button "Can I list on Swiggy or Zomato before getting licences?" [ref=e523] [cursor=pointer]:
+                    - text: Can I list on Swiggy or Zomato before getting licences?
+                    - img [ref=e524]
+                - heading "What is the difference between FSSAI Registration and State License?" [level=3] [ref=e527]:
+                  - button "What is the difference between FSSAI Registration and State License?" [ref=e528] [cursor=pointer]:
+                    - text: What is the difference between FSSAI Registration and State License?
+                    - img [ref=e529]
+                - heading "How long is the FSSAI licence valid?" [level=3] [ref=e532]:
+                  - button "How long is the FSSAI licence valid?" [ref=e533] [cursor=pointer]:
+                    - text: How long is the FSSAI licence valid?
+                    - img [ref=e534]
+                - heading "Does a cloud kitchen need a separate address for each brand?" [level=3] [ref=e537]:
+                  - button "Does a cloud kitchen need a separate address for each brand?" [ref=e538] [cursor=pointer]:
+                    - text: Does a cloud kitchen need a separate address for each brand?
+                    - img [ref=e539]
+                - heading "What documents are needed?" [level=3] [ref=e542]:
+                  - button "What documents are needed?" [ref=e543] [cursor=pointer]:
+                    - text: What documents are needed?
+                    - img [ref=e544]
+            - generic [ref=e547]:
+              - heading "Services you'll need next" [level=2] [ref=e548]
+              - paragraph [ref=e549]: These services often go with what you're booking.
+              - link "GST Reg Your GSTIN, applied for and obtained. We handle every step. ₹1,499 By 16 Apr" [ref=e551] [cursor=pointer]:
+                - /url: /services/gst-registration
+                - generic [ref=e552]:
+                  - generic [ref=e553]:
+                    - generic [ref=e554]:
+                      - heading "GST Reg" [level=3] [ref=e555]
+                      - paragraph [ref=e556]: Your GSTIN, applied for and obtained. We handle every step.
+                    - img [ref=e557]
+                  - generic [ref=e559]:
+                    - generic [ref=e560]: ₹1,499
+                    - generic [ref=e561]:
+                      - img [ref=e562]
+                      - text: By 16 Apr
+            - generic [ref=e565]:
+              - heading "How we reviewed this page" [level=3] [ref=e566]
+              - paragraph [ref=e567]: The penalty amounts, deadlines, and regulatory requirements on this page are sourced directly from official government portals. We do not use secondary sources. When regulations change, we update the page.
+              - generic [ref=e568]:
+                - button "sources" [ref=e569] [cursor=pointer]:
+                  - img [ref=e570]
+                  - text: sources
+                - button "history" [ref=e573] [cursor=pointer]:
+                  - img [ref=e574]
+                  - text: history
+              - list [ref=e578]:
+                - listitem [ref=e579]:
+                  - generic [ref=e581]:
+                    - link "FSSAI FoSCoS Portal" [ref=e582] [cursor=pointer]:
+                      - /url: https://foscos.fssai.gov.in
+                      - text: FSSAI FoSCoS Portal
+                      - img [ref=e583]
+                    - paragraph [ref=e587]: Food licensing and registration portal
+                - listitem [ref=e588]:
+                  - generic [ref=e590]:
+                    - link "GST Portal" [ref=e591] [cursor=pointer]:
+                      - /url: https://www.gst.gov.in
+                      - text: GST Portal
+                      - img [ref=e592]
+                    - paragraph [ref=e596]: Official GST registration and filing
+                - listitem [ref=e597]:
+                  - generic [ref=e599]:
+                    - link "Food Safety and Standards Act, 2006" [ref=e600] [cursor=pointer]:
+                      - /url: https://www.fssai.gov.in/cms/food-safety-and-standards-act-2006.php
+                      - text: Food Safety and Standards Act, 2006
+                      - img [ref=e601]
+                    - paragraph [ref=e605]: FSSAI licensing requirements
+          - complementary [ref=e606]:
+            - generic [ref=e607]:
+              - generic [ref=e609]:
+                - img [ref=e610]
+                - paragraph [ref=e613]: Guaranteed by 9 Jun
+              - generic [ref=e614]:
+                - paragraph [ref=e615]: YOUR EXPECTED ANNUAL TURNOVER
+                - generic [ref=e616]:
+                  - button "Under ₹12L/year FSSAI Basic Registration" [ref=e617] [cursor=pointer]:
+                    - paragraph [ref=e618]: Under ₹12L/year
+                    - paragraph [ref=e619]: FSSAI Basic Registration
+                  - button "₹12L - ₹20Cr/year FSSAI State License" [ref=e620] [cursor=pointer]:
+                    - paragraph [ref=e621]: ₹12L - ₹20Cr/year
+                    - paragraph [ref=e622]: FSSAI State License
+              - generic [ref=e623]:
+                - paragraph [ref=e624]: INCLUDED SERVICES
+                - generic [ref=e625]:
+                  - button "GST Registration ₹8,999 GSTIN in 7 working days. Required for Swiggy/Zomato." [ref=e626] [cursor=pointer]:
+                    - img [ref=e628]
+                    - generic [ref=e631]:
+                      - generic [ref=e632]:
+                        - paragraph [ref=e633]: GST Registration
+                        - generic [ref=e634]: ₹8,999
+                      - paragraph [ref=e635]: GSTIN in 7 working days. Required for Swiggy/Zomato.
+                  - button "Shop & Establishment ₹5,199 Labour department registration. 5-7 working days." [ref=e636] [cursor=pointer]:
+                    - img [ref=e638]
+                    - generic [ref=e641]:
+                      - generic [ref=e642]:
+                        - paragraph [ref=e643]: Shop & Establishment
+                        - generic [ref=e644]: ₹5,199
+                      - paragraph [ref=e645]: Labour department registration. 5-7 working days.
+                  - button "Trade License / Eating House ₹9,999 Municipal corporation license. 15-30 working days." [ref=e646] [cursor=pointer]:
+                    - img [ref=e648]
+                    - generic [ref=e651]:
+                      - generic [ref=e652]:
+                        - paragraph [ref=e653]: Trade License / Eating House
+                        - generic [ref=e654]: ₹9,999
+                      - paragraph [ref=e655]: Municipal corporation license. 15-30 working days.
+              - generic [ref=e656]:
+                - paragraph [ref=e657]: Total to pay now
+                - paragraph [ref=e658]: ₹46,296
+              - generic [ref=e659]:
+                - generic [ref=e660]:
+                  - generic [ref=e661]:
+                    - img [ref=e663]
+                    - generic [ref=e666]:
+                      - paragraph [ref=e667]: FSSAI State License
+                      - paragraph [ref=e668]: Service fee
+                  - generic [ref=e669]: ₹22,099
+                - generic [ref=e670]:
+                  - generic [ref=e671]:
+                    - img [ref=e673]
+                    - generic [ref=e676]:
+                      - paragraph [ref=e677]: GST Registration
+                      - paragraph [ref=e678]: Service fee
+                  - generic [ref=e679]: ₹8,999
+                - generic [ref=e680]:
+                  - generic [ref=e681]:
+                    - img [ref=e683]
+                    - generic [ref=e686]:
+                      - paragraph [ref=e687]: Shop & Establishment
+                      - paragraph [ref=e688]: Service fee
+                  - generic [ref=e689]: ₹5,199
+                - generic [ref=e690]:
+                  - generic [ref=e691]:
+                    - img [ref=e693]
+                    - generic [ref=e696]:
+                      - paragraph [ref=e697]: Trade License / Eating House
+                      - paragraph [ref=e698]: Service fee
+                  - generic [ref=e699]: ₹9,999
+                - generic [ref=e700]:
+                  - generic [ref=e701]: Total Amount
+                  - generic [ref=e702]: ₹46,296
+              - link "Book Now" [active] [ref=e703] [cursor=pointer]:
+                - /url: /checkout/4bef395d-195f-4660-a2a7-9690dd47f93e?variant=fssai-state&addons=gst-registration%2Cshop-establishment%2Ctrade-license
+              - paragraph [ref=e704]: GST-compliant invoice generated at checkout
+              - generic [ref=e705]:
+                - paragraph [ref=e706]: Questions about documents, process, or price?
+                - generic [ref=e707]:
+                  - link "WhatsApp" [ref=e708] [cursor=pointer]:
+                    - /url: https://wa.me/919217065577?text=Hi%2C%20I%20have%20a%20question%20about%20Cloud%20Kitchen%20Setup
+                    - img
+                    - text: WhatsApp
+                  - link "Call" [ref=e709] [cursor=pointer]:
+                    - /url: tel:+919217065577
+                    - img
+                    - text: Call
+        - generic [ref=e711]:
+          - heading "Get Cloud Kitchen done now" [level=2] [ref=e712]
+          - paragraph [ref=e713]: Fixed price. Verified CA. Done within 45 working days.
+          - link "Book Now" [ref=e714] [cursor=pointer]:
+            - /url: /checkout/4bef395d-195f-4660-a2a7-9690dd47f93e/eligibility
+    - contentinfo [ref=e715]:
+      - generic [ref=e716]:
+        - generic [ref=e717]:
+          - generic [ref=e718]:
+            - link "Ollvy" [ref=e719] [cursor=pointer]:
+              - /url: /
+            - paragraph [ref=e720]: You run your business. We handle the rest.
+            - generic [ref=e721]:
+              - link "LinkedIn" [ref=e722] [cursor=pointer]:
+                - /url: https://linkedin.com/company/ollvy
+                - img [ref=e723]
+              - link "Twitter" [ref=e727] [cursor=pointer]:
+                - /url: https://twitter.com/ollvy
+                - img [ref=e728]
+          - generic [ref=e730]:
+            - link "Calculators" [ref=e731] [cursor=pointer]:
+              - /url: /tools/penalty-calculator
+            - list [ref=e732]:
+              - listitem [ref=e733]:
+                - link "GST Late Filing" [ref=e734] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-late-filing
+              - listitem [ref=e735]:
+                - link "GST Demand Notice" [ref=e736] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/gst-demand-notice
+              - listitem [ref=e737]:
+                - link "ITR Late Filing" [ref=e738] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/itr-late-filing
+              - listitem [ref=e739]:
+                - link "TDS Late Filing" [ref=e740] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/tds-late-filing
+              - listitem [ref=e741]:
+                - link "MCA Annual Filing" [ref=e742] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/mca-annual-filing
+              - listitem [ref=e743]:
+                - link "Director KYC" [ref=e744] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/director-kyc
+              - listitem [ref=e745]:
+                - link "PF/ESIC Penalty" [ref=e746] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/pf-esic-penalty
+              - listitem [ref=e747]:
+                - link "Professional Tax" [ref=e748] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/professional-tax-penalty
+              - listitem [ref=e749]:
+                - link "Shops & Establishment" [ref=e750] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/shops-establishment-penalty
+              - listitem [ref=e751]:
+                - link "Startup DPIIT" [ref=e752] [cursor=pointer]:
+                  - /url: /tools/penalty-calculator/startup-dpiit-compliance
+          - generic [ref=e753]:
+            - link "Checklists" [ref=e754] [cursor=pointer]:
+              - /url: /tools/documents
+            - list [ref=e755]:
+              - listitem [ref=e756]:
+                - link "Pvt Ltd Documents" [ref=e757] [cursor=pointer]:
+                  - /url: /tools/documents/private-limited-company
+              - listitem [ref=e758]:
+                - link "LLP Documents" [ref=e759] [cursor=pointer]:
+                  - /url: /tools/documents/llp
+              - listitem [ref=e760]:
+                - link "Partnership Documents" [ref=e761] [cursor=pointer]:
+                  - /url: /tools/documents/partnership
+              - listitem [ref=e762]:
+                - link "Sole Proprietor" [ref=e763] [cursor=pointer]:
+                  - /url: /tools/documents/sole-proprietor
+              - listitem [ref=e764]:
+                - link "GST Registration" [ref=e765] [cursor=pointer]:
+                  - /url: /tools/documents/gst-registration
+              - listitem [ref=e766]:
+                - link "Individual ITR" [ref=e767] [cursor=pointer]:
+                  - /url: /tools/documents/individual-itr
+              - listitem [ref=e768]:
+                - link "Business ITR" [ref=e769] [cursor=pointer]:
+                  - /url: /tools/documents/business-itr
+              - listitem [ref=e770]:
+                - link "Trademark" [ref=e771] [cursor=pointer]:
+                  - /url: /tools/documents/trademark
+          - generic [ref=e772]:
+            - link "Services" [ref=e773] [cursor=pointer]:
+              - /url: /services
+            - list [ref=e774]:
+              - listitem [ref=e775]:
+                - link "Pvt Ltd Registration" [ref=e776] [cursor=pointer]:
+                  - /url: /services/pvt-ltd-incorporation
+              - listitem [ref=e777]:
+                - link "LLP Registration" [ref=e778] [cursor=pointer]:
+                  - /url: /services/llp-incorporation
+              - listitem [ref=e779]:
+                - link "GST Registration" [ref=e780] [cursor=pointer]:
+                  - /url: /services/gst-registration
+              - listitem [ref=e781]:
+                - link "GST Monthly Filing" [ref=e782] [cursor=pointer]:
+                  - /url: /services/gst-monthly
+              - listitem [ref=e783]:
+                - link "GST Cancellation" [ref=e784] [cursor=pointer]:
+                  - /url: /services/gst-cancellation
+              - listitem [ref=e785]:
+                - link "GST Revocation" [ref=e786] [cursor=pointer]:
+                  - /url: /services/gst-revocation
+              - listitem [ref=e787]:
+                - link "Trademark Registration" [ref=e788] [cursor=pointer]:
+                  - /url: /services/trademark-registration
+              - listitem [ref=e789]:
+                - link "MSME Registration" [ref=e790] [cursor=pointer]:
+                  - /url: /services/msme-registration
+              - listitem [ref=e791]:
+                - link "Cloud Kitchen Setup" [ref=e792] [cursor=pointer]:
+                  - /url: /services/cloud-kitchen-setup
+              - listitem [ref=e793]:
+                - link "Business ITR Filing" [ref=e794] [cursor=pointer]:
+                  - /url: /services/business-itr
+              - listitem [ref=e795]:
+                - link "Annual Compliance" [ref=e796] [cursor=pointer]:
+                  - /url: /services/mca-annual-filing
+              - listitem [ref=e797]:
+                - link "TDS Compliance" [ref=e798] [cursor=pointer]:
+                  - /url: /services/tds-monthly-compliance
+              - listitem [ref=e799]:
+                - link "Company Name Change" [ref=e800] [cursor=pointer]:
+                  - /url: /services/company-name-change
+              - listitem [ref=e801]:
+                - link "DIN Reactivation" [ref=e802] [cursor=pointer]:
+                  - /url: /services/din-reactivation
+              - listitem [ref=e803]:
+                - link "All Services" [ref=e804] [cursor=pointer]:
+                  - /url: /services
+          - generic [ref=e805]:
+            - paragraph [ref=e806]: Deadlines
+            - list [ref=e807]:
+              - listitem [ref=e808]:
+                - link "Director KYC 2026" [ref=e809] [cursor=pointer]:
+                  - /url: /director-kyc-2026
+              - listitem [ref=e810]:
+                - link "Business ITR 2026" [ref=e811] [cursor=pointer]:
+                  - /url: /itr-2026
+              - listitem [ref=e812]:
+                - link "GSTR-9 2026" [ref=e813] [cursor=pointer]:
+                  - /url: /gst-annual-2026
+              - listitem [ref=e814]:
+                - link "TDS Return Q1 2027" [ref=e815] [cursor=pointer]:
+                  - /url: /tds-return-q1-2027
+              - listitem [ref=e816]:
+                - link "Business ITR 2027" [ref=e817] [cursor=pointer]:
+                  - /url: /itr-2027
+              - listitem [ref=e818]:
+                - link "GSTR-9 2027" [ref=e819] [cursor=pointer]:
+                  - /url: /gst-annual-2027
+          - generic [ref=e820]:
+            - link "Guides" [ref=e821] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e822]:
+              - listitem [ref=e823]:
+                - link "Do I Need GST?" [ref=e824] [cursor=pointer]:
+                  - /url: /guides/do-i-need-gst-registration
+              - listitem [ref=e825]:
+                - link "Pvt Ltd vs LLP" [ref=e826] [cursor=pointer]:
+                  - /url: /guides/pvt-ltd-vs-llp
+              - listitem [ref=e827]:
+                - link "Which ITR Form?" [ref=e828] [cursor=pointer]:
+                  - /url: /guides/which-itr-form-should-i-use
+              - listitem [ref=e829]:
+                - link "DPIIT Recognition" [ref=e830] [cursor=pointer]:
+                  - /url: /guides/should-i-get-dpiit-startup-recognition
+              - listitem [ref=e831]:
+                - link "All Guides" [ref=e832] [cursor=pointer]:
+                  - /url: /guides
+          - generic [ref=e833]:
+            - link "Notice Help" [ref=e834] [cursor=pointer]:
+              - /url: /guides
+            - list [ref=e835]:
+              - listitem [ref=e836]:
+                - link "GST DRC-01 Notice" [ref=e837] [cursor=pointer]:
+                  - /url: /guides/gst-drc-01-notice
+              - listitem [ref=e838]:
+                - link "GST ASMT-10 Notice" [ref=e839] [cursor=pointer]:
+                  - /url: /guides/gst-asmt-10-notice
+              - listitem [ref=e840]:
+                - link "IT 143(1) Intimation" [ref=e841] [cursor=pointer]:
+                  - /url: /guides/income-tax-143-1-intimation
+              - listitem [ref=e842]:
+                - link "IT 148/148A Notice" [ref=e843] [cursor=pointer]:
+                  - /url: /guides/income-tax-148-148a-reopening
+              - listitem [ref=e844]:
+                - link "TDS Short Deduction" [ref=e845] [cursor=pointer]:
+                  - /url: /guides/tds-short-deduction-notice
+          - generic [ref=e846]:
+            - paragraph [ref=e847]: Legal
+            - list [ref=e848]:
+              - listitem [ref=e849]:
+                - link "Privacy Policy" [ref=e850] [cursor=pointer]:
+                  - /url: /privacy
+              - listitem [ref=e851]:
+                - link "Terms of Service" [ref=e852] [cursor=pointer]:
+                  - /url: /terms
+              - listitem [ref=e853]:
+                - link "Cancellation Policy" [ref=e854] [cursor=pointer]:
+                  - /url: /cancellation
+              - listitem [ref=e855]:
+                - link "Refund Policy" [ref=e856] [cursor=pointer]:
+                  - /url: /refunds
+              - listitem [ref=e857]:
+                - link "Contact" [ref=e858] [cursor=pointer]:
+                  - /url: mailto:support@ollvy.com
+        - paragraph [ref=e860]: © 2026 Ollvy Technologies Private Limited. All rights reserved.
+  - region "Notifications (F8)":
+    - list
+  - button "Open Next.js Dev Tools" [ref=e866] [cursor=pointer]:
+    - img [ref=e867]
+  - alert [ref=e870]
