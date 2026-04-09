@@ -37,8 +37,10 @@ import type { Order, OrderStageHistory, OrderWorkDocument, ServicePackage, Workf
 import { WorkDocumentsSection } from '@/components/orders/WorkDocumentsSection'
 import { RoundNotificationBanner } from '@/components/orders/RoundNotificationBanner'
 import { FinalOutputBanner } from '@/components/orders/FinalOutputBanner'
-import { RoundsTimeline } from '@/components/orders/RoundsTimeline'
-import { ChatWindow } from '@/components/chat/ChatWindow'
+import dynamic from 'next/dynamic'
+
+const RoundsTimeline = dynamic(() => import('@/components/orders/RoundsTimeline').then(m => ({ default: m.RoundsTimeline })))
+const ChatWindow = dynamic(() => import('@/components/chat/ChatWindow').then(m => ({ default: m.ChatWindow })))
 import { getEdgeFunctionUrl } from '@/lib/supabase'
 import { getSignedUrl, downloadFile } from '@/lib/storage'
 import {
