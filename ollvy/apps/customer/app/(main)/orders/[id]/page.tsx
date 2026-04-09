@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { getUser, createServerSupabase, supabaseServer } from '@/lib/supabase-server'
+import { getUserFast, createServerSupabase, supabaseServer } from '@/lib/supabase-server'
 import { OrderPageClient } from './OrderPageClient'
 import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
 
@@ -48,7 +48,7 @@ interface RoundNotification {
 
 export default async function OrderDetailPage({ params }: PageProps) {
   const { id: orderId } = await params
-  const user = await getUser()
+  const user = await getUserFast()
 
   if (!user) {
     redirect(`/login?returnUrl=/orders/${orderId}`)

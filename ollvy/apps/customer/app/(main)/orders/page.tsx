@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { getUser, supabaseServer } from '@/lib/supabase-server'
+import { getUserFast, supabaseServer } from '@/lib/supabase-server'
 import { OrdersPageClient } from './OrdersPageClient'
 import type { Order } from '@/lib/types'
 
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 export default async function OrdersPage() {
-  const user = await getUser()
+  const user = await getUserFast()
 
   if (!user) {
     redirect('/login?returnUrl=/orders')

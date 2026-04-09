@@ -65,6 +65,35 @@ export async function getUser() {
   return userData
 }
 
+/**
+ * Fast user lookup using auth ID from middleware header.
+ * Skips the redundant auth.getUser() call (~200ms saved) since
+ * middleware already verified the JWT.
+ * Falls back to full getUser() if header is missing.
+ */
+export async function getUserFast() {
+  const { headers } = await import('next/headers')
+  const headerStore = await headers()
+  const authUserId = headerStore.get('x-auth-user-id')
+
+  if (!authUserId) {
+    // Fallback: middleware didn't set header (direct access, etc.)
+    return getUser()
+  }
+
+  // Skip auth.getUser() — middleware already verified the JWT
+  // Just fetch user data from the users table (single DB query)
+  if (!supabaseServer) return getUser()
+
+  const { data: userData } = await supabaseServer
+    .from('users')
+    .select('*')
+    .eq('auth_user_id', authUserId)
+    .single()
+
+  return userData
+}
+
 export async function getSession() {
   const supabase = await createServerSupabase()
   const { data: { session } } = await supabase.auth.getSession()

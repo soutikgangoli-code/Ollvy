@@ -7,6 +7,13 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   transpilePackages: ['@ollvy/shared'],
+  experimental: {
+    // Cache dynamic pages client-side for 30s so back-navigation is instant
+    staleTimes: {
+      dynamic: 30,
+      static: 180,
+    },
+  },
   images: {
     remotePatterns: [
       {

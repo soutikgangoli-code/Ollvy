@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { createServerSupabase, getUser } from '@/lib/supabase-server'
+import { createServerSupabase, getUserFast } from '@/lib/supabase-server'
 import { DocumentsPageClient } from './DocumentsPageClient'
 
 interface PageProps {
@@ -12,7 +12,7 @@ export default async function DocumentsUploadPage({ params }: PageProps) {
   const { id: orderId } = await params
 
   // Check if user is logged in
-  const user = await getUser()
+  const user = await getUserFast()
   if (!user) {
     redirect('/login')
   }

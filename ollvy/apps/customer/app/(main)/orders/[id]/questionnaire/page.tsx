@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { createServerSupabase, getUser } from '@/lib/supabase-server'
+import { createServerSupabase, getUserFast } from '@/lib/supabase-server'
 import { QuestionnairePageClient } from './QuestionnairePageClient'
 
 interface PageProps {
@@ -15,7 +15,7 @@ export default async function QuestionnairePage({ params, searchParams }: PagePr
   const forceEdit = edit === 'true'
 
   // Check if user is logged in
-  const user = await getUser()
+  const user = await getUserFast()
   if (!user) {
     redirect('/login')
   }

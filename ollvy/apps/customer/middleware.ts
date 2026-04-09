@@ -81,6 +81,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
+  // Pass auth user ID to page via header so pages can skip redundant auth.getUser()
+  if (user) {
+    response.headers.set('x-auth-user-id', user.id)
+  }
+
   return response
 }
 

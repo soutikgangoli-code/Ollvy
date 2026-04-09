@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { getUser, supabaseServer } from '@/lib/supabase-server'
+import { getUserFast, supabaseServer } from '@/lib/supabase-server'
 import { ProfilePageClient } from './ProfilePageClient'
 
 export const metadata: Metadata = {
@@ -73,7 +73,7 @@ export default async function ProfilePage({ searchParams }: PageProps) {
   const params = await searchParams
   const isSetup = params.setup === 'true'
 
-  const user = await getUser()
+  const user = await getUserFast()
 
   if (!user) {
     redirect('/login?returnUrl=/profile')
