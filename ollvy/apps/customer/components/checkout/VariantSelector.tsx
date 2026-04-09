@@ -1,7 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Settings2 } from 'lucide-react'
+import { Settings2, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface Variant {
@@ -28,6 +29,8 @@ export function VariantSelector({
   title = 'Select Your Option',
   subtitle,
 }: VariantSelectorProps) {
+  const [expandedTooltip, setExpandedTooltip] = useState<string | null>(null)
+
   if (!variants || variants.length === 0) {
     return null
   }
@@ -46,21 +49,41 @@ export function VariantSelector({
       <CardContent className="pt-0">
         <div className="grid grid-cols-2 gap-3">
           {variants.map((variant) => (
-            <button
-              key={variant.id}
-              type="button"
-              onClick={() => onVariantChange(variant.id)}
-              title={variant.tooltip || undefined}
-              className={cn(
-                'border rounded-xl p-4 text-left transition-all',
-                selectedVariant === variant.id
-                  ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5'
-                  : 'border-border hover:border-border/80 bg-card'
+            <div key={variant.id} className="flex flex-col">
+              <button
+                type="button"
+                onClick={() => onVariantChange(variant.id)}
+                className={cn(
+                  'border rounded-xl p-4 text-left transition-all',
+                  selectedVariant === variant.id
+                    ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5'
+                    : 'border-border hover:border-border/80 bg-card'
+                )}
+              >
+                <div className="flex items-start justify-between gap-1">
+                  <p className="text-sm font-medium text-foreground">{variant.label}</p>
+                  {variant.tooltip && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setExpandedTooltip(expandedTooltip === variant.id ? null : variant.id)
+                      }}
+                      className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label={`More info about ${variant.label}`}
+                    >
+                      <Info size={14} />
+                    </button>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">{variant.sublabel}</p>
+              </button>
+              {variant.tooltip && expandedTooltip === variant.id && (
+                <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2 mt-1.5">
+                  {variant.tooltip}
+                </p>
               )}
-            >
-              <p className="text-sm font-medium text-foreground">{variant.label}</p>
-              <p className="text-xs text-muted-foreground mt-1">{variant.sublabel}</p>
-            </button>
+            </div>
           ))}
         </div>
       </CardContent>

@@ -72,12 +72,12 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
       {/* Step content */}
       <div
         key={active}
-        className="p-8 min-h-[280px] flex flex-col"
+        className="p-4 sm:p-8 min-h-[220px] sm:min-h-[280px] flex flex-col"
       >
         {/* Step icon */}
         <div
           className={cn(
-            'w-10 h-10 rounded-xl flex items-center justify-center mb-5',
+            'w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-3 sm:mb-5',
             step.isCompletion
               ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
               : 'bg-muted text-muted-foreground'
@@ -87,11 +87,11 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
         </div>
 
         {/* Title + timeline */}
-        <div className="flex items-start justify-between gap-4 mb-3">
-          <h3 className="text-lg font-semibold text-foreground leading-snug">
+        <div className="flex items-start justify-between gap-3 sm:gap-4 mb-2 sm:mb-3">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground leading-snug">
             {step.title}
           </h3>
-          <span className="shrink-0 text-xs text-muted-foreground border border-border rounded-full px-2.5 py-1 font-mono">
+          <span className="shrink-0 text-xs text-muted-foreground border border-border rounded-full px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono">
             {step.timeline}
           </span>
         </div>
@@ -103,7 +103,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
 
         {/* Milestone */}
         {step.milestone && (
-          <div className="mt-4 flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-2.5">
+          <div className="mt-3 sm:mt-4 flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-2">
             <div
               className={cn(
                 'w-1.5 h-1.5 rounded-full shrink-0',
@@ -121,7 +121,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between px-8 pb-6">
+      <div className="flex justify-between px-4 pb-4 sm:px-8 sm:pb-6">
         <Button
           variant="outline"
           size="sm"

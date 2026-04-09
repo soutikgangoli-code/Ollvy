@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Phone, MessageCircle, Square, CheckSquare } from 'lucide-react'
+import { CheckCircle, Phone, MessageCircle, Square, CheckSquare, Info } from 'lucide-react'
 import { getCompletionEstimate } from '@/lib/dates'
 import { DBServiceConfig } from '@/lib/data/services'
 import { cn } from '@/lib/utils'
@@ -35,6 +35,7 @@ export function BookingPanel({
   const [internalVariant, setInternalVariant] = useState<string>(
     service.defaultVariantId ?? service.variants?.[0]?.id ?? ''
   )
+  const [expandedTooltip, setExpandedTooltip] = useState<string | null>(null)
 
   // Initialize addon selection based on defaultSelected
   const defaultAddonIds = useMemo(() => {
@@ -166,21 +167,41 @@ export function BookingPanel({
           </p>
           <div className="grid grid-cols-2 gap-2">
             {service.variants.map((variant: any) => (
-              <button
-                key={variant.id}
-                type="button"
-                onClick={() => setSelectedVariant(variant.id)}
-                title={variant.tooltip || undefined}
-                className={cn(
-                  'border rounded-xl p-3 text-left transition-all',
-                  selectedVariant === variant.id
-                    ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5'
-                    : 'border-border hover:border-border/80'
+              <div key={variant.id} className="flex flex-col">
+                <button
+                  type="button"
+                  onClick={() => setSelectedVariant(variant.id)}
+                  className={cn(
+                    'border rounded-xl p-3 text-left transition-all',
+                    selectedVariant === variant.id
+                      ? 'border-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/5'
+                      : 'border-border hover:border-border/80'
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-1">
+                    <p className="text-xs font-medium text-foreground">{variant.label}</p>
+                    {variant.tooltip && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setExpandedTooltip(expandedTooltip === variant.id ? null : variant.id)
+                        }}
+                        className="shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                        aria-label={`More info about ${variant.label}`}
+                      >
+                        <Info size={12} />
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-0.5">{variant.sublabel}</p>
+                </button>
+                {variant.tooltip && expandedTooltip === variant.id && (
+                  <p className="text-[11px] text-muted-foreground bg-muted/50 rounded-lg px-3 py-2 mt-1">
+                    {variant.tooltip}
+                  </p>
                 )}
-              >
-                <p className="text-xs font-medium text-foreground">{variant.label}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{variant.sublabel}</p>
-              </button>
+              </div>
             ))}
           </div>
         </div>
