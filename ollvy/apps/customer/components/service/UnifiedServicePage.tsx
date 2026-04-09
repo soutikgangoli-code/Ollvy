@@ -740,7 +740,7 @@ export function UnifiedServicePage({
                   <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
                     Everything included
                   </h2>
-                  <p className="text-sm text-muted-foreground mb-10">
+                  <p className="text-sm text-muted-foreground mb-6 sm:mb-10">
                     What your CA handles on your behalf. Nothing hidden.
                   </p>
 
@@ -749,7 +749,7 @@ export function UnifiedServicePage({
                       <div
                         key={index}
                         className={cn(
-                          'grid gap-8 items-center py-10',
+                          'grid gap-4 sm:gap-8 items-center py-5 sm:py-10',
                           item.mockVisualType
                             ? 'grid-cols-1 md:grid-cols-2'
                             : 'grid-cols-1'
@@ -774,34 +774,35 @@ export function UnifiedServicePage({
 
                         {/* Text */}
                         <div className={cn(item.mockVisualType ? 'order-1' : '')}>
-                          <div className="flex items-start gap-3">
-                            <div className="w-6 h-6 rounded-full bg-[hsl(var(--ollvy-green))]/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <Check size={12} className="text-[hsl(var(--ollvy-green))]" />
+                          <div className="flex items-start gap-2.5 sm:gap-3">
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[hsl(var(--ollvy-green))]/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <Check size={10} className="text-[hsl(var(--ollvy-green))] sm:hidden" />
+                              <Check size={12} className="text-[hsl(var(--ollvy-green))] hidden sm:block" />
                             </div>
                             <div>
-                              <h3 className="text-base font-semibold text-foreground">
+                              <h3 className="text-sm sm:text-base font-semibold text-foreground">
                                 {formatWithMonoNumbers(item.title)}
                               </h3>
-                              <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                              <p className="text-sm text-muted-foreground mt-1 sm:mt-2 leading-relaxed">
                                 {formatWithMonoNumbers(item.body)}
                               </p>
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
-                                <div className="mt-5 grid grid-cols-2 gap-3">
-                                  <div className="bg-muted/40 rounded-lg p-3 border border-border">
-                                    <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1.5 font-mono">
+                                <div className="mt-3 sm:mt-5 grid grid-cols-2 gap-2 sm:gap-3">
+                                  <div className="bg-muted/40 rounded-lg p-2.5 sm:p-3 border border-border">
+                                    <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mb-1 sm:mb-1.5 font-mono">
                                       Without Ollvy
                                     </p>
-                                    <p className="text-sm font-medium text-foreground">
+                                    <p className="text-xs sm:text-sm font-medium text-foreground">
                                       {item.comparisonWithout && formatWithMonoNumbers(item.comparisonWithout)}
                                     </p>
                                   </div>
-                                  <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-3 border border-[hsl(var(--ollvy-green))]/20">
-                                    <p className="text-xs text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1.5 font-mono">
+                                  <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-2.5 sm:p-3 border border-[hsl(var(--ollvy-green))]/20">
+                                    <p className="text-[10px] sm:text-xs text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1 sm:mb-1.5 font-mono">
                                       With Ollvy
                                     </p>
-                                    <p className="text-sm font-medium text-foreground">
+                                    <p className="text-xs sm:text-sm font-medium text-foreground">
                                       {item.comparisonWithOllvy && formatWithMonoNumbers(item.comparisonWithOllvy)}
                                     </p>
                                   </div>
@@ -1246,7 +1247,10 @@ export function UnifiedServicePage({
       </div>
 
       {/* Mobile booking bar - fixed bottom */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 flex items-center justify-between lg:hidden">
+      <div
+        className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 flex items-center justify-between lg:hidden"
+        style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+      >
         <div>
           <p className="text-xs text-muted-foreground">
             {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
