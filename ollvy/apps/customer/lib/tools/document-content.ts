@@ -859,6 +859,98 @@ Your registration protects you for 10 years from the date of application, and yo
 export const privateLimitedContent = privateLimitedCompanyContent
 
 // ─────────────────────────────────────────────
+// 9. BUSINESS PAN REGISTRATION
+// ─────────────────────────────────────────────
+export const businessPanContent: DocumentPageContent = {
+  slug: 'business-pan',
+  seo: {
+    title: 'Business PAN Registration Documents Checklist (2025) | Ollvy',
+    description: 'Complete list of documents for company, LLP, or firm PAN registration. Certificate of Incorporation, address proof, signatory details, and authorisation letter.',
+    keywords: [
+      'business PAN documents',
+      'company PAN registration documents',
+      'PAN for LLP',
+      'PAN for company',
+      'Form 49A documents',
+      'business PAN card requirements',
+    ],
+    canonical: '/tools/documents/business-pan',
+  },
+  intro: {
+    title: 'How to Get PAN for Your Company or LLP (2025)',
+    description: `Every company, LLP, and registered firm needs a PAN before it can open a bank account, register for GST, or file income tax returns. PAN is applied through Form 49A on the NSDL portal.
+
+The process is straightforward but document accuracy is critical. The entity name on Form 49A must match the Certificate of Incorporation exactly - even minor differences cause rejection. Address proof must be less than 2 months old. A Board Resolution authorising the signatory is mandatory for companies and LLPs.
+
+NSDL processes applications within 5 to 7 working days. The e-PAN arrives by email first - you can use it immediately. The physical card takes 10 to 15 additional days. The government fee is Rs. 107 for domestic delivery.`,
+    whoNeeds: [
+      'Newly incorporated Pvt Ltd companies, OPCs, and LLPs - PAN is required before you can open a bank account',
+      'Partnership firms registering for the first time or applying for GST',
+      'Sole proprietorships that need a PAN in the business name (separate from personal PAN)',
+      'Trusts and societies that need to file income tax returns',
+      'Any business entity that needs to deduct TDS on payments',
+      'Companies applying for GST registration - GST portal requires company PAN',
+    ],
+    timeline: '5-7 working days',
+    cost: 'Government fee: Rs. 107 | Professional assistance: Rs. 999',
+  },
+  steps: [
+    {
+      title: 'Gather your documents based on entity type',
+      description: 'Companies need Certificate of Incorporation, MOA/AOA. LLPs need the LLP Agreement. Partnerships need the Partnership Deed. All need address proof (less than 2 months old) and signatory documents.',
+    },
+    {
+      title: 'Prepare the Board Resolution or Authorization Letter',
+      description: 'Companies and LLPs must provide a board resolution on letterhead authorising one person to sign Form 49A. We provide the template - the directors just need to sign it.',
+    },
+    {
+      title: 'CA prepares Form 49A',
+      description: 'Your CA fills all fields on Form 49A with entity details, registered address, and authorised signatory information. Every field is verified against your documents before submission.',
+    },
+    {
+      title: 'Application submitted to NSDL',
+      description: 'Form 49A submitted on the NSDL portal with all supporting documents. Acknowledgement number generated immediately and shared with you the same day.',
+    },
+    {
+      title: 'NSDL processes and issues PAN',
+      description: 'Income Tax Department verifies your application. e-PAN delivered to your email within 48 hours of allotment. Physical card dispatched to your registered office.',
+    },
+  ],
+  faqs: [
+    {
+      question: 'My company was just incorporated. Do I need PAN before opening a bank account?',
+      answer: 'Yes. Banks require company PAN as mandatory KYC to open a current account. Apply immediately after incorporation. Banks also accept the NSDL acknowledgement letter while the physical card is in transit.',
+    },
+    {
+      question: 'Is company PAN different from director PAN?',
+      answer: 'Yes. The company is a separate legal entity and needs its own PAN. Each director has their own individual PAN. These are different numbers used for different tax filings.',
+    },
+    {
+      question: 'How long does PAN registration take?',
+      answer: 'NSDL processes applications in 5 to 7 working days. e-PAN arrives by email within 48 hours of allotment. Physical card takes 10 to 15 additional days by post.',
+    },
+    {
+      question: 'Can I use the acknowledgement number while waiting for PAN?',
+      answer: 'Yes. Banks and the GST portal accept the NSDL acknowledgement number. We share it the same day we submit your application.',
+    },
+  ],
+  commonMistakes: [
+    'Entity name on Form 49A does not match Certificate of Incorporation exactly - even "Pvt" vs "Private" causes rejection',
+    'Address proof is more than 2 months old - check the date on the document before uploading',
+    'Board resolution or authorization letter is missing or not properly signed by all directors',
+    'PAN of authorised signatory is invalid or name does not match Aadhaar',
+    'Documents are blurry, cropped, or in unsupported format - use clear PDF or JPG scans',
+    'CIN or LLPIN entered incorrectly on Form 49A',
+  ],
+  nextSteps: [
+    { title: 'Open a company bank account', href: '' },
+    { title: 'Apply for GST Registration', href: '/services/gst-registration' },
+    { title: 'File your first Business ITR', href: '/services/business-itr' },
+    { title: 'Start TDS compliance', href: '/services/tds-monthly-compliance' },
+  ],
+}
+
+// ─────────────────────────────────────────────
 // EXPORT MAP
 // ─────────────────────────────────────────────
 export const documentContentMap: Record<string, DocumentPageContent> = {
@@ -870,6 +962,7 @@ export const documentContentMap: Record<string, DocumentPageContent> = {
   'individual-itr': individualItrContent,
   'business-itr': businessItrContent,
   'trademark': trademarkContent,
+  'business-pan': businessPanContent,
 }
 
 // Helper function to get content by slug

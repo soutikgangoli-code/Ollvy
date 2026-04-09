@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server'
 const PUBLIC_ROUTES = ['/', '/login', '/verify', '/auth/callback', '/auth/error']
 
 // Routes that require authentication (server-side redirect to /login)
-const PROTECTED_ROUTES = ['/orders', '/profile', '/retainers', '/compliance']
+const PROTECTED_ROUTES = ['/orders', '/profile', '/retainers', '/compliance', '/admin']
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

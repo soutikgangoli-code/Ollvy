@@ -104,7 +104,7 @@ export default function CheckoutPage() {
   const serviceId = params.serviceId as string
   const { user, session, isHydrated, openAuthModal, isAuthModalOpen } = useAuthStore()
   const { toast } = useToast()
-  const { trackBeginCheckout, trackAddPaymentInfo } = useGTM()
+  const { trackBeginCheckout, trackAddPaymentInfo, trackPurchase } = useGTM()
 
   const [service, setService] = useState<ServicePackage | null>(null)
   const [hasTrackedCheckout, setHasTrackedCheckout] = useState(false)
@@ -417,23 +417,31 @@ export default function CheckoutPage() {
   }
 
   const handleApplyPromo = async () => {
-    if (!promoCode.trim()) return
+    if (!promoCode.trim() || !service) return
     setPromoLoading(true)
     setPromoError(null)
 
     try {
+      const supabase = getClient()
+      const { data: { session: promoSession } } = await supabase.auth.getSession()
+      if (!promoSession?.access_token) {
+        setPromoError('Please log in to apply promo codes')
+        setPromoLoading(false)
+        return
+      }
+
       const response = await fetchWithTimeout(
         `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/resolve-promo`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+            Authorization: `Bearer ${promoSession.access_token}`,
           },
           body: JSON.stringify({
             code: promoCode.toUpperCase(),
-            service_id: serviceId,
-            user_id: user?.id,
+            service_package_id: serviceId,
+            base_price_paisa: service.price_base_paisa,
           }),
           timeout: TIMEOUTS.DEFAULT,
         }
@@ -530,6 +538,20 @@ export default function CheckoutPage() {
         clearPreCursorAnswers()
         clearAllAttributionData()
         clearCheckoutState()
+        trackPurchase({
+          transaction_id: data.order_number,
+          value: paisaToRupees(data.amount),
+          currency: 'INR',
+          items: [
+            {
+              item_id: service.id,
+              item_name: service.name,
+              item_category: 'Services',
+              price: paisaToRupees(data.amount),
+              quantity: 1,
+            },
+          ],
+        })
         setSuccessModal({
           isOpen: true,
           orderId: data.order_id,
@@ -578,6 +600,20 @@ export default function CheckoutPage() {
           clearPreCursorAnswers()
           clearAllAttributionData()
           clearCheckoutState()
+          trackPurchase({
+            transaction_id: data.order_number,
+            value: paisaToRupees(data.amount),
+            currency: 'INR',
+            items: [
+              {
+                item_id: service.id,
+                item_name: service.name,
+                item_category: 'Services',
+                price: paisaToRupees(data.amount),
+                quantity: 1,
+              },
+            ],
+          })
           setSuccessModal({
             isOpen: true,
             orderId: data.order_id,

@@ -61,6 +61,10 @@ export const fallbackReviews: Record<string, FallbackReview[]> = {
     { rating: 5, comment: 'Missed KYC for 2 years. Penalty explained before starting, both years sorted in one go, back to active in 8 days.', date: 'March 2026', name: 'Ashok Mehta' },
     { rating: 5, comment: 'They flagged a phone number issue before starting so we could fix it first. Saved days of going back and forth mid-process.', date: 'February 2026', name: 'Swetha Gopalakrishnan' },
   ],
+  'business-pan': [
+    { rating: 5, comment: 'PAN allotment letter in 5 days. Needed it urgently for bank account opening. CA handled everything after I uploaded the documents.', date: 'March 2026', name: 'Rohit Sharma Gupta' },
+    { rating: 5, comment: 'Just incorporated our LLP and needed PAN fast. Acknowledgement number came the same day they submitted. Bank accepted it immediately.', date: 'April 2026', name: 'Meera Balachandran' },
+  ],
   'company-name-change': [
     { rating: 5, comment: 'Name checked before we paid anything. New certificate in 18 days. They also reminded us what else needed updating - we had not thought of that.', date: 'April 2026', name: 'Karan Kapoor' },
     { rating: 4, comment: 'Tracked the MCA status on the app without having to ask anyone. Smooth from start to finish.', date: 'March 2026', name: 'Padmini Rao' },

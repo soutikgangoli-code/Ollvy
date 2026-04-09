@@ -15,6 +15,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
+import { verifyUser } from '../_shared/auth.ts';
 
 export interface ResolvePromoInput {
   code: string;
@@ -233,15 +234,27 @@ serve(async (req) => {
   }
 
   try {
+    // Verify JWT and extract user_id — never trust user_id from request body
+    const auth = await verifyUser(req);
+    if (!auth.success || !auth.userId) {
+      return new Response(
+        JSON.stringify({ valid: false, reason: 'NOT_FOUND', error: auth.error || 'Unauthorized' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: auth.status || 401,
+        }
+      );
+    }
+
     const body = await req.json();
 
-    // Validate required fields
-    if (!body.code || !body.service_package_id || !body.user_id || body.base_price_paisa === undefined) {
+    // Validate required fields (user_id comes from JWT, not body)
+    if (!body.code || !body.service_package_id || body.base_price_paisa === undefined) {
       return new Response(
         JSON.stringify({
           valid: false,
           reason: 'NOT_FOUND',
-          error: 'Missing required fields: code, service_package_id, user_id, base_price_paisa',
+          error: 'Missing required fields: code, service_package_id, base_price_paisa',
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -250,7 +263,10 @@ serve(async (req) => {
       );
     }
 
-    const result = await resolvePromo(body);
+    const result = await resolvePromo({
+      ...body,
+      user_id: auth.userId, // Override any user_id from request body
+    });
 
     return new Response(
       JSON.stringify(result),

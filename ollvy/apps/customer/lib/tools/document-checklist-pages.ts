@@ -546,6 +546,73 @@ For bank current account opening, banks require the registered partnership deed,
 }
 
 
+// ─── 9. Business PAN Documents Checklist ─────────────────────────────────────
+
+export const businessPanChecklistPage: ToolPageConfig = {
+  slug: 'business-pan',
+  title: 'Documents Required for Business PAN Registration',
+  seoTitle: 'Documents for Business PAN Registration: Company, LLP and Firm (2025) | Ollvy',
+  seoDescription: 'Complete document checklist for business PAN registration in India. Certificate of Incorporation, address proof, board resolution, and signatory KYC - by entity type.',
+  canonicalUrl: 'https://www.ollvy.com/tools/documents/business-pan',
+  lastReviewed: 'March 2026',
+  category: 'Compliance',
+  relatedServiceSlug: 'business-pan',
+  relatedServiceLabel: 'Get Business PAN Registration',
+  relatedCalculatorSlugs: [],
+  relatedLearnSlug: 'what-is-business-pan',
+  reviewSources: [
+    {
+      name: 'Income Tax Department - PAN Application Guide',
+      url: 'https://www.incometax.gov.in/iec/foportal/help/how-to-apply-for-pan',
+      description: 'Official IT department guide for PAN application process and document requirements',
+    },
+    {
+      name: 'NSDL e-Gov PAN Portal',
+      url: 'https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html',
+      description: 'NSDL portal where Form 49A applications are submitted',
+    },
+    {
+      name: 'Income Tax Act, 1961 (Section 139A)',
+      url: 'https://www.incometax.gov.in',
+      description: 'Statutory requirement for PAN for companies, LLPs, and firms',
+    },
+  ],
+
+  intro: 'NSDL requires proof of identity, address, and legal constitution for all business entities applying for PAN. Documents differ by entity type. Upload clear scanned copies in PDF or JPG format, each under 2MB.',
+
+  howToUse: `**Select your entity type** from the checklist below to see the exact documents required for your business structure.
+
+**Name consistency is critical.** The entity name on Form 49A must match the Certificate of Incorporation exactly - including punctuation, capitalisation, and abbreviations. Even "Pvt" vs "Private" causes rejection.
+
+**Address proof must be recent.** Utility bills and bank statements must not be older than 2 months from the date of filing. Check the date on the document, not when you downloaded it.
+
+**Board Resolution:** Companies and LLPs must provide a board resolution authorising the specific signatory. We provide the template after payment - the directors just need to sign it on company letterhead.`,
+
+  faqs: [
+    {
+      q: 'My company was incorporated yesterday. Which documents do I need right now?',
+      a: 'Certificate of Incorporation, MOA, AOA, and the authorised signatory\'s PAN and Aadhaar are the minimum. The address proof and board resolution can be uploaded within 24 hours of ordering. Your CA will tell you exactly what is missing after reviewing your uploads.',
+    },
+    {
+      q: 'The registered office address proof is in the director\'s personal name, not the company name. Is that acceptable?',
+      a: 'Yes, provided you also upload a No Objection Certificate (NOC) from the director confirming the company is permitted to use that address as its registered office. NSDL accepts this combination.',
+    },
+    {
+      q: 'We do not have a board resolution yet. Can we start the process?',
+      a: 'Yes. Upload all other documents first. We will send you a board resolution template immediately after payment. Once all directors sign it, upload it and your CA will proceed with submission.',
+    },
+    {
+      q: 'The electricity bill at our registered office is in the previous tenant\'s name. What do I upload?',
+      a: 'Upload the rent agreement (in your company\'s name) as the address proof instead. If the landlord can provide a NOC or an electricity bill in their own name for the same address, upload that alongside the rent agreement.',
+    },
+    {
+      q: 'Do I need to upload physical originals or are digital scans accepted?',
+      a: 'Digital scans and original digital documents (like the MCA-issued Certificate of Incorporation PDF) are accepted. Photographs taken on a phone are acceptable if they are clear, well-lit, and show all four corners of the document.',
+    },
+  ],
+}
+
+
 // ─── Export all document checklist page configs ──────────────────────────────
 
 export const documentChecklistPages: Record<string, ToolPageConfig> = {
@@ -557,6 +624,7 @@ export const documentChecklistPages: Record<string, ToolPageConfig> = {
   'business-itr': businessItrChecklistPage,
   'sole-proprietor': soleProprietorChecklistPage,
   'partnership': partnershipChecklistPage,
+  'business-pan': businessPanChecklistPage,
 }
 
 export function getDocumentChecklistPage(slug: string): ToolPageConfig | undefined {

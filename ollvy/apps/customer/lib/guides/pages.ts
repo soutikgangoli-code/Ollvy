@@ -79,6 +79,7 @@ export const DOCUMENT_CHECKLIST_METADATA: ToolMetadata[] = [
   { slug: 'partnership', title: 'Partnership Firm Documents', subtitle: 'Partnership deed requirements' },
   { slug: 'sole-proprietor', title: 'Sole Proprietor Documents', subtitle: 'Proprietorship registration docs' },
   { slug: 'trademark', title: 'Trademark Documents', subtitle: 'TM application requirements' },
+  { slug: 'business-pan', title: 'Business PAN Documents', subtitle: 'Company PAN registration docs' },
 ];
 
 export const DEADLINE_METADATA: ToolMetadata[] = [
@@ -222,6 +223,9 @@ import { tds194c194jDemand } from './pages/tds-194c-194j-demand';
 import { rocAnnualFilingDefaultNotice } from './pages/roc-annual-filing-default-notice';
 import { dir3KycDinDeactivation } from './pages/dir-3-kyc-din-deactivation';
 
+// Business PAN Guide
+import { businessPanGuide } from './pages/business-pan';
+
 // Deadline Guides
 import { tdsQ4FY2526 } from './pages/tds-return-q4-fy2025-26';
 import { tdsQ1FY2627 } from './pages/tds-return-q1-fy2026-27';
@@ -280,6 +284,9 @@ export const LEARN_PAGES: LearnPageConfig[] = [
   // ROC Notices
   rocAnnualFilingDefaultNotice,
   dir3KycDinDeactivation,
+
+  // Business PAN
+  businessPanGuide,
 
   // Deadline Guides
   tdsQ4FY2526,

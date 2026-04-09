@@ -27,6 +27,7 @@ const DOCUMENT_CHECKLIST_SLUGS = [
   'individual-itr',
   'business-itr',
   'trademark',
+  'business-pan',
 ]
 
 // Penalty calculator slugs (static routes)

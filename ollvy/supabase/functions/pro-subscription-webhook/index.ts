@@ -73,6 +73,37 @@ serve(async (req) => {
     const supabase = getSupabaseAdmin();
     const now = new Date();
 
+    // Build idempotency key from event type + entity ID
+    const entityId = subscription?.id || payment?.id || payload.payload?.entity?.id || 'unknown';
+    const eventId = `${event}_${entityId}`;
+
+    console.log(`Received pro-subscription webhook: ${event}, Entity ID: ${entityId}, Idempotency Key: ${eventId}`);
+
+    // Idempotency check - skip if already processed
+    const { data: existing } = await supabase
+      .from('processed_webhook_events')
+      .select('razorpay_event_id')
+      .eq('razorpay_event_id', eventId)
+      .single();
+
+    if (existing) {
+      console.log(`Skipping already processed event: ${eventId}`);
+      return new Response(
+        JSON.stringify({ ok: true, message: 'Event already processed' }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        }
+      );
+    }
+
+    // Record this event immediately (for idempotency)
+    await supabase.from('processed_webhook_events').insert({
+      razorpay_event_id: eventId,
+      event_type: event,
+      processed_at: new Date().toISOString(),
+    });
+
     switch (event) {
       case 'subscription.charged': {
         // Pro subscription charged successfully
