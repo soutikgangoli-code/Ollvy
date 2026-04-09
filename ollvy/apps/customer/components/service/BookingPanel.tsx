@@ -160,14 +160,17 @@ export function BookingPanel({
       {service.variants && service.variants.length > 0 && (
         <div className="border border-amber-500/20 bg-amber-500/5 rounded-xl p-4 mb-5">
           <p className="font-mono uppercase tracking-wider text-xs text-amber-600 dark:text-amber-400 mb-3">
-            YOUR EXPECTED ANNUAL TURNOVER
+            {service.variants.some((v: any) => v.tooltip)
+              ? 'YOUR BUSINESS ENTITY TYPE'
+              : 'YOUR EXPECTED ANNUAL TURNOVER'}
           </p>
           <div className="grid grid-cols-2 gap-2">
-            {service.variants.map((variant) => (
+            {service.variants.map((variant: any) => (
               <button
                 key={variant.id}
                 type="button"
                 onClick={() => setSelectedVariant(variant.id)}
+                title={variant.tooltip || undefined}
                 className={cn(
                   'border rounded-xl p-3 text-left transition-all',
                   selectedVariant === variant.id

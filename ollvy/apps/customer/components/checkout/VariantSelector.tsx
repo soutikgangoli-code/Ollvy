@@ -10,6 +10,7 @@ interface Variant {
   sublabel: string
   priceAdjustment?: number
   govtFeeAdjustment?: number
+  tooltip?: string
 }
 
 interface VariantSelectorProps {
@@ -49,6 +50,7 @@ export function VariantSelector({
               key={variant.id}
               type="button"
               onClick={() => onVariantChange(variant.id)}
+              title={variant.tooltip || undefined}
               className={cn(
                 'border rounded-xl p-4 text-left transition-all',
                 selectedVariant === variant.id
