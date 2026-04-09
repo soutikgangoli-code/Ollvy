@@ -5,11 +5,30 @@ import { OrdersListClient } from '@/components/admin/OrdersListClient'
 
 export const metadata = { robots: 'noindex, nofollow' }
 
-export default async function AdminOrdersPage() {
+const PAGE_SIZE = 50
+
+const STATUS_FILTERS: Record<string, string[]> = {
+  active: ['pending_assignment', 'waitlisted', 'in_progress'],
+  needs_attention: ['pending_assignment', 'disputed'],
+  completed: ['completed'],
+  cancelled: ['cancelled'],
+}
+
+interface Props {
+  searchParams: Promise<{ page?: string; tab?: string }>
+}
+
+export default async function AdminOrdersPage({ searchParams }: Props) {
+  const params = await searchParams
   const adminUser = await getAdminUser()
   if (!supabaseServer) redirect('/admin/login')
 
-  const { data: orders } = await supabaseServer
+  const page = Math.max(1, parseInt(params.page || '1', 10) || 1)
+  const tab = params.tab || 'all'
+  const offset = (page - 1) * PAGE_SIZE
+
+  // Build query with server-side status filter
+  let query = supabaseServer
     .from('orders')
     .select(`
       id,
@@ -19,8 +38,17 @@ export default async function AdminOrdersPage() {
       total_paisa_snapshot,
       service_packages (name),
       users (business_name)
-    `)
+    `, { count: 'exact' })
     .order('paid_at', { ascending: false })
+    .range(offset, offset + PAGE_SIZE - 1)
+
+  const statusFilter = STATUS_FILTERS[tab]
+  if (statusFilter) {
+    query = query.in('status', statusFilter)
+  }
+
+  const { data: orders, count } = await query
+  const totalCount = count || 0
 
   const formattedOrders = (orders || []).map(order => {
     // Handle both single object and array cases for joins
@@ -41,5 +69,13 @@ export default async function AdminOrdersPage() {
     }
   })
 
-  return <OrdersListClient orders={formattedOrders} />
+  return (
+    <OrdersListClient
+      orders={formattedOrders}
+      currentPage={page}
+      totalCount={totalCount}
+      pageSize={PAGE_SIZE}
+      activeTab={tab}
+    />
+  )
 }

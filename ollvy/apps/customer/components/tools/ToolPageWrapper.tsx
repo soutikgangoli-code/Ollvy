@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
+import { ArrowLeft, ChevronRight } from 'lucide-react'
 import { type ToolPageConfig, generateToolFAQSchema, generateToolBreadcrumbSchema, generateSoftwareApplicationSchema, generateToolHowToSchema } from '@/lib/tools/types'
 import { PenaltyCalculatorSelector } from '@/components/penalty-calculator/PenaltyCalculatorSelector'
 import { penaltyCalculators } from '@/components/penalty-calculator/penalty-calculator-data'
@@ -185,8 +185,15 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
 
         {/* Header with H1 - Centered like Document pages */}
         <header className="mb-12 text-center">
-          {/* Breadcrumb: Tools > Penalty Calculators > [Calculator Name] */}
-          <nav className="flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4" aria-label="Breadcrumb">
+          {/* Mobile: back arrow + page name */}
+          <div className="md:hidden flex items-center justify-center mb-4">
+            <Link href="/tools/penalty-calculator" className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span className="text-foreground">{config.title}</span>
+            </Link>
+          </div>
+          {/* Full breadcrumb: hidden on mobile, visible on desktop. Stays in DOM for SEO. */}
+          <nav className="hidden md:flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4" aria-label="Breadcrumb">
             <Link href="/tools" className="hover:text-foreground transition-colors">
               Tools
             </Link>

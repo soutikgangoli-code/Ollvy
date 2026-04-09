@@ -2,12 +2,12 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { formatPaisa, formatDate } from '@/lib/utils'
-import { usePersistedState } from '@/lib/hooks/use-persisted-state'
 
 interface Order {
   id: string
@@ -21,46 +21,36 @@ interface Order {
 
 interface OrdersListClientProps {
   orders: Order[]
+  currentPage: number
+  totalCount: number
+  pageSize: number
+  activeTab: string
 }
 
 type FilterTab = 'all' | 'active' | 'needs_attention' | 'completed' | 'cancelled'
 
-export function OrdersListClient({ orders }: OrdersListClientProps) {
-  // Persisted filter state - survives page navigation
-  const [activeTab, setActiveTab] = usePersistedState<FilterTab>('admin-orders-tab', 'all')
+export function OrdersListClient({ orders, currentPage, totalCount, pageSize, activeTab }: OrdersListClientProps) {
+  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
+  const totalPages = Math.ceil(totalCount / pageSize)
 
   const filteredOrders = useMemo(() => {
-    let result = orders
+    if (!searchQuery.trim()) return orders
+    const query = searchQuery.toLowerCase()
+    return orders.filter(o =>
+      o.order_number.toLowerCase().includes(query) ||
+      o.user_name.toLowerCase().includes(query) ||
+      o.service_name.toLowerCase().includes(query)
+    )
+  }, [orders, searchQuery])
 
-    // Filter by tab
-    switch (activeTab) {
-      case 'active':
-        result = result.filter(o => ['pending_assignment', 'waitlisted', 'in_progress'].includes(o.status))
-        break
-      case 'needs_attention':
-        result = result.filter(o => ['pending_assignment', 'disputed'].includes(o.status))
-        break
-      case 'completed':
-        result = result.filter(o => o.status === 'completed')
-        break
-      case 'cancelled':
-        result = result.filter(o => o.status === 'cancelled')
-        break
-    }
-
-    // Filter by search
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      result = result.filter(o =>
-        o.order_number.toLowerCase().includes(query) ||
-        o.user_name.toLowerCase().includes(query) ||
-        o.service_name.toLowerCase().includes(query)
-      )
-    }
-
-    return result
-  }, [orders, activeTab, searchQuery])
+  function navigateTo(tab: string, page: number) {
+    const params = new URLSearchParams()
+    if (tab !== 'all') params.set('tab', tab)
+    if (page > 1) params.set('page', String(page))
+    const qs = params.toString()
+    router.push(`/admin/orders${qs ? `?${qs}` : ''}`)
+  }
 
   const tabs: { key: FilterTab; label: string }[] = [
     { key: 'all', label: 'All' },
@@ -97,7 +87,7 @@ export function OrdersListClient({ orders }: OrdersListClientProps) {
             key={tab.key}
             variant={activeTab === tab.key ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => navigateTo(tab.key, 1)}
           >
             {tab.label}
           </Button>
@@ -167,6 +157,36 @@ export function OrdersListClient({ orders }: OrdersListClientProps) {
           )}
         </CardContent>
       </Card>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Showing {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, totalCount)} of {totalCount}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage <= 1}
+              onClick={() => navigateTo(activeTab, currentPage - 1)}
+            >
+              Previous
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              Page {currentPage} of {totalPages}
+            </span>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage >= totalPages}
+              onClick={() => navigateTo(activeTab, currentPage + 1)}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

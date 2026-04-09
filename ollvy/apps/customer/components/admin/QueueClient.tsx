@@ -52,6 +52,9 @@ interface QueueClientProps {
   orders: QueueOrder[]
   adminUser: AdminUser
   adminUsers?: AdminUserWithCount[]
+  currentPage: number
+  totalCount: number
+  pageSize: number
 }
 
 const BUCKET_CONFIG: Record<Bucket, { label: string; color: string; badgeVariant: 'default' | 'destructive' | 'secondary' | 'outline' }> = {
@@ -135,7 +138,7 @@ const DATE_PRESETS = [
   }},
 ]
 
-export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientProps) {
+export function QueueClient({ orders, adminUser, adminUsers = [], currentPage, totalCount, pageSize }: QueueClientProps) {
   const router = useRouter()
   const { toast } = useToast()
 
@@ -806,6 +809,39 @@ export function QueueClient({ orders, adminUser, adminUsers = [] }: QueueClientP
           </div>
         </div>
       )}
+
+      {/* Pagination */}
+      {totalCount > pageSize && (() => {
+        const totalPages = Math.ceil(totalCount / pageSize)
+        return (
+          <div className="flex items-center justify-between mt-6">
+            <p className="text-sm text-muted-foreground">
+              Showing {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, totalCount)} of {totalCount}
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage <= 1}
+                onClick={() => router.push(`/admin/queue${currentPage > 2 ? `?page=${currentPage - 1}` : ''}`)}
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={currentPage >= totalPages}
+                onClick={() => router.push(`/admin/queue?page=${currentPage + 1}`)}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        )
+      })()}
 
       {/* Date Range Picker Dialog */}
       <Dialog open={datePickerOpen} onOpenChange={setDatePickerOpen}>

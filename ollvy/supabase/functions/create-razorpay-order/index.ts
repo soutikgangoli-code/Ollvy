@@ -152,16 +152,23 @@ serve(async (req) => {
     let priceSource = 'base';
     let quoteId: string | null = null;
 
-    // Handle quote flow (sequential - needs quote data first to get service_package_id)
+    // Handle quote flow - parallelize user and quote fetch (both only need userId)
     if (quote_request_id) {
-      // Fetch user data first
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('id, state, city, subscription_tier, referral_credit_balance_paisa')
-        .eq('id', userId)
-        .single();
+      const [userResult, quoteResult] = await Promise.all([
+        supabase
+          .from('users')
+          .select('id, state, city, subscription_tier, referral_credit_balance_paisa')
+          .eq('id', userId)
+          .single(),
+        supabase
+          .from('quote_requests')
+          .select('id, service_package_id, confirmed_price_paisa, confirmed_govt_fees_paisa, status, expires_at')
+          .eq('id', quote_request_id)
+          .eq('user_id', userId)
+          .single(),
+      ]);
 
-      if (userError || !userData) {
+      if (userResult.error || !userResult.data) {
         return new Response(
           JSON.stringify({ ok: false, error: 'User not found' }),
           {
@@ -170,16 +177,10 @@ serve(async (req) => {
           }
         );
       }
-      user = userData;
+      user = userResult.data;
 
-      const { data: quote, error: quoteError } = await supabase
-        .from('quote_requests')
-        .select('id, service_package_id, confirmed_price_paisa, confirmed_govt_fees_paisa, status, expires_at')
-        .eq('id', quote_request_id)
-        .eq('user_id', userId)
-        .single();
-
-      if (quoteError || !quote) {
+      const quote = quoteResult.data;
+      if (quoteResult.error || !quote) {
         return new Response(
           JSON.stringify({ ok: false, error: 'Quote not found' }),
           {
@@ -504,76 +505,82 @@ serve(async (req) => {
       );
     }
 
-    // If referral credit used, deduct from user balance using atomic function
-    // This prevents race condition where concurrent orders could overdraft balance
-    if (actualReferralCredit > 0) {
-      const { data: deductResult, error: deductError } = await supabase.rpc(
-        'deduct_referral_credit_atomic',
-        {
-          p_user_id: userId,
-          p_requested_amount: actualReferralCredit,
-          p_max_applicable: actualReferralCredit,
-        }
-      );
-
-      if (deductError) {
-        console.error('Failed to deduct referral credit:', deductError);
-        // Continue without credit - order is already created
-      } else if (deductResult && deductResult[0]) {
-        const result = deductResult[0];
-        if (!result.success) {
-          console.error('Referral credit deduction failed:', result.error_message);
-        } else if (result.amount_deducted !== actualReferralCredit) {
-          // Race condition detected - less credit was available than expected
-          console.warn(
-            `Race condition: Expected to deduct ${actualReferralCredit}, actual: ${result.amount_deducted}`
+    // Fire-and-forget: referral credit deduction, addon inserts, and quote
+    // status update run after response is returned so they don't add latency
+    // before the Razorpay modal opens.
+    const postInsertWork = async () => {
+      try {
+        // Deduct referral credit atomically
+        if (actualReferralCredit > 0) {
+          const { data: deductResult, error: deductError } = await supabase.rpc(
+            'deduct_referral_credit_atomic',
+            {
+              p_user_id: userId,
+              p_requested_amount: actualReferralCredit,
+              p_max_applicable: actualReferralCredit,
+            }
           );
-          // Update the order with actual amount deducted
+
+          if (deductError) {
+            console.error('Failed to deduct referral credit:', deductError);
+          } else if (deductResult && deductResult[0]) {
+            const result = deductResult[0];
+            if (!result.success) {
+              console.error('Referral credit deduction failed:', result.error_message);
+            } else if (result.amount_deducted !== actualReferralCredit) {
+              console.warn(
+                `Race condition: Expected to deduct ${actualReferralCredit}, actual: ${result.amount_deducted}`
+              );
+              await supabase
+                .from('orders')
+                .update({ referral_credit_used_paisa: result.amount_deducted })
+                .eq('id', order.id);
+            }
+          }
+        }
+
+        // Insert order addons
+        if (addon_ids && addon_ids.length > 0 && servicePackage.addons) {
+          const addonsToInsert = addon_ids
+            .map((addonId: string) => {
+              const addon = (servicePackage.addons as any[])?.find((a: any) => a.id === addonId);
+              if (!addon) return null;
+              return {
+                order_id: order.id,
+                addon_id: addonId,
+                addon_name: addon.name,
+                price_paisa_snapshot: addon.pricePaisa || 0,
+                govt_fee_paisa_snapshot: addon.govtFeePaisa || 0,
+              };
+            })
+            .filter(Boolean);
+
+          if (addonsToInsert.length > 0) {
+            const { error: addonsError } = await supabase
+              .from('order_addons')
+              .insert(addonsToInsert);
+            if (addonsError) {
+              console.error('Failed to insert order addons:', addonsError);
+            }
+          }
+        }
+
+        // Update quote status
+        if (quoteId) {
           await supabase
-            .from('orders')
-            .update({ referral_credit_used_paisa: result.amount_deducted })
-            .eq('id', order.id);
+            .from('quote_requests')
+            .update({ status: 'accepted', accepted_at: new Date().toISOString() })
+            .eq('id', quoteId);
         }
+      } catch (err) {
+        console.error('Post-insert background work failed:', err);
       }
-    }
+    };
 
-    // Insert order_addons if any addons were selected
-    if (addon_ids && addon_ids.length > 0 && servicePackage.addons) {
-      const addonsToInsert = addon_ids
-        .map((addonId: string) => {
-          const addon = (servicePackage.addons as any[])?.find((a: any) => a.id === addonId);
-          if (!addon) return null;
-          return {
-            order_id: order.id,
-            addon_id: addonId,
-            addon_name: addon.name,
-            price_paisa_snapshot: addon.pricePaisa || 0,
-            govt_fee_paisa_snapshot: addon.govtFeePaisa || 0,
-          };
-        })
-        .filter(Boolean);
+    // Start background work without awaiting — runs after response is sent
+    postInsertWork();
 
-      if (addonsToInsert.length > 0) {
-        const { error: addonsError } = await supabase
-          .from('order_addons')
-          .insert(addonsToInsert);
-
-        if (addonsError) {
-          console.error('Failed to insert order addons:', addonsError);
-          // Don't fail the order - just log the error
-        }
-      }
-    }
-
-    // Update quote status if quote flow
-    if (quoteId) {
-      await supabase
-        .from('quote_requests')
-        .update({ status: 'accepted', accepted_at: new Date().toISOString() })
-        .eq('id', quoteId);
-    }
-
-    // Return response
+    // Return response immediately
     return new Response(
       JSON.stringify({
         ok: true,

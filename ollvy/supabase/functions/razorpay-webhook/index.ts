@@ -422,7 +422,7 @@ serve(async (req) => {
       .from('orders')
       .select(`
         *,
-        users!inner (id, fcm_token, state, city, business_name),
+        users!inner (id, fcm_token, state, city, business_name, phone),
         service_packages!inner (id, name, workflow_stages, sla_working_days)
       `)
       .eq('razorpay_order_id', razorpayOrderId)
@@ -472,31 +472,23 @@ serve(async (req) => {
 
     // 1.5 Capture phone from Razorpay payment and save to user profile if not set
     const paymentContact = payment.contact;
-    if (paymentContact) {
-      // Fetch current user phone
-      const { data: currentUser } = await supabase
+    if (paymentContact && !order.users.phone) {
+      const { error: phoneError } = await supabase
         .from('users')
-        .select('phone')
-        .eq('id', order.user_id)
-        .single();
+        .update({ phone: paymentContact })
+        .eq('id', order.user_id);
 
-      // Update phone if user doesn't have one
-      if (!currentUser?.phone) {
-        const { error: phoneError } = await supabase
-          .from('users')
-          .update({ phone: paymentContact })
-          .eq('id', order.user_id);
-
-        if (phoneError) {
-          console.error('Failed to update user phone:', phoneError);
-        } else {
-          console.log(`Updated user ${order.user_id} phone from Razorpay: ${paymentContact}`);
-        }
+      if (phoneError) {
+        console.error('Failed to update user phone:', phoneError);
+      } else {
+        console.log(`Updated user ${order.user_id} phone from Razorpay: ${paymentContact}`);
       }
     }
 
     // 2. Create chat conversation for this order (if not already created by trigger)
     // The AFTER INSERT trigger should have created it, but check as fallback
+    let chatConversationId: string | null = order.chat_conversation_id || null;
+
     if (!order.chat_conversation_id) {
       // Check if conversation already exists for this order (trigger may have created it)
       const { data: existingChat } = await supabase
@@ -507,6 +499,7 @@ serve(async (req) => {
 
       if (existingChat) {
         // Trigger created the chat but order wasn't updated - link it now
+        chatConversationId = existingChat.id;
         await supabase
           .from('orders')
           .update({ chat_conversation_id: existingChat.id })
@@ -514,7 +507,7 @@ serve(async (req) => {
         console.log(`Linked existing chat conversation ${existingChat.id} to order ${order.id}`);
       } else {
         // No chat exists - create one (fallback for edge cases)
-        const { data: chatConversation, error: chatError } = await supabase
+        const { data: newChat, error: chatError } = await supabase
           .from('chat_conversations')
           .insert({
             order_id: order.id,
@@ -526,10 +519,11 @@ serve(async (req) => {
         if (chatError) {
           console.error('Failed to create chat conversation:', chatError);
         } else {
+          chatConversationId = newChat.id;
           // Link chat to order
           await supabase
             .from('orders')
-            .update({ chat_conversation_id: chatConversation.id })
+            .update({ chat_conversation_id: newChat.id })
             .eq('id', order.id);
         }
       }
@@ -555,10 +549,10 @@ serve(async (req) => {
       // Don't fail the webhook - order is paid, assignment can be done manually
     }
 
-    // 4. Generate invoice (call internal function)
-    // For now, create invoice record - PDF generation would be a separate process
-    try {
-      const { data: invoice, error: invoiceError } = await supabase
+    // 4-6. Create invoice, engagement letter, and notification in parallel (independent operations)
+    const [invoiceResult, letterResult, notifyResult] = await Promise.all([
+      // Invoice
+      supabase
         .from('invoices')
         .insert({
           order_id: order.id,
@@ -571,57 +565,51 @@ serve(async (req) => {
           issued_at: new Date().toISOString(),
         })
         .select()
-        .single();
+        .single()
+        .then(res => {
+          if (res.error) console.error('Failed to create invoice:', res.error);
+          else console.log(`Created invoice ${res.data.id} for order ${order.id}`);
+          return res;
+        })
+        .catch(err => { console.error('Invoice generation error:', err); return null; }),
 
-      if (invoiceError) {
-        console.error('Failed to create invoice:', invoiceError);
-      } else {
-        console.log(`Created invoice ${invoice.id} for order ${order.id}`);
-      }
-    } catch (invoiceError) {
-      console.error('Invoice generation error:', invoiceError);
-    }
-
-    // 5. Generate engagement letter
-    try {
-      const { error: letterError } = await supabase
+      // Engagement letter
+      supabase
         .from('engagement_letters')
         .insert({
           order_id: order.id,
           user_id: order.user_id,
           service_name: order.service_packages.name,
           generated_at: new Date().toISOString(),
-        });
+        })
+        .then(res => {
+          if (res.error) console.error('Failed to create engagement letter:', res.error);
+          return res;
+        })
+        .catch(err => { console.error('Engagement letter error:', err); return null; }),
 
-      if (letterError) {
-        console.error('Failed to create engagement letter:', letterError);
-      }
-    } catch (letterError) {
-      console.error('Engagement letter error:', letterError);
-    }
-
-    // 6. Send notification to user
-    try {
-      await supabase.from('notifications').insert({
-        user_id: order.user_id,
-        type: 'payment_success',
-        title: 'Payment Successful',
-        body: `Your payment for ${order.service_packages.name} has been received. We're assigning a specialist now.`,
-      });
-
-      // If FCM token exists, we would send push here
-      // For now, just log it
-      if (order.users.fcm_token) {
-        console.log(`Would send FCM push to token: ${order.users.fcm_token.substring(0, 20)}...`);
-      }
-    } catch (notifyError) {
-      console.error('Notification error:', notifyError);
-    }
+      // Notification
+      supabase
+        .from('notifications')
+        .insert({
+          user_id: order.user_id,
+          type: 'payment_success',
+          title: 'Payment Successful',
+          body: `Your payment for ${order.service_packages.name} has been received. We're assigning a specialist now.`,
+        })
+        .then(res => {
+          if (order.users.fcm_token) {
+            console.log(`Would send FCM push to token: ${order.users.fcm_token.substring(0, 20)}...`);
+          }
+          return res;
+        })
+        .catch(err => { console.error('Notification error:', err); return null; }),
+    ]);
 
     // 7. Add system message to chat
-    if (chatConversation) {
+    if (chatConversationId) {
       await supabase.from('chat_messages').insert({
-        conversation_id: chatConversation.id,
+        conversation_id: chatConversationId,
         sender_type: 'system',
         content: 'Your Ollvy specialist is on the case. Expect to hear from them within 24 hours.',
       });

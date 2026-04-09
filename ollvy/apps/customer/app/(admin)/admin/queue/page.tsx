@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 
 export const metadata = { robots: 'noindex, nofollow' }
 
+const PAGE_SIZE = 50
+
 // Bucket type definition
 type Bucket = 'needs_assignment' | 'disputed' | 'awaiting_user' | 'docs_to_review' | 'in_progress' | 'awaiting_government' | 'ready_to_deliver' | 'other'
 
@@ -26,10 +28,18 @@ interface QueueOrder {
   is_paid: boolean
 }
 
-export default async function AdminQueuePage() {
+interface Props {
+  searchParams: Promise<{ page?: string }>
+}
+
+export default async function AdminQueuePage({ searchParams }: Props) {
+  const params = await searchParams
   // getAdminUser is cached - layout already called it, so this returns cached result
   const adminUser = await getAdminUser()
   if (!supabaseServer) redirect('/admin/login')
+
+  const page = Math.max(1, parseInt(params.page || '1', 10) || 1)
+  const offset = (page - 1) * PAGE_SIZE
 
   // Non-super_admin can only see their own assigned orders
   const isSuper = adminUser.role === 'super_admin'
@@ -47,16 +57,18 @@ export default async function AdminQueuePage() {
       assigned_admin_id,
       service_packages (name),
       users (business_name, email, phone)
-    `)
+    `, { count: 'exact' })
     .not('status', 'in', '("completed","cancelled")')
     .order('paid_at', { ascending: false })
+    .range(offset, offset + PAGE_SIZE - 1)
 
   // Filter by assigned admin for non-super_admin
   if (!isSuper) {
     ordersQuery = ordersQuery.eq('assigned_admin_id', adminUser.id)
   }
 
-  const { data: ordersRaw } = await ordersQuery
+  const { data: ordersRaw, count } = await ordersQuery
+  const totalCount = count || 0
 
   // Fetch rounds and work documents for bucket calculation
   const orderIds = ordersRaw?.map(o => o.id) || []
@@ -234,5 +246,14 @@ export default async function AdminQueuePage() {
     adminUsers.sort((a, b) => a.activeOrderCount - b.activeOrderCount)
   }
 
-  return <QueueClient orders={orders} adminUser={adminUser} adminUsers={adminUsers} />
+  return (
+    <QueueClient
+      orders={orders}
+      adminUser={adminUser}
+      adminUsers={adminUsers}
+      currentPage={page}
+      totalCount={totalCount}
+      pageSize={PAGE_SIZE}
+    />
+  )
 }

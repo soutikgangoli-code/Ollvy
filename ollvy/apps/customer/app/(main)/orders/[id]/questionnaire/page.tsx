@@ -20,10 +20,23 @@ export default async function QuestionnairePage({ params, searchParams }: PagePr
     redirect('/login')
   }
 
-  // Fetch order data server-side
+  // Fetch order data server-side with retry for webhook race condition.
+  // After payment, the customer may land here before the Razorpay webhook
+  // has finished updating the order, so we retry with exponential backoff.
   const supabase = await createServerSupabase()
-  const { data: orderData, error } = await supabase
-    .rpc('get_user_order', { p_order_id: orderId })
+  const delays = [1000, 2000, 4000, 8000, 16000]
+  let orderData: any = null
+  let error: any = null
+
+  for (let attempt = 0; attempt <= delays.length; attempt++) {
+    const res = await supabase.rpc('get_user_order', { p_order_id: orderId })
+    orderData = res.data
+    error = res.error
+    if (orderData) break
+    if (attempt < delays.length) {
+      await new Promise(r => setTimeout(r, delays[attempt]))
+    }
+  }
 
   if (error || !orderData) {
     return (
