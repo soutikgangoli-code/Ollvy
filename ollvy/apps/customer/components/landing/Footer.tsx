@@ -123,6 +123,7 @@ export function Footer() {
             links={[
               { label: 'Pvt Ltd Registration', href: '/services/pvt-ltd-incorporation' },
               { label: 'LLP Registration', href: '/services/llp-incorporation' },
+              { label: 'Business PAN Card', href: '/services/business-pan' },
               { label: 'GST Registration', href: '/services/gst-registration' },
               { label: 'GST Monthly Filing', href: '/services/gst-monthly' },
               { label: 'GST Cancellation', href: '/services/gst-cancellation' },

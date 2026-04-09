@@ -295,7 +295,14 @@ export function ProductShowcase() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [isMobile, setIsMobile] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const dragStartRef = useRef({ x: 0, scrollLeft: 0 })
+  const dragRef = useRef({
+    startX: 0,
+    scrollLeft: 0,
+    lastX: 0,
+    lastTime: 0,
+    velocity: 0,
+  })
+  const momentumRef = useRef<number>(0)
 
   // Check if mobile on mount and resize
   useEffect(() => {
@@ -312,55 +319,108 @@ export function ProductShowcase() {
   const maxIndex = FEATURES.length - itemsPerView
   const totalPages = maxIndex + 1
 
-  // Handle scroll events to update current index
+  // Get card width helper
+  const getCardWidth = useCallback(() => {
+    if (!scrollContainerRef.current) return 0
+    return scrollContainerRef.current.offsetWidth / itemsPerView
+  }, [itemsPerView])
+
+  // Smoothly snap to nearest card
+  const snapToNearest = useCallback(() => {
+    if (!scrollContainerRef.current) return
+    const cardWidth = getCardWidth()
+    if (cardWidth === 0) return
+    const nearest = Math.round(scrollContainerRef.current.scrollLeft / cardWidth)
+    const clamped = Math.min(Math.max(0, nearest), maxIndex)
+    scrollContainerRef.current.scrollTo({ left: cardWidth * clamped, behavior: 'smooth' })
+    setCurrentIndex(clamped)
+  }, [getCardWidth, maxIndex])
+
+  // Handle native scroll events to update dot indicator
   const handleScroll = useCallback(() => {
     if (!scrollContainerRef.current || isDragging) return
-    const container = scrollContainerRef.current
-    const scrollLeft = container.scrollLeft
-    const cardWidth = container.offsetWidth / itemsPerView
-    const newIndex = Math.round(scrollLeft / cardWidth)
+    const cardWidth = getCardWidth()
+    if (cardWidth === 0) return
+    const newIndex = Math.round(scrollContainerRef.current.scrollLeft / cardWidth)
     setCurrentIndex(Math.min(Math.max(0, newIndex), maxIndex))
-  }, [itemsPerView, maxIndex, isDragging])
+  }, [getCardWidth, maxIndex, isDragging])
 
-  // Scroll to specific index
+  // Scroll to specific index (dot click)
   const scrollToIndex = useCallback((index: number) => {
     if (!scrollContainerRef.current) return
-    const container = scrollContainerRef.current
-    const cardWidth = container.offsetWidth / itemsPerView
-    container.scrollTo({ left: cardWidth * index, behavior: 'smooth' })
+    const cardWidth = getCardWidth()
+    scrollContainerRef.current.scrollTo({ left: cardWidth * index, behavior: 'smooth' })
     setCurrentIndex(index)
-  }, [itemsPerView])
+  }, [getCardWidth])
+
+  // Momentum animation after release
+  const startMomentum = useCallback((velocity: number) => {
+    cancelAnimationFrame(momentumRef.current)
+    const container = scrollContainerRef.current
+    if (!container) return
+
+    let v = velocity
+    const friction = 0.95
+    const minVelocity = 0.5
+
+    const step = () => {
+      if (Math.abs(v) < minVelocity) {
+        snapToNearest()
+        return
+      }
+      container.scrollLeft -= v
+      v *= friction
+      momentumRef.current = requestAnimationFrame(step)
+    }
+    momentumRef.current = requestAnimationFrame(step)
+  }, [snapToNearest])
 
   // Mouse drag handlers
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!scrollContainerRef.current) return
+    cancelAnimationFrame(momentumRef.current)
     setIsDragging(true)
-    dragStartRef.current = {
-      x: e.pageX,
+    const now = performance.now()
+    dragRef.current = {
+      startX: e.pageX,
       scrollLeft: scrollContainerRef.current.scrollLeft,
+      lastX: e.pageX,
+      lastTime: now,
+      velocity: 0,
     }
   }, [])
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (!isDragging || !scrollContainerRef.current) return
     e.preventDefault()
-    const dx = e.pageX - dragStartRef.current.x
-    scrollContainerRef.current.scrollLeft = dragStartRef.current.scrollLeft - dx
+    const now = performance.now()
+    const dx = e.pageX - dragRef.current.lastX
+    const dt = now - dragRef.current.lastTime
+    if (dt > 0) {
+      dragRef.current.velocity = dx / dt * 16 // normalize to ~60fps
+    }
+    dragRef.current.lastX = e.pageX
+    dragRef.current.lastTime = now
+
+    const totalDx = e.pageX - dragRef.current.startX
+    scrollContainerRef.current.scrollLeft = dragRef.current.scrollLeft - totalDx
   }, [isDragging])
 
-  const handleMouseUp = useCallback(() => {
+  const handleDragEnd = useCallback(() => {
     if (!isDragging) return
     setIsDragging(false)
-    // Snap to nearest card after drag ends
-    handleScroll()
-  }, [isDragging, handleScroll])
-
-  const handleMouseLeave = useCallback(() => {
-    if (isDragging) {
-      setIsDragging(false)
-      handleScroll()
+    const v = dragRef.current.velocity
+    if (Math.abs(v) > 1) {
+      startMomentum(v)
+    } else {
+      snapToNearest()
     }
-  }, [isDragging, handleScroll])
+  }, [isDragging, startMomentum, snapToNearest])
+
+  // Cleanup momentum on unmount
+  useEffect(() => {
+    return () => cancelAnimationFrame(momentumRef.current)
+  }, [])
 
   return (
     <section id="product-showcase" className="py-12 md:py-16 lg:py-20 bg-background">
@@ -379,9 +439,9 @@ export function ProductShowcase() {
             onScroll={handleScroll}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-            className={`flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-6 md:gap-8 ${
+            onMouseUp={handleDragEnd}
+            onMouseLeave={handleDragEnd}
+            className={`flex overflow-x-auto scrollbar-hide gap-6 md:gap-8 select-none ${
               isDragging ? 'cursor-grabbing' : 'cursor-grab'
             }`}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -389,7 +449,7 @@ export function ProductShowcase() {
             {FEATURES.map((item, i) => (
               <div
                 key={i}
-                className="flex-shrink-0 w-full md:w-[calc(50%-16px)] snap-start"
+                className="flex-shrink-0 w-full md:w-[calc(50%-16px)]"
               >
                 {/* Mockup card - auto height on mobile, fixed aspect on desktop */}
                 <div className="min-h-[280px] md:aspect-[4/3] md:min-h-0 rounded-2xl border border-border bg-card overflow-hidden mb-4 md:mb-5 shadow-sm">
