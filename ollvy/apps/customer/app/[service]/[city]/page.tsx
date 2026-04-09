@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { unstable_cache } from 'next/cache'
 import { getCityBySlug, CITIES, GEO_ENABLED_SERVICES } from '@/lib/geo'
 import { getServiceBySlugFromDB, getStatePricing, getServiceReviews, getRelatedServicesBySlugs, getAllServiceSlugs } from '@/lib/data/services'
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
@@ -47,7 +48,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, city: citySlug } = await params
-  const { service } = await getServiceBySlugFromDB(serviceSlug)
+  const getCachedGeoService = unstable_cache(() => getServiceBySlugFromDB(serviceSlug), [`geo-service-${serviceSlug}`], { revalidate: 3600 })
+  const { service } = await getCachedGeoService()
   const city = getCityBySlug(citySlug)
 
   if (!service || !city) {
@@ -92,17 +94,19 @@ export default async function GeoPage({ params }: PageProps) {
     notFound()
   }
 
-  // Fetch complete service data from database
-  const { service, pricing: basePricing } = await getServiceBySlugFromDB(serviceSlug)
+  // Fetch complete service data from database (cached)
+  const getCachedGeoServiceData = unstable_cache(() => getServiceBySlugFromDB(serviceSlug), [`geo-service-${serviceSlug}`], { revalidate: 3600 })
+  const { service, pricing: basePricing } = await getCachedGeoServiceData()
 
   if (!service) {
     notFound()
   }
 
-  // Fetch state-specific pricing override
+  // Fetch state-specific pricing override (cached)
   let adjustedService = { ...service }
   if (basePricing?.id) {
-    const statePricing = await getStatePricing(basePricing.id, city.state)
+    const getCachedStatePricing = unstable_cache(() => getStatePricing(basePricing.id, city.state), [`geo-state-pricing-${serviceSlug}-${citySlug}`], { revalidate: 3600 })
+    const statePricing = await getCachedStatePricing()
 
     if (statePricing) {
       // Override with state-specific pricing
@@ -114,10 +118,12 @@ export default async function GeoPage({ params }: PageProps) {
     }
   }
 
-  // Fetch reviews and related services in parallel
+  // Fetch reviews and related services in parallel (cached)
+  const getCachedGeoReviews = unstable_cache(() => getServiceReviews(service.id), [`geo-reviews-${serviceSlug}`], { revalidate: 3600 })
+  const getCachedGeoRelated = unstable_cache(() => getRelatedServicesBySlugs(service.relatedSlugs), [`geo-related-${serviceSlug}`], { revalidate: 3600 })
   const [reviews, relatedServices] = await Promise.all([
-    getServiceReviews(service.id),
-    getRelatedServicesBySlugs(service.relatedSlugs),
+    getCachedGeoReviews(),
+    getCachedGeoRelated(),
   ])
 
   // Build BreadcrumbList schema for navigation hierarchy

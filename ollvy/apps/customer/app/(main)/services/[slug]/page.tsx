@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { unstable_cache } from 'next/cache'
 import { getServiceBySlugFromDB, getAllServiceSlugs, getServiceReviews, getRelatedServicesBySlugs } from '@/lib/data/services'
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
 import { ServiceStructuredData } from '@/components/seo/ServiceStructuredData'
@@ -27,7 +28,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const { service } = await getServiceBySlugFromDB(slug)
+  const getCachedService = unstable_cache(() => getServiceBySlugFromDB(slug), [`service-${slug}`], { revalidate: 3600 })
+  const { service } = await getCachedService()
 
   if (!service) {
     return {
@@ -62,17 +64,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params
 
-  // Fetch complete service data from database
-  const { service, pricing } = await getServiceBySlugFromDB(slug)
+  // Fetch complete service data from database (cached)
+  const getCachedService = unstable_cache(() => getServiceBySlugFromDB(slug), [`service-${slug}`], { revalidate: 3600 })
+  const { service, pricing } = await getCachedService()
 
   if (!service) {
     notFound()
   }
 
-  // Fetch reviews and related services in parallel
+  // Fetch reviews and related services in parallel (cached)
+  const getCachedReviews = unstable_cache(() => getServiceReviews(service.id), [`service-reviews-${slug}`], { revalidate: 3600 })
+  const getCachedRelated = unstable_cache(() => getRelatedServicesBySlugs(service.relatedSlugs), [`service-related-${slug}`], { revalidate: 3600 })
   const [reviews, relatedServices] = await Promise.all([
-    getServiceReviews(service.id),
-    getRelatedServicesBySlugs(service.relatedSlugs),
+    getCachedReviews(),
+    getCachedRelated(),
   ])
 
   // Get price in rupees

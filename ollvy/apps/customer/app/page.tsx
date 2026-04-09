@@ -8,7 +8,11 @@ import { ServicesSimplified } from '@/components/landing/ServicesSimplified'
 import { FinalCTA } from '@/components/landing/FinalCTA'
 import { Footer } from '@/components/landing/Footer'
 import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
+import { unstable_cache } from 'next/cache'
 import { getPopularServices, getFAQServicePrices, FAQServicePrices } from '@/lib/data/services'
+
+const getCachedPopularServices = unstable_cache(getPopularServices, ['popular-services'], { revalidate: 3600 })
+const getCachedFAQServicePrices = unstable_cache(getFAQServicePrices, ['faq-service-prices'], { revalidate: 3600 })
 // Direct imports for SEO crawlability - dynamic imports hide content from Google
 import { ProductShowcase } from '@/components/landing/ProductShowcase'
 import { HomeFAQ } from '@/components/landing/HomeFAQ'
@@ -295,8 +299,8 @@ The honest answer: if you want the cheapest possible registration and are comfor
 export default async function LandingPage() {
   // Fetch popular services and FAQ prices from database in parallel
   const [popularServices, faqPrices] = await Promise.all([
-    getPopularServices(),
-    getFAQServicePrices(),
+    getCachedPopularServices(),
+    getCachedFAQServicePrices(),
   ])
 
   // Generate FAQ schema with live prices

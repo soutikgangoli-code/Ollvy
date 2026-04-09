@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import { Suspense } from 'react'
+import { unstable_cache } from 'next/cache'
 import { ServicesClient } from './services-client'
 import { supabaseServer } from '@/lib/supabase-server'
 import { SERVICES } from '@/lib/services'
@@ -171,7 +172,8 @@ function ServicesLoadingSkeleton() {
 
 export default async function ServicesPage() {
   // Fetch services server-side for SEO
-  const services = await fetchServices()
+  const getCachedServices = unstable_cache(fetchServices, ['all-services'], { revalidate: 3600 })
+  const services = await getCachedServices()
   const servicesSchema = generateServicesSchema(services)
 
   return (
