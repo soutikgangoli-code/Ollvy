@@ -434,54 +434,8 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
     }
   }, [orderId])
 
-  // Fallback polling for chat_conversation_id
-  // Ensures chat appears even if realtime has issues
-  // Limited to 10 attempts (30 seconds max) to prevent indefinite polling
-  useEffect(() => {
-    // Only poll if order exists but chat_conversation_id is missing
-    if (order?.chat_conversation_id || !order?.id) return
-
-    // Don't poll for waitlisted orders (they don't have chat yet)
-    if (order.status === 'waitlisted') return
-
-    const supabase = getClient()
-    let attemptCount = 0
-    const maxAttempts = 10 // 10 attempts * 3 seconds = 30 seconds max
-
-    const pollForChat = async () => {
-      attemptCount++
-
-      const { data } = await supabase
-        .from('orders')
-        .select('chat_conversation_id')
-        .eq('id', order.id)
-        .single()
-
-      if (data?.chat_conversation_id) {
-        setOrder(prev => prev ? { ...prev, chat_conversation_id: data.chat_conversation_id } : prev)
-        return true // Signal to stop polling
-      }
-
-      return false
-    }
-
-    // Poll every 3 seconds until chat_conversation_id is set or max attempts reached
-    const interval = setInterval(async () => {
-      if (attemptCount >= maxAttempts) {
-        clearInterval(interval)
-        return
-      }
-      const found = await pollForChat()
-      if (found) {
-        clearInterval(interval)
-      }
-    }, 3000)
-
-    // Also poll immediately on mount
-    pollForChat()
-
-    return () => clearInterval(interval)
-  }, [order?.id, order?.chat_conversation_id, order?.status])
+  // chat_conversation_id is picked up by the realtime subscription on the orders table (line above)
+  // No polling needed — the UPDATE event fires when the backend sets it
 
   // Calculate progress stats
   const stats = useMemo(() => {
