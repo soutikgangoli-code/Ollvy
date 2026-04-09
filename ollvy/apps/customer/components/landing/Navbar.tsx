@@ -32,6 +32,7 @@ import type { NavbarServiceData } from '@/lib/data/services'
 
 interface NavbarProps {
   services?: NavbarServiceData[]
+  minimal?: boolean
 }
 
 const navLinks = [
@@ -96,7 +97,7 @@ function useActiveSection(sectionIds: (string | null)[]) {
   return activeSection
 }
 
-export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
+export function Navbar({ services: prefetchedServices = [], minimal = false }: NavbarProps) {
   const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -182,7 +183,7 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-10">
+          {!minimal && <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => {
             const isActive = link.sectionId && activeSection === link.sectionId
             return (
@@ -234,11 +235,11 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </nav>
+        </nav>}
         </div>
 
         {/* Theme Toggle + Desktop Search Button + Profile */}
-        <div className="hidden md:flex items-center gap-2">
+        {!minimal && <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
           <button
             type="button"
@@ -310,10 +311,10 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
               Sign in
             </button>
           )}
-        </div>
+        </div>}
 
         {/* Mobile Search + Theme + Menu Buttons */}
-        <div className="flex items-center gap-1 md:hidden">
+        {!minimal && <div className="flex items-center gap-1 md:hidden">
           {mobileSearchOpen ? (
             <>
               {/* Expanded search input - expands from right to left */}
@@ -360,10 +361,10 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
             <Menu className="h-5 w-5" />
             <span className="sr-only">Open menu</span>
           </button>
-        </div>
+        </div>}
 
         {/* Mobile Sheet */}
-        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+        {!minimal && <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetContent side="right" className="w-full max-w-[320px] p-0 flex flex-col">
             <SheetHeader className="p-6 pb-4">
               <SheetTitle className="text-left font-mono text-xl font-bold tracking-tight">
@@ -490,7 +491,7 @@ export function Navbar({ services: prefetchedServices = [] }: NavbarProps) {
               )}
             </SheetFooter>
           </SheetContent>
-        </Sheet>
+        </Sheet>}
 
         {/* Search Dialog */}
         <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
