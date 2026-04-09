@@ -1,5 +1,3 @@
-'use client'
-
 import { Check, AlertCircle, FileText } from 'lucide-react'
 
 export function FearRelief() {

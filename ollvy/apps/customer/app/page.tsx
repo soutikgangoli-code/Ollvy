@@ -13,9 +13,10 @@ import { getPopularServices, getFAQServicePrices, FAQServicePrices } from '@/lib
 
 const getCachedPopularServices = unstable_cache(getPopularServices, ['popular-services'], { revalidate: 3600 })
 const getCachedFAQServicePrices = unstable_cache(getFAQServicePrices, ['faq-service-prices'], { revalidate: 3600 })
-// Direct imports for SEO crawlability - dynamic imports hide content from Google
-import { ProductShowcase } from '@/components/landing/ProductShowcase'
-import { HomeFAQ } from '@/components/landing/HomeFAQ'
+import dynamic from 'next/dynamic'
+
+const ProductShowcase = dynamic(() => import('@/components/landing/ProductShowcase').then(m => ({ default: m.ProductShowcase })))
+const HomeFAQ = dynamic(() => import('@/components/landing/HomeFAQ').then(m => ({ default: m.HomeFAQ })))
 
 /**
  * Homepage - Mercury-Inspired Redesign
