@@ -546,6 +546,7 @@ const FALLBACK_SERVICE_SLUGS = [
   // Registrations
   'pvt-ltd-incorporation',
   'llp-incorporation',
+  'business-pan',
   'gst-registration',
   'msme-registration',        // NOT 'msme-udyam'
   'trademark-registration',
@@ -564,7 +565,6 @@ const FALLBACK_SERVICE_SLUGS = [
   // Other Services
   'company-name-change',
   'din-reactivation',
-  'business-pan',
 ]
 
 /**

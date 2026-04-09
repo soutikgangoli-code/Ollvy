@@ -10,7 +10,6 @@ import { ProcessStepper } from './ProcessStepper'
 import { ExplainerStepper } from './ExplainerStepper'
 import { ServiceRisks } from './ServiceRisks'
 import { ProfilePersonas } from './ProfilePersonas'
-import { CompletionStats } from './CompletionStats'
 // Import directly for SEO crawlability - dynamic imports hide content from Google
 import { RelatedServices } from './RelatedServices'
 import { HowWeReviewed } from './HowWeReviewed'
@@ -675,12 +674,6 @@ export function UnifiedServicePage({
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 items-start">
               {/* Left: All content sections flowing */}
               <div className="min-w-0 space-y-0">
-                {/* Section: Stats (if enabled) */}
-                {service.showCompletionStats && (
-                  <section className="pb-16 border-b border-border">
-                    <CompletionStats service={service} />
-                  </section>
-                )}
 
                 {/* Section: How it works (Process Steps) */}
                 <section
@@ -688,7 +681,7 @@ export function UnifiedServicePage({
                   ref={(el) => { sectionRefs.current.process = el }}
                   className={cn(
                     "pb-16 border-b border-border scroll-mt-28",
-                    service.showCompletionStats ? "pt-16" : "pt-0"
+                    "pt-0"
                   )}
                 >
                   <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
