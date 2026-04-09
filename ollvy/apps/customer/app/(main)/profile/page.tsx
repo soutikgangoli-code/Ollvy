@@ -106,6 +106,7 @@ export default async function ProfilePage({ searchParams }: PageProps) {
             )
           `)
           .eq('user_id', user.id)
+          .neq('status', 'pending_payment')
           .order('created_at', { ascending: false })
           .limit(50),
 
@@ -135,6 +136,7 @@ export default async function ProfilePage({ searchParams }: PageProps) {
           .from('orders')
           .select('id, order_number, service_package:service_packages(name)')
           .eq('user_id', user.id)
+          .neq('status', 'pending_payment')
           .order('created_at', { ascending: false })
           .limit(50),
 
