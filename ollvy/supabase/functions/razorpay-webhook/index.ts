@@ -17,7 +17,6 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { crypto } from 'https://deno.land/std@0.177.0/crypto/mod.ts';
-import { autoAssignProfessional } from '../auto-assign-professional/index.ts';
 import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 
 // Verify Razorpay webhook signature using HMAC SHA256
@@ -455,11 +454,12 @@ serve(async (req) => {
 
     console.log(`Processing payment for order ${order.id}`);
 
-    // 1. Update order status to 'in_progress' (note: 'paid' status not in enum)
+    // 1. Update order status to 'pending_assignment' — professional is assigned
+    // manually from the admin panel. This lands the order in the "Needs Assignment" bucket.
     const { error: updateError } = await supabase
       .from('orders')
       .update({
-        status: 'in_progress',
+        status: 'pending_assignment',
         razorpay_payment_id: razorpayPaymentId,
         paid_at: new Date().toISOString(),
       })
@@ -531,25 +531,8 @@ serve(async (req) => {
       console.log(`Chat conversation already exists for order ${order.id}`);
     }
 
-    // 3. Call auto-assign-professional
-    try {
-      const assignResult = await autoAssignProfessional({
-        order_id: order.id,
-        service_package_id: order.service_package_id,
-        city: order.city,
-        state: order.users.state,
-        is_pro_user: order.users.subscription_tier === 'pro',
-      });
-
-      if (!assignResult.ok) {
-        console.log(`Auto-assign result: ${assignResult.status || 'waitlisted'}`);
-      }
-    } catch (assignError) {
-      console.error('Auto-assign error:', assignError);
-      // Don't fail the webhook - order is paid, assignment can be done manually
-    }
-
-    // 4-6. Create invoice, engagement letter, and notification in parallel (independent operations)
+    // 3. Create invoice, engagement letter, and notification in parallel (independent operations)
+    // Note: Professional assignment is handled manually from the admin panel.
     const [invoiceResult, letterResult, notifyResult] = await Promise.all([
       // Invoice
       supabase
