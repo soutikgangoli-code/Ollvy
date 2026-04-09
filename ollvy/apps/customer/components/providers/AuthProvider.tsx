@@ -20,6 +20,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     console.log('[AuthProvider] Mounting, starting hydration')
 
     const hydrate = async () => {
+      // Skip network calls for first-time visitors with no session
+      const hasAuthCookie = document.cookie.includes('sb-')
+      if (!hasAuthCookie) {
+        useAuthStore.setState({ isHydrated: true })
+        initialHydrationComplete.current = true
+        console.log('[AuthProvider] No auth cookie, skipping hydration')
+        return
+      }
       await refreshSession()
       initialHydrationComplete.current = true
       console.log('[AuthProvider] Initial hydration complete')

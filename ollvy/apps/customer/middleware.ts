@@ -20,6 +20,20 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 308) // 308 = permanent redirect
   }
 
+  // Skip auth for public routes entirely — no Supabase client needed
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname) ||
+    pathname.startsWith('/services') ||
+    pathname.startsWith('/guides') ||
+    pathname.startsWith('/tools') ||
+    pathname.startsWith('/join') ||
+    pathname.startsWith('/startup') ||
+    pathname.startsWith('/auth/') ||
+    /^\/[^/]+\/[^/]+$/.test(pathname)
+
+  if (isPublicRoute) {
+    return NextResponse.next()
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
