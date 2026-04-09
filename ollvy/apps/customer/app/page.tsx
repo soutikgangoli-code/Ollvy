@@ -65,43 +65,43 @@ function generateFAQSchema(prices: FAQServicePrices) {
   const faqs = [
     {
       question: 'What is the difference between an LLP and a Private Limited Company in India?',
-      answer: `An LLP has lower compliance (no board meetings, simpler filings) and costs less annually. A Pvt Ltd lets you raise VC funding, issue ESOPs, and is preferred for product startups. Both offer limited liability and are taxed at 30%. LLP registration: ${prices.llp} plus govt fees, 10-12 working days. Pvt Ltd: ${prices.pvtLtd} plus govt fees, 12-15 working days.`,
+      answer: `Both LLP (Limited Liability Partnership) and Private Limited Company are popular legal structures for Indian businesses, but they serve different needs. Both structures offer limited liability - your personal assets are protected. An LLP has far lower annual compliance requirements - no mandatory board meetings, no statutory registers, and simpler annual filings. If you plan to raise funding from angel investors or venture capital, Private Limited is the only viable option. Both are taxed at 30% flat on profits plus surcharges. Ollvy handles registration for both structures. LLP Incorporation is completed in 10-12 working days at ${prices.llp} plus government fees. Private Limited Incorporation is completed in 12-15 working days at ${prices.pvtLtd} plus government fees.`,
     },
     {
       question: 'How long does company registration take in India?',
-      answer: `Pvt Ltd: 12-15 working days. LLP: 10-12 working days. OPC: 10-12 working days. GST: 5-7 working days. Trademark filing: 1-2 days (certificate takes 12-18 months). FSSAI State Licence: 30-45 working days. Timelines start after document approval by your assigned CA.`,
+      answer: `Company registration timelines in India have improved significantly since MCA21 Version 3.0 launched in 2022. Private Limited Company: Typical timeline is 12-15 working days. LLP (Limited Liability Partnership): Typical timeline is 10-12 working days. OPC (One Person Company): Typical timeline is 10-12 working days. GST Registration: Typical timeline is 5-7 working days. Trademark Registration: Filing takes 1-2 days, but the complete registration certificate takes 12-18 months. FSSAI License (State): Typical timeline is 30-45 working days. The working days timeline starts from the date all documents are approved by our CA, not from the date of payment.`,
     },
     {
       question: 'What documents are required for LLP registration in India?',
-      answer: `Per partner: PAN card, Aadhaar card, passport-size photo, and address proof (bank statement or utility bill). For registered office: rent agreement (if rented), NOC from property owner, and utility bill not older than 2 months. A home address is valid as registered office. DSCs are arranged by your CA.`,
+      answer: `LLP registration requires documents from two categories: each designated partner, and the registered office. For each designated partner: PAN Card (name must exactly match Aadhaar), Aadhaar Card (both front and back), passport-size photograph, and address proof such as bank statement or utility bill. For the registered office: rent agreement (if rented), No Objection Certificate (NOC) from the property owner, and utility bill not older than 2 months. A residential address is completely valid as a registered office address for an LLP. Digital Signature Certificates (DSC) for all partners are arranged by our CA as part of the service.`,
     },
     {
       question: 'How much does company registration cost in India?',
-      answer: `LLP: ${prices.llp} plus Rs 500-800 govt fees. Pvt Ltd: ${prices.pvtLtd} plus Rs 3,000-6,000 govt fees. OPC: ${prices.opc} plus Rs 1,500-3,000 govt fees. GST: ${prices.gst} (no govt fees). Trademark: ${prices.trademark} plus Rs 4,500-9,000 govt fees. All prices exclude 18% GST on professional fees.`,
+      answer: `The total cost of company registration in India has two components: professional fees and government fees (paid directly to MCA). LLP Incorporation: Ollvy fee is ${prices.llp}, government fees approximately Rs 500-800. Private Limited Company: Ollvy fee is ${prices.pvtLtd}, government fees approximately Rs 3,000-6,000. OPC Incorporation: Ollvy fee is ${prices.opc}, government fees approximately Rs 1,500-3,000. GST Registration: Ollvy fee is ${prices.gst}, government fees are Rs 0. Trademark Registration: Ollvy fee is ${prices.trademark}, government fees approximately Rs 4,500-9,000. GST at 18% on professional fees is not included. Government fees are GST-exempt.`,
     },
     {
       question: 'Can I register a company using my home address in India?',
-      answer: `Yes. A residential address is completely legal as the registered office for a company or LLP. You need an NOC from the property owner and a utility bill not older than 2 months. You can change the address later when you move to a commercial space.`,
+      answer: `Yes. Using a residential address as the registered office of a company or LLP is completely legal in India, and is one of the most common approaches taken by early-stage founders. There is no requirement to have a commercial office to register a company. You need an NOC from the property owner and a utility bill not older than 2 months. Once your business grows and you move to a commercial space, you can update the registered office address. Ollvy handles registered office changes as a separate service.`,
     },
     {
       question: 'What is GST registration and does my business need it?',
-      answer: `GST registration is mandatory if turnover exceeds Rs 40 lakhs (goods) or Rs 20 lakhs (services), or if you sell interstate or on e-commerce platforms. It takes 5-7 working days. Penalty for non-registration: 10% of tax due (minimum Rs 10,000). Ollvy fee: ${prices.gst}.`,
+      answer: `GST (Goods and Services Tax) registration gives your business a GSTIN - a 15-digit unique identification number - and allows you to collect GST from customers, claim input tax credit on purchases, and trade across state lines without restrictions. GST registration is mandatory when your annual turnover exceeds Rs 40 lakhs (for goods) or Rs 20 lakhs (for services), when you sell goods or services across state lines, or when you sell on e-commerce platforms. Registration typically takes 5-7 working days. Penalty for not registering when mandatory: 10% of the tax due (minimum Rs 10,000).`,
     },
     {
       question: 'What is Director KYC and what happens if I miss the deadline?',
-      answer: `Director KYC (DIR-3 KYC) is mandatory annually by 30 September for all DIN holders. Missing the deadline deactivates your DIN with a Rs 5,000 penalty per director. Ollvy sends automated reminders and handles filing at ${prices.directorKyc} per director.`,
+      answer: `Director KYC is a mandatory annual compliance requirement for all individuals who hold a Director Identification Number (DIN) in India - regardless of whether the company is active or not. It is filed using Form DIR-3 KYC on the MCA portal. The annual deadline is 30 September each year. If you miss this date, your DIN is immediately deactivated and a penalty of Rs 5,000 per director applies. Ollvy sends automated compliance reminders 30 days, 7 days, and 1 day before the deadline. Filing is available as a standalone service at ${prices.directorKyc} per director.`,
     },
     {
       question: 'How does trademark registration work in India, and how long does it take?',
-      answer: `Trademark registration takes 12-18 months total: search (1-2 days), TM-A filing (1 day), examination (3-6 months), journal publication (4 months), then certificate. Govt fees: Rs 4,500 per class for startups, Rs 9,000 for companies. Ollvy fee: ${prices.trademark} including search, filing, and examination response.`,
+      answer: `Trademark registration in India gives you the exclusive legal right to use your brand name, logo, or tagline in connection with the goods or services you register it for. The process: trademark search (1-2 days), class selection, TM-A filing (1 day), examination (3-6 months), journal publication (4 months), then registration certificate. Total timeline is 12-18 months from filing to certificate. Government fees are Rs 4,500 per class for individuals, startups, and small enterprises, or Rs 9,000 per class for companies and LLPs. Ollvy's professional fee is ${prices.trademark} and covers one class, the conflict search, TM-A filing, and examination response if needed.`,
     },
     {
       question: 'What is the difference between an FSSAI registration and an FSSAI licence?',
-      answer: `Basic Registration: turnover below Rs 12 lakhs, fee ${prices.fssaiBasic}. State Licence: Rs 12 lakhs to Rs 20 crores, fee ${prices.fssaiState}. Central Licence: above Rs 20 crores or multi-state, fee ${prices.fssaiCentral}. Operating without FSSAI attracts Rs 1-10 lakh penalties and blocks listing on Zomato/Swiggy.`,
+      answer: `FSSAI compliance comes in three tiers depending on the size and nature of your food business. Basic Registration: for petty food businesses, home bakers, and small dhabas with annual turnover below Rs 12 lakhs, Ollvy fee is ${prices.fssaiBasic}. State Licence: for restaurants, bakeries, and mid-size food manufacturers with turnover between Rs 12 lakhs and Rs 20 crores, Ollvy fee is ${prices.fssaiState}. Central Licence: for large manufacturers, food importers and exporters, or businesses with turnover above Rs 20 crores, Ollvy fee is ${prices.fssaiCentral}. Penalties for operating without FSSAI range from Rs 1 lakh to Rs 10 lakhs. Zomato, Swiggy, and other food aggregators require a valid FSSAI number to list your restaurant.`,
     },
     {
       question: 'Why should I use Ollvy instead of hiring a CA directly or using IndiaFilings or Vakilsearch?',
-      answer: `Ollvy offers fixed transparent pricing, in-app document upload with CA review, real-time order tracking, and proactive compliance reminders. Unlike IndiaFilings or Vakilsearch, there are no upsells or WhatsApp-based document collection. Every order is handled by a vetted CA with clear timelines and guaranteed deliverables.`,
+      answer: `Ollvy gives you the same quality of CA (we vet all professionals on the platform) with fixed, transparent pricing, clear timelines, documented deliverables, and in-app tracking of every stage of your order. Ollvy has a structured in-app upload flow with per-document status, CA review, and rejection handling - all in one place. Status updates use real-time stage tracking in the app. Pricing has no hidden add-ons. Ollvy proactively surfaces upcoming compliance deadlines as a core feature. Every order is handled by a vetted, experienced CA.`,
     },
   ]
 

@@ -41,7 +41,7 @@ export function FearRelief() {
               </div>
 
               {/* Chat area - WhatsApp style background */}
-              <div className="p-2 space-y-1.5 flex-1 bg-[#e5ddd5] bg-cover bg-center" style={{ backgroundImage: `url('/images/whatsapp-bg.jpg')` }}>
+              <div className="p-2 space-y-1.5 flex-1 bg-[#e5ddd5] bg-cover bg-center" style={{ backgroundImage: `url('/images/whatsapp-bg.webp')` }}>
 
                 {/* Date: Tuesday, 18 Oct */}
                 <div className="flex justify-center">

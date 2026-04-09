@@ -2,22 +2,25 @@
 
 import posthog from 'posthog-js'
 import { PostHogProvider as PHProvider, usePostHog } from 'posthog-js/react'
-import { useEffect, Suspense } from 'react'
+import { useEffect, Suspense, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN
 const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
 
-// Initialize PostHog only once on client side
-if (typeof window !== 'undefined' && POSTHOG_KEY) {
+let posthogInitialized = false
+
+function initPostHog() {
+  if (posthogInitialized || !POSTHOG_KEY) return
+  posthogInitialized = true
   posthog.init(POSTHOG_KEY, {
     api_host: POSTHOG_HOST,
     person_profiles: 'identified_only',
-    capture_pageview: false, // We capture manually for better control
+    capture_pageview: false,
     capture_pageleave: true,
-    loaded: (posthog) => {
+    loaded: (ph) => {
       if (process.env.NODE_ENV === 'development') {
-        posthog.debug()
+        ph.debug()
       }
     },
   })
@@ -52,8 +55,20 @@ function SuspendedPageView() {
 }
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
+  const initialized = useRef(false)
+
+  useEffect(() => {
+    if (initialized.current) return
+    initialized.current = true
+    // Defer PostHog init until after page is interactive
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(() => initPostHog())
+    } else {
+      setTimeout(() => initPostHog(), 2000)
+    }
+  }, [])
+
   if (!POSTHOG_KEY) {
-    // Don't render PostHog in development without a key
     return <>{children}</>
   }
 
