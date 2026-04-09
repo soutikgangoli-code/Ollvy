@@ -54,18 +54,20 @@ export default async function OrderDetailPage({ params }: PageProps) {
     redirect(`/login?returnUrl=/orders/${orderId}`)
   }
 
-  // Server-side data fetching - much faster than client-side
+  // Server-side data fetching — all queries in a single parallel batch
+  // Queries that only need orderId run alongside the order fetch (no waterfall)
   const supabase = await createServerSupabase()
 
-  // First, verify user can access this order (RLS check)
-  // We fetch order without service_package join because RLS on service_packages
-  // blocks inactive packages, but we need to show order details for existing orders
-  const [orderResult, stageResult, docsResult, workDocsResult] = await Promise.all([
+  const [
+    orderResult, stageResult, docsResult, workDocsResult,
+    invoiceResult, notificationResult, responsesResult, addonsResult
+  ] = await Promise.all([
+    // Core order data (RLS verifies user access)
     supabase
       .from('orders')
       .select(`
         *,
-        professional:professionals(*)
+        professional:professionals(id, name, email, phone, specializations, avg_rating, total_ratings)
       `)
       .eq('id', orderId)
       .single(),
@@ -76,24 +78,15 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .order('started_at', { ascending: true }),
     supabase
       .from('order_documents')
-      .select('*')
+      .select('id, order_id, document_key, document_label, stage_key, is_required, uploaded_at, file_url, file_name, verified_at, verified_by, rejection_reason, created_at')
       .eq('order_id', orderId)
       .order('created_at', { ascending: false }),
     supabase
       .from('order_work_documents')
-      .select('*')
+      .select('id, order_id, file_name, file_url, direction, status, tag, round_id, rejection_reason, created_at, updated_at')
       .eq('order_id', orderId)
-      .order('created_at', { ascending: false })
-  ])
-
-  // If order not found or error, let client handle it
-  if (orderResult.error || !orderResult.data) {
-    return <OrderPageClient orderId={orderId} initialData={null} />
-  }
-
-  // Fetch optional data (don't block on these) - includes service_package in parallel
-  // Service package uses service role client (bypasses RLS) - safe because BATCH 1 verified user access
-  const [invoiceResult, notificationResult, responsesResult, servicePackageResult, addonsResult] = await Promise.allSettled([
+      .order('created_at', { ascending: false }),
+    // These only need orderId — no dependency on order result
     supabase
       .from('invoices')
       .select('id')
@@ -101,7 +94,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .maybeSingle(),
     supabase
       .from('round_notifications')
-      .select('*')
+      .select('id, order_id, round_id, round_title, message, is_dismissed, created_at')
       .eq('order_id', orderId)
       .eq('is_dismissed', false)
       .order('created_at', { ascending: false })
@@ -111,25 +104,29 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .from('order_questionnaire_responses')
       .select('question_key, response_value')
       .eq('order_id', orderId),
-    // Service package - now parallel with other optional queries
-    supabaseServer && orderResult.data.service_package_id
-      ? supabaseServer
-          .from('service_packages')
-          .select('*')
-          .eq('id', orderResult.data.service_package_id)
-          .single()
-      : Promise.resolve({ data: null, error: null }),
-    // Order addons - fetch server-side to avoid flash of empty content
     supabase
       .from('order_addons')
       .select('id, addon_id, addon_name, price_paisa_snapshot, govt_fee_paisa_snapshot')
-      .eq('order_id', orderId)
+      .eq('order_id', orderId),
   ])
 
-  // Extract service package data from result
-  const servicePackageData = servicePackageResult.status === 'fulfilled'
-    ? servicePackageResult.value.data
-    : null
+  // If order not found or error, let client handle it
+  if (orderResult.error || !orderResult.data) {
+    return <OrderPageClient orderId={orderId} initialData={null} />
+  }
+
+  // Service package fetch — needs service_package_id from order result
+  // Uses service role client to bypass RLS on inactive packages
+  const servicePackageResult = orderResult.data.service_package_id && supabaseServer
+    ? await supabaseServer
+        .from('service_packages')
+        .select('id, name, slug, sla_working_days, workflow_stages, questionnaire, variants, whats_included')
+        .eq('id', orderResult.data.service_package_id)
+        .single()
+    : { data: null, error: null }
+
+  // Extract service package data
+  const servicePackageData = servicePackageResult.data || null
 
   // Attach service_package to order data
   const orderWithServicePackage = {
@@ -139,33 +136,27 @@ export default async function OrderDetailPage({ params }: PageProps) {
 
   // Build questionnaire responses with labels
   let questionnaireResponses: QuestionnaireResponse[] = []
-  if (responsesResult.status === 'fulfilled' && responsesResult.value.data) {
-    // servicePackageData is already a single object (fetched via service role)
+  if (responsesResult.data) {
     const questionnaire = (servicePackageData as { questionnaire?: Array<{ key: string; label: string }> } | null)?.questionnaire || []
     const questionLabels = new Map(
       questionnaire.map((q: { key: string; label: string }) => [q.key, q.label])
     )
-    questionnaireResponses = (responsesResult.value.data || []).map((r: { question_key: string; response_value: string | string[] }) => ({
+    questionnaireResponses = (responsesResult.data || []).map((r: { question_key: string; response_value: string | string[] }) => ({
       question_key: r.question_key,
       question_label: questionLabels.get(r.question_key) || r.question_key,
       response_value: r.response_value,
     }))
   }
 
-  // Extract order addons
-  const orderAddons: OrderAddon[] = addonsResult.status === 'fulfilled' && addonsResult.value.data
-    ? addonsResult.value.data
-    : []
-
   const initialData = {
     order: orderWithServicePackage as Order,
     stageHistory: (stageResult.data || []) as OrderStageHistory[],
     documents: (docsResult.data || []) as OrderDocument[],
     workDocuments: (workDocsResult.data || []) as OrderWorkDocument[],
-    invoiceId: invoiceResult.status === 'fulfilled' ? invoiceResult.value.data?.id || null : null,
-    roundNotification: notificationResult.status === 'fulfilled' ? notificationResult.value.data as RoundNotification | null : null,
+    invoiceId: invoiceResult.data?.id || null,
+    roundNotification: (notificationResult.data as RoundNotification | null) || null,
     questionnaireResponses,
-    orderAddons,
+    orderAddons: (addonsResult.data || []) as OrderAddon[],
   }
 
   return <OrderPageClient orderId={orderId} initialData={initialData} />

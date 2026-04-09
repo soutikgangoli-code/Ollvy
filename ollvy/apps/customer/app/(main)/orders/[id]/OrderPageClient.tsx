@@ -29,7 +29,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { OrderStatusBadge } from '@/components/orders/OrderStatusBadge'
-import { DocumentPreview } from '@/components/documents'
+const DocumentPreview = dynamic(() => import('@/components/documents').then(m => ({ default: m.DocumentPreview })))
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { formatPaisa, formatDate, cn } from '@/lib/utils'

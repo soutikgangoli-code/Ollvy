@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, useMemo, Suspense } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -232,9 +232,9 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
           service_package: { name: r.service_package?.name || 'Retainer' }
         })),
         compliance: initialData.compliance,
-        doc_counts: {},
-        stage_histories: {},
-        work_doc_counts: {},
+        doc_counts: initialData.doc_counts || {},
+        stage_histories: initialData.stage_histories || {},
+        work_doc_counts: initialData.work_doc_counts || {},
         document_groups,
       }
     }
@@ -260,99 +260,18 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
   const [panNumber, setPanNumber] = useState(userData.pan_number || '')
   const [aadhaarNumber, setAadhaarNumber] = useState(userData.aadhaar_number || '')
 
-  // Fetch dependent data (doc counts, stages, work docs) - only needs activeOrderIds
-  // This runs client-side because it needs the active order IDs
+  // Fetch data client-side only as fallback when server data not available
   useEffect(() => {
-    // Wait for auth to fully hydrate before fetching
     if (!isHydrated || authLoading) return
 
-    const fetchDependentData = async () => {
-      // Get active order IDs - either from initialData or dashboardData
-      const activeOrderIds = dashboardData.active_orders.map(o => o.id)
-
-      if (activeOrderIds.length === 0) {
-        setIsLoading(false)
-        return
-      }
-
-      try {
-        const supabase = getClient()
-
-        // Fetch only the dependent data that needs activeOrderIds
-        const [docCounts, stages, workDocs] = await Promise.all([
-          // Document counts - needs activeOrderIds
-          supabase
-            .from('order_documents')
-            .select('order_id, uploaded_at')
-            .in('order_id', activeOrderIds)
-            .eq('is_required', true),
-          // Stage history - needs activeOrderIds
-          supabase
-            .from('order_stage_history')
-            .select('order_id, completed_at')
-            .in('order_id', activeOrderIds),
-          // Work docs - needs activeOrderIds
-          supabase
-            .from('order_work_documents')
-            .select('order_id, status')
-            .in('order_id', activeOrderIds)
-            .eq('direction', 'from_customer')
-        ])
-
-        // Process document counts
-        const docCountsMap: Record<string, { total: number; uploaded: number }> = {}
-        if (docCounts.data) {
-          docCounts.data.forEach((d: any) => {
-            if (!docCountsMap[d.order_id]) {
-              docCountsMap[d.order_id] = { total: 0, uploaded: 0 }
-            }
-            docCountsMap[d.order_id].total++
-            if (d.uploaded_at) docCountsMap[d.order_id].uploaded++
-          })
-        }
-
-        // Process stage histories
-        const stageHistoriesMap: Record<string, number> = {}
-        if (stages.data) {
-          stages.data.forEach((s: any) => {
-            if (s.completed_at) {
-              stageHistoriesMap[s.order_id] = (stageHistoriesMap[s.order_id] || 0) + 1
-            }
-          })
-        }
-
-        // Process work document counts
-        const workDocCountsMap: Record<string, { pending: number; rejected: number }> = {}
-        if (workDocs.data) {
-          workDocs.data.forEach((w: any) => {
-            if (!workDocCountsMap[w.order_id]) {
-              workDocCountsMap[w.order_id] = { pending: 0, rejected: 0 }
-            }
-            if (w.status === 'pending') workDocCountsMap[w.order_id].pending++
-            if (w.status === 'rejected') workDocCountsMap[w.order_id].rejected++
-          })
-        }
-
-        setDashboardData(prev => ({
-          ...prev,
-          doc_counts: docCountsMap,
-          stage_histories: stageHistoriesMap,
-          work_doc_counts: workDocCountsMap,
-        }))
-      } catch (err) {
-        console.error('Failed to fetch dependent data:', err)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    // If we have initialData, fetch dependent data immediately
-    // Otherwise, fall back to full client-side fetch
+    // Server already provided all data including dependent queries — no client fetch needed
     if (initialData) {
-      fetchDependentData()
-    } else {
-      fetchAllDashboardData()
+      setIsLoading(false)
+      return
     }
+
+    // Fallback: full client-side fetch
+    fetchAllDashboardData()
   }, [isHydrated, authLoading, initialData])
 
   // Full client-side fetch - only used as fallback when server data not available
@@ -577,8 +496,8 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
     }
   }
 
-  // Process dashboard data
-  const processedData = (() => {
+  // Process dashboard data (memoized to avoid recalculation on every render)
+  const processedData = useMemo(() => {
     const initialDashboardData = dashboardData
     const docCounts = initialDashboardData.doc_counts || {}
     const stageHistories = initialDashboardData.stage_histories || {}
@@ -684,7 +603,7 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
       overdueCount,
       hasComplianceData,
     }
-  })()
+  }, [dashboardData])
 
   const handleSave = async () => {
     setIsSaving(true)

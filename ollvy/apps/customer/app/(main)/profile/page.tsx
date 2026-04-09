@@ -67,6 +67,9 @@ export interface ProfileInitialData {
   compliance: ServerComplianceData[]
   vault_orders: ServerVaultOrder[]
   vault_documents: ServerVaultDocument[]
+  doc_counts: Record<string, { total: number; uploaded: number }>
+  stage_histories: Record<string, number>
+  work_doc_counts: Record<string, { pending: number; rejected: number }>
 }
 
 export default async function ProfilePage({ searchParams }: PageProps) {
@@ -86,8 +89,8 @@ export default async function ProfilePage({ searchParams }: PageProps) {
   if (supabaseServer) {
     try {
       // Parallel server-side fetches (service role bypasses RLS)
-      const [ordersResult, retainersResult, complianceResult, vaultOrdersResult, vaultDocsResult] = await Promise.all([
-        // All orders with service package info
+      // Single orders query — used for both active/completed tabs AND vault
+      const [ordersResult, retainersResult, complianceResult] = await Promise.all([
         supabaseServer
           .from('orders')
           .select(`
@@ -130,28 +133,50 @@ export default async function ProfilePage({ searchParams }: PageProps) {
           .select('id, status, due_date')
           .eq('user_id', user.id)
           .order('due_date', { ascending: true }),
-
-        // Orders for vault (just id, order_number, service name)
-        supabaseServer
-          .from('orders')
-          .select('id, order_number, service_package:service_packages(name)')
-          .eq('user_id', user.id)
-          .neq('status', 'pending_payment')
-          .order('created_at', { ascending: false })
-          .limit(50),
-
-        // Vault documents
-        supabaseServer
-          .from('order_documents')
-          .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
-          .not('file_url', 'is', null)
-          .order('uploaded_at', { ascending: false })
-          .limit(200)
       ])
 
-      // Process orders into active/completed
       const orders = ordersResult.data || []
+      const orderIds = orders.map(o => o.id)
+
+      // BATCH 2: Queries that depend on order IDs — run in parallel
       const activeStatuses = ['pending_assignment', 'waitlisted', 'in_progress']
+      const activeOrderIds = orders.filter(o => activeStatuses.includes(o.status)).map(o => o.id)
+
+      const [vaultDocsResult, docCountsResult, stagesResult, workDocsResult] = await Promise.all([
+        // Vault documents — filtered to user's orders only (not full table scan)
+        orderIds.length > 0
+          ? supabaseServer
+              .from('order_documents')
+              .select('id, order_id, document_label, file_name, file_url, uploaded_at, verified_at')
+              .in('order_id', orderIds)
+              .not('file_url', 'is', null)
+              .order('uploaded_at', { ascending: false })
+              .limit(200)
+          : Promise.resolve({ data: [], error: null }),
+        // Document counts for active orders (moved from client)
+        activeOrderIds.length > 0
+          ? supabaseServer
+              .from('order_documents')
+              .select('order_id, uploaded_at')
+              .in('order_id', activeOrderIds)
+              .eq('is_required', true)
+          : Promise.resolve({ data: [], error: null }),
+        // Stage history for active orders (moved from client)
+        activeOrderIds.length > 0
+          ? supabaseServer
+              .from('order_stage_history')
+              .select('order_id, completed_at')
+              .in('order_id', activeOrderIds)
+          : Promise.resolve({ data: [], error: null }),
+        // Work doc counts for active orders (moved from client)
+        activeOrderIds.length > 0
+          ? supabaseServer
+              .from('order_work_documents')
+              .select('order_id, status')
+              .in('order_id', activeOrderIds)
+              .eq('direction', 'from_customer')
+          : Promise.resolve({ data: [], error: null }),
+      ])
 
       // Transform service_package arrays to single objects (Supabase returns arrays for joins)
       const transformOrder = (o: any): ServerOrderData => ({
@@ -175,16 +200,41 @@ export default async function ProfilePage({ searchParams }: PageProps) {
         service_package: Array.isArray(r.service_package) ? r.service_package[0] : r.service_package
       }))
 
-      // Transform vault orders
-      const vault_orders: ServerVaultOrder[] = (vaultOrdersResult.data || []).map((o: any) => ({
-        ...o,
+      // Vault orders reuse the same orders query (no second DB call)
+      const vault_orders: ServerVaultOrder[] = orders.map((o: any) => ({
+        id: o.id,
+        order_number: o.order_number,
         service_package: Array.isArray(o.service_package) ? o.service_package[0] : o.service_package
       }))
 
-      // Filter vault documents to only those belonging to user's orders
-      const userOrderIds = new Set(vault_orders.map(o => o.id))
-      const vault_documents: ServerVaultDocument[] = (vaultDocsResult.data || [])
-        .filter((d: any) => userOrderIds.has(d.order_id))
+      // Vault docs already filtered by user's order IDs at DB level
+      const vault_documents: ServerVaultDocument[] = (vaultDocsResult.data || []) as ServerVaultDocument[]
+
+      // Process dependent data server-side (eliminates client-side waterfall)
+      const doc_counts: Record<string, { total: number; uploaded: number }> = {}
+      if (docCountsResult.data) {
+        (docCountsResult.data as any[]).forEach((d: any) => {
+          if (!doc_counts[d.order_id]) doc_counts[d.order_id] = { total: 0, uploaded: 0 }
+          doc_counts[d.order_id].total++
+          if (d.uploaded_at) doc_counts[d.order_id].uploaded++
+        })
+      }
+
+      const stage_histories: Record<string, number> = {}
+      if (stagesResult.data) {
+        (stagesResult.data as any[]).forEach((s: any) => {
+          if (s.completed_at) stage_histories[s.order_id] = (stage_histories[s.order_id] || 0) + 1
+        })
+      }
+
+      const work_doc_counts: Record<string, { pending: number; rejected: number }> = {}
+      if (workDocsResult.data) {
+        (workDocsResult.data as any[]).forEach((w: any) => {
+          if (!work_doc_counts[w.order_id]) work_doc_counts[w.order_id] = { pending: 0, rejected: 0 }
+          if (w.status === 'pending') work_doc_counts[w.order_id].pending++
+          if (w.status === 'rejected') work_doc_counts[w.order_id].rejected++
+        })
+      }
 
       initialData = {
         active_orders,
@@ -192,7 +242,10 @@ export default async function ProfilePage({ searchParams }: PageProps) {
         retainers,
         compliance: complianceResult.data || [],
         vault_orders,
-        vault_documents
+        vault_documents,
+        doc_counts,
+        stage_histories,
+        work_doc_counts,
       }
     } catch (err) {
       console.error('[Profile Page] Server-side fetch error:', err)
