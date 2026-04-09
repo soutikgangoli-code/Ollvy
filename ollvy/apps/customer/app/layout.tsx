@@ -1,14 +1,17 @@
 import type { Metadata, Viewport } from 'next'
+import dynamic from 'next/dynamic'
 import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
-import { AuthModal, LoginSuccessBanner } from '@/components/auth'
+import { LoginSuccessBanner } from '@/components/auth/LoginSuccessBanner'
 import { StructuredData } from '@/components/seo/StructuredData'
 import { GTMProvider, GTMNoScript } from '@/components/analytics/GTMProvider'
 import { PostHogProvider } from '@/components/analytics/PostHogProvider'
+
+const AuthModal = dynamic(() => import('@/components/auth/AuthModal').then(m => ({ default: m.AuthModal })))
 
 const inter = Inter({
   subsets: ['latin'],
@@ -85,9 +88,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Preconnect to Supabase for faster API calls */}
-        <link rel="preconnect" href="https://wsuleaypyjazcmmntcru.supabase.co" />
-        <link rel="dns-prefetch" href="https://wsuleaypyjazcmmntcru.supabase.co" />
+        {/* Preconnect to origins used on first load (max 4) */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
