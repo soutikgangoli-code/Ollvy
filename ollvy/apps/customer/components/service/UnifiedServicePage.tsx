@@ -438,13 +438,14 @@ export function UnifiedServicePage({
         }
       }
 
-      // Mobile tabs: scroll active tab into view (at the start)
+      // Mobile tabs: scroll active tab into center of container
       if (mobileTabsRef.current) {
         const activeButton = mobileTabsRef.current.querySelector(`[data-section="${activeSection}"]`) as HTMLElement
         if (activeButton) {
-          // Scroll the active tab to the left edge with some padding
-          mobileTabsRef.current.scrollTo({
-            left: activeButton.offsetLeft - 16,
+          const container = mobileTabsRef.current
+          const scrollLeft = activeButton.offsetLeft - (container.offsetWidth / 2) + (activeButton.offsetWidth / 2)
+          container.scrollTo({
+            left: Math.max(0, scrollLeft),
             behavior: 'smooth'
           })
         }
@@ -491,10 +492,10 @@ export function UnifiedServicePage({
         )}
       >
         {/* Desktop: Full bar with logo, centered tabs */}
-        <div className="hidden md:block max-w-[1200px] mx-auto px-6">
+        <div className="hidden md:block max-w-[1200px] mx-auto px-6 overflow-hidden">
           <div className="relative flex items-center justify-center h-16">
             {/* Logo + Service name - absolute left */}
-            <div className="absolute left-0 flex items-center gap-4">
+            <div className="absolute left-0 flex items-center gap-4 bg-background pr-4 z-10">
               <Link href="/" className="font-mono text-xl font-bold text-foreground tracking-tight">
                 Ollvy
               </Link>
