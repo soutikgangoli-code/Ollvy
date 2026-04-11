@@ -118,6 +118,8 @@ export function BookingPanel({
   // Determine CTA label and URL based on service type
   const ctaLabel = priceVariesByState
     ? 'Get Quote'
+    : priceVariesByQuestionnaire
+    ? 'Check Eligibility & Price'
     : 'Start Application'
 
   // Build checkout URL with optional variant and addon params

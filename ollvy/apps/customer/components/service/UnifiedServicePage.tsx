@@ -364,6 +364,8 @@ export function UnifiedServicePage({
   // Determine CTA label and URL for this service
   const ctaLabel = service.priceVariesByState
     ? 'Get Quote'
+    : priceVariesByQuestionnaire
+    ? 'Check Eligibility & Price'
     : 'Start Application'
 
   // Build base checkout/eligibility URL
