@@ -151,9 +151,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
               // Always go through eligibility first - it handles redirect if no questions
               return `/checkout/${serviceId}/eligibility`
             })()} prefetch={true}>
-              {serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)
-                ? 'Check Eligibility & Price →'
-                : 'Book this service →'}
+              Start Application →
             </Link>
           </Button>
         )}

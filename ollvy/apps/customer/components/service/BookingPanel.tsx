@@ -118,9 +118,7 @@ export function BookingPanel({
   // Determine CTA label and URL based on service type
   const ctaLabel = priceVariesByState
     ? 'Get Quote'
-    : priceVariesByQuestionnaire
-    ? 'Check Eligibility & Price'
-    : 'Book Now'
+    : 'Start Application'
 
   // Build checkout URL with optional variant and addon params
   // Services with questionnaire-based pricing go to eligibility page first
