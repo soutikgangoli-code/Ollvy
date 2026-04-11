@@ -153,7 +153,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
             })()} prefetch={true}>
               {serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)
                 ? 'Check Eligibility & Price →'
-                : 'Book this service →'}
+                : 'Start Application →'}
             </Link>
           </Button>
         )}
