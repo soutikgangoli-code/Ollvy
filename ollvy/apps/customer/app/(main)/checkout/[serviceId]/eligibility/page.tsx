@@ -9,7 +9,7 @@ import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { QuestionnaireWizard } from '@/components/questionnaire/QuestionnaireWizard'
 import { LivePricePreview, LivePricePreviewCompact } from '@/components/questionnaire/LivePricePreview'
-import { storePreCursorAnswers, getPreCursorAnswers } from '@/lib/pre-cursor'
+import { storePreCursorAnswers } from '@/lib/pre-cursor'
 import type { ServicePackage } from '@/lib/types'
 
 export default function EligibilityPage() {
@@ -17,7 +17,7 @@ export default function EligibilityPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const serviceId = params.serviceId as string
-  const { user, isHydrated, openAuthModal } = useAuthStore()
+  const { isHydrated } = useAuthStore()
 
   // Live values for price preview (updated in real-time as user fills form)
   const [liveValues, setLiveValues] = useState<Record<string, unknown>>({})
@@ -31,7 +31,6 @@ export default function EligibilityPage() {
   const [hasPrePaymentQuestions, setHasPrePaymentQuestions] = useState<boolean | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [hasShownAuthPrompt, setHasShownAuthPrompt] = useState(false)
 
   // Check if user is editing (coming from checkout Edit button)
   const isEditing = searchParams.get('edit') === 'true'
@@ -90,24 +89,8 @@ export default function EligibilityPage() {
     fetchService()
   }, [serviceId, isHydrated])
 
-  // Open auth modal once if user is not logged in
-  useEffect(() => {
-    if (!isHydrated) return
-    if (!user && !hasShownAuthPrompt) {
-      openAuthModal()
-      setHasShownAuthPrompt(true)
-    }
-  }, [user, isHydrated, hasShownAuthPrompt, openAuthModal])
-
-  // After sign-in, if answers were already stored, proceed to checkout
-  useEffect(() => {
-    if (!user || !service || !isHydrated) return
-    const stored = getPreCursorAnswers(service.slug)
-    if (stored && hasPrePaymentQuestions === true) {
-      const checkoutUrl = `/checkout/${serviceId}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
-      router.push(checkoutUrl)
-    }
-  }, [user, service, isHydrated, hasPrePaymentQuestions, serviceId, router, searchParams])
+  // No auth prompt on eligibility — let users fill the questionnaire freely.
+  // Auth is handled on the checkout page (auto-prompt + Pay Now button).
 
   // Redirect to checkout if no pre-payment questions
   useEffect(() => {
@@ -120,24 +103,15 @@ export default function EligibilityPage() {
   }, [hasPrePaymentQuestions, service, serviceId, router, searchParams, error])
 
   // Handle completion of pre-payment questionnaire
+  // Always proceed to checkout — auth is handled there
   const handleComplete = useCallback((answers: Record<string, unknown>) => {
     if (!service) return
 
-    // Require auth to proceed to checkout
-    if (!user) {
-      // Store answers first so they persist after sign-in
-      storePreCursorAnswers(service.slug, answers)
-      openAuthModal()
-      return
-    }
-
-    // Store answers in sessionStorage
     storePreCursorAnswers(service.slug, answers)
 
-    // Navigate to checkout
     const checkoutUrl = `/checkout/${serviceId}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
     router.push(checkoutUrl)
-  }, [service, serviceId, router, searchParams, user, openAuthModal])
+  }, [service, serviceId, router, searchParams])
 
   // Loading state while checking for pre-payment questions - prevents flash
   if (isLoading || !isHydrated || hasPrePaymentQuestions === null) {
