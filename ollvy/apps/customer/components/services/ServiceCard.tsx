@@ -136,6 +136,14 @@ export function ServiceCard({ service }: ServiceCardProps) {
             ) : (
               // Non-bundle: show fee breakdown
               <>
+                {govtFee > 0 && (
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-sm text-muted-foreground">Govt fee</span>
+                    <span className="font-mono text-base text-muted-foreground">
+                      ₹{govtFee.toLocaleString('en-IN')}
+                    </span>
+                  </div>
+                )}
                 <div className="flex justify-between items-baseline">
                   <span className="text-sm text-muted-foreground">Ollvy fee</span>
                   <span className="font-mono text-base font-medium text-foreground">
@@ -145,14 +153,6 @@ export function ServiceCard({ service }: ServiceCardProps) {
                     )}
                   </span>
                 </div>
-                {govtFee > 0 && (
-                  <div className="flex justify-between items-baseline">
-                    <span className="text-sm text-muted-foreground">Govt fee</span>
-                    <span className="font-mono text-base text-muted-foreground">
-                      ₹{govtFee.toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                )}
                 <div className="flex justify-between items-baseline pt-2 border-t border-border/40">
                   <span className="text-sm font-medium text-foreground">
                     {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
