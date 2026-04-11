@@ -15,10 +15,10 @@ export function ToolIntroSection({ text }: { text: string }) {
   const paragraphs = text.split('\n\n').filter(Boolean)
 
   return (
-    <section className="mb-8">
-      <div className="prose prose-sm dark:prose-invert max-w-none">
+    <section className="mb-8 p-6 rounded-xl border border-border bg-muted/30">
+      <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         {paragraphs.map((paragraph, index) => (
-          <p key={index} className="text-muted-foreground leading-relaxed mb-4 last:mb-0">
+          <p key={index}>
             {paragraph}
           </p>
         ))}

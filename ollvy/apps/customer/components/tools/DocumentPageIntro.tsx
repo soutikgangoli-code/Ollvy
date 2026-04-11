@@ -77,13 +77,18 @@ export function DocumentTimelineCost({ content }: DocumentPageIntroProps) {
 
 /**
  * Editorial intro text - describes the service/process
+ * Styled to match penalty calculator SEO sections
  */
 export function DocumentEditorialIntro({ content }: DocumentPageIntroProps) {
+  const paragraphs = content.intro.description.split('\n\n')
+
   return (
-    <div className="mb-10 text-sm text-muted-foreground leading-relaxed space-y-4">
-      {content.intro.description.split('\n\n').map((paragraph, index) => (
-        <p key={index}>{paragraph}</p>
-      ))}
+    <div className="mb-10 p-6 rounded-xl border border-border bg-muted/30">
+      <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+        {paragraphs.map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
+      </div>
     </div>
   )
 }
