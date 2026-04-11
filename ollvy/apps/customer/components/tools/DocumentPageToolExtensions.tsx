@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { ToolPageConfig } from '@/lib/tools/types'
 import { StickyToolCTA } from '@/components/tools/StickyToolCTA'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 
 /**
  * Renders the intro section from ToolPageConfig for document checklist pages
@@ -57,14 +63,22 @@ export function ToolFAQSection({ faqs, sectionNumber }: { faqs: ToolPageConfig['
           More Questions
         </h2>
       </div>
-      <div className="rounded-xl border border-border overflow-hidden">
+      <Accordion type="single" collapsible className="space-y-0">
         {faqs.map((faq, index) => (
-          <div key={index} className="border-b border-border last:border-0 p-4 md:p-5">
-            <h3 className="text-sm font-medium text-foreground mb-2">{faq.q}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
-          </div>
+          <AccordionItem
+            key={index}
+            value={`faq-${index}`}
+            className="border-b border-border last:border-0"
+          >
+            <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+              {faq.q}
+            </AccordionTrigger>
+            <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+              {faq.a}
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
     </section>
   )
 }

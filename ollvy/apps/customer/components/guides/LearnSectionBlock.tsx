@@ -1,5 +1,11 @@
 import { LearnSection, LearnSectionTable } from '@/lib/guides/pages';
 import { LearnSectionTable as LearnSectionTableComponent } from './LearnSectionTable';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 // Convert ALL CAPS or mixed case to Title Case for SEO-friendly headings
 function toTitleCase(str: string): string {
@@ -26,13 +32,23 @@ interface ProcessStepItem {
 
 function FaqList({ faqs }: { faqs: FaqItem[] }) {
   return (
-    <div className="mt-6 space-y-4">
-      {faqs.map((faq, i) => (
-        <div key={i} className="border border-border rounded-lg p-4">
-          <p className="text-sm font-semibold text-foreground mb-2">{faq.q}</p>
-          <p className="text-sm text-muted-foreground">{faq.a}</p>
-        </div>
-      ))}
+    <div className="mt-6">
+      <Accordion type="single" collapsible className="space-y-0">
+        {faqs.map((faq, i) => (
+          <AccordionItem
+            key={i}
+            value={`faq-${i}`}
+            className="border-b border-border last:border-0"
+          >
+            <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+              {faq.q}
+            </AccordionTrigger>
+            <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+              {faq.a}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 }

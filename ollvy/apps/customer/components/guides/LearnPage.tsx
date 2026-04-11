@@ -1,6 +1,12 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import {
   LearnPageConfig,
   getPenaltyCalculatorBySlug,
   getDocumentChecklistBySlug,
@@ -62,14 +68,22 @@ export function LearnPage({ page, ctaService, secondaryService }: {
                 Frequently Asked Questions
               </h2>
             </div>
-            <div className="space-y-4">
+            <Accordion type="single" collapsible className="space-y-0">
               {page.faqs.map((faq, i) => (
-                <div key={i} className="border border-border rounded-lg p-4">
-                  <p className="text-sm font-semibold text-foreground mb-2">{faq.q}</p>
-                  <p className="text-sm text-muted-foreground">{faq.a}</p>
-                </div>
+                <AccordionItem
+                  key={i}
+                  value={`faq-${i}`}
+                  className="border-b border-border last:border-0"
+                >
+                  <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </div>
+            </Accordion>
           </div>
         )}
 

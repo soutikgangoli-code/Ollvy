@@ -1,3 +1,9 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import type { DocumentPageContent } from '@/lib/tools/document-content'
 
 interface DocumentFAQSectionProps {
@@ -16,14 +22,22 @@ export function DocumentFAQSection({ content, sectionNumber }: DocumentFAQSectio
           Frequently Asked Questions
         </h2>
       </div>
-      <div className="rounded-xl border border-border overflow-hidden">
-        {content.faqs.map((faq) => (
-          <div key={faq.question} className="border-b border-border last:border-0 p-4 md:p-5">
-            <h3 className="text-sm font-medium text-foreground mb-2">{faq.question}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
-          </div>
+      <Accordion type="single" collapsible className="space-y-0">
+        {content.faqs.map((faq, i) => (
+          <AccordionItem
+            key={faq.question}
+            value={`faq-${i}`}
+            className="border-b border-border last:border-0"
+          >
+            <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+              {faq.question}
+            </AccordionTrigger>
+            <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+              {faq.answer}
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
     </div>
   )
 }

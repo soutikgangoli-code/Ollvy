@@ -1,6 +1,12 @@
 import { ReactNode } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { type ToolPageConfig, generateToolFAQSchema, generateToolBreadcrumbSchema, generateSoftwareApplicationSchema, generateToolHowToSchema } from '@/lib/tools/types'
 import { PenaltyCalculatorSelector } from '@/components/penalty-calculator/PenaltyCalculatorSelector'
 import { StickyToolCTA } from '@/components/tools/StickyToolCTA'
@@ -91,14 +97,22 @@ function FAQSection({ faqs }: { faqs: ToolPageConfig['faqs'] }) {
           Frequently Asked Questions
         </h2>
       </div>
-      <div className="rounded-xl border border-border overflow-hidden">
+      <Accordion type="single" collapsible className="space-y-0">
         {faqs.map((faq, index) => (
-          <div key={index} className="border-b border-border last:border-0 p-5">
-            <h3 className="text-sm font-medium text-foreground mb-2">{faq.q}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
-          </div>
+          <AccordionItem
+            key={index}
+            value={`faq-${index}`}
+            className="border-b border-border last:border-0"
+          >
+            <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+              {faq.q}
+            </AccordionTrigger>
+            <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+              {faq.a}
+            </AccordionContent>
+          </AccordionItem>
         ))}
-      </div>
+      </Accordion>
     </section>
   )
 }
