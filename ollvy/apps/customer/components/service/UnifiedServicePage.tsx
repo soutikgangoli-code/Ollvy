@@ -750,7 +750,7 @@ export function UnifiedServicePage({
                       <div
                         key={index}
                         className={cn(
-                          'grid gap-4 sm:gap-8 items-center py-5 sm:py-10',
+                          'grid gap-3 sm:gap-6 items-center py-3 sm:py-5',
                           item.mockVisualType
                             ? 'grid-cols-1 md:grid-cols-2'
                             : 'grid-cols-1'
@@ -776,31 +776,32 @@ export function UnifiedServicePage({
                         {/* Text */}
                         <div className={cn(item.mockVisualType ? 'order-1' : '')}>
                           <div className="flex items-start gap-2.5 sm:gap-3">
-                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[hsl(var(--ollvy-green))]/10 flex items-center justify-center shrink-0 mt-0.5">
-                              <Check size={10} className="text-[hsl(var(--ollvy-green))] sm:hidden" />
-                              <Check size={12} className="text-[hsl(var(--ollvy-green))] hidden sm:block" />
+                            <div className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/10 flex items-center justify-center shrink-0 mt-0.5">
+                              <Check size={11} className="text-[hsl(var(--ollvy-green))]" />
                             </div>
                             <div>
-                              <h3 className="text-sm sm:text-base font-semibold text-foreground">
+                              <h3 className="text-sm font-semibold text-foreground">
                                 {formatWithMonoNumbers(item.title)}
                               </h3>
-                              <p className="text-sm text-muted-foreground mt-1 sm:mt-2 leading-relaxed">
-                                {formatWithMonoNumbers(item.body)}
-                              </p>
+                              {item.body && (
+                                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                                  {formatWithMonoNumbers(item.body)}
+                                </p>
+                              )}
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
-                                <div className="mt-3 sm:mt-5 grid grid-cols-2 gap-2 sm:gap-3">
-                                  <div className="bg-muted/40 rounded-lg p-2.5 sm:p-3 border border-border">
-                                    <p className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mb-1 sm:mb-1.5 font-mono">
+                                <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-3">
+                                  <div className="bg-muted/40 rounded-lg p-2.5 border border-border">
+                                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1 font-mono">
                                       Without Ollvy
                                     </p>
                                     <p className="text-xs sm:text-sm font-medium text-foreground">
                                       {item.comparisonWithout && formatWithMonoNumbers(item.comparisonWithout)}
                                     </p>
                                   </div>
-                                  <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-2.5 sm:p-3 border border-[hsl(var(--ollvy-green))]/20">
-                                    <p className="text-[10px] sm:text-xs text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1 sm:mb-1.5 font-mono">
+                                  <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-2.5 border border-[hsl(var(--ollvy-green))]/20">
+                                    <p className="text-[10px] text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1 font-mono">
                                       With Ollvy
                                     </p>
                                     <p className="text-xs sm:text-sm font-medium text-foreground">

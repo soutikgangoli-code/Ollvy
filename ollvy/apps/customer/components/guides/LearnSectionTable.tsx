@@ -36,19 +36,21 @@ export function LearnSectionTable({ table }: Props) {
   const { caption, headers, rows } = table
 
   return (
-    <div className="my-6 overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
-        {caption && (
-          <caption className="mb-2 text-left text-xs font-medium text-muted-foreground">
+    <div className="overflow-x-auto rounded-xl border border-border">
+      {caption && (
+        <div className="px-4 py-3 border-b border-border bg-muted/30">
+          <p className="text-xs font-medium text-muted-foreground">
             {caption}
-          </caption>
-        )}
+          </p>
+        </div>
+      )}
+      <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-border">
+          <tr className="border-b border-border bg-muted/20">
             {headers.map((header, i) => (
               <th
                 key={i}
-                className="px-3 py-2 text-left font-semibold text-foreground"
+                className="text-left py-3 px-4 font-semibold text-foreground"
               >
                 {header}
               </th>
@@ -59,12 +61,15 @@ export function LearnSectionTable({ table }: Props) {
           {rows.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="border-b border-border last:border-b-0"
+              className="border-b border-border last:border-0"
             >
               {row.map((cell, cellIndex) => (
                 <td
                   key={cellIndex}
-                  className="px-3 py-2 text-muted-foreground"
+                  className={cellIndex === 0
+                    ? 'py-3 px-4 text-foreground font-medium'
+                    : 'py-3 px-4 text-muted-foreground'
+                  }
                 >
                   {formatWithMonoNumbers(cell)}
                 </td>
