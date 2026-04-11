@@ -1,7 +1,13 @@
+import dynamic from 'next/dynamic'
 import { supabaseServer } from '@/lib/supabase-server'
 import { getAdminUser } from '@/lib/admin/get-admin-user'
-import { OrderViewClient } from '@/components/admin/OrderViewClient'
 import { redirect, notFound } from 'next/navigation'
+import { Skeleton } from '@/components/ui/skeleton'
+
+const OrderViewClient = dynamic(
+  () => import('@/components/admin/OrderViewClient').then(m => ({ default: m.OrderViewClient })),
+  { loading: () => <div className="container py-8 space-y-6"><Skeleton className="h-10 w-64" /><Skeleton className="h-[600px] w-full rounded-xl" /></div> }
+)
 
 export const metadata = { robots: 'noindex, nofollow' }
 
@@ -77,7 +83,7 @@ export default async function AdminOrderPage({ params }: PageProps) {
     // Fetch initial documents (Round 0)
     supabaseServer
       .from('order_documents')
-      .select('*')
+      .select('id, order_id, document_key, document_label, stage_key, is_required, uploaded_at, file_url, file_name, verified_at, verified_by, rejection_reason, created_at')
       .eq('order_id', orderId)
       .eq('stage_key', 'doc_collection'),
 
@@ -97,7 +103,7 @@ export default async function AdminOrderPage({ params }: PageProps) {
     // Fetch admin notes
     supabaseServer
       .from('order_admin_notes')
-      .select('*, admin_users(name)')
+      .select('id, order_id, admin_id, content, created_at, admin_users(name)')
       .eq('order_id', orderId)
       .order('created_at', { ascending: false }),
 
@@ -111,7 +117,7 @@ export default async function AdminOrderPage({ params }: PageProps) {
     // Fetch activity log (pre-load for instant display)
     supabaseServer
       .from('order_activity_log')
-      .select('*')
+      .select('id, order_id, action_type, actor_type, actor_id, actor_name, description, metadata, created_at')
       .eq('order_id', orderId)
       .order('created_at', { ascending: false }),
   ])
@@ -145,7 +151,7 @@ export default async function AdminOrderPage({ params }: PageProps) {
       initialDocs={initialDocs || []}
       questionnaireAnswers={questionnaireAnswers || []}
       questionnaireQuestions={questionnaireQuestions || []}
-      adminNotes={adminNotes || []}
+      adminNotes={(adminNotes || []) as any}
       professionals={professionals || []}
       adminNamesMap={adminNamesMap}
       assignedAdmin={assignedAdmin}

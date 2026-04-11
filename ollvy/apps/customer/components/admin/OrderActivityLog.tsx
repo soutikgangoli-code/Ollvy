@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { getClient } from '@/lib/supabase'
 import { formatDateTime } from '@/lib/utils'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
@@ -14,14 +14,16 @@ interface OrderActivityLogProps {
 export function OrderActivityLog({ orderId, initialEntries }: OrderActivityLogProps) {
   const [entries, setEntries] = useState<ActivityLogEntry[]>(initialEntries || [])
   const [expanded, setExpanded] = useState(false)
-  const supabase = getClient()
+  const supabaseRef = useRef(getClient())
 
   useEffect(() => {
+    const supabase = supabaseRef.current
+
     // Only fetch if no initial entries were provided (fallback)
     if (!initialEntries || initialEntries.length === 0) {
       supabase
         .from('order_activity_log')
-        .select('*')
+        .select('id, order_id, action_type, actor_type, actor_id, actor_name, description, metadata, created_at')
         .eq('order_id', orderId)
         .order('created_at', { ascending: false })
         .then(({ data }) => setEntries((data as ActivityLogEntry[]) || []))
@@ -40,8 +42,11 @@ export function OrderActivityLog({ orderId, initialEntries }: OrderActivityLogPr
       })
       .subscribe()
 
-    return () => { supabase.removeChannel(channel) }
-  }, [orderId, supabase, initialEntries])
+    return () => {
+      channel.unsubscribe()
+      supabase.removeChannel(channel)
+    }
+  }, [orderId, initialEntries])
 
   const preview = entries.slice(0, 5)
   const rest = entries.slice(5)

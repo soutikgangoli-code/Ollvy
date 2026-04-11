@@ -3,10 +3,10 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import { getClient } from '@/lib/supabase'
-import { useAuthStore } from '@/lib/stores/auth-store'
 import { QuestionnaireWizard } from '@/components/questionnaire/QuestionnaireWizard'
 import { LivePricePreview, LivePricePreviewCompact } from '@/components/questionnaire/LivePricePreview'
 import { storePreCursorAnswers } from '@/lib/pre-cursor'
@@ -17,7 +17,6 @@ export default function EligibilityPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const serviceId = params.serviceId as string
-  const { isHydrated } = useAuthStore()
 
   // Live values for price preview (updated in real-time as user fills form)
   const [liveValues, setLiveValues] = useState<Record<string, unknown>>({})
@@ -35,10 +34,9 @@ export default function EligibilityPage() {
   // Check if user is editing (coming from checkout Edit button)
   const isEditing = searchParams.get('edit') === 'true'
 
-  // Fetch service data
+  // Fetch service data + pre-payment question count in parallel
+  // No auth needed — eligibility page is open to all users
   useEffect(() => {
-    if (!isHydrated) return
-
     const fetchService = async () => {
       setIsLoading(true)
       setError(null)
@@ -46,7 +44,7 @@ export default function EligibilityPage() {
       try {
         const supabase = getClient()
 
-        // Fetch service package
+        // Fetch service first to get the resolved UUID
         const { data: serviceData, error: serviceError } = await supabase
           .from('service_packages')
           .select('*')
@@ -55,12 +53,14 @@ export default function EligibilityPage() {
           .single()
 
         if (serviceError || !serviceData) {
-          throw new Error('Service not found')
+          setError('Service not found')
+          setIsLoading(false)
+          return
         }
 
         setService(serviceData as ServicePackage)
 
-        // Check if this service has pre_payment questions
+        // Now use the resolved UUID for the questionnaire count
         const { count, error: countError } = await supabase
           .from('service_questionnaires')
           .select('*', { count: 'exact', head: true })
@@ -70,8 +70,6 @@ export default function EligibilityPage() {
 
         if (countError) {
           console.error('Error checking pre-payment questions:', countError)
-          // Don't redirect on error - stay in loading state and retry
-          // Set to null to indicate "unknown" rather than "definitely none"
           setHasPrePaymentQuestions(null)
           setError('Failed to load eligibility questions. Please refresh the page.')
         } else {
@@ -87,7 +85,7 @@ export default function EligibilityPage() {
     }
 
     fetchService()
-  }, [serviceId, isHydrated])
+  }, [serviceId])
 
   // No auth prompt on eligibility — let users fill the questionnaire freely.
   // Auth is handled on the checkout page (auto-prompt + Pay Now button).
@@ -113,25 +111,42 @@ export default function EligibilityPage() {
     router.push(checkoutUrl)
   }, [service, serviceId, router, searchParams])
 
-  // Loading state while checking for pre-payment questions - prevents flash
-  if (isLoading || !isHydrated || hasPrePaymentQuestions === null) {
+  // Loading state — show skeleton matching the questionnaire layout
+  if (isLoading || hasPrePaymentQuestions === null) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto" />
-          <p className="text-sm text-muted-foreground mt-3">Loading...</p>
+      <div className="container max-w-5xl mx-auto py-8 px-4">
+        <div className="mb-8">
+          <Skeleton className="h-8 w-32 mb-4" />
+          <Skeleton className="h-8 w-72 mb-2" />
+          <Skeleton className="h-5 w-96" />
+        </div>
+        <div className="rounded-xl border border-border p-6 space-y-6">
+          <Skeleton className="h-5 w-48" />
+          <Skeleton className="h-10 w-full rounded-lg" />
+          <Skeleton className="h-5 w-56" />
+          <Skeleton className="h-10 w-full rounded-lg" />
+          <Skeleton className="h-5 w-40" />
+          <div className="flex gap-3">
+            <Skeleton className="h-10 flex-1 rounded-lg" />
+            <Skeleton className="h-10 flex-1 rounded-lg" />
+          </div>
+          <Skeleton className="h-10 w-36 rounded-lg mt-4" />
         </div>
       </div>
     )
   }
 
-  // Loading state while redirect to checkout fires (no pre-payment questions)
+  // Redirect in progress (no pre-payment questions)
   if (hasPrePaymentQuestions === false) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mx-auto" />
-          <p className="text-sm text-muted-foreground mt-3">Loading...</p>
+      <div className="container max-w-5xl mx-auto py-8 px-4">
+        <div className="mb-8">
+          <Skeleton className="h-8 w-32 mb-4" />
+          <Skeleton className="h-8 w-72" />
+        </div>
+        <div className="rounded-xl border border-border p-6 space-y-6">
+          <Skeleton className="h-10 w-full rounded-lg" />
+          <Skeleton className="h-10 w-full rounded-lg" />
         </div>
       </div>
     )

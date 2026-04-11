@@ -63,27 +63,30 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  // Use getSession() instead of getUser() — reads JWT from cookie locally
+  // without a network call to Supabase auth server (~150-200ms saved).
+  // Pages verify auth independently via getUser()/getUserFast()/getAdminUser().
+  const { data: { session } } = await supabase.auth.getSession()
 
   // Check if route is protected
   const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
   const isAuthRoute = pathname === '/login' || pathname === '/verify'
 
   // Redirect to login if accessing protected route without session
-  if (isProtectedRoute && !user) {
+  if (isProtectedRoute && !session) {
     const redirectUrl = new URL('/login', request.url)
     redirectUrl.searchParams.set('returnUrl', pathname)
     return NextResponse.redirect(redirectUrl)
   }
 
   // Redirect to home if accessing auth routes with valid session
-  if (isAuthRoute && user) {
+  if (isAuthRoute && session) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
   // Pass auth user ID to page via header so pages can skip redundant auth.getUser()
-  if (user) {
-    response.headers.set('x-auth-user-id', user.id)
+  if (session?.user) {
+    response.headers.set('x-auth-user-id', session.user.id)
   }
 
   return response

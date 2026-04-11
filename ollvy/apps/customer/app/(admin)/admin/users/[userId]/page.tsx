@@ -17,7 +17,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   // Fetch user
   const { data: user, error: userError } = await supabaseServer
     .from('users')
-    .select('*')
+    .select('id, auth_user_id, business_name, phone, email, business_type, gstin, state, city, address, created_at')
     .eq('id', userId)
     .single()
 

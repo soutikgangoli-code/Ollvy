@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 import { type ToolPageConfig, generateToolFAQSchema, generateToolBreadcrumbSchema, generateSoftwareApplicationSchema, generateToolHowToSchema } from '@/lib/tools/types'
 import { PenaltyCalculatorSelector } from '@/components/penalty-calculator/PenaltyCalculatorSelector'
+import { StickyToolCTA } from '@/components/tools/StickyToolCTA'
 import { penaltyCalculators } from '@/components/penalty-calculator/penalty-calculator-data'
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
 
@@ -19,12 +20,12 @@ function IntroSection({ text }: { text: string }) {
   const paragraphs = text.split('\n\n').filter(Boolean)
 
   return (
-    <div className="prose prose-sm dark:prose-invert max-w-none mb-10">
-      {paragraphs.map((paragraph, index) => (
-        <p key={index} className="text-muted-foreground leading-relaxed">
-          {paragraph}
-        </p>
-      ))}
+    <div className="mb-10 p-6 rounded-xl border border-border bg-muted/30">
+      <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+        {paragraphs.map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
+      </div>
     </div>
   )
 }
@@ -43,16 +44,16 @@ function HowToUseSection({ text, title }: { text: string; title: string }) {
           How to Use This {title.includes('Calculator') ? 'Calculator' : 'Checklist'}
         </h2>
       </div>
-      <div className="prose prose-sm dark:prose-invert max-w-none space-y-4">
+      <div className="rounded-xl border border-border bg-muted/30 p-4 md:p-6 space-y-4">
         {lines.map((line, index) => {
           // Handle bold headers with **text**
           if (line.startsWith('**') && line.includes(':**')) {
             const match = line.match(/^\*\*(.+?):\*\*\s*(.*)/)
             if (match) {
               return (
-                <div key={index}>
-                  <p className="font-medium text-foreground mb-1">{match[1]}:</p>
-                  {match[2] && <p className="text-muted-foreground">{match[2]}</p>}
+                <div key={index} className="pt-2 first:pt-0">
+                  <p className="text-sm font-medium text-foreground mb-1">{match[1]}:</p>
+                  {match[2] && <p className="text-sm text-muted-foreground">{match[2]}</p>}
                 </div>
               )
             }
@@ -60,15 +61,15 @@ function HowToUseSection({ text, title }: { text: string; title: string }) {
           // Handle list items
           if (line.startsWith('- ')) {
             return (
-              <p key={index} className="text-muted-foreground pl-4">
-                <span className="text-muted-foreground/50 mr-2">-</span>
-                {line.slice(2)}
-              </p>
+              <div key={index} className="flex gap-2 pl-2">
+                <span className="text-muted-foreground/50 shrink-0">-</span>
+                <p className="text-sm text-muted-foreground">{line.slice(2)}</p>
+              </div>
             )
           }
           // Regular paragraph
           return (
-            <p key={index} className="text-muted-foreground">
+            <p key={index} className="text-sm text-muted-foreground">
               {line}
             </p>
           )
@@ -90,10 +91,10 @@ function FAQSection({ faqs }: { faqs: ToolPageConfig['faqs'] }) {
           Frequently Asked Questions
         </h2>
       </div>
-      <div className="space-y-6">
+      <div className="rounded-xl border border-border overflow-hidden">
         {faqs.map((faq, index) => (
-          <div key={index} className="border-b border-border/50 pb-6 last:border-0">
-            <h3 className="font-medium text-foreground mb-2">{faq.q}</h3>
+          <div key={index} className="border-b border-border last:border-0 p-5">
+            <h3 className="text-sm font-medium text-foreground mb-2">{faq.q}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
           </div>
         ))}
@@ -246,24 +247,28 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
         <RelatedLinks config={config} />
 
         {/* CTA */}
-        <section className="mt-16 flex">
-          <div className="rounded-xl border border-border bg-card p-6">
-            <p className="font-medium text-foreground mb-2">Need help with {config.category.toLowerCase()} compliance?</p>
-            <p className="text-sm text-foreground/70 mb-4">
-              Our team handles the paperwork so you can focus on your business.
-            </p>
-            <Link
-              href={`/services/${config.relatedServiceSlug}`}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium rounded-full hover:bg-[hsl(var(--ollvy-green))]/90 transition-colors"
-            >
-              {config.relatedServiceLabel}
-              <ChevronRight className="h-4 w-4" />
-            </Link>
-          </div>
+        <section className="mt-16">
+          <p className="font-medium text-foreground mb-2">Need help with {config.category.toLowerCase()} compliance?</p>
+          <p className="text-sm text-foreground/70 mb-4">
+            Our team handles the paperwork so you can focus on your business.
+          </p>
+          <Link
+            href={`/services/${config.relatedServiceSlug}`}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium rounded-full hover:bg-[hsl(var(--ollvy-green))]/90 transition-colors"
+          >
+            {config.relatedServiceLabel}
+            <ChevronRight className="h-4 w-4" />
+          </Link>
         </section>
 
         {/* How we reviewed - at bottom like service pages */}
         <ToolLastReviewed lastReviewed={config.lastReviewed} sources={config.reviewSources} />
+
+        {/* Sticky mobile CTA */}
+        <StickyToolCTA
+          buttonText={config.relatedServiceLabel}
+          buttonHref={`/services/${config.relatedServiceSlug}`}
+        />
 
         {/* Print styles */}
         <style
