@@ -111,13 +111,7 @@ export default function IndividualITRDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={individualItrContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={individualItrContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={individualITRDocuments}
           pageTitle="Personal ITR Filing"
@@ -130,6 +124,12 @@ export default function IndividualITRDocumentsPage() {
           penaltyCalcText="Calculate ITR late filing penalty"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={individualItrContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={individualItrContent} sectionNumber="01" />

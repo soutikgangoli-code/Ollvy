@@ -111,13 +111,7 @@ export default function BusinessPanDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={businessPanContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={businessPanContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={businessPanDocuments}
           pageTitle="Business PAN Registration"
@@ -128,6 +122,12 @@ export default function BusinessPanDocumentsPage() {
           ctaButtonHref="/services/business-pan"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={businessPanContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={businessPanContent} sectionNumber="01" />

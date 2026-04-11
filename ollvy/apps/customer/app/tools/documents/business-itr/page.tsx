@@ -111,13 +111,7 @@ export default function BusinessITRDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={businessItrContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={businessItrContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={businessITRDocuments}
           pageTitle="Business ITR Filing"
@@ -130,6 +124,12 @@ export default function BusinessITRDocumentsPage() {
           penaltyCalcText="Calculate ITR late filing penalty"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={businessItrContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={businessItrContent} sectionNumber="01" />

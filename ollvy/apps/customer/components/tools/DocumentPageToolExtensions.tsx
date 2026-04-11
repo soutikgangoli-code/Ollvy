@@ -6,6 +6,7 @@ import { ChevronRight, ArrowRight, FileText, History } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import type { ToolPageConfig } from '@/lib/tools/types'
+import { StickyToolCTA } from '@/components/tools/StickyToolCTA'
 
 /**
  * Renders the intro section from ToolPageConfig for document checklist pages
@@ -15,7 +16,7 @@ export function ToolIntroSection({ text }: { text: string }) {
   const paragraphs = text.split('\n\n').filter(Boolean)
 
   return (
-    <section className="mb-8 p-6 rounded-xl border border-border bg-muted/30">
+    <section className="mb-8 p-4 md:p-6 rounded-xl border border-border bg-muted/30">
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         {paragraphs.map((paragraph, index) => (
           <p key={index}>
@@ -56,10 +57,10 @@ export function ToolFAQSection({ faqs, sectionNumber }: { faqs: ToolPageConfig['
           More Questions
         </h2>
       </div>
-      <div className="space-y-6">
+      <div className="rounded-xl border border-border overflow-hidden">
         {faqs.map((faq, index) => (
-          <div key={index} className="border-b border-border/50 pb-6 last:border-0">
-            <h3 className="font-medium text-foreground mb-2">{faq.q}</h3>
+          <div key={index} className="border-b border-border last:border-0 p-4 md:p-5">
+            <h3 className="text-sm font-medium text-foreground mb-2">{faq.q}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
           </div>
         ))}
@@ -87,29 +88,32 @@ export function DocumentCTA({
   penaltyCalcText?: string
 }) {
   return (
-    <section className="mt-16 py-10 text-center">
-      <h3 className="text-xl font-semibold text-foreground">{title}</h3>
-      <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto leading-relaxed">
-        {description}
-      </p>
-      <Button className="mt-6 h-12 px-8" size="lg" asChild>
-        <Link href={buttonHref}>
-          {buttonText}
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Link>
-      </Button>
-      {penaltyCalcHref && (
-        <p className="mt-4">
-          <Link
-            href={penaltyCalcHref}
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
-          >
-            {penaltyCalcText || 'Calculate late filing penalty'}
-            <ChevronRight size={12} />
-          </Link>
+    <>
+      <section className="mt-16 py-10 text-center">
+        <h3 className="text-xl font-semibold text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground mt-3 max-w-lg mx-auto leading-relaxed">
+          {description}
         </p>
-      )}
-    </section>
+        <Button className="mt-6 h-12 px-8" size="lg" asChild>
+          <Link href={buttonHref}>
+            {buttonText}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+        {penaltyCalcHref && (
+          <p className="mt-4">
+            <Link
+              href={penaltyCalcHref}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+            >
+              {penaltyCalcText || 'Calculate late filing penalty'}
+              <ChevronRight size={12} />
+            </Link>
+          </p>
+        )}
+      </section>
+      <StickyToolCTA buttonText={buttonText} buttonHref={buttonHref} />
+    </>
   )
 }
 

@@ -12,7 +12,7 @@ export function DocumentCommonMistakes({ content, sectionNumber }: DocumentCommo
   }
 
   return (
-    <div className="mt-12 p-6 rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-amber-500/5">
+    <div className="mt-12 p-4 md:p-6 rounded-xl border border-amber-500/30 dark:border-amber-500/20 bg-amber-500/5">
       <div className="flex items-center gap-3 mb-4">
         {sectionNumber && (
           <span className="font-mono text-[10px] text-amber-600 dark:text-amber-500">{sectionNumber}</span>

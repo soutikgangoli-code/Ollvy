@@ -111,13 +111,7 @@ export default function SoleProprietorDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={soleProprietorContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={soleProprietorContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={soleProprietorDocuments}
           pageTitle="Sole Proprietorship Registration"
@@ -128,6 +122,12 @@ export default function SoleProprietorDocumentsPage() {
           ctaButtonHref="/services/gst-registration"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={soleProprietorContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={soleProprietorContent} sectionNumber="01" />

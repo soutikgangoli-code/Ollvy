@@ -111,13 +111,7 @@ export default function TrademarkDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={trademarkContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={trademarkContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={trademarkDocuments}
           pageTitle="Trademark Registration"
@@ -128,6 +122,12 @@ export default function TrademarkDocumentsPage() {
           ctaButtonHref="/services/trademark-registration"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={trademarkContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={trademarkContent} sectionNumber="01" />

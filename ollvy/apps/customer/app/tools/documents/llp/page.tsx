@@ -111,13 +111,7 @@ export default function LLPDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={llpContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={llpContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={llpDocuments}
           pageTitle="LLP Registration"
@@ -130,6 +124,12 @@ export default function LLPDocumentsPage() {
           penaltyCalcText="Calculate MCA filing penalty"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={llpContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={llpContent} sectionNumber="01" />

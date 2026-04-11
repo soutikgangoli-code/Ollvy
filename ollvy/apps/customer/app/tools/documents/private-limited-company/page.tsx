@@ -111,13 +111,7 @@ export default function PrivateLimitedDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={privateLimitedContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={privateLimitedContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={pvtLtdDocuments}
           pageTitle="Private Limited Company Registration"
@@ -130,6 +124,12 @@ export default function PrivateLimitedDocumentsPage() {
           penaltyCalcText="Calculate MCA filing penalty"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={privateLimitedContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={privateLimitedContent} sectionNumber="01" />

@@ -16,10 +16,10 @@ export function DocumentFAQSection({ content, sectionNumber }: DocumentFAQSectio
           Frequently Asked Questions
         </h2>
       </div>
-      <div className="space-y-6">
+      <div className="rounded-xl border border-border overflow-hidden">
         {content.faqs.map((faq) => (
-          <div key={faq.question} className="border-b border-border pb-6 last:border-0 last:pb-0">
-            <h3 className="font-medium text-foreground mb-2">{faq.question}</h3>
+          <div key={faq.question} className="border-b border-border last:border-0 p-4 md:p-5">
+            <h3 className="text-sm font-medium text-foreground mb-2">{faq.question}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
           </div>
         ))}

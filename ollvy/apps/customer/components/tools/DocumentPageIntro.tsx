@@ -83,7 +83,7 @@ export function DocumentEditorialIntro({ content }: DocumentPageIntroProps) {
   const paragraphs = content.intro.description.split('\n\n')
 
   return (
-    <div className="mb-10 p-6 rounded-xl border border-border bg-muted/30">
+    <div className="mb-10 p-4 md:p-6 rounded-xl border border-border bg-muted/30">
       <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
         {paragraphs.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>

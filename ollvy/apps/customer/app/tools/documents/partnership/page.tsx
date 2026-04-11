@@ -111,13 +111,7 @@ export default function PartnershipDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={partnershipContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={partnershipContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={partnershipDocuments}
           pageTitle="Partnership Firm Registration"
@@ -128,6 +122,12 @@ export default function PartnershipDocumentsPage() {
           ctaButtonHref="/services"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={partnershipContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={partnershipContent} sectionNumber="01" />

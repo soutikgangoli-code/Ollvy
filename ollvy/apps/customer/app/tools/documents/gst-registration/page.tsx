@@ -111,13 +111,7 @@ export default function GSTDocumentsPage() {
         {/* Timeline and Government Fee bar */}
         <DocumentTimelineCost content={gstRegistrationContent} />
 
-        {/* Editorial intro - describes the service/process */}
-        <DocumentEditorialIntro content={gstRegistrationContent} />
-
-        {/* Practical intro from config */}
-        <ToolIntroSection text={config.intro} />
-
-        {/* Document checklist - CTA hidden, will be rendered separately below */}
+        {/* Document checklist - shown first for mobile usability */}
         <DocumentChecklistContent
           categories={gstDocuments}
           pageTitle="GST Registration"
@@ -130,6 +124,12 @@ export default function GSTDocumentsPage() {
           penaltyCalcText="Calculate GST late filing penalty"
           hideCta
         />
+
+        {/* Editorial intro */}
+        <DocumentEditorialIntro content={gstRegistrationContent} />
+
+        {/* Practical intro from config */}
+        <ToolIntroSection text={config.intro} />
 
         {/* Who Needs This - section 01 */}
         <DocumentWhoNeedsThis content={gstRegistrationContent} sectionNumber="01" />
