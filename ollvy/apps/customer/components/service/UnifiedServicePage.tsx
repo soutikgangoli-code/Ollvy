@@ -586,7 +586,7 @@ export function UnifiedServicePage({
                 {/* Guarantee badge */}
                 {guaranteedDate && (
                   <div className="text-center mb-1">
-                    <p className="text-sm md:text-base font-mono text-foreground">
+                    <p className="text-sm md:text-[17px] font-mono text-foreground">
                       <CheckCircle size={14} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
                       {service.isRetainer
                         ? `Current cycle due: ${guaranteedDate}`
