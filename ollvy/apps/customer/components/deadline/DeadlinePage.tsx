@@ -4,6 +4,12 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Clock, AlertTriangle, Check } from 'lucide-react'
 import { DeadlineConfig } from '@/lib/deadlines'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { Navbar } from '@/components/landing/Navbar'
 import { Footer } from '@/components/landing/Footer'
 import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
@@ -271,6 +277,39 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                     </div>
                   </Card>
                 ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* FAQ Section */}
+        {deadline.faqs && deadline.faqs.length > 0 && (
+          <section className="bg-background py-24">
+            <div className="container">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground text-center mb-3">
+                COMMON QUESTIONS
+              </p>
+              <h2 className="text-3xl md:text-4xl font-semibold text-foreground text-center">
+                Frequently asked questions
+              </h2>
+
+              <div className="mt-12 max-w-[720px] mx-auto">
+                <Accordion type="single" collapsible className="space-y-0">
+                  {deadline.faqs.map((faq, i) => (
+                    <AccordionItem
+                      key={i}
+                      value={`faq-${i}`}
+                      className="border-b border-border last:border-0"
+                    >
+                      <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+                        {faq.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+                        {faq.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
               </div>
             </div>
           </section>

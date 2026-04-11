@@ -29,6 +29,7 @@ export interface DeadlineConfig {
   documentHeading: string // Section heading for documents
   risks: { title: string; body: string }[]
   testimonials: Testimonial[]
+  faqs?: { q: string; a: string }[]
 }
 
 export const DEADLINES: DeadlineConfig[] = [
@@ -86,6 +87,28 @@ export const DEADLINES: DeadlineConfig[] = [
         city: 'Chennai',
       },
     ],
+    faqs: [
+      {
+        q: 'What is the due date for filing business ITR for FY 2025-26?',
+        a: 'The due date is October 31, 2026 for companies and firms that require an audit. This applies to all Pvt Ltd companies (ITR-6), LLPs (ITR-5), and Partnership firms. If you miss this date, a belated return can be filed until December 31, 2026 - but penalties and interest apply from November 1.',
+      },
+      {
+        q: 'What happens if I file my company ITR after October 31?',
+        a: 'Three things happen. First, Section 234F imposes a flat late filing fee of Rs 5,000 (or Rs 1,000 if total income is below Rs 5 lakh). Second, Section 234A charges interest at 1% per month on any unpaid tax liability from November 1 until you file. Third, and most importantly, you permanently lose the right to carry forward any business losses from FY 2025-26 under Section 80.',
+      },
+      {
+        q: 'Which ITR form does my company need to file?',
+        a: 'Pvt Ltd companies and OPCs file ITR-6. LLPs and Partnership firms file ITR-5. If you are an individual with business income, you file ITR-3 (due July 31, not October 31). Ollvy assigns a CA who determines the correct form based on your entity type and handles the filing end to end.',
+      },
+      {
+        q: 'Do I need a tax audit before filing ITR?',
+        a: 'A tax audit under Section 44AB is mandatory if your business turnover exceeds Rs 1 crore (or Rs 10 crore if 95% of transactions are digital). The audit must be completed and the audit report uploaded to the Income Tax portal before filing the ITR. Ollvy coordinates the audit and filing together within the SLA.',
+      },
+      {
+        q: 'How long does Ollvy take to file business ITR?',
+        a: 'Ollvy files business ITR within 10 working days of receiving all documents and the approved financial statements. A CA is assigned within 24 hours of booking. The timeline starts after document approval, not payment - so have your P&L, balance sheet, and bank statements ready.',
+      },
+    ],
   },
   {
     slug: 'gst-annual-2026',
@@ -137,6 +160,28 @@ export const DEADLINES: DeadlineConfig[] = [
         city: 'Bangalore',
       },
     ],
+    faqs: [
+      {
+        q: 'Who needs to file GSTR-9 for FY 2025-26?',
+        a: 'GSTR-9 is mandatory for all GST-registered businesses with annual aggregate turnover above Rs 2 crore. If your turnover is below Rs 2 crore, GSTR-9 is optional but recommended - it reconciles your monthly returns and can help you catch unclaimed ITC before it expires.',
+      },
+      {
+        q: 'What is the penalty for filing GSTR-9 late?',
+        a: 'The late fee is Rs 200 per day - Rs 100 under CGST and Rs 100 under SGST. There is no ceiling on this late fee in terms of days. At 90 days late, the fee is Rs 18,000. At 180 days, Rs 36,000. The maximum cap is 0.25% of your annual turnover in the state.',
+      },
+      {
+        q: 'What is the difference between GSTR-9 and GSTR-9C?',
+        a: 'GSTR-9 is the annual return - a summary of all your monthly GSTR-1 and GSTR-3B filings for the year. GSTR-9C is the reconciliation statement (audit) required if your turnover exceeds Rs 5 crore. It reconciles the figures in GSTR-9 with your audited financial statements. If GSTR-9C is required, both must be filed by the same deadline.',
+      },
+      {
+        q: 'Can I claim missed ITC through GSTR-9?',
+        a: 'Yes. GSTR-9 is your last opportunity to claim any ITC that was missed or incorrectly reported in your monthly GSTR-3B returns for FY 2025-26. Any ITC not reconciled and claimed through GSTR-9 for this financial year is permanently lost.',
+      },
+      {
+        q: 'How long does Ollvy take to file GSTR-9?',
+        a: 'Ollvy files GSTR-9 within 7 working days. The CA reconciles your GSTR-1, GSTR-3B, and GSTR-2A/2B data, identifies any ITC gaps or mismatches, prepares the return, and files after your approval. A GST expert is assigned the same day you book.',
+      },
+    ],
   },
   {
     slug: 'director-kyc-2026',
@@ -186,6 +231,28 @@ export const DEADLINES: DeadlineConfig[] = [
         role: 'Founder & Director',
         business: 'SaaS startup',
         city: 'Hyderabad',
+      },
+    ],
+    faqs: [
+      {
+        q: 'What is Director KYC and who needs to file it?',
+        a: 'Director KYC (DIR-3 KYC) is a mandatory annual compliance for every person who holds a Director Identification Number (DIN) in India. This includes active directors, resigned directors who still hold a DIN, and designated partners of LLPs. If you have ever been allotted a DIN, you must file DIR-3 KYC every year - even if the company is dormant or you have resigned.',
+      },
+      {
+        q: 'What happens if I miss the September 30 deadline?',
+        a: 'Your DIN is immediately deactivated by MCA on October 1. A deactivated DIN means you cannot sign any board resolutions, company filings, or legal documents as a director. The penalty is Rs 5,000 per director, and all MCA filings for your company are blocked until the KYC is filed and the DIN is reactivated.',
+      },
+      {
+        q: 'What documents are needed for Director KYC?',
+        a: 'Just two documents: your PAN card and Aadhaar card. The name on both must match exactly. No address proof, no photographs, no NOCs. Ollvy handles the DSC (Digital Signature Certificate) and the DIR-3 KYC filing with MCA.',
+      },
+      {
+        q: 'How long does it take to reactivate a deactivated DIN?',
+        a: 'After filing DIR-3 KYC with the Rs 5,000 penalty fee, MCA typically reactivates the DIN within 1-2 working days. During the deactivation period, all company filings that require your DIN - annual returns, director changes, share transfers - are blocked.',
+      },
+      {
+        q: 'How fast can Ollvy file Director KYC?',
+        a: 'Ollvy files DIR-3 KYC within 2 working days of receiving your PAN and Aadhaar. The fee is Rs 1,499 per director. If you have multiple directors or multiple companies, we handle all filings under a single order with one point of contact.',
       },
     ],
   },
@@ -246,6 +313,28 @@ export const DEADLINES: DeadlineConfig[] = [
         city: 'Hyderabad',
       },
     ],
+    faqs: [
+      {
+        q: 'What is the TDS return filing deadline for Q1 FY 2027-28?',
+        a: 'The TDS return for Q1 (April to June 2027) is due by July 31, 2027. This applies to all businesses and employers who deducted TDS during these three months. You must file the appropriate form - 24Q for salary TDS, 26Q for non-salary TDS, or 27Q for payments to non-residents.',
+      },
+      {
+        q: 'What is the penalty for late filing of TDS returns?',
+        a: 'Section 234E imposes a late fee of Rs 200 per day from August 1 until you file. This is capped at the total TDS amount for the quarter. On top of this, Section 201(1A) charges 1.5% monthly interest on any TDS that was deducted but not deposited on time. In serious cases, Section 276B allows prosecution with imprisonment from 3 months to 7 years.',
+      },
+      {
+        q: 'What forms do I need to file for TDS returns?',
+        a: 'Form 24Q is for TDS on salary. Form 26Q is for TDS on payments other than salary (rent, professional fees, contractor payments). Form 27Q is for TDS on payments to non-residents. Most businesses with employees and vendors will file both 24Q and 26Q. Your CA determines which forms apply based on your deductions.',
+      },
+      {
+        q: 'What documents are needed to file TDS returns?',
+        a: 'You need your payroll sheets (for salary TDS), vendor payment records with TDS certificates, bank statements showing TDS deposits via challan, and the TAN (Tax Deduction Account Number) for your business. Ollvy provides a document checklist in the app and your assigned CA handles the reconciliation and filing.',
+      },
+      {
+        q: 'How long does Ollvy take to file TDS returns?',
+        a: 'Ollvy files TDS returns within 5 working days. A CA is assigned the same day you book. If you have multiple forms (24Q + 26Q), they are filed together under a single order. The fee starts at Rs 2,999 per quarter.',
+      },
+    ],
   },
   {
     slug: 'itr-2027',
@@ -299,6 +388,28 @@ export const DEADLINES: DeadlineConfig[] = [
         role: 'Director',
         business: 'Pvt Ltd, D2C',
         city: 'Mumbai',
+      },
+    ],
+    faqs: [
+      {
+        q: 'What is the due date for business ITR filing for FY 2026-27?',
+        a: 'October 31, 2027. This applies to all Pvt Ltd companies, LLPs, OPCs, and Partnership firms. Companies that require a transfer pricing report have an extended deadline of November 30, 2027. A belated return can be filed until December 31, 2027 but penalties and loss of carry-forward rights apply from November 1.',
+      },
+      {
+        q: 'What do I lose by filing business ITR late?',
+        a: 'You permanently lose the right to carry forward any business losses from FY 2026-27 under Section 80. If your company made a Rs 15 lakh loss this year, the offset against future profits - and the Rs 4.5 lakh in tax it would save - is gone with no appeal or remedy. Additionally, Section 234F charges Rs 10,000 in late fees and Section 234A charges 1% monthly interest on unpaid tax.',
+      },
+      {
+        q: 'Does my company need a tax audit for FY 2026-27?',
+        a: 'A tax audit under Section 44AB is mandatory if your business turnover exceeds Rs 1 crore (or Rs 10 crore if 95% of transactions are digital). The audit report must be uploaded to the Income Tax portal before filing the ITR. Ollvy coordinates the audit and ITR filing as a single engagement.',
+      },
+      {
+        q: 'What documents are needed to file company ITR?',
+        a: 'You need your audited financial statements (P&L and balance sheet), bank statements for all business accounts, details of tax payments (advance tax, TDS), depreciation schedule, and any capital gains documentation. For LLPs, the LLP agreement and partner capital account statements are also required.',
+      },
+      {
+        q: 'How much does Ollvy charge for business ITR filing?',
+        a: 'Ollvy charges Rs 12,999 for business ITR filing for FY 2026-27. This includes CA assignment within 24 hours, document review, computation of income, and filing of ITR-6 (for companies) or ITR-5 (for LLPs). The filing is completed within 10 working days of receiving approved financial statements.',
       },
     ],
   },
@@ -356,9 +467,47 @@ export const DEADLINES: DeadlineConfig[] = [
         city: 'Ahmedabad',
       },
     ],
+    faqs: [
+      {
+        q: 'Who needs to file GSTR-9 for FY 2026-27?',
+        a: 'All GST-registered businesses with annual aggregate turnover above Rs 2 crore must file GSTR-9. Businesses below Rs 2 crore are exempt but can file voluntarily. If you have multiple GSTINs across states, each registration requires a separate GSTR-9.',
+      },
+      {
+        q: 'What is the GSTR-9 deadline for FY 2026-27?',
+        a: 'December 31, 2027. The late fee of Rs 200 per day (Rs 100 CGST + Rs 100 SGST) starts from January 1, 2028. The maximum late fee is capped at 0.25% of your annual turnover in the state. On Rs 3 crore turnover, the ceiling is Rs 75,000.',
+      },
+      {
+        q: 'Do I also need to file GSTR-9C?',
+        a: 'GSTR-9C (the reconciliation statement) is required if your annual turnover exceeds Rs 5 crore. It reconciles the figures in your GSTR-9 with your audited financial statements. Both GSTR-9 and GSTR-9C share the same December 31 deadline.',
+      },
+      {
+        q: 'What happens if my GSTR-9 has mismatches with my monthly returns?',
+        a: 'Discrepancies between GSTR-9 and your monthly GSTR-1/GSTR-3B filings are auto-flagged by the GSTN system. Common mismatches include HSN summary errors, ITC differences, and inter-state vs intra-state misclassification. These can trigger scrutiny notices and GST audits. Filing a clean, reconciled GSTR-9 is the best way to avoid these.',
+      },
+      {
+        q: 'How does Ollvy handle GSTR-9 filing?',
+        a: 'Ollvy assigns a GST expert the same day you book. The CA reconciles your GSTR-1, GSTR-3B, and GSTR-2A/2B data for the full year, identifies ITC gaps and mismatches, prepares the GSTR-9 draft for your approval, and files after sign-off. The entire process takes 7 working days. Fee is Rs 4,999.',
+      },
+    ],
   },
 ]
 
 export function getDeadlineBySlug(slug: string): DeadlineConfig | undefined {
   return DEADLINES.find((d) => d.slug === slug)
+}
+
+export function generateDeadlineFAQSchema(deadline: DeadlineConfig) {
+  if (!deadline.faqs || deadline.faqs.length === 0) return null
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: deadline.faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
+  }
 }

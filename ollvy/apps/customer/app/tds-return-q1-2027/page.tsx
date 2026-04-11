@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { DeadlinePage } from '@/components/deadline/DeadlinePage'
-import { getDeadlineBySlug } from '@/lib/deadlines'
+import { getDeadlineBySlug, generateDeadlineFAQSchema } from '@/lib/deadlines'
 import { notFound } from 'next/navigation'
 
 const deadline = getDeadlineBySlug('tds-return-q1-2027')
@@ -87,6 +87,12 @@ export default function TDSReturnQ12027Page() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
+      {generateDeadlineFAQSchema(deadline) && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(generateDeadlineFAQSchema(deadline)) }}
+        />
+      )}
       <DeadlinePage deadline={deadline} />
     </>
   )
