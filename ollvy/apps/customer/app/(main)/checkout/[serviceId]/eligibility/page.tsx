@@ -9,7 +9,7 @@ import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { QuestionnaireWizard } from '@/components/questionnaire/QuestionnaireWizard'
 import { LivePricePreview, LivePricePreviewCompact } from '@/components/questionnaire/LivePricePreview'
-import { storePreCursorAnswers } from '@/lib/pre-cursor'
+import { storePreCursorAnswers, getPreCursorAnswers } from '@/lib/pre-cursor'
 import type { ServicePackage } from '@/lib/types'
 
 export default function EligibilityPage() {
@@ -99,6 +99,16 @@ export default function EligibilityPage() {
     }
   }, [user, isHydrated, hasShownAuthPrompt, openAuthModal])
 
+  // After sign-in, if answers were already stored, proceed to checkout
+  useEffect(() => {
+    if (!user || !service || !isHydrated) return
+    const stored = getPreCursorAnswers(service.slug)
+    if (stored && hasPrePaymentQuestions === true) {
+      const checkoutUrl = `/checkout/${serviceId}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
+      router.push(checkoutUrl)
+    }
+  }, [user, service, isHydrated, hasPrePaymentQuestions, serviceId, router, searchParams])
+
   // Redirect to checkout if no pre-payment questions
   useEffect(() => {
     // Only redirect if we DEFINITELY know there are no pre-payment questions
@@ -113,13 +123,21 @@ export default function EligibilityPage() {
   const handleComplete = useCallback((answers: Record<string, unknown>) => {
     if (!service) return
 
+    // Require auth to proceed to checkout
+    if (!user) {
+      // Store answers first so they persist after sign-in
+      storePreCursorAnswers(service.slug, answers)
+      openAuthModal()
+      return
+    }
+
     // Store answers in sessionStorage
     storePreCursorAnswers(service.slug, answers)
 
     // Navigate to checkout
     const checkoutUrl = `/checkout/${serviceId}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
     router.push(checkoutUrl)
-  }, [service, serviceId, router, searchParams])
+  }, [service, serviceId, router, searchParams, user, openAuthModal])
 
   // Loading state while checking for pre-payment questions - prevents flash
   if (isLoading || !isHydrated || hasPrePaymentQuestions === null) {
@@ -168,20 +186,6 @@ export default function EligibilityPage() {
           <Button onClick={() => window.location.reload()}>
             Retry
           </Button>
-        </div>
-      </div>
-    )
-  }
-
-  // Auth required state - show loading while waiting for auth
-  if (!user) {
-    return (
-      <div className="container max-w-3xl mx-auto py-12 px-4">
-        <div className="rounded-xl border border-border bg-card p-8 text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-muted-foreground" />
-          <p className="text-muted-foreground">
-            Please sign in to check eligibility and pricing
-          </p>
         </div>
       </div>
     )
