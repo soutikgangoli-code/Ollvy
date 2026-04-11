@@ -585,7 +585,7 @@ export function UnifiedServicePage({
               <div className="mt-5 md:mt-6 flex flex-col items-center gap-2">
                 {/* Guarantee badge */}
                 {guaranteedDate && (
-                  <div className="text-center">
+                  <div className="text-center mb-1">
                     <p className="text-base md:text-lg font-mono text-foreground">
                       <CheckCircle size={16} className="inline mr-1.5 text-[hsl(var(--ollvy-green))]" />
                       {service.isRetainer
@@ -594,6 +594,12 @@ export function UnifiedServicePage({
                     </p>
                   </div>
                 )}
+
+                <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild>
+                  <Link href={getCtaUrl()} prefetch={true}>
+                    {ctaLabel}
+                  </Link>
+                </Button>
               </div>
 
               {/* Metadata pills */}
