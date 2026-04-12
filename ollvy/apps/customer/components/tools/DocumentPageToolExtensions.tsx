@@ -126,7 +126,13 @@ export function DocumentCTA({
           </p>
         )}
       </section>
-      <StickyToolCTA buttonText={buttonText} buttonHref={buttonHref} />
+      <StickyToolCTA
+        buttonText={buttonText.replace(/^Start\s+/, 'Book ')}
+        buttonHref={buttonHref}
+        triggerId="doc-checklist-section"
+        showScrollTop
+        scrollTopTargetId="doc-checklist-section"
+      />
     </>
   )
 }

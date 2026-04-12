@@ -244,7 +244,7 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
         </header>
 
         {/* The actual tool widget (calculator or checklist) */}
-        <div className="mb-8">
+        <div id="tool-section" className="mb-8">
           {children}
         </div>
 
@@ -280,8 +280,9 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
 
         {/* Sticky mobile CTA */}
         <StickyToolCTA
-          buttonText={config.relatedServiceLabel}
+          buttonText="Book Now"
           buttonHref={`/services/${config.relatedServiceSlug}`}
+          triggerId="tool-section"
         />
 
         {/* Print styles */}

@@ -243,7 +243,7 @@ export function DocumentChecklistContent({
   }
 
   return (
-    <>
+    <div id="doc-checklist-section">
       {/* Stats + Export */}
       <div className="flex items-center justify-between mb-10">
         <div className="flex items-center gap-8">
@@ -410,6 +410,6 @@ export function DocumentChecklistContent({
           )}
         </div>
       )}
-    </>
+    </div>
   )
 }
