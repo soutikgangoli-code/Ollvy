@@ -1344,22 +1344,34 @@ export function UnifiedServicePage({
 
       {/* Mobile booking bar - fixed bottom */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border p-4 flex items-center justify-between lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-4 pb-4 pt-2.5 lg:hidden"
         style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
       >
-        <div>
-          <p className="text-xs text-muted-foreground">
-            {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
-          </p>
-          <p className="font-mono font-bold text-foreground">
-            ₹{totalFee.toLocaleString('en-IN')}
-          </p>
+        {guaranteedDate && (
+          <div className="flex items-center gap-1.5 mb-2">
+            <CheckCircle size={12} className="text-[hsl(var(--ollvy-green))]" />
+            <p className="text-xs font-medium font-mono text-foreground">
+              {service.isRetainer
+                ? `Current cycle due: ${guaranteedDate}`
+                : `Guaranteed by ${guaranteedDate}`}
+            </p>
+          </div>
+        )}
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-xs text-muted-foreground">
+              {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
+            </p>
+            <p className="font-mono font-bold text-foreground">
+              ₹{totalFee.toLocaleString('en-IN')}
+            </p>
+          </div>
+          <Button size="lg" className="flex-1 ml-4" asChild>
+            <Link href={getCtaUrl(true)} prefetch={true}>
+              {ctaLabel}
+            </Link>
+          </Button>
         </div>
-        <Button size="lg" className="flex-1 ml-4" asChild>
-          <Link href={getCtaUrl(true)} prefetch={true}>
-            {ctaLabel}
-          </Link>
-        </Button>
       </div>
     </>
   )

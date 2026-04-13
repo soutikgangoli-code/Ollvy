@@ -139,7 +139,7 @@ export function BookingPanel({
   const ctaUrl = urlParams.toString() ? `${baseCheckoutUrl}?${urlParams.toString()}` : baseCheckoutUrl
 
   return (
-    <Card className="border border-border bg-card p-6 w-full">
+    <Card className="border border-border bg-card p-6 w-full rounded-xl shadow-sm">
       {/* Guaranteed date at top */}
       {guaranteedDate && (
         <div className="pb-5 border-b border-border mb-5">
@@ -148,7 +148,7 @@ export function BookingPanel({
               size={14}
               className="text-[hsl(var(--ollvy-green))] shrink-0"
             />
-            <p className="text-sm font-semibold text-foreground font-mono">
+            <p className="text-[16px] font-semibold text-foreground font-mono">
               {service.isRetainer
                 ? `Current cycle due: ${guaranteedDate}`
                 : `Guaranteed by ${guaranteedDate}`}
@@ -279,12 +279,7 @@ export function BookingPanel({
         {/* Base service fee */}
         <div className="flex justify-between items-start">
           <div className="flex items-start gap-2">
-            <div className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center mt-0.5 shrink-0">
-              <CheckCircle
-                size={11}
-                className="text-[hsl(var(--ollvy-green))]"
-              />
-            </div>
+            <div className="w-1.5 h-1.5 rounded-full bg-foreground/30 mt-2 shrink-0" />
             <div>
               <p className="text-sm font-medium text-foreground">
                 {selectedVariantData?.sublabel ?? service.shortName ?? service.name}
@@ -305,12 +300,7 @@ export function BookingPanel({
           return (
             <div key={addon.id} className="flex justify-between items-start">
               <div className="flex items-start gap-2">
-                <div className="w-5 h-5 rounded-full bg-[hsl(var(--ollvy-green))]/20 flex items-center justify-center mt-0.5 shrink-0">
-                  <CheckCircle
-                    size={11}
-                    className="text-[hsl(var(--ollvy-green))]"
-                  />
-                </div>
+                <div className="w-1.5 h-1.5 rounded-full bg-foreground/30 mt-2 shrink-0" />
                 <div>
                   <p className="text-sm font-medium text-foreground">{addon.name}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">Service fee</p>
@@ -340,11 +330,6 @@ export function BookingPanel({
           {ctaLabel}
         </Link>
       </Button>
-
-      {/* GST invoice note */}
-      <p className="text-xs text-muted-foreground text-center mt-2">
-        GST-compliant invoice generated at checkout
-      </p>
 
       {/* Have queries */}
       <div className="mt-5 pt-5 border-t border-border">
