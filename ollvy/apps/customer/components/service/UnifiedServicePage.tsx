@@ -1345,15 +1345,15 @@ export function UnifiedServicePage({
 
       {/* Mobile booking bar - fixed bottom */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-3 py-2.5 lg:hidden"
-        style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
+        className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-3 py-2 lg:hidden"
+        style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
       >
         {guaranteedDate && (
-          <div className="flex items-center gap-1 mb-1.5">
-            <CheckCircle size={10} className="text-[hsl(var(--ollvy-green))]" />
-            <p className="text-[10px] font-medium font-mono text-foreground">
+          <div className="flex items-center justify-center gap-1.5 py-1">
+            <CheckCircle size={12} className="text-[hsl(var(--ollvy-green))]" />
+            <p className="text-xs font-medium font-mono text-foreground">
               {service.isRetainer
-                ? `Due: ${guaranteedDate}`
+                ? `Current cycle due: ${guaranteedDate}`
                 : `Guaranteed by ${guaranteedDate}`}
             </p>
           </div>
