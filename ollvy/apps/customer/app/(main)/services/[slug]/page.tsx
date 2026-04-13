@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache'
 import { getServiceBySlugFromDB, getAllServiceSlugs, getServiceReviews, getRelatedServicesBySlugs } from '@/lib/data/services'
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
 import { ServiceStructuredData } from '@/components/seo/ServiceStructuredData'
+import { DATA as DIYvsOllvyData } from '@/components/service/DIYvsOllvy'
 import { getFallbackReviews } from '@/lib/data/fallback-reviews'
 
 /**
@@ -101,6 +102,28 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         whatsIncluded={service.whatsIncluded}
         slaDays={service.slaDays}
       />
+      {DIYvsOllvyData[slug] && (
+        <div className="max-w-[1200px] mx-auto px-6">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-border">
+                <th className="text-left py-2 pr-4 font-medium text-foreground">What needs doing</th>
+                <th className="text-left py-2 pr-4 font-medium text-muted-foreground">On your own</th>
+                <th className="text-left py-2 font-medium text-[hsl(var(--ollvy-green-fg))]">With Ollvy</th>
+              </tr>
+            </thead>
+            <tbody>
+              {DIYvsOllvyData[slug].rows.map((row, i) => (
+                <tr key={i} className="border-b border-border">
+                  <td className="py-3 pr-4 font-medium text-foreground align-top">{row.task}</td>
+                  <td className="py-3 pr-4 text-muted-foreground align-top">{row.own}</td>
+                  <td className="py-3 text-foreground align-top">{row.ollvy_head} {row.ollvy_badge}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <UnifiedServicePage
         service={service}
         pricing={pricing}

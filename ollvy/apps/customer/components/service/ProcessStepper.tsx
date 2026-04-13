@@ -45,56 +45,70 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
 
   return (
     <div className="border border-border rounded-xl bg-card overflow-hidden">
-      {/* Progress track */}
-      <div className="relative h-12 bg-background border-b border-border flex items-center px-6">
-        {/* Track line */}
-        <div className="absolute left-6 right-6 h-px bg-border top-1/2 -translate-y-1/2" />
-        {/* Step dots */}
-        <div className="relative flex justify-between w-full">
-          {steps.map((s, i) => (
-            <button
-              key={i}
-              onClick={() => setActive(i)}
-              className={cn(
-                'w-3 h-3 rounded-full border-2 transition-all duration-200',
-                i < active
-                  ? 'bg-[hsl(var(--ollvy-green))] border-[hsl(var(--ollvy-green))]'
-                  : i === active
-                    ? 'bg-background border-foreground scale-125'
-                    : 'bg-background border-border hover:border-foreground/40'
-              )}
-              aria-label={`Step ${i + 1}`}
-            />
-          ))}
-        </div>
+      {/* Step numbers track */}
+      <div className="flex items-center gap-0 border-b border-border bg-muted/30">
+        {steps.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            className={cn(
+              'flex-1 py-3 text-center text-xs font-mono font-medium transition-all duration-200 relative',
+              i < active
+                ? 'text-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/[0.04]'
+                : i === active
+                  ? 'text-foreground bg-background'
+                  : 'text-muted-foreground/50 hover:text-muted-foreground'
+            )}
+            aria-label={`Step ${i + 1}`}
+          >
+            <span className={cn(
+              'inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold transition-all',
+              i < active
+                ? 'bg-[hsl(var(--ollvy-green))] text-white'
+                : i === active
+                  ? 'bg-muted-foreground text-background'
+                  : 'bg-muted text-muted-foreground'
+            )}>
+              {i < active ? '✓' : i + 1}
+            </span>
+            {/* Active indicator bar */}
+            {i === active && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-muted-foreground" />
+            )}
+          </button>
+        ))}
       </div>
 
       {/* Step content */}
       <div
-        key={active}
-        className="p-4 sm:p-8 min-h-[220px] sm:min-h-[280px] flex flex-col"
+        className="p-5 sm:p-8 h-[300px] sm:h-[320px] flex flex-col overflow-y-auto"
       >
-        {/* Step icon */}
-        <div
-          className={cn(
-            'w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center mb-3 sm:mb-5',
+        {/* Step icon + timeline badge row */}
+        <div className="flex items-center justify-between mb-4 sm:mb-5">
+          <div
+            className={cn(
+              'w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center',
+              step.isCompletion
+                ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
+                : 'bg-muted text-muted-foreground'
+            )}
+          >
+            <Icon size={20} />
+          </div>
+          <span className={cn(
+            'text-xs border rounded-full px-3 py-1 font-mono',
             step.isCompletion
-              ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
-              : 'bg-muted text-muted-foreground'
-          )}
-        >
-          <Icon size={18} />
-        </div>
-
-        {/* Title + timeline */}
-        <div className="flex items-start justify-between gap-3 sm:gap-4 mb-2 sm:mb-3">
-          <h3 className="text-base sm:text-lg font-semibold text-foreground leading-snug">
-            {step.title}
-          </h3>
-          <span className="shrink-0 text-xs text-muted-foreground border border-border rounded-full px-2 sm:px-2.5 py-0.5 sm:py-1 font-mono">
+              ? 'border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 text-[hsl(var(--ollvy-green-fg))]'
+              : 'border-border text-muted-foreground'
+          )}>
             {step.timeline}
           </span>
         </div>
+
+        {/* Title */}
+        <h3 className="text-lg sm:text-xl font-semibold text-foreground leading-snug mb-2 sm:mb-3">
+          {step.title}
+        </h3>
 
         {/* Body */}
         <p className="text-sm text-muted-foreground leading-relaxed flex-1">
@@ -103,16 +117,24 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
 
         {/* Milestone */}
         {step.milestone && (
-          <div className="mt-3 sm:mt-4 flex items-center gap-2 bg-background border border-border rounded-lg px-3 py-2">
+          <div className={cn(
+            'mt-4 sm:mt-5 flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 border',
+            step.isCompletion
+              ? 'bg-[hsl(var(--ollvy-green))]/5 border-[hsl(var(--ollvy-green))]/20'
+              : 'bg-muted/30 border-border'
+          )}>
             <div
               className={cn(
-                'w-1.5 h-1.5 rounded-full shrink-0',
+                'w-2 h-2 rounded-full shrink-0',
                 step.isCompletion
                   ? 'bg-[hsl(var(--ollvy-green))]'
-                  : 'bg-muted-foreground'
+                  : 'bg-muted-foreground/40'
               )}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className={cn(
+              'text-xs',
+              step.isCompletion ? 'text-[hsl(var(--ollvy-green-fg))] font-medium' : 'text-muted-foreground'
+            )}>
               {step.isCompletion ? '✓ ' : ''}
               {step.milestone}
             </p>
@@ -121,7 +143,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between px-4 pb-4 sm:px-8 sm:pb-6">
+      <div className="flex justify-between px-5 pb-5 sm:px-8 sm:pb-6">
         <Button
           variant="outline"
           size="sm"

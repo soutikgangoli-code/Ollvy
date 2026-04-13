@@ -13,7 +13,7 @@ import { ProfilePersonas } from './ProfilePersonas'
 // Import directly for SEO crawlability - dynamic imports hide content from Google
 import { RelatedServices } from './RelatedServices'
 import { HowWeReviewed } from './HowWeReviewed'
-import { LearnSectionTable } from '@/components/guides/LearnSectionTable'
+import { DIYvsOllvy } from '@/components/service/DIYvsOllvy'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -38,6 +38,7 @@ import {
   X,
   HelpCircle,
   ChevronDown,
+  FileText,
 } from 'lucide-react'
 
 interface GeoContext {
@@ -110,7 +111,7 @@ function getProcessHeading(serviceName: string, shortName: string): string {
   // Registration services
   if (nameLower.includes('registration')) {
     // e.g., "GST Registration" -> "How Ollvy registers your GST"
-    const subject = shortName.replace(/\s*registration\s*/i, '').trim()
+    const subject = serviceName.replace(/\s*registration\s*/i, '').trim()
     return `How Ollvy registers your ${subject}`
   }
 
@@ -818,23 +819,18 @@ export function UnifiedServicePage({
                   </div>
                 </section>
 
-                {/* Section: Government Fees (from static config) */}
-                {staticConfig?.govtFees && (
-                  <section className="py-16 border-b border-border">
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
-                      GOVERNMENT FEES
-                    </p>
-                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
-                      Official fees paid to the government
-                    </h2>
-                    <p className="text-sm text-muted-foreground mb-8">
-                      These fees are collected by Ollvy and remitted in full to the relevant government authority.
-                    </p>
-                    <LearnSectionTable table={staticConfig.govtFees} />
-                  </section>
-                )}
+                {/* Section: DIY vs Ollvy comparison (replaces old govt fees section) */}
+                <section className="py-16 border-b border-border">
+                  <div className="mt-0" suppressHydrationWarning>
+                    <DIYvsOllvy
+                      slug={service.slug}
+                      guaranteedDate={guaranteedDate}
+                      isRetainer={service.isRetainer}
+                    />
+                  </div>
+                </section>
 
-                {/* Section: Documents Required Table (from static config) */}
+                {/* Section: Documents Required (from static config) */}
                 {staticConfig?.documents && (
                   <section className="py-16 border-b border-border">
                     <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
@@ -843,10 +839,48 @@ export function UnifiedServicePage({
                     <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
                       Documents you will need to provide
                     </h2>
-                    <p className="text-sm text-muted-foreground mb-8">
-                      Prepare these documents before starting the process.
+                    <p className="text-sm text-muted-foreground mb-5">
+                      Prepare these before starting. Your CA verifies everything before filing.
                     </p>
-                    <LearnSectionTable table={staticConfig.documents} />
+
+                    <div className="rounded-xl border border-border overflow-hidden">
+                      <table className="w-full text-sm border-collapse">
+                        <thead>
+                          <tr className="border-b border-border bg-muted/20">
+                            {staticConfig.documents.headers.map((header, j) => (
+                              <th
+                                key={j}
+                                className={cn(
+                                  'text-left py-3 px-4 font-semibold text-foreground',
+                                  j > 0 && 'border-l border-border'
+                                )}
+                              >
+                                {header}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {staticConfig.documents.rows.map((row, i) => (
+                            <tr key={i} className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors">
+                              {row.map((cell, j) => (
+                                <td
+                                  key={j}
+                                  className={cn(
+                                    'py-3 px-4',
+                                    j > 0 && 'border-l border-border',
+                                    j === 0 ? 'font-medium text-foreground' : 'text-muted-foreground'
+                                  )}
+                                >
+                                  {formatWithMonoNumbers(cell)}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
                     {documentChecklistPaths[service.slug] && (
                       <div className="mt-6">
                         <Link
@@ -1204,6 +1238,66 @@ export function UnifiedServicePage({
                         </AccordionContent>
                       </AccordionItem>
                     ))}
+
+                    {/* Government fees FAQ with rich table */}
+                    {staticConfig?.govtFees && (
+                      <AccordionItem
+                        value="faq-govt-fees"
+                        className="border-b border-border last:border-0"
+                      >
+                        <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+                          What government fees apply for {service.name}?
+                        </AccordionTrigger>
+                        <AccordionContent forceMount className="pb-5">
+                          <div className="rounded-xl border border-border overflow-hidden">
+                            {/* Caption */}
+                            {staticConfig.govtFees.caption && (
+                              <div className="px-4 py-3 border-b border-border bg-muted/30">
+                                <p className="text-xs font-medium text-muted-foreground">
+                                  {staticConfig.govtFees.caption}
+                                </p>
+                              </div>
+                            )}
+                            <table className="w-full text-sm">
+                              <thead>
+                                <tr className="border-b border-border bg-muted/20">
+                                  {staticConfig.govtFees.headers.map((header, j) => (
+                                    <th
+                                      key={j}
+                                      className="text-left py-3 px-4 font-semibold text-foreground"
+                                    >
+                                      {header}
+                                    </th>
+                                  ))}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {staticConfig.govtFees.rows.map((row, ri) => (
+                                  <tr
+                                    key={ri}
+                                    className="border-b border-border last:border-0"
+                                  >
+                                    {row.map((cell, ci) => (
+                                      <td
+                                        key={ci}
+                                        className={cn(
+                                          'py-3 px-4',
+                                          ci === 0
+                                            ? 'text-foreground font-medium'
+                                            : 'text-muted-foreground'
+                                        )}
+                                      >
+                                        {formatWithMonoNumbers(cell)}
+                                      </td>
+                                    ))}
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    )}
                   </Accordion>
                 </section>
 
