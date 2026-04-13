@@ -826,6 +826,7 @@ export function UnifiedServicePage({
                       slug={service.slug}
                       guaranteedDate={guaranteedDate}
                       isRetainer={service.isRetainer}
+                      totalFee={totalFee}
                     />
                   </div>
                 </section>
@@ -844,14 +845,14 @@ export function UnifiedServicePage({
                     </p>
 
                     <div className="rounded-xl border border-border overflow-hidden">
-                      <table className="w-full text-sm border-collapse">
+                      <table className="w-full text-xs sm:text-sm border-collapse">
                         <thead>
-                          <tr className="border-b border-border bg-muted/20">
+                          <tr className="border-b border-border bg-muted/40">
                             {staticConfig.documents.headers.map((header, j) => (
                               <th
                                 key={j}
                                 className={cn(
-                                  'text-left py-3 px-4 font-semibold text-foreground',
+                                  'text-center py-2 sm:py-3 px-2 sm:px-4 font-semibold text-foreground font-mono text-xs uppercase tracking-widest',
                                   j > 0 && 'border-l border-border'
                                 )}
                               >
@@ -867,7 +868,7 @@ export function UnifiedServicePage({
                                 <td
                                   key={j}
                                   className={cn(
-                                    'py-3 px-4',
+                                    'py-2 sm:py-3 px-2 sm:px-4',
                                     j > 0 && 'border-l border-border',
                                     j === 0 ? 'font-medium text-foreground' : 'text-muted-foreground'
                                   )}
@@ -911,7 +912,7 @@ export function UnifiedServicePage({
                     <br />
                     Not just on time.
                   </h2>
-                  <p className="text-sm text-muted-foreground mb-8 max-w-[520px] leading-relaxed">
+                  <p className="text-sm text-muted-foreground mb-8 max-w-[520px] leading-relaxed hidden sm:block">
                     Most CAs submit what you give them and hope for the best. Ollvy
                     reviews your documents before filing - not after a notice arrives.
                   </p>
@@ -949,9 +950,9 @@ export function UnifiedServicePage({
                     </div>
                   ) : (
                     // Generic comparison for services without specific data
-                    <div className="grid grid-cols-2 gap-4 mb-10 max-w-[560px]">
-                      <Card className="border border-border bg-muted/30 p-5">
-                        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-10 max-w-[560px]">
+                      <Card className="border border-border bg-muted/30 p-4 sm:p-5">
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 sm:mb-3 font-mono">
                           Others
                         </p>
                         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -959,8 +960,8 @@ export function UnifiedServicePage({
                           query or rejection, it's your problem.
                         </p>
                       </Card>
-                      <Card className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-5">
-                        <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-3 font-mono">
+                      <Card className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-4 sm:p-5">
+                        <p className="text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-2 sm:mb-3 font-mono">
                           Ollvy
                         </p>
                         <p className="text-sm text-foreground leading-relaxed">
@@ -971,12 +972,12 @@ export function UnifiedServicePage({
                     </div>
                   )}
 
-                  {/* 4-step flow */}
-                  <Card className="border border-border bg-card p-8">
-                    <h3 className="text-base font-semibold text-foreground mb-6">
+                  {/* 4-step flow — desktop only */}
+                  <Card className="border border-border bg-card p-4 sm:p-8 hidden sm:block">
+                    <h3 className="text-sm sm:text-base font-semibold text-foreground mb-4 sm:mb-6">
                       We catch compliance gaps before regulators do.
                     </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-4 gap-2 sm:gap-4">
                       {[
                         {
                           step: 'we review',
@@ -1001,32 +1002,32 @@ export function UnifiedServicePage({
                         },
                       ].map((item, i) => (
                         <div key={i} className="text-center">
-                          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center mx-auto mb-3">
-                            <span className="text-xs font-mono font-bold text-foreground">
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-muted flex items-center justify-center mx-auto mb-1.5 sm:mb-3">
+                            <span className="text-[10px] sm:text-xs font-mono font-bold text-foreground">
                               {i + 1}
                             </span>
                           </div>
-                          <p className="text-xs font-semibold text-foreground">
+                          <p className="text-[10px] sm:text-xs font-semibold text-foreground">
                             {item.step}
                           </p>
-                          <p className="text-xs text-[hsl(var(--ollvy-green-fg))] mt-0.5">
+                          <p className="text-[10px] sm:text-xs text-[hsl(var(--ollvy-green-fg))] mt-0.5">
                             {item.label}
                           </p>
-                          <p className="text-xs text-muted-foreground mt-2 leading-snug">
+                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 sm:mt-2 leading-snug hidden sm:block">
                             {item.description}
                           </p>
                         </div>
                       ))}
                     </div>
                   </Card>
-                </section>
 
-                {/* Section: Profile Personas (We handle messy situations) */}
-                <section className="py-16 border-b border-border">
-                  <ProfilePersonas
-                    personas={service.profilePersonas}
-                    serviceName={service.shortName}
-                  />
+                  {/* Profile Personas (merged into Why Ollvy section) */}
+                  <div className="mt-10 sm:mt-16">
+                    <ProfilePersonas
+                      personas={service.profilePersonas}
+                      serviceName={service.shortName}
+                    />
+                  </div>
                 </section>
 
                 {/* Section: Service Risks */}
@@ -1344,29 +1345,24 @@ export function UnifiedServicePage({
 
       {/* Mobile booking bar - fixed bottom */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-4 pb-4 pt-2.5 lg:hidden"
-        style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+        className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-3 py-2.5 lg:hidden"
+        style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
       >
         {guaranteedDate && (
-          <div className="flex items-center gap-1.5 mb-2">
-            <CheckCircle size={12} className="text-[hsl(var(--ollvy-green))]" />
-            <p className="text-xs font-medium font-mono text-foreground">
+          <div className="flex items-center gap-1 mb-1.5">
+            <CheckCircle size={10} className="text-[hsl(var(--ollvy-green))]" />
+            <p className="text-[10px] font-medium font-mono text-foreground">
               {service.isRetainer
-                ? `Current cycle due: ${guaranteedDate}`
+                ? `Due: ${guaranteedDate}`
                 : `Guaranteed by ${guaranteedDate}`}
             </p>
           </div>
         )}
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground">
-              {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
-            </p>
-            <p className="font-mono font-bold text-foreground">
-              ₹{totalFee.toLocaleString('en-IN')}
-            </p>
-          </div>
-          <Button size="lg" className="flex-1 ml-4" asChild>
+        <div className="flex items-center gap-2">
+          <p className="font-mono font-bold text-foreground text-base shrink-0">
+            ₹{totalFee.toLocaleString('en-IN')}
+          </p>
+          <Button size="lg" className="flex-1 h-10" asChild>
             <Link href={getCtaUrl(true)} prefetch={true}>
               {ctaLabel}
             </Link>

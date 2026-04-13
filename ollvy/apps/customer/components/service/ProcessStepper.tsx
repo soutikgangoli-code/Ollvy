@@ -53,27 +53,27 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
             onClick={() => setActive(i)}
             className={cn(
               'flex-1 py-3 text-center text-xs font-mono font-medium transition-all duration-200 relative',
-              i < active
-                ? 'text-[hsl(var(--ollvy-green))] bg-[hsl(var(--ollvy-green))]/[0.04]'
-                : i === active
-                  ? 'text-foreground bg-background'
+              i === active
+                ? 'text-foreground bg-background shadow-sm z-10'
+                : i < active
+                  ? 'text-[hsl(var(--ollvy-green-fg))]'
                   : 'text-muted-foreground/50 hover:text-muted-foreground'
             )}
             aria-label={`Step ${i + 1}`}
           >
             <span className={cn(
               'inline-flex items-center justify-center w-6 h-6 rounded-full text-[11px] font-bold transition-all',
-              i < active
-                ? 'bg-[hsl(var(--ollvy-green))] text-white'
-                : i === active
-                  ? 'bg-muted-foreground text-background'
+              i === active
+                ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green-fg))]'
+                : i < active
+                  ? 'bg-[hsl(var(--ollvy-green))]/10 text-[hsl(var(--ollvy-green-fg))]'
                   : 'bg-muted text-muted-foreground'
             )}>
               {i < active ? '✓' : i + 1}
             </span>
             {/* Active indicator bar */}
             {i === active && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-muted-foreground" />
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[hsl(var(--ollvy-green))]/40" />
             )}
           </button>
         ))}
@@ -81,19 +81,20 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
 
       {/* Step content */}
       <div
-        className="p-5 sm:p-8 h-[300px] sm:h-[320px] flex flex-col overflow-y-auto"
+        key={active}
+        className="p-5 sm:p-8 min-h-[220px] sm:min-h-[280px] flex flex-col"
       >
         {/* Step icon + timeline badge row */}
-        <div className="flex items-center justify-between mb-4 sm:mb-5">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
           <div
             className={cn(
-              'w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center',
+              'w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center',
               step.isCompletion
                 ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
                 : 'bg-muted text-muted-foreground'
             )}
           >
-            <Icon size={20} />
+            <Icon size={18} />
           </div>
           <span className={cn(
             'text-xs border rounded-full px-3 py-1 font-mono',
@@ -106,7 +107,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
         </div>
 
         {/* Title */}
-        <h3 className="text-lg sm:text-xl font-semibold text-foreground leading-snug mb-2 sm:mb-3">
+        <h3 className="text-base sm:text-xl font-semibold text-foreground leading-snug mb-2 sm:mb-3">
           {step.title}
         </h3>
 
@@ -118,7 +119,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
         {/* Milestone */}
         {step.milestone && (
           <div className={cn(
-            'mt-4 sm:mt-5 flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 border',
+            'mt-3 sm:mt-5 flex items-center gap-2 sm:gap-2.5 rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 border',
             step.isCompletion
               ? 'bg-[hsl(var(--ollvy-green))]/5 border-[hsl(var(--ollvy-green))]/20'
               : 'bg-muted/30 border-border'
@@ -143,7 +144,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between px-5 pb-5 sm:px-8 sm:pb-6">
+      <div className="flex justify-between px-4 pb-4 sm:px-8 sm:pb-6">
         <Button
           variant="outline"
           size="sm"

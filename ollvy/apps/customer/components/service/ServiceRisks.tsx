@@ -30,22 +30,22 @@ export function ServiceRisks({
         they are.
       </p>
 
-      <div className="space-y-4">
+      <div className="space-y-2 sm:space-y-4">
         {risks.map((risk, i) => {
           const Icon = RISK_ICONS[risk.icon]
           return (
             <div
               key={i}
-              className="flex items-start gap-4 border border-border rounded-xl p-5 bg-card"
+              className="flex items-start gap-3 sm:gap-4 border border-border rounded-xl p-3 sm:p-5 bg-card"
             >
-              <div className="w-10 h-10 rounded-xl bg-[hsl(var(--ollvy-amber))]/10 flex items-center justify-center shrink-0">
-                <Icon size={18} className="text-[hsl(var(--ollvy-amber))]" />
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[hsl(var(--ollvy-amber))]/10 flex items-center justify-center shrink-0">
+                <Icon className="w-3.5 h-3.5 sm:w-[18px] sm:h-[18px] text-[hsl(var(--ollvy-amber))]" />
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-foreground">
+                <h3 className="text-xs sm:text-sm font-semibold text-foreground">
                   {risk.title}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed">
                   {risk.body}
                 </p>
               </div>
