@@ -56,14 +56,14 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Fix JSONB columns
-UPDATE services SET
-  process_steps  = _fix_ca(process_steps::text)::jsonb,
-  whats_included = _fix_ca(whats_included::text)::jsonb,
-  service_risks  = _fix_ca(service_risks::text)::jsonb,
-  faqs           = _fix_ca(faqs::text)::jsonb;
+UPDATE service_packages SET
+  workflow_stages = _fix_ca(workflow_stages::text)::jsonb,
+  whats_included  = _fix_ca(whats_included::text)::jsonb,
+  service_risks   = _fix_ca(service_risks::text)::jsonb,
+  faqs            = _fix_ca(faqs::text)::jsonb;
 
 -- Fix plain text columns
-UPDATE services SET
+UPDATE service_packages SET
   seo_description   = _fix_ca(seo_description),
   short_description = _fix_ca(short_description);
 

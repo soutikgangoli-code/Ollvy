@@ -11,7 +11,7 @@ DECLARE
   body_text text;
   first_line text;
 BEGIN
-  FOR svc IN SELECT id, whats_included FROM services WHERE whats_included IS NOT NULL LOOP
+  FOR svc IN SELECT id, whats_included FROM service_packages WHERE whats_included IS NOT NULL LOOP
     new_arr := '[]'::jsonb;
     FOR item IN SELECT * FROM jsonb_array_elements(svc.whats_included) LOOP
       IF item ? 'comparisonWithout' OR item ? 'comparisonWithOllvy' THEN
@@ -27,7 +27,7 @@ BEGIN
       END IF;
       new_arr := new_arr || jsonb_build_array(item);
     END LOOP;
-    UPDATE services SET whats_included = new_arr WHERE id = svc.id;
+    UPDATE service_packages SET whats_included = new_arr WHERE id = svc.id;
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
