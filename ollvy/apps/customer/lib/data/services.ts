@@ -471,6 +471,7 @@ export interface PopularServiceData {
   description: string
   ollvyFee: number
   govtFee: number
+  mrp?: number
   slaDays: number
   isRetainer: boolean
 }
@@ -494,6 +495,7 @@ export async function getPopularServices(): Promise<PopularServiceData[]> {
         short_description,
         price_base_paisa,
         price_govt_fees_paisa,
+        price_mrp_paisa,
         sla_working_days,
         billing_cycle
       `)
@@ -517,6 +519,7 @@ export async function getPopularServices(): Promise<PopularServiceData[]> {
       description: pkg.short_description ?? '',
       ollvyFee: pkg.price_base_paisa / 100,
       govtFee: pkg.price_govt_fees_paisa / 100,
+      mrp: (pkg as any).price_mrp_paisa > 0 ? (pkg as any).price_mrp_paisa / 100 : undefined,
       slaDays: pkg.sla_working_days,
       isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
     }))

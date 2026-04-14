@@ -48,7 +48,7 @@ export const llpIncorporation: ServiceConfig = {
       step: 3,
       title: 'DPIN and DSC arranged',
       timeline: 'Day 1-3',
-      body: 'DPIN required for all partners — applications filed\nDSC tokens arranged with guided video verification',
+      body: 'DPIN required for all partners. Applications filed\nDSC tokens arranged with guided video verification',
       visual: 'form',
       milestone: 'DPIN and DSC ready',
     },
@@ -74,7 +74,7 @@ export const llpIncorporation: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'LLP Agreement drafted - not templated',
-      body: 'Covers profit-sharing, decision-making, capital contribution, and exit terms\nDrafted for your actual arrangement — not a generic 50-50 template',
+      body: 'Covers profit-sharing, decision-making, capital contribution, and exit terms\nDrafted for your actual arrangement, not a generic 50-50 template',
       comparisonWithout: 'Generic template - disputes arise later',
       comparisonWithOllvy: 'Custom agreement reflecting your actual split and roles',
     },

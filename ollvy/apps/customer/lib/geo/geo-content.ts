@@ -10,10 +10,10 @@ export interface GeoContent {
 export const GEO_CONTENT: Record<string, GeoContent> = {
 
   'gst-registration__delhi': {
-    jurisdictionNote: `Delhi falls under CGST jurisdiction. Depending on your business address, you may be assigned to Delhi North, Delhi West, Delhi South, or Delhi Central CGST Commissionerate. All applications are filed electronically through the GSTN portal - the commissionerate only matters if you receive an officer query, in which case your CA handles the response directly with that commissionerate's officers.`,
+    jurisdictionNote: `Delhi falls under CGST jurisdiction. Depending on your business address, you may be assigned to Delhi North, Delhi West, Delhi South, or Delhi Central CGST Commissionerate. All applications are filed electronically through the GSTN portal - the commissionerate only matters if you receive an officer query, in which case Ollvy CA handles the response directly with that commissionerate's officers.`,
     citySpecificNotes: [
       `Delhi has no separate state GST - it uses the Central GST framework directly. Unlike states like Maharashtra or Karnataka where SGST and CGST are separate administrations, Delhi's GST is administered entirely by CGST officers.`,
-      `The GSTN Seva Kendra for Delhi is at SCOPE Complex, Core 8, 7 Institutional Area, Lodhi Road, New Delhi - 110 003. Walk-in queries are handled there, though almost all issues can be resolved online or through your CA.`,
+      `The GSTN Seva Kendra for Delhi is at SCOPE Complex, Core 8, 7 Institutional Area, Lodhi Road, New Delhi - 110 003. Walk-in queries are handled there, though almost all issues can be resolved online or through Ollvy CA.`,
     ],
     additionalFaqs: [
       {
@@ -22,7 +22,7 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
       },
       {
         q: 'Which CGST commissionerate covers South Delhi?',
-        a: `South Delhi falls under the Delhi South CGST Commissionerate. Your GSTIN will have "07" as the state code (Delhi's GST state code). The commissionerate is relevant only for officer queries - your CA handles any interactions with them.`,
+        a: `South Delhi falls under the Delhi South CGST Commissionerate. Your GSTIN will have "07" as the state code (Delhi's GST state code). The commissionerate is relevant only for officer queries - Ollvy CA handles any interactions with them.`,
       },
     ],
   },
@@ -54,7 +54,7 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
     additionalFaqs: [
       {
         q: 'Can I register for GST with a co-working space address in BKC or Lower Parel?',
-        a: `Yes. GST registration with co-working space addresses is standard in Mumbai. You need the NOC from the space operator (on their letterhead, with your name, company, and workspace details) and a utility bill for the premises in the operator's name. Your CA verifies both before filing. BKC, Lower Parel, Andheri, and other major business hubs have established co-working operators who provide these routinely.`,
+        a: `Yes. GST registration with co-working space addresses is standard in Mumbai. You need the NOC from the space operator (on their letterhead, with your name, company, and workspace details) and a utility bill for the premises in the operator's name. Ollvy CA verifies both before filing. BKC, Lower Parel, Andheri, and other major business hubs have established co-working operators who provide these routinely.`,
       },
     ],
   },

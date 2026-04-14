@@ -34,7 +34,7 @@ export const gstMonthlyFiling: ServiceConfig = {
 
   seoTitle: 'GST Monthly Filing Service | GSTR-1 & GSTR-3B | From ₹2,999/month | Ollvy',
   seoDescription:
-    'Monthly GST filing handled by verified CA. GSTR-1 by 11th, GSTR-3B by 20th. Fixed price from ₹2,999/month. Monthly report included. Cancel anytime.',
+    'Monthly GST filing handled by verified Ollvy CA. GSTR-1 by 11th, GSTR-3B by 20th. Fixed price from ₹2,999/month. Monthly report included. Cancel anytime.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-monthly',
 
   processSteps: [
@@ -42,9 +42,9 @@ export const gstMonthlyFiling: ServiceConfig = {
       step: 1,
       title: 'Share your GST portal credentials',
       timeline: 'Day 0',
-      body: "Share read-only GST portal access\nCA reviews filing history and business pattern\nDedicated CA assigned for all monthly filings",
+      body: "Share read-only GST portal access\nOllvy CA reviews filing history and business pattern\nDedicated Ollvy CA assigned for all monthly filings",
       visual: 'checklist',
-      milestone: 'CA assigned to your account',
+      milestone: 'Ollvy CA assigned to your account',
     },
     {
       step: 2,
@@ -66,7 +66,7 @@ export const gstMonthlyFiling: ServiceConfig = {
       step: 4,
       title: 'GSTR-3B filed by the 20th',
       timeline: '18th-20th',
-      body: "GSTR-3B prepared from GSTR-1 and purchase data\nNet tax liability calculated, ITC verified against GSTR-2B\nChallan generated — you pay, done",
+      body: "GSTR-3B prepared from GSTR-1 and purchase data\nNet tax liability calculated, ITC verified against GSTR-2B\nChallan generated. You pay, done",
       visual: 'form',
       milestone: 'GSTR-3B filed and acknowledged',
     },
@@ -74,7 +74,7 @@ export const gstMonthlyFiling: ServiceConfig = {
       step: 5,
       title: 'Monthly compliance report delivered',
       timeline: '21st-25th',
-      body: "Monthly report delivered: filings, dates, acknowledgements\nITC claimed, tax paid, notices received — all documented",
+      body: "Monthly report delivered: filings, dates, acknowledgements\nITC claimed, tax paid, notices received, all documented",
       visual: 'checklist',
       isCompletion: true,
       milestone: 'Monthly report delivered',
@@ -94,7 +94,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     },
     {
       title: 'GSTR-3B - net tax payment',
-      body: "Output tax minus eligible ITC = your net GST liability\nChallan generated — you pay through your bank",
+      body: "Output tax minus eligible ITC = your net GST liability\nChallan generated. You pay through your bank",
     },
     {
       title: 'ITC reconciliation with GSTR-2B',
@@ -104,7 +104,7 @@ export const gstMonthlyFiling: ServiceConfig = {
     },
     {
       title: 'Monthly compliance report',
-      body: "What was filed, when, acknowledgement numbers, ITC claimed, tax paid — all in one report",
+      body: "What was filed, when, acknowledgement numbers, ITC claimed, tax paid, all in one report",
       mockVisualType: 'receipt',
       mockVisualData: {
         label: 'March 2025 Compliance Report',
@@ -154,7 +154,7 @@ export const gstMonthlyFiling: ServiceConfig = {
 
   reviewKeywordChips: [
     '✓ Filed on time every month',
-    '✓ CA is responsive',
+    '✓ Ollvy CA is responsive',
     '✓ Monthly report received',
     '✓ ITC reconciled',
     '✓ No surprises',

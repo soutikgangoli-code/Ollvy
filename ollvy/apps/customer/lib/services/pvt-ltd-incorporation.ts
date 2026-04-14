@@ -24,7 +24,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
 
   seoTitle: 'Private Limited Company Registration Online India | ₹24,999 | Ollvy',
   seoDescription:
-    'Register your Private Limited Company in India. Includes name reservation, DSC, DIN, MOA/AOA, and CIN. Fixed price ₹24,999 (₹9,999 Ollvy + ₹15,000 MCA). CA assigned within 4 hours.',
+    'Register your Private Limited Company in India. Includes name reservation, DSC, DIN, MOA/AOA, and CIN. Fixed price ₹24,999 (₹9,999 Ollvy + ₹15,000 MCA). Ollvy CA assigned within 4 hours.',
   canonicalUrl: 'https://www.ollvy.com/services/pvt-ltd-incorporation',
 
   processSteps: [
@@ -82,7 +82,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'DSC for all directors - video verification guided',
-      body: 'DSC is mandatory — we arrange the tokens and guide each director through video verification\n15 minutes per director',
+      body: 'DSC is mandatory. We arrange the tokens and guide each director through video verification\n15 minutes per director',
       comparisonWithout: 'Navigate DSC portals yourself - 3+ hours',
       comparisonWithOllvy: 'Guided flow in app - 15 minutes per director',
     },
@@ -115,7 +115,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     },
     {
       title: 'All documents stored permanently',
-      body: 'CoI, MOA, AOA, PAN, TAN, share certificates, DSC details — all in your Ollvy account\nYour CA will ask for these repeatedly over the years',
+      body: 'CoI, MOA, AOA, PAN, TAN, share certificates, DSC details, all in your Ollvy account\nYour Ollvy CA will need these repeatedly over the years',
     },
   ],
 
@@ -204,7 +204,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     {
       category: 'After Completion',
       q: 'What are my compliance obligations after incorporation?',
-      a: 'INC-20A (commencement of business) within 180 days — requires share capital deposited in a company bank account, so open a current account immediately. Annual: AOC-4 (30 days after AGM), MGT-7 (60 days after AGM), Director KYC by Sep 30, Business ITR by Oct 31.',
+      a: 'INC-20A (commencement of business) within 180 days. Requires share capital deposited in a company bank account, so open a current account immediately. Annual: AOC-4 (30 days after AGM), MGT-7 (60 days after AGM), Director KYC by Sep 30, Business ITR by Oct 31.',
     },
     {
       category: 'After Completion',

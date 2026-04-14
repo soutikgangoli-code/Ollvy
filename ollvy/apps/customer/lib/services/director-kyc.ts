@@ -29,7 +29,7 @@ export const directorKyc: ServiceConfig = {
       step: 1,
       title: 'Upload PAN and Aadhaar',
       timeline: 'Day 0',
-      body: "Two documents — that's it\nCS assigned within 4 hours\nDIN status checked on MCA portal\nIf DIN already deactivated, you're told upfront",
+      body: "Two documents. That's it\nCS assigned within 4 hours\nDIN status checked on MCA portal\nIf DIN already deactivated, you're told upfront",
       visual: 'upload',
       milestone: 'Documents received, DIN status checked',
     },
@@ -37,7 +37,7 @@ export const directorKyc: ServiceConfig = {
       step: 2,
       title: 'CS files DIR-3 KYC',
       timeline: 'Day 1',
-      body: "DIR-3 KYC form filled on MCA21\nOTP sent to registered mobile and email — you approve\n~10 minutes of your time",
+      body: "DIR-3 KYC form filled on MCA21\nOTP sent to registered mobile and email. You approve\n~10 minutes of your time",
       visual: 'form',
       milestone: 'DIR-3 KYC submitted to MCA',
     },
@@ -65,7 +65,7 @@ export const directorKyc: ServiceConfig = {
     },
     {
       title: 'OTP verification handled live',
-      body: "OTP verification on your registered mobile and email\nCS coordinates live — they file, you approve the OTP. About 10 minutes",
+      body: "OTP verification on your registered mobile and email\nCS coordinates live. They file, you approve the OTP. About 10 minutes",
     },
     {
       title: 'Next year reminder added automatically',

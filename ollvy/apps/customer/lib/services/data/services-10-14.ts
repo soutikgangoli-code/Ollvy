@@ -676,7 +676,7 @@ export const cloudKitchenSetup: ServicePageConfig = {
     },
     {
       title: 'GST registration',
-      description: 'Full GST registration including CA assignment, document verification, and ARN tracking. Included in the bundle.',
+      description: 'Full GST registration including Ollvy CA assignment, document verification, and ARN tracking. Included in the bundle.',
     },
     {
       title: 'Local trade/health licence',

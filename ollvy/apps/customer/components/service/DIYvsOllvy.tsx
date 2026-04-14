@@ -31,7 +31,7 @@ export const DATA: Record<string, DIYData> = {
     on_stat: 'Save 14 hrs + \u20B98,000.',
     on_date_label: 'Guaranteed by',
     rows: [
-      { task: 'Gathering documents', own: ' 3-4 hrs. One mismatch and you\'re back to square one.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% sail through.' },
+      { task: 'Gathering documents', own: ' 3-4 hrs. One mismatch and you\'re back to square one.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% go through.' },
       { task: 'Filing the application', own: '4-6 hrs on a portal that gives no error messages.', ollvy_head: 'CA checks every field.', ollvy_badge: 'ARN same day.' },
       { task: 'Getting it done', own: '7 days or 22. No way to know.', ollvy_head: 'We give you the exact date.', ollvy_badge: 'Late = free.' },
       { task: 'GST officer query', own: '1 in 5 get one. Wrong reply = restart from scratch.', ollvy_head: 'CA replies in 24 hrs.', ollvy_badge: 'Already included.' },
@@ -43,7 +43,7 @@ export const DATA: Record<string, DIYData> = {
     on_stat: 'Save 2 days + \u20B922,000.',
     on_date_label: 'Guaranteed by',
     rows: [
-      { task: 'Gathering documents', own: 'Physical DSC visit. One wrong doc and you restart.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% sail through.' },
+      { task: 'Gathering documents', own: 'Physical DSC visit. One wrong doc and you restart.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% go through.' },
       { task: 'Filing SPICe+', own: '6-10 hrs. Wrong name costs \u20B91,000 and 5 days.', ollvy_head: 'CA and CS handle everything.', ollvy_badge: 'CIN to your app.' },
       { task: 'Getting incorporated', own: '15-25 days. Deficiency notices appear with no warning.', ollvy_head: 'We give you the exact date.', ollvy_badge: 'Late = free.' },
       { task: 'MCA deficiency notices', own: '\u20B92,000-5,000 per round. Rounds are unlimited.', ollvy_head: 'Unlimited revisions.', ollvy_badge: 'Already included.' },
@@ -55,7 +55,7 @@ export const DATA: Record<string, DIYData> = {
     on_stat: 'Save 15 hrs + \u20B914,000.',
     on_date_label: 'Guaranteed by',
     rows: [
-      { task: 'Gathering documents', own: 'Physical DSC visit. Wrong doc = full day gone.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% sail through.' },
+      { task: 'Gathering documents', own: 'Physical DSC visit. Wrong doc = full day gone.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% go through.' },
       { task: 'Filing FiLLiP', own: 'Wrong name = 10-day delay. Agreement errors are worse.', ollvy_head: 'CS handles everything.', ollvy_badge: 'LLPIN to your app.' },
       { task: 'Getting registered', own: '15-20 days. Unpredictable from here.', ollvy_head: 'We give you the exact date.', ollvy_badge: 'Late = free.' },
       { task: 'MCA deficiency notices', own: '\u20B92,000-5,000 per round. No cap.', ollvy_head: 'Unlimited revisions.', ollvy_badge: 'Already included.' },

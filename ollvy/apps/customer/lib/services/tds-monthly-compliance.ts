@@ -23,7 +23,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
 
   seoTitle: 'TDS Filing Monthly Service | TDS Return & Challan | ₹1,999/mo | Ollvy',
   seoDescription:
-    'Monthly TDS compliance service. TDS calculation, challan deposit, and quarterly return filing. Fixed ₹1,999/month. CA assigned permanently.',
+    'Monthly TDS compliance service. TDS calculation, challan deposit, and quarterly return filing. Fixed ₹1,999/month. Ollvy CA assigned permanently.',
   canonicalUrl: 'https://www.ollvy.com/services/tds-monthly-compliance',
 
   processSteps: [
@@ -65,13 +65,13 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'TDS calculation for all payment types',
-      body: 'Salary (192), contractors (194C), professional fees (194J), rent (194I), interest (194A)\nEach has different rates and thresholds — correct rate applied automatically',
+      body: 'Salary (192), contractors (194C), professional fees (194J), rent (194I), interest (194A)\nEach has different rates and thresholds. Correct rate applied automatically',
       comparisonWithout: 'Guess the rate - risk under-deduction notice',
       comparisonWithOllvy: 'Correct TDS rate applied for every payment',
     },
     {
       title: 'Monthly challan preparation',
-      body: 'Challan needs the right BSR code, assessment year, and tax type\nWrong entries cause mismatched credits for your deductees\nWe prepare the challan — you just pay',
+      body: 'Challan needs the right BSR code, assessment year, and tax type\nWrong entries cause mismatched credits for your deductees\nWe prepare the challan. You just pay',
       mockVisualType: 'receipt',
       mockVisualData: {
         row1: 'Form 26Q - Q4 FY 2024-25',
@@ -137,7 +137,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   reviewKeywordChips: [
     '✓ Never missed 7th deadline',
     '✓ Form 16 ready on time',
-    '✓ CA explained rates',
+    '✓ Ollvy CA explained rates',
     '✓ Fixed monthly fee',
     '✓ No surprises',
   ],

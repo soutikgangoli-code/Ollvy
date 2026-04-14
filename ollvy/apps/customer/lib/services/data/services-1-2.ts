@@ -7,7 +7,7 @@ export const pvtLtdIncorporation: ServicePageConfig = {
   title: 'Private Limited Company Registration',
   tagline: 'Separate legal entity. Limited liability. Ready for investment.',
   seoTitle: 'Private Limited Company Registration in India 2025 | Ollvy',
-  seoDescription: 'Register your Pvt Ltd company in 15 working days. DSC, DIN, MOA/AOA, PAN, TAN included. CA/CS assigned same day. From Rs. 1,499 + govt fees.',
+  seoDescription: 'Register your Pvt Ltd company in 15 working days. DSC, DIN, MOA/AOA, PAN, TAN included. Ollvy CA/CS assigned same day. From Rs. 1,499 + govt fees.',
   canonicalUrl: 'https://www.ollvy.com/services/pvt-ltd-incorporation',
   lastReviewed: 'April 2026',
   category: 'Incorporation',
@@ -95,7 +95,7 @@ export const pvtLtdIncorporation: ServicePageConfig = {
     },
     {
       title: 'All documents stored permanently',
-      description: 'Certificate of Incorporation, MOA, AOA, PAN, TAN, share certificates - all in your Ollvy account. Your CA will ask for these every year.',
+      description: 'Certificate of Incorporation, MOA, AOA, PAN, TAN, share certificates - all in your Ollvy account. Ollvy CA will ask for these every year.',
     },
   ],
 

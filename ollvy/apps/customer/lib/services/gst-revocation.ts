@@ -21,7 +21,7 @@ export const gstRevocation: ServiceConfig = {
 
   seoTitle: 'GST Revocation Online India | Restore Cancelled GSTIN | ₹2,999 | Ollvy',
   seoDescription:
-    'GST cancelled by officer? File all pending returns and restore your GSTIN. Fixed price ₹2,999. CA assigned same day. 90-day window - act fast.',
+    'GST cancelled by officer? File all pending returns and restore your GSTIN. Fixed price ₹2,999. Ollvy CA assigned same day. 90-day window - act fast.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-revocation',
 
   processSteps: [

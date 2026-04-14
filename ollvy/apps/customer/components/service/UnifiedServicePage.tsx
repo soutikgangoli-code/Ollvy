@@ -843,7 +843,7 @@ export function UnifiedServicePage({
                       DOCUMENTS REQUIRED
                     </p>
                     <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-5">
-                      What you will give
+                      What you will provide
                     </h2>
 
                     <div className="rounded-xl border border-border overflow-hidden">

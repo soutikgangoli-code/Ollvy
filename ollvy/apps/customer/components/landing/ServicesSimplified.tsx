@@ -72,6 +72,11 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                   <span className="font-mono text-2xl font-bold text-foreground">
                     ₹{totalPrice.toLocaleString('en-IN')}
                   </span>
+                  {service.mrp && service.mrp > totalPrice && (
+                    <span className="font-mono text-sm text-muted-foreground line-through">
+                      ₹{service.mrp.toLocaleString('en-IN')}
+                    </span>
+                  )}
                   <span className="text-sm text-muted-foreground">
                     {service.isRetainer ? '/month' : 'all-in'}
                   </span>

@@ -56,7 +56,7 @@ export const trademarkRegistration: ServiceConfig = {
       step: 4,
       title: 'Examination and publication (handled)',
       timeline: '6-12 months (govt processing)',
-      body: "Registry examines application — objections handled by attorney\nMark published in Trademark Journal for 4 months\nNo opposition → registration granted",
+      body: "Registry examines application. Objections handled by attorney\nMark published in Trademark Journal for 4 months\nNo opposition → registration granted",
       visual: 'calendar',
       milestone: 'Under examination',
     },
@@ -80,11 +80,11 @@ export const trademarkRegistration: ServiceConfig = {
     },
     {
       title: 'Class selection guidance',
-      body: '45 classes exist under the Nice Classification\nAttorney recommends only the ones you actually need — no unnecessary filings',
+      body: '45 classes exist under the Nice Classification\nAttorney recommends only the ones you actually need. No unnecessary filings',
     },
     {
       title: 'Examiner objection response included',
-      body: 'Examiner objections are common for descriptive marks — your attorney handles the response\nIncluded in the service, not a separate charge',
+      body: 'Examiner objections are common for descriptive marks. Your attorney handles the response\nIncluded in the service, not a separate charge',
       comparisonWithout: 'Objection raised, you pay extra to respond',
       comparisonWithOllvy: 'Objection response included in service',
     },

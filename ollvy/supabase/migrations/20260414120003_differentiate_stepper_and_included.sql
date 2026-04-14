@@ -13,7 +13,7 @@ SET workflow_stages = '[
     "timeline": "Day 0",
     "body": "Business type, state, turnover, supply type\nCA assigned within 4 hours\nPersonalised checklist generated based on your entity type",
     "visual": "checklist",
-    "milestone": "CA assigned, personalised checklist sent"
+    "milestone": "Ollvy CA assigned, personalised checklist sent"
   },
   {
     "step": 2,
@@ -21,7 +21,7 @@ SET workflow_stages = '[
     "timeline": "Day 0-1",
     "body": "Upload in the app. Phone photos accepted\nCA reviews every document before filing",
     "visual": "upload",
-    "milestone": "Documents verified by CA"
+    "milestone": "Documents verified by Ollvy"
   },
   {
     "step": 3,
@@ -35,7 +35,7 @@ SET workflow_stages = '[
     "step": 4,
     "title": "Officer query handled if needed",
     "timeline": "Day 3-5 (if applicable)",
-    "body": "Officers may request clarifications within 7 days\nYour CA responds within 24 hours",
+    "body": "Officers may request clarifications within 7 days\nOllvy CA responds within 24 hours",
     "visual": "form"
   },
   {
@@ -55,8 +55,8 @@ WHERE slug = 'gst-registration';
 UPDATE service_packages
 SET whats_included = '[
   {
-    "title": "CA fills all 23 GSTN fields",
-    "body": "The government form has 23 fields across 5 tabs and times out constantly\nYou answer 5 questions in the app. Your CA handles the rest",
+    "title": "Ollvy CA fills all 23 GSTN fields",
+    "body": "The government form has 23 fields across 5 tabs and times out constantly\nYou answer 5 questions in the app. Ollvy CA handles the rest",
     "comparisonWithout": "23 fields, 5 tabs, 3-4 hours on GSTN portal",
     "comparisonWithOllvy": "5 questions in app, ~4 minutes",
     "mockVisualType": "status",
@@ -65,18 +65,18 @@ SET whats_included = '[
       "row1": "Business details - complete ✓",
       "row2": "Promoter/Partner info - complete ✓",
       "row3": "Place of business - complete ✓",
-      "note": "All 23 fields handled by your CA"
+      "note": "All 23 fields handled by Ollvy CA"
     }
   },
   {
     "title": "Every document reviewed before filing",
     "body": "Blurry Aadhaar, mismatched address, wrong format. These get caught before filing, not after an officer query",
     "comparisonWithout": "Upload and hope. Query comes 5 days later",
-    "comparisonWithOllvy": "CA reviews every document before submission"
+    "comparisonWithOllvy": "Ollvy reviews every document before submission"
   },
   {
     "title": "Officer queries included, no extra charge",
-    "body": "Happens in about 20% of cases. Your CA responds within 24 hours\nIncluded in the service, not an extra charge\nCommon queries: Aadhaar verification, address proof, bank details"
+    "body": "Happens in about 20% of cases. Ollvy CA responds within 24 hours\nIncluded in the service, not an extra charge\nCommon queries: Aadhaar verification, address proof, bank details"
   },
   {
     "title": "Compliance calendar auto-populated",
@@ -246,7 +246,7 @@ SET whats_included = '[
   },
   {
     "title": "All documents stored permanently",
-    "body": "CoI, MOA, AOA, PAN, TAN, share certificates, DSC details. All in your Ollvy account\nYour CA will ask for these repeatedly over the years"
+    "body": "CoI, MOA, AOA, PAN, TAN, share certificates, DSC details. All in your Ollvy account\nOllvy CA will ask for these repeatedly over the years"
   }
 ]'::jsonb,
     updated_at = now()
@@ -263,15 +263,15 @@ SET workflow_stages = '[
     "step": 1,
     "title": "Share your GST portal credentials",
     "timeline": "Day 0",
-    "body": "Share read-only GST portal access\nCA reviews filing history and business pattern\nDedicated CA assigned for all monthly filings",
+    "body": "Share read-only GST portal access\nOllvy CA reviews filing history and business pattern\nDedicated Ollvy CA assigned for all monthly filings",
     "visual": "checklist",
-    "milestone": "CA assigned to your account"
+    "milestone": "Ollvy CA assigned to your account"
   },
   {
     "step": 2,
     "title": "Upload sales invoices and purchase data",
     "timeline": "By 8th of month",
-    "body": "Upload sales invoices and purchase register in app\nTally/Zoho exports accepted directly\nCA reconciles data and prepares GSTR-1",
+    "body": "Upload sales invoices and purchase register in app\nTally/Zoho exports accepted directly\nOllvy CA reconciles data and prepares GSTR-1",
     "visual": "upload",
     "milestone": "Data received for the month"
   },
@@ -483,21 +483,21 @@ SET workflow_stages = '[
     "step": 1,
     "title": "Upload your financials: P&L, Balance Sheet, bank statements",
     "timeline": "Day 0-1",
-    "body": "CA assigned within 4 hours\nPersonalised document checklist based on entity type\nUpload via app: audited accounts, trial balance, bank statements, income docs",
+    "body": "Ollvy CA assigned within 4 hours\nPersonalised document checklist based on entity type\nUpload via app: audited accounts, trial balance, bank statements, income docs",
     "visual": "upload",
-    "milestone": "Documents received and assigned to CA"
+    "milestone": "Documents received and assigned to Ollvy CA"
   },
   {
     "step": 2,
-    "title": "CA reviews your books and prepares computation",
+    "title": "Ollvy CA reviews your books and prepares computation",
     "timeline": "Day 1-4",
-    "body": "P&L, Balance Sheet, depreciation, director remuneration reviewed\nIncome computation prepared\nDiscrepancies flagged through app. CA follows up, not the other way around",
+    "body": "P&L, Balance Sheet, depreciation, director remuneration reviewed\nIncome computation prepared\nDiscrepancies flagged through app. Ollvy follows up, not the other way around",
     "visual": "form",
     "milestone": "Draft computation shared for your review"
   },
   {
     "step": 3,
-    "title": "You review, approve, and CA files",
+    "title": "You review, approve, and Ollvy files",
     "timeline": "Day 4-7",
     "body": "Draft ITR shared in app: income, deductions, tax computation\nYou review and approve\nFiled to Income Tax portal within 24 hours of approval",
     "visual": "checklist",
@@ -523,7 +523,7 @@ SET whats_included = '[
     "title": "Depreciation review, not just data entry",
     "body": "Asset schedule and depreciation calculations reviewed\nIncorrect rates or missed depreciation on eligible assets caught\nThis directly affects your tax liability",
     "comparisonWithout": "You calculate depreciation, CA just enters it",
-    "comparisonWithOllvy": "CA reviews asset schedule and corrects rates"
+    "comparisonWithOllvy": "Ollvy reviews asset schedule and corrects rates"
   },
   {
     "title": "Director remuneration treatment",

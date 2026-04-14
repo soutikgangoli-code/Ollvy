@@ -785,7 +785,7 @@ export default function CheckoutPage() {
                 <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 font-mono">DOCUMENTS</p>
                 <h3 className="text-lg md:text-xl font-semibold text-foreground">Documents You'll Need</h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Keep these ready - your CA will guide you through each one
+                  Keep these ready - Ollvy CA will guide you through each one
                 </p>
               </div>
               {isLoading || !service ? (

@@ -7,7 +7,7 @@ export const gstRegistration: ServicePageConfig = {
   title: 'GST Registration',
   tagline: 'Your GSTIN, applied and obtained. ARN within 24 hours of filing.',
   seoTitle: 'GST Registration Online in India 2025 | Get GSTIN in 7 Days | Ollvy',
-  seoDescription: 'GST registration in 7 working days. CA assigned same day, ARN in 24 hours. No govt fee. Mandatory above Rs. 20 lakh turnover for services.',
+  seoDescription: 'GST registration in 7 working days. Ollvy CA assigned same day, ARN in 24 hours. No govt fee. Mandatory above Rs. 20 lakh turnover for services.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-registration',
   lastReviewed: 'April 2026',
   category: 'GST',
@@ -26,28 +26,28 @@ export const gstRegistration: ServicePageConfig = {
       step: 1,
       title: 'Answer 5 questions - we build your checklist',
       timeframe: 'Day 0',
-      description: 'Business type, state, turnover estimate, supply type (goods/services/both). CA assigned within 4 hours. They generate your specific document checklist - not the standard 20-item government list.',
-      milestone: 'CA assigned, personalised checklist sent',
+      description: 'Business type, state, turnover estimate, supply type (goods/services/both). Ollvy CA assigned within 4 hours. They generate your specific document checklist - not the standard 20-item government list.',
+      milestone: 'Ollvy CA assigned, personalised checklist sent',
     },
     {
       step: 2,
       title: 'Upload documents through the app',
       timeframe: 'Day 0-1',
-      description: 'CA reviews every document before filing - blurry Aadhaar, address mismatch, wrong format caught here, not after the officer raises a query.',
-      milestone: 'Documents verified by CA',
+      description: 'Ollvy CA reviews every document before filing - blurry Aadhaar, address mismatch, wrong format caught here, not after the officer raises a query.',
+      milestone: 'Documents verified by Ollvy CA',
     },
     {
       step: 3,
       title: 'Application filed - ARN in 24 hours',
       timeframe: 'Day 1-2',
-      description: 'CA files GST REG-01 on the GSTN portal. ARN generated immediately on submission and shared in your app the same day. Verify status yourself at gstn.gov.in.',
+      description: 'Ollvy CA files GST REG-01 on the GSTN portal. ARN generated immediately on submission and shared in your app the same day. Verify status yourself at gstn.gov.in.',
       milestone: 'ARN generated and sent to your app',
     },
     {
       step: 4,
       title: 'Officer query handled if applicable',
       timeframe: 'Day 3-5',
-      description: 'GST officers request clarifications in approximately 20% of cases, typically for Aadhaar verification or address proof. Your CA responds within 24 hours. Included in scope.',
+      description: 'GST officers request clarifications in approximately 20% of cases, typically for Aadhaar verification or address proof. Ollvy CA responds within 24 hours. Included in scope.',
       milestone: 'Query responded',
     },
     {
@@ -61,8 +61,8 @@ export const gstRegistration: ServicePageConfig = {
 
   included: [
     {
-      title: 'CA handles the GSTN portal - all 23 fields',
-      description: 'GST REG-01 has 23 fields across 5 tabs. Your CA completes the entire form. You answer 5 questions in the app.',
+      title: 'Ollvy CA handles the GSTN portal - all 23 fields',
+      description: 'GST REG-01 has 23 fields across 5 tabs. Ollvy CA completes the entire form. You answer 5 questions in the app.',
       without: '23 fields, 5 tabs, 3-4 hours on the government portal',
       withOllvy: '5 questions, approximately 4 minutes in the app',
     },
@@ -72,7 +72,7 @@ export const gstRegistration: ServicePageConfig = {
     },
     {
       title: 'Officer queries handled - no extra charge',
-      description: 'If the GST officer requests clarification, your CA responds within 24 hours. Part of the service, not a separate charge.',
+      description: 'If the GST officer requests clarification, Ollvy CA responds within 24 hours. Part of the service, not a separate charge.',
     },
     {
       title: 'Compliance calendar updated automatically',
@@ -83,7 +83,7 @@ export const gstRegistration: ServicePageConfig = {
   risks: [
     {
       title: 'Address proof mismatch',
-      description: 'The business address on all documents must match exactly - building name, floor, area, and PIN code. Your CA checks every document for consistency before filing.',
+      description: 'The business address on all documents must match exactly - building name, floor, area, and PIN code. Your Ollvy CA checks every document for consistency before filing.',
     },
     {
       title: 'Aadhaar OTP failure',
@@ -148,7 +148,7 @@ export const gstRegistration: ServicePageConfig = {
     {
       category: 'Process',
       q: 'What if the officer raises a query?',
-      a: 'Your CA responds within 24 hours. Included in the service at no extra charge. Most queries are resolved in one reply.',
+      a: 'Ollvy CA responds within 24 hours. Included in the service at no extra charge. Most queries are resolved in one reply.',
     },
     {
       category: 'After Completion',
@@ -198,7 +198,7 @@ export const gstMonthlyFiling: ServicePageConfig = {
   title: 'GST Monthly Filing',
   tagline: 'GSTR-1 by the 11th. GSTR-3B by the 20th. Every month.',
   seoTitle: 'GST Return Filing Service India 2025 | GSTR-1 & GSTR-3B | Ollvy',
-  seoDescription: 'Monthly GST filing handled by a CA. GSTR-1 by the 11th, GSTR-3B by the 20th, ITC reconciled every cycle. Cancel anytime.',
+  seoDescription: 'Monthly GST filing handled by an Ollvy CA. GSTR-1 by the 11th, GSTR-3B by the 20th, ITC reconciled every cycle. Cancel anytime.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-monthly-50l',
   lastReviewed: 'April 2026',
   category: 'GST',
@@ -217,8 +217,8 @@ export const gstMonthlyFiling: ServicePageConfig = {
       step: 1,
       title: 'Share your GST credentials',
       timeframe: 'Day 0',
-      description: 'Read-only access to your GST portal. CA reviews your filing history and is assigned to your account permanently.',
-      milestone: 'CA assigned to your account',
+      description: 'Read-only access to your GST portal. Ollvy CA reviews your filing history and is assigned to your account permanently.',
+      milestone: 'Ollvy CA assigned to your account',
     },
     {
       step: 2,
@@ -231,14 +231,14 @@ export const gstMonthlyFiling: ServicePageConfig = {
       step: 3,
       title: 'GSTR-1 filed by the 11th',
       timeframe: '9th-11th',
-      description: 'CA files all outward supply invoices. Acknowledgement shared in your app.',
+      description: 'Ollvy CA files all outward supply invoices. Acknowledgement shared in your app.',
       milestone: 'GSTR-1 filed',
     },
     {
       step: 4,
       title: 'GSTR-3B filed by the 20th',
       timeframe: '18th-20th',
-      description: 'CA prepares the summary return, verifies ITC claims against GSTR-2B, calculates net tax liability, and files. Challan generated.',
+      description: 'Ollvy CA prepares the summary return, verifies ITC claims against GSTR-2B, calculates net tax liability, and files. Challan generated.',
       milestone: 'GSTR-3B filed',
     },
     {
@@ -384,14 +384,14 @@ export const businessItr: ServicePageConfig = {
       step: 1,
       title: 'Upload your financials',
       timeframe: 'Day 0-1',
-      description: 'P&L, Balance Sheet, trial balance, bank statements. CA assigned within 4 hours.',
-      milestone: 'Documents received, CA assigned',
+      description: 'P&L, Balance Sheet, trial balance, bank statements. Ollvy CA assigned within 4 hours.',
+      milestone: 'Documents received, Ollvy CA assigned',
     },
     {
       step: 2,
-      title: 'CA reviews books and prepares computation',
+      title: 'Ollvy CA reviews books and prepares computation',
       timeframe: 'Day 1-4',
-      description: 'CA reviews P&L, verifies depreciation schedule, checks director remuneration treatment, and prepares income computation.',
+      description: 'Ollvy CA reviews P&L, verifies depreciation schedule, checks director remuneration treatment, and prepares income computation.',
       milestone: 'Draft computation ready',
     },
     {
@@ -405,7 +405,7 @@ export const businessItr: ServicePageConfig = {
       step: 4,
       title: 'Filed and acknowledgement delivered',
       timeframe: 'Day 7-10',
-      description: 'CA files within 24 hours of your approval. ITR-V acknowledgement generated immediately and shared same day.',
+      description: 'Ollvy CA files within 24 hours of your approval. ITR-V acknowledgement generated immediately and shared same day.',
       milestone: 'ITR-V acknowledgement delivered',
     },
   ],
@@ -413,11 +413,11 @@ export const businessItr: ServicePageConfig = {
   included: [
     {
       title: 'Depreciation review',
-      description: 'CA reviews your asset schedule and depreciation rates. Incorrect rates are flagged before filing.',
+      description: 'Ollvy CA reviews your asset schedule and depreciation rates. Incorrect rates are flagged before filing.',
     },
     {
       title: 'Director remuneration treatment',
-      description: 'For Pvt Ltd, how director salary is treated versus dividends has tax implications. CA reviews compliance with Companies Act limits.',
+      description: 'For Pvt Ltd, how director salary is treated versus dividends has tax implications. Ollvy CA reviews compliance with Companies Act limits.',
     },
     {
       title: 'Full draft review before filing',

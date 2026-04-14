@@ -24,7 +24,7 @@ export const iecCode: ServiceConfig = {
 
   seoTitle: 'IEC Code Registration Online India | Import Export Code | ₹4,499 | Ollvy',
   seoDescription:
-    'Get your Import Export Code (IEC) in 5 working days. Required for all imports and exports. Fixed price ₹4,499 (₹3,999 Ollvy + ₹500 govt fee). CA assigned same day.',
+    'Get your Import Export Code (IEC) in 5 working days. Required for all imports and exports. Fixed price ₹4,499 (₹3,999 Ollvy + ₹500 govt fee). Ollvy CA assigned same day.',
   canonicalUrl: 'https://www.ollvy.com/services/iec-code',
 
   processSteps: [
@@ -40,7 +40,7 @@ export const iecCode: ServiceConfig = {
       step: 2,
       title: 'Upload documents through the app',
       timeline: 'Day 0-1',
-      body: 'Business PAN, incorporation certificate, cancelled cheque or bank statement\nVerified before filing — mismatches caught early',
+      body: 'Business PAN, incorporation certificate, cancelled cheque or bank statement\nVerified before filing. Mismatches caught early',
       visual: 'upload',
       milestone: 'Documents verified',
     },
@@ -48,7 +48,7 @@ export const iecCode: ServiceConfig = {
       step: 3,
       title: 'Application filed on DGFT portal',
       timeline: 'Day 1-2',
-      body: 'Application filed on DGFT portal\nAadhaar OTP required for authorized signatory — guided through',
+      body: 'Application filed on DGFT portal\nAadhaar OTP required for authorized signatory. Guided through the process',
       visual: 'form',
       milestone: 'Application submitted to DGFT',
     },
@@ -56,7 +56,7 @@ export const iecCode: ServiceConfig = {
       step: 4,
       title: 'IEC issued - you can trade internationally',
       timeline: 'Day 3-5',
-      body: '10-digit IEC issued — valid for life, no renewal\nCertificate uploaded to your account\nCustoms clearance enabled for imports and exports',
+      body: '10-digit IEC issued, valid for life with no renewal\nCertificate uploaded to your account\nCustoms clearance enabled for imports and exports',
       visual: 'stamp',
       milestone: 'IEC certificate issued',
       isCompletion: true,
@@ -66,23 +66,23 @@ export const iecCode: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Filed on DGFT portal - not an outdated form',
-      body: 'Issued exclusively online through DGFT — PAN, Aadhaar, bank details must match exactly\nWe handle the submission, you verify the OTP',
+      body: 'Issued exclusively online through DGFT. PAN, Aadhaar, and bank details must match exactly\nWe handle the submission, you verify the OTP',
       comparisonWithout: 'Navigate DGFT portal - 2+ hours, frequent errors',
       comparisonWithOllvy: 'We file - you verify OTP - IEC in 5 days',
     },
     {
       title: 'Bank account verification guidance',
-      body: 'Cancelled cheque or bank statement needed — business name, account number, and IFSC must be visible\nMany applications fail because the account is in a personal name, not the business name\nVerified before filing',
+      body: 'Cancelled cheque or bank statement needed. Business name, account number, and IFSC must be visible\nMany applications fail because the account is in a personal name, not the business name\nVerified before filing',
       comparisonWithout: 'Rejection due to bank account mismatch',
       comparisonWithOllvy: 'Bank account verified before submission',
     },
     {
       title: 'Lifetime validity - no renewal',
-      body: 'Valid for life — no annual renewal unlike GST or FSSAI\nIf business details change (address, bank, directors), the profile needs updating (₹999)',
+      body: 'Valid for life. No annual renewal unlike GST or FSSAI\nIf business details change (address, bank, directors), the profile needs updating (₹999)',
     },
     {
       title: 'Ready to use at customs',
-      body: 'Active immediately on ICEGATE — file bills of entry (imports) and shipping bills (exports)\nNo additional registration required',
+      body: 'Active immediately on ICEGATE. File bills of entry (imports) and shipping bills (exports)\nNo additional registration required',
       mockVisualType: 'status',
       mockVisualData: {
         row1: 'IEC: 0123456789',

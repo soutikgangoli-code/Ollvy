@@ -21,7 +21,7 @@ export const gstCancellation: ServiceConfig = {
 
   seoTitle: 'GST Cancellation Online India | Surrender GSTIN | ₹1,999 | Ollvy',
   seoDescription:
-    'Cancel your GST registration online. All pending returns filed. GSTIN surrendered cleanly. Fixed price ₹1,999. CA assigned same day.',
+    'Cancel your GST registration online. All pending returns filed. GSTIN surrendered cleanly. Fixed price ₹1,999. Ollvy CA assigned same day.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-cancellation',
 
   processSteps: [

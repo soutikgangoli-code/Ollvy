@@ -5,7 +5,7 @@ BEGIN;
 
 -- 1. gst-registration
 UPDATE service_packages
-SET service_risks = '[{"icon":"document","title":"Address proof mismatch","body":"Address on all documents must match exactly\nOfficer flags even minor variations (flat number, society name)\nCA reviews for consistency before filing"},{"icon":"clock","title":"Aadhaar OTP fails","body":"Aadhaar OTP required — old or inactive mobile number causes failure\nMust be fixed at an Aadhaar centre, no workaround\nChecked upfront before filing"},{"icon":"alert","title":"Operating without registration","body":"Above ₹40L turnover (₹20L for services) without registration = 100% tax due + ₹10,000 penalty\nRegistration stops the liability from growing"}]'::jsonb,
+SET service_risks = '[{"icon":"document","title":"Address proof mismatch","body":"Address on all documents must match exactly\nOfficer flags even minor variations (flat number, society name)\nOllvy reviews for consistency before filing"},{"icon":"clock","title":"Aadhaar OTP fails","body":"Aadhaar OTP required. Old or inactive mobile number causes failure\nMust be fixed at an Aadhaar centre, no workaround\nChecked upfront before filing"},{"icon":"alert","title":"Operating without registration","body":"Above ₹40L turnover (₹20L for services) without registration = 100% tax due + ₹10,000 penalty\nRegistration stops the liability from growing"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'gst-registration';
 
@@ -17,19 +17,19 @@ WHERE slug = 'company-name-change';
 
 -- 3. pvt-ltd-incorporation
 UPDATE service_packages
-SET service_risks = '[{"icon":"document","title":"Name rejected by MCA","body":"MCA rejects similar names or restricted words (Bank, Insurance, Exchange)\nMCA + trademark databases searched before filing\nAll 3 rejected? Alternatives suggested at no extra cost"},{"icon":"mismatch","title":"Registered address document mismatch","body":"Utility bill address must match application exactly\nRented address requires landlord NOC\nCS verifies all address documents before filing"},{"icon":"clock","title":"Director slow on DSC video verification","body":"SPICe+ blocked until all directors complete DSC verification\n10–15 minutes per director, daily reminders sent"}]'::jsonb,
+SET service_risks = '[{"icon":"document","title":"Name rejected by MCA","body":"MCA rejects similar names or restricted words (Bank, Insurance, Exchange)\nMCA + trademark databases searched before filing\nAll 3 rejected? Alternatives suggested at no extra cost"},{"icon":"mismatch","title":"Registered address document mismatch","body":"Utility bill address must match application exactly\nRented address requires landlord NOC\nOllvy CS verifies all address documents before filing"},{"icon":"clock","title":"Director slow on DSC video verification","body":"SPICe+ blocked until all directors complete DSC verification\n10-15 minutes per director, daily reminders sent"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'pvt-ltd-incorporation';
 
 -- 4. gst-monthly
 UPDATE service_packages
-SET service_risks = '[{"icon":"clock","title":"Late fee accumulates quickly","body":"₹50/day per return, ₹100/day for both combined\n18% interest on unpaid tax\nAvoidable — share data by the 8th"},{"icon":"mismatch","title":"GSTR-1 and GSTR-3B figures must match","body":"GSTN auto-flags discrepancies between GSTR-1 and GSTR-3B\nBoth filed from the same data set to ensure consistency"},{"icon":"alert","title":"Vendor not filed = ITC blocked","body":"Vendor hasn''t filed GSTR-1 → their invoices missing from your GSTR-2B\nClaiming that ITC invites a mismatch notice\nChecked before claiming"}]'::jsonb,
+SET service_risks = '[{"icon":"clock","title":"Late fee accumulates quickly","body":"₹50/day per return, ₹100/day for both combined\n18% interest on unpaid tax\nAvoidable. Share data by the 8th"},{"icon":"mismatch","title":"GSTR-1 and GSTR-3B figures must match","body":"GSTN auto-flags discrepancies between GSTR-1 and GSTR-3B\nBoth filed from the same data set to ensure consistency"},{"icon":"alert","title":"Vendor not filed = ITC blocked","body":"Vendor hasn''t filed GSTR-1. Their invoices missing from your GSTR-2B\nClaiming that ITC invites a mismatch notice\nChecked before claiming"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'gst-monthly';
 
 -- 5. trademark-registration
 UPDATE service_packages
-SET service_risks = '[{"icon":"document","title":"Similar mark already exists","body":"Similar mark in your class = rejection\nSearch catches most conflicts, but unpublished pending apps are invisible\nIf rejected, appeal or modification assisted"},{"icon":"clock","title":"Government processing takes 12-18 months","body":"7-day timeline = filing only\nExamination, publication, certificate are government-side (12–18 months)\nTracked and updated, but cannot be sped up"},{"icon":"alert","title":"Opposition during publication","body":"Mark published for 4 months — anyone can oppose\nOpposition = formal legal proceeding (separate service)\nRare — under 5% of cases"}]'::jsonb,
+SET service_risks = '[{"icon":"document","title":"Similar mark already exists","body":"Similar mark in your class = rejection\nSearch catches most conflicts, but unpublished pending apps are invisible\nIf rejected, appeal or modification assisted"},{"icon":"clock","title":"Government processing takes 12-18 months","body":"7-day timeline = filing only\nExamination, publication, certificate are government-side (12-18 months)\nTracked and updated, but cannot be sped up"},{"icon":"alert","title":"Opposition during publication","body":"Mark published for 4 months. Anyone can oppose\nOpposition = formal legal proceeding (separate service)\nRare. Under 5% of cases"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'trademark-registration';
 
@@ -53,13 +53,13 @@ WHERE slug = 'llp-incorporation';
 
 -- 9. mca-annual-filing
 UPDATE service_packages
-SET service_risks = '[{"icon":"document","title":"Audit must be complete first","body":"AOC-4 requires signed, audited financials\nCannot file until audit is complete\nPlan audit timeline accordingly"},{"icon":"clock","title":"AGM not held on time","body":"AGM delayed past Sep 30 → filing deadlines shift\nNew deadlines calculated from actual AGM date"},{"icon":"alert","title":"Penalty accrues daily","body":"₹100/day per form, ₹200/day for both — no ceiling\nFile as soon as documents are ready"}]'::jsonb,
+SET service_risks = '[{"icon":"document","title":"Audit must be complete first","body":"AOC-4 requires signed, audited financials\nCannot file until audit is complete\nPlan audit timeline accordingly"},{"icon":"clock","title":"AGM not held on time","body":"AGM delayed past Sep 30. Filing deadlines shift\nNew deadlines calculated from actual AGM date"},{"icon":"alert","title":"Penalty accrues daily","body":"₹100/day per form, ₹200/day for both. No ceiling\nFile as soon as documents are ready"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'mca-annual-filing';
 
 -- 10. fssai-license
 UPDATE service_packages
-SET service_risks = '[{"icon":"document","title":"Wrong license type filed","body":"Filing Registration when you need State License = rejection\nWorse: getting Registration then facing penalties for insufficient license\nTurnover verified before filing"},{"icon":"building","title":"Premises inspection failure","body":"Common failures: missing pest control cert, outdated water test, no staff medical fitness\nDocumentation issues, not actual violations\nPre-inspection checklist provided"},{"icon":"alert","title":"Operating without license","body":"₹10,000 penalty + ₹100/day for operating without license\nSerious violations: goods seized and destroyed\nE-commerce platforms require FSSAI number — no number, no listing"}]'::jsonb,
+SET service_risks = '[{"icon":"document","title":"Wrong license type filed","body":"Filing Registration when you need State License = rejection\nWorse: getting Registration then facing penalties for insufficient license\nTurnover verified before filing"},{"icon":"building","title":"Premises inspection failure","body":"Common failures: missing pest control cert, outdated water test, no staff medical fitness\nDocumentation issues, not actual violations\nPre-inspection checklist provided"},{"icon":"alert","title":"Operating without license","body":"₹10,000 penalty + ₹100/day for operating without license\nSerious violations: goods seized and destroyed\nE-commerce platforms require FSSAI number. No number, no listing"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'fssai-license';
 
@@ -71,7 +71,7 @@ WHERE slug = 'iec-code';
 
 -- 12. director-kyc
 UPDATE service_packages
-SET service_risks = '[{"icon":"clock","title":"₹5,000/day penalty - starts immediately","body":"Penalty starts Oct 1 — ₹91,000 per director by Dec 31\nMultiple directors multiply this\nDIN deactivated, all company filings blocked"},{"icon":"building","title":"All MCA filings blocked","body":"Deactivated DIN blocks: annual returns, director changes, share transfers\nEverything stops until KYC is filed"}]'::jsonb,
+SET service_risks = '[{"icon":"clock","title":"₹5,000/day penalty - starts immediately","body":"Penalty starts Oct 1. ₹91,000 per director by Dec 31\nMultiple directors multiply this\nDIN deactivated, all company filings blocked"},{"icon":"building","title":"All MCA filings blocked","body":"Deactivated DIN blocks: annual returns, director changes, share transfers\nEverything stops until KYC is filed"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'director-kyc';
 
@@ -89,7 +89,7 @@ WHERE slug = 'gst-revocation';
 
 -- 15. din-reactivation
 UPDATE service_packages
-SET service_risks = '[{"icon":"clock","title":"Rs 5,000 per missed year","body":"₹5,000 govt fee per missed year — mandatory, non-negotiable\nMultiple missed years = multiple fees"},{"icon":"building","title":"All companies blocked until DIN is active","body":"Every company where you are director is blocked from MCA filings\nImpact not limited to one company"}]'::jsonb,
+SET service_risks = '[{"icon":"clock","title":"Rs 5,000 per missed year","body":"₹5,000 govt fee per missed year. Mandatory, non-negotiable\nMultiple missed years = multiple fees"},{"icon":"building","title":"All companies blocked until DIN is active","body":"Every company where you are director is blocked from MCA filings\nImpact not limited to one company"}]'::jsonb,
     updated_at = now()
 WHERE slug = 'din-reactivation';
 

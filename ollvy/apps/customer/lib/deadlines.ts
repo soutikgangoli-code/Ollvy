@@ -131,7 +131,7 @@ export const DEADLINES: DeadlineConfig[] = [
       'File your GSTR-9 annual return for FY 2025-26 before December 31. Fixed price ₹4,999. CA assigned same day.',
     canonicalUrl: 'https://www.ollvy.com/gst-annual-2026',
     documentTab: 'pvt_ltd',
-    documentHeading: 'What your CA will ask for to file GSTR-9',
+    documentHeading: 'What Ollvy CA will ask for to file GSTR-9',
     risks: [
       {
         title: '₹200/day late fee - no ceiling',
@@ -324,7 +324,7 @@ export const DEADLINES: DeadlineConfig[] = [
       },
       {
         q: 'What forms do I need to file for TDS returns?',
-        a: 'Form 24Q is for TDS on salary. Form 26Q is for TDS on payments other than salary (rent, professional fees, contractor payments). Form 27Q is for TDS on payments to non-residents. Most businesses with employees and vendors will file both 24Q and 26Q. Your CA determines which forms apply based on your deductions.',
+        a: 'Form 24Q is for TDS on salary. Form 26Q is for TDS on payments other than salary (rent, professional fees, contractor payments). Form 27Q is for TDS on payments to non-residents. Most businesses with employees and vendors will file both 24Q and 26Q. Ollvy CA determines which forms apply based on your deductions.',
       },
       {
         q: 'What documents are needed to file TDS returns?',
@@ -424,7 +424,7 @@ export const DEADLINES: DeadlineConfig[] = [
     heroTagline: 'GST Annual Return - FY 2026-27',
     purposeLabel: 'GST ANNUAL FILING',
     eligibilityLabel: 'All GST-registered businesses with annual aggregate turnover above ₹2 crore',
-    urgencyLine: 'GSTR-9 reconciles your entire year of GST returns into one final statement. Due December 31 - and it requires your CA to reconcile 12 months of GSTR-1, 3B, and 2A data before filing.',
+    urgencyLine: 'GSTR-9 reconciles your entire year of GST returns into one final statement. Due December 31 - and it requires Ollvy CA to reconcile 12 months of GSTR-1, 3B, and 2A data before filing.',
     penaltyLine: "Past due: ₹200/day in late fees (₹100 CGST + ₹100 SGST) starts January 1, capped at 0.25% of your annual turnover. On ₹2Cr turnover, that's ₹50,000 in fees.",
     ollvyFee: 4999,
     govtFee: 0,
@@ -434,7 +434,7 @@ export const DEADLINES: DeadlineConfig[] = [
       "File GSTR-9 for FY 2026-27 before December 31, 2027. From ₹4,999 with a dedicated GST expert. Late fees start at ₹200/day - don't miss it.",
     canonicalUrl: 'https://www.ollvy.com/gst-annual-2027',
     documentTab: 'pvt_ltd',
-    documentHeading: 'What your CA will ask for to file GSTR-9',
+    documentHeading: 'What Ollvy CA will ask for to file GSTR-9',
     risks: [
       {
         title: '₹200/day and it compounds with turnover',

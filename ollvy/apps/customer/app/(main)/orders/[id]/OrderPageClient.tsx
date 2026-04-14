@@ -1592,14 +1592,14 @@ export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) 
                 <div className="flex items-center gap-2">
                   <MessageSquare className="h-4 w-4 text-muted-foreground" />
                   <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                    Chat with your CA
+                    Chat with Ollvy CA
                   </span>
                 </div>
               </div>
               <div className="flex-1 min-h-0">
                 <ChatWindow
                   conversationId={order.chat_conversation_id}
-                  professionalName={(order.professional as { name?: string })?.name || 'Your CA'}
+                  professionalName={(order.professional as { name?: string })?.name || 'Ollvy CA'}
                 />
               </div>
             </div>

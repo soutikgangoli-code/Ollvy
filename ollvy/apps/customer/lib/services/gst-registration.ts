@@ -21,7 +21,7 @@ export const gstRegistration: ServiceConfig = {
 
   seoTitle: 'GST Registration Online India - GSTIN in 7 Days | ₹8,999 | Ollvy',
   seoDescription:
-    'Get your GSTIN in 7 working days. No government fee. Fixed price ₹8,999. CA assigned same day. ARN shared within 24 hours of filing.',
+    'Get your GSTIN in 7 working days. No government fee. Fixed price ₹8,999. Ollvy CA assigned same day. ARN shared within 24 hours of filing.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-registration',
 
   processSteps: [
@@ -29,17 +29,17 @@ export const gstRegistration: ServiceConfig = {
       step: 1,
       title: 'Answer 5 questions - we build your personalised checklist',
       timeline: 'Day 0',
-      body: "Business type, state, turnover, supply type, voluntary registration\nCA assigned within 4 hours\nPersonalised checklist generated — not the standard 20-item govt list\nSole proprietor with domestic sales? 4 documents, not 20",
+      body: "Business type, state, turnover, supply type, voluntary registration\nOllvy CA assigned within 4 hours\nPersonalised checklist generated. Not the standard 20-item govt list\nSole proprietor with domestic sales? 4 documents, not 20",
       visual: 'checklist',
-      milestone: 'CA assigned, personalised checklist sent',
+      milestone: 'Ollvy CA assigned, personalised checklist sent',
     },
     {
       step: 2,
       title: 'Upload documents through the app',
       timeline: 'Day 0-1',
-      body: 'Upload directly in the app — phone photos accepted\nCA reviews every document before filing\nBlurry Aadhaar, mismatched address, wrong format — caught here, not after officer query',
+      body: 'Upload directly in the app, phone photos accepted\nOllvy CA reviews every document before filing\nBlurry Aadhaar, mismatched address, wrong format. Caught here, not after officer query',
       visual: 'upload',
-      milestone: 'Documents verified by CA',
+      milestone: 'Documents verified by Ollvy CA',
     },
     {
       step: 3,
@@ -51,16 +51,16 @@ export const gstRegistration: ServiceConfig = {
     },
     {
       step: 4,
-      title: 'If an officer query arrives, your CA handles it',
+      title: 'If an officer query arrives, Ollvy CA handles it',
       timeline: 'Day 3-5 (if applicable)',
-      body: "Officers may request clarifications within 7 days\nCA responds within 24 hours — included, no extra charge\nCommon queries: Aadhaar verification, address proof mismatch — both resolvable",
+      body: "Officers may request clarifications within 7 days\nOllvy CA responds within 24 hours. Included, no extra charge\nCommon queries: Aadhaar verification, address proof mismatch. Both resolvable",
       visual: 'form',
     },
     {
       step: 5,
       title: 'GSTIN issued',
       timeline: 'Day 5-7',
-      body: "GSTIN issued — permanent, no renewal, no expiry\nDelivered to app immediately\nCompliance calendar auto-updated: GSTR-1 (11th) and GSTR-3B (20th) due dates added",
+      body: "GSTIN issued. Permanent, no renewal, no expiry\nDelivered to app immediately\nCompliance calendar auto-updated: GSTR-1 (11th) and GSTR-3B (20th) due dates added",
       visual: 'stamp',
       isCompletion: true,
       milestone: 'GSTIN active on GSTN portal',
@@ -69,8 +69,8 @@ export const gstRegistration: ServiceConfig = {
 
   whatsIncluded: [
     {
-      title: 'CA handles the GSTN portal - all 23 fields',
-      body: "The government form has 23 fields across 5 tabs and times out constantly\nYour CA fills the whole thing — you answer 5 questions in the app",
+      title: 'Ollvy CA handles the GSTN portal - all 23 fields',
+      body: "The government form has 23 fields across 5 tabs and times out constantly\nOllvy CA fills the whole thing. You answer 5 questions in the app",
       comparisonWithout: '23 fields · 5 tabs · 3-4 hours on GSTN portal',
       comparisonWithOllvy: '5 questions in app · ~4 minutes',
       mockVisualType: 'status',
@@ -79,7 +79,7 @@ export const gstRegistration: ServiceConfig = {
         row1: 'Business details - complete ✓',
         row2: 'Promoter/Partner info - complete ✓',
         row3: 'Place of business - complete ✓',
-        note: 'All 23 fields handled by your CA',
+        note: 'All 23 fields handled by Ollvy CA',
       },
     },
     {
@@ -94,7 +94,7 @@ export const gstRegistration: ServiceConfig = {
     },
     {
       title: 'Officer queries handled - no extra charge',
-      body: "Happens in about 20% of cases — your CA responds within 24 hours\nIncluded in the service, not an extra charge\nCommon queries: Aadhaar verification, address proof, bank details",
+      body: "Happens in about 20% of cases. Ollvy CA responds within 24 hours\nIncluded in the service, not an extra charge\nCommon queries: Aadhaar verification, address proof, bank details",
     },
     {
       title: 'Compliance calendar updated automatically',
@@ -148,7 +148,7 @@ export const gstRegistration: ServiceConfig = {
 
   reviewKeywordChips: [
     '✓ GSTIN in 5 days',
-    '✓ CA was responsive',
+    '✓ Ollvy CA was responsive',
     '✓ ARN shared same day',
     '✓ No extra charges',
     '✓ Officer query handled',
@@ -175,7 +175,7 @@ export const gstRegistration: ServiceConfig = {
     {
       category: 'Process',
       q: 'What if the officer raises a query?',
-      a: 'Your CA responds within 24 hours. Included in the service. Most queries are resolved in one reply.',
+      a: 'Ollvy CA responds within 24 hours. Included in the service. Most queries are resolved in one reply.',
     },
     {
       category: 'Documents',

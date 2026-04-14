@@ -40,7 +40,7 @@ export const fssaiLicense: ServiceConfig = {
       step: 2,
       title: 'Upload documents through the app',
       timeline: 'Day 0-1',
-      body: 'Documents: registration proof, food safety plan, layout plan, equipment list, water test\nExact list sent based on your license type — not the generic one',
+      body: 'Documents: registration proof, food safety plan, layout plan, equipment list, water test\nExact list sent based on your license type, not the generic one',
       visual: 'upload',
       milestone: 'Documents verified',
     },
@@ -63,7 +63,7 @@ export const fssaiLicense: ServiceConfig = {
       step: 5,
       title: 'FSSAI license issued',
       timeline: 'Day 8-10',
-      body: '14-digit FSSAI license issued\nPrint on all food packaging — legally required\nRenewal reminder added to compliance calendar',
+      body: '14-digit FSSAI license issued\nPrint on all food packaging. Legally required\nRenewal reminder added to compliance calendar',
       visual: 'stamp',
       milestone: 'FSSAI license active',
       isCompletion: true,
@@ -79,7 +79,7 @@ export const fssaiLicense: ServiceConfig = {
     },
     {
       title: 'Application filed on FSSAI portal',
-      body: '20+ fields on the FSSAI portal per application type\nYou answer 5 questions in the app — the rest is handled',
+      body: '20+ fields on the FSSAI portal per application type\nYou answer 5 questions in the app. The rest is handled',
       comparisonWithout: '2+ hours on FSSAI portal, frequent session timeouts',
       comparisonWithOllvy: '5 questions in app - we file the rest',
     },
@@ -167,7 +167,7 @@ export const fssaiLicense: ServiceConfig = {
     {
       category: 'Process',
       q: 'How long is the license valid?',
-      a: '1 to 5 years — you choose at the time of application. Fees scale accordingly. Renewal must be filed 30 days before expiry.',
+      a: '1 to 5 years. You choose at the time of application. Fees scale accordingly. Renewal must be filed 30 days before expiry.',
     },
     {
       category: 'Process',

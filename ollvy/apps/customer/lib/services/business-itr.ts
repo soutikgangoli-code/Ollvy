@@ -21,7 +21,7 @@ export const businessItr: ServiceConfig = {
 
   seoTitle: 'Business ITR Filing 2025 | ITR-6, ITR-5 | ₹11,999 | Ollvy',
   seoDescription:
-    'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31. Fixed price ₹11,999. Verified CA assigned within 24 hours. Includes P&L review and depreciation.',
+    'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31. Fixed price ₹11,999. Verified Ollvy CA assigned within 24 hours. Includes P&L review and depreciation.',
   canonicalUrl: 'https://www.ollvy.com/services/business-itr',
 
   processSteps: [
@@ -29,21 +29,21 @@ export const businessItr: ServiceConfig = {
       step: 1,
       title: 'Upload your financials - P&L, Balance Sheet, bank statements',
       timeline: 'Day 0-1',
-      body: "CA assigned within 4 hours\nPersonalised document checklist based on entity type\nUpload via app: audited accounts, trial balance, bank statements, income docs",
+      body: "Ollvy CA assigned within 4 hours\nPersonalised document checklist based on entity type\nUpload via app: audited accounts, trial balance, bank statements, income docs",
       visual: 'upload',
-      milestone: 'Documents received and assigned to CA',
+      milestone: 'Documents received and assigned to Ollvy CA',
     },
     {
       step: 2,
-      title: 'CA reviews your books and prepares computation',
+      title: 'Ollvy CA reviews your books and prepares computation',
       timeline: 'Day 1-4',
-      body: "P&L, Balance Sheet, depreciation, director remuneration reviewed\nIncome computation prepared\nDiscrepancies flagged through app — CA chases you, not the other way",
+      body: "P&L, Balance Sheet, depreciation, director remuneration reviewed\nIncome computation prepared\nDiscrepancies flagged through app. Ollvy CA chases you, not the other way",
       visual: 'form',
       milestone: 'Draft computation shared for your review',
     },
     {
       step: 3,
-      title: 'You review, approve, and CA files',
+      title: 'You review, approve, and Ollvy CA files',
       timeline: 'Day 4-7',
       body: "Draft ITR shared in app: income, deductions, tax computation\nYou review and approve\nFiled to Income Tax portal within 24 hours of approval",
       visual: 'checklist',
@@ -65,7 +65,7 @@ export const businessItr: ServiceConfig = {
       title: 'Depreciation review - not just data entry',
       body: "Asset schedule and depreciation calculations reviewed\nIncorrect rates or missed depreciation on eligible assets caught\nThis directly affects your tax liability",
       comparisonWithout: 'You calculate depreciation, CA just enters it',
-      comparisonWithOllvy: 'CA reviews asset schedule and corrects rates',
+      comparisonWithOllvy: 'Ollvy CA reviews asset schedule and corrects rates',
     },
     {
       title: 'Director remuneration treatment',
@@ -73,13 +73,13 @@ export const businessItr: ServiceConfig = {
     },
     {
       title: 'Draft review before filing',
-      body: "Full draft shared before filing — income, deductions, tax computation\nYou review and approve in the app. Nothing goes to the portal without your sign-off",
+      body: "Full draft shared before filing, including income, deductions, and tax computation\nYou review and approve in the app. Nothing goes to the portal without your sign-off",
       comparisonWithout: 'ITR filed, acknowledgement sent, no review',
       comparisonWithOllvy: 'Draft shared, you approve, then we file',
     },
     {
       title: 'Acknowledgement stored permanently',
-      body: "ITR-V uploaded the moment it's generated\nStored permanently — accessible for loans, audits, or anything else years later",
+      body: "ITR-V uploaded the moment it's generated\nStored permanently. Accessible for loans, audits, or anything else years later",
       mockVisualType: 'receipt',
       mockVisualData: {
         label: 'ITR-V Acknowledgement',
@@ -129,7 +129,7 @@ export const businessItr: ServiceConfig = {
 
   reviewKeywordChips: [
     '✓ Filed before deadline',
-    '✓ CA reviewed depreciation',
+    '✓ Ollvy CA reviewed depreciation',
     '✓ Draft shared before filing',
     '✓ Acknowledgement same day',
     '✓ No surprises',
