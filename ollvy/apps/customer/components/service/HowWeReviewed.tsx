@@ -39,44 +39,40 @@ export function HowWeReviewed({ service }: { service: DBServiceConfig }) {
         ))}
       </div>
 
-      {activeTab === 'sources' && (
-        <ul className="space-y-3">
-          {service.reviewSources.map((source) => (
-            <li key={source.name} className="flex items-start gap-3">
-              <div className="w-1 h-1 rounded-full bg-muted-foreground mt-2 shrink-0" />
-              <div>
-                <a
-                  href={source.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs font-medium text-foreground hover:underline inline-flex items-center gap-1"
-                >
-                  {source.name}
-                  <ExternalLink size={9} className="opacity-50" />
-                </a>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {source.description}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className={cn('space-y-3', activeTab !== 'sources' && 'hidden')}>
+        {service.reviewSources.map((source) => (
+          <li key={source.name} className="flex items-start gap-3">
+            <div className="w-1 h-1 rounded-full bg-muted-foreground mt-2 shrink-0" />
+            <div>
+              <a
+                href={source.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-medium text-foreground hover:underline inline-flex items-center gap-1"
+              >
+                {source.name}
+                <ExternalLink size={9} className="opacity-50" />
+              </a>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {source.description}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
 
-      {activeTab === 'history' && (
-        <div>
-          <p className="text-xs text-muted-foreground">
-            Last reviewed:{' '}
-            <span className="text-foreground font-medium">
-              {LAST_REVIEWED[service.slug] ?? 'March 2025'}
-            </span>
-          </p>
-          <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
-            Penalty amounts and deadlines are manually verified against source
-            portals when any regulatory update is announced.
-          </p>
-        </div>
-      )}
+      <div className={cn(activeTab !== 'history' && 'hidden')}>
+        <p className="text-xs text-muted-foreground">
+          Last reviewed:{' '}
+          <span className="text-foreground font-medium">
+            {LAST_REVIEWED[service.slug] ?? 'March 2025'}
+          </span>
+        </p>
+        <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+          Penalty amounts and deadlines are manually verified against source
+          portals when any regulatory update is announced.
+        </p>
+      </div>
     </div>
   )
 }

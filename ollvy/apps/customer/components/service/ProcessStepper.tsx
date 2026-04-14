@@ -40,9 +40,6 @@ const QUESTIONNAIRE_BASED_SERVICES = [
 export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesByState }: ProcessStepperProps) {
   const [active, setActive] = useState(0)
 
-  const step = steps[active]
-  const Icon = STEP_ICONS[step.visual ?? 'form']
-
   return (
     <div className="border border-border rounded-xl bg-card overflow-hidden">
       {/* Step numbers track */}
@@ -79,77 +76,85 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
         ))}
       </div>
 
-      {/* Step content */}
-      <div
-        key={active}
-        className="p-5 sm:p-8 min-h-[220px] sm:min-h-[280px] flex flex-col"
-      >
-        {/* Step icon + timeline badge row */}
-        <div className="flex items-center justify-between mb-3 sm:mb-4">
+      {/* Step content — all steps rendered for SEO, only active one visible */}
+      {steps.map((s, i) => {
+        const StepIcon = STEP_ICONS[s.visual ?? 'form']
+        return (
           <div
+            key={i}
             className={cn(
-              'w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center',
-              step.isCompletion
-                ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
-                : 'bg-muted text-muted-foreground'
+              'p-5 sm:p-8 min-h-[220px] sm:min-h-[280px] flex flex-col',
+              i !== active && 'hidden'
             )}
           >
-            <Icon size={18} />
+            {/* Step icon + timeline badge row */}
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div
+                className={cn(
+                  'w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center',
+                  s.isCompletion
+                    ? 'bg-[hsl(var(--ollvy-green))]/15 text-[hsl(var(--ollvy-green))]'
+                    : 'bg-muted text-muted-foreground'
+                )}
+              >
+                <StepIcon size={18} />
+              </div>
+              <span className={cn(
+                'text-xs border rounded-full px-3 py-1 font-mono',
+                s.isCompletion
+                  ? 'border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 text-[hsl(var(--ollvy-green-fg))]'
+                  : 'border-border text-muted-foreground'
+              )}>
+                {s.timeline}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 className="text-base sm:text-xl font-semibold text-foreground leading-snug mb-2 sm:mb-3">
+              {s.title}
+            </h3>
+
+            {/* Body */}
+            {s.body.includes('\n') ? (
+              <ul className="text-sm text-muted-foreground leading-relaxed flex-1 list-disc list-inside space-y-1">
+                {s.body.split('\n').filter(Boolean).map((line, li) => (
+                  <li key={li}>{line}</li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+                {s.body}
+              </p>
+            )}
+
+            {/* Milestone */}
+            {s.milestone && (
+              <div className={cn(
+                'mt-3 sm:mt-5 flex items-center gap-2 sm:gap-2.5 rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 border',
+                s.isCompletion
+                  ? 'bg-[hsl(var(--ollvy-green))]/5 border-[hsl(var(--ollvy-green))]/20'
+                  : 'bg-muted/30 border-border'
+              )}>
+                <div
+                  className={cn(
+                    'w-2 h-2 rounded-full shrink-0',
+                    s.isCompletion
+                      ? 'bg-[hsl(var(--ollvy-green))]'
+                      : 'bg-muted-foreground/40'
+                  )}
+                />
+                <p className={cn(
+                  'text-xs',
+                  s.isCompletion ? 'text-[hsl(var(--ollvy-green-fg))] font-medium' : 'text-muted-foreground'
+                )}>
+                  {s.isCompletion ? '✓ ' : ''}
+                  {s.milestone}
+                </p>
+              </div>
+            )}
           </div>
-          <span className={cn(
-            'text-xs border rounded-full px-3 py-1 font-mono',
-            step.isCompletion
-              ? 'border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 text-[hsl(var(--ollvy-green-fg))]'
-              : 'border-border text-muted-foreground'
-          )}>
-            {step.timeline}
-          </span>
-        </div>
-
-        {/* Title */}
-        <h3 className="text-base sm:text-xl font-semibold text-foreground leading-snug mb-2 sm:mb-3">
-          {step.title}
-        </h3>
-
-        {/* Body */}
-        {step.body.includes('\n') ? (
-          <ul className="text-sm text-muted-foreground leading-relaxed flex-1 list-disc list-inside space-y-1">
-            {step.body.split('\n').filter(Boolean).map((line, i) => (
-              <li key={i}>{line}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-            {step.body}
-          </p>
-        )}
-
-        {/* Milestone */}
-        {step.milestone && (
-          <div className={cn(
-            'mt-3 sm:mt-5 flex items-center gap-2 sm:gap-2.5 rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 border',
-            step.isCompletion
-              ? 'bg-[hsl(var(--ollvy-green))]/5 border-[hsl(var(--ollvy-green))]/20'
-              : 'bg-muted/30 border-border'
-          )}>
-            <div
-              className={cn(
-                'w-2 h-2 rounded-full shrink-0',
-                step.isCompletion
-                  ? 'bg-[hsl(var(--ollvy-green))]'
-                  : 'bg-muted-foreground/40'
-              )}
-            />
-            <p className={cn(
-              'text-xs',
-              step.isCompletion ? 'text-[hsl(var(--ollvy-green-fg))] font-medium' : 'text-muted-foreground'
-            )}>
-              {step.isCompletion ? '✓ ' : ''}
-              {step.milestone}
-            </p>
-          </div>
-        )}
-      </div>
+        )
+      })}
 
       {/* Navigation */}
       <div className="flex justify-between px-4 pb-4 sm:px-8 sm:pb-6">

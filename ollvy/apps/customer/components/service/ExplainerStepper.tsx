@@ -47,8 +47,6 @@ export function ExplainerStepper({ serviceName, steps }: ExplainerStepperProps) 
 
   if (!steps || steps.length === 0) return null
 
-  const step = steps[active]
-
   return (
     <div className="border border-border rounded-xl bg-card overflow-hidden mt-6">
       {/* Header with tab navigation and smooth underline */}
@@ -83,15 +81,20 @@ export function ExplainerStepper({ serviceName, steps }: ExplainerStepperProps) 
         </div>
       </div>
 
-      {/* Step content */}
-      <div
-        key={active}
-        className="p-6 min-h-[120px] flex flex-col"
-      >
-        <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-          {step.body}
-        </p>
-      </div>
+      {/* Step content — all tabs rendered for SEO, only active one visible */}
+      {steps.map((s, i) => (
+        <div
+          key={i}
+          className={cn(
+            'p-6 min-h-[120px] flex flex-col',
+            i !== active && 'hidden'
+          )}
+        >
+          <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+            {s.body}
+          </p>
+        </div>
+      ))}
 
       {/* Navigation - hide on last step */}
       {active < steps.length - 1 && (
