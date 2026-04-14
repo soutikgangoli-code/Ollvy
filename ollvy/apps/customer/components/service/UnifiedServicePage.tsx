@@ -66,8 +66,8 @@ interface UnifiedServicePageProps {
 
 // Section definitions for navigation
 const SECTIONS = [
-  { id: 'process', label: 'Process' },
-  { id: 'included', label: "What's Included" },
+  { id: 'process', label: 'How it works' },
+  { id: 'included', label: 'What you get' },
   { id: 'why-ollvy', label: 'Why Ollvy' },
   { id: 'risks', label: 'Risks' },
   { id: 'reviews', label: 'Reviews' },
