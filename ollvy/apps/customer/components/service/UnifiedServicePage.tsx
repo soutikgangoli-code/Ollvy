@@ -1002,7 +1002,7 @@ export function UnifiedServicePage({
                     Every order carries a guaranteed completion date. If we miss it, the full service fee is refunded automatically. No claim needed.
                   </p>
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-[560px] mt-3">
-                    Your CA is an ICAI-enrolled member with a minimum of three years of practice. Ask for their enrollment number at any point.
+                    Your Ollvy CA is a qualified, practicing chartered accountant with at least three years of experience. Ask for their credentials at any point.
                   </p>
 
                   {/* Profile Personas (merged into Why Ollvy section) */}

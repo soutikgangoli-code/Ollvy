@@ -13,13 +13,13 @@ export const iepfConsultation: ServicePageConfig = {
 
   explainer: {
     whatItIs:
-      'IEPF stands for Investor Education and Protection Fund. Under the Companies Act 2013, if dividends on a shareholder account go unclaimed for 7 consecutive years, the company must transfer those dividends to this government fund. The shares on which those dividends went unclaimed are transferred alongside. The money does not disappear permanently, but recovering it requires filing Form IEPF-5 through the company and then IEPF Authority.',
+      'IEPF stands for Investor Education and Protection Fund. Under the Companies Act, if dividends on a shareholder account go unclaimed for 7 consecutive years, the company must transfer those dividends to this government fund. The shares on which those dividends went unclaimed are transferred alongside. The money does not disappear permanently, but recovering it requires filing a claim form through the company and then the IEPF Authority.',
 
     whyYouNeedIt:
       'Most people who contact us do not know whether their shares are in IEPF, how much is there, or what the process looks like for their case. A direct claim by the original investor is completely different from a legal heir claim. Physical share certificates have different requirements than demat holdings. This consultation answers all of it before you spend weeks filing paperwork that turns out to be wrong.',
 
     whatHappensWithout:
-      'There is no deadline to claim from IEPF. But the paperwork gets harder over time. Companies change their RTAs. Physical certificates deteriorate. If the original investor has passed away, each year without action adds documents to the legal heir process. Starting with a clear picture costs Rs.500 and takes 2 days.',
+      'There is no deadline to claim from IEPF. But the paperwork gets harder over time. Companies change their share transfer agents. Physical certificates deteriorate. If the original investor has passed away, each year without action adds documents to the legal heir process. Starting with a clear picture costs Rs.500 and takes 2 days.',
   },
 
   workflow: [
@@ -34,7 +34,7 @@ export const iepfConsultation: ServicePageConfig = {
       step: 2,
       title: 'Expert checks the IEPF database',
       timeframe: 'Day 0-1',
-      description: 'Expert searches iepf.gov.in and MCA21 using your PAN, name, and company details. Confirms what is actually credited in IEPF under your name before the call.',
+      description: 'Expert searches the IEPF portal and government company records using your PAN, name, and company details. Confirms what is actually credited in IEPF under your name before the call.',
       milestone: 'IEPF balance confirmed',
     },
     {
@@ -56,8 +56,8 @@ export const iepfConsultation: ServicePageConfig = {
   included: [
     {
       title: 'IEPF database check',
-      description: 'Expert searches iepf.gov.in and MCA21 using your PAN and company details. Confirms exactly which shares and dividend amounts are credited under your name.',
-      without: 'Hours across iepf.gov.in, MCA21, and the company RTA with no guarantee of finding the right entry.',
+      description: 'Expert searches the IEPF portal and government company records using your PAN and company details. Confirms exactly which shares and dividend amounts are credited under your name.',
+      without: 'Hours across government portals and the company\'s share transfer agent with no guarantee of finding the right entry.',
       withOllvy: 'Confirmed in under 24 hours before the call.',
     },
     {
@@ -77,7 +77,7 @@ export const iepfConsultation: ServicePageConfig = {
   risks: [
     {
       title: 'IEPF-5 rejected for a data mismatch',
-      description: 'Form IEPF-5 requires folio number, DP ID, client ID, and company CIN exactly matching government records. One mismatch causes rejection at the RTA stage, which you find out about 4 to 6 weeks later.',
+      description: 'The claim form requires folio number, demat account details, and company registration number exactly matching government records. One mismatch causes rejection at the company\'s verification stage, which you find out about 4 to 6 weeks later.',
     },
     {
       title: 'PAN not linked to the folio',
@@ -89,7 +89,7 @@ export const iepfConsultation: ServicePageConfig = {
     },
     {
       title: 'Physical certificates have extra requirements',
-      description: 'Physical shares need an affidavit and indemnity bond on top of standard documents. Lost certificates need a duplicate from the company RTA, which is a separate process with its own timeline.',
+      description: 'Physical shares need an affidavit and indemnity bond on top of standard documents. Lost certificates need a duplicate from the company\'s share transfer agent, which is a separate process with its own timeline.',
     },
   ],
 
@@ -114,23 +114,23 @@ export const iepfConsultation: ServicePageConfig = {
 
   faqs: [
     { category: 'General', q: 'What is IEPF and how did my shares end up there?', a: 'IEPF stands for Investor Education and Protection Fund, created under the Companies Act 2013. If dividends on a shareholder account go unclaimed for 7 consecutive years, the company must transfer those dividends to IEPF. The shares on which those dividends went unclaimed are transferred alongside. This happens automatically. Most shareholders find out only when looking for old investments or receiving a company notice.' },
-    { category: 'General', q: 'How do I check if my shares are in IEPF?', a: 'You can search on iepf.gov.in using the company CIN and folio number, or on MCA21. Most people search and find nothing - not because there is nothing, but because the search needs precise inputs that are easy to get wrong. The consultation includes running this search correctly before the call.' },
+    { category: 'General', q: 'How do I check if my shares are in IEPF?', a: 'You can search on the IEPF portal using the company registration number and folio number, or on the government company records portal. Most people search and find nothing - not because there is nothing, but because the search needs precise inputs that are easy to get wrong. The consultation includes running this search correctly before the call.' },
     { category: 'General', q: 'Can I get the money back?', a: 'Yes. Transfer to IEPF is not forfeiture. You can file Form IEPF-5 at any time. There is no deadline. The refund takes 60 to 90 days from a complete application.' },
     { category: 'General', q: 'Do I get the shares back or just the dividends?', a: 'Both. One IEPF-5 application covers the shares and all accumulated unclaimed dividends. Shares go to your demat account. Dividends go to your bank account.' },
     { category: 'Process', q: 'What does the Rs.500 consultation cover?', a: 'Expert checks what is in IEPF under your name, then does a 45-minute call covering your case - what is claimable, what IEPF-5 involves for you, which documents you need, and realistic timeline. You get a written action plan and personalised document checklist. Filing IEPF-5 is a separate service.' },
-    { category: 'Process', q: 'What is Form IEPF-5?', a: 'IEPF-5 is the government claim form filed on MCA21 by the shareholder or their legal heir. After filing online, you courier physical documents to the company Nodal Officer. The company verifies and forwards the claim to IEPF Authority, which processes the share and dividend refund.' },
-    { category: 'Process', q: 'How long does the full IEPF claim take?', a: '60 to 90 days from filing IEPF-5 if the company RTA is responsive. Physical certificate and legal heir claims typically take longer. The consultation tells you what to expect for your company specifically.' },
+    { category: 'Process', q: 'What is the IEPF claim form?', a: 'The claim form is filed online by the shareholder or their legal heir. After filing, you courier physical documents to the company\'s designated officer. The company verifies and forwards the claim to the IEPF Authority, which processes the share and dividend refund.' },
+    { category: 'Process', q: 'How long does the full IEPF claim take?', a: '60 to 90 days from filing if the company\'s share transfer agent is responsive. Physical certificate and legal heir claims typically take longer. The consultation tells you what to expect for your company specifically.' },
     { category: 'Documents', q: 'What documents does IEPF-5 require?', a: 'Depends on your case. Original investor with demat: PAN, Aadhaar, cancelled cheque, client master report from broker. Physical shares: add share certificate, affidavit, indemnity bond. Legal heir: add death certificate, heirship or succession certificate, transmission documents. The consultation gives you your specific list.' },
-    { category: 'Documents', q: 'I cannot find the original share certificate. Can I still claim?', a: 'Possibly. If shares are in IEPF, they exist as a government entry regardless of the physical certificate. Many RTAs accept an indemnity bond in lieu. Whether this applies to your company is covered in the consultation.' },
+    { category: 'Documents', q: 'I cannot find the original share certificate. Can I still claim?', a: 'Possibly. If shares are in IEPF, they exist as a government entry regardless of the physical certificate. Many companies accept an indemnity bond instead. Whether this applies to your company is covered in the consultation.' },
     { category: 'Pricing', q: 'Is there a government fee to file IEPF-5?', a: 'No. Filing IEPF-5 and claiming from IEPF is free of government fees. Case-specific costs can arise - court fees for a succession certificate, stamp duty on an indemnity bond. The consultation flags any that apply.' },
-    { category: 'Pricing', q: 'What is the difference between this consultation and the full IEPF filing service?', a: 'This consultation tells you what is claimable and what the process looks like for your case. You leave with a document checklist and action plan. Filing Form IEPF-5, coordinating with the Nodal Officer, and following up with IEPF Authority is a longer engagement handled separately.' },
+    { category: 'Pricing', q: 'What is the difference between this consultation and the full IEPF filing service?', a: 'This consultation tells you what is claimable and what the process looks like for your case. You leave with a document checklist and action plan. Filing the claim form, coordinating with the company\'s designated officer, and following up with the IEPF Authority is a longer engagement handled separately.' },
   ],
 
   govtFees: {
-    caption: 'Government Fees - IEPF Claim',
+    caption: 'Government fees for IEPF claims',
     headers: ['Item', 'Government Fee', 'Notes'],
     rows: [
-      ['IEPF-5 filing on MCA21', 'Nil', 'No fee to file the claim form'],
+      ['Claim form filing', 'Nil', 'No fee to file the claim form'],
       ['Dividend refund from IEPF', 'Nil', 'Credited to your bank account'],
       ['Share refund from IEPF', 'Nil', 'Credited to your demat account'],
       ['Succession certificate (if needed)', 'Court fee, varies by state', 'Only if there is no registered will and no legal heirship certificate issued by local authority'],
@@ -139,7 +139,7 @@ export const iepfConsultation: ServicePageConfig = {
   },
 
   documents: {
-    caption: 'Typical Documents for IEPF-5 - Exact List Depends on Your Case',
+    caption: 'Documents typically needed - exact list depends on your case',
     headers: ['Document', 'Original Investor (Living)', 'Legal Heir (Deceased Original Holder)'],
     rows: [
       ['PAN card', 'Self-attested copy', 'Claimant PAN, self-attested'],
@@ -149,7 +149,7 @@ export const iepfConsultation: ServicePageConfig = {
       ['Cancelled cheque', 'Account where refund is deposited', 'Claimant bank account'],
       ['Death certificate', 'Not applicable', 'Original holder death certificate'],
       ['Legal heirship or succession certificate', 'Not applicable', 'Issued by court or state authority'],
-      ['Transmission request to company RTA', 'Not applicable', 'Must be done before filing IEPF-5 for physical shares'],
+      ['Share transmission request to the company', 'Not applicable', 'Must be done before filing the claim for physical shares'],
       ['Indemnity bond', 'Only if original certificate is lost', 'Only if original certificate is lost'],
     ],
   },

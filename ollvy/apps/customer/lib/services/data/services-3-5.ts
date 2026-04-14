@@ -5,20 +5,20 @@ import type { ServicePageConfig } from '../types'
 export const gstRegistration: ServicePageConfig = {
   slug: 'gst-registration',
   title: 'GST Registration',
-  tagline: 'Your GSTIN, applied and obtained. ARN within 24 hours of filing.',
+  tagline: 'Your GST number, applied and obtained. Reference number within 24 hours of filing.',
   seoTitle: 'GST Registration Online in India 2025 | Get GSTIN in 7 Days | Ollvy',
   seoDescription: 'GST registration in 7 working days. Ollvy CA assigned same day, ARN in 24 hours. No govt fee. Mandatory above Rs. 20 lakh turnover for services.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-registration',
   lastReviewed: 'April 2026',
   category: 'GST',
 
-  relatedServiceSlugs: ['gst-monthly-50l', 'pvt-ltd-incorporation', 'gst-cancellation'],
+  relatedServiceSlugs: ['gst-monthly', 'pvt-ltd-incorporation', 'gst-cancellation'],
   relatedLearnSlugs: ['do-i-need-gst-registration'],
 
   explainer: {
-    whatItIs: 'GST registration gives you a 15-digit GSTIN under the CGST Act, 2017. It authorises you to collect GST from customers, claim Input Tax Credit on purchases, and file GST returns.',
-    whyYouNeedIt: 'Mandatory if your aggregate turnover exceeds Rs. 40 lakh for goods (Rs. 20 lakh for services, Rs. 10 lakh in special category states), for any interstate supply, or if you sell on any e-commerce platform. Even below the threshold, being registered lets B2B clients claim ITC on your invoices.',
-    whatHappensWithout: 'Operating without mandatory registration is tax evasion. Penalty is 100% of tax due or Rs. 10,000, whichever is higher. You cannot claim ITC on purchases, cannot generate e-way bills, and platforms like Amazon and Flipkart will not onboard you.',
+    whatItIs: 'GST registration gives you a 15-digit GST number. It lets you collect GST from customers, claim tax credits on business purchases, and file GST returns.',
+    whyYouNeedIt: 'Required if your total turnover crosses Rs. 40 lakh for goods (Rs. 20 lakh for services, Rs. 10 lakh in certain states), for any sale across state lines, or if you sell on any e-commerce platform. Even below the threshold, being registered lets business clients claim tax credits on your invoices.',
+    whatHappensWithout: 'Operating without required registration is treated as tax evasion. Penalty: 100% of tax due or Rs. 10,000, whichever is higher. You cannot claim tax credits on purchases, cannot generate transport documents for goods, and platforms like Amazon and Flipkart will not list you.',
   },
 
   workflow: [
@@ -38,37 +38,37 @@ export const gstRegistration: ServicePageConfig = {
     },
     {
       step: 3,
-      title: 'Application filed - ARN in 24 hours',
+      title: 'Application filed - reference number in 24 hours',
       timeframe: 'Day 1-2',
-      description: 'Ollvy CA files GST REG-01 on the GSTN portal. ARN generated immediately on submission and shared in your app the same day. Verify status yourself at gstn.gov.in.',
-      milestone: 'ARN generated and sent to your app',
+      description: 'Ollvy CA files the application on the government portal. Your reference number is generated immediately and shared in the app the same day. Track status yourself at gstn.gov.in.',
+      milestone: 'Reference number generated and sent to your app',
     },
     {
       step: 4,
       title: 'Officer query handled if applicable',
       timeframe: 'Day 3-5',
-      description: 'GST officers request clarifications in approximately 20% of cases, typically for Aadhaar verification or address proof. Ollvy CA responds within 24 hours. Included in scope.',
+      description: 'The GST officer asks for clarification in about 1 in 5 cases, usually about identity or address proof. Ollvy CA responds within 24 hours. Included in the price.',
       milestone: 'Query responded',
     },
     {
       step: 5,
-      title: 'GSTIN issued',
+      title: 'GST number issued',
       timeframe: 'Day 5-7',
-      description: 'Permanent - no renewal, no expiry as long as you file returns. Compliance calendar updated with your first GSTR-1 and GSTR-3B due dates.',
-      milestone: 'GSTIN active on GSTN portal',
+      description: 'Permanent - no renewal, no expiry, as long as you file returns. Your Ollvy compliance calendar is updated with your first monthly filing due dates.',
+      milestone: 'GST number active',
     },
   ],
 
   included: [
     {
-      title: 'Ollvy CA handles the GSTN portal - all 23 fields',
-      description: 'GST REG-01 has 23 fields across 5 tabs. Ollvy CA completes the entire form. You answer 5 questions in the app.',
+      title: 'Ollvy CA handles the government portal - all 23 fields',
+      description: 'The GST application has 23 fields across 5 tabs. Ollvy CA fills the whole thing. You answer 5 questions in the app.',
       without: '23 fields, 5 tabs, 3-4 hours on the government portal',
-      withOllvy: '5 questions, approximately 4 minutes in the app',
+      withOllvy: '5 questions, about 4 minutes in the app',
     },
     {
-      title: 'ARN shared same day - track it yourself',
-      description: 'ARN is generated on submission and shared immediately. Verify status on gstn.gov.in yourself - you do not have to wait for updates from us.',
+      title: 'Reference number shared same day - track it yourself',
+      description: 'Your reference number is generated on submission and shared right away. Track progress at gstn.gov.in yourself. You don\'t have to wait for updates.',
     },
     {
       title: 'Officer queries handled - no extra charge',
@@ -76,7 +76,7 @@ export const gstRegistration: ServicePageConfig = {
     },
     {
       title: 'Compliance calendar updated automatically',
-      description: 'GSTR-1 (11th of each month) and GSTR-3B (20th of each month) due dates appear in your calendar the moment GSTIN is issued.',
+      description: 'Your monthly filing due dates (11th and 20th of each month) appear in your calendar the moment your GST number is active.',
     },
   ],
 
@@ -87,7 +87,7 @@ export const gstRegistration: ServicePageConfig = {
     },
     {
       title: 'Aadhaar OTP failure',
-      description: 'GST registration requires Aadhaar-based authentication. If the mobile linked to Aadhaar is old or inactive, OTP fails. This must be fixed at an Aadhaar enrolment centre. We verify this upfront.',
+      description: 'GST registration requires Aadhaar-based authentication. If the mobile linked to Aadhaar is old or inactive, OTP fails. This must be fixed at an Aadhaar enrolment centre. Ollvy verifies this upfront.',
     },
     {
       title: 'Already past threshold without registration',
@@ -98,37 +98,37 @@ export const gstRegistration: ServicePageConfig = {
   personas: [
     {
       title: 'First GST registration',
-      description: 'Never registered before. We explain what each document is for and why it is needed.',
+      description: 'Never registered before. Ollvy explains what each document is for and why it is needed.',
     },
     {
       title: 'Turnover just crossed threshold',
-      description: 'You waited until legally required. We register you quickly to stop penalty exposure.',
+      description: 'You waited until legally required. Ollvy registers you quickly to stop the penalty from building up.',
     },
     {
       title: 'Voluntary registration',
-      description: 'Below threshold but want to issue GST invoices to B2B clients for ITC. Completely legal.',
+      description: 'Below threshold but want to issue GST invoices to business clients so they can claim tax credits. Completely legal.',
     },
     {
       title: 'Home as principal place of business',
-      description: 'Fully legal. We verify your electricity bill matches your application before filing.',
+      description: 'Fully legal. Ollvy verifies your electricity bill matches your application before filing.',
     },
   ],
 
   faqs: [
     {
       category: 'General',
-      q: 'When is GST registration mandatory?',
-      a: 'When aggregate turnover crosses Rs. 40 lakh for goods (Rs. 20 lakh for services, Rs. 10 lakh in special category states like Manipur, Mizoram, Nagaland, Tripura). Also mandatory for any interstate supply regardless of turnover, and for all e-commerce sellers from day one.',
+      q: 'When is GST registration required?',
+      a: 'When total turnover crosses Rs. 40 lakh for goods (Rs. 20 lakh for services, Rs. 10 lakh in certain states). Also required for any sale to another state regardless of turnover, and for all e-commerce sellers from day one.',
     },
     {
       category: 'General',
       q: 'What is the government fee for GST registration?',
-      a: 'Nil. There is no government fee for GST registration. The only cost is the professional fee for filing.',
+      a: 'Zero. There is no government fee for GST registration. The only cost is the professional fee for filing.',
     },
     {
       category: 'General',
       q: 'Can I register voluntarily if I am below the threshold?',
-      a: 'Yes. Voluntary registration lets you issue GST invoices and claim ITC on purchases. Cannot be cancelled for at least one year from the date of registration.',
+      a: 'Yes. Voluntary registration lets you issue GST invoices and claim tax credits on your purchases. Cannot be cancelled for at least one year from the date of registration.',
     },
     {
       category: 'General',
@@ -137,13 +137,13 @@ export const gstRegistration: ServicePageConfig = {
     },
     {
       category: 'General',
-      q: 'I make interstate sales but my turnover is only Rs. 5 lakh. Do I need GST?',
-      a: 'Yes. Section 24 of the CGST Act mandates registration for any interstate supply - there is no turnover threshold for this. Even one sale to a customer in another state triggers mandatory registration.',
+      q: 'I sell to customers in other states but my turnover is only Rs. 5 lakh. Do I need GST?',
+      a: 'Yes. The GST law requires registration for any sale to another state - there is no turnover threshold for this. Even one sale to a customer in another state means you need GST.',
     },
     {
       category: 'Process',
-      q: 'What is an ARN and why does it matter?',
-      a: 'Application Reference Number - generated the moment your application is submitted. You can track processing status on the GSTN portal yourself at gstn.gov.in using the ARN without waiting for updates from us.',
+      q: 'What is the application reference number?',
+      a: 'Your application reference number is generated the moment your application is submitted. You can track progress at gstn.gov.in yourself, without waiting for updates from Ollvy.',
     },
     {
       category: 'Process',
@@ -152,13 +152,13 @@ export const gstRegistration: ServicePageConfig = {
     },
     {
       category: 'After Completion',
-      q: 'What returns must I file after getting GSTIN?',
-      a: 'GSTR-1 by 11th of every month (outward supplies), GSTR-3B by 20th (net tax payment and ITC claim). Nil returns required even when there are no transactions. GSTR-9 annual return by December 31. All deadlines in your Ollvy compliance calendar.',
+      q: 'What returns must I file after getting my GST number?',
+      a: 'Sales return (GSTR-1) by the 11th of every month. Tax payment return (GSTR-3B) by the 20th. Returns are required even when there are zero transactions. Annual return (GSTR-9) by December 31. All deadlines in your Ollvy compliance calendar.',
     },
     {
       category: 'After Completion',
       q: 'What is the penalty for not filing GST returns?',
-      a: 'Rs. 50 per day per return (Rs. 25 CGST + Rs. 25 SGST) for non-nil returns, capped at Rs. 10,000 per return. Rs. 20 per day for nil returns, capped at Rs. 500. Plus 18% annual interest on any unpaid tax.',
+      a: 'Rs. 50 per day per return for returns with transactions, capped at Rs. 10,000. Rs. 20 per day for zero-transaction returns, capped at Rs. 500. Plus 18% annual interest on any unpaid tax.',
     },
   ],
 
@@ -166,10 +166,10 @@ export const gstRegistration: ServicePageConfig = {
     caption: 'Government Fees - GST Registration',
     headers: ['Item', 'Government Fee', 'Notes'],
     rows: [
-      ['GST registration application (REG-01)', 'Nil', 'No government fee for registration'],
+      ['GST registration application', 'Free', 'No government fee for registration'],
       ['Penalty if registering late (turnover above threshold)', 'Rs. 10,000 minimum or 100% of unpaid tax', 'Whichever is higher - stops accruing once registered'],
-      ['Late filing fee after registration (non-nil returns)', 'Rs. 50/day per return, capped at Rs. 10,000', 'Rs. 25 CGST + Rs. 25 SGST per day per return'],
-      ['Late filing fee (nil returns)', 'Rs. 20/day per return, capped at Rs. 500', 'Rs. 10 CGST + Rs. 10 SGST per day per return'],
+      ['Late filing fee after registration (returns with transactions)', 'Rs. 50/day per return, capped at Rs. 10,000', 'Rs. 50/day total per return'],
+      ['Late filing fee (zero-transaction returns)', 'Rs. 20/day per return, capped at Rs. 500', 'Rs. 20/day total per return'],
     ],
   },
 
@@ -180,7 +180,7 @@ export const gstRegistration: ServicePageConfig = {
       ['PAN card', 'Owner PAN', 'Company / LLP PAN'],
       ['Aadhaar card', 'Owner Aadhaar (OTP required)', 'Not required at entity level'],
       ['Address proof (business)', 'Electricity bill (not older than 2 months)', 'Electricity bill (not older than 2 months)'],
-      ['NOC from property owner', 'If premises is rented', 'If premises is rented'],
+      ['No-objection letter from property owner', 'If premises is rented', 'If premises is rented'],
       ['Bank account proof', 'Cancelled cheque or 3-month bank statement', 'Cancelled cheque or bank statement'],
       ['Business registration proof', 'Not required (proprietorship)', 'Certificate of Incorporation or LLP agreement'],
       ['Director/partner PAN', 'Not applicable', 'All directors or designated partners'],
@@ -194,12 +194,12 @@ export const gstRegistration: ServicePageConfig = {
 // ─── 4. GST Monthly Filing ────────────────────────────────────────────────────
 
 export const gstMonthlyFiling: ServicePageConfig = {
-  slug: 'gst-monthly-50l',
+  slug: 'gst-monthly',
   title: 'GST Monthly Filing',
-  tagline: 'GSTR-1 by the 11th. GSTR-3B by the 20th. Every month.',
+  tagline: 'Sales return by the 11th. Tax return by the 20th. Every month.',
   seoTitle: 'GST Return Filing Service India 2025 | GSTR-1 & GSTR-3B | Ollvy',
   seoDescription: 'Monthly GST filing handled by an Ollvy CA. GSTR-1 by the 11th, GSTR-3B by the 20th, ITC reconciled every cycle. Cancel anytime.',
-  canonicalUrl: 'https://www.ollvy.com/services/gst-monthly-50l',
+  canonicalUrl: 'https://www.ollvy.com/services/gst-monthly',
   lastReviewed: 'April 2026',
   category: 'GST',
 
@@ -207,9 +207,9 @@ export const gstMonthlyFiling: ServicePageConfig = {
   relatedLearnSlugs: ['do-i-need-gst-registration'],
 
   explainer: {
-    whatItIs: 'Monthly GST compliance means filing GSTR-1 (outward supplies, due 11th) and GSTR-3B (net tax payment, due 20th) every month. GSTR-1 reports every sales invoice. GSTR-3B calculates your tax liability, deducts eligible Input Tax Credit, and records your payment to the government.',
-    whyYouNeedIt: 'All regular GST-registered taxpayers must file every month, including nil returns when there are no transactions. Consecutive missed filings trigger e-way bill suspension, then registration suspension, then suo-moto cancellation. Your customers cannot claim ITC on your invoices until you file.',
-    whatHappensWithout: 'Late filing fee of Rs. 50 per day per return (Rs. 20 for nil returns). Interest at 18% per annum on unpaid tax. E-way bill generation blocked after two consecutive missed filings. Registration cancelled after 6 months of non-filing.',
+    whatItIs: 'Monthly GST compliance means filing two returns every month: your sales return (due 11th) and your tax payment return (due 20th). The sales return reports every invoice you issued. The tax return calculates what you owe, deducts eligible purchase credits, and records your payment to the government.',
+    whyYouNeedIt: 'Everyone with a GST number must file every month, even when there are zero transactions. Miss filings and the consequences escalate: first your transport documents get blocked, then your registration is suspended, then the government cancels it entirely. Your customers cannot claim tax credits on your invoices until you file.',
+    whatHappensWithout: 'Late fee: Rs. 50/day per return (Rs. 20 for zero-transaction returns). Interest: 18% per year on unpaid tax. Transport documents blocked after 2 missed filings. Registration cancelled after 6 months of non-filing.',
   },
 
   workflow: [
@@ -229,75 +229,75 @@ export const gstMonthlyFiling: ServicePageConfig = {
     },
     {
       step: 3,
-      title: 'GSTR-1 filed by the 11th',
+      title: 'Sales return filed by the 11th',
       timeframe: '9th-11th',
-      description: 'Ollvy CA files all outward supply invoices. Acknowledgement shared in your app.',
-      milestone: 'GSTR-1 filed',
+      description: 'Ollvy CA files all your sales invoices. Acknowledgement shared in the app.',
+      milestone: 'Sales return filed',
     },
     {
       step: 4,
-      title: 'GSTR-3B filed by the 20th',
+      title: 'Tax return filed by the 20th',
       timeframe: '18th-20th',
-      description: 'Ollvy CA prepares the summary return, verifies ITC claims against GSTR-2B, calculates net tax liability, and files. Challan generated.',
-      milestone: 'GSTR-3B filed',
+      description: 'Ollvy CA prepares the return, verifies your purchase credits against the government\'s auto-generated statement, calculates what you owe, and files. Payment slip generated.',
+      milestone: 'Tax return filed',
     },
     {
       step: 5,
       title: 'Monthly compliance report',
       timeframe: '21st-25th',
-      description: 'What was filed, when, acknowledgement numbers, ITC claimed, tax paid.',
+      description: 'What was filed, when, acknowledgement numbers, credits claimed, tax paid.',
       milestone: 'Report delivered',
     },
   ],
 
   included: [
     {
-      title: 'GSTR-1 - outward supply return',
-      description: 'All B2B invoices, B2C sales above Rs. 2.5 lakh, and export invoices reported. Filed by the 11th.',
+      title: 'Sales return (GSTR-1)',
+      description: 'All business invoices, consumer sales above Rs. 2.5 lakh, and export invoices reported. Filed by the 11th.',
     },
     {
-      title: 'GSTR-3B - net tax payment return',
-      description: 'Output tax calculated, eligible ITC deducted, return filed, challan generated.',
+      title: 'Tax payment return (GSTR-3B)',
+      description: 'Tax calculated, eligible credits deducted, return filed, payment slip generated.',
     },
     {
-      title: 'ITC reconciliation with GSTR-2B',
-      description: 'ITC claimed is matched against GSTR-2B before filing. Mismatches flagged.',
-      without: 'Claim ITC without verification, receive a demand notice later',
-      withOllvy: 'ITC verified against GSTR-2B every cycle before filing',
+      title: 'Tax credit verification',
+      description: 'The credits you claim are checked against the government\'s auto-generated statement before filing. Mismatches flagged before they become a problem.',
+      without: 'Claim credits without checking, get a government demand notice months later',
+      withOllvy: 'Credits verified against the government system every month before filing',
     },
     {
       title: 'Monthly compliance report',
-      description: 'Filed returns, acknowledgement numbers, ITC summary, and tax paid - delivered after every cycle.',
+      description: 'Filed returns, acknowledgement numbers, credit summary, and tax paid. Delivered after every filing cycle.',
     },
   ],
 
   risks: [
     {
       title: 'Data must be shared by the 8th',
-      description: 'Late fee accumulates from the 12th for GSTR-1 and 21st for GSTR-3B. Rs. 50/day per return on non-nil returns. We file the moment data is ready.',
+      description: 'Late fee starts from the 12th for the sales return and 21st for the tax return. Rs. 50/day per return. Ollvy files the moment your data is ready.',
     },
     {
-      title: 'GSTR-1 and GSTR-3B figures must match',
-      description: 'Discrepancies between the two returns are flagged automatically by GSTN. We file both from the same data set.',
+      title: 'Sales return and tax return figures must match',
+      description: 'Mismatches between the two returns are flagged automatically by the government system. Ollvy files both from the same data, so they always match.',
     },
     {
-      title: 'Vendor not filed = ITC blocked',
-      description: 'If your vendor has not filed their GSTR-1, their invoices do not appear in your GSTR-2B. We check before claiming - you are not exposed to a mismatch notice.',
+      title: 'Vendor hasn\'t filed = your credits are blocked',
+      description: 'If your vendor hasn\'t filed their sales return, their invoices don\'t show up in your credit statement. Ollvy checks before claiming anything, so you\'re not exposed to a mismatch notice.',
     },
   ],
 
   personas: [
     {
       title: 'Switching from another CA',
-      description: 'Seamless takeover. We review your filing history before the first cycle.',
+      description: 'Seamless takeover. Ollvy reviews your filing history before the first cycle.',
     },
     {
-      title: 'Multiple GSTINs',
+      title: 'Multiple GST numbers',
       description: 'Multiple states, multiple registrations. All handled under one retainer.',
     },
     {
       title: 'Previous CA stopped responding',
-      description: 'We work to SLA every month. Acknowledgement numbers delivered same day as filing.',
+      description: 'Ollvy works to a guaranteed timeline every month. Acknowledgement numbers delivered the same day as filing.',
     },
   ],
 
@@ -305,7 +305,7 @@ export const gstMonthlyFiling: ServicePageConfig = {
     {
       category: 'General',
       q: 'What does the monthly retainer cover?',
-      a: 'GSTR-1 by the 11th, GSTR-3B by the 20th, ITC reconciliation against GSTR-2B every cycle, and a monthly compliance report with filing acknowledgements.',
+      a: 'Sales return by the 11th, tax return by the 20th, credit verification every month, and a compliance report with filing acknowledgements.',
     },
     {
       category: 'General',
@@ -314,34 +314,34 @@ export const gstMonthlyFiling: ServicePageConfig = {
     },
     {
       category: 'General',
-      q: 'What is GSTR-2B and why does it matter?',
-      a: 'GSTR-2B is an auto-drafted statement that shows the ITC available to you based on what your suppliers have filed. Claiming ITC that is not reflected in GSTR-2B invites a demand notice. We reconcile against GSTR-2B before every GSTR-3B filing.',
+      q: 'What is the auto-generated credit statement and why does it matter?',
+      a: 'The government auto-generates a credit statement each month showing what tax credits are available to you, based on what your suppliers have filed. If you claim credits that don\'t appear in this statement, you get a demand notice. Ollvy checks against it before every filing.',
     },
     {
       category: 'Process',
       q: 'What data do I need to share each month?',
-      a: 'Sales invoices and purchase register. If you use Tally, Zoho, or any accounting software, the export takes 2 minutes. We also handle nil returns when there are no transactions.',
+      a: 'Sales invoices and purchase register. If you use Tally, Zoho, or any accounting software, the export takes 2 minutes. Ollvy also handles zero-transaction returns when there\'s nothing to file.',
     },
     {
       category: 'Process',
       q: 'What if I have no transactions in a month?',
-      a: 'Nil GSTR-1 and GSTR-3B must still be filed. We handle nil returns as part of the retainer at no extra charge.',
+      a: 'Both returns must still be filed even with zero transactions. Ollvy handles these as part of the retainer at no extra charge.',
     },
     {
       category: 'General',
-      q: 'What is the penalty for missing GSTR-3B?',
-      a: 'Rs. 50 per day (Rs. 25 CGST + Rs. 25 SGST) for non-nil returns, capped at Rs. 10,000. Plus 18% per annum interest on any unpaid tax from the due date. Nil return late fee is Rs. 20/day, capped at Rs. 500.',
+      q: 'What is the penalty for missing a filing?',
+      a: 'Rs. 50 per day for returns with transactions, capped at Rs. 10,000. Plus 18% annual interest on any unpaid tax. Zero-transaction return late fee: Rs. 20/day, capped at Rs. 500.',
     },
   ],
 
   govtFees: {
     caption: 'Government Late Fees - GST Monthly Filing (per missed return)',
-    headers: ['Return', 'Late Fee (Non-Nil)', 'Late Fee (Nil Return)', 'Cap'],
+    headers: ['Return', 'Late Fee (With Transactions)', 'Late Fee (Zero Transactions)', 'Cap'],
     rows: [
-      ['GSTR-1', 'Rs. 50/day (Rs. 25 CGST + Rs. 25 SGST)', 'Rs. 20/day (Rs. 10 + Rs. 10)', 'Rs. 10,000 per return (nil: Rs. 500)'],
-      ['GSTR-3B', 'Rs. 50/day (Rs. 25 CGST + Rs. 25 SGST)', 'Rs. 20/day (Rs. 10 + Rs. 10)', 'Rs. 10,000 per return (nil: Rs. 500)'],
-      ['Interest on unpaid tax', '18% per annum on outstanding amount', 'Not applicable for nil returns', 'Accrues daily - no cap'],
-      ['Both returns missed (1 month)', 'Rs. 100/day combined (both returns)', 'Rs. 40/day combined', 'Rs. 20,000 combined cap (nil: Rs. 1,000)'],
+      ['Sales return (GSTR-1)', 'Rs. 50/day', 'Rs. 20/day', 'Rs. 10,000 per return (zero-transaction: Rs. 500)'],
+      ['Tax return (GSTR-3B)', 'Rs. 50/day', 'Rs. 20/day', 'Rs. 10,000 per return (zero-transaction: Rs. 500)'],
+      ['Interest on unpaid tax', '18% per year on outstanding amount', 'Not applicable for zero-transaction returns', 'Accrues daily - no cap'],
+      ['Both returns missed (1 month)', 'Rs. 100/day combined (both returns)', 'Rs. 40/day combined', 'Rs. 20,000 combined cap (zero-transaction: Rs. 1,000)'],
     ],
   },
 
@@ -349,10 +349,10 @@ export const gstMonthlyFiling: ServicePageConfig = {
     caption: 'Data Required Each Month - GST Filing',
     headers: ['Data / Document', 'Required For', 'Format'],
     rows: [
-      ['Sales invoices', 'GSTR-1', 'Excel, Tally export, or accounting software export'],
-      ['Purchase invoices / purchase register', 'ITC reconciliation (GSTR-2B matching)', 'Excel or accounting software export'],
+      ['Sales invoices', 'Sales return', 'Excel, Tally export, or accounting software export'],
+      ['Purchase invoices / purchase register', 'Credit verification', 'Excel or accounting software export'],
       ['GST portal credentials (read-only)', 'Filing', 'Shared once at onboarding; not required monthly'],
-      ['Bank statement (for high-value B2C)', 'GSTR-1 (B2C consolidated)', 'For verifying B2C sales above Rs. 2.5 lakh'],
+      ['Bank statement (for large consumer sales)', 'Sales return (large consumer sales)', 'For verifying consumer sales above Rs. 2.5 lakh'],
     ],
   },
 }
@@ -363,20 +363,20 @@ export const gstMonthlyFiling: ServicePageConfig = {
 export const businessItr: ServicePageConfig = {
   slug: 'business-itr',
   title: 'Business ITR Filing',
-  tagline: 'ITR-6 for Pvt Ltd. ITR-5 for LLP. Filed correctly, on time.',
+  tagline: 'Your company\'s annual tax return - filed correctly, on time.',
   seoTitle: 'Business ITR Filing India 2025 | Company & LLP Income Tax Return | Ollvy',
   seoDescription: 'Annual income tax return for Pvt Ltd (ITR-6) and LLP (ITR-5). Due October 31. Includes depreciation review, draft approval, and ITR-V same day.',
   canonicalUrl: 'https://www.ollvy.com/services/business-itr',
   lastReviewed: 'April 2026',
   category: 'Tax',
 
-  relatedServiceSlugs: ['mca-annual-filing', 'tds-monthly-compliance', 'gst-monthly-50l'],
+  relatedServiceSlugs: ['mca-annual-filing', 'tds-monthly-compliance', 'gst-monthly'],
   relatedLearnSlugs: ['do-i-need-to-file-itr', 'which-itr-form-should-i-use'],
 
   explainer: {
-    whatItIs: 'Business ITR is the annual income tax return filed by companies (ITR-6) and LLPs or partnerships (ITR-5) under Section 139 of the Income Tax Act, 1961. It reports income, expenses, depreciation, and tax computation for the financial year.',
-    whyYouNeedIt: 'Mandatory for every company and LLP regardless of profit or loss. Filing a loss return preserves the right to carry it forward against future profits - missing the deadline loses that benefit permanently. Banks, visa offices, and government tender departments ask for 2-3 years of ITR.',
-    whatHappensWithout: 'Interest at 1% per month on unpaid tax from the due date (Section 234A). Loss returns filed late cannot carry forward losses - that benefit is permanently gone. The department can reopen assessments up to 3 years back.',
+    whatItIs: 'Every Pvt Ltd, LLP, and partnership must file an annual income tax return. It covers what the business earned, what it spent, and how much tax is owed for the year. The government uses a different form depending on your entity type - Ollvy picks the right one.',
+    whyYouNeedIt: 'Mandatory for every company and LLP - even if you made zero revenue or a loss. If your business lost money this year, filing on time lets you use that loss to reduce tax in future profitable years. Miss the deadline and that benefit is gone forever. Banks, visa offices, and government tender departments ask for 2-3 years of filed returns.',
+    whatHappensWithout: 'Late filing means 1% per month interest on any unpaid tax from the deadline. If your business made a loss and you file late, you lose the right to use that loss against future profits - permanently. The tax department can also reopen your books going back 3 years.',
   },
 
   workflow: [
@@ -384,82 +384,82 @@ export const businessItr: ServicePageConfig = {
       step: 1,
       title: 'Upload your financials',
       timeframe: 'Day 0-1',
-      description: 'P&L, Balance Sheet, trial balance, bank statements. Ollvy CA assigned within 4 hours.',
+      description: 'Profit & loss statement, balance sheet, trial balance, and bank statements. Ollvy CA assigned within 4 hours.',
       milestone: 'Documents received, Ollvy CA assigned',
     },
     {
       step: 2,
-      title: 'Ollvy CA reviews books and prepares computation',
+      title: 'Ollvy CA reviews books and prepares calculation',
       timeframe: 'Day 1-4',
-      description: 'Ollvy CA reviews P&L, verifies depreciation schedule, checks director remuneration treatment, and prepares income computation.',
-      milestone: 'Draft computation ready',
+      description: 'Ollvy CA reviews your profit & loss, checks that asset write-offs are calculated correctly, verifies how director pay is treated for tax, and prepares the full tax calculation.',
+      milestone: 'Draft tax calculation ready',
     },
     {
       step: 3,
       title: 'You review and approve the draft',
       timeframe: 'Day 4-7',
-      description: 'Complete draft ITR shared in the app - income figures, deductions, tax computation. Nothing is filed without your explicit approval.',
+      description: 'Complete draft return shared in the app - income, deductions, and the final tax number. Nothing is filed without your approval.',
       milestone: 'Draft approved',
     },
     {
       step: 4,
       title: 'Filed and acknowledgement delivered',
       timeframe: 'Day 7-10',
-      description: 'Ollvy CA files within 24 hours of your approval. ITR-V acknowledgement generated immediately and shared same day.',
-      milestone: 'ITR-V acknowledgement delivered',
+      description: 'Ollvy CA files within 24 hours of your approval. The official acknowledgement is generated immediately and shared the same day.',
+      milestone: 'Filing acknowledgement delivered',
     },
   ],
 
   included: [
     {
-      title: 'Depreciation review',
-      description: 'Ollvy CA reviews your asset schedule and depreciation rates. Incorrect rates are flagged before filing.',
+      title: 'Asset write-off review',
+      description: 'Ollvy CA checks that your assets are written off at the correct rates. Wrong rates get flagged before filing - not after a government notice.',
     },
     {
-      title: 'Director remuneration treatment',
-      description: 'For Pvt Ltd, how director salary is treated versus dividends has tax implications. Ollvy CA reviews compliance with Companies Act limits.',
+      title: 'Director pay and tax treatment',
+      description: 'For Pvt Ltd companies, how much you pay directors as salary vs dividends changes your tax bill. Ollvy CA makes sure it stays within legal limits.',
     },
     {
       title: 'Full draft review before filing',
-      description: 'You see the complete return before it is filed - income, deductions, tax computation. Nothing filed without your explicit approval.',
+      description: 'You see the complete return before it goes in - income, deductions, and the final tax number. Nothing filed without your approval.',
     },
     {
-      title: 'ITR-V stored permanently',
+      title: 'Filing acknowledgement stored permanently',
       description: 'Acknowledgement uploaded to your Ollvy account immediately. Available for loan applications, visa, or audits.',
     },
   ],
 
   risks: [
     {
-      title: 'Losses cannot be carried forward if filed late',
-      description: 'A company or LLP that made a loss and files after October 31 loses the right to offset that loss against future profits. That tax benefit cannot be recovered.',
+      title: 'You lose the right to offset losses if you file late',
+      description: 'If your business lost money this year and you file after October 31, you can never use that loss to reduce tax in a future profitable year. That benefit is gone permanently.',
     },
     {
-      title: 'Belated filing interest',
-      description: 'Section 234A: if you file after the due date with outstanding tax, 1% monthly interest accrues from the original deadline.',
+      title: 'Late filing interest',
+      description: 'If you file after the deadline with tax still owed, you pay 1% interest per month from the original due date. The longer you wait, the more it adds up.',
     },
     {
       title: 'Audit must be complete first',
-      description: 'Audit is mandatory for all Pvt Ltd companies (any turnover) and LLPs above Rs. 40 lakh turnover or Rs. 25 lakh contribution. Audited financials must be ready before ITR can be filed.',
+      description: 'All Pvt Ltd companies must be audited before filing - regardless of size. LLPs need an audit only above Rs. 40 lakh turnover or Rs. 25 lakh partner contribution. Your audited financials must be ready before Ollvy CA can file the return.',
     },
   ],
 
   personas: [
     {
       title: 'First year after incorporation',
-      description: 'First ITR. We walk through every document required.',
+      description: 'First tax return. Ollvy CA walks you through every document needed.',
     },
     {
       title: 'Company made a loss',
-      description: 'Loss return filed to preserve carry-forward rights. Missing the deadline loses the benefit permanently.',
+      description: 'Loss return filed on time so you can use that loss against future profits. Miss the deadline and that benefit is gone forever.',
     },
     {
       title: 'Changed CA mid-year',
-      description: 'Previous CA\'s books need reconciliation. We clean up and file correctly.',
+      description: 'Previous CA left messy books. Ollvy CA cleans up and files correctly.',
     },
     {
       title: 'Filing late',
-      description: 'We calculate interest liability upfront so there are no surprises, then file immediately to stop it growing.',
+      description: 'Ollvy CA calculates how much late interest you owe upfront - no surprises - then files immediately to stop it growing.',
     },
   ],
 
@@ -467,65 +467,65 @@ export const businessItr: ServicePageConfig = {
     {
       category: 'General',
       q: 'When is Business ITR due?',
-      a: 'October 31 for all Pvt Ltd companies (statutory audit is mandatory for all companies regardless of turnover, so the extended deadline always applies). For LLPs not requiring tax audit: July 31. For LLPs requiring tax audit (turnover above Rs. 1 crore or contribution above Rs. 25 lakh): October 31.',
+      a: 'October 31 for all Pvt Ltd companies (every company needs an audit, so the extended deadline always applies). For LLPs that don\'t need an audit: July 31. For LLPs that need one (turnover above Rs. 1 crore or partner contribution above Rs. 25 lakh): October 31.',
     },
     {
       category: 'General',
       q: 'What is the difference between ITR-5 and ITR-6?',
-      a: 'ITR-6 is for all companies - Pvt Ltd, Public Ltd, and OPC. ITR-5 is for LLPs, partnership firms, AOPs, and BOIs. The form is determined by your entity type, not by turnover or income.',
+      a: 'The government uses different forms for different entities. Companies (Pvt Ltd, Public Ltd, One Person Company) use one form. LLPs and partnerships use another. Ollvy picks the right one based on your entity type.',
     },
     {
       category: 'General',
       q: 'What is the penalty for not filing Business ITR?',
-      a: 'Rs. 10,000 late filing fee under Section 234F. Plus 1% per month interest under Section 234A on any unpaid tax from the original due date. And the permanent loss of any loss carry-forward rights.',
+      a: 'Rs. 10,000 late filing fee. Plus 1% per month interest on any unpaid tax from the original deadline. And if your business made a loss, you permanently lose the right to use it against future profits.',
     },
     {
       category: 'General',
       q: 'Must I file even if the company made no profit?',
-      a: 'Yes. Every company and LLP must file ITR every year regardless of profit, loss, or activity level. Filing a loss return is especially important - it preserves your right to offset that loss against future profits.',
+      a: 'Yes. Every company and LLP must file every year - even with zero activity. If you made a loss, filing is extra important because it lets you use that loss to pay less tax in future profitable years.',
     },
     {
       category: 'Process',
       q: 'What documents do I need?',
-      a: 'Audited P&L and Balance Sheet, trial balance, bank statements (full year), Form 26AS, depreciation schedule, and director/partner remuneration details. For LLPs not requiring audit: management accounts are sufficient.',
+      a: 'Audited profit & loss and balance sheet, trial balance, full-year bank statements, tax credit statement (Form 26AS), asset write-off schedule, and director or partner pay details. For LLPs not needing an audit: management accounts are enough.',
     },
     {
       category: 'Process',
-      q: 'Do I need a statutory audit before filing?',
-      a: 'Mandatory for all Pvt Ltd companies regardless of turnover. For LLPs: mandatory above Rs. 40 lakh turnover or Rs. 25 lakh contribution. Tax audit (separate from statutory audit) is mandatory for businesses with turnover above Rs. 1 crore.',
+      q: 'Do I need an audit before filing?',
+      a: 'Every Pvt Ltd company needs an audit - no matter the size. LLPs need one only above Rs. 40 lakh turnover or Rs. 25 lakh contribution. There\'s also a separate tax-specific audit for businesses above Rs. 1 crore turnover.',
     },
     {
       category: 'General',
       q: 'What if I missed the October 31 deadline?',
-      a: 'You can file a belated return by December 31 of the assessment year with the late fee and interest. After December 31, filing requires special circumstances or departmental notice. The longer you wait, the more interest accrues.',
+      a: 'You can still file a late return by December 31 of the same assessment year - you\'ll pay the late fee and interest. After December 31, it gets much harder and usually requires a government notice. The longer you wait, the more interest accrues.',
     },
   ],
 
   govtFees: {
-    caption: 'Government Penalties - Late Business ITR Filing',
-    headers: ['Penalty Type', 'Amount', 'Provision'],
+    caption: 'Government penalties for late filing',
+    headers: ['Penalty', 'Amount', 'Legal basis'],
     rows: [
-      ['Late filing fee', 'Rs. 10,000 (companies and audit cases)', 'Section 234F, Income Tax Act 1961'],
-      ['Interest on unpaid tax', '1% per month from due date until payment', 'Section 234A'],
-      ['Interest on advance tax shortfall', '1% per month on shortfall amount', 'Section 234B (if <90% of liability paid as advance tax)'],
-      ['Loss carry-forward forfeited', 'Permanent loss of tax benefit', 'Section 139(3) - loss return not filed by due date'],
+      ['Late filing fee', 'Rs. 10,000 (companies and audit cases)', 'Income Tax Act - late filing fee'],
+      ['Interest on unpaid tax', '1% per month from due date until payment', 'Income Tax Act - interest on late payment'],
+      ['Interest on advance tax shortfall', '1% per month on shortfall amount', 'Income Tax Act - advance tax shortfall (if less than 90% paid in advance)'],
+      ['Loss benefit forfeited', 'Permanent loss of tax benefit', 'Income Tax Act - loss benefit forfeited if filed late'],
     ],
   },
 
   documents: {
-    caption: 'Documents Required - Business ITR Filing',
-    headers: ['Document', 'Company (ITR-6)', 'LLP (ITR-5)'],
+    caption: 'Documents you\'ll need',
+    headers: ['Document', 'Company (Pvt Ltd)', 'LLP / Partnership'],
     rows: [
-      ['Audited Balance Sheet', 'Mandatory', 'Mandatory if audit required; management accounts otherwise'],
-      ['Audited P&L Statement', 'Mandatory', 'Mandatory if audit required'],
+      ['Audited Balance Sheet', 'Mandatory', 'Mandatory if audit required - management accounts are enough otherwise'],
+      ['Audited profit & loss', 'Mandatory', 'Mandatory if audit required'],
       ['Statutory Auditor Report', 'Mandatory', 'If audit required'],
-      ['Tax Audit Report (Form 3CA/3CB + 3CD)', 'If turnover > Rs. 1 crore', 'If turnover > Rs. 1 crore'],
+      ['Tax audit report', 'If turnover above Rs. 1 crore', 'If turnover above Rs. 1 crore'],
       ['Trial balance', 'Required', 'Required'],
       ['Bank statements (full year)', 'Required', 'Required'],
       ['Form 26AS', 'Required', 'Required'],
-      ['Depreciation schedule', 'Required', 'Required'],
-      ['Director/partner remuneration details', 'Required', 'Required - Section 40(b) calculation'],
-      ['Previous year ITR and computation', 'For reference', 'For reference'],
+      ['Asset write-off schedule', 'Required', 'Required'],
+      ['Director or partner pay details', 'Required', 'Required - partner pay limits apply'],
+      ['Previous year return and calculation', 'For reference', 'For reference'],
     ],
   },
 }

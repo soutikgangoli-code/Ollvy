@@ -29,7 +29,7 @@ export const fallbackReviews: Record<string, FallbackReview[]> = {
     { rating: 5, comment: 'They checked for similar marks before filing and found one. Changed our approach before spending the government fee. Good catch.', date: 'March 2026', name: 'Amit Prakash Joshi' },
     { rating: 4, comment: 'Registry came back with a question and it was answered the next day. That was part of the price - no extra charge.', date: 'February 2026', name: 'Deepika Nair' },
   ],
-  'gst-monthly-50l': [
+  'gst-monthly': [
     { rating: 5, comment: 'Filed on time every month. I send the data, rest is done. Summary in the app tells me what was filed.', date: 'March 2026', name: 'Suresh Babu Reddy' },
     { rating: 5, comment: 'Switched from a CA who missed the deadline. Not happened once here. No calls needed.', date: 'February 2026', name: 'Neha Sharma' },
   ],
