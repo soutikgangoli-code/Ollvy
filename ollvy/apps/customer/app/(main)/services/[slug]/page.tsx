@@ -136,7 +136,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 <li key={i}>
                   <h3>Step {step.step}: {step.title}</h3>
                   <p><strong>Timeline:</strong> {step.timeline}</p>
-                  {step.body.includes('\n') ? (
+                  {(step.body || '').includes('\n') ? (
                     <ul>{step.body.split('\n').filter(Boolean).map((line, j) => <li key={j}>{line}</li>)}</ul>
                   ) : (
                     <p>{step.body}</p>
@@ -155,7 +155,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {service.whatsIncluded.map((item, i) => (
               <div key={i}>
                 <h3>{item.title}</h3>
-                {item.body.includes('\n') ? (
+                {(item.body || '').includes('\n') ? (
                   <ul>{item.body.split('\n').filter(Boolean).map((line, j) => <li key={j}>{line}</li>)}</ul>
                 ) : (
                   <p>{item.body}</p>
@@ -174,7 +174,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {service.serviceRisks.map((risk, i) => (
               <div key={i}>
                 <h3>{risk.title}</h3>
-                {risk.body.includes('\n') ? (
+                {(risk.body || '').includes('\n') ? (
                   <ul>{risk.body.split('\n').filter(Boolean).map((line, j) => <li key={j}>{line}</li>)}</ul>
                 ) : (
                   <p>{risk.body}</p>
@@ -191,7 +191,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {service.faqs.map((faq, i) => (
               <div key={i}>
                 <h3>{faq.q}</h3>
-                {faq.a.includes('\n') ? (
+                {(faq.a || '').includes('\n') ? (
                   faq.a.split('\n').filter(Boolean).map((line, j) => <p key={j}>{line}</p>)
                 ) : (
                   <p>{faq.a}</p>
