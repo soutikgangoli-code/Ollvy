@@ -84,9 +84,9 @@ INSERT INTO service_packages (
 
   '[]'::jsonb,
 
-  '["✓ Found shares we had forgotten about","✓ Expert explained it without jargon","✓ Got the document list same day","✓ Inheritance process explained clearly","✓ Worth every rupee"]'::jsonb,
+  ARRAY['✓ Found shares we had forgotten about','✓ Expert explained it without jargon','✓ Got the document list same day','✓ Inheritance process explained clearly','✓ Worth every rupee'],
 
-  '["gst-registration","trademark-registration","pvt-ltd-incorporation"]'::jsonb
+  ARRAY['gst-registration','trademark-registration','pvt-ltd-incorporation']::text[]
 
 ) ON CONFLICT (slug) DO UPDATE SET
   name = EXCLUDED.name,
