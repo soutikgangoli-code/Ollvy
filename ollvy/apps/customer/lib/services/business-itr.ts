@@ -62,23 +62,23 @@ export const businessItr: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Depreciation review - not just data entry',
-      body: "Your CA reviews your asset schedule and depreciation calculations. If you've been using incorrect rates or missing depreciation on eligible assets, they catch it. This affects your tax liability - getting it right matters.",
+      body: "Asset schedule and depreciation calculations reviewed\nIncorrect rates or missed depreciation on eligible assets caught\nThis directly affects your tax liability",
       comparisonWithout: 'You calculate depreciation, CA just enters it',
       comparisonWithOllvy: 'CA reviews asset schedule and corrects rates',
     },
     {
       title: 'Director remuneration treatment',
-      body: "For Pvt Ltd companies, how you treat director salary vs dividends affects tax. Your CA reviews the remuneration structure and ensures it's compliant with Companies Act limits. If you're overpaying relative to profits, they flag it.",
+      body: "How you split director salary vs dividends affects your tax\nRemuneration structure checked against Companies Act limits\nOverpayment relative to profits flagged",
     },
     {
       title: 'Draft review before filing',
-      body: "You see the complete ITR before it's filed. Income figures, deductions, tax computation - everything. You approve it in the app. We don't file until you've reviewed it. Most CAs file and send you the acknowledgement after the fact.",
+      body: "Full draft shared before filing — income, deductions, tax computation\nYou review and approve in the app. Nothing goes to the portal without your sign-off",
       comparisonWithout: 'ITR filed, acknowledgement sent, no review',
       comparisonWithOllvy: 'Draft shared, you approve, then we file',
     },
     {
       title: 'Acknowledgement stored permanently',
-      body: "The ITR-V acknowledgement is uploaded to your Ollvy account the moment it's generated. Five years from now when you need it for a loan or audit, it's there. Not in an email thread you can't find.",
+      body: "ITR-V uploaded the moment it's generated\nStored permanently — accessible for loans, audits, or anything else years later",
       mockVisualType: 'receipt',
       mockVisualData: {
         label: 'ITR-V Acknowledgement',
@@ -140,7 +140,7 @@ export const businessItr: ServiceConfig = {
     {
       category: 'General',
       q: 'When is Business ITR due?',
-      a: 'For Pvt Ltd companies: October 31 - statutory audit is mandatory for all companies regardless of turnover, so the extended deadline always applies. For LLPs not requiring tax audit: July 31. For LLPs requiring tax audit (turnover above Rs 1 crore): October 31.',
+      a: 'Pvt Ltd: October 31 (statutory audit always required). LLP without audit: July 31. LLP with audit (turnover above ₹1 crore): October 31.',
     },
     {
       category: 'General',

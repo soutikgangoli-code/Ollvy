@@ -65,23 +65,23 @@ export const iecCode: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Filed on DGFT portal - not an outdated form',
-      body: 'IEC is now issued exclusively online through DGFT. The portal requires careful data entry - PAN, Aadhaar, bank details must match exactly. We handle the submission, you do the OTP.',
+      body: 'Issued exclusively online through DGFT — PAN, Aadhaar, bank details must match exactly\nWe handle the submission, you verify the OTP',
       comparisonWithout: 'Navigate DGFT portal - 2+ hours, frequent errors',
       comparisonWithOllvy: 'We file - you verify OTP - IEC in 5 days',
     },
     {
       title: 'Bank account verification guidance',
-      body: 'IEC requires a cancelled cheque or bank statement with business name, account number, and IFSC clearly visible. Many applications fail because the account is in the proprietor\'s personal name, not the business name. We verify this before filing.',
+      body: 'Cancelled cheque or bank statement needed — business name, account number, and IFSC must be visible\nMany applications fail because the account is in a personal name, not the business name\nVerified before filing',
       comparisonWithout: 'Rejection due to bank account mismatch',
       comparisonWithOllvy: 'Bank account verified before submission',
     },
     {
       title: 'Lifetime validity - no renewal',
-      body: 'IEC is valid for life. Unlike GST or FSSAI, there is no annual renewal. However, you must update your IEC profile if business details change (address, bank account, directors). We can handle updates for ₹999.',
+      body: 'Valid for life — no annual renewal unlike GST or FSSAI\nIf business details change (address, bank, directors), the profile needs updating (₹999)',
     },
     {
       title: 'Ready to use at customs',
-      body: 'Once issued, your IEC is active immediately in the ICEGATE customs system. You can file bills of entry (imports) and shipping bills (exports). No additional registration required.',
+      body: 'Active immediately on ICEGATE — file bills of entry (imports) and shipping bills (exports)\nNo additional registration required',
       mockVisualType: 'status',
       mockVisualData: {
         row1: 'IEC: 0123456789',

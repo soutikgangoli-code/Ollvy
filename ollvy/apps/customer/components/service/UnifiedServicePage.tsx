@@ -782,9 +782,17 @@ export function UnifiedServicePage({
                                 {formatWithMonoNumbers(item.title)}
                               </h3>
                               {item.body && (
-                                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-                                  {formatWithMonoNumbers(item.body)}
-                                </p>
+                                item.body.includes('\n') ? (
+                                  <ul className="text-sm text-muted-foreground mt-1 leading-relaxed list-disc list-inside space-y-0.5">
+                                    {item.body.split('\n').filter(Boolean).map((line, li) => (
+                                      <li key={li}>{formatWithMonoNumbers(line)}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                                    {formatWithMonoNumbers(item.body)}
+                                  </p>
+                                )
                               )}
 
                               {/* Comparison */}
@@ -946,8 +954,7 @@ export function UnifiedServicePage({
                           Others
                         </p>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          Take your documents as-is. Submit the application. If there's a
-                          query or rejection, it's your problem.
+                          Documents taken as-is. Query or rejection? Your problem.
                         </p>
                       </Card>
                       <Card className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 p-4 sm:p-5">
@@ -955,8 +962,7 @@ export function UnifiedServicePage({
                           Ollvy
                         </p>
                         <p className="text-sm text-foreground leading-relaxed">
-                          Review every document before filing. Catch mismatches, expired
-                          items, and format issues. Then file.
+                          Every document reviewed before filing. Mismatches and format issues caught upfront.
                         </p>
                       </Card>
                     </div>

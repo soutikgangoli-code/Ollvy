@@ -64,13 +64,13 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'TDS calculation for all payment types',
-      body: 'Salary TDS (Section 192), contractor payments (194C), professional fees (194J), rent (194I), interest (194A). Each has different rates and thresholds. We apply the correct rate automatically.',
+      body: 'Salary (192), contractors (194C), professional fees (194J), rent (194I), interest (194A)\nEach has different rates and thresholds — correct rate applied automatically',
       comparisonWithout: 'Guess the rate - risk under-deduction notice',
       comparisonWithOllvy: 'Correct TDS rate applied for every payment',
     },
     {
       title: 'Monthly challan preparation',
-      body: 'TDS challan requires correct BSR code, assessment year, and tax type (TDS/TCS). Wrong entries cause mismatched credits for deductees. We prepare the challan - you just pay.',
+      body: 'Challan needs the right BSR code, assessment year, and tax type\nWrong entries cause mismatched credits for your deductees\nWe prepare the challan — you just pay',
       mockVisualType: 'receipt',
       mockVisualData: {
         row1: 'Form 26Q - Q4 FY 2024-25',
@@ -81,7 +81,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
     },
     {
       title: 'Quarterly return filing',
-      body: 'TDS returns are filed quarterly: Form 24Q (salary), Form 26Q (non-salary). Returns must match the challans deposited. Your CA reconciles deposits with return before filing.',
+      body: 'Form 24Q (salary) and Form 26Q (non-salary) filed quarterly\nReconciled against your challan deposits before filing',
       mockVisualType: 'calendar',
       mockVisualData: {
         row1: 'Q1 (Apr-Jun) return due: July 31',
@@ -92,7 +92,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
     },
     {
       title: 'Form 16/16A generation enabled',
-      body: 'Once quarterly returns are filed, Form 16 (salary TDS certificate) and Form 16A (non-salary TDS certificate) can be downloaded from TRACES. Your employees and vendors need these for their ITR.',
+      body: 'Form 16 (salary) and Form 16A (non-salary) downloadable from TRACES after filing\nYour employees and vendors need these for their own ITR',
     },
   ],
 

@@ -69,7 +69,7 @@ export const gstRegistration: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'CA handles the GSTN portal - all 23 fields',
-      body: "The GST REG-01 form on the government portal has 23 fields across 5 tabs, requires documents in specific formats, and times out after inactivity. Your CA fills the entire form. You answer 5 questions in the app.",
+      body: "The government form has 23 fields across 5 tabs and times out constantly\nYour CA fills the whole thing — you answer 5 questions in the app",
       comparisonWithout: '23 fields · 5 tabs · 3-4 hours on GSTN portal',
       comparisonWithOllvy: '5 questions in app · ~4 minutes',
       mockVisualType: 'status',
@@ -83,7 +83,7 @@ export const gstRegistration: ServiceConfig = {
     },
     {
       title: 'ARN shared same day - you can track it yourself',
-      body: "The ARN (Application Reference Number) is generated the moment your CA submits. We share it in the app immediately. You can go to gstn.gov.in → Search Taxpayer → Search by ARN and verify status yourself. We don't ask you to trust us blindly.",
+      body: "ARN generated the moment it's submitted, shared in app immediately\nYou can verify status yourself at gstn.gov.in → Search Taxpayer → Search by ARN",
       mockVisualType: 'arn',
       mockVisualData: {
         arn: 'AA270325014782R',
@@ -93,11 +93,11 @@ export const gstRegistration: ServiceConfig = {
     },
     {
       title: 'Officer queries handled - no extra charge',
-      body: "If the GST officer requests clarification (happens in ~20% of cases), your CA responds within 24 hours. This is part of the service - not a separate charge. Common queries: Aadhaar verification, address proof, bank account details. We've handled all of them before.",
+      body: "Happens in about 20% of cases — your CA responds within 24 hours\nIncluded in the service, not an extra charge\nCommon queries: Aadhaar verification, address proof, bank details",
     },
     {
       title: 'Compliance calendar updated automatically',
-      body: "The moment your GSTIN is issued, your Ollvy compliance calendar shows your first GSTR-1 due date (11th of next month) and GSTR-3B due date (20th of next month). You don't have to calculate anything. The deadlines appear.",
+      body: "GSTIN issued → your first GSTR-1 (11th) and GSTR-3B (20th) due dates appear automatically\nNo manual setup needed",
       mockVisualType: 'calendar',
       mockVisualData: {
         row1: 'GSTR-1 - Due 11 Apr (outward supplies)',

@@ -65,13 +65,13 @@ export const mcaAnnualFiling: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Both forms filed - AOC-4 and MGT-7',
-      body: 'AOC-4 contains your audited financial statements. MGT-7 is the annual return with shareholder and director details. Both are mandatory. Both are included in ₹6,999.',
+      body: 'AOC-4 (financial statements) and MGT-7 (annual return with shareholder and director details)\nBoth mandatory, both included',
       comparisonWithout: 'Book AOC-4 and MGT-7 separately - higher total cost',
       comparisonWithOllvy: 'Both forms, one price, one CS',
     },
     {
       title: 'Deadline calculation based on AGM',
-      body: 'AOC-4 is due within 30 days of AGM. MGT-7 is due within 60 days of AGM. AGM must be held within 6 months of financial year end. We track all three dates for you.',
+      body: 'AOC-4 due 30 days after AGM, MGT-7 due 60 days after AGM\nAGM must be held within 6 months of financial year end\nAll three dates tracked for you',
       mockVisualType: 'calendar',
       mockVisualData: {
         row1: 'FY End: March 31 → AGM by Sep 30',
@@ -82,13 +82,13 @@ export const mcaAnnualFiling: ServiceConfig = {
     },
     {
       title: 'Penalty status checked before filing',
-      body: "If you're filing late, penalty is ₹100/day per form from the due date. We calculate the exact penalty amount before filing so there are no surprises. Additional fees for delayed filing are disclosed upfront.",
+      body: "Late filing = ₹100/day per form from the due date\nExact penalty calculated and disclosed before you approve",
       comparisonWithout: 'Surprise penalty at MCA portal during filing',
       comparisonWithOllvy: 'Penalty calculated and disclosed before you approve',
     },
     {
       title: 'SRN shared immediately',
-      body: 'The Service Request Number is your proof of filing. We share both SRNs (AOC-4 and MGT-7) in your app immediately after submission. ROC typically processes within 48 hours.',
+      body: 'Both SRNs (AOC-4 and MGT-7) shared in your app immediately after submission\nROC typically processes within 48 hours',
     },
   ],
 
@@ -158,7 +158,7 @@ export const mcaAnnualFiling: ServiceConfig = {
     {
       category: 'Process',
       q: 'What if I missed the deadline?',
-      a: 'Penalty is Rs 100 per day per form from the due date. We calculate the exact amount and file immediately to stop further accumulation.',
+      a: '₹100/day per form from the due date. File immediately to stop accumulation.',
     },
     {
       category: 'Documents',

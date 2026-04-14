@@ -81,7 +81,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'DSC for all directors - video verification guided',
-      body: 'Digital Signature Certificates are mandatory. We arrange the tokens and guide each director through video verification. Takes 15 minutes per director.',
+      body: 'DSC is mandatory — we arrange the tokens and guide each director through video verification\n15 minutes per director',
       comparisonWithout: 'Navigate DSC portals yourself - 3+ hours',
       comparisonWithOllvy: 'Guided flow in app - 15 minutes per director',
     },
@@ -93,7 +93,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     },
     {
       title: 'MOA and AOA drafted for your business',
-      body: 'Main objects, ancillary objects, and authorised capital are drafted based on what you actually do - not a generic template that needs amendment later.',
+      body: 'Drafted based on what your business actually does\nNot a generic template that needs amendment later',
       comparisonWithout: 'Generic template - may need amendment later',
       comparisonWithOllvy: 'Custom drafting based on your business activities',
     },
@@ -103,7 +103,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     },
     {
       title: 'Compliance calendar auto-populated',
-      body: 'From the day your company is incorporated, your calendar shows every deadline: first board meeting (30 days), ADT-1 auditor appointment (15 days from AGM), DIR-3 KYC (Sep 30 every year), MCA annual filing, and Business ITR.',
+      body: 'Board meeting (30 days), ADT-1 auditor appointment (15 days from AGM)\nDIR-3 KYC (Sep 30 every year), MCA annual filing, Business ITR\nAll populated the day your company is incorporated',
       mockVisualType: 'calendar',
       mockVisualData: {
         row1: 'First Board Meeting - Within 30 days',
@@ -114,7 +114,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     },
     {
       title: 'All documents stored permanently',
-      body: 'Certificate of Incorporation, MOA, AOA, PAN, TAN, share certificates, and DSC details - all in your Ollvy account. Your CA will ask for these repeatedly over the years.',
+      body: 'CoI, MOA, AOA, PAN, TAN, share certificates, DSC details — all in your Ollvy account\nYour CA will ask for these repeatedly over the years',
     },
   ],
 
@@ -173,7 +173,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     {
       category: 'General',
       q: 'How long does incorporation take?',
-      a: '15 working days end-to-end. DSC takes 2 days, name approval 3 days, SPICe+ filing and MCA approval 10 days. MCA processing speed is outside our control, but we file the moment documents are ready.',
+      a: '15 working days end-to-end. DSC takes 2 days, name approval 3 days, SPICe+ filing and MCA approval 10 days.',
     },
     {
       category: 'General',
@@ -203,7 +203,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     {
       category: 'After Completion',
       q: 'What are my compliance obligations after incorporation?',
-      a: 'File Form INC-20A (commencement of business declaration) within 180 days - this requires the initial share capital to be deposited in a company bank account, so open a current account immediately. Annual obligations: MCA annual return (AOC-4 due 30 days after AGM, MGT-7 due 60 days after AGM), Director KYC by Sep 30, Business ITR by Oct 31. All added to your compliance calendar automatically.',
+      a: 'INC-20A (commencement of business) within 180 days — requires share capital deposited in a company bank account, so open a current account immediately. Annual: AOC-4 (30 days after AGM), MGT-7 (60 days after AGM), Director KYC by Sep 30, Business ITR by Oct 31.',
     },
     {
       category: 'After Completion',

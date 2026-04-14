@@ -73,17 +73,17 @@ export const trademarkRegistration: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Trademark search before filing',
-      body: 'Attorney searches the Registry before we spend your government fee. If your exact mark is already registered in your class, we tell you upfront.',
+      body: 'Registry searched before your government fee is spent\nIf your exact mark is already registered in your class, you know upfront',
       comparisonWithout: 'File without searching, wait months, get rejected',
       comparisonWithOllvy: 'Search first, modify if needed, then file',
     },
     {
       title: 'Class selection guidance',
-      body: 'Trademarks are registered per class (45 classes under the Nice Classification). Attorney recommends only the classes you actually need - we do not push unnecessary filings.',
+      body: '45 classes exist under the Nice Classification\nAttorney recommends only the ones you actually need — no unnecessary filings',
     },
     {
       title: 'Examiner objection response included',
-      body: 'If the Trademark Examiner raises objections (common for descriptive marks), your attorney responds. Included in the service - not a separate charge.',
+      body: 'Examiner objections are common for descriptive marks — your attorney handles the response\nIncluded in the service, not a separate charge',
       comparisonWithout: 'Objection raised, you pay extra to respond',
       comparisonWithOllvy: 'Objection response included in service',
     },
@@ -160,7 +160,7 @@ export const trademarkRegistration: ServiceConfig = {
     {
       category: 'Process',
       q: 'Why does registration take 12-18 months?',
-      a: 'The 7-day timeline is for filing. Examination by the Registry takes 6-12 months. Then 4 months of public opposition window. Then certificate issuance. All government-side processing.',
+      a: 'The 7-day timeline is for filing. Examination by the Registry takes 6-12 months, then 4 months of public opposition window, then certificate issuance.',
     },
     {
       category: 'Process',

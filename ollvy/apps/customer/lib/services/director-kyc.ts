@@ -54,7 +54,7 @@ export const directorKyc: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'DIN status check before filing',
-      body: "Before we file, your CS checks your DIN status on MCA21. If it's already deactivated, we tell you upfront. The filing process is the same, but you know where you stand.",
+      body: "DIN status checked on MCA21 before filing\nIf it's already deactivated, you know upfront",
       mockVisualType: 'status',
       mockVisualData: {
         row1: 'DIN: 08765432',
@@ -64,11 +64,11 @@ export const directorKyc: ServiceConfig = {
     },
     {
       title: 'OTP verification handled live',
-      body: "DIR-3 KYC requires OTP verification on your registered mobile and email. Your CS coordinates this with you in real-time - they file, you receive OTP, you share, they submit. Takes 10 minutes.",
+      body: "OTP verification on your registered mobile and email\nCS coordinates live — they file, you approve the OTP. About 10 minutes",
     },
     {
       title: 'Next year reminder added automatically',
-      body: "The moment we file, next year's Sep 30 deadline is added to your compliance calendar. You'll get reminders at 30d, 7d, and 1d before. You won't forget again.",
+      body: "Next year's Sep 30 deadline auto-added to your compliance calendar\nReminders at 30 days, 7 days, and 1 day before",
       mockVisualType: 'calendar',
       mockVisualData: {
         row1: 'DIR-3 KYC - Due Sep 30, 2026',

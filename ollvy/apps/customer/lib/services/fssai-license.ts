@@ -72,19 +72,19 @@ export const fssaiLicense: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'Correct license type determined upfront',
-      body: 'There are 3 types: Registration (up to ₹12L turnover), State License (₹12L-₹20Cr), Central License (₹20Cr+ or interstate). Filing the wrong type means rejection and refiling. We determine the right one before you pay.',
+      body: 'Registration (up to ₹12L), State License (₹12L–₹20Cr), Central License (₹20Cr+ or interstate)\nFiling the wrong type means rejection and refiling\nThe right one is determined before you pay',
       comparisonWithout: 'Guess the license type - risk rejection and delay',
       comparisonWithOllvy: 'License type verified based on turnover and geography',
     },
     {
       title: 'Application filed on FSSAI portal',
-      body: 'The FSSAI portal has 20+ fields per application type. We handle the entire submission. You answer 5 questions in the app.',
+      body: '20+ fields on the FSSAI portal per application type\nYou answer 5 questions in the app — the rest is handled',
       comparisonWithout: '2+ hours on FSSAI portal, frequent session timeouts',
       comparisonWithOllvy: '5 questions in app - we file the rest',
     },
     {
       title: 'Inspection preparation checklist',
-      body: 'For State and Central licenses, FSSAI may inspect your premises. We provide a pre-inspection checklist: hygiene requirements, equipment labels, water storage, pest control evidence. Most businesses fail inspection for missing documentation, not actual violations.',
+      body: 'FSSAI may inspect your premises for State and Central licenses\nPre-inspection checklist provided: hygiene, equipment labels, water storage, pest control\nMost failures are missing documentation, not actual violations',
       mockVisualType: 'checklist',
       mockVisualData: {
         row1: '✓ Pest control certificate (last 3 months)',
@@ -96,7 +96,7 @@ export const fssaiLicense: ServiceConfig = {
     },
     {
       title: 'Renewal reminder in your calendar',
-      body: 'FSSAI licenses are valid for 1-5 years depending on fee paid. We add renewal reminders to your compliance calendar. Operating with an expired license is the same as operating without one - full penalty applies.',
+      body: 'Valid 1–5 years depending on fee paid\nRenewal reminder added to your compliance calendar\nExpired license = same penalty as no license',
       mockVisualType: 'calendar',
       mockVisualData: {
         row1: 'FSSAI License Renewal - Due Mar 2026',
@@ -166,12 +166,12 @@ export const fssaiLicense: ServiceConfig = {
     {
       category: 'Process',
       q: 'How long is the license valid?',
-      a: '1 to 5 years - you choose at the time of application. Fees scale accordingly. We recommend 5 years to avoid annual renewal hassle. Renewal must be filed 30 days before expiry.',
+      a: '1 to 5 years — you choose at the time of application. Fees scale accordingly. Renewal must be filed 30 days before expiry.',
     },
     {
       category: 'Process',
       q: 'What happens during inspection?',
-      a: 'FSSAI official visits your premises, checks hygiene practices, reviews documentation (pest control, water test, staff medical certificates), and verifies equipment. Pass rate is high if documentation is in order. We send a checklist.',
+      a: 'FSSAI official visits your premises, checks hygiene, reviews documentation (pest control, water test, staff medical certificates), and verifies equipment. Pass rate is high if documentation is in order.',
     },
     {
       category: 'Documents',

@@ -73,7 +73,7 @@ export const llpIncorporation: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'LLP Agreement drafted - not templated',
-      body: 'The agreement defines profit-sharing, decision-making, capital contribution, and exit terms. Drafted based on your actual arrangement - not a generic 50-50 template.',
+      body: 'Covers profit-sharing, decision-making, capital contribution, and exit terms\nDrafted for your actual arrangement — not a generic 50-50 template',
       comparisonWithout: 'Generic template - disputes arise later',
       comparisonWithOllvy: 'Custom agreement reflecting your actual split and roles',
     },

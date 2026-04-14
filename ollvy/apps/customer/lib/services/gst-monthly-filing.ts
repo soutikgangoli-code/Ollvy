@@ -83,7 +83,7 @@ export const gstMonthlyFiling: ServiceConfig = {
   whatsIncluded: [
     {
       title: 'GSTR-1 - outward supply return',
-      body: "All B2B invoices, B2C sales above ₹2.5L, and export invoices are captured in GSTR-1. Your CA prepares this from your sales data and files by the 11th.",
+      body: "B2B invoices, B2C sales above ₹2.5L, and export invoices captured\nPrepared from your sales data and filed by the 11th",
       mockVisualType: 'status',
       mockVisualData: {
         row1: 'GSTR-1 · March 2025',
@@ -93,17 +93,17 @@ export const gstMonthlyFiling: ServiceConfig = {
     },
     {
       title: 'GSTR-3B - net tax payment',
-      body: "GSTR-3B is where you pay your net GST liability. Your CA calculates output tax, deducts eligible ITC, and files. The challan is generated - you pay through your bank.",
+      body: "Output tax minus eligible ITC = your net GST liability\nChallan generated — you pay through your bank",
     },
     {
       title: 'ITC reconciliation with GSTR-2B',
-      body: "Your CA matches the ITC you're claiming against what's available in GSTR-2B (auto-populated from your vendors' GSTR-1). If there's a mismatch, they flag it before you claim ineligible ITC.",
+      body: "ITC you're claiming is matched against GSTR-2B (your vendors' filed data)\nMismatches flagged before you claim ineligible ITC",
       comparisonWithout: 'Claim ITC blindly, get notice later',
       comparisonWithOllvy: 'ITC verified against GSTR-2B before claiming',
     },
     {
       title: 'Monthly compliance report',
-      body: "After every filing cycle, you get a report: what was filed, when, acknowledgement numbers, ITC claimed, tax paid. This is your answer to 'what am I paying for?'",
+      body: "What was filed, when, acknowledgement numbers, ITC claimed, tax paid — all in one report",
       mockVisualType: 'receipt',
       mockVisualData: {
         label: 'March 2025 Compliance Report',
