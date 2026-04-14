@@ -594,6 +594,114 @@ MOBILE: Sticky bottom bar with price + CTA replaces sidebar
 
 ---
 
+## Optional service features (not used by GST, but needed for some services)
+
+### Variants (pricing tiers)
+
+For services with tier-based pricing (e.g., FSSAI Basic vs State License). Stored as `variants` JSONB in `service_packages`.
+
+```typescript
+interface DBServiceVariant {
+  id: string              // 'fssai-basic' | 'fssai-state'
+  label: string           // 'Under ₹12L/year'
+  sublabel: string        // 'FSSAI Basic Registration'
+  priceAdjustment: number // Paisa adjustment from base (negative = cheaper, 0 = base)
+  govtFeeAdjustment: number
+}
+```
+
+Example (cloud-kitchen-setup):
+```json
+[
+  {"id": "fssai-basic", "label": "Under ₹12L/year", "sublabel": "FSSAI Basic Registration", "priceAdjustment": -1000000, "govtFeeAdjustment": -110000},
+  {"id": "fssai-state", "label": "₹12L - ₹20Cr/year", "sublabel": "FSSAI State License", "priceAdjustment": 0, "govtFeeAdjustment": 0}
+]
+```
+Also set `default_variant_id` to the default selection.
+
+### Addons (selectable sub-services)
+
+For bundle services where users can toggle optional sub-services. Stored as `addons` JSONB.
+
+```typescript
+interface DBServiceAddon {
+  id: string              // 'gst-registration'
+  name: string            // 'GST Registration'
+  description: string     // Short description
+  pricePaisa: number      // Ollvy fee in paisa
+  govtFeePaisa: number    // Government fee in paisa (0 if none)
+  required: boolean       // Cannot be deselected if true
+  defaultSelected: boolean
+}
+```
+
+### Service-level comparison bullets (`comparisonWithout` / `comparisonWith`)
+
+For the "Why Ollvy" section — custom bullet-point comparison instead of the generic fallback. Stored as two text arrays in DB.
+
+```json
+// comparison_without (red card, X icons)
+["Wrong FSSAI license type - Swiggy rejects it", "FSSAI inspection failed", ...]
+
+// comparison_with (green card, check icons)  
+["License type verified before filing", "Inspection prep checklist included", ...]
+```
+
+If these are null, the generic fallback text is shown.
+
+### Service explainer ("What is [Service]?")
+
+Collapsible section below the process stepper. Stored as `service_explainer` JSONB.
+
+```typescript
+interface DBServiceExplainer {
+  steps: DBServiceExplainerStep[]
+}
+interface DBServiceExplainerStep {
+  step: number
+  title: string      // "What it is", "Why you need it", "What happens without it"
+  body: string
+  visual?: 'info' | 'scale' | 'sparkles' | 'shield' | 'alert'
+}
+```
+
+### Completion estimate fields
+
+For services with government processing where completion time is variable:
+
+```
+has_govt_processing: true           // enables range-based estimate
+completion_min_days: 180            // calendar days minimum
+completion_max_days: 540            // calendar days maximum
+completion_range_text: '12-18 months'  // displayed in disclaimer
+```
+
+If `has_govt_processing = false` (most services), the guaranteed date is calculated from `sla_working_days` using business days + Indian holiday calendar.
+
+Long timelines (> 60 days) format as "Month Year" (e.g., "September 2027"). Short timelines format as "Day Month" (e.g., "28 Mar").
+
+### Scope included / excluded
+
+Shown on checkout page. Stored as `scope_included` and `scope_excluded` text arrays.
+
+```json
+// scope_included
+["GST REG-01 filing", "ARN tracking", "Officer query response", "Compliance calendar setup"]
+
+// scope_excluded
+["GST return filing (separate service)", "Accounting or bookkeeping"]
+```
+
+### Service grid visibility
+
+```
+is_active: true       // false = hidden from grid and /services/[slug] returns 404
+display_order: 1      // lower = shown first in grid
+urgency_score: 95     // 0-100, affects smart sorting
+```
+
+---
+
 ## Database columns mapped
 
 When seeded to the `service_packages` table, the fields map as:
@@ -1187,6 +1295,190 @@ POST-PAYMENT:
 | Questionnaire store | `lib/stores/questionnaire-store.ts` |
 | Create order function | `supabase/functions/create-razorpay-order/index.ts` |
 | Webhook handler | `supabase/functions/razorpay-webhook/index.ts` |
+
+---
+
+## GST Registration — full questionnaire content (post-payment)
+
+GST Registration has NO pre-payment questions (fixed price, no eligibility step). All questions below are `is_pre_payment = false` — asked AFTER payment.
+
+**Migration:** `supabase/migrations/20260320900013_seed_registration_questionnaires.sql`
+
+### Step 1: Business Entity (8 questions)
+
+```
+1. entity_type (select, required)
+   "What type of business entity are you registering?"
+   Options: Sole Proprietorship, Partnership, Pvt Ltd, OPC, LLP, HUF, Trust/Society, Government
+   Help: "Select the legal structure of your business."
+
+2. legal_name (text, required, 3-200 chars)
+   "What is the legal name of the business?"
+   Placeholder: "As per PAN card"
+   Help: "Must match PAN card exactly."
+
+3. has_trade_name (select, required)
+   "Do you have a trade name different from the legal name?"
+   Options: Yes, No
+   Help: "Trade name is the name under which you conduct business."
+
+4. trade_name (text, optional, 2-200 chars)
+   "Trade name (if different)"
+   Placeholder: "e.g., Sharma Electronics"
+
+5. pan_number (text, required, regex: ^[A-Z]{5}[0-9]{4}[A-Z]{1}$)
+   "PAN of the business / proprietor"
+   Placeholder: "e.g., ABCDE1234F"
+   Help: "For proprietorship, use personal PAN. For company/LLP, use business PAN."
+
+6. turnover_threshold (select, required)
+   "Is your annual turnover likely to exceed Rs. 40 lakhs (goods) or Rs. 20 lakhs (services)?"
+   Options: Yes, No, Not Sure
+   Help: "GST registration is mandatory above these thresholds."
+
+7. voluntary_registration (select, optional)
+   "Are you registering voluntarily (below threshold)?"
+   Options: Yes, No
+   Help: "Voluntary registration allows you to collect GST and claim input tax credit."
+
+8. interstate_supply (select, required)
+   "Is this registration required for inter-state supply?"
+   Options: Yes, No
+   Help: "GST registration is mandatory for inter-state supply regardless of turnover."
+```
+
+### Step 2: Business Address (8 questions)
+
+```
+1. state (select, required) — all 28 states + 8 UTs
+   "State"
+   Help: "State where your principal place of business is located."
+
+2. district (text, required)
+   "District"
+
+3. pincode (text, required, 6 digits)
+   "Pincode"
+
+4. address_line_1 (text, required)
+   "Building / Flat / Office Number"
+
+5. address_line_2 (text, optional)
+   "Street / Road / Locality"
+
+6. premises_type (select, required)
+   "Type of premises"
+   Options: Owned, Rented, Shared / Co-working, Consent
+
+7. electricity_bill_name (text, required)
+   "Name on your electricity bill"
+   Help: "Must match or be relatable to the applicant."
+
+8. noc_available (select, conditional: premises_type = rented/shared)
+   "Do you have an NOC from the property owner?"
+   Options: Yes, No, Will arrange
+```
+
+### Step 3: Bank Details (3 questions)
+
+```
+1. bank_account_number (text, required)
+   "Bank account number"
+   Help: "Must be a current account in the business name."
+
+2. ifsc_code (text, required, regex)
+   "IFSC Code"
+
+3. bank_name (text, required)
+   "Bank name and branch"
+```
+
+### Step 4: Authorized Signatory (4 questions)
+
+```
+1. signatory_name (text, required)
+   "Authorized signatory name"
+   Help: "Person who will sign the GST application."
+
+2. signatory_pan (text, required, PAN regex)
+   "Signatory PAN"
+
+3. signatory_aadhaar (text, required, 12 digits)
+   "Signatory Aadhaar number"
+   Help: "OTP will be sent to the mobile number linked to this Aadhaar."
+
+4. signatory_mobile (text, required, 10 digits)
+   "Mobile number linked to Aadhaar"
+   Help: "This number will receive the Aadhaar OTP during filing."
+```
+
+---
+
+## GST Registration — document templates
+
+**Migration:** `supabase/migrations/20260321200002_seed_questionnaires_and_docs.sql`
+
+GST Registration uses the documents table from the `ServicePageConfig` (data source 2) for display on the service page. For actual upload tracking post-payment, document templates are seeded per service.
+
+General pattern — the documents table on the service page shows what's needed. After payment, `service_document_templates` defines what the user uploads:
+
+```sql
+INSERT INTO service_document_templates
+  (service_package_id, document_key, document_label, description,
+   stage_key, is_required, display_order, tips, template_url)
+VALUES
+  (service_id, 'pan_card', 'PAN Card',
+   'PAN card of the business or proprietor',
+   'doc_collection', true, 1,
+   ARRAY['Same PAN used for GST registration',
+         'Business PAN for companies, personal PAN for proprietorship'], NULL),
+
+  (service_id, 'aadhaar_card', 'Aadhaar Card',
+   'Aadhaar of the authorized signatory',
+   'doc_collection', true, 2,
+   ARRAY['Front and back both required',
+         'Name must match PAN exactly'], NULL),
+
+  (service_id, 'address_proof', 'Address Proof (Business Premises)',
+   'Electricity bill, rent agreement, or property tax receipt',
+   'doc_collection', true, 3,
+   ARRAY['Not older than 2 months',
+         'Address must match application exactly'], NULL),
+
+  (service_id, 'bank_proof', 'Bank Account Proof',
+   'Cancelled cheque or first page of passbook or bank statement',
+   'doc_collection', true, 4,
+   ARRAY['Must show account holder name, account number, and IFSC',
+         'Account must be in business name (not personal savings)'], NULL),
+
+  (service_id, 'noc', 'NOC from Property Owner',
+   'No Objection Certificate if premises is rented',
+   'doc_collection', false, 5,
+   ARRAY['Only required if premises is rented or shared',
+         'Must be signed by the landlord on their letterhead'], NULL),
+
+  (service_id, 'photo', 'Passport Photo',
+   'Passport-size photo of the authorized signatory',
+   'doc_collection', true, 6,
+   ARRAY['Recent photo, white background',
+         'JPEG or PNG, minimum 200x200px'], NULL);
+```
+
+### Work document templates (deliverables FROM professional TO customer)
+
+```sql
+INSERT INTO service_work_document_templates
+  (service_package_id, stage_key, direction, document_key,
+   document_label, description, display_order)
+VALUES
+  (service_id, 'application_filed', 'to_customer', 'arn_confirmation',
+   'Application Reference Number (ARN)',
+   'ARN generated on filing. Use to track status at gstn.gov.in.', 1),
+
+  (service_id, 'gstin_issued', 'to_customer', 'gst_certificate',
+   'GST Registration Certificate',
+   'Official GSTIN certificate from GSTN portal. Keep permanently.', 2);
+```
 
 ---
 
