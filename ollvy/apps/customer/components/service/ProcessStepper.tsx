@@ -76,7 +76,18 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
         ))}
       </div>
 
-      {/* Step content — all steps rendered for SEO, only active one visible */}
+      {/* All step content for SEO — sr-only, always in DOM */}
+      <div className="sr-only">
+        {steps.map((s, i) => (
+          <div key={`seo-${i}`}>
+            <h3>Step {s.step}: {s.title}</h3>
+            <p>{s.body}</p>
+            {s.milestone && <p>Milestone: {s.milestone}</p>}
+          </div>
+        ))}
+      </div>
+
+      {/* Step content — only active one visible */}
       {steps.map((s, i) => {
         const StepIcon = STEP_ICONS[s.visual ?? 'form']
         return (

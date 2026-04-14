@@ -788,7 +788,7 @@ export function UnifiedServicePage({
                               <h3 className="text-sm font-semibold text-foreground">
                                 {formatWithMonoNumbers(item.title)}
                               </h3>
-                              {item.body && (
+                              {item.body && (item.comparisonWithout || item.comparisonWithOllvy) && (
                                 item.body.includes('\n') ? (
                                   <ul className="text-sm text-muted-foreground mt-1 leading-relaxed list-disc list-inside space-y-0.5">
                                     {item.body.split('\n').filter(Boolean).map((line, li) => (
@@ -998,12 +998,6 @@ export function UnifiedServicePage({
                     </div>
                   )}
 
-                  <p className="text-sm text-muted-foreground leading-relaxed max-w-[560px]">
-                    Every order carries a guaranteed completion date. If we miss it, the full service fee is refunded automatically. No claim needed.
-                  </p>
-                  <p className="text-sm text-muted-foreground leading-relaxed max-w-[560px] mt-3">
-                    Your Ollvy CA is a qualified, practicing chartered accountant with at least three years of experience. Ask for their credentials at any point.
-                  </p>
 
                   {/* Profile Personas (merged into Why Ollvy section) */}
                   <div className="mt-10 sm:mt-16">

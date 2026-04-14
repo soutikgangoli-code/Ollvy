@@ -41,17 +41,18 @@ export function ServiceRisks({
                 <h3 className="text-xs sm:text-sm font-semibold text-foreground">
                   {risk.title}
                 </h3>
-                {risk.body.includes('\n') ? (
-                  <ul className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed list-disc list-inside space-y-0.5">
-                    {risk.body.split('\n').filter(Boolean).map((line, j) => (
-                      <li key={j}>{line}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed">
-                    {risk.body}
-                  </p>
-                )}
+                {(() => {
+                  const lines = risk.body.includes('\n')
+                    ? risk.body.split('\n').filter(Boolean)
+                    : risk.body.split(/(?<=\.)\s+/).filter(Boolean)
+                  return (
+                    <ul className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed list-disc list-inside space-y-0.5">
+                      {lines.map((line, j) => (
+                        <li key={j}>{line}</li>
+                      ))}
+                    </ul>
+                  )
+                })()}
               </div>
             </div>
           )

@@ -273,6 +273,8 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
           <p className="text-xl sm:text-2xl font-mono font-bold leading-snug text-foreground">
             {on ? onStat : data.off_stat}
           </p>
+          {/* Hidden for SEO: ensure on_stat text is always in server HTML */}
+          {!on && <span className="sr-only">{onStat}</span>}
         </div>
 
         {/* iOS toggle */}
