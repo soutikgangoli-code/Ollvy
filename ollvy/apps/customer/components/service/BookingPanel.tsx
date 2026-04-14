@@ -198,7 +198,11 @@ export function BookingPanel({
                 </button>
                 {variant.tooltip && expandedTooltip === variant.id && (
                   <p className="text-[11px] text-muted-foreground bg-muted/50 rounded-lg px-3 py-2 mt-1">
-                    {variant.tooltip}
+                    {variant.tooltip.includes('\n')
+                      ? variant.tooltip.split('\n').filter(Boolean).map((line: string, j: number) => (
+                          <span key={j}>{j > 0 && <br />}{line}</span>
+                        ))
+                      : variant.tooltip}
                   </p>
                 )}
               </div>
@@ -249,7 +253,11 @@ export function BookingPanel({
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                      {addon.description}
+                      {addon.description?.includes('\n')
+                        ? addon.description.split('\n').filter(Boolean).map((line: string, j: number) => (
+                            <span key={j}>{j > 0 && <br />}{line}</span>
+                          ))
+                        : addon.description}
                     </p>
                     {isRequired && (
                       <span className="inline-block mt-1 text-[10px] text-amber-600 dark:text-amber-400 font-medium">

@@ -302,7 +302,11 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                   {row.task}
                 </td>
                 <td className="px-5 py-4 text-muted-foreground leading-relaxed align-top border-l border-border w-[34%]">
-                  {row.own}
+                  {row.own.includes('\n')
+                    ? row.own.split('\n').filter(Boolean).map((line, j) => (
+                        <span key={j}>{j > 0 && <br />}{line}</span>
+                      ))
+                    : row.own}
                 </td>
                 <td className={cn(
                   "px-5 py-4 align-top border-l border-border w-[40%] transition-colors duration-300",
@@ -348,7 +352,11 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                   {row.task}
                 </td>
                 <td className="px-3 py-3 text-muted-foreground leading-snug align-top border-l border-border text-[13px]">
-                  {row.own}
+                  {row.own.includes('\n')
+                    ? row.own.split('\n').filter(Boolean).map((line, j) => (
+                        <span key={j}>{j > 0 && <br />}{line}</span>
+                      ))
+                    : row.own}
                 </td>
                 <td className={cn(
                   "px-3 py-3 align-top border-l border-border text-[13px] transition-colors duration-300",

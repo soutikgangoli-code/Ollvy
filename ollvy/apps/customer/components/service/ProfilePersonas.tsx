@@ -31,7 +31,11 @@ export function ProfilePersonas({
                 {persona.label}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed hidden sm:block">
-                {persona.detail}
+                {persona.detail.includes('\n')
+                  ? persona.detail.split('\n').filter(Boolean).map((line, j) => (
+                      <span key={j}>{j > 0 && <br />}{line}</span>
+                    ))
+                  : persona.detail}
               </p>
             </div>
           </div>
