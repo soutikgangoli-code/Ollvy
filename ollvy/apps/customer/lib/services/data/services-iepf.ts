@@ -5,7 +5,7 @@ export const iepfConsultation: ServicePageConfig = {
   title: 'IEPF Claim Consultation',
   tagline: 'Old shares, unclaimed dividends, inherited investments. Find out what you have and exactly how to claim it.',
 
-  seoTitle: 'IEPF Claim Consultation India — Unclaimed Shares and Dividends | Rs.500 | Ollvy',
+  seoTitle: 'IEPF Claim Consultation India - Unclaimed Shares and Dividends | Rs.500 | Ollvy',
   seoDescription: 'Shares in IEPF? Old dividends unclaimed? Expert finds what is there under your name and tells you exactly how to claim it back. Rs.500 flat, consultation in 2 days.',
   canonicalUrl: 'https://www.ollvy.com/services/iepf-consultation',
   lastReviewed: 'April 2026',
@@ -41,7 +41,7 @@ export const iepfConsultation: ServicePageConfig = {
       step: 3,
       title: '45-minute consultation call',
       timeframe: 'Day 1-2',
-      description: 'Covers what is claimable, what IEPF-5 looks like for your case, and which documents you need. Legal heir claim? Covered separately — different requirements from a direct claim.',
+      description: 'Covers what is claimable, what IEPF-5 looks like for your case, and which documents you need. Legal heir claim? Covered separately - different requirements from a direct claim.',
       milestone: 'Consultation complete',
     },
     {
@@ -61,7 +61,7 @@ export const iepfConsultation: ServicePageConfig = {
       withOllvy: 'Confirmed in under 24 hours before the call.',
     },
     {
-      title: '45-minute expert call — your case only',
+      title: '45-minute expert call - your case only',
       description: 'Expert walks through Form IEPF-5 for your specific situation. Simple direct claim: you hear that and get next steps. Complex inherited or physical certificate case: every step mapped out. No generic script.',
     },
     {
@@ -114,20 +114,20 @@ export const iepfConsultation: ServicePageConfig = {
 
   faqs: [
     { category: 'General', q: 'What is IEPF and how did my shares end up there?', a: 'IEPF stands for Investor Education and Protection Fund, created under the Companies Act 2013. If dividends on a shareholder account go unclaimed for 7 consecutive years, the company must transfer those dividends to IEPF. The shares on which those dividends went unclaimed are transferred alongside. This happens automatically. Most shareholders find out only when looking for old investments or receiving a company notice.' },
-    { category: 'General', q: 'How do I check if my shares are in IEPF?', a: 'You can search on iepf.gov.in using the company CIN and folio number, or on MCA21. Most people search and find nothing — not because there is nothing, but because the search needs precise inputs that are easy to get wrong. The consultation includes running this search correctly before the call.' },
+    { category: 'General', q: 'How do I check if my shares are in IEPF?', a: 'You can search on iepf.gov.in using the company CIN and folio number, or on MCA21. Most people search and find nothing - not because there is nothing, but because the search needs precise inputs that are easy to get wrong. The consultation includes running this search correctly before the call.' },
     { category: 'General', q: 'Can I get the money back?', a: 'Yes. Transfer to IEPF is not forfeiture. You can file Form IEPF-5 at any time. There is no deadline. The refund takes 60 to 90 days from a complete application.' },
     { category: 'General', q: 'Do I get the shares back or just the dividends?', a: 'Both. One IEPF-5 application covers the shares and all accumulated unclaimed dividends. Shares go to your demat account. Dividends go to your bank account.' },
-    { category: 'Process', q: 'What does the Rs.500 consultation cover?', a: 'Expert checks what is in IEPF under your name, then does a 45-minute call covering your case — what is claimable, what IEPF-5 involves for you, which documents you need, and realistic timeline. You get a written action plan and personalised document checklist. Filing IEPF-5 is a separate service.' },
+    { category: 'Process', q: 'What does the Rs.500 consultation cover?', a: 'Expert checks what is in IEPF under your name, then does a 45-minute call covering your case - what is claimable, what IEPF-5 involves for you, which documents you need, and realistic timeline. You get a written action plan and personalised document checklist. Filing IEPF-5 is a separate service.' },
     { category: 'Process', q: 'What is Form IEPF-5?', a: 'IEPF-5 is the government claim form filed on MCA21 by the shareholder or their legal heir. After filing online, you courier physical documents to the company Nodal Officer. The company verifies and forwards the claim to IEPF Authority, which processes the share and dividend refund.' },
     { category: 'Process', q: 'How long does the full IEPF claim take?', a: '60 to 90 days from filing IEPF-5 if the company RTA is responsive. Physical certificate and legal heir claims typically take longer. The consultation tells you what to expect for your company specifically.' },
     { category: 'Documents', q: 'What documents does IEPF-5 require?', a: 'Depends on your case. Original investor with demat: PAN, Aadhaar, cancelled cheque, client master report from broker. Physical shares: add share certificate, affidavit, indemnity bond. Legal heir: add death certificate, heirship or succession certificate, transmission documents. The consultation gives you your specific list.' },
     { category: 'Documents', q: 'I cannot find the original share certificate. Can I still claim?', a: 'Possibly. If shares are in IEPF, they exist as a government entry regardless of the physical certificate. Many RTAs accept an indemnity bond in lieu. Whether this applies to your company is covered in the consultation.' },
-    { category: 'Pricing', q: 'Is there a government fee to file IEPF-5?', a: 'No. Filing IEPF-5 and claiming from IEPF is free of government fees. Case-specific costs can arise — court fees for a succession certificate, stamp duty on an indemnity bond. The consultation flags any that apply.' },
+    { category: 'Pricing', q: 'Is there a government fee to file IEPF-5?', a: 'No. Filing IEPF-5 and claiming from IEPF is free of government fees. Case-specific costs can arise - court fees for a succession certificate, stamp duty on an indemnity bond. The consultation flags any that apply.' },
     { category: 'Pricing', q: 'What is the difference between this consultation and the full IEPF filing service?', a: 'This consultation tells you what is claimable and what the process looks like for your case. You leave with a document checklist and action plan. Filing Form IEPF-5, coordinating with the Nodal Officer, and following up with IEPF Authority is a longer engagement handled separately.' },
   ],
 
   govtFees: {
-    caption: 'Government Fees — IEPF Claim',
+    caption: 'Government Fees - IEPF Claim',
     headers: ['Item', 'Government Fee', 'Notes'],
     rows: [
       ['IEPF-5 filing on MCA21', 'Nil', 'No fee to file the claim form'],
@@ -139,7 +139,7 @@ export const iepfConsultation: ServicePageConfig = {
   },
 
   documents: {
-    caption: 'Typical Documents for IEPF-5 — Exact List Depends on Your Case',
+    caption: 'Typical Documents for IEPF-5 - Exact List Depends on Your Case',
     headers: ['Document', 'Original Investor (Living)', 'Legal Heir (Deceased Original Holder)'],
     rows: [
       ['PAN card', 'Self-attested copy', 'Claimant PAN, self-attested'],
