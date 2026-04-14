@@ -280,6 +280,7 @@ export function UnifiedServicePage({
 
   // Explainer stepper open state
   const [explainerOpen, setExplainerOpen] = useState(false)
+  const [docsExpanded, setDocsExpanded] = useState(false)
 
   // GTM tracking
   const { trackViewService } = useGTM()
@@ -842,16 +843,33 @@ export function UnifiedServicePage({
                   </div>
                 </section>
 
-                {/* Section: Documents Required (from static config) */}
+                {/* Section: Documents Required (from static config) — collapsible */}
                 {staticConfig?.documents && (
                   <section className="py-16 border-b border-border">
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
-                      DOCUMENTS REQUIRED
-                    </p>
-                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-5">
-                      What you will provide
-                    </h2>
+                    <button
+                      type="button"
+                      onClick={() => setDocsExpanded(!docsExpanded)}
+                      className="w-full text-left flex items-center justify-between group"
+                    >
+                      <div>
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                          DOCUMENTS REQUIRED
+                        </p>
+                        <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
+                          What you will provide
+                        </h2>
+                      </div>
+                      <ChevronDown
+                        size={20}
+                        className={cn(
+                          'text-muted-foreground transition-transform duration-200 shrink-0 ml-4',
+                          docsExpanded && 'rotate-180'
+                        )}
+                      />
+                    </button>
 
+                    {docsExpanded && (
+                    <div className="mt-5">
                     <div className="rounded-xl border border-border overflow-hidden">
                       <table className="w-full text-xs sm:text-sm border-collapse">
                         <thead>
@@ -905,6 +923,8 @@ export function UnifiedServicePage({
                     <p className="text-xs text-muted-foreground mt-6">
                       Your documents are encrypted, visible only to your assigned professional, and deleted 90 days after your order closes.
                     </p>
+                    </div>
+                    )}
                   </section>
                 )}
 
