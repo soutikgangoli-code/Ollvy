@@ -895,6 +895,10 @@ export function UnifiedServicePage({
                         </Link>
                       </div>
                     )}
+
+                    <p className="text-xs text-muted-foreground mt-6">
+                      Your documents are encrypted, visible only to your assigned professional, and deleted 90 days after your order closes.
+                    </p>
                   </section>
                 )}
 
@@ -968,6 +972,12 @@ export function UnifiedServicePage({
                     </div>
                   )}
 
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-[560px]">
+                    Every order carries a guaranteed completion date. If we miss it, the full service fee is refunded automatically. No claim needed.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed max-w-[560px] mt-3">
+                    Your CA is an ICAI-enrolled member with a minimum of three years of practice. Ask for their enrollment number at any point.
+                  </p>
 
                   {/* Profile Personas (merged into Why Ollvy section) */}
                   <div className="mt-10 sm:mt-16">

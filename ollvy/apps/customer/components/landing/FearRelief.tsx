@@ -10,7 +10,7 @@ export function FearRelief() {
             Why Ollvy?
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground mt-5">
-            Ollvy files your returns before you even think to ask. No chasing.
+            Every order gets a guaranteed date. Miss it and the full fee is refunded. No forms, no claims.
           </p>
         </div>
 

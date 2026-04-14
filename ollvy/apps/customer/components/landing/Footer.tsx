@@ -183,6 +183,7 @@ export function Footer() {
           <FooterColumn
             title="Legal"
             links={[
+              { label: 'About', href: '/about' },
               { label: 'Privacy Policy', href: '/privacy' },
               { label: 'Terms of Service', href: '/terms' },
               { label: 'Cancellation Policy', href: '/cancellation' },

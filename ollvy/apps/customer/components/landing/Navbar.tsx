@@ -38,6 +38,7 @@ interface NavbarProps {
 const navLinks = [
   { href: '/services', label: 'Services', sectionId: null },
   { href: '/guides', label: 'Guides', sectionId: null },
+  { href: '/about', label: 'About', sectionId: null },
 ]
 
 // Popular services for crawler-friendly static links (always in DOM)
