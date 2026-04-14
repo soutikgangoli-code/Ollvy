@@ -362,6 +362,12 @@ export function UnifiedServicePage({
     'llp-incorporation',
   ].includes(service.slug)
 
+  // Services with pre-payment questions that don't affect pricing
+  // These route through eligibility for context collection but keep fixed pricing labels
+  const hasPrePaymentQuestions = [
+    'iepf-consultation',
+  ].includes(service.slug)
+
   // Determine CTA label and URL for this service
   const ctaLabel = service.priceVariesByState
     ? 'Get Quote'
@@ -370,13 +376,13 @@ export function UnifiedServicePage({
     : 'Start Application'
 
   // Build base checkout/eligibility URL
-  // Only services with pre-qualifying questions go through eligibility
+  // Services with pre-payment questions (pricing or context) go through eligibility
   // Others go directly to checkout - no intermediate loading screen
   const getCtaUrl = (includeVariant = false) => {
     const serviceId = service.id || service.slug
     const baseUrl = service.priceVariesByState
       ? `/quote/request/${serviceId}`
-      : priceVariesByQuestionnaire
+      : (priceVariesByQuestionnaire || hasPrePaymentQuestions)
       ? `/checkout/${serviceId}/eligibility`
       : `/checkout/${serviceId}`
     if (includeVariant && service.variants && selectedVariant) {
