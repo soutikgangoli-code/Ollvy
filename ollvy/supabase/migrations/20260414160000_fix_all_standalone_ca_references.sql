@@ -14,7 +14,7 @@ BEGIN
   -- 2. Replace all standalone CA patterns
   r := replace(r, 'Your CA',       '{{OLLVY_CA}}');
   r := replace(r, 'your CA',       '{{OLLVY_CA}}');
-  r := replace(r, 'Dedicated CA',  'Dedicated {{OLLVY_CA}}');
+  r := replace(r, 'Dedicated CA',  '{{OLLVY_CA}}');
   r := replace(r, 'by CA',         'by {{OLLVY_CA}}');
   r := replace(r, 'a CA.',          'an {{OLLVY_CA}}.');
   r := replace(r, 'a CA,',          'an {{OLLVY_CA}},');

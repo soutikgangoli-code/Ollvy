@@ -277,7 +277,7 @@ export const DEADLINES: DeadlineConfig[] = [
     slaDays: 5,
     seoTitle: 'TDS Return Q1 FY2027-28 Filing - File Before July 31 | Ollvy',
     seoDescription:
-      "File your Q1 TDS return before July 31, 2027. Starting at ₹2,999 with a dedicated CA. Miss it and pay ₹200/day - don't risk prosecution.",
+      "File your Q1 TDS return before July 31, 2027. Starting at ₹2,999 with an Ollvy CA. Miss it and pay ₹200/day - don't risk prosecution.",
     canonicalUrl: 'https://www.ollvy.com/tds-return-q1-2027',
     documentTab: 'business_itr',
     documentHeading: 'Documents needed for TDS return filing',

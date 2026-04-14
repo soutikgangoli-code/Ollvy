@@ -29,7 +29,7 @@ const defaultComparisons: ComparisonItem[] = [
   },
   {
     feature: 'CA assignment',
-    ollvy: 'Dedicated CA with direct WhatsApp contact',
+    ollvy: 'Ollvy CA with direct WhatsApp contact',
     other: 'Rotated between support agents',
   },
   {

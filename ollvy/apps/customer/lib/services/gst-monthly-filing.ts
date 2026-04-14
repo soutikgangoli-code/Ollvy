@@ -42,7 +42,7 @@ export const gstMonthlyFiling: ServiceConfig = {
       step: 1,
       title: 'Share your GST portal credentials',
       timeline: 'Day 0',
-      body: "Share read-only GST portal access\nOllvy CA reviews filing history and business pattern\nDedicated Ollvy CA assigned for all monthly filings",
+      body: "Share read-only GST portal access\nOllvy CA reviews filing history and business pattern\nOllvy CA assigned for all monthly filings",
       visual: 'checklist',
       milestone: 'Ollvy CA assigned to your account',
     },
