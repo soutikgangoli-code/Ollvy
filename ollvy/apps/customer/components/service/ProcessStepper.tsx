@@ -112,9 +112,17 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
         </h3>
 
         {/* Body */}
-        <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-          {step.body}
-        </p>
+        {step.body.includes('\n') ? (
+          <ul className="text-sm text-muted-foreground leading-relaxed flex-1 list-disc list-inside space-y-1">
+            {step.body.split('\n').filter(Boolean).map((line, i) => (
+              <li key={i}>{line}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+            {step.body}
+          </p>
+        )}
 
         {/* Milestone */}
         {step.milestone && (

@@ -80,12 +80,12 @@ export const dinReactivation: ServiceConfig = {
     {
       icon: 'clock',
       title: 'Rs 5,000 per missed year',
-      body: 'The government late fee is Rs 5,000 per year of missed DIR-3 KYC. Multiple missed years means multiple fees - these are mandatory and non-negotiable.',
+      body: '₹5,000 govt fee per missed year — mandatory, non-negotiable\nMultiple missed years = multiple fees',
     },
     {
       icon: 'building',
       title: 'All companies blocked until DIN is active',
-      body: 'Every company where you are a director cannot file any MCA form while your DIN is deactivated. The impact is not limited to one company.',
+      body: 'Every company where you are director is blocked from MCA filings\nImpact not limited to one company',
     },
   ],
 

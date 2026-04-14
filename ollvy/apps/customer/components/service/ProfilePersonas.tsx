@@ -13,12 +13,9 @@ export function ProfilePersonas({
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-foreground mb-2">
+      <h2 className="text-xl font-semibold text-foreground mb-6">
         We handle the messy situations too.
       </h2>
-      <p className="text-sm text-muted-foreground mb-6">
-        The situations most CAs decline or overcharge for.
-      </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {personas.map((persona, i) => (
@@ -33,7 +30,7 @@ export function ProfilePersonas({
               <p className="text-sm font-medium text-foreground">
                 {persona.label}
               </p>
-              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+              <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed hidden sm:block">
                 {persona.detail}
               </p>
             </div>

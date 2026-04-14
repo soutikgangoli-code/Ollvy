@@ -22,13 +22,9 @@ export function ServiceRisks({
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-foreground mb-2">
+      <h2 className="text-xl font-semibold text-foreground mb-6">
         What could go wrong with {serviceShortName}
       </h2>
-      <p className="text-sm text-muted-foreground mb-6">
-        These are the risks. We handle most of them, but you should know what
-        they are.
-      </p>
 
       <div className="space-y-2 sm:space-y-4">
         {risks.map((risk, i) => {
@@ -45,9 +41,17 @@ export function ServiceRisks({
                 <h3 className="text-xs sm:text-sm font-semibold text-foreground">
                   {risk.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed">
-                  {risk.body}
-                </p>
+                {risk.body.includes('\n') ? (
+                  <ul className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed list-disc list-inside space-y-0.5">
+                    {risk.body.split('\n').filter(Boolean).map((line, j) => (
+                      <li key={j}>{line}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed">
+                    {risk.body}
+                  </p>
+                )}
               </div>
             </div>
           )

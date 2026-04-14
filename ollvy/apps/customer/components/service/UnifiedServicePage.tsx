@@ -739,12 +739,9 @@ export function UnifiedServicePage({
                   <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                     WHAT YOU GET
                   </p>
-                  <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-6 sm:mb-10">
                     Everything included
                   </h2>
-                  <p className="text-sm text-muted-foreground mb-6 sm:mb-10">
-                    What your CA handles on your behalf. Nothing hidden.
-                  </p>
 
                   <div className="divide-y divide-border">
                     {service.whatsIncluded.map((item, index) => (
@@ -837,12 +834,9 @@ export function UnifiedServicePage({
                     <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
                       DOCUMENTS REQUIRED
                     </p>
-                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
-                      Documents you will need to provide
+                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-5">
+                      What you will give
                     </h2>
-                    <p className="text-sm text-muted-foreground mb-5">
-                      Prepare these before starting. Your CA verifies everything before filing.
-                    </p>
 
                     <div className="rounded-xl border border-border overflow-hidden">
                       <table className="w-full text-xs sm:text-sm border-collapse">
@@ -912,10 +906,6 @@ export function UnifiedServicePage({
                     <br />
                     Not just on time.
                   </h2>
-                  <p className="text-sm text-muted-foreground mb-8 max-w-[520px] leading-relaxed hidden sm:block">
-                    Most CAs submit what you give them and hope for the best. Ollvy
-                    reviews your documents before filing - not after a notice arrives.
-                  </p>
 
                   {/* Others vs Ollvy comparison */}
                   {service.comparisonWithout && service.comparisonWith ? (
@@ -972,54 +962,6 @@ export function UnifiedServicePage({
                     </div>
                   )}
 
-                  {/* 4-step flow — desktop only */}
-                  <Card className="border border-border bg-card p-4 sm:p-8 hidden sm:block">
-                    <h3 className="text-sm sm:text-base font-semibold text-foreground mb-4 sm:mb-6">
-                      We catch compliance gaps before regulators do.
-                    </h3>
-                    <div className="grid grid-cols-4 gap-2 sm:gap-4">
-                      {[
-                        {
-                          step: 'we review',
-                          label: 'your documents',
-                          description: 'Every upload checked before anything is filed',
-                        },
-                        {
-                          step: 'we flag',
-                          label: 'the risks',
-                          description:
-                            'Issues identified - expiry dates, mismatches, format errors',
-                        },
-                        {
-                          step: 'we fix',
-                          label: 'if possible',
-                          description: 'Fixable issues resolved before filing, not after',
-                        },
-                        {
-                          step: 'we file',
-                          label: 'correctly',
-                          description: 'Clean submission - lower chance of officer query',
-                        },
-                      ].map((item, i) => (
-                        <div key={i} className="text-center">
-                          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-muted flex items-center justify-center mx-auto mb-1.5 sm:mb-3">
-                            <span className="text-[10px] sm:text-xs font-mono font-bold text-foreground">
-                              {i + 1}
-                            </span>
-                          </div>
-                          <p className="text-[10px] sm:text-xs font-semibold text-foreground">
-                            {item.step}
-                          </p>
-                          <p className="text-[10px] sm:text-xs text-[hsl(var(--ollvy-green-fg))] mt-0.5">
-                            {item.label}
-                          </p>
-                          <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 sm:mt-2 leading-snug hidden sm:block">
-                            {item.description}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </Card>
 
                   {/* Profile Personas (merged into Why Ollvy section) */}
                   <div className="mt-10 sm:mt-16">
@@ -1324,8 +1266,8 @@ export function UnifiedServicePage({
             </div>
           </div>
 
-          {/* Final CTA Section */}
-          <section className="bg-card py-24">
+          {/* Final CTA Section — desktop only */}
+          <section className="bg-card py-24 hidden lg:block">
             <div className="container text-center">
               <h2 className="text-3xl md:text-4xl font-semibold text-foreground">
                 Get {service.shortName} done now
@@ -1358,11 +1300,11 @@ export function UnifiedServicePage({
             </p>
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-2">
           <p className="font-mono font-bold text-foreground text-base shrink-0">
             ₹{totalFee.toLocaleString('en-IN')}
           </p>
-          <Button size="lg" className="flex-1 h-10" asChild>
+          <Button size="lg" className="w-[60%] h-10" asChild>
             <Link href={getCtaUrl(true)} prefetch={true}>
               {ctaLabel}
             </Link>

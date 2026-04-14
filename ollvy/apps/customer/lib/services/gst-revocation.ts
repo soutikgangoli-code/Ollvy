@@ -78,12 +78,12 @@ export const gstRevocation: ServiceConfig = {
     {
       icon: 'clock',
       title: '30-day deadline',
-      body: 'Revocation must be applied for within 30 days of the cancellation order date. Extensions are possible but require a separate application. Act immediately on receiving a cancellation order.',
+      body: 'Must apply within 30 days of cancellation order\nExtensions possible but require separate application\nAct immediately',
     },
     {
       icon: 'alert',
       title: 'All pending returns must be filed first',
-      body: 'The department will not process REG-21 unless all outstanding returns are filed and taxes paid with interest.',
+      body: 'REG-21 not processed until all returns filed and taxes paid with interest',
     },
   ],
 

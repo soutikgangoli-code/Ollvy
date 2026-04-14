@@ -78,12 +78,12 @@ export const gstCancellation: ServiceConfig = {
     {
       icon: 'alert',
       title: 'ITC reversal is mandatory',
-      body: 'Any ITC taken on goods still in stock at the time of cancellation must be reversed or paid back. This is calculated before filing.',
+      body: 'ITC on goods in stock at cancellation must be reversed or paid back\nCalculated before filing',
     },
     {
       icon: 'document',
       title: 'Pending returns must be cleared first',
-      body: 'All outstanding GSTR-1 and GSTR-3B returns must be filed before a cancellation application can be processed.',
+      body: 'All outstanding GSTR-1 and GSTR-3B must be filed first\nCancellation cannot be processed otherwise',
     },
   ],
 

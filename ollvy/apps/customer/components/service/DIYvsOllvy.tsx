@@ -273,14 +273,14 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
         {/* Desktop table */}
         <table className="w-full text-sm border-collapse hidden md:table">
           <thead>
-            <tr className="border-b border-border bg-muted/40">
-              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-foreground text-center font-semibold">
+            <tr className="border-b border-border bg-background">
+              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-semibold">
                 What needs doing
               </th>
-              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-foreground text-center bg-orange-500/[0.06] font-semibold border-l border-border">
+              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-semibold border-l border-border">
                 On your own
               </th>
-              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] text-center bg-[hsl(var(--ollvy-green))]/[0.06] font-semibold border-l border-border">
+              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-semibold border-l border-border">
                 With Ollvy
               </th>
             </tr>
@@ -291,13 +291,16 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                 'border-b border-border last:border-b-0 hover:bg-muted/10 transition-colors',
                 i === data.rows.length - 1 && 'bg-muted/20'
               )}>
-                <td className="px-5 py-4 font-semibold text-foreground align-top w-[28%]">
+                <td className="px-5 py-4 font-semibold text-foreground align-top w-[26%]">
                   {row.task}
                 </td>
-                <td className="px-5 py-4 text-foreground leading-relaxed align-top border-l border-border bg-orange-500/[0.04] w-[38%]">
+                <td className="px-5 py-4 text-muted-foreground leading-relaxed align-top border-l border-border w-[37%]">
                   {row.own}
                 </td>
-                <td className="px-5 py-4 align-top border-l border-[hsl(var(--ollvy-green))]/20 bg-[hsl(var(--ollvy-green))]/[0.03] w-[34%]">
+                <td className={cn(
+                  "px-5 py-4 align-top border-l border-border w-[37%] transition-colors duration-300",
+                  on && "bg-[hsl(var(--ollvy-green))]/[0.04]"
+                )}>
                   <p className="font-medium text-foreground flex items-start gap-1.5">
                     <Check size={14} className="text-[hsl(var(--ollvy-green))] shrink-0 mt-0.5" />
                     {row.ollvy_head}
@@ -314,14 +317,14 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
         {/* Mobile: compact table */}
         <table className="w-full text-xs border-collapse md:hidden">
           <thead>
-            <tr className="border-b border-border">
-              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-left bg-muted/30 font-medium">
+            <tr className="border-b border-border bg-background">
+              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-center font-medium">
                 Task
               </th>
-              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-left bg-orange-500/[0.06] font-medium border-l border-border">
+              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-center font-medium border-l border-border">
                 On your own
               </th>
-              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] text-left bg-[hsl(var(--ollvy-green))]/[0.06] font-medium border-l border-border">
+              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-center font-medium border-l border-border">
                 With Ollvy
               </th>
             </tr>
@@ -335,10 +338,13 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                 <td className="px-3 py-3 font-semibold text-foreground align-top text-[13px]">
                   {row.task}
                 </td>
-                <td className="px-3 py-3 text-foreground leading-snug align-top border-l border-border bg-orange-500/[0.04] text-[13px]">
+                <td className="px-3 py-3 text-muted-foreground leading-snug align-top border-l border-border text-[13px]">
                   {row.own}
                 </td>
-                <td className="px-3 py-3 align-top border-l border-[hsl(var(--ollvy-green))]/20 bg-[hsl(var(--ollvy-green))]/[0.03] text-[13px]">
+                <td className={cn(
+                  "px-3 py-3 align-top border-l border-border text-[13px] transition-colors duration-300",
+                  on && "bg-[hsl(var(--ollvy-green))]/[0.04]"
+                )}>
                   <p className="font-medium text-foreground flex items-start gap-1">
                     <Check size={11} className="text-[hsl(var(--ollvy-green))] shrink-0 mt-0.5" />
                     {row.ollvy_head}
