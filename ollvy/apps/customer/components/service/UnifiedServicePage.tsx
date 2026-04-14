@@ -788,19 +788,6 @@ export function UnifiedServicePage({
                               <h3 className="text-sm font-semibold text-foreground">
                                 {formatWithMonoNumbers(item.title)}
                               </h3>
-                              {item.body && (item.comparisonWithout || item.comparisonWithOllvy) && (
-                                item.body.includes('\n') ? (
-                                  <ul className="text-sm text-muted-foreground mt-1 leading-relaxed list-disc list-inside space-y-0.5">
-                                    {item.body.split('\n').filter(Boolean).map((line, li) => (
-                                      <li key={li}>{formatWithMonoNumbers(line)}</li>
-                                    ))}
-                                  </ul>
-                                ) : (
-                                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-                                    {formatWithMonoNumbers(item.body)}
-                                  </p>
-                                )
-                              )}
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
