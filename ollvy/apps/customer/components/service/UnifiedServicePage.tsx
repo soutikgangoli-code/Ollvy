@@ -1193,7 +1193,15 @@ export function UnifiedServicePage({
                           {faq.q}
                         </AccordionTrigger>
                         <AccordionContent forceMount className="text-sm text-muted-foreground leading-relaxed pb-5">
-                          {faq.a}
+                          {faq.a.includes('\n') ? (
+                            faq.a.split('\n').filter(Boolean).map((line, j) => (
+                              <p key={j} className={j > 0 ? 'mt-2' : ''}>
+                                {line}
+                              </p>
+                            ))
+                          ) : (
+                            faq.a
+                          )}
                         </AccordionContent>
                       </AccordionItem>
                     ))}

@@ -511,7 +511,15 @@ export function HomeFAQ() {
                 </div>
               </AccordionTrigger>
               <AccordionContent forceMount className="text-sm text-foreground/90 leading-relaxed px-6 pb-6 pt-4 ml-10">
-                {faq.answer}
+                {typeof faq.answer === 'string' && faq.answer.includes('\n') ? (
+                  faq.answer.split('\n').filter(Boolean).map((line: string, j: number) => (
+                    <p key={j} className={j > 0 ? 'mt-2' : ''}>
+                      {line}
+                    </p>
+                  ))
+                ) : (
+                  faq.answer
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}
@@ -554,7 +562,15 @@ export function FullFAQ() {
                 </div>
               </AccordionTrigger>
               <AccordionContent forceMount className="text-sm text-foreground/90 leading-relaxed px-6 pb-6 pt-4 ml-10">
-                {faq.answer}
+                {typeof faq.answer === 'string' && faq.answer.includes('\n') ? (
+                  faq.answer.split('\n').filter(Boolean).map((line: string, j: number) => (
+                    <p key={j} className={j > 0 ? 'mt-2' : ''}>
+                      {line}
+                    </p>
+                  ))
+                ) : (
+                  faq.answer
+                )}
               </AccordionContent>
             </AccordionItem>
           ))}
