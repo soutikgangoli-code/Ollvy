@@ -7,8 +7,9 @@ export const gstCancellation: ServiceConfig = {
   category: 'Tax Filings',
   tagline: 'Close your GST registration properly. Final return filed.',
 
-  ollvyFee: 2999,
+  ollvyFee: 999,
   govtFee: undefined,
+  mrp: 3500,
 
   slaDays: 15,
   isRetainer: false,
@@ -78,7 +79,7 @@ export const gstCancellation: ServiceConfig = {
     {
       icon: 'alert',
       title: 'ITC reversal is mandatory',
-      body: 'ITC on goods in stock at cancellation must be reversed or paid back\nCalculated before filing',
+      body: 'ITC on goods in stock at cancellation must be reversed or paid back',
     },
     {
       icon: 'document',

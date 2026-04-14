@@ -269,9 +269,16 @@ export function BookingPanel({
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
           {priceVariesByQuestionnaire ? 'Starting from' : 'Total to pay now'}
         </p>
-        <p className="font-mono text-4xl font-bold text-foreground mt-1">
-          ₹{totalFee.toLocaleString('en-IN')}
-        </p>
+        <div className="flex items-baseline gap-2 mt-1">
+          <p className="font-mono text-4xl font-bold text-foreground">
+            ₹{totalFee.toLocaleString('en-IN')}
+          </p>
+          {service.mrp && service.mrp > totalFee && (
+            <p className="font-mono text-lg text-muted-foreground line-through">
+              ₹{service.mrp.toLocaleString('en-IN')}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Fee breakdown */}

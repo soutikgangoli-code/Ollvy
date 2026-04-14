@@ -7,8 +7,9 @@ export const dinReactivation: ServiceConfig = {
   category: 'Registrations',
   tagline: 'DIN deactivated? We restore it.',
 
-  ollvyFee: 3499,
+  ollvyFee: 1999,
   govtFee: 5000,
+  mrp: 10000,
   govtFeeLabel: 'MCA late filing fee',
   govtFeeNote: 'The ₹500 late fee is charged by MCA for filing DIR-3 KYC after Sep 30. This is the government fee - passed through at cost, no markup.',
 
@@ -80,7 +81,7 @@ export const dinReactivation: ServiceConfig = {
     {
       icon: 'clock',
       title: 'Rs 5,000 per missed year',
-      body: '₹5,000 govt fee per missed year — mandatory, non-negotiable\nMultiple missed years = multiple fees',
+      body: '₹5,000 govt fee per missed year. Mandatory, non-negotiable\nMultiple missed years = multiple fees',
     },
     {
       icon: 'building',

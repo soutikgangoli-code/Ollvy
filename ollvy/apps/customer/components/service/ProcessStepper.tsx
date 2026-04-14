@@ -184,8 +184,8 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
             <Link href={(() => {
               if (!serviceId) return '/services'
               if (priceVariesByState) return `/quote/request/${serviceId}`
-              // Always go through eligibility first - it handles redirect if no questions
-              return `/checkout/${serviceId}/eligibility`
+              if (serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)) return `/checkout/${serviceId}/eligibility`
+              return `/checkout/${serviceId}`
             })()} prefetch={true}>
               {serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)
                 ? 'Check Eligibility & Price →'

@@ -62,6 +62,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
   // Format govt fee if present
   const govtFee = service.price_govt_fees_paisa ? service.price_govt_fees_paisa / 100 : 0
   const baseOllvyFee = service.price_base_paisa / 100
+  const mrp = service.price_mrp_paisa ? service.price_mrp_paisa / 100 : null
 
   // For bundles, show just the base price as "Starting at" (minimum price)
   // User can add more services on the detail page
@@ -157,10 +158,17 @@ export function ServiceCard({ service }: ServiceCardProps) {
                   <span className="text-sm font-medium text-foreground">
                     {priceVariesByQuestionnaire ? 'Starting from' : 'Total'}
                   </span>
-                  <span className="font-mono text-xl font-semibold text-foreground tracking-tight">
-                    {service.price_varies_by_state ? 'Get Quote' : `₹${nonBundleTotal.toLocaleString('en-IN')}`}
-                    {!service.price_varies_by_state && billingLabel && (
-                      <span className="text-muted-foreground font-normal text-sm">{billingLabel}</span>
+                  <span className="flex items-baseline gap-1.5">
+                    <span className="font-mono text-xl font-semibold text-foreground tracking-tight">
+                      {service.price_varies_by_state ? 'Get Quote' : `₹${nonBundleTotal.toLocaleString('en-IN')}`}
+                      {!service.price_varies_by_state && billingLabel && (
+                        <span className="text-muted-foreground font-normal text-sm">{billingLabel}</span>
+                      )}
+                    </span>
+                    {!service.price_varies_by_state && mrp && mrp > nonBundleTotal && (
+                      <span className="font-mono text-sm text-muted-foreground line-through">
+                        ₹{mrp.toLocaleString('en-IN')}
+                      </span>
                     )}
                   </span>
                 </div>

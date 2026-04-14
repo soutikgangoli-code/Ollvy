@@ -1296,21 +1296,30 @@ export function UnifiedServicePage({
         className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-3 py-2 lg:hidden"
         style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}
       >
-        {guaranteedDate && (
-          <div className="flex items-center justify-center gap-1.5 py-1">
-            <CheckCircle size={12} className="text-[hsl(var(--ollvy-green))]" />
-            <p className="text-xs font-medium font-mono text-foreground">
-              {service.isRetainer
-                ? `Current cycle due: ${guaranteedDate}`
-                : `Guaranteed by ${guaranteedDate}`}
-            </p>
-          </div>
-        )}
         <div className="flex items-center justify-between gap-2">
-          <p className="font-mono font-bold text-foreground text-base shrink-0">
-            ₹{totalFee.toLocaleString('en-IN')}
-          </p>
-          <Button size="lg" className="w-[60%] h-10" asChild>
+          <div className="shrink-0">
+            <div className="flex items-baseline gap-1.5">
+              <p className="font-mono font-bold text-foreground text-base">
+                ₹{totalFee.toLocaleString('en-IN')}
+              </p>
+              {service.mrp && service.mrp > totalFee && (
+                <p className="font-mono text-sm text-muted-foreground line-through">
+                  ₹{service.mrp.toLocaleString('en-IN')}
+                </p>
+              )}
+            </div>
+            {guaranteedDate && (
+              <div className="flex items-center gap-1 mt-0.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
+                <p className="text-[11px] text-muted-foreground font-mono">
+                  {service.isRetainer
+                    ? `Due: ${guaranteedDate}`
+                    : `Guaranteed by ${guaranteedDate}`}
+                </p>
+              </div>
+            )}
+          </div>
+          <Button size="lg" className="w-[55%] h-10" asChild>
             <Link href={getCtaUrl(true)} prefetch={true}>
               {ctaLabel}
             </Link>

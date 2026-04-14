@@ -7,8 +7,9 @@ export const directorKyc: ServiceConfig = {
   category: 'Registrations',
   tagline: 'Annual filing. ₹5,000/day penalty if missed. Takes 15 minutes.',
 
-  ollvyFee: 3999,
+  ollvyFee: 999,
   govtFee: undefined,
+  mrp: 3500,
 
   slaDays: 2,
   isRetainer: false,
@@ -82,7 +83,7 @@ export const directorKyc: ServiceConfig = {
     {
       icon: 'clock',
       title: '₹5,000/day penalty - starts immediately',
-      body: "Penalty starts Oct 1 — ₹91,000 per director by Dec 31\nMultiple directors multiply this\nDIN deactivated, all company filings blocked",
+      body: "Penalty starts Oct 1. ₹91,000 per director by Dec 31\nMultiple directors multiply this\nDIN deactivated, all company filings blocked",
     },
     {
       icon: 'building',

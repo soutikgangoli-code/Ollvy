@@ -7,8 +7,9 @@ export const llpIncorporation: ServiceConfig = {
   category: 'Registrations',
   tagline: 'Limited liability. Flexible profit-sharing. Lower compliance than Pvt Ltd.',
 
-  ollvyFee: 19999,
+  ollvyFee: 4999,
   govtFee: 5000,
+  mrp: 15000,
   govtFeeLabel: 'MCA filing fees',
   govtFeeNote:
     'This fee is paid directly to the Ministry of Corporate Affairs. Varies slightly by capital contribution - ₹5,000 is the standard for up to ₹1L contribution.',
@@ -101,17 +102,17 @@ export const llpIncorporation: ServiceConfig = {
     {
       icon: 'document',
       title: 'Name similarity rejection',
-      body: 'Name must be distinct from existing LLPs and companies\nBoth registries checked before submission',
+      body: 'Name must be distinct from existing LLPs and companies',
     },
     {
       icon: 'alert',
       title: 'LLP Agreement must reflect actual terms',
-      body: 'Vague profit-sharing or exit clauses = partner disputes\nExplicit percentages and terms drafted',
+      body: 'Vague profit-sharing or exit clauses = partner disputes',
     },
     {
       icon: 'clock',
       title: 'All partners must complete DSC verification',
-      body: 'FiLLiP blocked until every partner completes video verification\nDaily reminders sent',
+      body: 'FiLLiP blocked until every partner completes video verification',
     },
   ],
 

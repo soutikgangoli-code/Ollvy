@@ -7,8 +7,9 @@ export const trademarkRegistration: ServiceConfig = {
   category: 'Legal',
   tagline: 'Protect your brand name. 10-year protection. Nationwide.',
 
-  ollvyFee: 14999,
+  ollvyFee: 2999,
   govtFee: 4500,
+  mrp: 15000,
   govtFeeLabel: 'Govt filing fee',
   govtFeeNote:
     'This is the government fee for a single class trademark application. Additional classes cost ₹4,500 each. MSME discount (₹4,500 → ₹2,250) applies if you have Udyam registration.',
@@ -103,17 +104,17 @@ export const trademarkRegistration: ServiceConfig = {
     {
       icon: 'document',
       title: 'Similar mark already exists',
-      body: 'Similar mark in your class = rejection\nSearch catches most conflicts, but unpublished pending apps are invisible\nIf rejected, appeal or modification assisted',
+      body: 'Similar mark in your class = rejection\nSearch catches most conflicts, but unpublished pending apps are invisible',
     },
     {
       icon: 'clock',
       title: 'Government processing takes 12-18 months',
-      body: '7-day timeline = filing only\nExamination, publication, certificate are government-side (12–18 months)\nTracked and updated, but cannot be sped up',
+      body: '7-day timeline = filing only\nExamination, publication, certificate are government-side (12-18 months)',
     },
     {
       icon: 'alert',
       title: 'Opposition during publication',
-      body: 'Mark published for 4 months — anyone can oppose\nOpposition = formal legal proceeding (separate service)\nRare — under 5% of cases',
+      body: 'Mark published for 4 months, anyone can oppose\nOpposition = formal legal proceeding (separate service)\nRare, under 5% of cases',
     },
   ],
 

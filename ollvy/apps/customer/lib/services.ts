@@ -89,6 +89,7 @@ export interface ServiceConfig {
   govtFee?: number // 15000 - if applicable
   govtFeeLabel?: string // "MCA stamp duty (approx)"
   govtFeeNote?: string // "This fee goes directly to the government..."
+  mrp?: number // Market comparison price (strikethrough)
 
   // SLA
   slaDays: number // 15 - working days

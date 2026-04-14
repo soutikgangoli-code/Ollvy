@@ -7,8 +7,9 @@ export const businessItr: ServiceConfig = {
   category: 'Tax Filings',
   tagline: 'ITR-6 for Pvt Ltd, ITR-5 for LLP. Filed correctly, on time.',
 
-  ollvyFee: 11999,
+  ollvyFee: 4999,
   govtFee: undefined,
+  mrp: 12000,
 
   slaDays: 10,
   isRetainer: false,
@@ -103,7 +104,7 @@ export const businessItr: ServiceConfig = {
     {
       icon: 'alert',
       title: 'Audit requirement',
-      body: 'Mandatory above ₹1Cr turnover (₹10Cr if cash < 5%)\nAudited financials must be ready before ITR can be filed',
+      body: 'Mandatory above ₹1Cr turnover (₹10Cr if cash < 5%)',
     },
   ],
 

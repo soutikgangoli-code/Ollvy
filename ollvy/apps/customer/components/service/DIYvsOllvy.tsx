@@ -294,11 +294,11 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                 <td className="px-5 py-4 font-semibold text-foreground align-top w-[26%]">
                   {row.task}
                 </td>
-                <td className="px-5 py-4 text-muted-foreground leading-relaxed align-top border-l border-border w-[37%]">
+                <td className="px-5 py-4 text-muted-foreground leading-relaxed align-top border-l border-border w-[34%]">
                   {row.own}
                 </td>
                 <td className={cn(
-                  "px-5 py-4 align-top border-l border-border w-[37%] transition-colors duration-300",
+                  "px-5 py-4 align-top border-l border-border w-[40%] transition-colors duration-300",
                   on && "bg-[hsl(var(--ollvy-green))]/[0.04]"
                 )}>
                   <p className="font-medium text-foreground flex items-start gap-1.5">

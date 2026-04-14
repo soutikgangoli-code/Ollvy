@@ -7,8 +7,9 @@ export const gstRegistration: ServiceConfig = {
   category: 'Registrations',
   tagline: 'Your GSTIN, applied for and obtained. We handle every step.',
 
-  ollvyFee: 8999,
+  ollvyFee: 1499,
   govtFee: undefined,
+  mrp: 5000,
 
   slaDays: 7,
   isRetainer: false,
@@ -112,17 +113,17 @@ export const gstRegistration: ServiceConfig = {
     {
       icon: 'document',
       title: 'Address proof mismatch',
-      body: "Address on all documents must match exactly\nOfficer flags even minor variations (flat number, society name)\nCA reviews for consistency before filing",
+      body: "Address on all documents must match exactly\nOfficer flags even minor variations (flat number, society name)",
     },
     {
       icon: 'clock',
       title: 'Aadhaar OTP fails',
-      body: "Aadhaar OTP required — old or inactive mobile number causes failure\nMust be fixed at an Aadhaar centre, no workaround\nChecked upfront before filing",
+      body: "Aadhaar OTP required. Old or inactive mobile number causes failure\nMust be fixed at an Aadhaar centre, no workaround",
     },
     {
       icon: 'alert',
       title: 'Operating without registration',
-      body: "Above ₹40L turnover (₹20L for services) without registration = 100% tax due + ₹10,000 penalty\nRegistration stops the liability from growing",
+      body: "Above ₹40L turnover (₹20L for services) without registration = 100% tax due + ₹10,000 penalty",
     },
   ],
 

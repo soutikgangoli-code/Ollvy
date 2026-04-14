@@ -9,6 +9,7 @@ export const fssaiLicense: ServiceConfig = {
 
   ollvyFee: 7999,
   govtFee: 2000,
+  mrp: 15000,
   govtFeeLabel: 'FSSAI license fee',
   govtFeeNote:
     'This fee is paid to the Food Safety and Standards Authority of India. Varies by license type - ₹2,000 is the standard for State License (₹12L-₹20Cr turnover). Central License is ₹7,500/year.',
@@ -109,17 +110,17 @@ export const fssaiLicense: ServiceConfig = {
     {
       icon: 'document',
       title: 'Wrong license type filed',
-      body: 'Filing Registration when you need State License = rejection\nWorse: getting Registration then facing penalties for insufficient license\nTurnover verified before filing',
+      body: 'Filing Registration when you need State License = rejection\nWorse: getting Registration then facing penalties for insufficient license',
     },
     {
       icon: 'building',
       title: 'Premises inspection failure',
-      body: 'Common failures: missing pest control cert, outdated water test, no staff medical fitness\nDocumentation issues, not actual violations\nPre-inspection checklist provided',
+      body: 'Common failures: missing pest control cert, outdated water test, no staff medical fitness',
     },
     {
       icon: 'alert',
       title: 'Operating without license',
-      body: '₹10,000 penalty + ₹100/day for operating without license\nSerious violations: goods seized and destroyed\nE-commerce platforms require FSSAI number — no number, no listing',
+      body: '₹10,000 penalty + ₹100/day for operating without license\nSerious violations: goods seized and destroyed\nE-commerce platforms require FSSAI number. No number, no listing',
     },
   ],
 

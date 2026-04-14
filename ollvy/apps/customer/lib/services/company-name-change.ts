@@ -7,8 +7,9 @@ export const companyNameChange: ServiceConfig = {
   category: 'Registrations',
   tagline: 'New name. Same company. All MCA formalities handled.',
 
-  ollvyFee: 6999,
+  ollvyFee: 4999,
   govtFee: 3000,
+  mrp: 12000,
   govtFeeLabel: 'MCA filing fee',
   govtFeeNote: 'Government fee for RUN application and INC-24 filing. Paid directly to MCA.',
 
@@ -97,7 +98,7 @@ export const companyNameChange: ServiceConfig = {
     {
       icon: 'document',
       title: 'Trademark conflict',
-      body: 'Similar trademark registered = MCA rejection or legal notice\nTrademark search before filing reduces this risk',
+      body: 'Similar trademark registered = MCA rejection or legal notice',
     },
   ],
 

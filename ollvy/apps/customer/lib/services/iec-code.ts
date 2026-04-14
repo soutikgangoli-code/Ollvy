@@ -9,6 +9,7 @@ export const iecCode: ServiceConfig = {
 
   ollvyFee: 6999,
   govtFee: 500,
+  mrp: 10000,
   govtFeeLabel: 'DGFT application fee',
   govtFeeNote:
     'This fee is paid to the Directorate General of Foreign Trade (DGFT). Fixed at ₹500 for all applicants.',
@@ -96,17 +97,17 @@ export const iecCode: ServiceConfig = {
     {
       icon: 'document',
       title: 'Bank account in personal name',
-      body: 'IEC requires current account in business name\nProprietor savings account won\'t work\nVerified before filing',
+      body: 'IEC requires current account in business name\nProprietor savings account won\'t work',
     },
     {
       icon: 'mismatch',
       title: 'PAN-Aadhaar name mismatch',
-      body: 'PAN and Aadhaar names must match exactly\nMiddle name variations cause OTP failure\nMismatch must be fixed before filing',
+      body: 'PAN and Aadhaar names must match exactly\nMiddle name variations cause OTP failure',
     },
     {
       icon: 'alert',
       title: 'Importing without IEC',
-      body: 'No IEC = shipment held at customs\nDemurrage accrues daily, penalties up to 3x duty\nGet IEC before your first shipment',
+      body: 'No IEC = shipment held at customs\nDemurrage accrues daily, penalties up to 3x duty',
     },
   ],
 

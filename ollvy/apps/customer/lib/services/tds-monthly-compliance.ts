@@ -8,7 +8,8 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   category: 'Monthly Compliance',
   tagline: 'Deduct TDS. Deposit the challan. File the return. Every month, on time.',
 
-  ollvyFee: 3999,
+  ollvyFee: 999,
+  mrp: 2999,
   retainerCycleLabel: 'per month',
   govtFee: undefined,
 
@@ -105,12 +106,12 @@ export const tdsMonthlyCompliance: ServiceConfig = {
     {
       icon: 'document',
       title: 'Wrong TDS rate',
-      body: 'Under-deduction = liable for shortfall + interest\nCurrent rates applied per section',
+      body: 'Under-deduction = liable for shortfall + interest',
     },
     {
       icon: 'alert',
       title: 'Missing PAN of deductees',
-      body: 'No PAN = TDS at 20% (higher rate)\nMissing PANs flagged during data review',
+      body: 'No PAN = TDS at 20% (higher rate)',
     },
   ],
 

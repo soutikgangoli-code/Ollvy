@@ -151,6 +151,7 @@ export interface DBServiceConfig {
   govtFee?: number
   govtFeeLabel?: string
   govtFeeNote?: string
+  mrp?: number
 
   // SLA
   slaDays: number
@@ -233,6 +234,7 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
       short_description,
       price_base_paisa,
       price_govt_fees_paisa,
+      price_mrp_paisa,
       sla_working_days,
       billing_cycle,
       urgency_score,
@@ -260,6 +262,7 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
     description: pkg.short_description ?? '',
     ollvyFee: pkg.price_base_paisa / 100,
     govtFee: pkg.price_govt_fees_paisa / 100,
+    mrp: (pkg as any).price_mrp_paisa ? (pkg as any).price_mrp_paisa / 100 : undefined,
     slaDays: pkg.sla_working_days,
     isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
     // Use DB rating if >= 10 reviews, otherwise null (per §23 spec)
@@ -302,6 +305,7 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
       penalty_color,
       price_base_paisa,
       price_govt_fees_paisa,
+      price_mrp_paisa,
       govt_fee_label,
       govt_fee_note,
       sla_working_days,
@@ -375,6 +379,7 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     govtFee: pkg.price_govt_fees_paisa > 0 ? pkg.price_govt_fees_paisa / 100 : undefined,
     govtFeeLabel: pkg.govt_fee_label ?? undefined,
     govtFeeNote: pkg.govt_fee_note ?? undefined,
+    mrp: (pkg as any).price_mrp_paisa > 0 ? (pkg as any).price_mrp_paisa / 100 : undefined,
 
     // SLA
     slaDays: pkg.sla_working_days,

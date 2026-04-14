@@ -7,8 +7,9 @@ export const gstRevocation: ServiceConfig = {
   category: 'Tax Filings',
   tagline: 'GST cancelled by the department? We restore it.',
 
-  ollvyFee: 4999,
+  ollvyFee: 2499,
   govtFee: undefined,
+  mrp: 7999,
 
   slaDays: 30,
   isRetainer: false,
@@ -78,7 +79,7 @@ export const gstRevocation: ServiceConfig = {
     {
       icon: 'clock',
       title: '30-day deadline',
-      body: 'Must apply within 30 days of cancellation order\nExtensions possible but require separate application\nAct immediately',
+      body: 'Must apply within 30 days of cancellation order\nExtensions possible but require separate application',
     },
     {
       icon: 'alert',

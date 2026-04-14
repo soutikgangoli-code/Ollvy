@@ -47,6 +47,7 @@ export interface ServicePackage {
   billing_cycle: 'one_time' | 'monthly' | 'quarterly' | 'yearly'
   price_base_paisa: number
   price_govt_fees_paisa: number
+  price_mrp_paisa: number
   price_gst_rate: number
   price_display_note?: string
   price_varies_by_state: boolean

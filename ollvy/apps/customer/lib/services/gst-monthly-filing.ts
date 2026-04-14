@@ -20,6 +20,7 @@ export const gstMonthlyFiling: ServiceConfig = {
 
   ollvyFee: 2999,
   govtFee: undefined,
+  mrp: 4999,
   retainerCycleLabel: 'per month',
 
   slaDays: 0, // retainer - uses nextDueDate instead
@@ -118,17 +119,17 @@ export const gstMonthlyFiling: ServiceConfig = {
     {
       icon: 'clock',
       title: 'Late fee accumulates quickly',
-      body: '₹50/day per return, ₹100/day for both combined\n18% interest on unpaid tax\nAvoidable — share data by the 8th',
+      body: '₹50/day per return, ₹100/day for both combined\n18% interest on unpaid tax',
     },
     {
       icon: 'mismatch',
       title: 'GSTR-1 and GSTR-3B figures must match',
-      body: 'GSTN auto-flags discrepancies between GSTR-1 and GSTR-3B\nBoth filed from the same data set to ensure consistency',
+      body: 'GSTN auto-flags discrepancies between GSTR-1 and GSTR-3B',
     },
     {
       icon: 'alert',
       title: 'Vendor not filed = ITC blocked',
-      body: "Vendor hasn't filed GSTR-1 → their invoices missing from your GSTR-2B\nClaiming that ITC invites a mismatch notice\nChecked before claiming",
+      body: "Vendor hasn't filed GSTR-1 = their invoices missing from your GSTR-2B\nClaiming that ITC invites a mismatch notice",
     },
   ],
 

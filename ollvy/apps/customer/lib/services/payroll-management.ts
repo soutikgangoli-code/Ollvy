@@ -7,7 +7,8 @@ export const payrollManagement: ServiceConfig = {
   category: 'Payroll',
   tagline: 'Salary slips. TDS. PF. ESI. All handled, every month.',
 
-  ollvyFee: 5999,
+  ollvyFee: 2999,
+  mrp: 5999,
   retainerCycleLabel: 'per month',
   govtFee: undefined,
 
@@ -109,12 +110,12 @@ export const payrollManagement: ServiceConfig = {
     {
       icon: 'document',
       title: 'Employee PAN/Aadhaar missing',
-      body: 'TDS requires employee PAN. PF requires UAN (which needs Aadhaar). Missing documents delay salary processing. We collect these during onboarding.',
+      body: 'TDS requires employee PAN. PF requires UAN (which needs Aadhaar). Missing documents delay salary processing.',
     },
     {
       icon: 'alert',
       title: 'Crossed 20 employees - PF now mandatory',
-      body: 'PF becomes mandatory once you have 20+ employees. Many startups miss this threshold. Your 20th employee hire triggers PF registration within 30 days. We track headcount.',
+      body: 'PF becomes mandatory once you have 20+ employees. Many startups miss this threshold. Your 20th employee hire triggers PF registration within 30 days.',
     },
   ],
 

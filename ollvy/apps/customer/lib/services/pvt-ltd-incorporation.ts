@@ -7,8 +7,9 @@ export const pvtLtdIncorporation: ServiceConfig = {
   category: 'Registrations',
   tagline: 'Your company, incorporated. Separate legal entity, limited liability, ready for investment.',
 
-  ollvyFee: 24999,
-  govtFee: 15000,
+  ollvyFee: 5999,
+  govtFee: 7999,
+  mrp: 20000,
   govtFeeLabel: 'MCA stamp duty',
   govtFeeNote:
     'This fee is paid directly to the Ministry of Corporate Affairs. Ollvy collects it on your behalf and remits it in full. It varies slightly by state - ₹15,000 is the standard amount for most states.',
@@ -122,17 +123,17 @@ export const pvtLtdIncorporation: ServiceConfig = {
     {
       icon: 'document',
       title: 'Name rejected by MCA',
-      body: 'MCA rejects similar names or restricted words (Bank, Insurance, Exchange)\nMCA + trademark databases searched before filing\nAll 3 rejected? Alternatives suggested at no extra cost',
+      body: 'MCA rejects similar names or restricted words (Bank, Insurance, Exchange)',
     },
     {
       icon: 'mismatch',
       title: 'Registered address document mismatch',
-      body: 'Utility bill address must match application exactly\nRented address requires landlord NOC\nCS verifies all address documents before filing',
+      body: 'Utility bill address must match application exactly\nRented address requires landlord NOC',
     },
     {
       icon: 'clock',
       title: 'Director slow on DSC video verification',
-      body: 'SPICe+ blocked until all directors complete DSC verification\n10–15 minutes per director, daily reminders sent',
+      body: 'SPICe+ blocked until all directors complete DSC verification',
     },
   ],
 

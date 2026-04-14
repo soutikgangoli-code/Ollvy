@@ -7,8 +7,9 @@ export const mcaAnnualFiling: ServiceConfig = {
   category: 'Tax Filings',
   tagline: 'AOC-4 and MGT-7. The annual return every Pvt Ltd must file.',
 
-  ollvyFee: 14999,
+  ollvyFee: 2999,
   govtFee: 600,
+  mrp: 12000,
   govtFeeLabel: 'MCA filing fees',
   govtFeeNote:
     'This fee is paid to the Ministry of Corporate Affairs. ₹300 per form (AOC-4 + MGT-7). Additional fees apply for delayed filing.',
@@ -96,17 +97,17 @@ export const mcaAnnualFiling: ServiceConfig = {
     {
       icon: 'document',
       title: 'Audit must be complete first',
-      body: 'AOC-4 requires signed, audited financials\nCannot file until audit is complete\nPlan audit timeline accordingly',
+      body: 'AOC-4 requires signed, audited financials\nCannot file until audit is complete',
     },
     {
       icon: 'clock',
       title: 'AGM not held on time',
-      body: 'AGM delayed past Sep 30 → filing deadlines shift\nNew deadlines calculated from actual AGM date',
+      body: 'AGM delayed past Sep 30 = filing deadlines shift',
     },
     {
       icon: 'alert',
       title: 'Penalty accrues daily',
-      body: '₹100/day per form, ₹200/day for both — no ceiling\nFile as soon as documents are ready',
+      body: '₹100/day per form, ₹200/day for both. No ceiling',
     },
   ],
 

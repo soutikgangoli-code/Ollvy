@@ -864,6 +864,7 @@ export default function CheckoutPage() {
                 hasGovtProcessing={service.has_govt_processing ?? false}
                 completionMaxDays={service.completion_max_days}
                 completionRangeText={service.completion_range_text}
+                mrpPaisa={service.price_mrp_paisa}
               />
             )}
           </div>
@@ -1107,6 +1108,7 @@ interface OrderSummarySidebarProps {
   hasGovtProcessing?: boolean
   completionMaxDays?: number | null
   completionRangeText?: string | null
+  mrpPaisa?: number
 }
 
 function OrderSummarySidebar({
@@ -1133,6 +1135,7 @@ function OrderSummarySidebar({
   hasGovtProcessing = false,
   completionMaxDays,
   completionRangeText,
+  mrpPaisa,
 }: OrderSummarySidebarProps) {
   // Calculate completion estimate with govt processing awareness
   const completionEstimate = getCompletionEstimate(
@@ -1172,9 +1175,16 @@ function OrderSummarySidebar({
         <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
           Total to pay now
         </p>
-        <p className="font-mono text-4xl font-bold text-foreground mt-1">
-          {formatPrice(total)}
-        </p>
+        <div className="flex items-baseline gap-2 mt-1">
+          <p className="font-mono text-4xl font-bold text-foreground">
+            {formatPrice(total)}
+          </p>
+          {mrpPaisa && mrpPaisa > 0 && mrpPaisa > total && (
+            <p className="font-mono text-lg text-muted-foreground line-through">
+              {formatPrice(mrpPaisa)}
+            </p>
+          )}
+        </div>
       </div>
 
       {/* Fee breakdown */}

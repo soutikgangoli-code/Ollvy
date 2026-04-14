@@ -52,6 +52,7 @@ function getStaticServices(): ServicePackage[] {
     billing_cycle: s.isRetainer ? 'monthly' : 'one_time',
     price_base_paisa: s.ollvyFee * 100,
     price_govt_fees_paisa: (s.govtFee ?? 0) * 100,
+    price_mrp_paisa: (s.mrp ?? 0) * 100,
     price_gst_rate: 18,
     price_varies_by_state: false,
     sla_working_days: s.slaDays,
