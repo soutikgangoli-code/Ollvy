@@ -102,28 +102,105 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         whatsIncluded={service.whatsIncluded}
         slaDays={service.slaDays}
       />
-      {DIYvsOllvyData[slug] && (
-        <div className="max-w-[1200px] mx-auto px-6">
-          <table className="w-full text-sm border-collapse">
+      {/* Server-rendered SEO content — all key data as semantic HTML for Google */}
+      <div className="max-w-[1200px] mx-auto px-6" aria-hidden="true" style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+        {/* DIY comparison table */}
+        {DIYvsOllvyData[slug] && (
+          <table>
+            <caption>DIY vs Ollvy comparison for {service.name}</caption>
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-2 pr-4 font-medium text-foreground">What needs doing</th>
-                <th className="text-left py-2 pr-4 font-medium text-muted-foreground">On your own</th>
-                <th className="text-left py-2 font-medium text-[hsl(var(--ollvy-green-fg))]">With Ollvy</th>
+              <tr>
+                <th>What needs doing</th>
+                <th>On your own</th>
+                <th>With Ollvy</th>
               </tr>
             </thead>
             <tbody>
               {DIYvsOllvyData[slug].rows.map((row, i) => (
-                <tr key={i} className="border-b border-border">
-                  <td className="py-3 pr-4 font-medium text-foreground align-top">{row.task}</td>
-                  <td className="py-3 pr-4 text-muted-foreground align-top">{row.own}</td>
-                  <td className="py-3 text-foreground align-top">{row.ollvy_head} {row.ollvy_badge}</td>
+                <tr key={i}>
+                  <td>{row.task}</td>
+                  <td>{row.own}</td>
+                  <td>{row.ollvy_head} — {row.ollvy_badge}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      )}
+        )}
+
+        {/* Process steps */}
+        {service.processSteps.length > 0 && (
+          <div>
+            <h2>How {service.name} works</h2>
+            <ol>
+              {service.processSteps.map((step, i) => (
+                <li key={i}>
+                  <h3>Step {step.step}: {step.title}</h3>
+                  <p><strong>Timeline:</strong> {step.timeline}</p>
+                  {step.body.includes('\n') ? (
+                    <ul>{step.body.split('\n').filter(Boolean).map((line, j) => <li key={j}>{line}</li>)}</ul>
+                  ) : (
+                    <p>{step.body}</p>
+                  )}
+                  {step.milestone && <p><strong>Milestone:</strong> {step.milestone}</p>}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
+
+        {/* What's included */}
+        {service.whatsIncluded.length > 0 && (
+          <div>
+            <h2>Everything included in {service.name}</h2>
+            {service.whatsIncluded.map((item, i) => (
+              <div key={i}>
+                <h3>{item.title}</h3>
+                {item.body.includes('\n') ? (
+                  <ul>{item.body.split('\n').filter(Boolean).map((line, j) => <li key={j}>{line}</li>)}</ul>
+                ) : (
+                  <p>{item.body}</p>
+                )}
+                {item.comparisonWithout && <p><strong>Without Ollvy:</strong> {item.comparisonWithout}</p>}
+                {item.comparisonWithOllvy && <p><strong>With Ollvy:</strong> {item.comparisonWithOllvy}</p>}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Risks */}
+        {service.serviceRisks.length > 0 && (
+          <div>
+            <h2>What could go wrong with {service.shortName}</h2>
+            {service.serviceRisks.map((risk, i) => (
+              <div key={i}>
+                <h3>{risk.title}</h3>
+                {risk.body.includes('\n') ? (
+                  <ul>{risk.body.split('\n').filter(Boolean).map((line, j) => <li key={j}>{line}</li>)}</ul>
+                ) : (
+                  <p>{risk.body}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* FAQs */}
+        {service.faqs.length > 0 && (
+          <div>
+            <h2>Frequently asked questions about {service.name}</h2>
+            {service.faqs.map((faq, i) => (
+              <div key={i}>
+                <h3>{faq.q}</h3>
+                {faq.a.includes('\n') ? (
+                  faq.a.split('\n').filter(Boolean).map((line, j) => <p key={j}>{line}</p>)
+                ) : (
+                  <p>{faq.a}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <UnifiedServicePage
         service={service}
         pricing={pricing}
