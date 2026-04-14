@@ -9,6 +9,7 @@ export type ServiceCategory =
   | 'Registration'
   | 'Payroll'
   | 'Licensing'
+  | 'Legal'
 
 export interface ServiceTable {
   caption: string

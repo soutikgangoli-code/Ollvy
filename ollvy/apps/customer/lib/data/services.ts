@@ -573,6 +573,8 @@ const FALLBACK_SERVICE_SLUGS = [
   // Other Services
   'company-name-change',
   'din-reactivation',
+  // Consulting
+  'iepf-consultation',
 ]
 
 /**

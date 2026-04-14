@@ -112,6 +112,12 @@ export function BookingPanel({
     'llp-incorporation',
   ].includes(service.slug)
 
+  // Services with pre-payment questions that don't affect pricing
+  // These route through eligibility for context collection but keep fixed pricing labels
+  const hasPrePaymentQuestions = [
+    'iepf-consultation',
+  ].includes(service.slug)
+
   // Use DB ID for checkout if available, otherwise fall back to slug
   const checkoutId = serviceId ?? service.slug
 
@@ -123,10 +129,10 @@ export function BookingPanel({
     : 'Start Application'
 
   // Build checkout URL with optional variant and addon params
-  // Services with questionnaire-based pricing go to eligibility page first
+  // Services with pre-payment questions (pricing or context) go to eligibility page first
   const baseCheckoutUrl = priceVariesByState
     ? `/quote/request/${checkoutId}`
-    : priceVariesByQuestionnaire
+    : (priceVariesByQuestionnaire || hasPrePaymentQuestions)
     ? `/checkout/${checkoutId}/eligibility`
     : `/checkout/${checkoutId}`
   const urlParams = new URLSearchParams()

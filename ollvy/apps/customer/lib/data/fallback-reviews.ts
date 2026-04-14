@@ -69,6 +69,11 @@ export const fallbackReviews: Record<string, FallbackReview[]> = {
     { rating: 5, comment: 'Name checked before we paid anything. New certificate in 18 days. They also reminded us what else needed updating - we had not thought of that.', date: 'April 2026', name: 'Karan Kapoor' },
     { rating: 4, comment: 'Tracked the MCA status on the app without having to ask anyone. Smooth from start to finish.', date: 'March 2026', name: 'Padmini Rao' },
   ],
+  'iepf-consultation': [
+    { rating: 5, comment: 'My father had Infosys shares from 2001. I had no idea they were in IEPF or even where to start. The expert found Rs.38,000 in unclaimed dividends before the call and then explained on the call that I needed to complete the share transmission first before filing IEPF-5. Would have made a costly mistake without that.', date: 'March 2026', name: 'Suresh Raghunathan' },
+    { rating: 5, comment: 'Found old Tata Motors certificates in a drawer after my mother passed away. Did not know if I should contact the company, go to IEPF directly, or hire a lawyer. Thirty minutes into the call I had a clear picture of what to do and in what order. The document checklist had 7 items. The government one has 18.', date: 'February 2026', name: 'Priya Venkataraman' },
+    { rating: 5, comment: 'Very specific to my case. The expert knew exactly how a legal heir claim differs from a personal one and went through each step I needed to take. Did not waste any time on things that did not apply to me.', date: 'January 2026', name: 'Anand Krishnamurthy' },
+  ],
 }
 
 // Default fallback for services not in the list

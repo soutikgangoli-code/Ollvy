@@ -206,6 +206,18 @@ export const DATA: Record<string, DIYData> = {
       { task: 'What it actually costs', own: '\u20B98,000-15,000. Post-change updates never included.', ollvy_head: '\u20B95,999.', ollvy_badge: 'Checklist included.' },
     ],
   },
+  'iepf-consultation': {
+    off_stat: 'Weeks of searching. No clear answer on what you can actually claim.',
+    on_stat: 'Know what is claimable and how to get it \u2014 in 2 days.',
+    on_date_label: 'Action plan by',
+    rows: [
+      { task: 'Finding your IEPF balance', own: 'iepf.gov.in needs the exact company CIN and folio number. Most people search and find nothing \u2014 not because there is nothing, but because the search needs precise inputs they do not have.', ollvy_head: 'Expert searches MCA21 and the IEPF portal correctly and confirms what is actually there.', ollvy_badge: 'Done before the call.' },
+      { task: 'Knowing your claim type', own: 'Direct claim, legal heir claim, physical certificate claim \u2014 each has a different process. No way to know which you are dealing with until something goes wrong partway through.', ollvy_head: 'Expert identifies your case type in the first 5 minutes of the call.', ollvy_badge: 'No surprises.' },
+      { task: 'Understanding Form IEPF-5', own: '18 fields, a separate instruction manual, and MCA21 help pages referencing 2016 rules that have been amended since.', ollvy_head: 'Expert covers only what applies to your case.', ollvy_badge: '45 minutes, not 45 pages.' },
+      { task: 'Document checklist', own: 'Government list has 14 items. Several probably do not apply to you. Two that do apply are not on the list.', ollvy_head: '5 to 9 items. Each explained in plain language, delivered in writing.', ollvy_badge: 'Specific to your case.' },
+      { task: 'What it actually costs', own: 'Free to figure out yourself \u2014 if you get it right. Mistakes cost 2 to 3 months of delay and filing from scratch.', ollvy_head: '{{GUARANTEE}}', ollvy_badge: 'That\'s it.' },
+    ],
+  },
 }
 
 export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvsOllvyProps) {

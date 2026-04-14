@@ -137,6 +137,12 @@ export const STEP_TITLES: Record<string, Record<number, { title: string; descrip
       description: 'What does your business do?',
     },
   },
+  'iepf-consultation': {
+    1: {
+      title: 'Your Situation',
+      description: 'Three quick questions so the expert knows your case before the call.',
+    },
+  },
 }
 
 // Default step titles for services without custom titles
