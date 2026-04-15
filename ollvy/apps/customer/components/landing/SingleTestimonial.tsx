@@ -86,13 +86,21 @@ export function SingleTestimonial() {
     setCurrentIndex(clamped)
   }, [getCardWidth])
 
+  const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const handleScroll = useCallback(() => {
     if (!scrollRef.current || isDragging) return
     const cardWidth = getCardWidth()
     if (cardWidth === 0) return
     const newIndex = Math.round(scrollRef.current.scrollLeft / cardWidth)
     setCurrentIndex(Math.min(Math.max(0, newIndex), REVIEWS.length - 1))
-  }, [getCardWidth, isDragging])
+
+    // Debounced snap for touch/native scroll
+    if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current)
+    scrollTimerRef.current = setTimeout(() => {
+      snapToNearest()
+    }, 150)
+  }, [getCardWidth, isDragging, snapToNearest])
 
   const scrollToIndex = useCallback((index: number) => {
     if (!scrollRef.current) return
@@ -161,13 +169,12 @@ export function SingleTestimonial() {
           className={`flex overflow-x-auto select-none ${
             isDragging ? 'cursor-grabbing' : 'cursor-grab'
           }`}
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
         >
           {REVIEWS.map((review) => (
             <article
               key={review.name}
               className="flex-shrink-0 w-full text-center"
-              style={{ scrollSnapAlign: 'start' }}
               draggable={false}
             >
               {/* Large decorative quotation mark */}

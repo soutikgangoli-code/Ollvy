@@ -14,6 +14,7 @@ import { ProfilePersonas } from './ProfilePersonas'
 import { RelatedServices } from './RelatedServices'
 import { HowWeReviewed } from './HowWeReviewed'
 import { DIYvsOllvy } from '@/components/service/DIYvsOllvy'
+import { getClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -281,6 +282,15 @@ export function UnifiedServicePage({
   // Explainer stepper open state
   const [explainerOpen, setExplainerOpen] = useState(false)
   const [docsExpanded, setDocsExpanded] = useState(false)
+
+  // Prefetch checkout service data on CTA hover — warms browser cache
+  const prefetchedRef = useRef(false)
+  const prefetchCheckout = useCallback(() => {
+    if (prefetchedRef.current) return
+    prefetchedRef.current = true
+    const supabase = getClient()
+    supabase.from('service_packages').select('*').eq('slug', service.slug).single()
+  }, [service.slug])
 
   // GTM tracking
   const { trackViewService } = useGTM()
@@ -603,7 +613,7 @@ export function UnifiedServicePage({
                   </div>
                 )}
 
-                <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild>
+                <Button size="lg" className="h-11 md:h-12 px-8 md:px-10" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
                   <Link href={getCtaUrl()} prefetch={true}>
                     {ctaLabel}
                   </Link>
@@ -1312,7 +1322,7 @@ export function UnifiedServicePage({
               <p className="text-base text-muted-foreground mt-4 whitespace-nowrap">
                 Fixed price. Verified CA. Done within {service.slaDays} working days.
               </p>
-              <Button size="lg" className="mt-8" asChild>
+              <Button size="lg" className="mt-8" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
                 <Link href={getCtaUrl()} prefetch={true}>
                   {ctaLabel}
                 </Link>
@@ -1350,7 +1360,7 @@ export function UnifiedServicePage({
               </div>
             )}
           </div>
-          <Button size="lg" className="w-[55%] h-10" asChild>
+          <Button size="lg" className="w-[55%] h-10" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
             <Link href={getCtaUrl(true)} prefetch={true}>
               {ctaLabel}
             </Link>

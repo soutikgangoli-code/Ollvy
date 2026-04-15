@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Phone, MessageCircle, Square, CheckSquare, Info } from 'lucide-react'
 import { getCompletionEstimate } from '@/lib/dates'
+import { getClient } from '@/lib/supabase'
 import { DBServiceConfig } from '@/lib/data/services'
 import { cn } from '@/lib/utils'
 import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
@@ -143,6 +144,15 @@ export function BookingPanel({
     urlParams.set('addons', selectedAddonIds.join(','))
   }
   const ctaUrl = urlParams.toString() ? `${baseCheckoutUrl}?${urlParams.toString()}` : baseCheckoutUrl
+
+  // Prefetch checkout service data on CTA hover
+  const prefetchedRef = useRef(false)
+  const prefetchCheckout = useCallback(() => {
+    if (prefetchedRef.current) return
+    prefetchedRef.current = true
+    const supabase = getClient()
+    supabase.from('service_packages').select('*').eq('slug', service.slug).single()
+  }, [service.slug])
 
   return (
     <Card className="border border-border bg-card p-6 w-full rounded-xl shadow-sm">
@@ -346,7 +356,7 @@ export function BookingPanel({
       </div>
 
       {/* CTA button */}
-      <Button className="w-full mt-5" size="lg" asChild>
+      <Button className="w-full mt-5" size="lg" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
         <Link href={ctaUrl} prefetch={true}>
           {ctaLabel}
         </Link>

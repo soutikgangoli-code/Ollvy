@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { getClient } from '@/lib/supabase'
 import {
   CheckCircle,
   ChevronLeft,
@@ -39,6 +40,15 @@ const QUESTIONNAIRE_BASED_SERVICES = [
 
 export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesByState }: ProcessStepperProps) {
   const [active, setActive] = useState(0)
+
+  // Prefetch checkout service data on CTA hover
+  const prefetchedRef = useRef(false)
+  const prefetchCheckout = useCallback(() => {
+    if (prefetchedRef.current || !serviceSlug) return
+    prefetchedRef.current = true
+    const supabase = getClient()
+    supabase.from('service_packages').select('*').eq('slug', serviceSlug).single()
+  }, [serviceSlug])
 
   return (
     <div className="border border-border rounded-xl bg-card overflow-hidden">
@@ -191,7 +201,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
             <ChevronRight size={14} />
           </Button>
         ) : (
-          <Button size="sm" asChild>
+          <Button size="sm" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
             <Link href={(() => {
               if (!serviceId) return '/services'
               if (priceVariesByState) return `/quote/request/${serviceId}`
