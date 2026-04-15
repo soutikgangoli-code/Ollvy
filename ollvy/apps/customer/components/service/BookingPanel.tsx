@@ -152,7 +152,18 @@ export function BookingPanel({
     prefetchedRef.current = true
     const supabase = getClient()
     supabase.from('service_packages').select('*').eq('slug', service.slug).single()
-  }, [service.slug])
+      .then(({ data }) => {
+        if (!data) return
+        if (priceVariesByQuestionnaire || hasPrePaymentQuestions) {
+          supabase
+            .from('service_questionnaires')
+            .select('*', { count: 'exact', head: true })
+            .eq('service_package_id', data.id)
+            .eq('is_active', true)
+            .eq('is_pre_payment', true)
+        }
+      })
+  }, [service.slug, priceVariesByQuestionnaire, hasPrePaymentQuestions])
 
   return (
     <Card className="border border-border bg-card p-6 w-full rounded-xl shadow-sm">

@@ -48,6 +48,17 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
     prefetchedRef.current = true
     const supabase = getClient()
     supabase.from('service_packages').select('*').eq('slug', serviceSlug).single()
+      .then(({ data }) => {
+        if (!data || !serviceSlug) return
+        if (QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)) {
+          supabase
+            .from('service_questionnaires')
+            .select('*', { count: 'exact', head: true })
+            .eq('service_package_id', data.id)
+            .eq('is_active', true)
+            .eq('is_pre_payment', true)
+        }
+      })
   }, [serviceSlug])
 
   return (

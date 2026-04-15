@@ -285,11 +285,24 @@ export function UnifiedServicePage({
 
   // Prefetch checkout service data on CTA hover — warms browser cache
   const prefetchedRef = useRef(false)
+  const PREFETCH_QUESTIONNAIRE_SLUGS = ['trademark-registration', 'pvt-ltd-incorporation', 'llp-incorporation', 'iepf-consultation']
   const prefetchCheckout = useCallback(() => {
     if (prefetchedRef.current) return
     prefetchedRef.current = true
     const supabase = getClient()
     supabase.from('service_packages').select('*').eq('slug', service.slug).single()
+      .then(({ data }) => {
+        if (!data) return
+        // Also prefetch questionnaire count for services that go through eligibility
+        if (PREFETCH_QUESTIONNAIRE_SLUGS.includes(service.slug)) {
+          supabase
+            .from('service_questionnaires')
+            .select('*', { count: 'exact', head: true })
+            .eq('service_package_id', data.id)
+            .eq('is_active', true)
+            .eq('is_pre_payment', true)
+        }
+      })
   }, [service.slug])
 
   // GTM tracking
