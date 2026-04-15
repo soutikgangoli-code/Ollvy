@@ -240,7 +240,7 @@ export function Navbar({ services: prefetchedServices = [], minimal = false }: N
         </div>
 
         {/* Theme Toggle + Desktop Search Button + Profile */}
-        {!minimal && <div className="hidden md:flex items-center gap-2">
+        <div className="hidden md:flex items-center gap-2">
           <ThemeToggle />
           <button
             type="button"
@@ -312,10 +312,10 @@ export function Navbar({ services: prefetchedServices = [], minimal = false }: N
               Sign in
             </button>
           )}
-        </div>}
+        </div>
 
         {/* Mobile Search + Theme + Menu Buttons */}
-        {!minimal && <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 md:hidden">
           {mobileSearchOpen ? (
             <>
               {/* Expanded search input - expands from right to left */}
@@ -354,15 +354,17 @@ export function Navbar({ services: prefetchedServices = [], minimal = false }: N
               </button>
             </>
           )}
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(true)}
-            className="p-2 rounded-md text-foreground hover:bg-muted active:bg-muted/80 transition-colors focus:outline-none shrink-0"
-          >
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Open menu</span>
-          </button>
-        </div>}
+          {!minimal && (
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 rounded-md text-foreground hover:bg-muted active:bg-muted/80 transition-colors focus:outline-none shrink-0"
+            >
+              <Menu className="h-5 w-5" />
+              <span className="sr-only">Open menu</span>
+            </button>
+          )}
+        </div>
 
         {/* Mobile Sheet */}
         {!minimal && <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
