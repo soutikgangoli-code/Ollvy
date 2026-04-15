@@ -96,7 +96,7 @@ function createSelectSchema(
 ): z.ZodTypeAny {
   if (options && options.length > 0) {
     const values = options.map((o) => o.value) as [string, ...string[]]
-    const schema = z.enum(values)
+    const schema = z.enum(values, { errorMap: () => ({ message: 'Please choose an option' }) })
 
     if (required) {
       return schema
@@ -106,7 +106,7 @@ function createSelectSchema(
 
   const schema = z.string()
   if (required) {
-    return schema.min(1, { message: 'Please select an option' })
+    return schema.min(1, { message: 'Please choose an option' })
   }
   return schema.optional().or(z.literal(''))
 }

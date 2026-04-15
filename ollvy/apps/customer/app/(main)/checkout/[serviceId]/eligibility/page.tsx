@@ -111,8 +111,42 @@ export default function EligibilityPage() {
     router.push(checkoutUrl)
   }, [service, serviceId, router, searchParams])
 
-  // Loading or redirecting — show checkout-style skeleton for both
-  if (isLoading || hasPrePaymentQuestions === null || hasPrePaymentQuestions === false) {
+  // Loading — show questionnaire skeleton (matches final layout)
+  if (isLoading || hasPrePaymentQuestions === null) {
+    return (
+      <div className="container max-w-5xl mx-auto py-8 px-4">
+        <div className="mb-8">
+          <Skeleton className="h-8 w-32 mb-4" />
+          <Skeleton className="h-7 w-64 mb-2" />
+          <Skeleton className="h-5 w-80" />
+        </div>
+        <div className="grid lg:grid-cols-[1fr_320px] gap-8">
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-6 w-12" />
+              </div>
+              <Skeleton className="h-1.5 w-full rounded-full" />
+            </div>
+            <div className="rounded-xl border border-border p-6 space-y-6">
+              <Skeleton className="h-5 w-48" />
+              <Skeleton className="h-11 w-full rounded-lg" />
+              <Skeleton className="h-5 w-56" />
+              <Skeleton className="h-11 w-full rounded-lg" />
+              <Skeleton className="h-10 w-32 rounded-lg mt-2" />
+            </div>
+          </div>
+          <div className="hidden lg:block">
+            <Skeleton className="h-[280px] rounded-xl" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // No pre-payment questions — redirecting to checkout, show checkout skeleton
+  if (hasPrePaymentQuestions === false) {
     return (
       <div className="container max-w-5xl mx-auto py-8 px-4">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8">

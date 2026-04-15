@@ -45,7 +45,7 @@ export function QuestionField({ question, mode = 'post_payment' }: QuestionField
       <div className="flex items-center gap-2">
         <Label
           htmlFor={question.question_key}
-          className={cn(error && !isPostPayment && 'text-destructive')}
+          className=""
         >
           {question.question_label}
           {question.validation?.required && !isPostPayment && (
@@ -69,12 +69,9 @@ export function QuestionField({ question, mode = 'post_payment' }: QuestionField
       {/* Field based on question type */}
       {renderField(question, control)}
 
-      {/* Error/hint message - muted in post_payment mode, red in pre_payment */}
+      {/* Error/hint message - always light grey */}
       {error && (
-        <p className={cn(
-          "text-sm",
-          isPostPayment ? "text-muted-foreground" : "text-destructive"
-        )}>
+        <p className="text-sm text-muted-foreground">
           {error.message as string}
         </p>
       )}
