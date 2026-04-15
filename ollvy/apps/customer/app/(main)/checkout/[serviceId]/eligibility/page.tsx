@@ -111,8 +111,8 @@ export default function EligibilityPage() {
     router.push(checkoutUrl)
   }, [service, serviceId, router, searchParams])
 
-  // Loading state — show skeleton matching the questionnaire layout
-  if (isLoading || hasPrePaymentQuestions === null) {
+  // Loading or redirect in progress — single consistent skeleton
+  if (isLoading || hasPrePaymentQuestions === null || hasPrePaymentQuestions === false) {
     return (
       <div className="container max-w-5xl mx-auto py-8 px-4">
         <div className="mb-8">
@@ -131,22 +131,6 @@ export default function EligibilityPage() {
             <Skeleton className="h-10 flex-1 rounded-lg" />
           </div>
           <Skeleton className="h-10 w-36 rounded-lg mt-4" />
-        </div>
-      </div>
-    )
-  }
-
-  // Redirect in progress (no pre-payment questions)
-  if (hasPrePaymentQuestions === false) {
-    return (
-      <div className="container max-w-5xl mx-auto py-8 px-4">
-        <div className="mb-8">
-          <Skeleton className="h-8 w-32 mb-4" />
-          <Skeleton className="h-8 w-72" />
-        </div>
-        <div className="rounded-xl border border-border p-6 space-y-6">
-          <Skeleton className="h-10 w-full rounded-lg" />
-          <Skeleton className="h-10 w-full rounded-lg" />
         </div>
       </div>
     )
