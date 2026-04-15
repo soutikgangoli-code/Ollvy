@@ -111,26 +111,35 @@ export default function EligibilityPage() {
     router.push(checkoutUrl)
   }, [service, serviceId, router, searchParams])
 
-  // Still loading — show questionnaire skeleton
+  // Still loading — match the final page layout (header + wizard skeleton)
   if (isLoading || hasPrePaymentQuestions === null) {
     return (
       <div className="container max-w-5xl mx-auto py-8 px-4">
         <div className="mb-8">
           <Skeleton className="h-8 w-32 mb-4" />
-          <Skeleton className="h-8 w-72 mb-2" />
-          <Skeleton className="h-5 w-96" />
+          <Skeleton className="h-7 w-72 mb-2" />
+          <Skeleton className="h-5 w-80" />
         </div>
-        <div className="rounded-xl border border-border p-6 space-y-6">
-          <Skeleton className="h-5 w-48" />
-          <Skeleton className="h-10 w-full rounded-lg" />
-          <Skeleton className="h-5 w-56" />
-          <Skeleton className="h-10 w-full rounded-lg" />
-          <Skeleton className="h-5 w-40" />
-          <div className="flex gap-3">
-            <Skeleton className="h-10 flex-1 rounded-lg" />
-            <Skeleton className="h-10 flex-1 rounded-lg" />
+        <div className="grid lg:grid-cols-[1fr_320px] gap-8">
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-8 w-12" />
+              </div>
+              <Skeleton className="h-1.5 w-full" />
+            </div>
+            <div className="rounded-xl border border-border bg-card p-6 space-y-6">
+              <Skeleton className="h-6 w-48" />
+              <div className="space-y-4">
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+              </div>
+            </div>
           </div>
-          <Skeleton className="h-10 w-36 rounded-lg mt-4" />
+          <div className="hidden lg:block">
+            <Skeleton className="h-[300px] rounded-xl" />
+          </div>
         </div>
       </div>
     )
