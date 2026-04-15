@@ -788,6 +788,12 @@ export function UnifiedServicePage({
                               <h3 className="text-sm font-semibold text-foreground">
                                 {formatWithMonoNumbers(item.title)}
                               </h3>
+                              {/* Show body only when there's no comparison card and no mock visual - otherwise title is enough */}
+                              {item.body && !item.comparisonWithout && !item.comparisonWithOllvy && !item.mockVisualType && (
+                                <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                                  {formatWithMonoNumbers(item.body)}
+                                </p>
+                              )}
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
