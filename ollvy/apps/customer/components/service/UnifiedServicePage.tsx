@@ -784,7 +784,7 @@ export function UnifiedServicePage({
                         )}
                       >
                         {/* Visual - alternating left/right */}
-                        {item.mockVisualType && (
+                        {item.mockVisualType && item.mockVisualData && Object.keys(item.mockVisualData).length > 0 && (
                           <div
                             className={cn(
                               'order-2',
