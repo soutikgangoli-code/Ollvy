@@ -405,4 +405,12 @@ CROSS JOIN (VALUES
   ('valuation_report', 'Latest Valuation Report', 'If available - used for FMV baseline', 'doc_collection', false, 6, ARRAY['Not mandatory - Ollvy prepares FMV note if not available', 'If you have a recent 409A or FMV report from a funding round, upload it'], NULL),
   ('board_minutes', 'Latest Board Meeting Minutes', 'For reference - to confirm current board composition', 'doc_collection', false, 7, ARRAY['Most recent board meeting minutes', 'Helps confirm who signs the board resolution'], NULL)
 ) AS dt(document_key, document_label, description, stage_key, is_required, display_order, tips, template_url)
-WHERE sp.slug = 'esop-structuring';
+WHERE sp.slug = 'esop-structuring'
+ON CONFLICT (service_package_id, document_key) DO UPDATE SET
+  document_label = EXCLUDED.document_label,
+  description = EXCLUDED.description,
+  stage_key = EXCLUDED.stage_key,
+  is_required = EXCLUDED.is_required,
+  display_order = EXCLUDED.display_order,
+  tips = EXCLUDED.tips,
+  template_url = EXCLUDED.template_url;
