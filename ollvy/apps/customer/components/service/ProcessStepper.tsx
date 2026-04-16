@@ -70,7 +70,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
             key={i}
             onClick={() => setActive(i)}
             className={cn(
-              'flex-1 py-3 text-center text-xs font-mono font-medium transition-all duration-200 relative',
+              'flex-1 py-2 sm:py-3 text-center text-xs font-mono font-medium transition-all duration-200 relative',
               i === active
                 ? 'text-foreground bg-background shadow-sm z-10'
                 : i < active
@@ -115,7 +115,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
           <div
             key={i}
             className={cn(
-              'p-5 sm:p-8 min-h-[220px] sm:min-h-[280px] flex flex-col',
+              'p-4 sm:p-8 min-h-[180px] sm:min-h-[280px] flex flex-col',
               i !== active && 'hidden'
             )}
           >
@@ -189,7 +189,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
       })}
 
       {/* Navigation */}
-      <div className="flex justify-between px-4 pb-4 sm:px-8 sm:pb-6">
+      <div className="flex justify-between px-4 pb-3 sm:px-8 sm:pb-6">
         <Button
           variant="outline"
           size="sm"
