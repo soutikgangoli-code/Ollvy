@@ -130,7 +130,7 @@ export const DEADLINES: DeadlineConfig[] = [
     seoDescription:
       'File your GSTR-9 annual return for FY 2025-26 before December 31. Fixed price ₹4,999. CA assigned same day.',
     canonicalUrl: 'https://www.ollvy.com/gst-annual-2026',
-    documentTab: 'gst_registration',
+    documentTab: 'pvt_ltd',
     documentHeading: 'What Ollvy CA will ask for to file GSTR-9',
     risks: [
       {
