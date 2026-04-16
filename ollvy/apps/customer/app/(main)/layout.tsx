@@ -1,9 +1,14 @@
-import { MainLayout } from '@/components/layout/MainLayout'
+import { NavbarServer } from '@/components/landing/NavbarServer'
+import { MainLayoutClient } from '@/components/layout/MainLayout'
 
 export default function MainLayoutWrapper({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <MainLayout>{children}</MainLayout>
+  return (
+    <MainLayoutClient navbar={<NavbarServer />}>
+      {children}
+    </MainLayoutClient>
+  )
 }
