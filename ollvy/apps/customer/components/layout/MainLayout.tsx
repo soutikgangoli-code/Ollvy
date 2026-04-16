@@ -39,7 +39,7 @@ export function MainLayoutClient({ children, navbar }: MainLayoutClientProps) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      {isMinimal ? <Navbar minimal /> : navbar}
+      {navbar}
       <main className="flex-1 pt-16">{children}</main>
       {!isMinimal && <Footer />}
     </div>

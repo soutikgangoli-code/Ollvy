@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, User, LogOut, ShoppingBag, Repeat, X } from 'lucide-react'
 import {
   Sheet,
@@ -98,8 +98,13 @@ function useActiveSection(sectionIds: (string | null)[]) {
   return activeSection
 }
 
-export function Navbar({ services: prefetchedServices = [], minimal = false }: NavbarProps) {
+// Checkout/questionnaire flows: hide nav links + footer, keep logo/search/theme
+const MINIMAL_PATTERNS = ['/checkout/', '/questionnaire']
+
+export function Navbar({ services: prefetchedServices = [], minimal: minimalProp }: NavbarProps) {
   const router = useRouter()
+  const pathname = usePathname()
+  const minimal = minimalProp ?? MINIMAL_PATTERNS.some(p => pathname.includes(p))
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
