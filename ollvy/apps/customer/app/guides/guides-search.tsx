@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, ArrowRight, SlidersHorizontal, X, FileText, AlertTriangle, Calculator, Clock } from 'lucide-react'
+import { Search, ArrowRight, SlidersHorizontal, X, FileText, AlertTriangle, Clock, Check } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { LEARN_PAGES, LearnCategory } from '@/lib/guides/pages'
@@ -60,8 +60,17 @@ const FILTER_TAGS = (() => {
 
 export function GuidesSearch() {
   const [query, setQuery] = useState('')
-  const [activeFilter, setActiveFilter] = useState<LearnCategory | null>(null)
+  const [activeFilters, setActiveFilters] = useState<Set<LearnCategory>>(new Set())
   const [filterOpen, setFilterOpen] = useState(false)
+
+  const toggleFilter = (cat: LearnCategory) => {
+    setActiveFilters(prev => {
+      const next = new Set(prev)
+      if (next.has(cat)) next.delete(cat)
+      else next.add(cat)
+      return next
+    })
+  }
   const filterRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -74,20 +83,73 @@ export function GuidesSearch() {
     return () => document.removeEventListener('mousedown', handleClick)
   }, [filterOpen])
 
+  // Search results with matched snippet from within the guide content
   const filtered = useMemo(() => {
     let pages = LEARN_PAGES
-    if (activeFilter) pages = pages.filter(p => p.category === activeFilter)
-    if (query.trim()) {
-      const q = query.toLowerCase()
-      pages = pages.filter(
-        p =>
-          p.title.toLowerCase().includes(q) ||
-          p.seoDescription.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q)
-      )
+    if (activeFilters.size > 0) pages = pages.filter(p => activeFilters.has(p.category))
+
+    if (!query.trim()) {
+      return pages.map(p => ({ page: p, snippet: null as string | null, snippetSource: null as string | null }))
     }
+
+    const q = query.toLowerCase()
+
     return pages
-  }, [query, activeFilter])
+      .map(p => {
+        // Check title/description first
+        const titleMatch = p.title.toLowerCase().includes(q) || p.seoDescription.toLowerCase().includes(q)
+
+        // Search within section bodies
+        let snippet: string | null = null
+        let snippetSource: string | null = null
+
+        for (const section of p.sections) {
+          const bodyLower = section.body.toLowerCase()
+          const idx = bodyLower.indexOf(q)
+          if (idx !== -1) {
+            // Extract ~120 chars around the match
+            const start = Math.max(0, idx - 40)
+            const end = Math.min(section.body.length, idx + q.length + 80)
+            snippet = (start > 0 ? '...' : '') + section.body.slice(start, end).trim() + (end < section.body.length ? '...' : '')
+            snippetSource = section.heading
+            break
+          }
+          // Also search bullets
+          const bullets = section.bullets || section.list || []
+          for (const bullet of bullets) {
+            if (bullet.toLowerCase().includes(q)) {
+              snippet = bullet.length > 120 ? bullet.slice(0, 120) + '...' : bullet
+              snippetSource = section.heading
+              break
+            }
+          }
+          if (snippet) break
+        }
+
+        // Search FAQs
+        if (!snippet && p.faqs) {
+          for (const faq of p.faqs) {
+            if (faq.q.toLowerCase().includes(q)) {
+              snippet = faq.a.length > 120 ? faq.a.slice(0, 120) + '...' : faq.a
+              snippetSource = 'FAQ'
+              break
+            }
+            const aIdx = faq.a.toLowerCase().indexOf(q)
+            if (aIdx !== -1) {
+              const start = Math.max(0, aIdx - 40)
+              const end = Math.min(faq.a.length, aIdx + q.length + 80)
+              snippet = (start > 0 ? '...' : '') + faq.a.slice(start, end).trim() + (end < faq.a.length ? '...' : '')
+              snippetSource = 'FAQ'
+              break
+            }
+          }
+        }
+
+        const hasMatch = titleMatch || snippet !== null
+        return hasMatch ? { page: p, snippet, snippetSource } : null
+      })
+      .filter((r): r is NonNullable<typeof r> => r !== null)
+  }, [query, activeFilters])
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -109,35 +171,30 @@ export function GuidesSearch() {
             onClick={() => setFilterOpen(!filterOpen)}
             className={cn(
               'h-full px-3.5 rounded-xl border text-sm flex items-center gap-2 transition-colors',
-              activeFilter
+              activeFilters.size > 0
                 ? 'border-foreground/30 bg-foreground text-background'
                 : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/30'
             )}
           >
             <SlidersHorizontal className="h-4 w-4" />
+            {activeFilters.size > 0 && (
+              <span className="text-xs font-mono">{activeFilters.size}</span>
+            )}
           </button>
 
           {filterOpen && (
             <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-lg z-50 py-1 max-h-[60vh] overflow-y-auto">
-              <button
-                onClick={() => { setActiveFilter(null); setFilterOpen(false) }}
-                className={cn(
-                  'w-full text-left px-4 py-2.5 text-sm transition-colors',
-                  !activeFilter ? 'text-foreground font-medium bg-muted/50' : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
-                )}
-              >
-                All categories
-              </button>
               {FILTER_TAGS.map(cat => (
                 <button
                   key={cat}
-                  onClick={() => { setActiveFilter(cat); setFilterOpen(false) }}
+                  onClick={() => toggleFilter(cat)}
                   className={cn(
-                    'w-full text-left px-4 py-2.5 text-sm transition-colors',
-                    activeFilter === cat ? 'text-foreground font-medium bg-muted/50' : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
+                    'w-full text-left px-4 py-2.5 text-sm transition-colors flex items-center justify-between',
+                    activeFilters.has(cat) ? 'text-foreground font-medium bg-muted/50' : 'text-muted-foreground hover:text-foreground hover:bg-muted/30'
                   )}
                 >
                   {CATEGORY_LABELS[cat]}
+                  {activeFilters.has(cat) && <Check className="h-3.5 w-3.5 text-[hsl(var(--ollvy-green))]" />}
                 </button>
               ))}
             </div>
@@ -145,25 +202,26 @@ export function GuidesSearch() {
         </div>
       </div>
 
-      {/* Active filter + result count */}
+      {/* Active filters + result count */}
       <div className="flex items-center justify-between mb-8">
-        <div>
-          {activeFilter && (
+        <div className="flex flex-wrap gap-2">
+          {Array.from(activeFilters).map(cat => (
             <button
-              onClick={() => setActiveFilter(null)}
+              key={cat}
+              onClick={() => toggleFilter(cat)}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-xs font-medium text-foreground hover:bg-muted/80 transition-colors"
             >
-              {CATEGORY_LABELS[activeFilter]}
+              {CATEGORY_LABELS[cat]}
               <X className="h-3 w-3" />
             </button>
-          )}
+          ))}
         </div>
-        <p className="text-xs text-muted-foreground font-mono">
+        <p className="text-xs text-muted-foreground font-mono shrink-0">
           {filtered.length} {filtered.length === 1 ? 'guide' : 'guides'}
         </p>
       </div>
 
-      {/* Results — card style matching penalty calculator index */}
+      {/* Results */}
       {filtered.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-sm text-muted-foreground">
@@ -172,7 +230,8 @@ export function GuidesSearch() {
         </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(page => {
+          {filtered.map(result => {
+            const page = result.page
             const Icon = getCategoryIcon(page.category)
             const toolBadge = getToolBadge(page.tool?.type)
 
@@ -191,6 +250,17 @@ export function GuidesSearch() {
                       <CardDescription className="mt-1 text-xs line-clamp-2">
                         {page.seoDescription}
                       </CardDescription>
+                      {/* Matched snippet from within the guide */}
+                      {result.snippet && query.trim() && (
+                        <div className="mt-2 px-3 py-2 rounded-lg bg-muted/50 border border-border/50">
+                          <p className="text-[10px] text-muted-foreground font-mono mb-1">
+                            Found in: {result.snippetSource}
+                          </p>
+                          <p className="text-xs text-muted-foreground leading-relaxed">
+                            <HighlightedSnippet text={result.snippet} query={query} />
+                          </p>
+                        </div>
+                      )}
                       <div className="flex items-center gap-2 mt-2">
                         <span className="text-[10px] text-muted-foreground font-mono">
                           {page.lastReviewed}
@@ -211,7 +281,7 @@ export function GuidesSearch() {
       )}
 
       {/* Bottom CTA */}
-      {!query && !activeFilter && (
+      {!query && activeFilters.size === 0 && (
         <div className="mt-16 text-center">
           <p className="text-sm text-muted-foreground">
             Need help with a specific compliance issue?{' '}
@@ -222,5 +292,25 @@ export function GuidesSearch() {
         </div>
       )}
     </div>
+  )
+}
+
+// Highlights matching text within the snippet
+function HighlightedSnippet({ text, query }: { text: string; query: string }) {
+  if (!query.trim()) return <>{text}</>
+
+  const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+  const parts = text.split(regex)
+
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <mark key={i} className="bg-[hsl(var(--ollvy-green))]/20 text-foreground rounded-sm px-0.5">{part}</mark>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
   )
 }
