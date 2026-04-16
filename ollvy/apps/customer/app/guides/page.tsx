@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { LEARN_PAGES, LearnCategory } from '@/lib/guides/pages';
+import { GuidesSearch } from './guides-search';
 
 export const metadata: Metadata = {
   title: 'Business Compliance Guides | Ollvy',
@@ -116,56 +117,18 @@ export default function LearnIndexPage() {
             </p>
           </header>
 
-          {/* Guides by category */}
-          <div className="max-w-3xl mx-auto">
-            {Object.entries(pagesByCategory).map(([category, pages]) => (
-              <div key={category} className="mb-12">
-                <h2 className="font-mono text-xs uppercase tracking-widest text-muted-foreground mb-4">
-                  {CATEGORY_LABELS[category as LearnCategory]}
-                </h2>
-
-                <div className="space-y-3">
-                  {pages.map(page => (
-                    <Link
-                      key={page.slug}
-                      href={`/guides/${page.slug}`}
-                      className="flex items-center justify-between p-4 sm:p-5 rounded-xl border border-border hover:border-foreground/30 hover:bg-muted/10 transition-colors group"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm sm:text-base font-semibold text-foreground group-hover:text-foreground/90">
-                          {page.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
-                          {page.seoDescription}
-                        </p>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          Last reviewed: {page.lastReviewed}
-                          {page.tool && (
-                            <span className="ml-2 px-2 py-0.5 rounded-full bg-muted text-xs">
-                              Includes {page.tool.type === 'eligibility' ? 'eligibility checker' :
-                                page.tool.type === 'penalty' ? 'penalty calculator' :
-                                page.tool.type === 'comparison' ? 'decision tool' : 'deadline tracker'}
-                            </span>
-                          )}
-                        </p>
-                      </div>
-                      <ChevronRight size={18} className="text-muted-foreground group-hover:text-foreground ml-4 shrink-0" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
+          {/* SSR guide list for crawlers */}
+          <div className="sr-only">
+            {LEARN_PAGES.map(page => (
+              <a key={page.slug} href={`/guides/${page.slug}`}>
+                <h2>{page.title}</h2>
+                <p>{page.seoDescription}</p>
+              </a>
             ))}
-
-            {/* Bottom CTA */}
-            <div className="mt-16 text-center">
-              <p className="text-sm text-muted-foreground">
-                Need help with a specific compliance issue?{' '}
-                <Link href="/services" className="text-foreground underline hover:no-underline">
-                  Browse all services
-                </Link>
-              </p>
-            </div>
           </div>
+
+          {/* Client-side filterable guide list */}
+          <GuidesSearch />
         </div>
       </div>
     </>
