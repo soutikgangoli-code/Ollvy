@@ -79,5 +79,33 @@ Static config files (`lib/services/*.ts`, `lib/services/data/*.ts`) are seed/fal
 - **ServiceRisks**: Always renders as bullets. Splits on `\n` or on sentence boundaries (`. `).
 - **Why Ollvy section**: No guarantee subtext, no CA credential subtext (removed).
 
+### How to Add a New Service — Full Checklist
+
+Every new service needs ALL of these. Missing any one means a broken page or broken checkout.
+
+**DB (renders the live `/services/[slug]` page + checkout):**
+1. `service_packages` INSERT — slug, name, tagline, pricing, workflow_stages, whats_included (with 2+ mockVisualType cards), service_risks, profile_personas, faqs, seo_title, seo_description, unlocks, scope_included, scope_excluded, comparison_without, comparison_with. Use `ON CONFLICT (slug) DO UPDATE` for idempotency.
+2. `service_questionnaires` INSERT — post-payment questions (3 steps typical). Linked by `service_package_id`.
+3. `service_document_templates` INSERT — required/optional uploads. Linked by `service_package_id`. Use `ON CONFLICT (service_package_id, document_key) DO UPDATE`.
+4. Set `is_active: true` and `display_order` for grid placement.
+
+**Static files (renders govtFees table, documents table, reviews, comparison, checklist mapping):**
+5. `lib/services/data/services-[name].ts` — `ServicePageConfig` with `govtFees` and `documents` tables only.
+6. `lib/services/data/index.ts` — import and add to `allServices` array.
+7. `components/service/DIYvsOllvy.tsx` — add slug key with comparison rows (`off_stat`, `on_stat`, `on_date_label`, `rows`).
+8. `components/landing/DocumentChecklist.tsx` — add slug to `SERVICE_DOCUMENT_DATA` mapping.
+9. `lib/data/fallback-reviews.ts` — add 5 reviews (Feb-Apr 2026 dates, specific details not generic praise).
+
+**Apply migrations:**
+10. `supabase db push --linked` to apply the migration to remote DB.
+
+**Verify:**
+- `/services/[slug]` renders all sections
+- `/checkout/[serviceId]` shows correct price, timeline, scope, document checklist
+- Post-payment questionnaire flows through all steps
+- Document upload shows correct templates
+- Reviews render on page and in JSON-LD schema
+- Cross-sell unlocks link to valid services with correct prices
+
 ### 16 Service Slugs
 `pvt-ltd-incorporation`, `llp-incorporation`, `gst-registration`, `gst-monthly`, `business-itr`, `trademark-registration`, `mca-annual-filing`, `tds-monthly-compliance`, `msme-registration`, `gst-cancellation`, `gst-revocation`, `din-reactivation`, `company-name-change`, `cloud-kitchen-setup`, `iepf-consultation`, `esop-structuring`
