@@ -2,7 +2,8 @@
 
 import { useState, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, ChevronRight, SlidersHorizontal, X } from 'lucide-react'
+import { Search, ArrowRight, SlidersHorizontal, X, FileText, AlertTriangle, Calculator, Clock } from 'lucide-react'
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { LEARN_PAGES, LearnCategory } from '@/lib/guides/pages'
 
@@ -25,7 +26,26 @@ const CATEGORY_LABELS: Record<LearnCategory, string> = {
   'ROC Notice': 'ROC Notices',
 }
 
-// Unique categories that actually have pages, in display order
+// Icon based on category type
+function getCategoryIcon(category: LearnCategory) {
+  if (category.includes('Notice')) return AlertTriangle
+  if (category.includes('Filing') || category.includes('Deadline')) return Clock
+  return FileText
+}
+
+// Tool badge text
+function getToolBadge(toolType?: string) {
+  if (!toolType) return null
+  switch (toolType) {
+    case 'eligibility': return 'Eligibility Checker'
+    case 'penalty': return 'Penalty Calculator'
+    case 'comparison': return 'Decision Tool'
+    case 'deadline': return 'Deadline Tracker'
+    default: return null
+  }
+}
+
+// Unique categories that actually have pages
 const FILTER_TAGS = (() => {
   const seen = new Set<LearnCategory>()
   const tags: LearnCategory[] = []
@@ -44,7 +64,6 @@ export function GuidesSearch() {
   const [filterOpen, setFilterOpen] = useState(false)
   const filterRef = useRef<HTMLDivElement>(null)
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
@@ -57,13 +76,7 @@ export function GuidesSearch() {
 
   const filtered = useMemo(() => {
     let pages = LEARN_PAGES
-
-    // Apply category filter
-    if (activeFilter) {
-      pages = pages.filter(p => p.category === activeFilter)
-    }
-
-    // Apply text search
+    if (activeFilter) pages = pages.filter(p => p.category === activeFilter)
     if (query.trim()) {
       const q = query.toLowerCase()
       pages = pages.filter(
@@ -73,44 +86,39 @@ export function GuidesSearch() {
           p.category.toLowerCase().includes(q)
       )
     }
-
     return pages
   }, [query, activeFilter])
 
   return (
-    <div className="max-w-3xl mx-auto">
-      {/* Search + filter row */}
-      <div className="flex gap-2 mb-10">
+    <div className="max-w-4xl mx-auto">
+      {/* Search + filter */}
+      <div className="flex gap-2 mb-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search guides, notices, deadlines..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 text-sm rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-foreground/30 transition-colors"
+            className="w-full pl-11 pr-4 py-3 text-sm rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 focus:border-foreground/30 transition-colors"
           />
         </div>
 
-        {/* Filter button + dropdown */}
         <div className="relative" ref={filterRef}>
           <button
             onClick={() => setFilterOpen(!filterOpen)}
             className={cn(
-              'h-full px-3 rounded-xl border text-sm flex items-center gap-2 transition-colors',
+              'h-full px-3.5 rounded-xl border text-sm flex items-center gap-2 transition-colors',
               activeFilter
                 ? 'border-foreground/30 bg-foreground text-background'
-                : 'border-border bg-card text-muted-foreground hover:text-foreground'
+                : 'border-border bg-card text-muted-foreground hover:text-foreground hover:border-foreground/30'
             )}
           >
             <SlidersHorizontal className="h-4 w-4" />
-            {activeFilter && (
-              <span className="text-xs font-medium hidden sm:inline">{CATEGORY_LABELS[activeFilter]}</span>
-            )}
           </button>
 
           {filterOpen && (
-            <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-lg z-50 py-1">
+            <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-lg z-50 py-1 max-h-[60vh] overflow-y-auto">
               <button
                 onClick={() => { setActiveFilter(null); setFilterOpen(false) }}
                 className={cn(
@@ -137,53 +145,68 @@ export function GuidesSearch() {
         </div>
       </div>
 
-      {/* Active filter badge */}
-      {activeFilter && (
-        <div className="mb-6">
-          <button
-            onClick={() => setActiveFilter(null)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-xs font-medium text-foreground"
-          >
-            {CATEGORY_LABELS[activeFilter]}
-            <X className="h-3 w-3" />
-          </button>
+      {/* Active filter + result count */}
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          {activeFilter && (
+            <button
+              onClick={() => setActiveFilter(null)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-muted text-xs font-medium text-foreground hover:bg-muted/80 transition-colors"
+            >
+              {CATEGORY_LABELS[activeFilter]}
+              <X className="h-3 w-3" />
+            </button>
+          )}
         </div>
-      )}
-
-      {/* Results — flat list, no category headers */}
-      {filtered.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center py-8">
-          No guides found{query ? ` for "${query}"` : ''}
+        <p className="text-xs text-muted-foreground font-mono">
+          {filtered.length} {filtered.length === 1 ? 'guide' : 'guides'}
         </p>
+      </div>
+
+      {/* Results — card style matching penalty calculator index */}
+      {filtered.length === 0 ? (
+        <div className="text-center py-16">
+          <p className="text-sm text-muted-foreground">
+            No guides found{query ? ` for "${query}"` : ''}
+          </p>
+        </div>
       ) : (
         <div className="space-y-3">
-          {filtered.map(page => (
-            <Link
-              key={page.slug}
-              href={`/guides/${page.slug}`}
-              className="flex items-center justify-between p-4 sm:p-5 rounded-xl border border-border hover:border-foreground/30 hover:bg-muted/10 transition-colors group"
-            >
-              <div className="flex-1 min-w-0">
-                <h3 className="text-sm sm:text-base font-semibold text-foreground group-hover:text-foreground/90">
-                  {page.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2">
-                  {page.seoDescription}
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  Last reviewed: {page.lastReviewed}
-                  {page.tool && (
-                    <span className="ml-2 px-2 py-0.5 rounded-full bg-muted text-xs">
-                      Includes {page.tool.type === 'eligibility' ? 'eligibility checker' :
-                        page.tool.type === 'penalty' ? 'penalty calculator' :
-                        page.tool.type === 'comparison' ? 'decision tool' : 'deadline tracker'}
-                    </span>
-                  )}
-                </p>
-              </div>
-              <ChevronRight size={18} className="text-muted-foreground group-hover:text-foreground ml-4 shrink-0" />
-            </Link>
-          ))}
+          {filtered.map(page => {
+            const Icon = getCategoryIcon(page.category)
+            const toolBadge = getToolBadge(page.tool?.type)
+
+            return (
+              <Link key={page.slug} href={`/guides/${page.slug}`}>
+                <Card className="border border-border hover:border-[hsl(var(--ollvy-green))] transition-colors cursor-pointer group">
+                  <CardHeader className="flex flex-row items-start gap-3 py-4 px-4">
+                    <div className="p-2 rounded-lg bg-muted shrink-0">
+                      <Icon className="h-4 w-4 text-muted-foreground group-hover:text-[hsl(var(--ollvy-green))] transition-colors" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-sm font-medium flex items-center justify-between gap-2 text-foreground/80">
+                        <span className="line-clamp-1">{page.title}</span>
+                        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-[hsl(var(--ollvy-green))] transition-colors shrink-0" />
+                      </CardTitle>
+                      <CardDescription className="mt-1 text-xs line-clamp-2">
+                        {page.seoDescription}
+                      </CardDescription>
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-[10px] text-muted-foreground font-mono">
+                          {page.lastReviewed}
+                        </span>
+                        {toolBadge && (
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-[hsl(var(--ollvy-green))]/10 text-[hsl(var(--ollvy-green-fg))] font-medium">
+                            {toolBadge}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </CardHeader>
+                </Card>
+              </Link>
+            )
+          })}
         </div>
       )}
 
