@@ -58,7 +58,7 @@ const configFaqJsonLd = generateToolFAQSchema(config)
 export const metadata: Metadata = {
   title: config.seoTitle,
   description: config.seoDescription,
-  keywords: ['business PAN documents', 'company PAN registration', 'PAN for LLP', 'Form 49A documents', 'business PAN card requirements', 'company PAN documents 2025'],
+  keywords: ['business PAN documents', 'company PAN registration', 'PAN for LLP', 'Form 49A documents', 'business PAN card requirements', 'company PAN documents 2026'],
   alternates: {
     canonical: config.canonicalUrl,
   },

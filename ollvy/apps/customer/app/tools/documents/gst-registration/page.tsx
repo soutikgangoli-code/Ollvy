@@ -58,7 +58,7 @@ const configFaqJsonLd = generateToolFAQSchema(config)
 export const metadata: Metadata = {
   title: config.seoTitle,
   description: config.seoDescription,
-  keywords: ['GST registration documents', 'GST documents list', 'documents for GST number', 'GST registration requirements india', 'how to register for GST', 'GSTIN documents 2025'],
+  keywords: ['GST registration documents', 'GST documents list', 'documents for GST number', 'GST registration requirements india', 'how to register for GST', 'GSTIN documents 2026'],
   alternates: {
     canonical: config.canonicalUrl,
   },
