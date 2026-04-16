@@ -596,7 +596,7 @@ export function UnifiedServicePage({
           {/* === HERO SECTION === */}
           <section
             ref={heroRef}
-            className="relative min-h-[55vh] md:min-h-[65vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-8 md:pb-10"
+            className="relative min-h-[60vh] md:min-h-[65vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-8 md:pb-10"
           >
             <div className="relative z-10 text-center w-full max-w-[800px] px-4 md:px-6">
               {/* Service name - large and bold */}
