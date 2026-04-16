@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react
 import Link from 'next/link'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { servicesBySlug } from '@/lib/services/data'
-import { fallbackReviews, defaultFallbackReviews } from '@/lib/data/fallback-reviews'
+import { fallbackReviews, defaultFallbackReviews, type FallbackReview } from '@/lib/data/fallback-reviews'
 import { BookingPanel } from './BookingPanel'
 import { ProcessStepper } from './ProcessStepper'
 import { ExplainerStepper } from './ExplainerStepper'
@@ -138,6 +138,67 @@ function getProcessHeading(serviceName: string, shortName: string): string {
 
   // Default fallback
   return `How Ollvy handles your ${serviceName}`
+}
+
+// Reviews list — show 3 initially, expand to 5
+function ReviewsList({
+  reviews,
+  fallback,
+  serviceSlug,
+}: {
+  reviews: ServiceReview[]
+  fallback: FallbackReview[]
+  serviceSlug: string
+}) {
+  const [expanded, setExpanded] = useState(false)
+  const hasDBReviews = reviews.length > 0
+  const allItems = hasDBReviews ? reviews : fallback
+  const visibleItems = expanded ? allItems.slice(0, 5) : allItems.slice(0, 3)
+  const hasMore = allItems.length > 3 && !expanded
+
+  return (
+    <div className="space-y-4">
+      {hasDBReviews
+        ? visibleItems.map((review, index) => {
+            const r = review as ServiceReview
+            return (
+              <Card key={`${r.created_at}-${index}`} className="border border-border bg-card p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} size={14} className={i < r.rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'} />
+                  ))}
+                  <span className="text-xs text-muted-foreground ml-2">{formatReviewDate(r.created_at)}</span>
+                </div>
+                {r.comment && <p className="text-sm text-foreground leading-relaxed">"{r.comment}"</p>}
+                <p className="text-xs text-muted-foreground mt-3">- Verified customer</p>
+              </Card>
+            )
+          })
+        : visibleItems.map((review, index) => {
+            const r = review as FallbackReview
+            return (
+              <Card key={index} className="border border-border bg-card p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} size={14} className={i < r.rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'} />
+                  ))}
+                  <span className="text-xs text-muted-foreground ml-2">{r.date}</span>
+                </div>
+                <p className="text-sm text-foreground leading-relaxed">"{r.comment}"</p>
+                <p className="text-xs text-muted-foreground mt-3">- {r.name}</p>
+              </Card>
+            )
+          })}
+      {hasMore && (
+        <button
+          onClick={() => setExpanded(true)}
+          className="text-sm text-muted-foreground hover:text-foreground transition-colors font-medium"
+        >
+          Show more reviews
+        </button>
+      )}
+    </div>
+  )
 }
 
 // Mini mock visual components for What's Included section
@@ -1137,71 +1198,12 @@ export function UnifiedServicePage({
                     </div>
                   )}
 
-                  {/* Reviews */}
-                  {reviews.length > 0 ? (
-                    <div className="space-y-4">
-                      {reviews.map((review, index) => (
-                        <Card
-                          key={`${review.created_at}-${index}`}
-                          className="border border-border bg-card p-5"
-                        >
-                          <div className="flex items-center gap-2 mb-3">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <Star
-                                key={i}
-                                size={14}
-                                className={
-                                  i < review.rating
-                                    ? 'fill-yellow-400 text-yellow-400'
-                                    : 'text-muted-foreground'
-                                }
-                              />
-                            ))}
-                            <span className="text-xs text-muted-foreground ml-2">
-                              {formatReviewDate(review.created_at)}
-                            </span>
-                          </div>
-                          {review.comment && (
-                            <p className="text-sm text-foreground leading-relaxed">
-                              "{review.comment}"
-                            </p>
-                          )}
-                          <p className="text-xs text-muted-foreground mt-3">
-                            - Verified customer
-                          </p>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {(fallbackReviews[service.slug] ?? defaultFallbackReviews).map((review, index) => (
-                        <Card key={index} className="border border-border bg-card p-5">
-                          <div className="flex items-center gap-2 mb-3">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                              <Star
-                                key={i}
-                                size={14}
-                                className={
-                                  i < review.rating
-                                    ? 'fill-yellow-400 text-yellow-400'
-                                    : 'text-muted-foreground'
-                                }
-                              />
-                            ))}
-                            <span className="text-xs text-muted-foreground ml-2">
-                              {review.date}
-                            </span>
-                          </div>
-                          <p className="text-sm text-foreground leading-relaxed">
-                            "{review.comment}"
-                          </p>
-                          <p className="text-xs text-muted-foreground mt-3">
-                            - {review.name}
-                          </p>
-                        </Card>
-                      ))}
-                    </div>
-                  )}
+                  {/* Reviews — show 3, expand to 5 */}
+                  <ReviewsList
+                    reviews={reviews}
+                    fallback={fallbackReviews[service.slug] ?? defaultFallbackReviews}
+                    serviceSlug={service.slug}
+                  />
                 </section>
 
                 {/* Section: FAQs */}
