@@ -763,12 +763,12 @@ export function UnifiedServicePage({
                 <section
                   id="included"
                   ref={(el) => { sectionRefs.current.included = el }}
-                  className="py-16 border-b border-border scroll-mt-28"
+                  className="py-10 sm:py-16 border-b border-border scroll-mt-28"
                 >
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 sm:mb-3 font-mono">
                     WHAT YOU GET
                   </p>
-                  <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-6 sm:mb-10">
+                  <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-5 sm:mb-10">
                     Everything included
                   </h2>
 
@@ -777,7 +777,7 @@ export function UnifiedServicePage({
                       <div
                         key={index}
                         className={cn(
-                          'grid gap-3 sm:gap-6 items-center py-3 sm:py-5',
+                          'grid gap-2.5 sm:gap-6 items-center py-2.5 sm:py-5',
                           item.mockVisualType
                             ? 'grid-cols-1 md:grid-cols-2'
                             : 'grid-cols-1'
@@ -821,8 +821,8 @@ export function UnifiedServicePage({
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
-                                <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-3">
-                                  <div className="bg-muted/40 rounded-lg p-2.5 border border-border">
+                                <div className="mt-2 sm:mt-3 grid grid-cols-2 gap-1.5 sm:gap-3">
+                                  <div className="bg-muted/40 rounded-lg p-2 sm:p-2.5 border border-border">
                                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1 font-mono">
                                       Without Ollvy
                                     </p>
@@ -830,7 +830,7 @@ export function UnifiedServicePage({
                                       {item.comparisonWithout && formatWithMonoNumbers(item.comparisonWithout)}
                                     </p>
                                   </div>
-                                  <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-2.5 border border-[hsl(var(--ollvy-green))]/20">
+                                  <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-2 sm:p-2.5 border border-[hsl(var(--ollvy-green))]/20">
                                     <p className="text-[10px] text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1 font-mono">
                                       With Ollvy
                                     </p>
