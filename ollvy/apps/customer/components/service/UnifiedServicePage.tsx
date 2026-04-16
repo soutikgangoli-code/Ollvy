@@ -212,7 +212,7 @@ function MockVisual({
   if (!type || !data) return null
 
   return (
-    <div className="rounded-xl bg-background border border-border p-4 font-mono text-xs">
+    <div className="rounded-xl bg-background border border-border p-3 sm:p-4 font-mono text-xs">
       {type === 'status' && (
         <div className="space-y-2">
           {data.label && (
@@ -852,7 +852,7 @@ export function UnifiedServicePage({
                               index % 2 === 1 ? 'md:order-first' : 'md:order-last'
                             )}
                           >
-                            <div className="max-w-[320px] mx-auto">
+                            <div className="max-w-[280px] sm:max-w-[320px] mx-auto">
                               <MockVisual
                                 type={item.mockVisualType}
                                 data={item.mockVisualData}
