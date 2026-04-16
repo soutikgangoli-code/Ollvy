@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const dir3KycDinDeactivation: LearnPageConfig = {
   slug: 'dir-3-kyc-din-deactivation',
   title: 'DIR-3 KYC Notice: Director DIN Deactivation',
-  seoTitle: 'DIN Deactivated: File DIR-3 KYC to Restore (2025) | Ollvy',
-  seoDescription: 'DIN deactivation blocks all director actions. File DIR-3 KYC with Rs. 5,000 late fee to restore. Annual KYC deadline is September 30. Use DIR-3 KYC-Web for renewals if details unchanged.',
+  seoTitle: 'DIN Deactivated: File DIR-3 KYC to Restore (2026) | Ollvy',
+  seoDescription: 'DIN deactivation blocks all director actions. File DIR-3 KYC with Rs. 5,000 late fee to restore. Triennial KYC filing. Next due June 30, 2028. Use DIR-3 KYC-Web for renewals if details unchanged.',
   canonicalUrl: 'https://www.ollvy.com/guides/dir-3-kyc-din-deactivation',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'ROC Notice',
   ctaServiceSlug: 'director-kyc',
   ctaSecondarySlug: 'mca-annual-filing',
@@ -18,14 +18,14 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
     documentChecklists: ['private-limited-company'],
   },
   severity: 'serious',
-  deadline: 'DIR-3 KYC must be filed annually by September 30',
+  deadline: 'DIR-3 KYC must be filed every 3 years. Next due June 30, 2028',
   deadlineNote: 'Once DIN is deactivated, you cannot sign any company documents, file any MCA forms, or appear as an active director on records - until it is restored.',
 
   sections: [
     {
       number: '01',
       heading: 'YOUR DIN HAS BEEN DEACTIVATED',
-      body: 'Every director of an Indian company holds a Director Identification Number (DIN) issued by MCA. To keep this DIN active, you must file DIR-3 KYC (Know Your Customer verification) every year by September 30.\n\nIf you missed the September 30 deadline, the MCA system automatically deactivates your DIN. You will receive an intimation about this. Your DIN status on the MCA portal will show as "Deactivated due to non-filing of DIR-3 KYC."',
+      body: 'Every director of an Indian company holds a Director Identification Number (DIN) issued by MCA. To keep this DIN active, you must file DIR-3 KYC Web before each triennial deadline (next: June 30, 2028). MCA changed this from annual to every 3 years effective March 31, 2026.\n\nIf you missed the last filing deadline, the MCA system automatically deactivates your DIN. You will receive an intimation about this. Your DIN status on the MCA portal will show as "Deactivated due to non-filing of DIR-3 KYC."',
       note: 'Source: Rule 12A and 12B, Companies (Appointment and Qualification of Directors) Rules, 2014.',
     },
     {
@@ -49,7 +49,7 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
         'Documents needed for DIR-3 KYC: PAN, Aadhaar, current address proof, mobile number OTP verification, email OTP verification. If filed by a CA/CS, their digital signature is also needed.',
         'File on the MCA portal: Log in to mca.gov.in, go to the DIR-3 KYC service, complete the form with verified documents, and pay the fee.',
         'Processing time: DIN reactivation is typically immediate or within 24 hours of successful DIR-3 KYC filing with fee.',
-        'Annual commitment: Once reactivated, file DIR-3 KYC every year before September 30 to avoid this happening again. It takes about 10 minutes.',
+        'Once reactivated, file DIR-3 KYC before each triennial deadline (next: June 30, 2028). Changes to mobile, email, or address require filing within 30 days.',
       ],
     },
     {
@@ -57,9 +57,9 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
       heading: 'DIR-3 KYC-WEB VS DIR-3 KYC: WHICH DO YOU FILE',
       body: 'There are two variants:',
       bullets: [
-        'DIR-3 KYC (eForm): Full KYC for first-time filing or when your details have changed (new PAN, new address, new mobile number, etc.). Requires digital signature of a professional (CA/CS).',
-        'DIR-3 KYC-Web: Annual renewal for directors whose details have not changed. A simpler web-based form requiring only OTP verification on the registered mobile and email. No professional signature needed.',
-        'Most directors do DIR-3 KYC-Web for annual renewal unless there is a change in personal details. First-time KYC (when DIN was newly issued) requires the full eForm.',
+        'DIR-3 KYC (eForm): Discontinued. Previously used for first-time filing or when details changed. No longer available on the MCA portal.',
+        'DIR-3 KYC-Web: Now the only permitted option. A web-based form requiring OTP verification on the registered mobile and email. No professional digital signature needed. Used for both first-time and renewal filings.',
+        'All directors must use DIR-3 KYC-Web going forward. Changes to mobile, email, or address require filing within 30 days even outside the triennial cycle.',
       ],
     },
   ],
@@ -71,7 +71,7 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
     },
     {
       q: 'I stopped being a director 2 years ago. Do I still need to file DIR-3 KYC?',
-      a: 'If you have resigned from all directorial positions and are no longer a director in any company, you can request surrender of your DIN. Post-surrender, no KYC filings are needed. However, as long as your DIN is active (even if you are no longer a director), the annual KYC requirement continues.',
+      a: 'If you have resigned from all directorial positions and are no longer a director in any company, you can request surrender of your DIN. Post-surrender, no KYC filings are needed. However, as long as your DIN is active (even if you are no longer a director), the triennial KYC requirement continues.',
     },
     {
       q: "My DIN was deactivated and now the company cannot file its annual returns. Who is responsible?",
@@ -84,7 +84,7 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
   ],
 
   sources: [
-    { name: 'Companies (Appointment and Qualification of Directors) Rules, 2014 (Rule 12A, 12B)', url: 'https://www.mca.gov.in', description: 'DIR-3 KYC annual requirement' },
+    { name: 'Companies (Appointment and Qualification of Directors) Rules, 2014 (Rule 12A, 12B)', url: 'https://www.mca.gov.in', description: 'DIR-3 KYC triennial requirement (amended Dec 2025)' },
     { name: 'MCA Portal', url: 'https://www.mca.gov.in', description: 'DIR-3 KYC filing and DIN status check' },
   ],
 };

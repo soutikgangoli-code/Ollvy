@@ -5,7 +5,7 @@ import type { ToolPageConfig } from './types'
 export const pvtLtdChecklistPage: ToolPageConfig = {
   slug: 'private-limited-company',
   title: 'Documents Required for Private Limited Company Registration',
-  seoTitle: 'Documents Required for Pvt Ltd Registration India 2025 | Complete List | Ollvy',
+  seoTitle: 'Documents Required for Pvt Ltd Registration India 2026 | Complete List | Ollvy',
   seoDescription: 'Complete document checklist for Private Limited Company registration in India. PAN, Aadhaar, address proof, DSC, MOA/AOA. Download and verify before filing.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/private-limited-company',
   lastReviewed: 'April 2026',
@@ -73,7 +73,7 @@ Use this checklist to verify every document before submission. A single mismatch
 export const llpChecklistPage: ToolPageConfig = {
   slug: 'llp',
   title: 'Documents Required for LLP Registration',
-  seoTitle: 'Documents Required for LLP Registration India 2025 | Complete List | Ollvy',
+  seoTitle: 'Documents Required for LLP Registration India 2026 | Complete List | Ollvy',
   seoDescription: 'Complete document checklist for LLP registration in India. DPIN, DSC, LLP Agreement, PAN for all designated partners. Download and verify before filing.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/llp',
   lastReviewed: 'April 2026',
@@ -141,7 +141,7 @@ The stamp duty on the LLP Agreement varies by state - higher capital contributio
 export const gstChecklistPage: ToolPageConfig = {
   slug: 'gst-registration',
   title: 'Documents Required for GST Registration',
-  seoTitle: 'Documents Required for GST Registration India 2025 | Complete Checklist | Ollvy',
+  seoTitle: 'Documents Required for GST Registration India 2026 | Complete Checklist | Ollvy',
   seoDescription: 'Complete GST registration document checklist by business type - sole proprietor, Pvt Ltd, LLP, partnership. PAN, Aadhaar, address proof, bank details.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/gst-registration',
   lastReviewed: 'April 2026',
@@ -209,7 +209,7 @@ The address proof must be a recent electricity bill (not older than 2 months). I
 export const trademarkChecklistPage: ToolPageConfig = {
   slug: 'trademark',
   title: 'Documents Required for Trademark Registration',
-  seoTitle: 'Documents Required for Trademark Registration India 2025 | IP India | Ollvy',
+  seoTitle: 'Documents Required for Trademark Registration India 2026 | IP India | Ollvy',
   seoDescription: 'Complete document checklist for trademark registration in India. Logo file specifications, applicant documents, MSME certificate for reduced fees.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/trademark',
   lastReviewed: 'April 2026',
@@ -277,7 +277,7 @@ If you want to claim prior use (that you have been using the mark before the fil
 export const individualItrChecklistPage: ToolPageConfig = {
   slug: 'individual-itr',
   title: 'Documents Required for Individual ITR Filing',
-  seoTitle: 'Documents Required for ITR Filing India 2025 | Salaried & Freelancer | Ollvy',
+  seoTitle: 'Documents Required for ITR Filing India 2026 | Salaried & Freelancer | Ollvy',
   seoDescription: 'Complete document checklist for individual income tax return filing. Form 16, Form 26AS, AIS, bank statements, investment proofs. FY 2024-25.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/individual-itr',
   lastReviewed: 'April 2026',
@@ -345,7 +345,7 @@ For freelancers and self-employed individuals, invoices and bank statements show
 export const businessItrChecklistPage: ToolPageConfig = {
   slug: 'business-itr',
   title: 'Documents Required for Business ITR Filing (Company & LLP)',
-  seoTitle: 'Documents Required for Business ITR Filing India 2025 | Company & LLP | Ollvy',
+  seoTitle: 'Documents Required for Business ITR Filing India 2026 | Company & LLP | Ollvy',
   seoDescription: 'Complete document checklist for company (ITR-6) and LLP (ITR-5) income tax return filing. Audited financials, Form 26AS, depreciation schedule, director remuneration.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/business-itr',
   lastReviewed: 'April 2026',
@@ -415,7 +415,7 @@ Director or partner remuneration has specific treatment: for companies, salary p
 export const soleProprietorChecklistPage: ToolPageConfig = {
   slug: 'sole-proprietor',
   title: 'Documents Required for Sole Proprietor Business Setup',
-  seoTitle: 'Sole Proprietor Business Documents India 2025 | GST, Bank Account, S&E | Ollvy',
+  seoTitle: 'Sole Proprietor Business Documents India 2026 | GST, Bank Account, S&E | Ollvy',
   seoDescription: 'Documents needed for sole proprietorship setup in India - GST registration, bank current account, Shop & Establishment registration. PAN, Aadhaar, address proof.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/sole-proprietor',
   lastReviewed: 'April 2026',
@@ -483,7 +483,7 @@ The Shop & Establishment registration is required in most states for any commerc
 export const partnershipChecklistPage: ToolPageConfig = {
   slug: 'partnership',
   title: 'Documents Required for Partnership Firm Registration',
-  seoTitle: 'Documents Required for Partnership Firm Registration India 2025 | Ollvy',
+  seoTitle: 'Documents Required for Partnership Firm Registration India 2026 | Ollvy',
   seoDescription: 'Complete document checklist for Partnership Firm registration. Partnership deed, PAN for all partners, address proof, bank account requirements.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/partnership',
   lastReviewed: 'April 2026',
@@ -551,7 +551,7 @@ For bank current account opening, banks require the registered partnership deed,
 export const businessPanChecklistPage: ToolPageConfig = {
   slug: 'business-pan',
   title: 'Documents Required for Business PAN Registration',
-  seoTitle: 'Documents for Business PAN Registration: Company, LLP and Firm (2025) | Ollvy',
+  seoTitle: 'Documents for Business PAN Registration: Company, LLP and Firm (2026) | Ollvy',
   seoDescription: 'Complete document checklist for business PAN registration in India. Certificate of Incorporation, address proof, board resolution, and signatory KYC - by entity type.',
   canonicalUrl: 'https://www.ollvy.com/tools/documents/business-pan',
   lastReviewed: 'March 2026',

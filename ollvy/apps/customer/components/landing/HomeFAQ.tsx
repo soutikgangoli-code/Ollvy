@@ -7,10 +7,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import type { FAQServicePrices } from '@/lib/data/services'
 
 // Show all FAQs on homepage
 
-const FAQ_DATA = [
+function getFaqData(prices: FAQServicePrices) {
+  return [
   {
     id: 'q1',
     question: 'What is the difference between an LLP and a Private Limited Company in India?',
@@ -43,11 +45,11 @@ const FAQ_DATA = [
           <Link href="/services/llp-incorporation" className="text-primary underline hover:no-underline">
             LLP Incorporation
           </Link>{' '}
-          is completed in 10-12 working days at Rs 7,999 plus government fees.{' '}
+          is completed in 10-12 working days at {prices.llpTotal} all-in.{' '}
           <Link href="/services/pvt-ltd-incorporation" className="text-primary underline hover:no-underline">
             Private Limited Incorporation
           </Link>{' '}
-          is completed in 12-15 working days at Rs 9,999 plus government fees.
+          is completed in 12-15 working days at {prices.pvtLtdTotal} all-in.
         </p>
       </>
     ),
@@ -175,37 +177,37 @@ const FAQ_DATA = [
             <tbody>
               <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/llp-incorporation" className="text-primary underline hover:no-underline">LLP Incorporation</Link></td>
-                <td className="py-2 pr-4">Rs 7,999</td>
+                <td className="py-2 pr-4">{prices.llp}</td>
                 <td className="py-2 pr-4">Rs 500-800</td>
-                <td className="py-2 pr-4">~Rs 8,800</td>
+                <td className="py-2 pr-4">{prices.llpTotal}</td>
                 <td className="py-2">DSC, name reservation, LLP agreement, Form 2 filing, CoI, compliance calendar</td>
               </tr>
               <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/pvt-ltd-incorporation" className="text-primary underline hover:no-underline">Private Limited Company</Link></td>
-                <td className="py-2 pr-4">Rs 9,999</td>
+                <td className="py-2 pr-4">{prices.pvtLtd}</td>
                 <td className="py-2 pr-4">Rs 3,000-6,000</td>
-                <td className="py-2 pr-4">~Rs 14,000</td>
+                <td className="py-2 pr-4">{prices.pvtLtdTotal}</td>
                 <td className="py-2">DSC for 2 directors, SPICe+ filing, PAN, TAN, CoI, MOA/AOA, compliance calendar</td>
               </tr>
               <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4">OPC Incorporation</td>
-                <td className="py-2 pr-4">Rs 8,499</td>
+                <td className="py-2 pr-4">{prices.opc}</td>
                 <td className="py-2 pr-4">Rs 1,500-3,000</td>
-                <td className="py-2 pr-4">~Rs 11,000</td>
+                <td className="py-2 pr-4">{prices.opcTotal}</td>
                 <td className="py-2">Single director DSC, SPICe+ filing, CoI, PAN, TAN</td>
               </tr>
               <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/gst-registration" className="text-primary underline hover:no-underline">GST Registration</Link></td>
-                <td className="py-2 pr-4">Rs 2,999</td>
+                <td className="py-2 pr-4">{prices.gst}</td>
                 <td className="py-2 pr-4">Rs 0</td>
-                <td className="py-2 pr-4">Rs 2,999</td>
+                <td className="py-2 pr-4">{prices.gstTotal}</td>
                 <td className="py-2">Portal application, document prep, officer query handling, GSTIN delivery</td>
               </tr>
               <tr className="border-b border-border/30 bg-muted/30">
                 <td className="py-2 pr-4"><Link href="/services/trademark-registration" className="text-primary underline hover:no-underline">Trademark Registration</Link></td>
-                <td className="py-2 pr-4">Rs 6,999</td>
+                <td className="py-2 pr-4">{prices.trademark}</td>
                 <td className="py-2 pr-4">Rs 4,500-9,000</td>
-                <td className="py-2 pr-4">~Rs 14,000</td>
+                <td className="py-2 pr-4">{prices.trademarkTotal}</td>
                 <td className="py-2">Conflict search, class identification, TM-A filing, examination tracking, certificate</td>
               </tr>
             </tbody>
@@ -215,7 +217,7 @@ const FAQ_DATA = [
           <strong>Why do government fees vary?</strong> For Private Limited Companies, government fees are based on authorised share capital - the higher the authorised capital, the higher the stamp duty and filing fees. Most early-stage companies register with Rs 1 lakh authorised capital, which brings government fees to the lower end of the range.
         </p>
         <p className="mb-4">
-          <strong>What is not included:</strong> GST at 18% on professional fees. GST on Rs 7,999 = Rs 1,440, bringing the LLP total professional fee to Rs 9,439. Government fees are GST-exempt.
+          <strong>What is not included:</strong> GST at 18% on professional fees ({prices.llp}) is additional. Government fees are GST-exempt.
         </p>
         <p>
           <strong>How Ollvy compares:</strong> IndiaFilings charges Rs 9,999-14,999 for LLP registration. Vakilsearch charges Rs 11,999-18,999. Ollvy prices are lower because we operate with lower overhead - no branch offices, no sales teams - and pass the savings to you without compromising on quality. Every order is handled by a vetted, experienced CA.
@@ -286,7 +288,7 @@ const FAQ_DATA = [
     answer: (
       <>
         <p className="mb-4">
-          Director KYC is a mandatory annual compliance requirement for all individuals who hold a Director Identification Number (DIN) in India - regardless of whether the company is active or not. It is filed using Form DIR-3 KYC on the MCA portal.
+          Director KYC is a mandatory compliance requirement for all individuals who hold a Director Identification Number (DIN) in India - regardless of whether the company is active or not. MCA changed this from annual to triennial (every 3 years) effective March 31, 2026. It is now filed using DIR-3 KYC Web on the MCA portal.
         </p>
         <p className="mb-2 font-semibold">Who must file Director KYC?</p>
         <ul className="list-disc pl-6 mb-4 space-y-1">
@@ -295,7 +297,7 @@ const FAQ_DATA = [
           <li>Designated partners of LLPs (they receive a DPIN, which is equivalent to a DIN for this purpose).</li>
         </ul>
         <p className="mb-4">
-          <strong>What is the deadline?</strong> The annual deadline is 30 September each year (for the financial year ending 31 March). If you miss this date, your DIN is marked as "Deactivated due to non-filing of DIR-3 KYC."
+          <strong>What is the deadline?</strong> The triennial deadline is 30 June every 3 years. Directors who filed KYC by September 30, 2025 are covered until June 30, 2028. If you miss the deadline, your DIN is marked as "Deactivated due to non-filing of DIR-3 KYC."
         </p>
         <p className="mb-2 font-semibold">What happens if you miss the deadline?</p>
         <ul className="list-disc pl-6 mb-4 space-y-1">
@@ -480,9 +482,11 @@ const FAQ_DATA = [
     ),
   },
 ]
+}
 
-// Homepage FAQ - shows all questions
-export function HomeFAQ() {
+// Homepage FAQ - shows all questions, prices from DB
+export function HomeFAQ({ prices }: { prices: FAQServicePrices }) {
+  const FAQ_DATA = getFaqData(prices)
   return (
     <section id="faqs" className="bg-background py-12 md:py-16 lg:py-20">
       <div className="container max-w-4xl">

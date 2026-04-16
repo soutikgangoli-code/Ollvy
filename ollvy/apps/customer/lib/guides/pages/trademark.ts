@@ -3,9 +3,9 @@ import { LearnPageConfig, getUrgencyLevel, URGENCY_LEVELS } from '../pages'
 export const trademarkRegistration: LearnPageConfig = {
   slug: 'do-i-need-trademark-registration',
   title: 'Do I Need Trademark Registration?',
-  seoTitle: 'Do I Need to Register a Trademark in India 2025? | Ollvy',
+  seoTitle: 'Do I Need to Register a Trademark in India 2026? | Ollvy',
   seoDescription:
-    'Find out if trademark registration makes sense for your brand in India. Understand protection, costs, enforcement, and when to prioritise it in 2025.',
+    'Find out if trademark registration makes sense for your brand in India. Understand protection, costs, enforcement, and when to prioritise it in 2026.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-trademark-registration',
   lastReviewed: 'April 2026',
   category: 'Registration',
@@ -215,7 +215,7 @@ export const trademarkRegistration: LearnPageConfig = {
         'Renewal: Rs. 9,000 to Rs. 10,000 every 10 years',
       ],
       table: {
-        caption: 'Trademark Registration Fees in India (IP India, 2025)',
+        caption: 'Trademark Registration Fees in India (IP India, 2026)',
         headers: ['Fee Type', 'Individual / Startup / Small Entity', 'Company / Others', 'Notes'],
         rows: [
           ['Registration per class', 'Rs. 4,500', 'Rs. 9,000', 'One-time government fee per 10-year term'],

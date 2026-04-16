@@ -3,9 +3,9 @@ import { LearnPageConfig } from '../pages'
 export const shopEstablishment: LearnPageConfig = {
   slug: 'do-i-need-shop-establishment-registration',
   title: 'Do I Need Shop and Establishment Registration?',
-  seoTitle: 'Shop & Establishment Registration in India 2025 | Ollvy',
+  seoTitle: 'Shop & Establishment Registration in India 2026 | Ollvy',
   seoDescription:
-    'Find out if your business needs Shop and Establishment registration in India. Covers shops, offices, restaurants, and home-based businesses - state-wise rules 2025.',
+    'Find out if your business needs Shop and Establishment registration in India. Covers shops, offices, restaurants, and home-based businesses - state-wise rules 2026.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-shop-establishment-registration',
   lastReviewed: 'April 2026',
   category: 'Registration',

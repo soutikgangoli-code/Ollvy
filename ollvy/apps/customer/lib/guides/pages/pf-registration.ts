@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const pfRegistration: LearnPageConfig = {
   slug: 'when-does-pf-registration-become-mandatory',
   title: 'When Does PF Registration Become Mandatory?',
-  seoTitle: 'PF Registration: When is it Mandatory in India 2025? | Ollvy',
+  seoTitle: 'PF Registration: When is it Mandatory in India 2026? | Ollvy',
   seoDescription:
     'Find out when Provident Fund (EPFO) registration becomes mandatory for your business in India. Covers employee threshold, penalties, and voluntary registration.',
   canonicalUrl: 'https://www.ollvy.com/guides/when-does-pf-registration-become-mandatory',

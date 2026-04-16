@@ -192,7 +192,7 @@ export default async function LandingPage() {
         <SingleTestimonial />
 
         {/* Section 7 - FAQ: Key questions */}
-        <HomeFAQ />
+        <HomeFAQ prices={faqPrices} />
 
         {/* Section 8 - Final CTA: Strong close */}
         <FinalCTA />

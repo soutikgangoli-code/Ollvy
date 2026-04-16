@@ -1,34 +1,35 @@
 import { Metadata } from 'next'
 import { DeadlinePage } from '@/components/deadline/DeadlinePage'
-import { getDeadlineBySlug, generateDeadlineFAQSchema } from '@/lib/deadlines'
+import { getDeadlineBySlug, getDeadlineWithLivePrice, generateDeadlineFAQSchema } from '@/lib/deadlines'
 import { notFound } from 'next/navigation'
 
-const deadline = getDeadlineBySlug('director-kyc-2026')
+const staticDeadline = getDeadlineBySlug('director-kyc-2026')
 
-export const metadata: Metadata = deadline
+export const metadata: Metadata = staticDeadline
   ? {
-      title: deadline.seoTitle,
-      description: deadline.seoDescription,
+      title: staticDeadline.seoTitle,
+      description: staticDeadline.seoDescription,
       alternates: {
-        canonical: deadline.canonicalUrl,
+        canonical: staticDeadline.canonicalUrl,
       },
       openGraph: {
-        title: deadline.seoTitle,
-        description: deadline.seoDescription,
-        url: deadline.canonicalUrl,
+        title: staticDeadline.seoTitle,
+        description: staticDeadline.seoDescription,
+        url: staticDeadline.canonicalUrl,
         siteName: 'Ollvy',
         images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
       },
       twitter: {
         card: 'summary_large_image',
-        title: deadline.seoTitle,
-        description: deadline.seoDescription,
+        title: staticDeadline.seoTitle,
+        description: staticDeadline.seoDescription,
         images: ['https://www.ollvy.com/logo.png'],
       },
     }
   : {}
 
-export default function DirectorKYC2026Page() {
+export default async function DirectorKYC2026Page() {
+  const deadline = await getDeadlineWithLivePrice('director-kyc-2026')
   if (!deadline) {
     notFound()
   }

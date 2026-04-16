@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstGstr9AnnualReturnMismatch: LearnPageConfig = {
   slug: 'gst-gstr9-annual-return-mismatch',
   title: 'GST Annual Return Mismatch Notice: GSTR-9 vs GSTR-3B Discrepancy',
-  seoTitle: 'GSTR-9 vs GSTR-3B Mismatch Notice: How to Reconcile (2025) | Ollvy',
+  seoTitle: 'GSTR-9 vs GSTR-3B Mismatch Notice: How to Reconcile (2026) | Ollvy',
   seoDescription: 'GSTR-9 discrepancies often trigger ASMT-10 scrutiny. Prepare a full year reconciliation matching GSTR-9 lines to GSTR-3B. GSTR-9 cannot be amended after filing.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-gstr9-annual-return-mismatch',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-monthly',
   ctaSecondarySlug: 'gst-registration',

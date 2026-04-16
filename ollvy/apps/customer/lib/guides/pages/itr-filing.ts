@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const itrFiling: LearnPageConfig = {
   slug: 'do-i-need-to-file-itr',
   title: 'Do I Need to File an Income Tax Return?',
-  seoTitle: 'Do I Need to File ITR in 2025? Mandatory vs Optional | Ollvy',
+  seoTitle: 'Do I Need to File ITR in 2026? Mandatory vs Optional | Ollvy',
   seoDescription:
     'Check if ITR filing is mandatory for you in India. Covers salaried, freelancers, business owners, and NRIs - with 2025-26 thresholds and exemptions.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-to-file-itr',
@@ -171,15 +171,15 @@ export const itrFiling: LearnPageConfig = {
         'Tax was deducted from any payment and you want it back',
       ],
       table: {
-        caption: 'ITR Filing: Basic Exemption Limits and Due Dates (FY 2024-25 / AY 2025-26)',
+        caption: 'ITR Filing: Basic Exemption Limits and Due Dates (FY 2025-26 / AY 2026-27)',
         headers: ['Taxpayer', 'Exemption Limit', 'Due Date', 'Late Fee'],
         rows: [
-          ['Individual below 60', 'Rs. 2.5 lakh', '31 July 2025', 'Rs. 1,000 (income ≤ Rs. 5L) or Rs. 5,000'],
-          ['Senior Citizen (60-80 years)', 'Rs. 3 lakh', '31 July 2025', 'Rs. 1,000 or Rs. 5,000'],
-          ['Super Senior Citizen (above 80)', 'Rs. 5 lakh', '31 July 2025', 'Rs. 1,000 only'],
-          ['Private Limited Company', 'No exemption', '31 October 2025', 'Rs. 10,000'],
+          ['Individual below 60', 'Rs. 2.5 lakh', '31 July 2026', 'Rs. 1,000 (income ≤ Rs. 5L) or Rs. 5,000'],
+          ['Senior Citizen (60-80 years)', 'Rs. 3 lakh', '31 July 2026', 'Rs. 1,000 or Rs. 5,000'],
+          ['Super Senior Citizen (above 80)', 'Rs. 5 lakh', '31 July 2026', 'Rs. 1,000 only'],
+          ['Private Limited Company', 'No exemption', '31 October 2026', 'Rs. 10,000'],
           ['LLP or Partnership Firm', 'No exemption', '31 July or 31 October (if audit)', 'Rs. 1,000-10,000'],
-          ['Business requiring tax audit', 'No exemption', '31 October 2025', 'Rs. 10,000'],
+          ['Business requiring tax audit', 'No exemption', '31 October 2026', 'Rs. 10,000'],
           ['Director in any company', 'No exemption (must file regardless)', 'As per entity type', 'Rs. 1,000-10,000'],
           ['Foreign assets/income holder', 'No exemption (must file regardless)', 'As per entity type', 'Rs. 1,000-10,000'],
         ],

@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const tdsShortDeductionNotice: LearnPageConfig = {
   slug: 'tds-short-deduction-notice',
   title: 'TDS Short Deduction or Non-Deduction Notice from TRACES',
-  seoTitle: 'TDS Short Deduction Notice: Interest and Penalty Explained (2025) | Ollvy',
+  seoTitle: 'TDS Short Deduction Notice: Interest and Penalty Explained (2026) | Ollvy',
   seoDescription: 'TRACES detected TDS short or non-deduction. Interest runs at 1-1.5 percent per month. Section 40(a)(ia) disallows 30 percent of the expense. File a correction return after depositing the shortfall.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-short-deduction-notice',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'TDS Notice',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],

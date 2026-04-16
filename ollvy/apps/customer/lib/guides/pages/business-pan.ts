@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const businessPanGuide: LearnPageConfig = {
   slug: 'what-is-business-pan',
   title: 'Business PAN: What It Is and Why Your Company Needs It',
-  seoTitle: 'Business PAN Card for Company and LLP: Complete Guide (2025) | Ollvy',
+  seoTitle: 'Business PAN Card for Company and LLP: Complete Guide (2026) | Ollvy',
   seoDescription: 'Every company, LLP, and firm needs a PAN before opening a bank account or registering for GST. Understand what business PAN is, who needs it, and how to get it in 7 days.',
   canonicalUrl: 'https://www.ollvy.com/guides/what-is-business-pan',
   lastReviewed: 'March 2026',

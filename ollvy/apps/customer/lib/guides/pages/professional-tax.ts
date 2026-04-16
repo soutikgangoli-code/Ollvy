@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const professionalTax: LearnPageConfig = {
   slug: 'do-i-need-professional-tax-registration',
   title: 'Do I Need Professional Tax Registration?',
-  seoTitle: 'Professional Tax Registration in India 2025: Do You Need It? | Ollvy',
+  seoTitle: 'Professional Tax Registration in India 2026: Do You Need It? | Ollvy',
   seoDescription:
     'Find out if Professional Tax applies to your business or profession in India. State-wise thresholds, who must register, and employer vs self-employed obligations.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-professional-tax-registration',
@@ -119,7 +119,7 @@ export const professionalTax: LearnPageConfig = {
         'Assam, Meghalaya, Manipur, Tripura, Jharkhand, Sikkim: PT applies with varying slabs',
       ],
       table: {
-        caption: 'Professional Tax by State - Current Rates and Thresholds (2025)',
+        caption: 'Professional Tax by State - Current Rates and Thresholds (2026)',
         headers: ['State', 'Max Annual PT', 'Approx. Monthly Income Threshold', 'Due Date'],
         rows: [
           ['Maharashtra', 'Rs. 2,500', 'Rs. 7,500/month', 'Monthly by end of month'],

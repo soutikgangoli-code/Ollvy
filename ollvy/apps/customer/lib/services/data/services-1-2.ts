@@ -6,7 +6,7 @@ export const pvtLtdIncorporation: ServicePageConfig = {
   slug: 'pvt-ltd-incorporation',
   title: 'Private Limited Company Registration',
   tagline: 'Separate legal entity. Limited liability. Ready for investment.',
-  seoTitle: 'Private Limited Company Registration in India 2025 | Ollvy',
+  seoTitle: 'Private Limited Company Registration in India 2026 | Ollvy',
   seoDescription: 'Register your Pvt Ltd company in 15 working days. DSC, DIN, MOA/AOA, PAN, TAN included. Ollvy CA/CS assigned same day. From Rs. 1,499 + govt fees.',
   canonicalUrl: 'https://www.ollvy.com/services/pvt-ltd-incorporation',
   lastReviewed: 'April 2026',
@@ -91,7 +91,7 @@ export const pvtLtdIncorporation: ServicePageConfig = {
     },
     {
       title: 'Compliance calendar auto-populated',
-      description: 'From day one, your calendar shows every deadline: first board meeting (30 days), auditor appointment (15 days after your annual meeting), Director KYC (Sep 30 every year), annual company filing, and income tax return.',
+      description: 'From day one, your calendar shows every deadline: first board meeting (30 days), auditor appointment (15 days after your annual meeting), Director KYC (triennial, next Jun 30, 2028), annual company filing, and income tax return.',
     },
     {
       title: 'All documents stored permanently',
@@ -177,7 +177,7 @@ export const pvtLtdIncorporation: ServicePageConfig = {
     {
       category: 'After Completion',
       q: 'What do I need to do after incorporation?',
-      a: 'Start a company bank account and deposit your initial capital within 180 days (this is required before you can officially start doing business). After that, annual deadlines kick in: financial filing within 30 days of your annual meeting, company return within 60 days, Director KYC by Sep 30, and income tax return by Oct 31. All added to your Ollvy compliance calendar automatically.',
+      a: 'Start a company bank account and deposit your initial capital within 180 days (this is required before you can officially start doing business). After that, annual deadlines kick in: financial filing within 30 days of your annual meeting, company return within 60 days, and income tax return by Oct 31. Director KYC is now triennial (next due Jun 30, 2028). All added to your Ollvy compliance calendar automatically.',
     },
     {
       category: 'After Completion',
@@ -187,7 +187,7 @@ export const pvtLtdIncorporation: ServicePageConfig = {
   ],
 
   govtFees: {
-    caption: 'Government Fees - Private Limited Company Registration (2025)',
+    caption: 'Government Fees - Private Limited Company Registration (2026)',
     headers: ['Item', 'Government Fee', 'Notes'],
     rows: [
       ['Digital signature per director', 'Rs. 1,000-2,000', 'Varies by certifying authority and 1 or 2-year validity'],
@@ -221,7 +221,7 @@ export const llpIncorporation: ServicePageConfig = {
   slug: 'llp-incorporation',
   title: 'LLP Registration',
   tagline: 'Limited liability. Flexible profit-sharing. Lower compliance than Pvt Ltd.',
-  seoTitle: 'LLP Registration in India 2025 | Limited Liability Partnership | Ollvy',
+  seoTitle: 'LLP Registration in India 2026 | Limited Liability Partnership | Ollvy',
   seoDescription: 'Register your LLP in 12 working days. DPIN, DSC, LLP Agreement, PAN included. No mandatory audit below Rs. 40 lakh turnover. CS assigned same day.',
   canonicalUrl: 'https://www.ollvy.com/services/llp-incorporation',
   lastReviewed: 'April 2026',
@@ -378,7 +378,7 @@ export const llpIncorporation: ServicePageConfig = {
   ],
 
   govtFees: {
-    caption: 'Government Fees - LLP Registration (2025)',
+    caption: 'Government Fees - LLP Registration (2026)',
     headers: ['Item', 'Government Fee', 'Notes'],
     rows: [
       ['Digital signature per partner', 'Rs. 1,000-2,000', 'Varies by certifying authority'],

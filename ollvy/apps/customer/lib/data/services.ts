@@ -809,26 +809,36 @@ export async function getNavbarServices(): Promise<NavbarServiceData[]> {
  */
 export interface FAQServicePrices {
   llp: string
+  llpTotal: string
   pvtLtd: string
+  pvtLtdTotal: string
   gst: string
+  gstTotal: string
   trademark: string
+  trademarkTotal: string
   fssaiBasic: string
   fssaiState: string
   fssaiCentral: string
   opc: string
+  opcTotal: string
   directorKyc: string
 }
 
 // Fallback prices if database is unavailable
 const FALLBACK_FAQ_PRICES: FAQServicePrices = {
   llp: 'Rs 7,999',
+  llpTotal: 'Rs 9,999',
   pvtLtd: 'Rs 9,999',
+  pvtLtdTotal: 'Rs 13,998',
   gst: 'Rs 2,999',
+  gstTotal: 'Rs 2,999',
   trademark: 'Rs 6,999',
+  trademarkTotal: 'Rs 12,499',
   fssaiBasic: 'Rs 3,999',
   fssaiState: 'Rs 5,999',
   fssaiCentral: 'Rs 8,999',
   opc: 'Rs 8,499',
+  opcTotal: 'Rs 11,499',
   directorKyc: 'Rs 999',
 }
 
@@ -868,7 +878,7 @@ export async function getFAQServicePrices(): Promise<FAQServicePrices> {
     const slugs = Object.keys(FAQ_SLUG_MAP)
     const { data, error } = await supabaseServer
       .from('service_packages')
-      .select('slug, price_base_paisa')
+      .select('slug, price_base_paisa, price_govt_fees_paisa')
       .in('slug', slugs)
       .eq('is_active', true)
 
@@ -885,6 +895,12 @@ export async function getFAQServicePrices(): Promise<FAQServicePrices> {
       const priceKey = FAQ_SLUG_MAP[pkg.slug]
       if (priceKey) {
         prices[priceKey] = formatPriceINR(pkg.price_base_paisa)
+        // Compute total (Ollvy fee + govt fee) for services that have a total key
+        const totalKey = `${priceKey}Total` as keyof FAQServicePrices
+        if (totalKey in prices) {
+          const total = pkg.price_base_paisa + (pkg.price_govt_fees_paisa || 0)
+          prices[totalKey] = formatPriceINR(total)
+        }
       }
     }
 

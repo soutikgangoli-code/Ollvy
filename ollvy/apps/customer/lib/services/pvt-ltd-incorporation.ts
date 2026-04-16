@@ -104,11 +104,11 @@ export const pvtLtdIncorporation: ServiceConfig = {
     },
     {
       title: 'Compliance calendar auto-populated',
-      body: 'Board meeting (30 days), ADT-1 auditor appointment (15 days from AGM)\nDIR-3 KYC (Sep 30 every year), MCA annual filing, Business ITR\nAll populated the day your company is incorporated',
+      body: 'Board meeting (30 days), ADT-1 auditor appointment (15 days from AGM)\nDIR-3 KYC (triennial, next Jun 30, 2028), MCA annual filing, Business ITR\nAll populated the day your company is incorporated',
       mockVisualType: 'calendar',
       mockVisualData: {
         row1: 'First Board Meeting - Within 30 days',
-        row2: 'DIR-3 KYC - Due Sep 30 every year',
+        row2: 'DIR-3 KYC - Due Jun 30, 2028 (triennial)',
         row3: 'MCA Annual Filing - Due after AGM',
         note: 'Added to your calendar automatically',
       },
@@ -204,7 +204,7 @@ export const pvtLtdIncorporation: ServiceConfig = {
     {
       category: 'After Completion',
       q: 'What are my compliance obligations after incorporation?',
-      a: 'INC-20A (commencement of business) within 180 days. Requires share capital deposited in a company bank account, so open a current account immediately. Annual: AOC-4 (30 days after AGM), MGT-7 (60 days after AGM), Director KYC by Sep 30, Business ITR by Oct 31.',
+      a: 'INC-20A (commencement of business) within 180 days. Requires share capital deposited in a company bank account, so open a current account immediately. Annual: AOC-4 (30 days after AGM), MGT-7 (60 days after AGM), Business ITR by Oct 31. Director KYC is triennial (next due Jun 30, 2028).',
     },
     {
       category: 'After Completion',
@@ -240,9 +240,9 @@ export const pvtLtdIncorporation: ServiceConfig = {
       slug: 'gst-registration',
     },
     {
-      name: 'Director KYC (DIR-3)',
-      explanation: 'Annual KYC for every director. Due Sep 30 each year. ₹5,000/day penalty if missed.',
-      price: '₹1,499/director',
+      name: 'Director KYC (DIR-3 KYC Web)',
+      explanation: 'Triennial KYC for every director. Next due Jun 30, 2028. Rs 5,000 penalty if missed.',
+      price: 'Rs 999/director',
       type: 'required',
       slug: 'director-kyc',
     },

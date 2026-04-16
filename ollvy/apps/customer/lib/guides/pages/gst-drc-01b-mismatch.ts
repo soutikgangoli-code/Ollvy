@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstDrc01bMismatch: LearnPageConfig = {
   slug: 'gst-drc-01b-mismatch',
   title: 'GST DRC-01B Notice: GSTR-1 vs GSTR-3B Liability Mismatch',
-  seoTitle: 'GST DRC-01B Notice: GSTR-1 vs 3B Mismatch - How to Fix (2025) | Ollvy',
+  seoTitle: 'GST DRC-01B Notice: GSTR-1 vs 3B Mismatch - How to Fix (2026) | Ollvy',
   seoDescription: 'A DRC-01B notice means the GST system found a mismatch between your GSTR-1 and GSTR-3B. You have 7 days to explain or pay the difference before it escalates to a formal DRC-01 demand.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-drc-01b-mismatch',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-monthly',
   ctaSecondarySlug: 'gst-registration',

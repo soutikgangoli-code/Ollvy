@@ -5,7 +5,7 @@ export const directorKyc: ServiceConfig = {
   name: 'Director KYC (DIR-3 KYC)',
   shortName: 'Director KYC',
   category: 'Registrations',
-  tagline: 'Annual filing. ₹5,000/day penalty if missed. Takes 15 minutes.',
+  tagline: 'Triennial filing (every 3 years). Rs 5,000 penalty if missed. Takes 15 minutes.',
 
   ollvyFee: 999,
   govtFee: undefined,
@@ -13,15 +13,15 @@ export const directorKyc: ServiceConfig = {
 
   slaDays: 2,
   isRetainer: false,
-  serviceType: 'Annual',
+  serviceType: 'Triennial',
   mandatoryFor: 'All directors of Indian companies',
   legalBasis: 'Companies (Appointment and Qualification of Directors) Rules, 2014',
-  penaltyForMissing: '₹5,000/day until filed',
+  penaltyForMissing: 'Rs 5,000 per director for late filing',
   penaltyColor: 'red',
 
-  seoTitle: 'Director KYC 2025 | DIR-3 KYC Filing | ₹1,499 | Ollvy',
+  seoTitle: 'Director KYC 2026 | DIR-3 KYC Web Filing | Rs 999 | Ollvy',
   seoDescription:
-    'File DIR-3 KYC before Sep 30. Avoid DIN deactivation and ₹5,000/day penalty. Fixed price ₹1,499 per director. Filed within 2 working days.',
+    'Director KYC now triennial. Next due Jun 30, 2028. Missed the last deadline? Rs 5,000 penalty per director. Ollvy files DIR-3 KYC Web in 2 working days. Rs 999 per director.',
   canonicalUrl: 'https://www.ollvy.com/services/director-kyc',
 
   processSteps: [
@@ -35,9 +35,9 @@ export const directorKyc: ServiceConfig = {
     },
     {
       step: 2,
-      title: 'CS files DIR-3 KYC',
+      title: 'Ollvy CS files DIR-3 KYC Web',
       timeline: 'Day 1',
-      body: "DIR-3 KYC form filled on MCA21\nOTP sent to registered mobile and email. You approve\n~10 minutes of your time",
+      body: "DIR-3 KYC Web form filed on MCA21\nOTP sent to registered mobile and email. You approve\n10 minutes of your time",
       visual: 'form',
       milestone: 'DIR-3 KYC submitted to MCA',
     },
@@ -45,7 +45,7 @@ export const directorKyc: ServiceConfig = {
       step: 3,
       title: 'Acknowledgement delivered',
       timeline: 'Day 1-2',
-      body: "MCA processes within 24 hours\nAcknowledgement uploaded to your account\nDeactivated DIN → reactivated\nCompliance calendar updated with next Sep 30 deadline",
+      body: "MCA processes within 24 hours\nAcknowledgement uploaded to your account\nDeactivated DIN reactivated\nCompliance calendar updated with next triennial deadline (Jun 30, 2028)",
       visual: 'stamp',
       isCompletion: true,
       milestone: 'DIN verified and active',
@@ -68,12 +68,12 @@ export const directorKyc: ServiceConfig = {
       body: "OTP verification on your registered mobile and email\nCS coordinates live. They file, you approve the OTP. About 10 minutes",
     },
     {
-      title: 'Next year reminder added automatically',
-      body: "Next year's Sep 30 deadline auto-added to your compliance calendar\nReminders at 30 days, 7 days, and 1 day before",
+      title: 'Next triennial deadline added automatically',
+      body: "Next filing deadline (Jun 30, 2028) auto-added to your compliance calendar\nReminders at 30 days, 7 days, and 1 day before",
       mockVisualType: 'calendar',
       mockVisualData: {
-        row1: 'DIR-3 KYC - Due Sep 30, 2026',
-        row2: 'Reminder: Aug 31, 2026',
+        row1: 'DIR-3 KYC - Due Jun 30, 2028',
+        row2: 'Reminder: May 31, 2028',
         row3: 'Status: Scheduled',
       },
     },
@@ -82,8 +82,8 @@ export const directorKyc: ServiceConfig = {
   serviceRisks: [
     {
       icon: 'clock',
-      title: '₹5,000/day penalty - starts immediately',
-      body: "Penalty starts Oct 1. ₹91,000 per director by Dec 31\nMultiple directors multiply this\nDIN deactivated, all company filings blocked",
+      title: 'Rs 5,000 flat penalty per director',
+      body: "Rs 5,000 per director for late filing (flat fee, not per day)\n3 directors = Rs 15,000\nDIN deactivated, all company filings blocked until filed",
     },
     {
       icon: 'building',
@@ -95,11 +95,11 @@ export const directorKyc: ServiceConfig = {
   profilePersonas: [
     {
       label: 'Filing on time',
-      detail: 'Sep 30 is coming up. We file it in 2 days. Done.',
+      detail: 'Next triennial filing due Jun 30, 2028. Ollvy files in 2 days.',
     },
     {
       label: 'Already missed deadline',
-      detail: "DIN may be deactivated. We file immediately to stop the penalty clock.",
+      detail: "DIN may be deactivated. Ollvy files immediately. Rs 5,000 MCA penalty applies.",
     },
     {
       label: 'Multiple directorships',
@@ -125,22 +125,22 @@ export const directorKyc: ServiceConfig = {
     {
       category: 'General',
       q: 'What is DIR-3 KYC?',
-      a: "DIR-3 KYC is an annual verification that every director of an Indian company must file with MCA. It confirms your PAN, Aadhaar, and contact details are current. It's due every Sep 30.",
+      a: "DIR-3 KYC is a triennial verification (every 3 years) that every director of an Indian company must file with MCA. It confirms your PAN, Aadhaar, and contact details are current. Next due date is Jun 30, 2028. Only DIR-3 KYC Web is permitted - the e-Form has been discontinued.",
     },
     {
       category: 'General',
-      q: 'Why is this required every year?',
-      a: "MCA wants to verify that directors are real people with valid IDs. It's a fraud prevention measure. Before this rule, shell companies used fake directors.",
+      q: 'How often is Director KYC required?',
+      a: "MCA changed Director KYC from annual to triennial (every 3 years) effective March 31, 2026. If you filed by Sep 30, 2025, next filing is Jun 30, 2028. Changes to mobile, email, or residential address still require filing DIR-3 KYC Web within 30 days.",
     },
     {
       category: 'Process',
-      q: 'What happens if I miss Sep 30?',
-      a: "Your DIN is deactivated on Oct 1. You can't sign any MCA documents. Penalty of ₹5,000/day starts accruing. The only way to stop it is to file the KYC.",
+      q: 'What happens if I miss the deadline?',
+      a: "Your DIN is deactivated by MCA. You cannot sign any MCA documents. Penalty of Rs 5,000 per director (flat fee, not per day). The only way to restore it is to file DIR-3 KYC Web with the late fee.",
     },
     {
       category: 'Process',
       q: 'If my DIN is deactivated, can I still file?',
-      a: "Yes. File the DIR-3 KYC, pay the penalty (calculated by MCA), and your DIN is reactivated within 24-48 hours. We handle the entire process.",
+      a: "Yes. File DIR-3 KYC Web, pay the Rs 5,000 penalty, and your DIN is reactivated within 24-48 hours. Ollvy handles the entire process.",
     },
     {
       category: 'Documents',
@@ -158,7 +158,7 @@ export const directorKyc: ServiceConfig = {
     {
       name: 'Companies (Appointment and Qualification of Directors) Rules, 2014',
       url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/rules.html',
-      description: 'Rule 12A: Annual KYC requirement for directors',
+      description: 'Rule 12A: Triennial KYC requirement for directors (amended Dec 2025)',
     },
   ],
 

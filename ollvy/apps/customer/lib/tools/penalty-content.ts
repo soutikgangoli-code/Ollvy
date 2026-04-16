@@ -299,10 +299,10 @@ Good news: the late fee structure was rationalised in 2023 with turnover-based c
 export const itrLateFilingContent: PenaltyPageContent = {
   slug: 'itr-late-filing',
   intro: {
-    title: 'ITR Late Filing Penalty Calculator 2024-25 (Section 234F)',
-    description: `Miss your income tax return due date and you'll face a mandatory late filing fee under Section 234F. For FY 2024-25 (AY 2025-26), salaried individuals must file by 31 July 2025. File after that date but before 31 December 2025, and you'll pay Rs. 5,000 (or Rs. 1,000 if your total income doesn't exceed Rs. 5 lakhs).
+    title: 'ITR Late Filing Penalty Calculator 2025-26 (Section 234F)',
+    description: `Miss your income tax return due date and you'll face a mandatory late filing fee under Section 234F. For FY 2025-26 (AY 2026-27), salaried individuals must file by 31 July 2026. File after that date but before 31 December 2026, and you'll pay Rs. 5,000 (or Rs. 1,000 if your total income doesn't exceed Rs. 5 lakhs).
 
-Beyond the flat fee, late filing can also trigger interest on unpaid tax under Section 234A (1% per month), advance tax interest under Sections 234B and 234C, and - importantly - you lose the right to carry forward certain losses. You can file a belated return under Section 139(4) up to 31 December 2025. After that, your only option is an Updated Return (ITR-U) under Section 139(8A), which carries an additional tax surcharge.`,
+Beyond the flat fee, late filing can also trigger interest on unpaid tax under Section 234A (1% per month), advance tax interest under Sections 234B and 234C, and - importantly - you lose the right to carry forward certain losses. You can file a belated return under Section 139(4) up to 31 December 2026. After that, your only option is an Updated Return (ITR-U) under Section 139(8A), which carries an additional tax surcharge.`,
     keyInfo: [
       { label: 'Late fee - income above Rs. 5 lakhs (Section 234F)', value: 'Rs. 5,000 flat' },
       { label: 'Late fee - income up to Rs. 5 lakhs (Section 234F)', value: 'Rs. 1,000 flat' },
@@ -428,14 +428,14 @@ Beyond the flat fee, late filing can also trigger interest on unpaid tax under S
     },
   },
   deadlines: {
-    title: 'Income Tax Return Due Dates AY 2025-26',
+    title: 'Income Tax Return Due Dates AY 2026-27',
     dates: [
-      { form: 'ITR - individuals, HUF (non-audit)', dueDate: '31 July 2025', frequency: 'Annual' },
-      { form: 'ITR - businesses requiring tax audit (Section 44AB)', dueDate: '31 October 2025', frequency: 'Annual' },
-      { form: 'ITR - international transactions (Section 92E transfer pricing)', dueDate: '30 November 2025', frequency: 'Annual' },
-      { form: 'Belated return (Section 139(4))', dueDate: '31 December 2025', frequency: 'Annual - last chance for belated filing' },
-      { form: 'Revised return (Section 139(5))', dueDate: '31 December 2025', frequency: 'Can be filed after original or belated return' },
-      { form: 'Updated return ITR-U (Section 139(8A))', dueDate: '31 March 2028', frequency: '2 years from end of AY 2025-26' },
+      { form: 'ITR - individuals, HUF (non-audit)', dueDate: '31 July 2026', frequency: 'Annual' },
+      { form: 'ITR - businesses requiring tax audit (Section 44AB)', dueDate: '31 October 2026', frequency: 'Annual' },
+      { form: 'ITR - international transactions (Section 92E transfer pricing)', dueDate: '30 November 2026', frequency: 'Annual' },
+      { form: 'Belated return (Section 139(4))', dueDate: '31 December 2026', frequency: 'Annual - last chance for belated filing' },
+      { form: 'Revised return (Section 139(5))', dueDate: '31 December 2026', frequency: 'Can be filed after original or belated return' },
+      { form: 'Updated return ITR-U (Section 139(8A))', dueDate: '31 March 2029', frequency: '2 years from end of AY 2026-27' },
     ],
   },
   legalReferences: {
@@ -649,8 +649,8 @@ On top of that, Section 271H gives the Assessing Officer discretion to levy an a
     dates: [
       { form: 'Q1 TDS Return (Apr-Jun 2024) - Form 24Q / 26Q / 27Q', dueDate: '31 July 2024', frequency: 'Quarterly' },
       { form: 'Q2 TDS Return (Jul-Sep 2024) - Form 24Q / 26Q / 27Q', dueDate: '31 October 2024', frequency: 'Quarterly' },
-      { form: 'Q3 TDS Return (Oct-Dec 2024) - Form 24Q / 26Q / 27Q', dueDate: '31 January 2025', frequency: 'Quarterly' },
-      { form: 'Q4 TDS Return (Jan-Mar 2025) - Form 24Q / 26Q / 27Q', dueDate: '31 May 2025', frequency: 'Quarterly' },
+      { form: 'Q3 TDS Return (Oct-Dec 2025) - Form 24Q / 26Q / 27Q', dueDate: '31 January 2026', frequency: 'Quarterly' },
+      { form: 'Q4 TDS Return (Jan-Mar 2026) - Form 24Q / 26Q / 27Q', dueDate: '31 May 2026', frequency: 'Quarterly' },
       { form: 'Monthly TDS deposit - all months except March', dueDate: '7th of following month', frequency: 'Monthly' },
       { form: 'Monthly TDS deposit - March', dueDate: '30 April', frequency: 'Annual exception' },
       { form: 'TDS certificate (Form 16) to employees', dueDate: '15 June of the following FY', frequency: 'Annual' },
@@ -880,9 +880,9 @@ For companies, AOC-4 (financial statements) is due within 30 days of the AGM and
       { form: 'AGM (Annual General Meeting)', dueDate: '30 September 2024 (within 6 months of 31 March year-end)', frequency: 'Annual' },
       { form: 'AOC-4 (Financial Statements) - Pvt Ltd / OPC', dueDate: '29 October 2024 (30 days after AGM on 30 Sep)', frequency: 'Annual' },
       { form: 'MGT-7 / MGT-7A (Annual Return)', dueDate: '28 November 2024 (60 days after AGM on 30 Sep)', frequency: 'Annual' },
-      { form: 'LLP Form 11 (Annual Return)', dueDate: '30 May 2025', frequency: 'Annual - fixed date' },
-      { form: 'LLP Form 8 (Statement of Accounts)', dueDate: '30 October 2025', frequency: 'Annual - fixed date' },
-      { form: 'DIR-3 KYC (for all directors)', dueDate: '30 September each year', frequency: 'Annual' },
+      { form: 'LLP Form 11 (Annual Return)', dueDate: '30 May 2026', frequency: 'Annual - fixed date' },
+      { form: 'LLP Form 8 (Statement of Accounts)', dueDate: '30 October 2026', frequency: 'Annual - fixed date' },
+      { form: 'DIR-3 KYC (for all directors)', dueDate: '30 September each year', frequency: 'Triennial (every 3 years)' },
       { form: 'ADT-1 (Auditor Appointment)', dueDate: '15 days from AGM', frequency: 'Annual or as changed' },
     ],
   },
@@ -910,7 +910,7 @@ For companies, AOC-4 (financial statements) is due within 30 days of the AGM and
     },
     {
       title: 'Keep all directors\' DINs active with timely DIR-3 KYC',
-      description: 'Deactivated DINs block all MCA form submissions. File DIR-3 KYC for every director by 30 September each year (free if filed on time). A deactivated DIN on any director delays the entire annual filing process.',
+      description: 'Deactivated DINs block all MCA form submissions. File DIR-3 KYC for every director before each triennial deadline (next: June 30, 2028). Free if filed on time. A deactivated DIN on any director delays the entire annual filing process.',
     },
     {
       title: 'File LLP forms on calendar dates, not AGM-linked dates',
@@ -1314,7 +1314,7 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
       },
     ],
     worstCase: {
-      description: 'All directors of a company fail to file DIR-3 KYC. All DINs are deactivated. The company can\'t file its annual returns (AOC-4 and MGT-7). After 2+ years, ROC initiates strike-off proceedings. Directors face Section 164(2) disqualification.',
+      description: 'All directors of a company fail to file DIR-3 KYC. All DINs are deactivated. The company can\'t file its annual returns (AOC-4 and MGT-7). After 3+ years, ROC initiates strike-off proceedings. Directors face Section 164(2) disqualification.',
       amount: 'Rs. 5,000 x number of directors (KYC late fees) + Rs. 100/day on all blocked MCA forms (no cap) + disqualification risk',
     },
   },
@@ -1331,7 +1331,7 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
     sections: [
       { section: 'Rule 12A, Companies (Appointment and Qualification of Directors) Rules 2014', description: 'Mandatory annual DIR-3 KYC filing requirement for all DIN holders' },
       { section: 'Rule 11, Companies (Appointment and Qualification of Directors) Rules 2014', description: 'DIN deactivation for non-compliance with DIR-3 KYC requirement' },
-      { section: 'Section 12(9), LLP Act 2008 and LLP Rules', description: 'Annual KYC requirement for LLP designated partners (DPIN holders)' },
+      { section: 'Section 12(9), LLP Act 2008 and LLP Rules', description: 'Triennial KYC requirement for LLP designated partners (amended Dec 2025)' },
     ],
     notifications: [
       { number: 'MCA Notification dated 5 July 2018', summary: 'Introduction of DIR-3 KYC requirement for all DIN holders - original mandate' },
@@ -2213,7 +2213,7 @@ Unlike other penalty calculators, DPIIT compliance doesn't have a per-day penalt
       { form: 'Company MGT-7 (annual return)', dueDate: '28 November 2024', frequency: 'Annual' },
       { form: 'Income tax return (non-audit companies)', dueDate: '31 July 2025 for FY 2024-25', frequency: 'Annual' },
       { form: 'GST returns (if registered)', dueDate: '11th / 20th of each month depending on return type', frequency: 'Monthly / Quarterly' },
-      { form: 'DIR-3 KYC for all directors', dueDate: '30 September each year', frequency: 'Annual' },
+      { form: 'DIR-3 KYC for all directors', dueDate: '30 September each year', frequency: 'Triennial (every 3 years)' },
       { form: 'Annual self-certification on Startup India portal', dueDate: 'Review portal for any annual update requirement', frequency: 'Annual' },
     ],
   },

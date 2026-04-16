@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const gstRegistration: LearnPageConfig = {
   slug: 'do-i-need-gst-registration',
   title: 'Do I Need GST Registration?',
-  seoTitle: 'Do I Need GST Registration in India 2025? | Ollvy',
+  seoTitle: 'Do I Need GST Registration in India 2026? | Ollvy',
   seoDescription:
     'Find out if GST registration is mandatory for your business in India. Covers turnover thresholds, exemptions, interstate supply rules, and e-commerce.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-gst-registration',
@@ -228,6 +228,19 @@ export const gstRegistration: LearnPageConfig = {
     {
       q: 'What happens if I cross the threshold mid-year?',
       a: 'You must apply for GST registration within 30 days of crossing the threshold. GST liability starts from the date you became liable, not the date you registered. Late registration means you owe GST on all supplies made after crossing the threshold.',
+    },
+  ],
+
+  sources: [
+    {
+      name: 'CGST Act, 2017',
+      url: 'https://cbic-gst.gov.in/gst-acts.html',
+      description: 'Section 22: Registration thresholds. Section 25: Registration procedure.',
+    },
+    {
+      name: 'GST Portal',
+      url: 'https://www.gst.gov.in',
+      description: 'Official GST registration and filing portal.',
     },
   ],
 }

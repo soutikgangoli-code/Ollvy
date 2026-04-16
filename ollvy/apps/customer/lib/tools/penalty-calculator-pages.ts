@@ -5,7 +5,7 @@ import type { ToolPageConfig } from './types'
 export const gstLateFilingPage: ToolPageConfig = {
   slug: 'gst-late-filing',
   title: 'GST Late Filing Penalty Calculator',
-  seoTitle: 'GST Late Filing Penalty Calculator India 2025 | GSTR-1 & GSTR-3B | Ollvy',
+  seoTitle: 'GST Late Filing Penalty Calculator India 2026 | GSTR-1 & GSTR-3B | Ollvy',
   seoDescription: 'Calculate GST late filing penalty and interest instantly. Covers GSTR-1, GSTR-3B, and GSTR-9. Correct rates per CBIC Notification 19/2021.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/gst-late-filing',
   lastReviewed: 'April 2026',
@@ -85,7 +85,7 @@ These caps were introduced by CBIC Notification 19/2021. The calculator applies 
 export const gstDemandPage: ToolPageConfig = {
   slug: 'gst-demand-notice',
   title: 'GST Demand Notice Penalty Calculator (Section 73 & 74)',
-  seoTitle: 'GST Demand Notice Penalty Calculator India 2025 | Section 73 & 74 | Ollvy',
+  seoTitle: 'GST Demand Notice Penalty Calculator India 2026 | Section 73 & 74 | Ollvy',
   seoDescription: 'Calculate penalty on GST show cause notice. Section 73 (non-fraud): no penalty if paid within 30 days. Section 74 (fraud): 15%/25%/100% tiers.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/gst-demand-notice',
   lastReviewed: 'April 2026',
@@ -153,7 +153,7 @@ This calculator shows your exposure across all scenarios so you can make an info
 export const directorKycPage: ToolPageConfig = {
   slug: 'director-kyc',
   title: 'Director KYC (DIR-3 KYC) Penalty Calculator',
-  seoTitle: 'Director KYC Penalty Calculator India 2025 | DIN Deactivation | Ollvy',
+  seoTitle: 'Director KYC Penalty Calculator India 2026 | DIN Deactivation | Ollvy',
   seoDescription: 'Calculate DIR-3 KYC late fee. Rs. 5,000 per year of missed KYC. DIN deactivates on October 1 each year. Find out what you owe to reactivate.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/director-kyc',
   lastReviewed: 'April 2026',
@@ -175,7 +175,7 @@ export const directorKycPage: ToolPageConfig = {
     },
   ],
 
-  intro: `Every director of an Indian company must file DIR-3 KYC annually by September 30. Miss the deadline and the DIN (Director Identification Number) is automatically deactivated by MCA on October 1.
+  intro: `Every director of an Indian company must file DIR-3 KYC. MCA changed this from annual to triennial (every 3 years) effective March 31, 2026. Directors who filed by September 30, 2025 are covered until June 30, 2028. Miss the deadline and the DIN (Director Identification Number) is automatically deactivated by MCA.
 
 A deactivated DIN is not just a personal inconvenience - it blocks every company where you hold a directorship from filing any MCA form. AOC-4, MGT-7, director appointment, share transfer - nothing can be filed until your DIN is restored.
 
@@ -187,14 +187,14 @@ This calculator shows the total late fee based on the number of years you have m
 
 **What you need to reactivate:** Aadhaar with an active linked mobile number (OTP required for each KYC filing), PAN card, email address, and a recent passport photo. If your Aadhaar-linked mobile is inactive, that must be updated at an Aadhaar enrolment centre before you can file.
 
-**How long it takes:** 10 working days from filing and payment to DIN being marked Active on MCA21.
+**How long it takes:** 1-2 working days from filing and payment to DIN being marked Active on MCA21.
 
-**Prevention going forward:** File DIR-3 KYC every year before September 30. If your mobile and email are already verified on MCA, you can use DIR-3 KYC-Web - a 2-minute online form with no late fee when filed on time.`,
+**Prevention going forward:** File DIR-3 KYC before each triennial deadline (next: June 30, 2028). Only DIR-3 KYC Web is permitted - the e-Form has been discontinued. A 2-minute online form with no late fee when filed on time. Changes to mobile, email, or address require filing within 30 days even outside the triennial cycle.`,
 
   faqs: [
     {
       q: 'What is DIR-3 KYC and why is it required?',
-      a: 'DIR-3 KYC is the annual KYC filing that every director must submit to MCA by September 30 each year. It verifies that the director\'s mobile number and email are current and active. Without it, MCA cannot contact directors and the DIN is deactivated automatically on October 1.',
+      a: 'DIR-3 KYC is the triennial KYC filing (every 3 years) that every director must submit to MCA. Next due June 30, 2028. It verifies that the director\'s mobile number and email are current and active. Without it, MCA cannot contact directors and the DIN is deactivated.',
     },
     {
       q: 'What is the penalty for missing DIR-3 KYC?',
@@ -206,7 +206,7 @@ This calculator shows the total late fee based on the number of years you have m
     },
     {
       q: 'Is there a difference between DIR-3 KYC and DIR-3 KYC-Web?',
-      a: 'Yes. DIR-3 KYC is the full form filed with DSC - required if you are filing for the first time or your details have changed. DIR-3 KYC-Web is the simplified web-based version available if your mobile and email are already verified on MCA - no DSC required, takes 2 minutes, and has no late fee when filed before September 30.',
+      a: 'The e-Form (DIR-3 KYC) has been discontinued by MCA. DIR-3 KYC Web is now the only permitted mode. It requires OTP verification on your registered mobile and email. No DSC required. Takes 2 minutes when filed before the triennial deadline.',
     },
     {
       q: 'Can I file DIR-3 KYC for multiple missed years at once?',
@@ -221,7 +221,7 @@ This calculator shows the total late fee based on the number of years you have m
 export const mcaFilingPage: ToolPageConfig = {
   slug: 'mca-annual-filing',
   title: 'MCA Annual Filing Penalty Calculator (AOC-4 & MGT-7)',
-  seoTitle: 'MCA Annual Filing Penalty Calculator 2025 | AOC-4 & MGT-7 | Ollvy',
+  seoTitle: 'MCA Annual Filing Penalty Calculator 2026 | AOC-4 & MGT-7 | Ollvy',
   seoDescription: 'Calculate MCA annual filing late fee for Pvt Ltd companies. AOC-4 due 30 days after AGM, MGT-7 due 60 days. Rs. 100/day per form. Director disqualification risk.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/mca-annual-filing',
   lastReviewed: 'April 2026',
@@ -247,7 +247,7 @@ export const mcaFilingPage: ToolPageConfig = {
 
 Missing these deadlines triggers additional MCA fees that scale with how late you are. Up to 30 days late: 2x the normal filing fee. 30-60 days: 4x. 60-90 days: 6x. 90-180 days: 10x. Above 180 days: 12x the normal fee. This is on top of the standard filing fee, not instead of it.
 
-Beyond the financial cost, sustained non-filing has serious consequences. A company that does not file for 2 consecutive years can be struck off as defunct by the Registrar. Every director of such a company is disqualified under Section 164(2) of the Companies Act from holding any directorship for 5 years - across all companies, not just the defaulting one.
+Beyond the financial cost, sustained non-filing has serious consequences. A company that does not file for 3 consecutive financial years can be struck off by the Registrar under Section 248 of the Companies Act. Directors are disqualified under Section 164(2) after 3 consecutive years of non-filing. Every director of such a company is disqualified under Section 164(2) of the Companies Act from holding any directorship for 5 years - across all companies, not just the defaulting one.
 
 This calculator helps you see the additional fee exposure for both forms so you can file immediately and stop the penalty from growing.`,
 
@@ -289,7 +289,7 @@ This calculator helps you see the additional fee exposure for both forms so you 
 export const itrLateFilingPage: ToolPageConfig = {
   slug: 'itr-late-filing',
   title: 'ITR Late Filing Penalty Calculator',
-  seoTitle: 'Income Tax Return Late Filing Penalty Calculator India 2025 | Ollvy',
+  seoTitle: 'Income Tax Return Late Filing Penalty Calculator India 2026 | Ollvy',
   seoDescription: 'Calculate ITR late filing fee, Section 234A interest, and 234B advance tax interest. Company and LLP ITR due October 31. Individual ITR due July 31.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/itr-late-filing',
   lastReviewed: 'April 2026',
@@ -360,7 +360,7 @@ The loss that cannot be quantified: if a company or LLP made a loss this year an
 export const tdsLateFilingPage: ToolPageConfig = {
   slug: 'tds-late-filing',
   title: 'TDS Late Filing Penalty Calculator',
-  seoTitle: 'TDS Late Filing Penalty Calculator India 2025 | Section 234E | Ollvy',
+  seoTitle: 'TDS Late Filing Penalty Calculator India 2026 | Section 234E | Ollvy',
   seoDescription: 'Calculate TDS late filing penalty (Rs. 200/day, Section 234E), interest on late deposit (1.5%/month), and Section 40(a)(ia) expense disallowance.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/tds-late-filing',
   lastReviewed: 'April 2026',
@@ -434,7 +434,7 @@ This calculator separates all three penalties so you can see the total exposure.
 export const pfEsicPage: ToolPageConfig = {
   slug: 'pf-esic-penalty',
   title: 'PF and ESIC Non-Compliance Penalty Calculator',
-  seoTitle: 'PF ESIC Penalty Calculator India 2025 | Section 14B EPF Act | Ollvy',
+  seoTitle: 'PF ESIC Penalty Calculator India 2026 | Section 14B EPF Act | Ollvy',
   seoDescription: 'Calculate PF damages (Section 14B, EPF Act) and ESIC interest (Section 85B) for late contributions. Tiered damage rates: 5% to 25% per annum.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/pf-esic-penalty',
   lastReviewed: 'April 2026',
@@ -504,7 +504,7 @@ The contributions themselves are not penalties - they are what you owe your empl
 export const professionalTaxPage: ToolPageConfig = {
   slug: 'professional-tax-penalty',
   title: 'Professional Tax Penalty Calculator',
-  seoTitle: 'Professional Tax Penalty Calculator India 2025 | State-wise PT Rates | Ollvy',
+  seoTitle: 'Professional Tax Penalty Calculator India 2026 | State-wise PT Rates | Ollvy',
   seoDescription: 'Calculate Professional Tax penalty for Maharashtra, Karnataka, West Bengal, Tamil Nadu, and other states. Max PT is Rs. 2,500/year per person.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/professional-tax-penalty',
   lastReviewed: 'April 2026',
@@ -572,7 +572,7 @@ Penalty rates for late payment vary by state: Maharashtra charges 10% per month 
 export const shopEstablishmentPage: ToolPageConfig = {
   slug: 'shops-establishment-penalty',
   title: 'Shop & Establishment Non-Compliance Penalty Calculator',
-  seoTitle: 'Shop & Establishment Penalty Calculator India 2025 | State-wise | Ollvy',
+  seoTitle: 'Shop & Establishment Penalty Calculator India 2026 | State-wise | Ollvy',
   seoDescription: 'Calculate Shop & Establishment Act penalty for operating without registration. State-wise penalties for Maharashtra, Delhi, Karnataka, Tamil Nadu, and others.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/shops-establishment-penalty',
   lastReviewed: 'April 2026',
@@ -640,7 +640,7 @@ This calculator gives state-specific penalty ranges for the 6 major states and i
 export const dpiitFemaPage: ToolPageConfig = {
   slug: 'startup-dpiit-compliance',
   title: 'DPIIT Startup / FEMA Compliance Penalty Calculator',
-  seoTitle: 'FEMA Compliance Penalty Calculator India 2025 | FC-GPR FC-TRS | Ollvy',
+  seoTitle: 'FEMA Compliance Penalty Calculator India 2026 | FC-GPR FC-TRS | Ollvy',
   seoDescription: 'Estimate FEMA compounding fees for FC-GPR, FC-TRS, and ESOP reporting delays. RBI sets the actual fee - this calculator provides indicative ranges.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/startup-dpiit-compliance',
   lastReviewed: 'April 2026',

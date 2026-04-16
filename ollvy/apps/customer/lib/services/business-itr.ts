@@ -19,9 +19,9 @@ export const businessItr: ServiceConfig = {
   penaltyForMissing: '1% per month interest on tax due',
   penaltyColor: 'amber',
 
-  seoTitle: 'Business ITR Filing 2025 | ITR-6, ITR-5 | ₹11,999 | Ollvy',
+  seoTitle: 'Business ITR Filing 2026 | ITR-6, ITR-5 | Rs 4,999 | Ollvy',
   seoDescription:
-    'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31. Fixed price ₹11,999. Verified Ollvy CA assigned within 24 hours. Includes P&L review and depreciation.',
+    'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31. Fixed price Rs 4,999. Ollvy CA assigned within 24 hours. Includes P&L review and depreciation.',
   canonicalUrl: 'https://www.ollvy.com/services/business-itr',
 
   processSteps: [
@@ -83,9 +83,9 @@ export const businessItr: ServiceConfig = {
       mockVisualType: 'receipt',
       mockVisualData: {
         label: 'ITR-V Acknowledgement',
-        row1: 'ITR-6 · AY 2025-26',
-        row2: 'Filed: 15 Oct 2025',
-        row3: 'Acknowledgement No: CPC/2025/A12345',
+        row1: 'ITR-6 · AY 2026-27',
+        row2: 'Filed: 15 Oct 2026',
+        row3: 'Acknowledgement No: CPC/2026/A12345',
       },
     },
   ],

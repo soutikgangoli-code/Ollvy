@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const rocAnnualFilingDefaultNotice: LearnPageConfig = {
   slug: 'roc-annual-filing-default-notice',
   title: 'ROC / MCA Show Cause Notice for Annual Filing Default',
-  seoTitle: 'ROC Annual Filing Default: Director Disqualification Risk (2025) | Ollvy',
+  seoTitle: 'ROC Annual Filing Default: Director Disqualification Risk (2026) | Ollvy',
   seoDescription: 'Three consecutive years of non-filing disqualifies all directors under Section 164(2). File AOC-4 and MGT-7 immediately. Penalties accumulate at Rs. 100 per day. Use CFSS amnesty if available.',
   canonicalUrl: 'https://www.ollvy.com/guides/roc-annual-filing-default-notice',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'ROC Notice',
   ctaServiceSlug: 'mca-annual-filing',
   relatedServiceSlugs: ['mca-annual-filing', 'director-kyc'],

@@ -6,7 +6,7 @@ export const gstCancellation: ServicePageConfig = {
   slug: 'gst-cancellation',
   title: 'GST Cancellation',
   tagline: 'Close your GST registration properly. Final return filed, tax credits settled.',
-  seoTitle: 'GST Registration Cancellation India 2025 | GSTR-10 and REG-16 | Ollvy',
+  seoTitle: 'GST Registration Cancellation India 2026 | GSTR-10 and REG-16 | Ollvy',
   seoDescription: 'Voluntary GST cancellation with GSTR-10 final return and ITC reversal. Clean closure in 15 working days. No pending liabilities left behind.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-cancellation',
   lastReviewed: 'April 2026',
@@ -152,7 +152,7 @@ export const gstRevocation: ServicePageConfig = {
   slug: 'gst-revocation',
   title: 'GST Revocation',
   tagline: 'GST cancelled by the department? Ollvy CA restores it.',
-  seoTitle: 'GST Registration Revocation India 2025 | Suo-Moto Cancellation Reversal | Ollvy',
+  seoTitle: 'GST Registration Revocation India 2026 | Suo-Moto Cancellation Reversal | Ollvy',
   seoDescription: 'Restore a suo-moto GST cancellation. Pending returns filed, REG-21 submitted, GSTIN restored. Act within 30 days of cancellation order.',
   canonicalUrl: 'https://www.ollvy.com/services/gst-revocation',
   lastReviewed: 'April 2026',
@@ -294,7 +294,7 @@ export const dinReactivation: ServicePageConfig = {
   slug: 'din-reactivation',
   title: 'DIN Reactivation',
   tagline: 'Director Identification Number deactivated? Active in 10 working days.',
-  seoTitle: 'DIN Reactivation India 2025 | DIR-3 KYC Late Filing | Rs. 5,000 Fee | Ollvy',
+  seoTitle: 'DIN Reactivation India 2026 | DIR-3 KYC Late Filing | Rs. 5,000 Fee | Ollvy',
   seoDescription: 'Reactivate a deactivated DIN in 10 working days. All pending DIR-3 KYC filed, Rs. 5,000 late fee per year, DIR-3C submitted. All directorships unblocked.',
   canonicalUrl: 'https://www.ollvy.com/services/din-reactivation',
   lastReviewed: 'April 2026',
@@ -304,7 +304,7 @@ export const dinReactivation: ServicePageConfig = {
   relatedLearnSlugs: ['pvt-ltd-vs-llp'],
 
   explainer: {
-    whatItIs: 'Your Director ID (DIN) gets deactivated automatically if you don\'t file the annual director KYC by September 30. Reactivation involves filing the KYC for every missed year, paying the Rs. 5,000 late fee per year, and submitting a reactivation application.',
+    whatItIs: 'Your Director ID (DIN) gets deactivated automatically if you miss the triennial director KYC deadline (currently June 30, 2028). Reactivation involves filing the KYC for every missed period, paying the Rs. 5,000 late fee, and submitting a reactivation application.',
     whyYouNeedIt: 'A deactivated Director ID means you cannot sign any company filing, resolution, or official document. Every company where you are a director is blocked from filing anything with the government until your ID is restored.',
     whatHappensWithout: 'All companies where you are a director cannot file their annual returns or any government form. Penalty of Rs. 100/day per form continues to accrue on missed annual filings. Those companies get marked as in default on government records - visible to investors, banks, and anyone checking.',
   },
@@ -373,7 +373,7 @@ export const dinReactivation: ServicePageConfig = {
   personas: [
     {
       title: 'Missed director KYC for one or more years',
-      description: 'Director ID deactivated on October 1 after missing the September 30 deadline. Act before your companies miss their annual filing deadlines.',
+      description: 'Director ID deactivated after missing the KYC deadline. Act before your companies miss their annual filing deadlines.',
     },
     {
       title: 'Director in multiple companies',
@@ -385,7 +385,7 @@ export const dinReactivation: ServicePageConfig = {
     {
       category: 'General',
       q: 'Why was my Director ID deactivated?',
-      a: 'Director IDs deactivate automatically on October 1 every year if the annual KYC is not filed by September 30. This is an automated government process - no individual notice is sent.',
+      a: 'Director IDs deactivate automatically if the triennial KYC (DIR-3 KYC Web) is not filed by the due date (currently June 30, 2028). This is an automated government process - no individual notice is sent.',
     },
     {
       category: 'General',
@@ -410,7 +410,7 @@ export const dinReactivation: ServicePageConfig = {
     {
       category: 'General',
       q: 'Can I prevent deactivation in future?',
-      a: 'Yes. File director KYC every year by September 30. It takes 15 minutes. If your mobile and email are verified on the government portal, you can use the quick online version - a 2-minute web form with no late fee. Your Ollvy compliance calendar shows this deadline.',
+      a: 'Yes. File director KYC (DIR-3 KYC Web) before each triennial deadline. It takes 15 minutes. Only DIR-3 KYC Web is permitted - the e-Form has been discontinued. If your details are unchanged, it is a 2-minute web form. Your Ollvy compliance calendar shows this deadline.',
     },
   ],
 
@@ -447,7 +447,7 @@ export const companyNameChange: ServicePageConfig = {
   slug: 'company-name-change',
   title: 'Company Name Change',
   tagline: 'New name. Same company. Same registration number, PAN, and TAN.',
-  seoTitle: 'Company Name Change MCA India 2025 | INC-24 and RUN Filing | Ollvy',
+  seoTitle: 'Company Name Change MCA India 2026 | INC-24 and RUN Filing | Ollvy',
   seoDescription: 'Change your Pvt Ltd company name with MCA in 20 working days. Special resolution, RUN filing, INC-24, MOA amendment, new Certificate of Incorporation.',
   canonicalUrl: 'https://www.ollvy.com/services/company-name-change',
   lastReviewed: 'April 2026',
@@ -607,7 +607,7 @@ export const cloudKitchenSetup: ServicePageConfig = {
   slug: 'cloud-kitchen-setup',
   title: 'Cloud Kitchen Setup',
   tagline: 'Every licence a delivery kitchen needs. FSSAI, GST, and trade licence together.',
-  seoTitle: 'Cloud Kitchen Licence India 2025 | FSSAI + GST Setup | Ollvy',
+  seoTitle: 'Cloud Kitchen Licence India 2026 | FSSAI + GST Setup | Ollvy',
   seoDescription: 'Complete cloud kitchen licensing - FSSAI State Licence, GST registration, and local trade licence. Swiggy and Zomato require FSSAI before onboarding.',
   canonicalUrl: 'https://www.ollvy.com/services/cloud-kitchen-setup',
   lastReviewed: 'April 2026',

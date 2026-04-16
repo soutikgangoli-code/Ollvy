@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const itrFormSelection: LearnPageConfig = {
   slug: 'which-itr-form-should-i-use',
   title: 'Which ITR Form Should I Use?',
-  seoTitle: 'Which ITR Form to Use in 2025? ITR-1 to ITR-7 Guide | Ollvy',
+  seoTitle: 'Which ITR Form to Use in 2026? ITR-1 to ITR-7 Guide | Ollvy',
   seoDescription:
     'Find out which Income Tax Return form applies to you in India for FY 2024-25. ITR-1, ITR-2, ITR-3, ITR-4, ITR-5, ITR-6, ITR-7 - clear eligibility explained.',
   canonicalUrl: 'https://www.ollvy.com/guides/which-itr-form-should-i-use',

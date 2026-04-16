@@ -1,5 +1,4 @@
 import { ServiceConfig } from '../services'
-import { getNextGstrDueDate } from '../dates'
 
 export const tdsMonthlyCompliance: ServiceConfig = {
   slug: 'tds-monthly-compliance',
@@ -142,7 +141,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
     '✓ No surprises',
   ],
 
-  relatedSlugs: ['gst-monthly', 'payroll-management', 'business-itr'],
+  relatedSlugs: ['gst-monthly', 'business-itr'],
 
   faqs: [
     {
@@ -181,13 +180,7 @@ export const tdsMonthlyCompliance: ServiceConfig = {
   ],
 
   unlocks: [
-    {
-      name: 'Payroll Management',
-      explanation: 'Full payroll processing including salary TDS.',
-      price: '₹2,999/month',
-      type: 'beneficial',
-      slug: 'payroll-management',
-    },
+    // Note: payroll-management service not yet available
     {
       name: 'Business ITR',
       explanation: 'Annual ITR filing. TDS credits must match.',

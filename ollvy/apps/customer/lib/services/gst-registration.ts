@@ -89,7 +89,7 @@ export const gstRegistration: ServiceConfig = {
       mockVisualData: {
         arn: 'AA270325014782R',
         status: 'Application Processing',
-        date: '25 Mar 2025',
+        date: '25 Mar 2026',
       },
     },
     {

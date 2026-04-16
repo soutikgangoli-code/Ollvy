@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const esiRegistration: LearnPageConfig = {
   slug: 'when-does-esi-registration-become-mandatory',
   title: 'When Does ESI Registration Become Mandatory?',
-  seoTitle: 'ESI Registration: When is it Mandatory in India 2025? | Ollvy',
+  seoTitle: 'ESI Registration: When is it Mandatory in India 2026? | Ollvy',
   seoDescription:
     'Understand when ESIC registration becomes mandatory for your business in India. Employee threshold, salary limit, covered industries, and non-compliance penalties.',
   canonicalUrl: 'https://www.ollvy.com/guides/when-does-esi-registration-become-mandatory',

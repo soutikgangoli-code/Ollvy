@@ -148,7 +148,7 @@ function RelatedLinks({ config }: { config: ToolPageConfig }) {
         ))}
         {config.relatedLearnSlug && (
           <Link
-            href={`/learn/${config.relatedLearnSlug}`}
+            href={`/guides/${config.relatedLearnSlug}`}
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <span>Learn more</span>

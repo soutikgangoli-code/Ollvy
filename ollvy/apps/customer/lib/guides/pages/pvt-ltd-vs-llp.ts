@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const pvtLtdVsLlp: LearnPageConfig = {
   slug: 'pvt-ltd-vs-llp',
   title: 'Private Limited Company vs LLP: Which Should You Choose?',
-  seoTitle: 'Pvt Ltd vs LLP in India 2025: Which is Better for You? | Ollvy',
+  seoTitle: 'Pvt Ltd vs LLP in India 2026: Which is Better for You? | Ollvy',
   seoDescription:
     'Compare Private Limited Company and LLP in India. Understand compliance costs, tax implications, liability protection, and which is better for your business.',
   canonicalUrl: 'https://www.ollvy.com/guides/pvt-ltd-vs-llp',
@@ -219,13 +219,13 @@ export const pvtLtdVsLlp: LearnPageConfig = {
         'Financial statements (AOC-4): mandatory regardless of activity',
         'Statutory audit: mandatory for all companies every year, regardless of size',
         'Board meetings: minimum 4 per year',
-        'Director KYC (DIR-3 KYC): annual filing by September 30 - miss it and the DIN deactivates',
+        'Director KYC (DIR-3 KYC Web): triennial filing, next due June 30, 2028 - miss it and the DIN deactivates',
         'Income tax return: mandatory every year',
         'Estimated annual cost: Rs. 25,000 to Rs. 50,000 for a small company with minimal activity',
         'LLP: Form 8 and Form 11 filings, no mandatory audit below Rs. 40 lakh turnover, estimated Rs. 10,000 to Rs. 20,000 per year',
       ],
       table: {
-        caption: 'Private Limited Company vs LLP: Key Differences (2025)',
+        caption: 'Private Limited Company vs LLP: Key Differences (2026)',
         headers: ['Criteria', 'Private Limited Company', 'LLP'],
         rows: [
           ['Equity investment', 'Can issue shares to angel investors and VCs', 'Cannot issue equity - investors cannot take stakes'],
@@ -234,7 +234,7 @@ export const pvtLtdVsLlp: LearnPageConfig = {
           ['How profits reach owners', 'Dividends taxed in shareholders\' hands at their slab rate', 'Partner remuneration deductible before tax - taxed at partner\'s slab rate'],
           ['Mandatory audit', 'Every year, regardless of turnover or activity', 'Only above Rs. 40 lakh turnover AND Rs. 25 lakh partner contribution'],
           ['Annual compliance cost', 'Rs. 25,000-50,000 (small company, minimal activity)', 'Rs. 10,000-20,000 (small LLP, minimal activity)'],
-          ['Annual filings', 'AOC-4, MGT-7, ITR, DIR-3 KYC, board meetings x4', 'Form 8, Form 11, ITR'],
+          ['Annual filings', 'AOC-4, MGT-7, ITR, board meetings x4. DIR-3 KYC triennial.', 'Form 8, Form 11, ITR'],
           ['ESOP to employees', 'Yes - standard practice for startups', 'No - not possible in LLP structure'],
           ['Converting to other structure', 'LLP to Pvt Ltd: 3-6 months, Rs. 50,000-1.5 lakh', 'Pvt Ltd to LLP: complex, stamp duty on asset transfer'],
           ['DPIIT Startup Recognition', 'Eligible', 'Eligible'],
@@ -284,6 +284,19 @@ export const pvtLtdVsLlp: LearnPageConfig = {
     {
       q: 'What about liability protection?',
       a: 'Both offer limited liability. Shareholders of a Pvt Ltd are not personally liable beyond their share capital. LLP partners are not personally liable beyond their capital contribution. Both can be held personally liable for fraud or wilful wrongdoing - the protection applies to genuine business losses, not misconduct.',
+    },
+  ],
+
+  sources: [
+    {
+      name: 'Companies Act, 2013',
+      url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/acts.html',
+      description: 'Section 3-7: Incorporation. Section 149: Directors. Section 2(68): Private company definition.',
+    },
+    {
+      name: 'Limited Liability Partnership Act, 2008',
+      url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/acts.html',
+      description: 'Section 2: Definitions. Section 23: LLP Agreement. Section 34: Annual return.',
     },
   ],
 }

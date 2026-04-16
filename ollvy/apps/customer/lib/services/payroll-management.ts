@@ -70,7 +70,7 @@ export const payrollManagement: ServiceConfig = {
         row1: 'Gross Salary: ₹75,000',
         row2: 'TDS: ₹4,500 · PF: ₹9,000 · PT: ₹200',
         row3: 'Net Payable: ₹61,300',
-        note: 'Salary slip for May 2025',
+        note: 'Salary slip for May 2026',
       },
     },
     {

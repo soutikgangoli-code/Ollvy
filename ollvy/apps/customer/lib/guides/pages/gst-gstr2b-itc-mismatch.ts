@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstGstr2bItcMismatch: LearnPageConfig = {
   slug: 'gst-gstr2b-itc-mismatch',
   title: 'GST ITC Mismatch Notice: GSTR-2B vs Claimed Input Tax Credit',
-  seoTitle: 'GSTR-2B ITC Mismatch: How to Resolve Blocked Credit (2025) | Ollvy',
+  seoTitle: 'GSTR-2B ITC Mismatch: How to Resolve Blocked Credit (2026) | Ollvy',
   seoDescription: 'ITC claims exceeding your GSTR-2B are blocked under Section 16(2)(aa). Reconcile your purchase register with GSTR-2B every month before filing GSTR-3B to avoid demands.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-gstr2b-itc-mismatch',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-monthly',
   ctaSecondarySlug: 'gst-registration',

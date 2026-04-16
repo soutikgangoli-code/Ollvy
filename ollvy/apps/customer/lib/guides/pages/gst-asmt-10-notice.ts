@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstAsmt10Notice: LearnPageConfig = {
   slug: 'gst-asmt-10-notice',
   title: 'GST ASMT-10 Scrutiny Notice: What It Means and How to Reply',
-  seoTitle: 'GST ASMT-10 Notice: How to Reply and What It Means (2025) | Ollvy',
+  seoTitle: 'GST ASMT-10 Notice: How to Reply and What It Means (2026) | Ollvy',
   seoDescription: 'A GST ASMT-10 notice means an officer found a discrepancy in your returns. You have 15 days to reply in Form ASMT-11. No reply leads to a best judgment assessment under Section 62.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-asmt-10-notice',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-monthly',
   relatedServiceSlugs: ['gst-monthly', 'gst-registration'],

@@ -11,14 +11,14 @@ export const dinReactivation: ServiceConfig = {
   govtFee: 5000,
   mrp: 10000,
   govtFeeLabel: 'MCA late filing fee',
-  govtFeeNote: 'The ₹500 late fee is charged by MCA for filing DIR-3 KYC after Sep 30. This is the government fee - passed through at cost, no markup.',
+  govtFeeNote: 'The Rs 5,000 late fee is charged by MCA for filing DIR-3 KYC after the due date. This is the government fee - passed through at cost, no markup.',
 
   slaDays: 3,
   isRetainer: false,
   serviceType: 'One-time',
   mandatoryFor: 'Directors whose DIN has been deactivated due to non-filing of DIR-3 KYC',
   legalBasis: 'Companies (Appointment and Qualification of Directors) Rules, 2014 - Rule 12A',
-  penaltyForMissing: '₹5,000/day continues until filed. All company filings blocked.',
+  penaltyForMissing: 'Rs 5,000 per director for late filing. All company filings blocked.',
   penaltyColor: 'red',
 
   seoTitle: 'DIN Reactivation India | DIR-3 KYC Late Filing | ₹1,999 | Ollvy',
@@ -115,7 +115,7 @@ export const dinReactivation: ServiceConfig = {
     {
       category: 'General',
       q: 'Why was my DIN deactivated?',
-      a: 'Deactivated when DIR-3 KYC is not filed by September 30 each year. Automated by MCA from October 1.',
+      a: 'Deactivated when DIR-3 KYC is not filed by the triennial due date (currently June 30, 2028). Automated by MCA after the deadline passes.',
     },
     {
       category: 'General',
@@ -143,7 +143,7 @@ export const dinReactivation: ServiceConfig = {
     {
       name: 'Companies (Appointment and Qualification of Directors) Rules, 2014',
       url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/rules.html',
-      description: 'Rule 12A: Annual KYC requirement and reactivation process',
+      description: 'Rule 12A: Triennial KYC requirement and reactivation process (amended Dec 2025)',
     },
   ],
 

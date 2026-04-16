@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstReg31Suspension: LearnPageConfig = {
   slug: 'gst-reg-31-suspension',
   title: 'GST REG-31 Notice: Your GST Registration Has Been Suspended',
-  seoTitle: 'GST REG-31 Suspension Notice: What to Do Now (2025) | Ollvy',
+  seoTitle: 'GST REG-31 Suspension Notice: What to Do Now (2026) | Ollvy',
   seoDescription: 'A GST REG-31 notice means your registration is suspended. You cannot issue invoices or claim ITC while suspended. REG-17 cancellation notice follows within 30 days if you do not act.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-reg-31-suspension',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-revocation',
   ctaSecondarySlug: 'gst-monthly',

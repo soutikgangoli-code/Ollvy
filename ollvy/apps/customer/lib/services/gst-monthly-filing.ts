@@ -87,8 +87,8 @@ export const gstMonthlyFiling: ServiceConfig = {
       body: "B2B invoices, B2C sales above ₹2.5L, and export invoices captured\nPrepared from your sales data and filed by the 11th",
       mockVisualType: 'status',
       mockVisualData: {
-        row1: 'GSTR-1 · March 2025',
-        row2: 'Filed: 10 Mar 2025',
+        row1: 'GSTR-1 · March 2026',
+        row2: 'Filed: 10 Mar 2026',
         row3: 'ARN: AA1234567890123',
       },
     },
@@ -107,7 +107,7 @@ export const gstMonthlyFiling: ServiceConfig = {
       body: "What was filed, when, acknowledgement numbers, ITC claimed, tax paid, all in one report",
       mockVisualType: 'receipt',
       mockVisualData: {
-        label: 'March 2025 Compliance Report',
+        label: 'March 2026 Compliance Report',
         row1: 'GSTR-1: Filed 10 Mar ✓',
         row2: 'GSTR-3B: Filed 18 Mar ✓',
         row3: 'Tax Paid: ₹45,230',

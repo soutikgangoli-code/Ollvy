@@ -88,8 +88,8 @@ export const directorKYC2026: LearnPageConfig = {
       heading: 'DIR-3 KYC FILING OPTIONS',
       body: 'Two methods are available for filing:',
       bullets: [
-        'DIR-3 KYC-Web (Simpler): Web-based form for directors with no changes in details. Only requires OTP verification on registered mobile and email. No professional signature needed.',
-        'DIR-3 KYC eForm (Full form): Required when details have changed or for first-time KYC. Needs digital signature of a practicing CA or CS.',
+        'DIR-3 KYC Web is now the only permitted mode. The e-Form (DIR-3 KYC) has been discontinued by MCA.',
+        'DIR-3 KYC Web requires OTP verification on registered mobile and email. No professional signature needed.',
         'For triennial filing in 2028: Most directors can use DIR-3 KYC-Web unless details have changed',
         'Filing fee: Rs. 50 if filed on time. Rs. 5,000 late fee if filed after the due date.',
       ],

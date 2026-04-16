@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax1431Intimation: LearnPageConfig = {
   slug: 'income-tax-143-1-intimation',
   title: 'Income Tax Section 143(1) Intimation: What It Means',
-  seoTitle: 'Section 143(1) Intimation: Demand, Refund, or No Action (2025) | Ollvy',
+  seoTitle: 'Section 143(1) Intimation: Demand, Refund, or No Action (2026) | Ollvy',
   seoDescription: 'A 143(1) intimation shows the CPC processing result: demand raised, refund due, or no adjustment. TDS mismatch is the most common demand trigger. File Section 154 rectification to fix errors.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-143-1-intimation',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,

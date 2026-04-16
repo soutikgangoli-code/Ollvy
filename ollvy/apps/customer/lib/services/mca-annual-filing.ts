@@ -183,9 +183,9 @@ export const mcaAnnualFiling: ServiceConfig = {
 
   unlocks: [
     {
-      name: 'Director KYC',
-      explanation: 'Due Sep 30 every year. ₹5,000/day penalty if missed.',
-      price: '₹1,499/director',
+      name: 'Director KYC (DIR-3 KYC Web)',
+      explanation: 'Triennial filing. Next due Jun 30, 2028. Rs 5,000 penalty if missed.',
+      price: 'Rs 999/director',
       type: 'required',
       slug: 'director-kyc',
     },

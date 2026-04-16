@@ -77,9 +77,9 @@ Once you place your order on Ollvy, our document upload system walks you through
     question: 'How much does company registration cost in India?',
     answer: `The total cost of company registration in India has two components: professional fees (what you pay a CA or service provider) and government fees (paid directly to MCA). Here is a full breakdown.
 
-LLP Incorporation: Ollvy fee is Rs 7,999. Government fees are approximately Rs 500-800. Total cost is around Rs 8,800. This includes DSC, name reservation, LLP agreement, Form 2 filing, Certificate of Incorporation, and compliance calendar.
+LLP Incorporation: Fixed all-in price covering Ollvy professional fee and government fees (approximately Rs 500-800). Includes DSC, name reservation, LLP agreement, Form 2 filing, Certificate of Incorporation, and compliance calendar.
 
-Private Limited Company: Ollvy fee is Rs 9,999. Government fees are approximately Rs 3,000-6,000. Total cost is around Rs 14,000. This includes DSC for 2 directors, SPICe+ filing, PAN, TAN, Certificate of Incorporation, MOA/AOA, and compliance calendar.
+Private Limited Company: Fixed all-in price covering Ollvy professional fee and government fees (approximately Rs 3,000-6,000 depending on state and authorised capital). Includes DSC for 2 directors, SPICe+ filing, PAN, TAN, Certificate of Incorporation, MOA/AOA, and compliance calendar.
 
 OPC Incorporation: Ollvy fee is Rs 8,499. Government fees are approximately Rs 1,500-3,000. Total cost is around Rs 11,000. This includes single director DSC, SPICe+ filing, Certificate of Incorporation, PAN, and TAN.
 
@@ -137,7 +137,7 @@ Penalty for not registering when mandatory: 10% of the tax due (minimum Rs 10,00
   },
   {
     question: 'What is Director KYC and what happens if I miss the deadline?',
-    answer: `Director KYC is a mandatory annual compliance requirement for all individuals who hold a Director Identification Number (DIN) in India - regardless of whether the company is active or not. It is filed using Form DIR-3 KYC on the MCA portal.
+    answer: `Director KYC is a mandatory compliance requirement for all individuals who hold a Director Identification Number (DIN) in India - regardless of whether the company is active or not. MCA changed this from annual to triennial (every 3 years) effective March 31, 2026. It is now filed using DIR-3 KYC Web on the MCA portal. The e-Form has been discontinued.
 
 Who must file Director KYC?
 
@@ -147,7 +147,7 @@ Directors of active Private Limited Companies, OPCs, and Section 8 companies.
 
 Designated partners of LLPs (they receive a DPIN, which is equivalent to a DIN for this purpose).
 
-What is the deadline? The annual deadline is 30 September each year (for the financial year ending 31 March). If you miss this date, your DIN is marked as "Deactivated due to non-filing of DIR-3 KYC."
+What is the deadline? The triennial deadline is 30 June every 3 years. Directors who filed KYC by September 30, 2025 are covered until June 30, 2028. If you miss the deadline, your DIN is marked as "Deactivated due to non-filing of DIR-3 KYC."
 
 What happens if you miss the deadline?
 
@@ -155,7 +155,9 @@ Your DIN is immediately deactivated. You cannot sign any board resolutions, comp
 
 The company cannot file any MCA forms that require a director's DIN - including annual returns and financial statements - until the DIN is reactivated.
 
-Penalty: Rs 5,000 per director for late filing. This fee is paid to MCA and is non-negotiable - there is no way to waive it.
+Penalty: Rs 5,000 per director for late filing (flat fee, not per day). This fee is paid to MCA and is non-negotiable.
+
+Important: Changes to your mobile number, email address, or residential address still require filing DIR-3 KYC Web within 30 days of the change, even outside the triennial cycle.
 
 Reactivation process: File DIR-3 KYC with the Rs 5,000 penalty fee. MCA typically reactivates the DIN within 1-2 working days after payment and filing.
 

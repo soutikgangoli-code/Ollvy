@@ -6,7 +6,7 @@ import { LearnPageConfig } from '../pages'
 export const msmeUdyam: LearnPageConfig = {
   slug: 'is-msme-registration-worth-it',
   title: 'Is MSME / Udyam Registration Worth It?',
-  seoTitle: 'Is MSME / Udyam Registration Worth It in 2025? | Ollvy',
+  seoTitle: 'Is MSME / Udyam Registration Worth It in 2026? | Ollvy',
   seoDescription:
     'Find out if Udyam (MSME) registration makes sense for your business. Covers benefits, eligibility, credit access, government tenders, and what you actually get.',
   canonicalUrl: 'https://www.ollvy.com/guides/is-msme-registration-worth-it',

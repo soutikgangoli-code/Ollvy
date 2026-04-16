@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstDrc01aPreNotice: LearnPageConfig = {
   slug: 'gst-drc-01a-pre-notice',
   title: 'GST DRC-01A Notice: Pre-Show Cause Notice Intimation',
-  seoTitle: 'GST DRC-01A Notice: What It Is and How to Respond (2025) | Ollvy',
+  seoTitle: 'GST DRC-01A Notice: What It Is and How to Respond (2026) | Ollvy',
   seoDescription: 'A DRC-01A is a pre-demand intimation, not a formal notice. Respond well here and the matter may close without a DRC-01 ever being issued. You have 30 days.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-drc-01a-pre-notice',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-monthly',
   relatedServiceSlugs: ['gst-monthly', 'gst-registration'],

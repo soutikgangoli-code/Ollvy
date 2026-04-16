@@ -148,7 +148,7 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
   },
 
   'director-kyc__delhi': {
-    jurisdictionNote: `Director KYC (DIR-3 KYC) is a federal filing through the MCA21 portal. There is no Delhi-specific process - all directors of companies registered anywhere in India file through the same portal. The filing must be done annually by September 30.`,
+    jurisdictionNote: `Director KYC (DIR-3 KYC Web) is a federal filing through the MCA21 portal. There is no Delhi-specific process - all directors of companies registered anywhere in India file through the same portal. Filing is now triennial (every 3 years). Next due date is June 30, 2028.`,
     citySpecificNotes: [
       `Director KYC uses OTP verification linked to your mobile number and email registered with MCA. Ensure these are up to date before filing.`,
       `If you're a director in multiple companies, you only need to file DIR-3 KYC once per financial year. The filing is linked to your DIN, not to individual companies.`,
@@ -156,7 +156,7 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
     additionalFaqs: [
       {
         q: 'What happens if I miss the Director KYC deadline?',
-        a: `If DIR-3 KYC is not filed by September 30, your DIN is marked as deactivated. The company cannot file annual returns or other forms requiring director approval until the DIN is reactivated. Reactivation requires filing DIR-3 KYC with a penalty of ₹5,000.`,
+        a: `If DIR-3 KYC is not filed by the triennial due date, your DIN is marked as deactivated. The company cannot file annual returns or other forms requiring director approval until the DIN is reactivated. Reactivation requires filing DIR-3 KYC Web with a penalty of Rs 5,000.`,
       },
     ],
   },
@@ -165,12 +165,12 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
     jurisdictionNote: `Director KYC is filed through the central MCA21 portal. There's no Karnataka-specific filing. All directors of Indian companies file through the same process regardless of where the company is registered.`,
     citySpecificNotes: [
       `Many Bangalore startup founders have DINs across multiple companies. Remember that DIR-3 KYC is once per DIN per year, not once per company.`,
-      `The September 30 deadline applies regardless of the company's financial year. Even if your company follows a different financial year, DIR-3 KYC is due by September 30 every year.`,
+      `The triennial deadline applies regardless of the company's financial year or registration date. Even if your company follows a different financial year, DIR-3 KYC is due by the common triennial date (currently June 30, 2028).`,
     ],
     additionalFaqs: [
       {
         q: 'I have a DIN from my previous company. Do I need to file DIR-3 KYC?',
-        a: `Yes. DIR-3 KYC must be filed for all active DINs, even if you've resigned from all directorships. If you want to use your DIN in the future (for a new company or advisory role), keep it active by filing annually.`,
+        a: `Yes. DIR-3 KYC must be filed for all active DINs, even if you've resigned from all directorships. If you want to use your DIN in the future (for a new company or advisory role), keep it active by filing before each triennial deadline.`,
       },
     ],
   },

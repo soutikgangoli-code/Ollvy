@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstDrc01Notice: LearnPageConfig = {
   slug: 'gst-drc-01-notice',
   title: 'GST DRC-01 Notice: What It Means and What to Do',
-  seoTitle: 'GST DRC-01 Notice: What It Is and How to Reply (2025) | Ollvy',
+  seoTitle: 'GST DRC-01 Notice: What It Is and How to Reply (2026) | Ollvy',
   seoDescription: 'A DRC-01 is a formal GST tax demand. You have 30 days to reply before the officer passes an order without hearing your side. Understand Section 73 vs 74 and how to respond.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-drc-01-notice',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-monthly',
   relatedServiceSlugs: ['gst-monthly', 'gst-registration'],

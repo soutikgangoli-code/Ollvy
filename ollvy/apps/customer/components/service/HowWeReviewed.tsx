@@ -65,7 +65,7 @@ export function HowWeReviewed({ service }: { service: DBServiceConfig }) {
         <p className="text-xs text-muted-foreground">
           Last reviewed:{' '}
           <span className="text-foreground font-medium">
-            {LAST_REVIEWED[service.slug] ?? 'March 2025'}
+            {LAST_REVIEWED[service.slug] ?? 'April 2026'}
           </span>
         </p>
         <p className="text-xs text-muted-foreground mt-2 leading-relaxed">

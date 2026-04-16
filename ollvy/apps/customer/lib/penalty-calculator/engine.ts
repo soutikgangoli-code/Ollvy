@@ -187,7 +187,7 @@ function calculateDirectorKycPenalty(inputs: CalculatorInputs): PenaltyBreakdown
     interestAmount: 0,
     totalAmount: DIRECTOR_KYC_FLAT_PENALTY,
     statute: 'Companies Act 2013, Rule 12A',
-    explanation: 'Rs. 5,000 reactivation fee per director. DIN deactivates automatically on October 1 if KYC is not filed by September 30, blocking all MCA filings for the company.',
+    explanation: 'Rs. 5,000 reactivation fee per director. DIN deactivates automatically if triennial KYC is not filed by the due date (currently June 30, 2028), blocking all MCA filings for the company.',
     serviceSlug: SERVICE_SLUGS.directorKyc,
   }
 }

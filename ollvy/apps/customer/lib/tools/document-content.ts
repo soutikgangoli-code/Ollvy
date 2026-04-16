@@ -47,7 +47,7 @@ export const gstRegistrationContent: DocumentPageContent = {
       'GST registration checklist',
       'GST documents list India',
       'GSTIN documents',
-      'GST registration requirements 2025',
+      'GST registration requirements 2026',
     ],
     canonical: '/tools/documents/gst-registration',
   },
@@ -154,7 +154,7 @@ export const privateLimitedCompanyContent: DocumentPageContent = {
       'company registration checklist India',
       'SPICe+ documents required',
       'documents for company incorporation',
-      'MCA registration documents 2025',
+      'MCA registration documents 2026',
     ],
     canonical: '/tools/documents/private-limited-company',
   },
@@ -257,7 +257,7 @@ export const llpContent: DocumentPageContent = {
       'LLP incorporation checklist',
       'FiLLiP form documents',
       'limited liability partnership documents',
-      'LLP registration requirements 2025',
+      'LLP registration requirements 2026',
     ],
     canonical: '/tools/documents/llp',
   },
@@ -359,7 +359,7 @@ export const partnershipContent: DocumentPageContent = {
       'partnership deed requirements',
       'documents for partnership firm',
       'partnership firm registration checklist',
-      'partnership documents India 2025',
+      'partnership documents India 2026',
     ],
     canonical: '/tools/documents/partnership',
   },
@@ -461,7 +461,7 @@ export const soleProprietorContent: DocumentPageContent = {
       'documents for sole proprietor',
       'proprietorship firm documents',
       'sole proprietor registration India',
-      'Udyam registration documents 2025',
+      'Udyam registration documents 2026',
     ],
     canonical: '/tools/documents/sole-proprietor',
   },
@@ -677,7 +677,7 @@ For FY 2025-26, a tax audit by a Chartered Accountant is mandatory if your busin
     whoNeeds: [
       'You\'re a sole proprietor or freelancer with business or professional income',
       'You\'re a partner in a partnership firm or LLP reporting your share of firm profits',
-      'You\'re a company director receiving salary plus dividends from your company',
+      'Your Pvt Ltd company, LLP, or OPC needs to file its entity-level income tax return (ITR-6 or ITR-5)',
       'Your business turnover exceeds Rs. 1 crore and you need a tax audit',
       'You\'re a professional (doctor, lawyer, CA, architect) with gross receipts above Rs. 50 lakhs',
       'Your business has international transactions requiring a transfer pricing report',
@@ -767,7 +767,7 @@ export const trademarkContent: DocumentPageContent = {
       'trademark application documents',
       'TM-A form documents',
       'brand registration documents India',
-      'trademark filing checklist 2025',
+      'trademark filing checklist 2026',
     ],
     canonical: '/tools/documents/trademark',
   },
@@ -864,7 +864,7 @@ export const privateLimitedContent = privateLimitedCompanyContent
 export const businessPanContent: DocumentPageContent = {
   slug: 'business-pan',
   seo: {
-    title: 'Business PAN Registration Documents Checklist (2025) | Ollvy',
+    title: 'Business PAN Registration Documents Checklist (2026) | Ollvy',
     description: 'Complete list of documents for company, LLP, or firm PAN registration. Certificate of Incorporation, address proof, signatory details, and authorisation letter.',
     keywords: [
       'business PAN documents',
@@ -877,7 +877,7 @@ export const businessPanContent: DocumentPageContent = {
     canonical: '/tools/documents/business-pan',
   },
   intro: {
-    title: 'How to Get PAN for Your Company or LLP (2025)',
+    title: 'How to Get PAN for Your Company or LLP (2026)',
     description: `Every company, LLP, and registered firm needs a PAN before it can open a bank account, register for GST, or file income tax returns. PAN is applied through Form 49A on the NSDL portal.
 
 The process is straightforward but document accuracy is critical. The entity name on Form 49A must match the Certificate of Incorporation exactly - even minor differences cause rejection. Address proof must be less than 2 months old. A Board Resolution authorising the signatory is mandatory for companies and LLPs.

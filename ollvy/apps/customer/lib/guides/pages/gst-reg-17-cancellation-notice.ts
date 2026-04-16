@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstReg17CancellationNotice: LearnPageConfig = {
   slug: 'gst-reg-17-cancellation-notice',
   title: 'GST REG-17 Notice: Your GST Registration May Be Cancelled',
-  seoTitle: 'GST REG-17 Cancellation Notice: How to Respond (2025) | Ollvy',
+  seoTitle: 'GST REG-17 Cancellation Notice: How to Respond (2026) | Ollvy',
   seoDescription: 'A GST REG-17 notice means your registration may be cancelled. You have 7 working days to reply in Form REG-18. No reply results in a REG-19 cancellation order.',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-reg-17-cancellation-notice',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-revocation',
   ctaSecondarySlug: 'gst-monthly',

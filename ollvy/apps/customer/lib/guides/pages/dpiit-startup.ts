@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const dpiitStartup: LearnPageConfig = {
   slug: 'should-i-get-dpiit-startup-recognition',
   title: 'Should I Get DPIIT Startup Recognition?',
-  seoTitle: 'DPIIT Startup India Recognition 2025: Is It Worth It? | Ollvy',
+  seoTitle: 'DPIIT Startup India Recognition 2026: Is It Worth It? | Ollvy',
   seoDescription:
     'Decide if DPIIT Startup Recognition is right for your company. Covers eligibility, angel tax exemption, 3-year tax holiday, patent benefits, and how to apply.',
   canonicalUrl: 'https://www.ollvy.com/guides/should-i-get-dpiit-startup-recognition',

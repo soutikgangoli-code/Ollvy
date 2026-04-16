@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const incomeTaxAisSftNotice: LearnPageConfig = {
   slug: 'income-tax-ais-sft-notice',
   title: 'Income Tax AIS / SFT High-Value Transaction Notice',
-  seoTitle: 'AIS / SFT High Value Transaction Notice: Explain or Pay (2025) | Ollvy',
+  seoTitle: 'AIS / SFT High Value Transaction Notice: Explain or Pay (2026) | Ollvy',
   seoDescription: 'AIS now shows every high-value transaction to the department. If your ITR does not reflect a transaction in your AIS, expect a notice. Respond proactively before it becomes a 148A.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-ais-sft-notice',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,

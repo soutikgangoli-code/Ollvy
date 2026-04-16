@@ -48,7 +48,7 @@ const trustCards = [
       <div className="bg-muted/50 rounded-lg p-3 space-y-1.5">
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">Invoice</span>
-          <span className="font-mono text-foreground">OLV-INV-2025-4821</span>
+          <span className="font-mono text-foreground">OLV-INV-2026-4821</span>
         </div>
         <div className="flex justify-between text-xs">
           <span className="text-muted-foreground">GSTIN</span>
@@ -131,7 +131,7 @@ const trustCards = [
         </div>
       </div>
     ),
-    visualCaption: 'March 2025 Compliance Report',
+    visualCaption: 'March 2026 Compliance Report',
   },
 ]
 

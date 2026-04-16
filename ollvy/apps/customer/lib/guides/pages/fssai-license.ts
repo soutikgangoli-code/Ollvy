@@ -3,7 +3,7 @@ import { LearnPageConfig } from '../pages'
 export const fssaiLicense: LearnPageConfig = {
   slug: 'do-i-need-fssai-license',
   title: 'Do I Need an FSSAI Licence?',
-  seoTitle: 'Do I Need an FSSAI Licence in India 2025? | Ollvy',
+  seoTitle: 'Do I Need an FSSAI Licence in India 2026? | Ollvy',
   seoDescription:
     'Find out if FSSAI registration or licence is mandatory for your food business in India. Covers restaurants, cloud kitchens, home cooks, manufacturers, and importers.',
   canonicalUrl: 'https://www.ollvy.com/guides/do-i-need-fssai-license',

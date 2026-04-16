@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const tds194c194jDemand: LearnPageConfig = {
   slug: 'tds-194c-194j-demand',
   title: 'TDS Demand Notice: Section 194C (Contractors) and 194J (Professional Fees)',
-  seoTitle: 'Section 194C and 194J TDS Demand: Thresholds and Rates (2025) | Ollvy',
+  seoTitle: 'Section 194C and 194J TDS Demand: Thresholds and Rates (2026) | Ollvy',
   seoDescription: '194C applies to contractor payments above Rs. 30,000 (1-2 percent). 194J applies to professional fees above Rs. 30,000 (10 percent or 2 percent for technical services). Non-deduction disallows 30 percent of the expense.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-194c-194j-demand',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'TDS Notice',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],

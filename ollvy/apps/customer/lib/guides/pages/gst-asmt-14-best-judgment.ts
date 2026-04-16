@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const gstAsmt14BestJudgment: LearnPageConfig = {
   slug: 'gst-asmt-14-best-judgment',
   title: 'GST ASMT-14 Notice: Best Judgment Assessment',
-  seoTitle: 'GST ASMT-14 Notice: Best Judgment Assessment Explained (2025) | Ollvy',
+  seoTitle: 'GST ASMT-14 Notice: Best Judgment Assessment Explained (2026) | Ollvy',
   seoDescription: 'A GST ASMT-14 is a best judgment assessment issued when ASMT-10 was not replied to. Filing all pending returns within 30 days withdraws the assessment under Section 62(2).',
   canonicalUrl: 'https://www.ollvy.com/guides/gst-asmt-14-best-judgment',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'GST Notice',
   ctaServiceSlug: 'gst-monthly',
   ctaSecondarySlug: 'gst-registration',

@@ -1,17 +1,38 @@
 import { addBusinessDays, addDays, format, isWeekend } from 'date-fns'
 
-// Indian public holidays FY 2025-26 - update annually
+// Indian Central Government Gazetted Holidays.
+// Source: DoPT (Ministry of Personnel) annual circular.
+// Covers current FY and next FY. Update annually in April.
 export const HOLIDAYS: string[] = [
-  '2025-08-15',
-  '2025-10-02',
-  '2025-10-24',
-  '2025-11-05',
-  '2025-11-14',
-  '2025-12-25',
-  '2026-01-26',
-  '2026-03-29',
-  '2026-04-02',
-  '2026-04-14',
+  // FY 2025-26 (Apr 2025 - Mar 2026) — past, kept for historical SLA
+  '2025-08-15', // Independence Day
+  '2025-10-02', // Gandhi Jayanti
+  '2025-10-24', // Dussehra (tentative - was per 2025 gazette)
+  '2025-11-05', // Diwali (tentative)
+  '2025-11-14', // Guru Nanak Jayanti
+  '2025-12-25', // Christmas
+  '2026-01-26', // Republic Day
+  '2026-03-04', // Holi
+  '2026-03-21', // Id-ul-Fitr (tentative, subject to moon sighting)
+  '2026-03-26', // Rama Navami
+  '2026-03-31', // Mahavir Jayanti
+  // FY 2026-27 (Apr 2026 - Mar 2027) — 17 gazetted holidays per DoPT
+  '2026-04-03', // Good Friday
+  '2026-04-14', // Dr. Ambedkar Jayanti
+  '2026-05-01', // Buddha Purnima
+  '2026-05-27', // Id-ul-Zuha / Bakrid (tentative)
+  '2026-06-26', // Muharram (tentative)
+  '2026-08-15', // Independence Day (Saturday)
+  '2026-08-26', // Id-e-Milad / Milad-un-Nabi (tentative)
+  '2026-09-04', // Janmashtami
+  '2026-10-02', // Mahatma Gandhi Jayanti
+  '2026-10-20', // Dussehra
+  '2026-11-08', // Diwali (Sunday)
+  '2026-11-24', // Guru Nanak Jayanti
+  '2026-12-25', // Christmas
+  '2027-01-26', // Republic Day
+  '2027-03-22', // Holi
+  '2027-03-26', // Good Friday
 ]
 
 export function getGuaranteedDate(slaDays: number): string | null {

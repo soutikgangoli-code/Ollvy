@@ -4,10 +4,10 @@ import { LearnPageConfig } from '../pages';
 export const incomeTax271Penalty: LearnPageConfig = {
   slug: 'income-tax-271-penalty',
   title: 'Income Tax Section 271 Penalty Notice: Penalty for Non-Compliance or Concealment',
-  seoTitle: 'Section 271 Penalty: Non-Compliance vs Concealment (2025) | Ollvy',
+  seoTitle: 'Section 271 Penalty: Non-Compliance vs Concealment (2026) | Ollvy',
   seoDescription: '271(1)(b) penalty is Rs. 10,000 for non-response. 271(1)(c) penalty is 100-300 percent of tax on concealed income. Show "reasonable cause" or "bonafide belief" to contest.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-271-penalty',
-  lastReviewed: 'March 2025',
+  lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['itr-notice-response'],

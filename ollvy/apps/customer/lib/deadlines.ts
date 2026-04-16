@@ -46,14 +46,14 @@ export const DEADLINES: DeadlineConfig[] = [
     eligibilityLabel: 'All Pvt Ltd, LLP, and Partnership firms',
     urgencyLine: 'File by Oct 31 to avoid late filing interest',
     penaltyLine: 'Past due: 1% per month interest on tax payable',
-    ollvyFee: 11999,
+    ollvyFee: 4999,
     govtFee: 0,
     slaDays: 10,
     seoTitle: 'Business ITR Filing 2026 - File Before Oct 31 | Ollvy',
     seoDescription:
-      'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31, 2026. Fixed price ₹11,999. Verified CA assigned within 24 hours.',
+      'File your company ITR (ITR-6 for Pvt Ltd, ITR-5 for LLP) before Oct 31, 2026. Fixed price Rs 4,999. Ollvy CA assigned within 24 hours.',
     canonicalUrl: 'https://www.ollvy.com/itr-2026',
-    documentTab: 'individual_itr',
+    documentTab: 'business_itr',
     documentHeading: "Documents you'll need to file ITR-6 / ITR-5",
     risks: [
       {
@@ -65,8 +65,8 @@ export const DEADLINES: DeadlineConfig[] = [
         body: "If your company made a loss this year and you file late, you lose the right to carry it forward and offset against future profits. This is irreversible.",
       },
       {
-        title: 'Defective return notice',
-        body: 'Late filers are more likely to receive defective return notices under Section 139(9) - requires a response within 15 days or the return is treated as not filed.',
+        title: 'Late filing fee under Section 234F',
+        body: 'Rs 5,000 penalty if filed after Oct 31 but before Dec 31. Rs 10,000 if filed after Dec 31. Reduced to Rs 1,000 if total income is below Rs 5 lakh.',
       },
     ],
     testimonials: [
@@ -112,7 +112,7 @@ export const DEADLINES: DeadlineConfig[] = [
   },
   {
     slug: 'gst-annual-2026',
-    serviceSlug: 'gst-monthly',
+    serviceSlug: 'gst-annual',
     serviceName: 'GST Annual Return (GSTR-9)',
     eventLabel: 'FY 2025-26 Annual Return',
     dueDate: '2026-12-31',
@@ -122,7 +122,7 @@ export const DEADLINES: DeadlineConfig[] = [
     purposeLabel: 'GST ANNUAL FILING',
     eligibilityLabel: 'All GST-registered businesses above ₹2Cr turnover',
     urgencyLine: 'File before Dec 31 to avoid ₹200/day penalty',
-    penaltyLine: 'Past due: ₹200/day late fee with no ceiling',
+    penaltyLine: 'Past due: Rs 200/day late fee, capped at 0.25% of turnover in the state',
     ollvyFee: 4999,
     govtFee: 0,
     slaDays: 7,
@@ -130,12 +130,12 @@ export const DEADLINES: DeadlineConfig[] = [
     seoDescription:
       'File your GSTR-9 annual return for FY 2025-26 before December 31. Fixed price ₹4,999. CA assigned same day.',
     canonicalUrl: 'https://www.ollvy.com/gst-annual-2026',
-    documentTab: 'pvt_ltd',
+    documentTab: 'gst_registration',
     documentHeading: 'What Ollvy CA will ask for to file GSTR-9',
     risks: [
       {
-        title: '₹200/day late fee - no ceiling',
-        body: "GSTR-9 late fee is ₹200/day (₹100 CGST + ₹100 SGST) with no maximum cap. At 90 days late, that's ₹18,000. At 180 days, ₹36,000.",
+        title: 'Rs 200/day late fee, capped at 0.25% of turnover',
+        body: "GSTR-9 late fee is Rs 200/day (Rs 100 CGST + Rs 100 SGST). Capped at 0.25% of annual turnover in the state (Section 47(2) CGST Act). At 90 days late, Rs 18,000. At 180 days, Rs 36,000 - or the 0.25% cap, whichever is lower.",
       },
       {
         title: 'ITC claims become final',
@@ -167,7 +167,7 @@ export const DEADLINES: DeadlineConfig[] = [
       },
       {
         q: 'What is the penalty for filing GSTR-9 late?',
-        a: 'The late fee is Rs 200 per day - Rs 100 under CGST and Rs 100 under SGST. There is no ceiling on this late fee in terms of days. At 90 days late, the fee is Rs 18,000. At 180 days, Rs 36,000. The maximum cap is 0.25% of your annual turnover in the state.',
+        a: 'Rs 200 per day (Rs 100 CGST + Rs 100 SGST). Capped at 0.25% of annual turnover in the state (0.25% CGST + 0.25% SGST = 0.50% total, Section 47(2) CGST Act). At 90 days late, Rs 18,000. At 180 days, Rs 36,000 - or the 0.25% cap, whichever is lower.',
       },
       {
         q: 'What is the difference between GSTR-9 and GSTR-9C?',
@@ -187,28 +187,28 @@ export const DEADLINES: DeadlineConfig[] = [
     slug: 'director-kyc-2026',
     serviceSlug: 'director-kyc',
     serviceName: 'Director KYC (DIR-3 KYC)',
-    eventLabel: 'Annual Filing - Due Sep 30',
-    dueDate: '2026-09-30',
+    eventLabel: 'Triennial Filing - Due Jun 30, 2028',
+    dueDate: '2028-06-30',
     postDeadlineMessage:
-      'The Sep 30 deadline has passed. Your DIN may already be deactivated. File DIR-3 KYC immediately - ₹5,000/day penalty is accruing.',
-    heroTagline: 'Sep 30, 2026 - Every year',
+      'The filing deadline has passed. Your DIN may already be deactivated. File DIR-3 KYC Web immediately - Rs 5,000 flat penalty per director applies.',
+    heroTagline: 'Jun 30, 2028 - Every 3 years',
     purposeLabel: 'MCA COMPLIANCE',
     eligibilityLabel: 'All directors of Indian companies',
-    urgencyLine: 'File by Sep 30 or your DIN gets deactivated',
-    penaltyLine: 'Past due: ₹5,000/day until filed + DIN deactivated',
-    ollvyFee: 1499,
+    urgencyLine: 'Next triennial filing due Jun 30, 2028. Missed the last deadline? DIN is already deactivated.',
+    penaltyLine: 'Past due: Rs 5,000 flat penalty per director + DIN deactivated',
+    ollvyFee: 999,
     govtFee: 0,
     slaDays: 2,
-    seoTitle: 'Director KYC 2026 - DIR-3 KYC Filing Before Sep 30 | Ollvy',
+    seoTitle: 'Director KYC 2026 - Triennial DIR-3 KYC Filing | Due Jun 30, 2028 | Ollvy',
     seoDescription:
-      'File DIR-3 KYC before Sep 30, 2026. Avoid DIN deactivation and ₹5,000/day penalty. Fixed price ₹1,499 per director.',
+      'Director KYC moved to triennial filing. Next due Jun 30, 2028. Missed the last deadline? Rs 5,000 penalty per director. Ollvy files DIR-3 KYC Web in 2 working days. Fixed price Rs 999.',
     canonicalUrl: 'https://www.ollvy.com/director-kyc-2026',
     documentTab: 'pvt_ltd',
     documentHeading: "Two documents. That's it. This one is simple.",
     risks: [
       {
-        title: '₹5,000/day penalty - starts immediately',
-        body: 'The MCA penalty clock starts Oct 1. By Dec 31, that\'s ₹91,000 per director. Multiple directors multiply this. The DIN is also deactivated, blocking all company filings.',
+        title: 'Rs 5,000 flat penalty per director',
+        body: 'MCA charges Rs 5,000 per director for late filing. 3 directors = Rs 15,000. The DIN is also deactivated, blocking all company filings until KYC is filed.',
       },
       {
         title: 'All MCA filings blocked',
@@ -218,7 +218,7 @@ export const DEADLINES: DeadlineConfig[] = [
     testimonials: [
       {
         quote:
-          "I have 3 companies and forgot DIR-3 KYC for all three. My DIN got deactivated on Oct 2. Ollvy filed the KYC for all three the same day I booked. DIN was reactivated within 48 hours. ₹4,500 total vs the ₹15,000/day penalty I was accruing.",
+          "I have 3 companies and forgot DIR-3 KYC for all three. My DIN got deactivated. Ollvy filed the KYC for all three the same day I booked. DIN was reactivated within 48 hours. Rs 2,997 for Ollvy (3 × Rs 999) plus the Rs 5,000 MCA late fee.",
         name: 'Sanjay M.',
         role: 'Director',
         business: 'Multiple Pvt Ltd companies',
@@ -226,7 +226,7 @@ export const DEADLINES: DeadlineConfig[] = [
       },
       {
         quote:
-          "Simplest compliance I've ever done. Uploaded Aadhaar and PAN to the app. The CS verified my details, filed DIR-3 KYC. Done in one day. I got a reminder for next year's KYC added to my calendar automatically.",
+          "Simplest compliance I've ever done. Uploaded Aadhaar and PAN to the app. The CS verified my details, filed DIR-3 KYC Web. Done in one day. Next triennial deadline added to my calendar automatically.",
         name: 'Nisha T.',
         role: 'Founder & Director',
         business: 'SaaS startup',
@@ -236,11 +236,11 @@ export const DEADLINES: DeadlineConfig[] = [
     faqs: [
       {
         q: 'What is Director KYC and who needs to file it?',
-        a: 'Director KYC (DIR-3 KYC) is a mandatory annual compliance for every person who holds a Director Identification Number (DIN) in India. This includes active directors, resigned directors who still hold a DIN, and designated partners of LLPs. If you have ever been allotted a DIN, you must file DIR-3 KYC every year - even if the company is dormant or you have resigned.',
+        a: 'Director KYC (DIR-3 KYC) is a mandatory compliance for every person who holds a Director Identification Number (DIN) in India. MCA changed this from annual to triennial (every 3 years) effective March 31, 2026. This includes active directors, resigned directors who still hold a DIN, and designated partners of LLPs. Next triennial filing is due June 30, 2028. Changes to mobile, email, or address still require filing within 30 days.',
       },
       {
-        q: 'What happens if I miss the September 30 deadline?',
-        a: 'Your DIN is immediately deactivated by MCA on October 1. A deactivated DIN means you cannot sign any board resolutions, company filings, or legal documents as a director. The penalty is Rs 5,000 per director, and all MCA filings for your company are blocked until the KYC is filed and the DIN is reactivated.',
+        q: 'What happens if I miss the filing deadline?',
+        a: 'Your DIN is deactivated by MCA after the due date. A deactivated DIN means you cannot sign any board resolutions, company filings, or legal documents as a director. The penalty is Rs 5,000 per director (flat fee, not per day), and all MCA filings for your company are blocked until the KYC is filed and the DIN is reactivated.',
       },
       {
         q: 'What documents are needed for Director KYC?',
@@ -252,7 +252,7 @@ export const DEADLINES: DeadlineConfig[] = [
       },
       {
         q: 'How fast can Ollvy file Director KYC?',
-        a: 'Ollvy files DIR-3 KYC within 2 working days of receiving your PAN and Aadhaar. The fee is Rs 1,499 per director. If you have multiple directors or multiple companies, we handle all filings under a single order with one point of contact.',
+        a: 'Ollvy files DIR-3 KYC Web within 2 working days of receiving your PAN and Aadhaar. The fee is Rs 999 per director. If you have multiple directors or multiple companies, Ollvy handles all filings under a single order with one point of contact.',
       },
     ],
   },
@@ -349,12 +349,12 @@ export const DEADLINES: DeadlineConfig[] = [
     eligibilityLabel: 'All Pvt Ltd companies, LLPs, OPCs, and Partnership firms registered in India',
     urgencyLine: 'Your company ITR for FY 2026-27 is due October 31. Miss this and your losses are gone - permanently. No extension, no workaround.',
     penaltyLine: 'Past due: a ₹10,000 late filing fee kicks in from November 1, you permanently lose the right to carry forward business losses, and director DINs may be deactivated by MCA.',
-    ollvyFee: 12999,
+    ollvyFee: 4999,
     govtFee: 0,
     slaDays: 10,
     seoTitle: 'Business ITR Filing FY2026-27 - File Before Oct 31 | Ollvy',
     seoDescription:
-      'File your company ITR for FY 2026-27 before October 31, 2027. Starting ₹12,999. Miss it and lose the right to carry forward losses forever.',
+      'File your company ITR for FY 2026-27 before October 31, 2027. Fixed price Rs 4,999. Miss it and lose the right to carry forward losses forever.',
     canonicalUrl: 'https://www.ollvy.com/itr-2027',
     documentTab: 'business_itr',
     documentHeading: "Documents you'll need to file ITR-6 / ITR-5",
@@ -368,8 +368,8 @@ export const DEADLINES: DeadlineConfig[] = [
         body: "Section 234F: a flat ₹10,000 late filing fee applies the moment you cross November 1. On top of that, Section 234A charges 1% per month interest on any unpaid tax from the due date. On a ₹5L tax liability, that's ₹5,000 per month compounding until you file.",
       },
       {
-        title: 'DIN deactivation by MCA',
-        body: "MCA cross-references non-filing of ITR when assessing director compliance. A deactivated DIN means you can't sign board resolutions, open bank accounts, or participate in any MCA filings - effectively freezing company operations until re-activation, which takes 4-6 weeks minimum.",
+        title: 'Scrutiny risk increases with late filing',
+        body: "Late filing increases the probability of receiving a Section 143(2) scrutiny notice. The Income Tax department flags belated returns for higher review priority. A scrutiny assessment requires detailed documentation and can take 6-12 months to close.",
       },
     ],
     testimonials: [
@@ -409,7 +409,7 @@ export const DEADLINES: DeadlineConfig[] = [
       },
       {
         q: 'How much does Ollvy charge for business ITR filing?',
-        a: 'Ollvy charges Rs 12,999 for business ITR filing for FY 2026-27. This includes CA assignment within 24 hours, document review, computation of income, and filing of ITR-6 (for companies) or ITR-5 (for LLPs). The filing is completed within 10 working days of receiving approved financial statements.',
+        a: 'Ollvy charges Rs 4,999 for business ITR filing for FY 2026-27. This includes CA assignment within 24 hours, document review, computation of income, and filing of ITR-6 (for companies) or ITR-5 (for LLPs). The filing is completed within 10 working days of receiving approved financial statements.',
       },
     ],
   },
@@ -510,4 +510,30 @@ export function generateDeadlineFAQSchema(deadline: DeadlineConfig) {
       },
     })),
   }
+}
+
+/**
+ * Fetch live price from DB for a deadline's linked service.
+ * Returns the deadline config with ollvyFee overridden by DB price.
+ * Falls back to static ollvyFee if DB is unavailable.
+ */
+export async function getDeadlineWithLivePrice(slug: string): Promise<DeadlineConfig | undefined> {
+  const deadline = getDeadlineBySlug(slug)
+  if (!deadline) return undefined
+
+  try {
+    const { getServiceBySlugFromDB } = await import('./data/services')
+    const { pricing } = await getServiceBySlugFromDB(deadline.serviceSlug)
+    if (pricing) {
+      return {
+        ...deadline,
+        ollvyFee: pricing.ollvyFee || deadline.ollvyFee,
+        govtFee: pricing.govtFee ?? deadline.govtFee,
+      }
+    }
+  } catch {
+    // Fallback to static price
+  }
+
+  return deadline
 }
