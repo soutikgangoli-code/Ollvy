@@ -195,17 +195,15 @@ export default async function ServicesPage() {
         </p>
       </div>
 
-      {/* SSR service grid — visible to crawlers, removed on hydration by client component */}
-      <div id="ssr-services-grid" className="container pb-6">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {services.map((s) => (
-            <a key={s.slug} href={`/services/${s.slug}`} className="block p-5 rounded-xl border border-border">
-              <h2 className="text-base font-semibold">{s.name}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{s.short_description}</p>
-              <p className="text-sm font-medium mt-2">From Rs {Math.round(s.price_base_paisa / 100).toLocaleString('en-IN')}</p>
-            </a>
-          ))}
-        </div>
+      {/* SSR service grid — sr-only for crawlers, users interact with client grid below */}
+      <div className="sr-only">
+        {services.map((s) => (
+          <a key={s.slug} href={`/services/${s.slug}`}>
+            <h2>{s.name}</h2>
+            <p>{s.short_description}</p>
+            <p>From Rs {Math.round(s.price_base_paisa / 100).toLocaleString('en-IN')}</p>
+          </a>
+        ))}
       </div>
 
       {/* Client component for interactive search/filter with initial services */}
