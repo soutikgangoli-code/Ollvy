@@ -48,6 +48,10 @@ Copy for Ollvy service pages. Audience: Indian founders confused about complianc
 | Homepage (FAQ, services, testimonials) | **Static** `components/landing/*.tsx` + `app/page.tsx` | Edit the file, deploy |
 | Service page `govtFees` + `documents` tables | **Static** `lib/services/data/services-*.ts` | Edit the file, deploy |
 | Service page DIY vs Ollvy comparison | **Static** `components/service/DIYvsOllvy.tsx` | Edit the file, deploy |
+| Service page reviews (visible + JSON-LD schema) | **Static** `lib/data/fallback-reviews.ts` | Edit the file, deploy. 5 reviews per service. Also feeds Google structured data. |
+| Post-payment questionnaire questions | **DB** `service_questionnaires` table | Update DB. Linked to service by `service_package_id`. |
+| Post-payment document upload templates | **DB** `service_document_templates` table | Update DB. Linked to service by `service_package_id`. |
+| Checkout scope (included/excluded) | **DB** `service_packages.scope_included` / `scope_excluded` | Update DB. |
 
 ### Service Page DB Fields
 
