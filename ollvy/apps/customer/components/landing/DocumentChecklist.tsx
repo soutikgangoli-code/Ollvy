@@ -74,6 +74,7 @@ const SERVICE_DOCUMENT_DATA: Record<string, DocumentCategory[]> = {
   'payroll-management': businessITRDocuments,
   'fssai-license': gstDocuments, // Basic business docs similar to GST
   'iec-code': gstDocuments, // Import-export uses similar KYC docs
+  'esop-structuring': pvtLtdDocuments, // Company identity docs as base
 }
 
 const TAB_LABELS: Record<string, string> = {

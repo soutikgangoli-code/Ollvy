@@ -75,5 +75,5 @@ Static config files (`lib/services/*.ts`, `lib/services/data/*.ts`) are seed/fal
 - **ServiceRisks**: Always renders as bullets. Splits on `\n` or on sentence boundaries (`. `).
 - **Why Ollvy section**: No guarantee subtext, no CA credential subtext (removed).
 
-### 15 Service Slugs
-`pvt-ltd-incorporation`, `llp-incorporation`, `gst-registration`, `gst-monthly`, `business-itr`, `trademark-registration`, `mca-annual-filing`, `tds-monthly-compliance`, `msme-registration`, `gst-cancellation`, `gst-revocation`, `din-reactivation`, `company-name-change`, `cloud-kitchen-setup`, `iepf-consultation`
+### 16 Service Slugs
+`pvt-ltd-incorporation`, `llp-incorporation`, `gst-registration`, `gst-monthly`, `business-itr`, `trademark-registration`, `mca-annual-filing`, `tds-monthly-compliance`, `msme-registration`, `gst-cancellation`, `gst-revocation`, `din-reactivation`, `company-name-change`, `cloud-kitchen-setup`, `iepf-consultation`, `esop-structuring`

@@ -206,6 +206,19 @@ export const DATA: Record<string, DIYData> = {
       { task: 'What it actually costs', own: '\u20B98,000-15,000. Post-change updates never included.', ollvy_head: '\u20B95,999.', ollvy_badge: 'Checklist included.' },
     ],
   },
+  'esop-structuring': {
+    off_stat: '3-4 weeks. ₹25,000-50,000. Verbal promises with no legal standing.',
+    on_stat: '7 days',
+    on_date_label: 'ESOP scheme live by',
+    rows: [
+      { task: 'Understanding your cap table', own: 'You figure out pool size from blog posts. 10%? 15%? No basis for the number.', ollvy_head: 'Ollvy reviews your cap table and hiring plan.', ollvy_badge: 'Pool size recommendation with rationale.' },
+      { task: 'Drafting the ESOP scheme', own: 'Generic template. Missing cliff, silent on termination, no exercise window.', ollvy_head: 'Custom scheme for your specific structure.', ollvy_badge: 'Covers cliff, exercise, termination, transfer.' },
+      { task: 'Board + shareholder resolutions', own: 'Miss the 75% majority requirement. Scheme is void. Found at due diligence.', ollvy_head: 'Ollvy CS handles both resolutions.', ollvy_badge: 'Passed and documented before any grants.' },
+      { task: 'Grant letters for employees', own: 'Informal email saying "you get 1% equity." No legal standing.', ollvy_head: 'Signed grant letters per employee.', ollvy_badge: 'Specific terms: options, price, vesting, cliff.' },
+      { task: 'FMV valuation', own: 'No record. Tax officer disputes exercise price 3 years later.', ollvy_head: 'FMV note at grant date.', ollvy_badge: 'Clean record for all future tax events.' },
+      { task: 'What it actually costs', own: '\u20B925,000-50,000 from a law firm. 3-4 weeks.', ollvy_head: '\u20B99,999.', ollvy_badge: '7 working days. Everything included.' },
+    ],
+  },
   'iepf-consultation': {
     off_stat: 'Weeks of searching. No clear answer on what you can actually claim.',
     on_stat: 'Know what is claimable and how to get it - in 2 days.',
