@@ -162,7 +162,7 @@ function ReviewsList({
         ? visibleItems.map((review, index) => {
             const r = review as ServiceReview
             return (
-              <Card key={`${r.created_at}-${index}`} className="border border-border bg-card p-5">
+              <Card key={`${r.created_at}-${index}`} className="border border-border bg-card p-3.5 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} size={14} className={i < r.rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'} />
@@ -177,7 +177,7 @@ function ReviewsList({
         : visibleItems.map((review, index) => {
             const r = review as FallbackReview
             return (
-              <Card key={index} className="border border-border bg-card p-5">
+              <Card key={index} className="border border-border bg-card p-3.5 sm:p-5">
                 <div className="flex items-center gap-2 mb-3">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} size={14} className={i < r.rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'} />
