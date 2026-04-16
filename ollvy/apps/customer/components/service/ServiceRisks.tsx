@@ -32,9 +32,9 @@ export function ServiceRisks({
           return (
             <div
               key={i}
-              className="flex items-start gap-3 sm:gap-4 border border-border rounded-xl p-3 sm:p-5 bg-card"
+              className="flex items-start gap-2.5 sm:gap-4 border border-border rounded-xl p-3 sm:p-5 bg-card"
             >
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[hsl(var(--ollvy-amber))]/10 flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[hsl(var(--ollvy-amber))]/10 flex items-center justify-center shrink-0">
                 <Icon className="w-3.5 h-3.5 sm:w-[18px] sm:h-[18px] text-[hsl(var(--ollvy-amber))]" />
               </div>
               <div>
