@@ -325,10 +325,10 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                 'border-b border-border last:border-b-0 md:hover:bg-muted/10 transition-colors',
                 i === data.rows.length - 1 && 'bg-muted/20'
               )}>
-                <td className="px-3 md:px-5 py-3 md:py-4 font-semibold text-foreground align-top text-[13px] md:text-sm md:w-[26%]">
+                <td className="px-3 md:px-5 py-3 md:py-4 font-semibold text-foreground align-top text-xs md:text-sm md:w-[26%]">
                   {row.task}
                 </td>
-                <td className="px-3 md:px-5 py-3 md:py-4 text-muted-foreground leading-snug md:leading-relaxed align-top border-l border-border text-[13px] md:text-sm md:w-[34%]">
+                <td className="px-3 md:px-5 py-3 md:py-4 text-muted-foreground leading-snug md:leading-relaxed align-top border-l border-border text-xs md:text-sm md:w-[34%]">
                   {row.own.includes('\n')
                     ? row.own.split('\n').filter(Boolean).map((line, j) => (
                         <span key={j}>{j > 0 && <br />}{line}</span>
@@ -336,7 +336,7 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                     : row.own}
                 </td>
                 <td className={cn(
-                  "px-3 md:px-5 py-3 md:py-4 align-top border-l border-border text-[13px] md:text-sm md:w-[40%] transition-colors duration-300",
+                  "px-3 md:px-5 py-3 md:py-4 align-top border-l border-border text-xs md:text-sm md:w-[40%] transition-colors duration-300",
                   on && "bg-[hsl(var(--ollvy-green))]/[0.04]"
                 )}>
                   <p className="font-medium text-foreground flex items-start gap-1 md:gap-1.5">
