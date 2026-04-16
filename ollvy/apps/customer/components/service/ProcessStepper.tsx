@@ -162,7 +162,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
             {/* Milestone */}
             {s.milestone && (
               <div className={cn(
-                'mt-3 sm:mt-5 flex items-center gap-2 sm:gap-2.5 rounded-lg px-3 sm:px-3.5 py-2 sm:py-2.5 border',
+                'mt-2 sm:mt-5 flex items-center gap-2 sm:gap-2.5 rounded-lg px-3 sm:px-3.5 py-1.5 sm:py-2.5 border',
                 s.isCompletion
                   ? 'bg-[hsl(var(--ollvy-green))]/5 border-[hsl(var(--ollvy-green))]/20'
                   : 'bg-muted/30 border-border'
@@ -189,7 +189,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
       })}
 
       {/* Navigation */}
-      <div className="flex justify-between px-4 pb-3 sm:px-8 sm:pb-6">
+      <div className="flex justify-between px-4 pb-2.5 sm:px-8 sm:pb-6">
         <Button
           variant="outline"
           size="sm"
