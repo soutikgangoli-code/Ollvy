@@ -13,11 +13,11 @@ export function ProfilePersonas({
 
   return (
     <div>
-      <h2 className="text-xl font-semibold text-foreground mb-6">
+      <h2 className="text-xl font-semibold text-foreground mb-4 sm:mb-6">
         We handle the messy situations too.
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
         {personas.map((persona, i) => (
           <div
             key={i}

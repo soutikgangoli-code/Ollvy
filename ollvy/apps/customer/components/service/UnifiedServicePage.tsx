@@ -1015,7 +1015,7 @@ export function UnifiedServicePage({
 
 
                   {/* Profile Personas (merged into Why Ollvy section) */}
-                  <div className="mt-10 sm:mt-16">
+                  <div className="mt-7 sm:mt-16">
                     <ProfilePersonas
                       personas={service.profilePersonas}
                       serviceName={service.shortName}
