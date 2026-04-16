@@ -34,28 +34,37 @@ Copy for Ollvy service pages. Audience: Indian founders confused about complianc
 
 ## Architecture Notes
 
-### Service Page Data Flow — CRITICAL: DB is the source of truth
+### Where Content Lives — DB vs Static Files
 
-**ALL service page content renders from Supabase DB** (`service_packages` table). Editing static `.ts` config files does NOT change what users see on service pages. If you need to fix content on a service page (tagline, risks, FAQs, unlocks, pricing, SEO), you MUST update the DB directly via Supabase SQL migration or the admin panel.
+**CRITICAL: Two different systems. Know which one to edit.**
 
-- **DB fields that render on live service pages:** `tagline`, `short_description`, `workflow_stages`, `whats_included`, `service_risks`, `profile_personas`, `faqs`, `seo_title`, `seo_description`, `unlocks`, `penalty_for_missing`, `service_type`, `price_base_paisa`, `price_govt_fees_paisa`, `comparison_without`, `comparison_with`
-- **Static `.ts` config files** (`apps/customer/lib/services/data/*.ts`) are used ONLY for `govtFees` and `documents` tables on service pages. Nothing else from these files renders.
-- **Old-style service configs** (`apps/customer/lib/services/*.ts` like `director-kyc.ts`, `gst-registration.ts`) are fallback/seed data only. The live page ignores them entirely for all DB fields listed above.
-- **Unlocks / "Next Steps" cross-sell cards** render from DB `service_packages.unlocks` JSONB field, NOT from the static config `unlocks` array.
-- `DIYvsOllvy.tsx` comparison table data is hardcoded in the component file (exception to DB rule).
+| Page | Source | How to fix content |
+|------|--------|-------------------|
+| `/services/[slug]` (all 16 service pages) | **Supabase DB** (`service_packages` table) | Update DB via migration or `scripts/sync-content-to-db.ts`. Static `.ts` files do NOT affect these pages. |
+| `/director-kyc-2026`, `/itr-2026`, `/gst-annual-2026` etc | **Static** `lib/deadlines.ts` | Edit the file, deploy |
+| `/guides/[slug]` (all guide + notice pages) | **Static** `lib/guides/pages/*.ts` | Edit the file, deploy |
+| `/tools/penalty-calculator/[type]` | **Static** `lib/tools/penalty-calculator-pages.ts` + `penalty-content.ts` | Edit the file, deploy |
+| `/tools/documents/[type]` | **Static** `lib/tools/document-checklist-pages.ts` + `document-content.ts` | Edit the file, deploy |
+| Homepage (FAQ, services, testimonials) | **Static** `components/landing/*.tsx` + `app/page.tsx` | Edit the file, deploy |
+| Service page `govtFees` + `documents` tables | **Static** `lib/services/data/services-*.ts` | Edit the file, deploy |
+| Service page DIY vs Ollvy comparison | **Static** `components/service/DIYvsOllvy.tsx` | Edit the file, deploy |
+
+### Service Page DB Fields
+
+The following fields on `/services/[slug]` pages ALL come from the DB. Editing static `.ts` config files has ZERO effect on these:
+
+`tagline`, `short_description`, `workflow_stages`, `whats_included`, `service_risks`, `profile_personas`, `faqs`, `seo_title`, `seo_description`, `unlocks` (Next Steps cross-sell cards), `penalty_for_missing`, `service_type`, `price_base_paisa`, `price_govt_fees_paisa`, `comparison_without`, `comparison_with`
+
+Static config files (`lib/services/*.ts`, `lib/services/data/*.ts`) are seed/fallback data only. The live service page ignores them for all fields above.
+
 - Page route: `apps/customer/app/(main)/services/[slug]/page.tsx` with ISR (3600s)
 - Main component: `apps/customer/components/service/UnifiedServicePage.tsx`
-
-### What DOES render from static files (not DB)
-- Deadline pages (`/director-kyc-2026`, `/itr-2026`, etc.) — `lib/deadlines.ts`
-- Guide pages (`/guides/[slug]`) — `lib/guides/pages/*.ts`
-- Penalty calculator pages (`/tools/penalty-calculator/[type]`) — `lib/tools/penalty-calculator-pages.ts` + `penalty-content.ts`
-- Document checklist tool pages (`/tools/documents/[type]`) — `lib/tools/document-checklist-pages.ts` + `document-content.ts`
-- Homepage components — `components/landing/*.tsx`
-- `govtFees` and `documents` tables on service pages — `lib/services/data/services-*.ts`
+- DB access: `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` in `.env.local`
+- Sync script: `apps/customer/scripts/sync-content-to-db.ts`
 
 ### SEO Rules
 - Service page `seo_title`, `seo_description`, `canonical_url` come from DB — update via migration, not static files
+- All other pages (guides, tools, deadlines, homepage) — SEO metadata is in static files, deploy to update
 - ProcessStepper has `sr-only` block rendering all steps for crawlers
 - DIYvsOllvy has `sr-only` span for `on_stat` text
 - Explainer uses `max-h-0 overflow-hidden` pattern (crawlable)
