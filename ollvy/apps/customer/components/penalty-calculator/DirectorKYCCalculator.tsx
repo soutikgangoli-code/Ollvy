@@ -63,7 +63,7 @@ function DirectorKYCCalculatorInner() {
           <div className="flex items-center justify-between">
             <div>
               <Label>Is the DIN already deactivated?</Label>
-              <p className="text-xs text-muted-foreground mt-0.5">DINs deactivate automatically on October 1 each year if DIR-3 KYC was not filed by September 30</p>
+              <p className="text-xs text-muted-foreground mt-0.5">DINs deactivate automatically if DIR-3 KYC is not filed by the triennial deadline (next: June 30, 2028)</p>
             </div>
             <Switch checked={isDINDeactivated} onCheckedChange={setIsDINDeactivated} />
           </div>
@@ -74,10 +74,10 @@ function DirectorKYCCalculatorInner() {
               Key facts
             </h3>
             <ul className="text-sm text-muted-foreground space-y-2 list-disc list-inside">
-              <li>Due every year by September 30. Miss it and the DIN deactivates on October 1.</li>
+              <li>Now triennial (every 3 years). Next due June 30, 2028. Miss it and the DIN deactivates.</li>
               <li>Deactivated DIN = the director cannot sign any MCA form. All company filings stop.</li>
-              <li>Reactivate by filing DIR-3 KYC with the Rs. 5,000 fee. Back active in 24-48 hours.</li>
-              <li>If your mobile and email are already verified on MCA, you file DIR-3 KYC-Web (web-based, no fee, 2 minutes).</li>
+              <li>Reactivate by filing DIR-3 KYC Web with the Rs. 5,000 fee. Back active in 1-2 working days.</li>
+              <li>Only DIR-3 KYC Web is permitted. The e-Form has been discontinued. OTP-based, no DSC, 2 minutes.</li>
             </ul>
           </div>
         </div>
@@ -87,7 +87,7 @@ function DirectorKYCCalculatorInner() {
         <ResultsPanel
           total={totalPenalty}
           breakdown={breakdown}
-          dueDate="30 September every year"
+          dueDate="Triennial - next due June 30, 2028"
           statute="Companies Act 2013, Rule 12A"
           ctaText="File DIR-3 KYC"
           ctaHref="/services/director-kyc"

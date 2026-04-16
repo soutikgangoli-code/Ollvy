@@ -882,7 +882,7 @@ For companies, AOC-4 (financial statements) is due within 30 days of the AGM and
       { form: 'MGT-7 / MGT-7A (Annual Return)', dueDate: '28 November 2024 (60 days after AGM on 30 Sep)', frequency: 'Annual' },
       { form: 'LLP Form 11 (Annual Return)', dueDate: '30 May 2026', frequency: 'Annual - fixed date' },
       { form: 'LLP Form 8 (Statement of Accounts)', dueDate: '30 October 2026', frequency: 'Annual - fixed date' },
-      { form: 'DIR-3 KYC (for all directors)', dueDate: '30 September each year', frequency: 'Triennial (every 3 years)' },
+      { form: 'DIR-3 KYC Web (for all directors)', dueDate: 'June 30, 2028 (triennial)', frequency: 'Triennial (every 3 years)' },
       { form: 'ADT-1 (Auditor Appointment)', dueDate: '15 days from AGM', frequency: 'Annual or as changed' },
     ],
   },
@@ -1207,15 +1207,15 @@ Pay late and you'll face interest under Section 7Q of the EPF Act at 12% per ann
 export const directorKycContent: PenaltyPageContent = {
   slug: 'director-kyc',
   intro: {
-    title: 'Director KYC (DIR-3 KYC) Penalty Calculator 2024-25',
-    description: `If you hold a Director Identification Number (DIN), you must file an annual KYC to keep it active. Introduced by the MCA in 2018, DIR-3 KYC must be filed by 30 September each year. Miss this deadline? You'll pay a flat Rs. 5,000 late fee - no exceptions.
+    title: 'Director KYC (DIR-3 KYC) Penalty Calculator 2025-26',
+    description: `If you hold a Director Identification Number (DIN), you must file DIR-3 KYC to keep it active. MCA changed this from annual to triennial (every 3 years) effective March 31, 2026. Next due date is June 30, 2028. Miss the deadline? Rs. 5,000 flat late fee per director - no exceptions.
 
 A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of DIR-3 KYC." Once deactivated, you can't use it to authorise or sign any MCA form. This blocks your company's ability to file annual returns, event-based filings, or any regulatory submission. For LLP designated partners, the same rules apply to your DPIN (Designated Partner Identification Number).`,
     keyInfo: [
-      { label: 'Annual filing deadline', value: '30 September each year' },
-      { label: 'Late fee after 30 September', value: 'Rs. 5,000 flat - cannot be waived' },
-      { label: 'Free filing (unchanged details)', value: 'DIR-3 KYC-Web - no fee, no DSC, OTP-based only (if details unchanged from last year)' },
-      { label: 'Full form (changed details or first-time)', value: 'DIR-3 KYC form with document uploads and DSC' },
+      { label: 'Triennial filing deadline', value: 'June 30, 2028 (next due date)' },
+      { label: 'Late fee after deadline', value: 'Rs. 5,000 flat per director - cannot be waived' },
+      { label: 'Filing method', value: 'DIR-3 KYC Web only - the e-Form has been discontinued by MCA' },
+      { label: 'Event-based filing', value: 'Changes to mobile, email, or address require filing within 30 days even outside the triennial cycle' },
       { label: 'Consequence of non-filing', value: 'DIN marked Deactivated - blocks all MCA filings by that director' },
       { label: 'Applicable to', value: 'All DIN holders including directors of companies, designated partners of LLPs, and DIN holders who aren\'t currently directors' },
     ],
@@ -1321,15 +1321,14 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
   deadlines: {
     title: 'DIR-3 KYC Due Dates',
     dates: [
-      { form: 'DIR-3 KYC (first-time filing or changed details)', dueDate: '30 September each year', frequency: 'Annual' },
-      { form: 'DIR-3 KYC-Web (unchanged details from previous year)', dueDate: '30 September each year', frequency: 'Annual - simpler web-based form' },
+      { form: 'DIR-3 KYC Web (only permitted mode - e-Form discontinued)', dueDate: 'June 30, 2028 (triennial)', frequency: 'Triennial (every 3 years)' },
       { form: 'DIN allotment (new directors)', dueDate: 'Through SPICe+ at incorporation or Form DIR-3 separately', frequency: 'One-time' },
       { form: 'Update of director details (name, address, etc.)', dueDate: 'Within 30 days of any change via DIR-6', frequency: 'As applicable' },
     ],
   },
   legalReferences: {
     sections: [
-      { section: 'Rule 12A, Companies (Appointment and Qualification of Directors) Rules 2014', description: 'Mandatory annual DIR-3 KYC filing requirement for all DIN holders' },
+      { section: 'Rule 12A, Companies (Appointment and Qualification of Directors) Rules 2014', description: 'Mandatory triennial DIR-3 KYC filing requirement for all DIN holders (amended Dec 2025)' },
       { section: 'Rule 11, Companies (Appointment and Qualification of Directors) Rules 2014', description: 'DIN deactivation for non-compliance with DIR-3 KYC requirement' },
       { section: 'Section 12(9), LLP Act 2008 and LLP Rules', description: 'Triennial KYC requirement for LLP designated partners (amended Dec 2025)' },
     ],
@@ -1349,7 +1348,7 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
     },
     {
       title: 'Renew your DSC before it expires in August or September',
-      description: 'Class 3 DSC certificates have 2-3 year validity. Check the DSC expiry date in July. If it expires before 30 September, renew it immediately. A lapsed DSC blocks the full DIR-3 KYC form submission.',
+      description: 'DIR-3 KYC Web does not require a DSC - it uses OTP verification on registered mobile and email. The e-Form requiring DSC has been discontinued by MCA.',
     },
     {
       title: 'Track KYC compliance for all directors centrally - including independent directors',
@@ -1357,7 +1356,7 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
     },
     {
       title: 'File KYC even for DINs not currently in active use',
-      description: 'Anyone who was ever allotted a DIN must file annual KYC - even if they\'re no longer an active director of any company. Dormant DIN holders who miss KYC find their DIN deactivated, and if they\'re later appointed as director of a new company, they must first pay Rs. 5,000 to reactivate.',
+      description: 'Anyone who was ever allotted a DIN must file triennial KYC (every 3 years) - even if they\'re no longer an active director of any company. Dormant DIN holders who miss KYC find their DIN deactivated, and if they\'re later appointed as director of a new company, they must first pay Rs. 5,000 to reactivate.',
     },
   ],
   additionalFaqs: [
@@ -1374,7 +1373,7 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
       answer: 'No, the Rs. 5,000 late fee is a flat charge that doesn\'t attract any interest. It also doesn\'t increase with the duration of delay - the fee is Rs. 5,000 whether you file 1 day late or 2 years late. However, the indirect consequences of a deactivated DIN (blocked company filings) can result in substantial cascading MCA additional fees of Rs. 100 per day with no cap.',
     },
     {
-      question: 'How do I file DIR-3 KYC after the 30 September deadline?',
+      question: 'How do I file DIR-3 KYC after the deadline?',
       answer: 'Log in to the MCA V3 portal at efiling.mca.gov.in. Go to e-Filing and select DIR-3 KYC or DIR-3 KYC-Web. The portal will show a message that the Rs. 5,000 late fee is applicable. Pay the fee via the integrated payment gateway. After successful payment, complete the form with OTP (KYC-Web) or DSC (full KYC form). Verify your DIN status is restored to Active within 24-48 hours.',
     },
     {
@@ -1391,7 +1390,7 @@ A DIN that isn't KYC-compliant gets marked as "Deactivated due to non-filing of 
     },
     {
       question: 'What if I resigned from all companies - do I still need DIR-3 KYC?',
-      answer: 'Yes. DIN is a lifetime identifier regardless of active directorships. Even if you have resigned from all companies, you must file annual KYC. The only way to stop KYC requirement is to surrender DIN using Form DIR-5.',
+      answer: 'Yes. DIN is a lifetime identifier regardless of active directorships. Even if you have resigned from all companies, you must file triennial KYC (every 3 years, next due June 30, 2028). The only way to stop the KYC requirement is to surrender DIN using Form DIR-5.',
     },
     {
       question: 'Does DIN deactivation affect my existing directorships?',
@@ -2213,7 +2212,7 @@ Unlike other penalty calculators, DPIIT compliance doesn't have a per-day penalt
       { form: 'Company MGT-7 (annual return)', dueDate: '28 November 2024', frequency: 'Annual' },
       { form: 'Income tax return (non-audit companies)', dueDate: '31 July 2025 for FY 2024-25', frequency: 'Annual' },
       { form: 'GST returns (if registered)', dueDate: '11th / 20th of each month depending on return type', frequency: 'Monthly / Quarterly' },
-      { form: 'DIR-3 KYC for all directors', dueDate: '30 September each year', frequency: 'Triennial (every 3 years)' },
+      { form: 'DIR-3 KYC Web for all directors', dueDate: 'June 30, 2028 (triennial)', frequency: 'Triennial (every 3 years)' },
       { form: 'Annual self-certification on Startup India portal', dueDate: 'Review portal for any annual update requirement', frequency: 'Annual' },
     ],
   },

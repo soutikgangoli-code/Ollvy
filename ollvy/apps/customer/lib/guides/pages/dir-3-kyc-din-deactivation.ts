@@ -45,8 +45,8 @@ export const dir3KycDinDeactivation: LearnPageConfig = {
       heading: 'HOW TO REACTIVATE YOUR DIN',
       body: 'Reactivation requires filing DIR-3 KYC with a late fee.',
       bullets: [
-        'Late filing fee: Rs. 5,000 if filed after September 30 but before the filing opens again (typically October onwards, with fee). The fee is fixed regardless of how many days late.',
-        'Documents needed for DIR-3 KYC: PAN, Aadhaar, current address proof, mobile number OTP verification, email OTP verification. If filed by a CA/CS, their digital signature is also needed.',
+        'Late filing fee: Rs. 5,000 per director if filed after the triennial deadline. The fee is fixed regardless of how many days late.',
+        'Documents needed for DIR-3 KYC Web: PAN, Aadhaar, mobile number OTP verification, email OTP verification. The e-Form requiring DSC has been discontinued - only DIR-3 KYC Web is permitted.',
         'File on the MCA portal: Log in to mca.gov.in, go to the DIR-3 KYC service, complete the form with verified documents, and pay the fee.',
         'Processing time: DIN reactivation is typically immediate or within 24 hours of successful DIR-3 KYC filing with fee.',
         'Once reactivated, file DIR-3 KYC before each triennial deadline (next: June 30, 2028). Changes to mobile, email, or address require filing within 30 days.',

@@ -65,7 +65,7 @@ function generateFAQSchema(prices: FAQServicePrices) {
   const faqs = [
     {
       question: 'What is the difference between an LLP and a Private Limited Company in India?',
-      answer: `Both LLP (Limited Liability Partnership) and Private Limited Company are popular legal structures for Indian businesses, but they serve different needs. Both structures offer limited liability - your personal assets are protected. An LLP has far lower annual compliance requirements - no mandatory board meetings, no statutory registers, and simpler annual filings. If you plan to raise funding from angel investors or venture capital, Private Limited is the only viable option. Both are taxed at 30% flat on profits plus surcharges. Ollvy handles registration for both structures. LLP Incorporation is completed in 10-12 working days at ${prices.llp} plus government fees. Private Limited Incorporation is completed in 12-15 working days at ${prices.pvtLtd} plus government fees.`,
+      answer: `Both LLP (Limited Liability Partnership) and Private Limited Company are popular legal structures for Indian businesses, but they serve different needs. Both structures offer limited liability - your personal assets are protected. An LLP has far lower annual compliance requirements - no mandatory board meetings, no statutory registers, and simpler annual filings. If you plan to raise funding from angel investors or venture capital, Private Limited is the only viable option. Both are taxed at 30% flat on profits plus surcharges. Ollvy handles registration for both structures. LLP Incorporation is completed in 10-12 working days at ${prices.llpTotal} all-in. Private Limited Incorporation is completed in 12-15 working days at ${prices.pvtLtdTotal} all-in.`,
     },
     {
       question: 'How long does company registration take in India?',
@@ -77,7 +77,7 @@ function generateFAQSchema(prices: FAQServicePrices) {
     },
     {
       question: 'How much does company registration cost in India?',
-      answer: `The total cost of company registration in India has two components: professional fees and government fees (paid directly to MCA). LLP Incorporation: Ollvy fee is ${prices.llp}, government fees approximately Rs 500-800. Private Limited Company: Ollvy fee is ${prices.pvtLtd}, government fees approximately Rs 3,000-6,000. OPC Incorporation: Ollvy fee is ${prices.opc}, government fees approximately Rs 1,500-3,000. GST Registration: Ollvy fee is ${prices.gst}, government fees are Rs 0. Trademark Registration: Ollvy fee is ${prices.trademark}, government fees approximately Rs 4,500-9,000. GST at 18% on professional fees is not included. Government fees are GST-exempt.`,
+      answer: `The total cost of company registration in India has two components: professional fees and government fees (paid directly to MCA). LLP Incorporation: ${prices.llpTotal} all-in (Ollvy fee ${prices.llp} + government fees approximately Rs 500-800). Private Limited Company: ${prices.pvtLtdTotal} all-in (Ollvy fee ${prices.pvtLtd} + government fees approximately Rs 3,000-6,000). OPC Incorporation: ${prices.opcTotal} all-in (Ollvy fee ${prices.opc} + government fees approximately Rs 1,500-3,000). GST Registration: ${prices.gstTotal} all-in (Ollvy fee ${prices.gst}, government fees Rs 0). Trademark Registration: ${prices.trademarkTotal} all-in (Ollvy fee ${prices.trademark} + government fees approximately Rs 4,500-9,000). GST at 18% on professional fees is additional. Government fees are GST-exempt.`,
     },
     {
       question: 'Can I register a company using my home address in India?',
@@ -89,7 +89,7 @@ function generateFAQSchema(prices: FAQServicePrices) {
     },
     {
       question: 'What is Director KYC and what happens if I miss the deadline?',
-      answer: `Director KYC is a mandatory annual compliance requirement for all individuals who hold a Director Identification Number (DIN) in India - regardless of whether the company is active or not. It is filed using Form DIR-3 KYC on the MCA portal. The annual deadline is 30 September each year. If you miss this date, your DIN is immediately deactivated and a penalty of Rs 5,000 per director applies. Ollvy sends automated compliance reminders 30 days, 7 days, and 1 day before the deadline. Filing is available as a standalone service at ${prices.directorKyc} per director.`,
+      answer: `Director KYC is a mandatory compliance requirement for all individuals who hold a Director Identification Number (DIN) in India - regardless of whether the company is active or not. MCA changed this from annual to triennial (every 3 years) effective March 31, 2026. It is now filed using DIR-3 KYC Web on the MCA portal. Directors who filed KYC by September 30, 2025 are covered until June 30, 2028. If you miss the deadline, your DIN is deactivated and a penalty of Rs 5,000 per director applies (flat fee, not per day). Changes to mobile, email, or address still require filing within 30 days. Ollvy files DIR-3 KYC Web within 2 working days at ${prices.directorKyc} per director.`,
     },
     {
       question: 'How does trademark registration work in India, and how long does it take?',

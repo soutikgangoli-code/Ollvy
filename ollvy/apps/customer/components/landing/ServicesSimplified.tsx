@@ -21,7 +21,8 @@ function getGuaranteedDate(slaDays: number): string {
 function getServiceTag(slug: string, isRetainer: boolean): string | null {
   if (isRetainer) return 'Monthly'
   if (slug === 'pvt-ltd-incorporation' || slug === 'gst-registration') return 'Popular'
-  if (slug === 'director-kyc' || slug === 'mca-annual-filing') return 'Annual'
+  if (slug === 'mca-annual-filing') return 'Annual'
+  if (slug === 'director-kyc') return 'Triennial'
   return null
 }
 

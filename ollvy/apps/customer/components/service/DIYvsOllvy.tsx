@@ -189,9 +189,9 @@ export const DATA: Record<string, DIYData> = {
     rows: [
       { task: 'Checking Director ID status', own: 'Wrong reason diagnosed = entirely wrong process and wasted time.', ollvy_head: 'Ollvy CS checks your Director ID status.', ollvy_badge: 'Status confirmed before you pay.' },
       { task: 'Director KYC documents', own: 'Wrong document = rejection inside a tight window.', ollvy_head: 'Ollvy CS cross-checks everything.', ollvy_badge: 'Before filing.' },
-      { task: 'Filing with the government', own: 'After September 30 = Rs. 5,000 penalty per year before reactivation.', ollvy_head: 'Ollvy CS files it.', ollvy_badge: 'Director ID active on time.' },
+      { task: 'Filing with the government', own: 'Miss the triennial deadline = Rs. 5,000 penalty per director before reactivation.', ollvy_head: 'Ollvy CS files it.', ollvy_badge: 'Director ID active on time.' },
       { task: 'Government processing queries', own: 'One wrong field = rejection with no time to spare.', ollvy_head: 'Ollvy CS handles every query.', ollvy_badge: 'Already included.' },
-      { task: 'What it actually costs', own: '\u20B9500-1,500. Penalty doubles it if you miss September 30.', ollvy_head: '\u20B9499.', ollvy_badge: 'That\'s it.' },
+      { task: 'What it actually costs', own: '\u20B9500-1,500. Rs. 5,000 govt penalty if you miss the deadline.', ollvy_head: '\u20B9499.', ollvy_badge: 'That\'s it.' },
     ],
   },
   'company-name-change': {

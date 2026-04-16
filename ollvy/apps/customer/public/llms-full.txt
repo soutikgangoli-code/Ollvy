@@ -101,7 +101,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 
 #### Director KYC
 - URL: https://www.ollvy.com/services/director-kyc
-- Description: Annual DIR-3 KYC for all directors. Due by September 30 each year. Required to keep DIN active.
+- Description: Triennial DIR-3 KYC Web for all directors. Next due June 30, 2028. Required to keep DIN active.
 - Timeline: 1-2 working days
 - Mandatory for: All directors with DIN
 - Penalty: Rs. 5,000 if filed after due date
@@ -446,7 +446,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 
 #### Director KYC Penalty Calculator
 - URL: https://www.ollvy.com/tools/penalty-calculator/director-kyc
-- Description: Calculate DIR-3 KYC late filing penalty. Rs. 5,000 if filed after September 30.
+- Description: Calculate DIR-3 KYC late filing penalty. Rs. 5,000 flat fee per director if filed after the triennial deadline.
 - Inputs: Due date, filing date
 
 #### PF & ESIC Penalty Calculator
