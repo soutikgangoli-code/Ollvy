@@ -161,14 +161,14 @@ export default async function LandingPage() {
     <div className="min-h-screen bg-background pb-20 lg:pb-0">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': [
+            faqJsonLd,
+            ...(servicesItemListJsonLd ? [servicesItemListJsonLd] : []),
+          ].map(({ '@context': _, ...rest }) => rest),
+        }) }}
       />
-      {servicesItemListJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesItemListJsonLd) }}
-        />
-      )}
       <NavbarServer />
 
       {/* Main content with padding for fixed navbar */}

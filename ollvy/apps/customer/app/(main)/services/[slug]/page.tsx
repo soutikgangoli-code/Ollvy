@@ -103,7 +103,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         slaDays={service.slaDays}
       />
       {/* Server-rendered SEO content — all key data as semantic HTML for Google */}
-      <div className="max-w-[1200px] mx-auto px-6" aria-hidden="true" style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+      <div className="sr-only">
         {/* DIY comparison table */}
         {DIYvsOllvyData[slug] && (
           <table>

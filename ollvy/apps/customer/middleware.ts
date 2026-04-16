@@ -28,6 +28,15 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith('/join') ||
     pathname.startsWith('/startup') ||
     pathname.startsWith('/auth/') ||
+    pathname.startsWith('/director-kyc') ||
+    pathname.startsWith('/itr-') ||
+    pathname.startsWith('/gst-annual') ||
+    pathname.startsWith('/tds-return') ||
+    pathname.startsWith('/privacy') ||
+    pathname.startsWith('/terms') ||
+    pathname.startsWith('/cancellation') ||
+    pathname.startsWith('/refunds') ||
+    pathname.startsWith('/about') ||
     /^\/[^/]+\/[^/]+$/.test(pathname)
 
   if (isPublicRoute) {

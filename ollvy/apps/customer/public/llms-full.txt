@@ -212,6 +212,12 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - Description: Shop & Establishment Act compliance. State-wise requirements, registration process, renewal.
 - Key Points: Mandatory for all commercial establishments. Regulates working hours, holidays, employment conditions.
 
+#### Do I Need Trademark Registration?
+- URL: https://www.ollvy.com/guides/do-i-need-trademark-registration
+- Category: Registration
+- Description: Guide to when trademark registration makes sense. Covers TM vs R, classes, priority dates, and opposition process.
+- Key Points: File early - first-to-file system. TM symbol available immediately. R symbol after registration (12-18 months). 10-year validity.
+
 #### FSSAI License Requirements
 - URL: https://www.ollvy.com/guides/do-i-need-fssai-license
 - Category: Licensing
@@ -260,6 +266,24 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - URL: https://www.ollvy.com/guides/gst-reg-31-suspension
 - Category: GST Notice
 - Description: GST registration suspension notice. Immediate steps to take, how to get unsuspended.
+- Severity: Urgent
+
+#### GST GSTR-2B ITC Mismatch
+- URL: https://www.ollvy.com/guides/gst-gstr2b-itc-mismatch
+- Category: GST Notice
+- Description: ITC mismatch between GSTR-2B and GSTR-3B. Reconciliation steps and response guidance.
+- Severity: Serious
+
+#### GST GSTR-9 Annual Return Mismatch
+- URL: https://www.ollvy.com/guides/gst-gstr9-annual-return-mismatch
+- Category: GST Notice
+- Description: Discrepancies in GSTR-9 annual return. How to respond to reconciliation notices.
+- Severity: Serious
+
+#### GST ASMT-14 Best Judgment Assessment
+- URL: https://www.ollvy.com/guides/gst-asmt-14-best-judgment
+- Category: GST Notice
+- Description: Best judgment assessment notice when returns not filed. Response and appeal options.
 - Severity: Urgent
 
 ---
@@ -368,6 +392,16 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - Category: ROC Notice
 - Description: Director KYC non-compliance and DIN deactivation. Reactivation process.
 - Severity: Urgent
+
+---
+
+### Business PAN Guide
+
+#### What is Business PAN?
+- URL: https://www.ollvy.com/guides/what-is-business-pan
+- Category: Registration
+- Description: Guide to Business PAN application for companies and LLPs. When required, documents needed, timeline.
+- Key Points: Required for bank account, GST registration, and ITR filing. 7 working day timeline.
 
 ---
 
@@ -496,6 +530,7 @@ Timelines shown are working days and depend on:
 
 ## Legal Pages
 
+- [About](https://www.ollvy.com/about)
 - [Privacy Policy](https://www.ollvy.com/privacy)
 - [Terms of Service](https://www.ollvy.com/terms)
 - [Cancellation Policy](https://www.ollvy.com/cancellation)
@@ -523,3 +558,12 @@ Timelines shown are working days and depend on:
 - [ITR 2027](https://www.ollvy.com/itr-2027) - Business ITR filing for FY 2026-27. Due October 31, 2027.
 - [GST Annual 2027](https://www.ollvy.com/gst-annual-2027) - GSTR-9 annual return for FY 2026-27. Due December 31, 2027.
 - [TDS Return Q1 2027](https://www.ollvy.com/tds-return-q1-2027) - TDS return for Q1 FY 2027-28. Due July 31, 2027.
+
+### Deadline Guides (Detailed)
+
+- [TDS Return Q4 FY2025-26](https://www.ollvy.com/guides/tds-return-q4-fy2025-26) - Due May 31, 2026
+- [TDS Return Q1 FY2026-27](https://www.ollvy.com/guides/tds-return-q1-fy2026-27) - Due Jul 31, 2026
+- [Director KYC 2026 Guide](https://www.ollvy.com/guides/director-kyc-2026) - Triennial KYC, next due Jun 30, 2028
+- [TDS Return Q2 FY2026-27](https://www.ollvy.com/guides/tds-return-q2-fy2026-27) - Due Oct 31, 2026
+- [Business ITR FY2025-26](https://www.ollvy.com/guides/business-itr-fy2025-26) - Due Oct 31, 2026
+- [GSTR-9 FY2025-26](https://www.ollvy.com/guides/gstr-9-fy2025-26) - Due Dec 31, 2026

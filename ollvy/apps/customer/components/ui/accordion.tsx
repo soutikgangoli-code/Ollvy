@@ -43,7 +43,7 @@ AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content> & { forceMount?: true }
->(({ className, children, forceMount, ...props }, ref) => (
+>(({ className, children, forceMount = true, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
     forceMount={forceMount}

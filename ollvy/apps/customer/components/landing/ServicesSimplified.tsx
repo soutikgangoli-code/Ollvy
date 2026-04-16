@@ -53,7 +53,7 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                 key={i}
                 href={`/services/${service.slug}`}
                 prefetch={true}
-                className={`p-6 rounded-2xl border border-border bg-card shadow-sm hover:bg-muted/30 transition-colors duration-200 group flex flex-col ${i >= 4 ? 'hidden md:flex' : ''}`}
+                className="p-6 rounded-2xl border border-border bg-card shadow-sm hover:bg-muted/30 transition-colors duration-200 group flex flex-col"
               >
                 {/* Row 1: Name + Tag - fixed height for 2 lines */}
                 <div className="flex items-start justify-between gap-3 mb-1">

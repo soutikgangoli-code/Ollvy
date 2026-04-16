@@ -304,17 +304,17 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
 
       {/* Table — connected to toggle header */}
       <div className="rounded-b-xl border border-border overflow-hidden">
-        {/* Desktop table */}
-        <table className="w-full text-sm border-collapse hidden md:table">
+        {/* Single responsive table (no duplication) */}
+        <table className="w-full text-xs md:text-sm border-collapse">
           <thead>
             <tr className="border-b border-border bg-background">
-              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-semibold">
+              <th className="px-2.5 md:px-5 py-2.5 md:py-3 text-[10px] md:text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-medium md:font-semibold">
                 What needs doing
               </th>
-              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-semibold border-l border-border">
+              <th className="px-2.5 md:px-5 py-2.5 md:py-3 text-[10px] md:text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-medium md:font-semibold border-l border-border">
                 On your own
               </th>
-              <th className="px-5 py-3 text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-semibold border-l border-border">
+              <th className="px-2.5 md:px-5 py-2.5 md:py-3 text-[10px] md:text-xs font-mono uppercase tracking-widest text-muted-foreground text-center font-medium md:font-semibold border-l border-border">
                 With Ollvy
               </th>
             </tr>
@@ -322,13 +322,13 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
           <tbody>
             {data.rows.map((row, i) => (
               <tr key={i} className={cn(
-                'border-b border-border last:border-b-0 hover:bg-muted/10 transition-colors',
+                'border-b border-border last:border-b-0 md:hover:bg-muted/10 transition-colors',
                 i === data.rows.length - 1 && 'bg-muted/20'
               )}>
-                <td className="px-5 py-4 font-semibold text-foreground align-top w-[26%]">
+                <td className="px-3 md:px-5 py-3 md:py-4 font-semibold text-foreground align-top text-[13px] md:text-sm md:w-[26%]">
                   {row.task}
                 </td>
-                <td className="px-5 py-4 text-muted-foreground leading-relaxed align-top border-l border-border w-[34%]">
+                <td className="px-3 md:px-5 py-3 md:py-4 text-muted-foreground leading-snug md:leading-relaxed align-top border-l border-border text-[13px] md:text-sm md:w-[34%]">
                   {row.own.includes('\n')
                     ? row.own.split('\n').filter(Boolean).map((line, j) => (
                         <span key={j}>{j > 0 && <br />}{line}</span>
@@ -336,65 +336,15 @@ export function DIYvsOllvy({ slug, guaranteedDate, isRetainer, totalFee }: DIYvs
                     : row.own}
                 </td>
                 <td className={cn(
-                  "px-5 py-4 align-top border-l border-border w-[40%] transition-colors duration-300",
+                  "px-3 md:px-5 py-3 md:py-4 align-top border-l border-border text-[13px] md:text-sm md:w-[40%] transition-colors duration-300",
                   on && "bg-[hsl(var(--ollvy-green))]/[0.04]"
                 )}>
-                  <p className="font-medium text-foreground flex items-start gap-1.5">
-                    <Check size={14} className="text-[hsl(var(--ollvy-green))] shrink-0 mt-0.5" />
+                  <p className="font-medium text-foreground flex items-start gap-1 md:gap-1.5">
+                    <Check size={12} className="text-[hsl(var(--ollvy-green))] shrink-0 mt-0.5 md:size-[14px]" />
                     {row.ollvy_head === '{{GUARANTEE}}' ? guaranteeText : row.ollvy_head}
                   </p>
                   {row.ollvy_badge && (
-                    <p className="text-xs text-[hsl(var(--ollvy-green-fg))] mt-1.5 font-mono ml-[20px]">
-                      {row.ollvy_badge}
-                    </p>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Mobile: compact table */}
-        <table className="w-full text-xs border-collapse md:hidden">
-          <thead>
-            <tr className="border-b border-border bg-background">
-              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-center font-medium">
-                Task
-              </th>
-              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-center font-medium border-l border-border">
-                On your own
-              </th>
-              <th className="px-2.5 py-2.5 text-[10px] font-mono uppercase tracking-widest text-muted-foreground text-center font-medium border-l border-border">
-                With Ollvy
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.rows.map((row, i) => (
-              <tr key={i} className={cn(
-                'border-b border-border last:border-b-0',
-                i === data.rows.length - 1 && 'bg-muted/20'
-              )}>
-                <td className="px-3 py-3 font-semibold text-foreground align-top text-[13px]">
-                  {row.task}
-                </td>
-                <td className="px-3 py-3 text-muted-foreground leading-snug align-top border-l border-border text-[13px]">
-                  {row.own.includes('\n')
-                    ? row.own.split('\n').filter(Boolean).map((line, j) => (
-                        <span key={j}>{j > 0 && <br />}{line}</span>
-                      ))
-                    : row.own}
-                </td>
-                <td className={cn(
-                  "px-3 py-3 align-top border-l border-border text-[13px] transition-colors duration-300",
-                  on && "bg-[hsl(var(--ollvy-green))]/[0.04]"
-                )}>
-                  <p className="font-medium text-foreground flex items-start gap-1">
-                    <Check size={11} className="text-[hsl(var(--ollvy-green))] shrink-0 mt-0.5" />
-                    {row.ollvy_head === '{{GUARANTEE}}' ? guaranteeText : row.ollvy_head}
-                  </p>
-                  {row.ollvy_badge && (
-                    <p className="text-[11px] text-[hsl(var(--ollvy-green-fg))] mt-0.5 font-mono ml-[15px]">
+                    <p className="text-[11px] md:text-xs text-[hsl(var(--ollvy-green-fg))] mt-0.5 md:mt-1.5 font-mono ml-[15px] md:ml-[20px]">
                       {row.ollvy_badge}
                     </p>
                   )}

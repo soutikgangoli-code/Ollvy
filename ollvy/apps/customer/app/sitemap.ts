@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getAllServiceSlugs } from '@/lib/data/services'
-import { LEARN_PAGES } from '@/lib/guides/pages'
+import { LEARN_PAGES, PENALTY_CALCULATOR_METADATA, DOCUMENT_CHECKLIST_METADATA } from '@/lib/guides/pages'
 import { GEO_ENABLED_SERVICES, CITIES } from '@/lib/geo'
 
 /**
@@ -17,34 +17,8 @@ import { GEO_ENABLED_SERVICES, CITIES } from '@/lib/geo'
 
 const BASE_URL = 'https://www.ollvy.com'
 
-// Document checklist slugs (static routes)
-const DOCUMENT_CHECKLIST_SLUGS = [
-  'private-limited-company',
-  'llp',
-  'partnership',
-  'sole-proprietor',
-  'gst-registration',
-  'individual-itr',
-  'business-itr',
-  'trademark',
-  'business-pan',
-]
-
-// Penalty calculator slugs (static routes)
-const PENALTY_CALCULATOR_SLUGS = [
-  'gst-late-filing',
-  'itr-late-filing',
-  'tds-late-filing',
-  'mca-annual-filing',
-  'pf-esic-penalty',
-  'director-kyc',
-  'gst-demand-notice',
-  'professional-tax-penalty',
-  'shops-establishment-penalty',
-  'startup-dpiit-compliance',
-]
-
-// Geo pages are now dynamically generated from GEO_ENABLED_SERVICES and CITIES
+// Document checklist and penalty calculator slugs imported from lib/guides/pages.ts
+// to prevent drift — any new tool added there automatically appears in the sitemap.
 
 // Deadline campaign pages
 const DEADLINE_SLUGS = [
@@ -68,6 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: staticDate },
+    { url: `${BASE_URL}/about`, lastModified: staticDate },
     { url: `${BASE_URL}/services`, lastModified: staticDate },
     { url: `${BASE_URL}/tools`, lastModified: staticDate },
     { url: `${BASE_URL}/guides`, lastModified: staticDate },
@@ -88,14 +63,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }))
 
   // Document checklist pages
-  const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/tools/documents/${slug}`,
+  const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_METADATA.map((tool) => ({
+    url: `${BASE_URL}/tools/documents/${tool.slug}`,
     lastModified: staticDate,
   }))
 
   // Penalty calculator pages
-  const penaltyRoutes: MetadataRoute.Sitemap = PENALTY_CALCULATOR_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/tools/penalty-calculator/${slug}`,
+  const penaltyRoutes: MetadataRoute.Sitemap = PENALTY_CALCULATOR_METADATA.map((tool) => ({
+    url: `${BASE_URL}/tools/penalty-calculator/${tool.slug}`,
     lastModified: staticDate,
   }))
 

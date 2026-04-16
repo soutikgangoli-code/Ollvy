@@ -97,6 +97,8 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
 
   useEffect(() => {
     fetchServices()
+    // Remove SSR grid once client component hydrates
+    document.getElementById('ssr-services-grid')?.remove()
   }, [fetchServices])
 
   useEffect(() => {

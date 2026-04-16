@@ -745,7 +745,6 @@ export function UnifiedServicePage({
 
                       {/* Always render for SEO, hide visually when collapsed */}
                       <div
-                        aria-hidden={!explainerOpen}
                         className={cn(
                           'transition-all duration-300 overflow-hidden',
                           explainerOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
@@ -812,11 +811,13 @@ export function UnifiedServicePage({
                                 {formatWithMonoNumbers(item.title)}
                               </h3>
                               {/* Show body only when there's no comparison card and no mock visual - otherwise title is enough */}
-                              {item.body && !item.comparisonWithout && !item.comparisonWithOllvy && !item.mockVisualType && (
+                              {item.body && !item.comparisonWithout && !item.comparisonWithOllvy && !item.mockVisualType ? (
                                 <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                                   {formatWithMonoNumbers(item.body)}
                                 </p>
-                              )}
+                              ) : item.body ? (
+                                <span className="sr-only">{item.body}</span>
+                              ) : null}
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
@@ -884,8 +885,7 @@ export function UnifiedServicePage({
                       />
                     </button>
 
-                    {docsExpanded && (
-                    <div className="mt-5">
+                    <div className={cn("mt-5 overflow-hidden transition-all", docsExpanded ? "max-h-[4000px] opacity-100" : "max-h-0 opacity-0")}>
                     <div className="rounded-xl border border-border overflow-hidden">
                       <table className="w-full text-xs sm:text-sm border-collapse">
                         <thead>
@@ -940,7 +940,6 @@ export function UnifiedServicePage({
                       Your documents are encrypted, visible only to your assigned professional, and deleted 90 days after your order closes.
                     </p>
                     </div>
-                    )}
                   </section>
                 )}
 

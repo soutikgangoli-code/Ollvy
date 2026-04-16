@@ -144,20 +144,18 @@ export function StructuredData() {
   // Service pages have their own Service schemas, geo pages have LocalBusiness schemas
   // Adding LocalBusiness globally causes warnings on tools, guides, and legal pages
 
+  // Strip @context from individual schemas before merging into @graph
+  const { '@context': _1, ...org } = organizationSchema
+  const { '@context': _2, ...site } = websiteSchema
+  const { '@context': _3, ...nav } = siteNavigationSchema
+
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavigationSchema) }}
-      />
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [org, site, nav],
+      }) }}
+    />
   )
 }

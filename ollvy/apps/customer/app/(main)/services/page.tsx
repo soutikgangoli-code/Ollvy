@@ -179,14 +179,13 @@ export default async function ServicesPage() {
 
   return (
     <>
-      {/* JSON-LD Schemas - rendered server-side for crawlers */}
+      {/* JSON-LD Schemas - consolidated @graph for crawlers */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': [breadcrumbSchema, servicesSchema].map(({ '@context': _, ...rest }) => rest),
+        }) }}
       />
       {/* H1 outside Suspense for SEO crawlers */}
       <div className="container pt-12 pb-6">
@@ -194,6 +193,19 @@ export default async function ServicesPage() {
         <p className="text-muted-foreground mt-2">
           Fixed-price compliance packages with transparent pricing.
         </p>
+      </div>
+
+      {/* SSR service grid — visible to crawlers, removed on hydration by client component */}
+      <div id="ssr-services-grid" className="container pb-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {services.map((s) => (
+            <a key={s.slug} href={`/services/${s.slug}`} className="block p-5 rounded-xl border border-border">
+              <h2 className="text-base font-semibold">{s.name}</h2>
+              <p className="text-sm text-muted-foreground mt-1">{s.short_description}</p>
+              <p className="text-sm font-medium mt-2">From Rs {Math.round(s.price_base_paisa / 100).toLocaleString('en-IN')}</p>
+            </a>
+          ))}
+        </div>
       </div>
 
       {/* Client component for interactive search/filter with initial services */}

@@ -50,6 +50,10 @@ Educational content to help founders understand Indian business compliance:
 - [PF Registration](https://www.ollvy.com/guides/when-does-pf-registration-become-mandatory) - EPF compliance for employers
 - [ESI Registration](https://www.ollvy.com/guides/when-does-esi-registration-become-mandatory) - ESIC compliance guide
 - [Professional Tax](https://www.ollvy.com/guides/do-i-need-professional-tax-registration) - State-wise PT guide
+- [FSSAI License Guide](https://www.ollvy.com/guides/do-i-need-fssai-license) - Food business licensing requirements
+- [Which ITR Form?](https://www.ollvy.com/guides/which-itr-form-should-i-use) - ITR form selection guide
+- [Trademark Registration Guide](https://www.ollvy.com/guides/do-i-need-trademark-registration) - When and why to register
+- [Shop & Establishment](https://www.ollvy.com/guides/do-i-need-shop-establishment-registration) - State-wise registration guide
 
 ### GST Notices
 - [GST DRC-01 Notice](https://www.ollvy.com/guides/gst-drc-01-notice) - Tax demand response guide
@@ -76,6 +80,10 @@ Free calculators and checklists for Indian business compliance:
 - [TDS Late Filing Penalty](https://www.ollvy.com/tools/penalty-calculator/tds-late-filing)
 - [MCA Annual Filing Penalty](https://www.ollvy.com/tools/penalty-calculator/mca-annual-filing)
 - [Director KYC Penalty](https://www.ollvy.com/tools/penalty-calculator/director-kyc)
+
+## About
+
+- [About Ollvy](https://www.ollvy.com/about) - Company information and contact
 
 ## Optional
 

@@ -43,12 +43,14 @@ TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
 
 const TabsContent = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Content> & { forceMount?: true }
+>(({ className, forceMount = true, ...props }, ref) => (
   <TabsPrimitive.Content
     ref={ref}
+    forceMount={forceMount}
     className={cn(
       "mt-4 focus-visible:outline-none",
+      forceMount && "data-[state=inactive]:hidden",
       className
     )}
     {...props}
