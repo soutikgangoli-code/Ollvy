@@ -151,6 +151,58 @@ const breadcrumbSchema = {
   ],
 }
 
+// Search index entry — lightweight text blob per service for client-side deep search
+export interface ServiceSearchEntry {
+  slug: string
+  texts: { source: string; text: string }[]
+}
+
+function buildSearchIndex(services: ServicePackage[]): ServiceSearchEntry[] {
+  return services.map(s => {
+    const raw = s as unknown as Record<string, unknown>
+    const texts: { source: string; text: string }[] = []
+
+    // Tagline
+    if (typeof raw.tagline === 'string' && raw.tagline) {
+      texts.push({ source: 'Tagline', text: raw.tagline })
+    }
+
+    // What's included
+    const included = raw.whats_included as { title?: string; body?: string }[] | undefined
+    if (Array.isArray(included)) {
+      for (const item of included) {
+        if (item.title) texts.push({ source: 'What you get', text: item.title + (item.body ? '. ' + item.body : '') })
+      }
+    }
+
+    // Process steps
+    const stages = raw.workflow_stages as { title?: string; body?: string }[] | undefined
+    if (Array.isArray(stages)) {
+      for (const step of stages) {
+        if (step.title) texts.push({ source: 'Process', text: step.title + (step.body ? '. ' + step.body : '') })
+      }
+    }
+
+    // FAQs
+    const faqs = raw.faqs as { q?: string; a?: string }[] | undefined
+    if (Array.isArray(faqs)) {
+      for (const faq of faqs) {
+        if (faq.q) texts.push({ source: 'FAQ', text: faq.q + (faq.a ? ' ' + faq.a : '') })
+      }
+    }
+
+    // Risks
+    const risks = raw.service_risks as { title?: string; body?: string }[] | undefined
+    if (Array.isArray(risks)) {
+      for (const risk of risks) {
+        if (risk.title) texts.push({ source: 'Risks', text: risk.title + (risk.body ? '. ' + risk.body : '') })
+      }
+    }
+
+    return { slug: s.slug, texts }
+  })
+}
+
 function ServicesLoadingSkeleton() {
   return (
     <div className="container pb-12">
@@ -208,7 +260,7 @@ export default async function ServicesPage() {
 
       {/* Client component for interactive search/filter with initial services */}
       <Suspense fallback={<ServicesLoadingSkeleton />}>
-        <ServicesClient initialServices={services} />
+        <ServicesClient initialServices={services} searchIndex={buildSearchIndex(services)} />
       </Suspense>
     </>
   )

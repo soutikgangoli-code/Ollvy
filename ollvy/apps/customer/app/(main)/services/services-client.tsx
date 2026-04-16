@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { SearchBar } from '@/components/services/SearchBar'
 import { FilterChips } from '@/components/services/FilterChips'
 import { ServiceGrid } from '@/components/services/ServiceGrid'
 import { getClient } from '@/lib/supabase'
 import type { ServicePackage } from '@/lib/types'
+import type { ServiceSearchEntry } from './page'
 
 // These match actual situation_tags in the database (plus special filters)
 const CATEGORY_FILTERS = [
@@ -24,9 +25,10 @@ const SPECIAL_FILTERS = ['bundles', 'cloud_kitchen']
 
 interface ServicesClientProps {
   initialServices: ServicePackage[]
+  searchIndex: ServiceSearchEntry[]
 }
 
-export function ServicesClient({ initialServices }: ServicesClientProps) {
+export function ServicesClient({ initialServices, searchIndex }: ServicesClientProps) {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -81,14 +83,12 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
 
       if (error) {
         console.error('Error fetching services:', error)
-        // Fall back to filtering initial services locally
         setServices(filterServicesLocally(initialServices, searchQuery, selectedFilters))
       } else {
         setServices(data || [])
       }
     } catch (err) {
       console.error('Failed to fetch services:', err)
-      // Fall back to filtering initial services locally
       setServices(filterServicesLocally(initialServices, searchQuery, selectedFilters))
     } finally {
       setIsLoading(false)
@@ -107,6 +107,46 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
     const newUrl = params.toString() ? `?${params.toString()}` : '/services'
     router.replace(newUrl, { scroll: false })
   }, [searchQuery, selectedFilters, router])
+
+  // Deep search: find snippets from service content for the current query
+  const snippetsBySlug = useMemo(() => {
+    const map: Record<string, { source: string; snippet: string }> = {}
+    if (!searchQuery.trim()) return map
+
+    const q = searchQuery.toLowerCase()
+
+    for (const entry of searchIndex) {
+      for (const { source, text } of entry.texts) {
+        const idx = text.toLowerCase().indexOf(q)
+        if (idx !== -1) {
+          const start = Math.max(0, idx - 40)
+          const end = Math.min(text.length, idx + q.length + 80)
+          const snippet = (start > 0 ? '...' : '') + text.slice(start, end).trim() + (end < text.length ? '...' : '')
+          map[entry.slug] = { source, snippet }
+          break
+        }
+      }
+    }
+
+    return map
+  }, [searchQuery, searchIndex])
+
+  // When searching, also include services matched by deep content search
+  const deepMatchSlugs = useMemo(() => {
+    if (!searchQuery.trim()) return new Set<string>()
+    return new Set(Object.keys(snippetsBySlug))
+  }, [searchQuery, snippetsBySlug])
+
+  // Merge deep matches into services list (add any that Supabase query missed)
+  const mergedServices = useMemo(() => {
+    if (!searchQuery.trim() || deepMatchSlugs.size === 0) return services
+
+    const existingSlugs = new Set(services.map(s => s.slug))
+    const extraServices = initialServices.filter(
+      s => deepMatchSlugs.has(s.slug) && !existingSlugs.has(s.slug)
+    )
+    return [...services, ...extraServices]
+  }, [services, deepMatchSlugs, searchQuery, initialServices])
 
   return (
     <div className="container pb-12">
@@ -128,12 +168,17 @@ export function ServicesClient({ initialServices }: ServicesClientProps) {
       <div className="mb-6">
         {!isLoading && (
           <p className="text-sm text-muted-foreground">
-            {services.length} service{services.length !== 1 ? 's' : ''} found
+            {mergedServices.length} service{mergedServices.length !== 1 ? 's' : ''} found
           </p>
         )}
       </div>
 
-      <ServiceGrid services={services} isLoading={isLoading} />
+      <ServiceGrid
+        services={mergedServices}
+        isLoading={isLoading}
+        snippets={searchQuery.trim() ? snippetsBySlug : undefined}
+        query={searchQuery}
+      />
     </div>
   )
 }
