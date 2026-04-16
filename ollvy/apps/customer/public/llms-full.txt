@@ -99,13 +99,6 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - Mandatory for: All registered companies
 - Penalty: Rs. 100 per day per form for late filing
 
-#### Director KYC
-- URL: https://www.ollvy.com/services/director-kyc
-- Description: Triennial DIR-3 KYC Web for all directors. Next due June 30, 2028. Required to keep DIN active.
-- Timeline: 1-2 working days
-- Mandatory for: All directors with DIN
-- Penalty: Rs. 5,000 if filed after due date
-
 #### DIN Reactivation
 - URL: https://www.ollvy.com/services/din-reactivation
 - Description: Reactivate a DIN deactivated due to non-filing of DIR-3 KYC. Includes filing pending KYC and reactivation application.
@@ -121,29 +114,36 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - Timeline: 1-2 working days
 - Benefits: Credit guarantee, subsidy schemes, lower interest rates
 
-#### Startup India DPIIT Recognition
-- URL: https://www.ollvy.com/services/startup-india
-- Description: Get DPIIT recognition for your startup. Unlocks tax benefits under Section 80-IAC, angel tax exemption, easier public procurement, and faster patent processing.
-- Timeline: 5-7 working days
-- Benefits: 3-year tax holiday, angel tax exemption, self-certification for labor laws, 80% rebate on patent filing
-
 #### Trademark Registration
 - URL: https://www.ollvy.com/services/trademark-registration
 - Description: Register and protect your brand name, logo, or tagline. 10-year protection, renewable. Includes trademark search, application, and response to examination.
 - Timeline: 12-18 months (TM application filed in 2-3 days)
 - Validity: 10 years, renewable
 
-#### FSSAI License
-- URL: https://www.ollvy.com/services/fssai-license
-- Description: Food Safety License from FSSAI. Basic registration for small businesses, State license for medium, Central for large. Required for all food businesses.
-- Timeline: 7-15 working days
-- Mandatory for: All food businesses - restaurants, manufacturers, importers, e-commerce food sellers
-
 #### Cloud Kitchen Setup
 - URL: https://www.ollvy.com/services/cloud-kitchen-setup
 - Description: Complete compliance bundle for cloud kitchens - FSSAI, GST, Shop & Establishment, Trade License bundled together.
 - Timeline: 15-20 working days
 - Includes: FSSAI + GST + Shop License + Trade License
+
+#### Business PAN Registration
+- URL: https://www.ollvy.com/services/business-pan
+- Description: Company PAN in 7 working days. Required for bank account, GST, and ITR.
+- Timeline: 7 working days
+
+#### ESOP Structuring
+- URL: https://www.ollvy.com/services/esop-structuring
+- Description: Complete ESOP scheme for your Pvt Ltd. Board resolution, shareholder approval, grant letters, vesting schedule.
+- Timeline: 7 working days
+
+---
+
+### Consulting
+
+#### IEPF Claim Consultation
+- URL: https://www.ollvy.com/services/iepf-consultation
+- Description: Expert checks IEPF database for your shares and dividends. 45-minute consultation call. Written report with claim eligibility.
+- Timeline: 1-2 working days
 
 ---
 
@@ -170,7 +170,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - Key Points: Income above Rs. 2.5L requires ITR. Foreign assets require ITR regardless of income. High-value transactions (Rs. 1Cr+ deposits) trigger mandatory filing.
 
 #### Which ITR Form Should I File?
-- URL: https://www.ollvy.com/guides/which-itr-form-should-i-file
+- URL: https://www.ollvy.com/guides/which-itr-form-should-i-use
 - Category: Tax
 - Description: Guide to choosing correct ITR form - ITR-1 to ITR-7. Based on income sources, business type, and entity type.
 
@@ -181,7 +181,7 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 - Key Points: Free registration. Priority sector lending. 45-day payment mandate for government contracts. Collateral-free loans up to Rs. 2 crore.
 
 #### DPIIT Startup Recognition
-- URL: https://www.ollvy.com/guides/dpiit-startup-recognition
+- URL: https://www.ollvy.com/guides/should-i-get-dpiit-startup-recognition
 - Category: Startup
 - Description: Guide to Startup India recognition. Covers eligibility criteria, tax benefits (Section 80-IAC), angel tax exemption, easier public procurement.
 - Key Points: Company/LLP less than 10 years old. Turnover below Rs. 100 crore. Working on innovation. Get 3-year tax holiday, angel tax exemption.
@@ -189,31 +189,31 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 ### Employer Compliance Guides
 
 #### PF Registration
-- URL: https://www.ollvy.com/guides/pf-registration
+- URL: https://www.ollvy.com/guides/when-does-pf-registration-become-mandatory
 - Category: Payroll
 - Description: Provident Fund registration and compliance guide. When mandatory, how to register, monthly compliance, penalties.
 - Key Points: Mandatory if 20+ employees. 12% employer contribution. Monthly payment by 15th. Major penalties for non-compliance.
 
 #### ESI Registration
-- URL: https://www.ollvy.com/guides/esi-registration
+- URL: https://www.ollvy.com/guides/when-does-esi-registration-become-mandatory
 - Category: Payroll
 - Description: ESIC registration and compliance. Covers threshold, contribution rates, hospital benefits, maternity benefits.
 - Key Points: Mandatory if 10+ employees and wages up to Rs. 21,000/month. 0.75% employee + 3.25% employer contribution.
 
 #### Professional Tax
-- URL: https://www.ollvy.com/guides/professional-tax
+- URL: https://www.ollvy.com/guides/do-i-need-professional-tax-registration
 - Category: Tax
 - Description: State-wise professional tax guide. Covers registration, slabs, payment, and compliance by state.
 - Key Points: State-specific tax on employment. Maximum Rs. 2,500/year. Employer must deduct and deposit.
 
 #### Shop & Establishment Registration
-- URL: https://www.ollvy.com/guides/shop-establishment-registration
+- URL: https://www.ollvy.com/guides/do-i-need-shop-establishment-registration
 - Category: Licensing
 - Description: Shop & Establishment Act compliance. State-wise requirements, registration process, renewal.
 - Key Points: Mandatory for all commercial establishments. Regulates working hours, holidays, employment conditions.
 
 #### FSSAI License Requirements
-- URL: https://www.ollvy.com/guides/fssai-license-requirements
+- URL: https://www.ollvy.com/guides/do-i-need-fssai-license
 - Category: Licensing
 - Description: Complete guide to FSSAI licensing. Basic vs State vs Central license, eligibility, documents, renewal.
 - Key Points: Basic for turnover under Rs. 12L. State for Rs. 12L-20Cr. Central for Rs. 20Cr+.

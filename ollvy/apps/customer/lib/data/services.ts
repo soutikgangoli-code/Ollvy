@@ -575,6 +575,7 @@ const FALLBACK_SERVICE_SLUGS = [
   'din-reactivation',
   // Consulting
   'iepf-consultation',
+  'esop-structuring',
 ]
 
 /**

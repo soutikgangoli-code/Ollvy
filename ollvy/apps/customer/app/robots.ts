@@ -14,7 +14,6 @@ const DISALLOWED_ROUTES = [
   '/admin',
   '/pro',
   '/api/',
-  '/_next/',
   '/order/',
   '/orders/',
   '/profile',
@@ -34,74 +33,10 @@ const DISALLOWED_ROUTES = [
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
-      // Default rule for all crawlers
+      // Wildcard covers all crawlers including AI bots (GPTBot, ClaudeBot, PerplexityBot, etc.)
+      // Add bot-specific blocks here only if you need DIFFERENT rules for a specific crawler.
       {
         userAgent: '*',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      // OpenAI crawlers
-      {
-        userAgent: 'GPTBot',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      {
-        userAgent: 'ChatGPT-User',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      {
-        userAgent: 'OAI-SearchBot',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      // Anthropic crawlers
-      {
-        userAgent: 'ClaudeBot',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      {
-        userAgent: 'Claude-User',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      {
-        userAgent: 'Claude-SearchBot',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      // Perplexity crawler
-      {
-        userAgent: 'PerplexityBot',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      // Google AI crawler
-      {
-        userAgent: 'Google-Extended',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      // Other AI crawlers
-      {
-        userAgent: 'Amazonbot',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      {
-        userAgent: 'CCBot',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      {
-        userAgent: 'anthropic-ai',
-        allow: '/',
-        disallow: DISALLOWED_ROUTES,
-      },
-      {
-        userAgent: 'cohere-ai',
         allow: '/',
         disallow: DISALLOWED_ROUTES,
       },

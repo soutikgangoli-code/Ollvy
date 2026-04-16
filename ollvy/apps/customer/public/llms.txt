@@ -28,19 +28,15 @@ Ollvy simplifies business registration and compliance in India. Founded to make 
 
 ### Company Compliance
 - [MCA Annual Filing](https://www.ollvy.com/services/mca-annual-filing) - AOC-4, MGT-7 annual returns
-- [Director KYC](https://www.ollvy.com/services/director-kyc) - DIR-3 KYC for directors
 - [DIN Reactivation](https://www.ollvy.com/services/din-reactivation) - Reactivate deactivated DIN
 
-### Business Licenses
+### Business Licenses & Other
 - [MSME/Udyam Registration](https://www.ollvy.com/services/msme-registration) - MSME certificate for benefits
-- [Startup India DPIIT](https://www.ollvy.com/services/startup-india) - DPIIT recognition for startups
 - [Trademark Registration](https://www.ollvy.com/services/trademark-registration) - Protect your brand name and logo
-- [FSSAI License](https://www.ollvy.com/services/fssai-license) - Food business license
-- [IEC Code](https://www.ollvy.com/services/iec-code) - Import Export Code for international trade
 - [Cloud Kitchen Setup](https://www.ollvy.com/services/cloud-kitchen-setup) - Complete cloud kitchen compliance bundle
-
-### Payroll Services
-- [Payroll Management](https://www.ollvy.com/services/payroll-management) - Monthly payroll processing and compliance
+- [Business PAN Registration](https://www.ollvy.com/services/business-pan) - Company PAN in 7 working days
+- [ESOP Structuring](https://www.ollvy.com/services/esop-structuring) - Complete ESOP scheme for your Pvt Ltd
+- [IEPF Claim Consultation](https://www.ollvy.com/services/iepf-consultation) - IEPF database check for shares and dividends
 
 ## Guides
 
@@ -50,10 +46,10 @@ Educational content to help founders understand Indian business compliance:
 - [Pvt Ltd vs LLP](https://www.ollvy.com/guides/pvt-ltd-vs-llp) - Compare business structures
 - [Do I Need to File ITR?](https://www.ollvy.com/guides/do-i-need-to-file-itr) - Income tax filing guide
 - [Is MSME Registration Worth It?](https://www.ollvy.com/guides/is-msme-registration-worth-it) - MSME benefits explained
-- [DPIIT Startup Recognition](https://www.ollvy.com/guides/dpiit-startup-recognition) - Startup India benefits
-- [PF Registration](https://www.ollvy.com/guides/pf-registration) - EPF compliance for employers
-- [ESI Registration](https://www.ollvy.com/guides/esi-registration) - ESIC compliance guide
-- [Professional Tax](https://www.ollvy.com/guides/professional-tax) - State-wise PT guide
+- [DPIIT Startup Recognition](https://www.ollvy.com/guides/should-i-get-dpiit-startup-recognition) - Startup India benefits
+- [PF Registration](https://www.ollvy.com/guides/when-does-pf-registration-become-mandatory) - EPF compliance for employers
+- [ESI Registration](https://www.ollvy.com/guides/when-does-esi-registration-become-mandatory) - ESIC compliance guide
+- [Professional Tax](https://www.ollvy.com/guides/do-i-need-professional-tax-registration) - State-wise PT guide
 
 ### GST Notices
 - [GST DRC-01 Notice](https://www.ollvy.com/guides/gst-drc-01-notice) - Tax demand response guide
