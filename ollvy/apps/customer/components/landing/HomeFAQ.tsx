@@ -526,7 +526,8 @@ export function HomeFAQ({ prices }: { prices: FAQServicePrices }) {
 }
 
 // Full FAQ component for /faq page - exports all questions
-export function FullFAQ() {
+export function FullFAQ({ prices }: { prices: FAQServicePrices }) {
+  const FAQ_DATA = getFaqData(prices)
   return (
     <section id="faqs" className="bg-background py-28">
       <div className="container max-w-4xl">
