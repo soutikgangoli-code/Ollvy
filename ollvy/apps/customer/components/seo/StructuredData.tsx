@@ -12,16 +12,18 @@ export function StructuredData() {
     logo: 'https://www.ollvy.com/android-chrome-512x512.png',
     image: 'https://www.ollvy.com/android-chrome-512x512.png',
     description: 'Company registration, GST, trademark, and compliance services in India with vetted CAs. Fixed prices. Tracked delivery.',
-    foundingDate: '2024',
+    foundingDate: '2026',
     sameAs: [
       'https://twitter.com/ollvy',
       'https://linkedin.com/company/ollvy',
     ],
     address: {
       '@type': 'PostalAddress',
+      streetAddress: '737, Block A, Sushant Lok Phase 1, Sector 43',
+      addressLocality: 'Gurgaon',
+      addressRegion: 'Haryana',
+      postalCode: '122009',
       addressCountry: 'IN',
-      addressLocality: 'Mumbai',
-      addressRegion: 'Maharashtra',
     },
     contactPoint: [
       {
