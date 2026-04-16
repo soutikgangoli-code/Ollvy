@@ -99,7 +99,7 @@ export interface ServiceConfig {
 
   // Service metadata (shown in hero metadata row)
   mandatoryFor: string // "All Pvt Ltd companies"
-  serviceType: 'One-time' | 'Annual' | 'Monthly retainer'
+  serviceType: 'One-time' | 'Annual' | 'Monthly retainer' | 'Triennial'
   legalBasis?: string // "Companies Act 2013, Section 7"
   penaltyForMissing?: string // "₹100/day, max ₹1,00,000"
   penaltyColor: 'amber' | 'red' | 'none'
