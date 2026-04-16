@@ -29,10 +29,11 @@ export function LearnPage({ page, ctaService, secondaryService }: {
   secondaryService?: ServiceConfig;
 }) {
   return (
-    <div className="min-h-screen bg-background">
-      <LearnHero page={page} />
+    <div className="py-16 md:py-24">
+      <div className="container max-w-5xl">
+        <LearnHero page={page} />
 
-      <div className="max-w-[760px] mx-auto px-6 py-12">
+        <div className="max-w-3xl mx-auto">
 
         {/* Tool - always at top, before first section */}
         {page.tool && (
@@ -107,6 +108,7 @@ export function LearnPage({ page, ctaService, secondaryService }: {
           learnSlugs={page.relatedLearnSlugs}
           serviceSlugs={page.relatedServiceSlugs}
         />
+      </div>
       </div>
     </div>
   );

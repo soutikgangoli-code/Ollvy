@@ -1,34 +1,41 @@
 import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
+import { ArrowLeft, ChevronRight } from 'lucide-react';
 import { LearnPageConfig } from '@/lib/guides/pages';
 
 export function LearnHero({ page }: { page: LearnPageConfig }) {
+  // Determine category label for the mono header
+  const categoryLabel = page.severity ? `${page.category}` : 'Guide';
+
   return (
-    <section className="border-b border-border bg-background">
-      <div className="max-w-[760px] mx-auto px-6 pt-10 pb-8">
-
-        {/* All Guides Link */}
-        <Link
-          href="/guides"
-          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors mb-4"
-        >
-          <ChevronLeft className="h-3 w-3" />
-          All Guides
+    <header className="mb-12 text-center">
+      {/* Mobile: back arrow */}
+      <div className="md:hidden flex items-center justify-center mb-4">
+        <Link href="/guides" className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-3.5 w-3.5" />
+          <span className="text-foreground">All Guides</span>
         </Link>
-
-        {/* H1 */}
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground leading-tight">
-          {page.title}
-        </h1>
-
-        {/* Last reviewed */}
-        <p className="text-xs text-muted-foreground mt-4">
-          Last reviewed:{' '}
-          <span className="text-foreground">{page.lastReviewed}</span>
-          {' · '}
-          <span>Sourced from official government portals</span>
-        </p>
       </div>
-    </section>
+      {/* Desktop breadcrumb */}
+      <nav className="hidden md:flex items-center justify-center gap-2 text-xs text-muted-foreground mb-4" aria-label="Breadcrumb">
+        <Link href="/guides" className="hover:text-foreground transition-colors">
+          Guides
+        </Link>
+        <ChevronRight className="h-3 w-3" />
+        <span className="text-foreground">{page.category}</span>
+      </nav>
+
+      <p className="font-mono text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4">
+        {categoryLabel}
+      </p>
+
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground mb-6 tracking-tight">
+        {page.title}
+      </h1>
+
+      <p className="text-sm text-muted-foreground">
+        Last reviewed: <span className="text-foreground">{page.lastReviewed}</span>
+        {' · '}Sourced from official government portals
+      </p>
+    </header>
   );
 }
