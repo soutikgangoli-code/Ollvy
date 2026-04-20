@@ -40,16 +40,19 @@ function getFaqData(prices: FAQServicePrices) {
         <p className="mb-4">
           <strong>Our recommendation:</strong> Choose LLP if you are a services business (consulting, law, design, accounting), have 2-5 partners, and are not planning to raise external funding in the near term. Choose Private Limited if you are building a product, plan to raise funding, want to issue ESOPs, or are in a sector where Pvt Ltd is the industry standard.
         </p>
+        <p className="mb-4">
+          <strong>Summary:</strong> Choose LLP if you are a services business (consulting, law, design, accounting), have 2-5 partners, and are not planning to raise external funding. Choose Private Limited if you are building a product, plan to raise funding, want to issue ESOPs, or are in a sector where Pvt Ltd is the industry standard.
+        </p>
         <p>
-          Ollvy handles registration for both structures.{' '}
+          Ollvy handles registration for both structures -{' '}
           <Link href="/services/llp-incorporation" className="text-primary underline hover:no-underline">
             LLP Incorporation
           </Link>{' '}
-          is completed in 10-12 working days at {prices.llpTotal} all-in.{' '}
+          (10-12 working days) and{' '}
           <Link href="/services/pvt-ltd-incorporation" className="text-primary underline hover:no-underline">
             Private Limited Incorporation
           </Link>{' '}
-          is completed in 12-15 working days at {prices.pvtLtdTotal} all-in.
+          (12-15 working days).
         </p>
       </>
     ),
