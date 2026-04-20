@@ -385,7 +385,7 @@ function getFaqData(prices: FAQServicePrices) {
           </table>
         </div>
         <p>
-          <strong>Government fees:</strong> Rs 4,500 per class for individuals, startups, and small enterprises. Rs 9,000 per class for companies and LLPs. Ollvy's professional fee is Rs 6,999 and covers one class, the conflict search, TM-A filing, and examination response if needed.
+          <strong>Government fees:</strong> Rs 4,500 per class for individuals, startups, and small enterprises. Rs 9,000 per class for companies and LLPs. Ollvy's professional fee is {prices.trademark} and covers one class, the conflict search, TM-A filing, and examination response if needed.
         </p>
       </>
     ),

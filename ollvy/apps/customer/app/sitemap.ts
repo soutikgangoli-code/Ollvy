@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next'
 import { getAllServiceSlugs } from '@/lib/data/services'
 import { LEARN_PAGES, PENALTY_CALCULATOR_METADATA, DOCUMENT_CHECKLIST_METADATA } from '@/lib/guides/pages'
 import { GEO_ENABLED_SERVICES, CITIES } from '@/lib/geo'
+import { DEADLINES } from '@/lib/deadlines'
 
 /**
  * Sitemap for Ollvy - per SEO mandate
@@ -20,66 +21,60 @@ const BASE_URL = 'https://www.ollvy.com'
 // Document checklist and penalty calculator slugs imported from lib/guides/pages.ts
 // to prevent drift — any new tool added there automatically appears in the sitemap.
 
-// Deadline campaign pages
-const DEADLINE_SLUGS = [
-  // 2026 deadlines
-  'director-kyc-2026',
-  'itr-2026',
-  'gst-annual-2026',
-  // 2027 deadlines
-  'tds-return-q1-2027',
-  'itr-2027',
-  'gst-annual-2027',
-]
+// Deadline campaign page slugs derived from DEADLINES config
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch service slugs from database
   const serviceSlugs = await getAllServiceSlugs()
 
-  // Static last modified date for unchanging content (updated when content changes)
-  const staticDate = new Date('2026-04-03')
-
-  // Static routes
-  const staticRoutes: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: staticDate },
-    { url: `${BASE_URL}/about`, lastModified: staticDate },
-    { url: `${BASE_URL}/services`, lastModified: staticDate },
-    { url: `${BASE_URL}/tools`, lastModified: staticDate },
-    { url: `${BASE_URL}/guides`, lastModified: staticDate },
-    { url: `${BASE_URL}/tools/documents`, lastModified: staticDate },
-    { url: `${BASE_URL}/tools/penalty-calculator`, lastModified: staticDate },
-    { url: `${BASE_URL}/privacy`, lastModified: staticDate },
-    { url: `${BASE_URL}/terms`, lastModified: staticDate },
-    { url: `${BASE_URL}/cancellation`, lastModified: staticDate },
-    { url: `${BASE_URL}/refunds`, lastModified: staticDate },
-    { url: `${BASE_URL}/startup`, lastModified: staticDate },
-    { url: `${BASE_URL}/join`, lastModified: staticDate },
-  ]
-
-  // Service detail pages
-  const serviceRoutes: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
-    url: `${BASE_URL}/services/${slug}`,
-    lastModified: staticDate,
-  }))
-
-  // Document checklist pages
-  const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_METADATA.map((tool) => ({
-    url: `${BASE_URL}/tools/documents/${tool.slug}`,
-    lastModified: staticDate,
-  }))
-
-  // Penalty calculator pages
-  const penaltyRoutes: MetadataRoute.Sitemap = PENALTY_CALCULATOR_METADATA.map((tool) => ({
-    url: `${BASE_URL}/tools/penalty-calculator/${tool.slug}`,
-    lastModified: staticDate,
-  }))
+  // Differentiated lastmod dates so Google can prioritize recrawling.
+  // Each content type gets its own date to avoid the "all URLs have same lastmod" problem.
+  const buildDate = new Date()                     // DB-backed content: regenerated each build
+  const legalDate = new Date('2026-02-01')         // Legal pages rarely change
 
   // Helper to parse lastReviewed date strings like "March 2025"
   const parseReviewDate = (dateStr: string): Date => {
-    const [month, year] = dateStr.split(' ')
+    const parts = dateStr.split(' ')
+    if (parts.length !== 2) return buildDate
+    const [month, year] = parts
     const monthIndex = new Date(`${month} 1, 2000`).getMonth()
     return new Date(parseInt(year), monthIndex, 1)
   }
+
+  // Static routes
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: buildDate },
+    { url: `${BASE_URL}/about`, lastModified: legalDate },
+    { url: `${BASE_URL}/services`, lastModified: buildDate },
+    { url: `${BASE_URL}/tools`, lastModified: buildDate },
+    { url: `${BASE_URL}/guides`, lastModified: buildDate },
+    { url: `${BASE_URL}/tools/documents`, lastModified: buildDate },
+    { url: `${BASE_URL}/tools/penalty-calculator`, lastModified: buildDate },
+    { url: `${BASE_URL}/privacy`, lastModified: legalDate },
+    { url: `${BASE_URL}/terms`, lastModified: legalDate },
+    { url: `${BASE_URL}/cancellation`, lastModified: legalDate },
+    { url: `${BASE_URL}/refunds`, lastModified: legalDate },
+    { url: `${BASE_URL}/startup`, lastModified: legalDate },
+    { url: `${BASE_URL}/join`, lastModified: legalDate },
+  ]
+
+  // Service detail pages - DB-backed, use build date
+  const serviceRoutes: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
+    url: `${BASE_URL}/services/${slug}`,
+    lastModified: buildDate,
+  }))
+
+  // Document checklist pages - use each page's lastReviewed date
+  const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_METADATA.map((tool) => ({
+    url: `${BASE_URL}/tools/documents/${tool.slug}`,
+    lastModified: tool.lastReviewed ? parseReviewDate(tool.lastReviewed) : buildDate,
+  }))
+
+  // Penalty calculator pages - use each page's lastReviewed date
+  const penaltyRoutes: MetadataRoute.Sitemap = PENALTY_CALCULATOR_METADATA.map((tool) => ({
+    url: `${BASE_URL}/tools/penalty-calculator/${tool.slug}`,
+    lastModified: tool.lastReviewed ? parseReviewDate(tool.lastReviewed) : buildDate,
+  }))
 
   // Guide pages - use actual lastReviewed dates from config
   const learnRoutes: MetadataRoute.Sitemap = LEARN_PAGES.map((page) => ({
@@ -87,18 +82,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: parseReviewDate(page.lastReviewed),
   }))
 
-  // Geo pages - all service/city combinations
+  // Geo pages - all service/city combinations (DB-backed pricing, use build date)
   const geoRoutes: MetadataRoute.Sitemap = GEO_ENABLED_SERVICES.flatMap((service) =>
     CITIES.map((city) => ({
       url: `${BASE_URL}/${service}/${city.slug}`,
-      lastModified: staticDate,
+      lastModified: buildDate,
     }))
   )
 
-  // Deadline campaign pages
-  const deadlineRoutes: MetadataRoute.Sitemap = DEADLINE_SLUGS.map((slug) => ({
-    url: `${BASE_URL}/${slug}`,
-    lastModified: staticDate,
+  // Deadline campaign pages - use each page's lastReviewed date
+  const deadlineRoutes: MetadataRoute.Sitemap = DEADLINES.map((d) => ({
+    url: `${BASE_URL}/${d.slug}`,
+    lastModified: parseReviewDate(d.lastReviewed),
   }))
 
   return [

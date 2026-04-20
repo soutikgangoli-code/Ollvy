@@ -662,6 +662,43 @@ export async function getRelatedServicesBySlugs(slugs: string[]): Promise<Relate
 }
 
 /**
+ * Fetch aggregate rating across all services for Organization schema
+ * Returns weighted average rating and total review count from all active services
+ */
+export async function getAggregateRating(): Promise<{ ratingValue: number; reviewCount: number } | null> {
+  if (!supabaseServer) return null
+
+  try {
+    const { data, error } = await supabaseServer
+      .from('service_packages')
+      .select('avg_rating, rating_count')
+      .eq('is_active', true)
+      .gt('rating_count', 0)
+
+    if (error || !data || data.length === 0) return null
+
+    let totalWeightedRating = 0
+    let totalReviews = 0
+
+    for (const pkg of data) {
+      if (pkg.avg_rating && pkg.rating_count) {
+        totalWeightedRating += pkg.avg_rating * pkg.rating_count
+        totalReviews += pkg.rating_count
+      }
+    }
+
+    if (totalReviews < 10) return null
+
+    return {
+      ratingValue: Math.round((totalWeightedRating / totalReviews) * 10) / 10,
+      reviewCount: totalReviews,
+    }
+  } catch {
+    return null
+  }
+}
+
+/**
  * Fetch reviews for a service
  * Per §23 Connection Point 4: Reviews from feedback table via orders
  */

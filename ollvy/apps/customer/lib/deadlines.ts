@@ -30,6 +30,8 @@ export interface DeadlineConfig {
   risks: { title: string; body: string }[]
   testimonials: Testimonial[]
   faqs?: { q: string; a: string }[]
+  lastReviewed: string
+  sources: { name: string; url: string; description: string }[]
 }
 
 export const DEADLINES: DeadlineConfig[] = [
@@ -109,6 +111,12 @@ export const DEADLINES: DeadlineConfig[] = [
         a: 'Ollvy files business ITR within 10 working days of receiving all documents and the approved financial statements. A CA is assigned within 24 hours of booking. The timeline starts after document approval, not payment - so have your P&L, balance sheet, and bank statements ready.',
       },
     ],
+    lastReviewed: 'April 2026',
+    sources: [
+      { name: 'Income Tax Act - Section 139', url: 'https://incometaxindia.gov.in/pages/acts/income-tax-act.aspx', description: 'Due dates for filing income tax returns by entity type' },
+      { name: 'Section 234A/234F - Late Filing Penalties', url: 'https://incometaxindia.gov.in/pages/acts/income-tax-act.aspx', description: 'Interest and late fee provisions for belated ITR filing' },
+      { name: 'CBDT Circular on Audit Due Dates', url: 'https://www.incometaxindia.gov.in/communications/circular/circular-no-6-2024.pdf', description: 'Clarification on tax audit and ITR filing deadlines' },
+    ],
   },
   {
     slug: 'gst-annual-2026',
@@ -182,6 +190,12 @@ export const DEADLINES: DeadlineConfig[] = [
         a: 'Ollvy files GSTR-9 within 7 working days. The CA reconciles your GSTR-1, GSTR-3B, and GSTR-2A/2B data, identifies any ITC gaps or mismatches, prepares the return, and files after your approval. A GST expert is assigned the same day you book.',
       },
     ],
+    lastReviewed: 'April 2026',
+    sources: [
+      { name: 'CBIC Notification - GSTR-9 Due Date', url: 'https://www.cbic.gov.in/resources/htdocs-cbec/gst/notfctn-gstr9-due-date.pdf', description: 'Official notification on GSTR-9 annual return due date' },
+      { name: 'CGST Act - Section 44 (Annual Return)', url: 'https://cbic-gst.gov.in/sectional-view-cgst-act.html', description: 'Legal provision requiring annual return filing for registered taxpayers' },
+      { name: 'CBIC Late Fee Notification 19/2021', url: 'https://www.cbic.gov.in/resources/htdocs-cbec/gst/notfctn-19-central-tax-english-2021.pdf', description: 'Revised late fee rates for delayed GSTR-9 filing' },
+    ],
   },
   {
     slug: 'director-kyc-2026',
@@ -254,6 +268,11 @@ export const DEADLINES: DeadlineConfig[] = [
         q: 'How fast can Ollvy file Director KYC?',
         a: 'Ollvy files DIR-3 KYC Web within 2 working days of receiving your PAN and Aadhaar. The fee is Rs 999 per director. If you have multiple directors or multiple companies, Ollvy handles all filings under a single order with one point of contact.',
       },
+    ],
+    lastReviewed: 'April 2026',
+    sources: [
+      { name: 'MCA General Circular 21/2025 - Triennial KYC', url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/circulars.html', description: 'MCA circular changing Director KYC from annual to triennial filing' },
+      { name: 'Companies (Appointment and Qualification of Directors) Rules', url: 'https://www.mca.gov.in/content/mca/global/en/acts-rules/ebooks/rules.html', description: 'Rule 12A - DIR-3 KYC filing requirements and penalty provisions' },
     ],
   },
   // ============================================
@@ -335,6 +354,12 @@ export const DEADLINES: DeadlineConfig[] = [
         a: 'Ollvy files TDS returns within 5 working days. A CA is assigned the same day you book. If you have multiple forms (24Q + 26Q), they are filed together under a single order. The fee starts at Rs 2,999 per quarter.',
       },
     ],
+    lastReviewed: 'April 2026',
+    sources: [
+      { name: 'Income Tax Act - Section 200(3)', url: 'https://incometaxindia.gov.in/pages/acts/income-tax-act.aspx', description: 'Due dates for filing TDS statements (Form 24Q, 26Q, 27Q)' },
+      { name: 'Section 234E - Late Filing Fee', url: 'https://incometaxindia.gov.in/pages/acts/income-tax-act.aspx', description: 'Rs 200 per day late fee for delayed TDS return filing' },
+      { name: 'TRACES Portal', url: 'https://www.tdscpc.gov.in/', description: 'TDS Reconciliation Analysis and Correction Enabling System' },
+    ],
   },
   {
     slug: 'itr-2027',
@@ -412,6 +437,12 @@ export const DEADLINES: DeadlineConfig[] = [
         a: 'Ollvy charges Rs 4,999 for business ITR filing for FY 2026-27. This includes CA assignment within 24 hours, document review, computation of income, and filing of ITR-6 (for companies) or ITR-5 (for LLPs). The filing is completed within 10 working days of receiving approved financial statements.',
       },
     ],
+    lastReviewed: 'April 2026',
+    sources: [
+      { name: 'Income Tax Act - Section 139', url: 'https://incometaxindia.gov.in/pages/acts/income-tax-act.aspx', description: 'Due dates for filing income tax returns by entity type' },
+      { name: 'Section 234A/234F - Late Filing Penalties', url: 'https://incometaxindia.gov.in/pages/acts/income-tax-act.aspx', description: 'Interest and late fee provisions for belated ITR filing' },
+      { name: 'CBDT Circular on Audit Due Dates', url: 'https://www.incometaxindia.gov.in/communications/circular/circular-no-6-2024.pdf', description: 'Clarification on tax audit and ITR filing deadlines' },
+    ],
   },
   {
     slug: 'gst-annual-2027',
@@ -488,6 +519,12 @@ export const DEADLINES: DeadlineConfig[] = [
         q: 'How does Ollvy handle GSTR-9 filing?',
         a: 'Ollvy assigns a GST expert the same day you book. The CA reconciles your GSTR-1, GSTR-3B, and GSTR-2A/2B data for the full year, identifies ITC gaps and mismatches, prepares the GSTR-9 draft for your approval, and files after sign-off. The entire process takes 7 working days. Fee is Rs 4,999.',
       },
+    ],
+    lastReviewed: 'April 2026',
+    sources: [
+      { name: 'CBIC Notification - GSTR-9 Due Date', url: 'https://www.cbic.gov.in/resources/htdocs-cbec/gst/notfctn-gstr9-due-date.pdf', description: 'Official notification on GSTR-9 annual return due date' },
+      { name: 'CGST Act - Section 44 (Annual Return)', url: 'https://cbic-gst.gov.in/sectional-view-cgst-act.html', description: 'Legal provision requiring annual return filing for registered taxpayers' },
+      { name: 'CBIC Late Fee Notification 19/2021', url: 'https://www.cbic.gov.in/resources/htdocs-cbec/gst/notfctn-19-central-tax-english-2021.pdf', description: 'Revised late fee rates for delayed GSTR-9 filing' },
     ],
   },
 ]

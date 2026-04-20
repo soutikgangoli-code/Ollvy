@@ -1,6 +1,8 @@
 // lib/geo/geo-content.ts
 // City-specific content for geo pages
 
+import type { CityConfig } from '@/lib/geo'
+
 export interface GeoContent {
   citySpecificNotes: string[];           // 2-3 sentences specific to this city
   additionalFaqs: Array<{q: string, a: string}>;  // 2-3 city-specific FAQs
@@ -189,3 +191,123 @@ export const GEO_CONTENT: Record<string, GeoContent> = {
     ],
   },
 };
+
+// ---------------------------------------------------------------------------
+// Generated content for service×city combos without hand-written entries
+// ---------------------------------------------------------------------------
+
+function buildIncorporationContent(city: CityConfig, type: 'pvt-ltd' | 'llp'): GeoContent {
+  const entityName = type === 'pvt-ltd' ? 'Private Limited Company' : 'LLP'
+  const formName = type === 'pvt-ltd' ? 'SPICe+' : 'FiLLiP'
+  const ptNote = city.ptApplicable
+    ? `${city.state} has Professional Tax (PT). Once your ${entityName.toLowerCase()} is registered, you must register for PT within 30 days if directors draw remuneration or you have salaried employees. Ollvy handles PT registration separately.`
+    : `${city.state} does not levy Professional Tax. This is one fewer post-incorporation compliance step compared to states like Maharashtra or Karnataka.`
+
+  const notes: string[] = [ptNote]
+  if (city.shopEstActName) {
+    notes.push(`The ${city.shopEstActName} applies to commercial establishments in ${city.name}. Registration under this Act is required within 30 days of commencing business.`)
+  }
+  if (city.coworkingNote) {
+    notes.push(city.coworkingNote)
+  }
+
+  return {
+    jurisdictionNote: `${entityName} incorporation in ${city.name} is filed with ${city.mcaRoc}. All ${formName} applications go through the MCA21 portal. Name availability is checked against the national MCA database - not just ${city.state} entities - so conflicting names anywhere in India can block your reservation.`,
+    citySpecificNotes: notes,
+    additionalFaqs: [
+      {
+        q: `Can I use a co-working space address in ${city.name} for ${entityName.toLowerCase()} incorporation?`,
+        a: `Yes. Co-working space addresses are accepted as registered office addresses in ${city.name}. You need an NOC from the space operator on their letterhead and a utility bill for the premises in the operator's name. Ollvy CS reviews the documents before filing to avoid address rejection - the #1 cause of incorporation delays.`,
+      },
+      {
+        q: `What is the typical timeline for ${entityName.toLowerCase()} incorporation in ${city.name}?`,
+        a: `Standard timeline is 10-15 working days. This includes DSC issuance (1-2 days), name approval (1-2 days), ${formName} filing and approval (5-7 days), and PAN/TAN issuance (2-3 days). If all documents are in order and there are no name objections, the process is usually completed within 12 days.`,
+      },
+    ],
+  }
+}
+
+function buildGstContent(city: CityConfig): GeoContent {
+  const ptNote = city.ptApplicable
+    ? `${city.state} has Professional Tax. Once you register for GST and start employing people, PT registration is mandatory under ${city.state} state rules.`
+    : `${city.state} does not levy Professional Tax, so there is no separate PT registration required after GST registration.`
+
+  const notes: string[] = [ptNote]
+  if (city.coworkingNote) {
+    notes.push(city.coworkingNote)
+  }
+
+  return {
+    jurisdictionNote: `${city.name} falls under ${city.gstJurisdiction} All GST applications are filed electronically through the GSTN portal. Your commissionerate assignment is based on your business address pin code and only matters if you receive an officer query - Ollvy CA handles any interactions directly.`,
+    citySpecificNotes: notes,
+    additionalFaqs: [
+      {
+        q: `Can I use a co-working space address in ${city.name} for GST registration?`,
+        a: `Yes. Co-working space addresses are accepted for GST registration in ${city.name}. You need an NOC from the space operator on their letterhead (with your name, company, and designated workspace) and a utility bill for the premises in the operator's name. Ollvy CA verifies both before filing.`,
+      },
+      {
+        q: `What documents are needed for GST registration in ${city.name}?`,
+        a: `For GST registration in ${city.name}: PAN and Aadhaar of the applicant, address proof (rental agreement or co-working NOC plus utility bill), bank account statement or cancelled cheque, and business incorporation documents if you're a company or LLP. Ollvy CA reviews all documents before filing to prevent rejection.`,
+      },
+    ],
+  }
+}
+
+function buildTrademarkContent(city: CityConfig): GeoContent {
+  return {
+    jurisdictionNote: `Trademark applications for ${city.name}-based businesses are filed online through the IP India portal (ipindia.gov.in). The filing is federal - the same Trade Marks Registry processes applications regardless of where your business is located. Examination and hearings are handled by the registry office assigned based on your application, not your city.`,
+    citySpecificNotes: [
+      `Trademark registration is the same process across India. Your ${city.state} business address appears on the application but does not affect which registry processes it or the timeline.`,
+      `Ollvy searches both the company registry (MCA) and trademark database (IP India) before filing to identify conflicts early. A conflicting name in either database can block your trademark.`,
+    ],
+    additionalFaqs: [
+      {
+        q: `How long does trademark registration take for a ${city.name} business?`,
+        a: `6-12 months. Initial examination report comes in 1-2 months. If no objections, the trademark is published in the journal for 4 months. After the publication period, the registration certificate is issued. Objections or oppositions add 2-4 months. The timeline is the same regardless of city.`,
+      },
+    ],
+  }
+}
+
+function buildItrContent(city: CityConfig): GeoContent {
+  const ptNote = city.ptApplicable
+    ? `${city.state} has Professional Tax, which is deductible as a business expense in your ITR. Ensure PT payments are accounted for when filing.`
+    : `${city.state} does not levy Professional Tax, so this deduction is not applicable to your filing.`
+
+  return {
+    jurisdictionNote: `Income tax returns for ${city.name} businesses are processed by CPC Bangalore regardless of business location. The filing is federal through the Income Tax e-filing portal. Your jurisdictional Assessing Officer (AO) is assigned based on your PAN and business address in ${city.state}, but filing and processing is entirely online.`,
+    citySpecificNotes: [
+      ptNote,
+      `${city.state} businesses must also ensure GST reconciliation (GSTR-9 vs books) and TDS compliance are up to date before filing ITR. Mismatches between GST returns and ITR are a common trigger for notices.`,
+    ],
+    additionalFaqs: [
+      {
+        q: `What is the ITR filing deadline for businesses in ${city.name}?`,
+        a: `October 31 for businesses requiring audit (turnover above Rs 1 crore, or Rs 10 crore with 95% digital transactions). July 31 for non-audit cases. Missing the deadline means you cannot carry forward business losses and face interest under Section 234A (1% per month on tax due).`,
+      },
+    ],
+  }
+}
+
+/**
+ * Get geo content for a service×city combination.
+ * Returns hand-written content where available, otherwise generates
+ * content from the city's jurisdiction data.
+ */
+export function getGeoContent(serviceSlug: string, city: CityConfig): GeoContent {
+  // Check for hand-written content first
+  const key = `${serviceSlug}__${city.slug}`
+  if (GEO_CONTENT[key]) {
+    return GEO_CONTENT[key]
+  }
+
+  // Generate from city config based on service type
+  if (serviceSlug === 'pvt-ltd-incorporation') return buildIncorporationContent(city, 'pvt-ltd')
+  if (serviceSlug === 'llp-incorporation') return buildIncorporationContent(city, 'llp')
+  if (serviceSlug === 'gst-registration') return buildGstContent(city)
+  if (serviceSlug === 'trademark-registration') return buildTrademarkContent(city)
+  if (serviceSlug === 'business-itr') return buildItrContent(city)
+
+  // Fallback (shouldn't reach here for the 5 geo-enabled services)
+  return buildIncorporationContent(city, 'pvt-ltd')
+}

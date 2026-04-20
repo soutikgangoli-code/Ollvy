@@ -55,31 +55,32 @@ export interface ToolMetadata {
   slug: string;
   title: string;
   subtitle: string;
+  lastReviewed?: string;
 }
 
 export const PENALTY_CALCULATOR_METADATA: ToolMetadata[] = [
-  { slug: 'gst-late-filing', title: 'GST Late Filing Penalty Calculator', subtitle: 'Calculate GSTR-1, GSTR-3B, GSTR-9 penalties' },
-  { slug: 'gst-demand-notice', title: 'GST Demand Notice Calculator', subtitle: 'Estimate penalty and interest on notices' },
-  { slug: 'itr-late-filing', title: 'ITR Late Filing Penalty Calculator', subtitle: 'Calculate Section 234F late fees' },
-  { slug: 'tds-late-filing', title: 'TDS Late Filing Penalty Calculator', subtitle: 'Calculate TDS return penalties' },
-  { slug: 'mca-annual-filing', title: 'MCA Annual Filing Penalty Calculator', subtitle: 'AOC-4, MGT-7 late fee calculator' },
-  { slug: 'director-kyc', title: 'Director KYC Penalty Calculator', subtitle: 'DIR-3 KYC default penalty' },
-  { slug: 'pf-esic-penalty', title: 'PF & ESIC Penalty Calculator', subtitle: 'Late payment and filing penalties' },
-  { slug: 'professional-tax-penalty', title: 'Professional Tax Penalty Calculator', subtitle: 'PT late payment penalties' },
-  { slug: 'shops-establishment-penalty', title: 'Shops & Establishment Penalty', subtitle: 'State-wise compliance penalties' },
-  { slug: 'startup-dpiit-compliance', title: 'DPIIT Startup Compliance', subtitle: 'Startup India compliance status' },
+  { slug: 'gst-late-filing', title: 'GST Late Filing Penalty Calculator', subtitle: 'Calculate GSTR-1, GSTR-3B, GSTR-9 penalties', lastReviewed: 'April 2026' },
+  { slug: 'gst-demand-notice', title: 'GST Demand Notice Calculator', subtitle: 'Estimate penalty and interest on notices', lastReviewed: 'April 2026' },
+  { slug: 'itr-late-filing', title: 'ITR Late Filing Penalty Calculator', subtitle: 'Calculate Section 234F late fees', lastReviewed: 'April 2026' },
+  { slug: 'tds-late-filing', title: 'TDS Late Filing Penalty Calculator', subtitle: 'Calculate TDS return penalties', lastReviewed: 'April 2026' },
+  { slug: 'mca-annual-filing', title: 'MCA Annual Filing Penalty Calculator', subtitle: 'AOC-4, MGT-7 late fee calculator', lastReviewed: 'April 2026' },
+  { slug: 'director-kyc', title: 'Director KYC Penalty Calculator', subtitle: 'DIR-3 KYC default penalty', lastReviewed: 'April 2026' },
+  { slug: 'pf-esic-penalty', title: 'PF & ESIC Penalty Calculator', subtitle: 'Late payment and filing penalties', lastReviewed: 'April 2026' },
+  { slug: 'professional-tax-penalty', title: 'Professional Tax Penalty Calculator', subtitle: 'PT late payment penalties', lastReviewed: 'April 2026' },
+  { slug: 'shops-establishment-penalty', title: 'Shops & Establishment Penalty', subtitle: 'State-wise compliance penalties', lastReviewed: 'April 2026' },
+  { slug: 'startup-dpiit-compliance', title: 'DPIIT Startup Compliance', subtitle: 'Startup India compliance status', lastReviewed: 'April 2026' },
 ];
 
 export const DOCUMENT_CHECKLIST_METADATA: ToolMetadata[] = [
-  { slug: 'gst-registration', title: 'GST Registration Documents', subtitle: 'Documents required for GSTIN' },
-  { slug: 'business-itr', title: 'Business ITR Documents', subtitle: 'Documents for company/LLP tax filing' },
-  { slug: 'individual-itr', title: 'Individual ITR Documents', subtitle: 'Documents for personal tax filing' },
-  { slug: 'private-limited-company', title: 'Private Limited Company Documents', subtitle: 'Incorporation document checklist' },
-  { slug: 'llp', title: 'LLP Documents', subtitle: 'LLP registration checklist' },
-  { slug: 'partnership', title: 'Partnership Firm Documents', subtitle: 'Partnership deed requirements' },
-  { slug: 'sole-proprietor', title: 'Sole Proprietor Documents', subtitle: 'Proprietorship registration docs' },
-  { slug: 'trademark', title: 'Trademark Documents', subtitle: 'TM application requirements' },
-  { slug: 'business-pan', title: 'Business PAN Documents', subtitle: 'Company PAN registration docs' },
+  { slug: 'gst-registration', title: 'GST Registration Documents', subtitle: 'Documents required for GSTIN', lastReviewed: 'April 2026' },
+  { slug: 'business-itr', title: 'Business ITR Documents', subtitle: 'Documents for company/LLP tax filing', lastReviewed: 'April 2026' },
+  { slug: 'individual-itr', title: 'Individual ITR Documents', subtitle: 'Documents for personal tax filing', lastReviewed: 'April 2026' },
+  { slug: 'private-limited-company', title: 'Private Limited Company Documents', subtitle: 'Incorporation document checklist', lastReviewed: 'April 2026' },
+  { slug: 'llp', title: 'LLP Documents', subtitle: 'LLP registration checklist', lastReviewed: 'April 2026' },
+  { slug: 'partnership', title: 'Partnership Firm Documents', subtitle: 'Partnership deed requirements', lastReviewed: 'April 2026' },
+  { slug: 'sole-proprietor', title: 'Sole Proprietor Documents', subtitle: 'Proprietorship registration docs', lastReviewed: 'April 2026' },
+  { slug: 'trademark', title: 'Trademark Documents', subtitle: 'TM application requirements', lastReviewed: 'April 2026' },
+  { slug: 'business-pan', title: 'Business PAN Documents', subtitle: 'Company PAN registration docs', lastReviewed: 'March 2026' },
 ];
 
 export const DEADLINE_METADATA: ToolMetadata[] = [

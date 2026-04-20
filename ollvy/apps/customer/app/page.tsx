@@ -9,10 +9,11 @@ import { FinalCTA } from '@/components/landing/FinalCTA'
 import { Footer } from '@/components/landing/Footer'
 import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
 import { unstable_cache } from 'next/cache'
-import { getPopularServices, getFAQServicePrices, FAQServicePrices } from '@/lib/data/services'
+import { getPopularServices, getFAQServicePrices, getAggregateRating, FAQServicePrices } from '@/lib/data/services'
 
 const getCachedPopularServices = unstable_cache(getPopularServices, ['popular-services'], { revalidate: 3600 })
 const getCachedFAQServicePrices = unstable_cache(getFAQServicePrices, ['faq-service-prices'], { revalidate: 3600 })
+const getCachedAggregateRating = unstable_cache(getAggregateRating, ['aggregate-rating'], { revalidate: 3600 })
 import dynamic from 'next/dynamic'
 
 const ProductShowcase = dynamic(() => import('@/components/landing/ProductShowcase').then(m => ({ default: m.ProductShowcase })))
@@ -120,14 +121,30 @@ function generateFAQSchema(prices: FAQServicePrices) {
 }
 
 export default async function LandingPage() {
-  // Fetch popular services and FAQ prices from database in parallel
-  const [popularServices, faqPrices] = await Promise.all([
+  // Fetch popular services, FAQ prices, and aggregate rating from database in parallel
+  const [popularServices, faqPrices, aggregateRating] = await Promise.all([
     getCachedPopularServices(),
     getCachedFAQServicePrices(),
+    getCachedAggregateRating(),
   ])
 
   // Generate FAQ schema with live prices
   const faqJsonLd = generateFAQSchema(faqPrices)
+
+  // AggregateRating for Ollvy as a whole (real data from DB, not hardcoded)
+  const aggregateRatingJsonLd = aggregateRating ? {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Ollvy',
+    url: 'https://www.ollvy.com',
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: aggregateRating.ratingValue.toString(),
+      reviewCount: aggregateRating.reviewCount.toString(),
+      bestRating: '5',
+      worstRating: '1',
+    },
+  } : null
 
   // ItemList schema for popular services (shows as carousel in Google)
   // Note: Organization, WebSite, and SiteNavigation schemas are in StructuredData (root layout)
@@ -166,6 +183,7 @@ export default async function LandingPage() {
           '@graph': [
             faqJsonLd,
             ...(servicesItemListJsonLd ? [servicesItemListJsonLd] : []),
+            ...(aggregateRatingJsonLd ? [aggregateRatingJsonLd] : []),
           ].map(({ '@context': _, ...rest }) => rest),
         }) }}
       />

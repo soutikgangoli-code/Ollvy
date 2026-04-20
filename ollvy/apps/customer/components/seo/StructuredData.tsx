@@ -57,13 +57,6 @@ export function StructuredData() {
       'Tax Filing',
       'MCA Annual Filing',
     ],
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '30',
-      bestRating: '5',
-      worstRating: '1',
-    },
   }
 
   const websiteSchema = {

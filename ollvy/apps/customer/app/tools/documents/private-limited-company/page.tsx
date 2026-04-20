@@ -103,7 +103,7 @@ export default function PrivateLimitedDocumentsPage() {
 
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
-          h1="How to Register a Private Limited Company"
+          h1="Documents Required for Private Limited Company Registration"
           label="Private Limited Company"
           href="/tools/documents/private-limited-company"
         />

@@ -2,33 +2,24 @@
 
 import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { useRouter, usePathname } from 'next/navigation'
 import { Menu, ChevronDown, Calculator, FileText, Search, ArrowRight, User, LogOut, ShoppingBag, Repeat, X } from 'lucide-react'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetFooter,
-} from '@/components/ui/sheet'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import type { NavbarServiceData } from '@/lib/data/services'
+
+// Heavy overlay components - lazy loaded, not needed for initial paint (LCP fix)
+const NavbarMobileMenu = dynamic(() => import('./NavbarMobileMenu'), { ssr: false })
+const NavbarSearchDialog = dynamic(() => import('./NavbarSearchDialog'), { ssr: false })
 
 interface NavbarProps {
   services?: NavbarServiceData[]
@@ -120,7 +111,7 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
     window.location.href = '/'
   }
 
-  // Filter services based on search query
+  // Filter services for mobile inline search
   const filteredServices = useMemo(() => {
     if (!searchQuery.trim()) return services
     const query = searchQuery.toLowerCase()
@@ -131,11 +122,16 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
     )
   }, [searchQuery, services])
 
+  // Track if heavy overlays have been requested (lazy load on first interaction)
+  const [menuLoaded, setMenuLoaded] = useState(false)
+  const [searchLoaded, setSearchLoaded] = useState(false)
+
   // Handle keyboard shortcut (Cmd/Ctrl + K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
+        setSearchLoaded(true)
         setSearchOpen(true)
       }
     }
@@ -249,7 +245,7 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
           <ThemeToggle />
           <button
             type="button"
-            onClick={() => setSearchOpen(true)}
+            onClick={() => { setSearchLoaded(true); setSearchOpen(true) }}
             className="flex items-center gap-2 h-9 pl-3 pr-2 rounded-lg border border-border/60 bg-card hover:border-border hover:bg-muted/30 transition-all text-sm text-muted-foreground"
           >
             <Search className="h-4 w-4" />
@@ -362,7 +358,7 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
           {!minimal && (
             <button
               type="button"
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => { setMenuLoaded(true); setMobileMenuOpen(true) }}
               className="p-2 rounded-md text-foreground hover:bg-muted active:bg-muted/80 transition-colors focus:outline-none shrink-0"
             >
               <Menu className="h-5 w-5" />
@@ -371,193 +367,30 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
           )}
         </div>
 
-        {/* Mobile Sheet */}
-        {!minimal && <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetContent side="right" className="w-full max-w-[320px] p-0 flex flex-col">
-            <SheetHeader className="p-6 pb-4">
-              <SheetTitle className="text-left font-mono text-xl font-bold tracking-tight">
-                Ollvy
-              </SheetTitle>
-            </SheetHeader>
+        {/* Mobile Sheet - lazy loaded on first interaction */}
+        {!minimal && menuLoaded && (
+          <NavbarMobileMenu
+            open={mobileMenuOpen}
+            onOpenChange={setMobileMenuOpen}
+            user={user}
+            onLogout={handleLogout}
+            onSignIn={() => openAuthModal()}
+            navLinks={navLinks}
+            scrollToSection={scrollToSection}
+          />
+        )}
 
-            <nav className="flex-1 px-4">
-              {/* Main Nav */}
-              <div className="space-y-1">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => {
-                      setMobileMenuOpen(false)
-                      if (link.href.startsWith('/#')) {
-                        setTimeout(() => scrollToSection(link.href), 100)
-                      }
-                    }}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg font-mono text-sm uppercase tracking-wide text-foreground hover:bg-muted transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-
-              {/* Tools Section */}
-              <div className="mt-6">
-                <p className="px-4 text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-2">Tools</p>
-                <div className="space-y-1">
-                  <Link
-                    href="/tools/documents/private-limited-company"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
-                  >
-                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
-                      <FileText className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-mono text-sm text-foreground">Document Checklist</p>
-                      <p className="font-mono text-[10px] text-muted-foreground">What you need to register</p>
-                    </div>
-                  </Link>
-                  <Link
-                    href="/tools/penalty-calculator/gst-late-filing"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
-                  >
-                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
-                      <Calculator className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <div>
-                      <p className="font-mono text-sm text-foreground">Penalty Calculator</p>
-                      <p className="font-mono text-[10px] text-muted-foreground">Calculate compliance penalties</p>
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </nav>
-
-            <SheetFooter className="p-4 border-t border-border mt-auto flex flex-col gap-3">
-              {user ? (
-                <div className="space-y-1 pt-2">
-                  <Link
-                    href="/profile"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
-                  >
-                    {user.avatar_url ? (
-                      <img
-                        src={user.avatar_url}
-                        alt={user.business_name || user.email || 'User avatar'}
-                        className="w-8 h-8 rounded-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
-                        <User className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                    )}
-                    <div>
-                      <p className="font-mono text-sm text-foreground">Profile</p>
-                      <p className="font-mono text-[10px] text-muted-foreground truncate max-w-[180px]">
-                        {user.business_name || user.phone || user.email}
-                      </p>
-                    </div>
-                  </Link>
-                  <Link
-                    href="/orders"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors group"
-                  >
-                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
-                      <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <p className="font-mono text-sm text-foreground">My Orders</p>
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMobileMenuOpen(false)
-                      handleLogout()
-                    }}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-muted transition-colors text-left"
-                  >
-                    <div className="w-8 h-8 rounded-md bg-muted flex items-center justify-center">
-                      <LogOut className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <p className="font-mono text-sm text-muted-foreground">Sign out</p>
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false)
-                    openAuthModal()
-                  }}
-                  className="text-center font-mono text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
-                >
-                  Already have an account? <span className="text-foreground font-medium">Sign in</span>
-                </button>
-              )}
-            </SheetFooter>
-          </SheetContent>
-        </Sheet>}
-
-        {/* Search Dialog */}
-        <Dialog open={searchOpen} onOpenChange={setSearchOpen}>
-          <DialogContent className="max-w-lg p-0 gap-0 overflow-hidden">
-            <DialogHeader className="px-4 py-3 border-b">
-              <DialogTitle className="sr-only">Search Services</DialogTitle>
-              <div className="relative">
-                <Search className="absolute left-0 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search GST, incorporation, ITR..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-7 border-0 shadow-none focus-visible:ring-0 text-base"
-                  autoFocus
-                />
-              </div>
-            </DialogHeader>
-            <div className="max-h-[60vh] overflow-y-auto">
-              {filteredServices.length === 0 ? (
-                <div className="px-4 py-8 text-center text-muted-foreground">
-                  {searchQuery ? `No services found for "${searchQuery}"` : 'No active services found'}
-                </div>
-              ) : (
-                <div className="py-2">
-                  <div className="px-4 py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {searchQuery ? `${filteredServices.length} results` : `${filteredServices.length} Services`}
-                  </div>
-                  {filteredServices.map((service) => (
-                    <button
-                      key={service.slug}
-                      onClick={() => handleServiceClick(service.slug)}
-                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted/50 transition-colors text-left group"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-foreground truncate">
-                          {service.name}
-                        </div>
-                        <div className="text-sm text-muted-foreground truncate">
-                          {service.short_description}
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2 ml-3">
-                        <span className="text-xs text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
-                          {service.order_type === 'recurring' ? 'Monthly' : 'One-time'}
-                        </span>
-                        <ArrowRight className="h-4 w-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="px-4 py-2 border-t bg-muted/30 flex items-center justify-between text-xs text-muted-foreground">
-              <span>Press Enter to select</span>
-              <span>ESC to close</span>
-            </div>
-          </DialogContent>
-        </Dialog>
+        {/* Search Dialog - lazy loaded on first interaction */}
+        {searchLoaded && (
+          <NavbarSearchDialog
+            open={searchOpen}
+            onOpenChange={setSearchOpen}
+            services={services}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            onServiceClick={handleServiceClick}
+          />
+        )}
 
       </div>
     </header>

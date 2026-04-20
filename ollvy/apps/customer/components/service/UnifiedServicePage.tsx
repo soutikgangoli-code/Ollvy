@@ -45,6 +45,11 @@ import {
 interface GeoContext {
   city: string
   state: string
+  compliance?: {
+    jurisdictionNote: string
+    notes: string[]
+    faqs: Array<{ q: string; a: string }>
+  }
 }
 
 // Mapping from service slug to document checklist page path
@@ -1206,6 +1211,33 @@ export function UnifiedServicePage({
                   />
                 </section>
 
+                {/* Section: City Compliance (geo pages only) */}
+                {geoContext?.compliance && (
+                  <section className="py-16 border-b border-border">
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                      LOCAL COMPLIANCE
+                    </p>
+                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-8">
+                      {service.name} in {geoContext.city} - what to know
+                    </h2>
+                    <div className="max-w-[720px] space-y-6">
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {geoContext.compliance.jurisdictionNote}
+                      </p>
+                      {geoContext.compliance.notes.length > 0 && (
+                        <ul className="space-y-3">
+                          {geoContext.compliance.notes.map((note, i) => (
+                            <li key={i} className="flex gap-3 text-sm text-muted-foreground leading-relaxed">
+                              <span className="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-muted-foreground/40" />
+                              <span>{note}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </section>
+                )}
+
                 {/* Section: FAQs */}
                 <section
                   id="faqs"
@@ -1239,6 +1271,22 @@ export function UnifiedServicePage({
                           ) : (
                             faq.a
                           )}
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+
+                    {/* City-specific FAQs (geo pages only) */}
+                    {geoContext?.compliance?.faqs.map((faq, i) => (
+                      <AccordionItem
+                        key={`city-faq-${i}`}
+                        value={`city-faq-${i}`}
+                        className="border-b border-border last:border-0"
+                      >
+                        <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+                          {faq.q}
+                        </AccordionTrigger>
+                        <AccordionContent forceMount className="text-sm text-muted-foreground leading-relaxed pb-5">
+                          {faq.a}
                         </AccordionContent>
                       </AccordionItem>
                     ))}

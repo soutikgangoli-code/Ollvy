@@ -39,7 +39,6 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Company Registration & GST Services in India | Ollvy',
   description: 'Register your company, get GST, trademark, FSSAI, and handle compliance - with vetted CAs on Ollvy. Fixed prices. Tracked delivery. India\'s most organised compliance platform.',
-  keywords: 'company registration india, llp registration, gst registration, trademark registration india, ca services india, compliance services india, business registration india',
   robots: 'index, follow',
   metadataBase: new URL('https://www.ollvy.com'),
   icons: {
@@ -88,10 +87,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Preconnect to origins used on first load (max 4) */}
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
+        {/* Preconnect to origins that affect page rendering (max 4) */}
+        {/* Analytics preconnects removed - they don't affect LCP and waste connection bandwidth */}
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>

@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { unstable_cache } from 'next/cache'
-import { getCityBySlug, CITIES, GEO_ENABLED_SERVICES } from '@/lib/geo'
+import { getCityBySlug, formatCityState, CITIES, GEO_ENABLED_SERVICES } from '@/lib/geo'
+import { getGeoContent } from '@/lib/geo/geo-content'
 import { getServiceBySlugFromDB, getStatePricing, getServiceReviews, getRelatedServicesBySlugs, getAllServiceSlugs } from '@/lib/data/services'
 import { UnifiedServicePage } from '@/components/service/UnifiedServicePage'
 
@@ -59,8 +60,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
+  const cityState = formatCityState(city)
   const title = `${service.name} in ${city.name} | Ollvy`
-  const description = `Get ${service.name.toLowerCase()} in ${city.name}, ${city.state}. ${service.slaDays} working days. Verified CAs. Starting at ₹${service.ollvyFee.toLocaleString('en-IN')}.`
+  const description = `Get ${service.name.toLowerCase()} in ${cityState}. ${service.slaDays} working days. Verified CAs. Starting at ₹${service.ollvyFee.toLocaleString('en-IN')}.`
 
   return {
     title,
@@ -101,6 +103,8 @@ export default async function GeoPage({ params }: PageProps) {
   if (!service) {
     notFound()
   }
+
+  const cityState = formatCityState(city)
 
   // Fetch state-specific pricing override (cached)
   let adjustedService = { ...service }
@@ -144,14 +148,14 @@ export default async function GeoPage({ params }: PageProps) {
     '@type': 'LocalBusiness',
     '@id': `https://www.ollvy.com/${serviceSlug}/${citySlug}#localbusiness`,
     name: `Ollvy - ${service.name} in ${city.name}`,
-    description: `Professional ${service.name.toLowerCase()} services in ${city.name}, ${city.state}. Verified CAs. Fixed prices. ${service.slaDays} working days delivery.`,
+    description: `Professional ${service.name.toLowerCase()} services in ${cityState}. Verified CAs. Fixed prices. ${service.slaDays} working days delivery.`,
     url: `https://www.ollvy.com/${serviceSlug}/${citySlug}`,
     telephone: '+91-9217065577',
     priceRange: `₹${adjustedService.ollvyFee.toLocaleString('en-IN')}`,
     address: {
       '@type': 'PostalAddress',
       addressLocality: city.name,
-      addressRegion: city.state,
+      addressRegion: city.name === city.state ? `${city.state} (UT)` : city.state,
       addressCountry: 'IN',
     },
     areaServed: {
@@ -189,10 +193,12 @@ export default async function GeoPage({ params }: PageProps) {
     areaServed: {
       '@type': 'City',
       name: city.name,
-      containedInPlace: {
-        '@type': 'State',
-        name: city.state,
-      },
+      ...(city.name !== city.state && {
+        containedInPlace: {
+          '@type': 'State',
+          name: city.state,
+        },
+      }),
     },
     offers: {
       '@type': 'Offer',
@@ -201,6 +207,21 @@ export default async function GeoPage({ params }: PageProps) {
       availability: 'https://schema.org/InStock',
     },
     description: service.tagline,
+  }
+
+  // City-specific FAQ schema for rich results
+  const geoContent = getGeoContent(serviceSlug, city)
+  const cityFaqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: geoContent.additionalFaqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.a,
+      },
+    })),
   }
 
   return (
@@ -226,12 +247,27 @@ export default async function GeoPage({ params }: PageProps) {
           __html: JSON.stringify(serviceSchema),
         }}
       />
+      {/* City-specific FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(cityFaqSchema),
+        }}
+      />
       <UnifiedServicePage
         service={adjustedService}
         pricing={basePricing}
         reviews={reviews}
         relatedServices={relatedServices}
-        geoContext={{ city: city.name, state: city.state }}
+        geoContext={{
+          city: city.name,
+          state: city.state,
+          compliance: {
+            jurisdictionNote: geoContent.jurisdictionNote,
+            notes: geoContent.citySpecificNotes,
+            faqs: geoContent.additionalFaqs,
+          },
+        }}
       />
     </>
   )

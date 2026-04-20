@@ -13,6 +13,7 @@ import {
 import { NavbarServer } from '@/components/landing/NavbarServer'
 import { Footer } from '@/components/landing/Footer'
 import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
+import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
 import { DeadlineCountdown, GuaranteedBadge } from './DeadlineCountdown'
 
 interface DeadlinePageProps {
@@ -246,6 +247,12 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                   variant="footer"
                 />
               </section>
+
+              {/* How we reviewed this page */}
+              <ToolLastReviewed
+                lastReviewed={deadline.lastReviewed}
+                sources={deadline.sources}
+              />
 
             </div>
           </div>
