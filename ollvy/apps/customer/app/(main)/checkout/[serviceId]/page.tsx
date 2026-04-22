@@ -891,6 +891,7 @@ export default function CheckoutPage() {
                 service.completion_range_text
               )?.guaranteedDate || ''
             }
+            mrpPaisa={service.price_mrp_paisa}
           />
         </div>
       )}
@@ -1478,6 +1479,7 @@ interface MobileBottomBarComponentProps {
   canSubmit: boolean
   onSubmit: () => void
   guaranteedDate: string
+  mrpPaisa?: number
 }
 
 function MobileBottomBarComponent({
@@ -1490,6 +1492,7 @@ function MobileBottomBarComponent({
   canSubmit,
   onSubmit,
   guaranteedDate,
+  mrpPaisa,
 }: MobileBottomBarComponentProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
@@ -1515,11 +1518,16 @@ function MobileBottomBarComponent({
               Guaranteed by {guaranteedDate}
             </span>
             {/* Total with chevron - UP when collapsed (tap to expand), DOWN when expanded */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-baseline gap-1.5">
               <span className="font-mono text-lg font-bold text-foreground">{formatPrice(total)}</span>
+              {mrpPaisa && mrpPaisa > 0 && mrpPaisa > total && (
+                <span className="font-mono text-sm text-muted-foreground line-through">
+                  {formatPrice(mrpPaisa)}
+                </span>
+              )}
               <ChevronUp
                 className={cn(
-                  'h-4 w-4 text-muted-foreground transition-transform duration-200',
+                  'h-4 w-4 text-muted-foreground transition-transform duration-200 self-center',
                   isExpanded ? 'rotate-180' : 'rotate-0'
                 )}
               />

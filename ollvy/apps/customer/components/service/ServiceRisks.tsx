@@ -46,7 +46,7 @@ export function ServiceRisks({
                     ? risk.body.split('\n').filter(Boolean)
                     : risk.body.split(/(?<=\.)\s+/).filter(Boolean)
                   return (
-                    <ul className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed list-disc list-inside space-y-0.5">
+                    <ul className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed list-disc pl-5 space-y-0.5">
                       {lines.map((line, j) => (
                         <li key={j}>{line}</li>
                       ))}

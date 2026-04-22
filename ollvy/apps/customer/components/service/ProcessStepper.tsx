@@ -148,7 +148,7 @@ export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesBySta
 
             {/* Body */}
             {s.body.includes('\n') ? (
-              <ul className="text-sm text-muted-foreground leading-relaxed flex-1 list-disc list-inside space-y-1">
+              <ul className="text-sm text-muted-foreground leading-relaxed flex-1 list-disc pl-5 space-y-1">
                 {s.body.split('\n').filter(Boolean).map((line, li) => (
                   <li key={li}>{line}</li>
                 ))}

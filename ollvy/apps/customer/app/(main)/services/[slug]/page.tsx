@@ -110,7 +110,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             <caption>DIY vs Ollvy comparison for {service.name}</caption>
             <thead>
               <tr>
-                <th>What needs doing</th>
+                <th>Step</th>
                 <th>On your own</th>
                 <th>With Ollvy</th>
               </tr>

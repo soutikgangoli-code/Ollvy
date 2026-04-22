@@ -77,6 +77,7 @@ const SECTIONS = [
   { id: 'why-ollvy', label: 'Why Ollvy' },
   { id: 'risks', label: 'Risks' },
   { id: 'reviews', label: 'Reviews' },
+  { id: 'documents', label: 'Documents' },
   { id: 'faqs', label: 'FAQs' },
 ] as const
 
@@ -217,7 +218,7 @@ function MockVisual({
   if (!type || !data) return null
 
   return (
-    <div className="rounded-xl bg-background border border-border p-3 sm:p-4 font-mono text-xs">
+    <div className="rounded-xl bg-background border border-border p-3 sm:p-4 font-mono text-[11px] sm:text-xs">
       {type === 'status' && (
         <div className="space-y-2">
           {data.label && (
@@ -262,7 +263,7 @@ function MockVisual({
               {data.label}
             </p>
           )}
-          <p className="text-foreground text-base font-bold tracking-wider">
+          <p className="text-foreground text-[15px] sm:text-base font-bold tracking-wider">
             {data.value}
           </p>
           <p className="text-[hsl(var(--ollvy-green-fg))]">{data.status}</p>
@@ -336,6 +337,11 @@ export function UnifiedServicePage({
   // Look up static config for govtFees and documents tables
   const staticConfig = servicesBySlug[service.slug]
 
+  // Hide "Documents" tab for services that don't have a documents table
+  const visibleSections = staticConfig?.documents
+    ? SECTIONS
+    : SECTIONS.filter(s => s.id !== 'documents')
+
   const [heroVisible, setHeroVisible] = useState(true)
   const [activeSection, setActiveSection] = useState<SectionId>('process')
   const heroRef = useRef<HTMLDivElement>(null)
@@ -405,6 +411,7 @@ export function UnifiedServicePage({
     'why-ollvy': null,
     risks: null,
     reviews: null,
+    documents: null,
     faqs: null,
   })
 
@@ -604,7 +611,7 @@ export function UnifiedServicePage({
 
             {/* Section tabs - centered, matching hero styling exactly */}
             <nav ref={stickyNavRef} className="flex gap-0 relative" role="tablist">
-              {SECTIONS.map((section) => (
+              {visibleSections.map((section) => (
                 <button
                   key={section.id}
                   data-section={section.id}
@@ -636,7 +643,7 @@ export function UnifiedServicePage({
         {/* Mobile: Only section tabs */}
         <div ref={mobileTabsRef} className="md:hidden overflow-x-auto scrollbar-hide">
           <div className="flex gap-0 min-w-max px-4">
-            {SECTIONS.map((section) => (
+            {visibleSections.map((section) => (
               <button
                 key={section.id}
                 data-section={section.id}
@@ -735,9 +742,9 @@ export function UnifiedServicePage({
               className="absolute bottom-0 left-0 right-0 border-t border-border bg-background/80 backdrop-blur-sm"
               role="tablist"
             >
-              <div className="max-w-[1200px] mx-auto px-4 md:px-6 overflow-x-auto scrollbar-hide">
+              <div className="max-w-[1200px] mx-auto px-4 md:px-6 overflow-x-auto scrollbar-hide overscroll-x-contain touch-pan-y">
                 <div ref={heroNavRef} className="flex gap-0 -mb-px relative min-w-max md:min-w-0 md:justify-center">
-                  {SECTIONS.map((section) => (
+                  {visibleSections.map((section) => (
                     <button
                       key={section.id}
                       data-section={section.id}
@@ -887,20 +894,20 @@ export function UnifiedServicePage({
 
                               {/* Comparison */}
                               {(item.comparisonWithout || item.comparisonWithOllvy) && (
-                                <div className="mt-2 sm:mt-3 grid grid-cols-2 gap-1.5 sm:gap-3">
-                                  <div className="bg-muted/40 rounded-lg p-2 sm:p-2.5 border border-border">
-                                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-1 font-mono">
-                                      Without Ollvy
+                                <div className="mt-2 sm:mt-3 grid grid-cols-2 gap-2 sm:gap-3">
+                                  <div className="border border-border bg-muted/30 rounded-lg p-2.5 sm:p-4">
+                                    <p className="text-[10px] sm:text-xs uppercase tracking-widest text-muted-foreground mb-1.5 sm:mb-3 font-mono">
+                                      Others
                                     </p>
-                                    <p className="text-xs sm:text-sm font-medium text-foreground">
+                                    <p className="text-sm font-medium text-foreground leading-snug">
                                       {item.comparisonWithout && formatWithMonoNumbers(item.comparisonWithout)}
                                     </p>
                                   </div>
-                                  <div className="bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-2 sm:p-2.5 border border-[hsl(var(--ollvy-green))]/20">
-                                    <p className="text-[10px] text-[hsl(var(--ollvy-green-fg))] uppercase tracking-widest mb-1 font-mono">
-                                      With Ollvy
+                                  <div className="border border-[hsl(var(--ollvy-green))]/30 bg-[hsl(var(--ollvy-green))]/5 rounded-lg p-2.5 sm:p-4">
+                                    <p className="text-[10px] sm:text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-1.5 sm:mb-3 font-mono">
+                                      Ollvy
                                     </p>
-                                    <p className="text-xs sm:text-sm font-medium text-foreground">
+                                    <p className="text-sm font-medium text-foreground leading-snug">
                                       {item.comparisonWithOllvy && formatWithMonoNumbers(item.comparisonWithOllvy)}
                                     </p>
                                   </div>
@@ -925,89 +932,6 @@ export function UnifiedServicePage({
                     />
                   </div>
                 </section>
-
-                {/* Section: Documents Required (from static config) — collapsible */}
-                {staticConfig?.documents && (
-                  <section className="py-16 border-b border-border">
-                    <button
-                      type="button"
-                      onClick={() => setDocsExpanded(!docsExpanded)}
-                      className="w-full text-left flex items-center justify-between group"
-                    >
-                      <div>
-                        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
-                          DOCUMENTS REQUIRED
-                        </p>
-                        <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
-                          What you will provide
-                        </h2>
-                      </div>
-                      <ChevronDown
-                        size={20}
-                        className={cn(
-                          'text-muted-foreground transition-transform duration-200 shrink-0 ml-4',
-                          docsExpanded && 'rotate-180'
-                        )}
-                      />
-                    </button>
-
-                    <div className={cn("mt-5 overflow-hidden transition-all", docsExpanded ? "max-h-[4000px] opacity-100" : "max-h-0 opacity-0")}>
-                    <div className="rounded-xl border border-border overflow-hidden">
-                      <table className="w-full text-xs sm:text-sm border-collapse">
-                        <thead>
-                          <tr className="border-b border-border bg-muted/40">
-                            {staticConfig.documents.headers.map((header, j) => (
-                              <th
-                                key={j}
-                                className={cn(
-                                  'text-center py-2 sm:py-3 px-2 sm:px-4 font-semibold text-foreground font-mono text-xs uppercase tracking-widest',
-                                  j > 0 && 'border-l border-border'
-                                )}
-                              >
-                                {header}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {staticConfig.documents.rows.map((row, i) => (
-                            <tr key={i} className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors">
-                              {row.map((cell, j) => (
-                                <td
-                                  key={j}
-                                  className={cn(
-                                    'py-2 sm:py-3 px-2 sm:px-4',
-                                    j > 0 && 'border-l border-border',
-                                    j === 0 ? 'font-medium text-foreground' : 'text-muted-foreground'
-                                  )}
-                                >
-                                  {formatWithMonoNumbers(cell)}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    {documentChecklistPaths[service.slug] && (
-                      <div className="mt-6">
-                        <Link
-                          href={documentChecklistPaths[service.slug]}
-                          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                          See full document checklist
-                          <ArrowRight size={14} />
-                        </Link>
-                      </div>
-                    )}
-
-                    <p className="text-xs text-muted-foreground mt-6">
-                      Your documents are encrypted, visible only to your assigned professional, and deleted 90 days after your order closes.
-                    </p>
-                    </div>
-                  </section>
-                )}
 
                 {/* Section: Why Ollvy */}
                 <section
@@ -1234,6 +1158,93 @@ export function UnifiedServicePage({
                           ))}
                         </ul>
                       )}
+                    </div>
+                  </section>
+                )}
+
+                {/* Section: Documents Required (from static config) — collapsible */}
+                {staticConfig?.documents && (
+                  <section
+                    id="documents"
+                    ref={(el) => { sectionRefs.current.documents = el }}
+                    className="py-16 border-b border-border scroll-mt-28"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setDocsExpanded(!docsExpanded)}
+                      className="w-full text-left flex items-center justify-between group"
+                    >
+                      <div>
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                          DOCUMENTS REQUIRED
+                        </p>
+                        <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
+                          What you will provide
+                        </h2>
+                      </div>
+                      <ChevronDown
+                        size={20}
+                        className={cn(
+                          'text-muted-foreground transition-transform duration-200 shrink-0 ml-4',
+                          docsExpanded && 'rotate-180'
+                        )}
+                      />
+                    </button>
+
+                    <div className={cn("mt-5 overflow-hidden transition-all", docsExpanded ? "max-h-[4000px] opacity-100" : "max-h-0 opacity-0")}>
+                    <div className="rounded-xl border border-border overflow-hidden">
+                      <table className="w-full text-xs sm:text-sm border-collapse">
+                        <thead>
+                          <tr className="border-b border-border bg-muted/40">
+                            {staticConfig.documents.headers.map((header, j) => (
+                              <th
+                                key={j}
+                                className={cn(
+                                  'text-center py-2 sm:py-3 px-2 sm:px-4 font-semibold text-foreground font-mono text-xs uppercase tracking-widest',
+                                  j > 0 && 'border-l border-border'
+                                )}
+                              >
+                                {header}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {staticConfig.documents.rows.map((row, i) => (
+                            <tr key={i} className="border-b border-border last:border-0 hover:bg-muted/20 transition-colors">
+                              {row.map((cell, j) => (
+                                <td
+                                  key={j}
+                                  className={cn(
+                                    'py-2 sm:py-3 px-2 sm:px-4',
+                                    j > 0 && 'border-l border-border',
+                                    j === 0 ? 'font-medium text-foreground' : 'text-muted-foreground'
+                                  )}
+                                >
+                                  {formatWithMonoNumbers(cell)}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {documentChecklistPaths[service.slug] && (
+                      <div className="mt-6">
+                        <Link
+                          href={documentChecklistPaths[service.slug]}
+                          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          See full document checklist
+                          <ArrowRight size={14} />
+                        </Link>
+                      </div>
+                    )}
+
+                    <p className="text-xs text-muted-foreground mt-6">
+                      Your documents are encrypted, visible only to your assigned professional, and deleted 90 days after your order closes.
+                    </p>
                     </div>
                   </section>
                 )}

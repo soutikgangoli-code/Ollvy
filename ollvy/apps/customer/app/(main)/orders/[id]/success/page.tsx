@@ -23,6 +23,7 @@ import { getCompletionEstimate } from '@/lib/dates'
 import { cn } from '@/lib/utils'
 import { getWhatsAppLink } from '@/lib/constants'
 import { useGTM, paisaToRupees } from '@/lib/hooks/useGTM'
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 
 interface OrderData {
   id: string
@@ -55,6 +56,7 @@ export default function PaymentSuccessPage() {
   const orderId = params.id as string
   const { user } = useAuthStore()
   const { trackPurchase } = useGTM()
+  const { trackPurchase: trackPurchasePH } = usePostHogEvents()
 
   const [order, setOrder] = useState<OrderData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -89,9 +91,16 @@ export default function PaymentSuccessPage() {
           },
         ],
       })
+      trackPurchasePH(
+        order.order_number,
+        order.service_package?.id || '',
+        order.service_package?.name || '',
+        paisaToRupees(order.total_paisa_snapshot),
+        'INR'
+      )
       setHasTrackedPurchase(true)
     }
-  }, [order, hasTrackedPurchase, trackPurchase])
+  }, [order, hasTrackedPurchase, trackPurchase, trackPurchasePH])
 
   const fetchOrder = async (retryCount = 0) => {
     if (!orderId) return
