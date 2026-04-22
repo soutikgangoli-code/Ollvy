@@ -29,7 +29,10 @@ const fraunces = Fraunces({
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
-  display: 'swap',
+  // 'optional' gives the font ~100ms to arrive, otherwise falls back permanently
+  // for this session. Eliminates the font-swap LCP bump on the service-page H1
+  // which uses font-mono; brand-accent fallback is still readable.
+  display: 'optional',
 })
 
 export const viewport: Viewport = {
@@ -88,8 +91,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Preconnect to origins that affect page rendering (max 4) */}
-        {/* Analytics preconnects removed - they don't affect LCP and waste connection bandwidth */}
+        {/* Preconnect to origins that block paint or first interaction.
+            Supabase: used for client-side auth + service fetches on every page.
+            Razorpay: loaded on /checkout — preconnecting globally warms the TCP+TLS
+            so the Razorpay modal opens faster on click. `crossOrigin=""` is required
+            since the eventual script is loaded cross-origin. */}
+        <link rel="preconnect" href="https://wsuleaypyjazcmmntcru.supabase.co" />
+        <link rel="preconnect" href="https://checkout.razorpay.com" crossOrigin="" />
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>

@@ -7,23 +7,35 @@ import { GuidesSearch, type GuideSearchEntry } from './guides-search';
 /**
  * Build a minimal search index on the server so the full LEARN_PAGES config
  * (~480KB of sections, bullets, table schemas, componentProps etc.) never ships
- * to the client. We serialize only plain text + display metadata.
+ * to the client.
+ *
+ * Each section/faq is truncated to the first SEARCH_EXCERPT_LEN chars. Most
+ * meaningful matches (headings, definitions, opening sentences) are at the
+ * start of a section, so this preserves search usefulness while cutting the
+ * serialized payload from ~245KB to ~30KB in the prerendered HTML.
  */
+const SEARCH_EXCERPT_LEN = 200;
+
 function buildSearchIndex(): GuideSearchEntry[] {
   return LEARN_PAGES.map((p) => {
     const searchBlocks: { source: string; text: string }[] = [];
 
     for (const section of p.sections) {
-      searchBlocks.push({ source: section.heading, text: section.body });
+      const body = section.body || '';
+      if (body) {
+        searchBlocks.push({ source: section.heading, text: body.slice(0, SEARCH_EXCERPT_LEN) });
+      }
       const bullets = section.bullets || section.list || [];
       if (bullets.length > 0) {
-        searchBlocks.push({ source: section.heading, text: bullets.join(' \n ') });
+        const joined = bullets.join(' \n ');
+        searchBlocks.push({ source: section.heading, text: joined.slice(0, SEARCH_EXCERPT_LEN) });
       }
     }
 
     if (p.faqs) {
       for (const faq of p.faqs) {
-        searchBlocks.push({ source: 'FAQ', text: faq.q + ' ' + faq.a });
+        const text = faq.q + ' ' + faq.a;
+        searchBlocks.push({ source: 'FAQ', text: text.slice(0, SEARCH_EXCERPT_LEN) });
       }
     }
 

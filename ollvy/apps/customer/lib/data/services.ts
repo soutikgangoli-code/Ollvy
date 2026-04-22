@@ -34,8 +34,6 @@ export interface ServicePricingData {
   isRetainer: boolean
   avgRating: number | null
   totalRatings: number
-  scopeIncluded: string[]
-  scopeExcluded: string[]
   priceVariesByState: boolean
 }
 
@@ -149,22 +147,16 @@ export interface DBServiceConfig {
   // Pricing
   ollvyFee: number
   govtFee?: number
-  govtFeeLabel?: string
-  govtFeeNote?: string
   mrp?: number
 
   // SLA
   slaDays: number
   isRetainer: boolean
-  retainerCycleLabel?: string
   nextDueDateValue?: string // Pre-computed for retainers
 
   // Service metadata
   mandatoryFor: string
   serviceType: 'One-time' | 'Annual' | 'Monthly retainer'
-  legalBasis?: string
-  penaltyForMissing?: string
-  penaltyColor: 'amber' | 'red' | 'none'
 
   // SEO
   seoTitle: string
@@ -187,10 +179,6 @@ export interface DBServiceConfig {
   reviewKeywordChips: string[]
   relatedSlugs: string[]
 
-  // Feature flags
-  showCompletionStats: boolean
-  showApprovalRate: boolean
-
   // Service variants (optional, for services with pricing options)
   variants?: DBServiceVariant[]
   defaultVariantId?: string
@@ -202,15 +190,11 @@ export interface DBServiceConfig {
   // Service addons (optional, for bundle customization)
   addons?: DBServiceAddon[]
 
-  // Bundle flag
-  isBundle?: boolean
-
   // Service explainer (optional, for "What is [Service]?" section)
   serviceExplainer?: DBServiceExplainer
 
   // Completion estimate fields (for govt processing services)
   hasGovtProcessing?: boolean
-  completionMinDays?: number | null
   completionMaxDays?: number | null
   completionRangeText?: string | null
 }
@@ -287,6 +271,11 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
   }
 
   try {
+    // Narrowed column list — only fields read by UnifiedServicePage + BookingPanel
+    // + HowWeReviewed + ServiceStructuredData + the pricing struct. Dropped 12
+    // columns that were selected but never consumed on any caller (admin pages
+    // hit service_packages via their own queries, not through this function).
+    // If you add a feature that reads a new field, add the column here.
     const { data: pkg, error } = await supabaseServer
     .from('service_packages')
     .select(`
@@ -296,25 +285,15 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
       short_name,
       short_description,
       tagline,
-      full_description,
       category,
       service_type,
       mandatory_for,
-      legal_basis,
-      penalty_for_missing,
-      penalty_color,
       price_base_paisa,
       price_govt_fees_paisa,
       price_mrp_paisa,
-      govt_fee_label,
-      govt_fee_note,
       sla_working_days,
       billing_cycle,
-      retainer_cycle_label,
       price_varies_by_state,
-      deliverables,
-      scope_included,
-      scope_excluded,
       avg_rating,
       rating_count,
       seo_title,
@@ -329,17 +308,13 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
       unlocks,
       review_keyword_chips,
       related_slugs,
-      show_completion_stats,
-      show_approval_rate,
       variants,
       default_variant_id,
       comparison_without,
       comparison_with,
       addons,
-      is_bundle,
       service_explainer,
       has_govt_processing,
-      completion_min_days,
       completion_max_days,
       completion_range_text
     `)
@@ -377,22 +352,16 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     // Pricing
     ollvyFee: pkg.price_base_paisa / 100,
     govtFee: pkg.price_govt_fees_paisa > 0 ? pkg.price_govt_fees_paisa / 100 : undefined,
-    govtFeeLabel: pkg.govt_fee_label ?? undefined,
-    govtFeeNote: pkg.govt_fee_note ?? undefined,
-    mrp: (pkg as any).price_mrp_paisa > 0 ? (pkg as any).price_mrp_paisa / 100 : undefined,
+    mrp: pkg.price_mrp_paisa > 0 ? pkg.price_mrp_paisa / 100 : undefined,
 
     // SLA
     slaDays: pkg.sla_working_days,
     isRetainer,
-    retainerCycleLabel: pkg.retainer_cycle_label ?? undefined,
     nextDueDateValue,
 
     // Metadata
     mandatoryFor: pkg.mandatory_for ?? 'All businesses',
     serviceType: pkg.service_type ?? (isRetainer ? 'Monthly retainer' : 'One-time'),
-    legalBasis: pkg.legal_basis ?? undefined,
-    penaltyForMissing: pkg.penalty_for_missing ?? undefined,
-    penaltyColor: pkg.penalty_color ?? 'none',
 
     // SEO
     seoTitle: pkg.seo_title ?? `${pkg.name} | Ollvy`,
@@ -415,10 +384,6 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     reviewKeywordChips: pkg.review_keyword_chips ?? [],
     relatedSlugs: pkg.related_slugs ?? [],
 
-    // Feature flags
-    showCompletionStats: pkg.show_completion_stats ?? false,
-    showApprovalRate: pkg.show_approval_rate ?? false,
-
     // Service variants (optional)
     variants: pkg.variants ?? undefined,
     defaultVariantId: pkg.default_variant_id ?? undefined,
@@ -430,15 +395,11 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     // Service addons (optional)
     addons: pkg.addons ?? undefined,
 
-    // Bundle flag
-    isBundle: pkg.is_bundle ?? false,
-
     // Service explainer (optional)
     serviceExplainer: pkg.service_explainer ?? undefined,
 
     // Completion estimate fields
     hasGovtProcessing: pkg.has_govt_processing ?? false,
-    completionMinDays: pkg.completion_min_days ?? null,
     completionMaxDays: pkg.completion_max_days ?? null,
     completionRangeText: pkg.completion_range_text ?? null,
   }
@@ -452,8 +413,6 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     isRetainer: service.isRetainer,
     avgRating: service.avgRating,
     totalRatings: service.totalRatings,
-    scopeIncluded: pkg.scope_included ?? pkg.deliverables ?? [],
-    scopeExcluded: pkg.scope_excluded ?? [],
     priceVariesByState: service.priceVariesByState,
   }
 

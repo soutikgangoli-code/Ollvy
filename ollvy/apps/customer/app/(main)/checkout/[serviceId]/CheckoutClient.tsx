@@ -780,6 +780,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
                 promoApplied={promoApplied}
                 isProcessing={isProcessing}
                 canSubmit={canSubmit || false}
+                paymentReady={razorpayReady}
                 onSubmit={handleCheckout}
                 slaDays={service.sla_working_days || 15}
                 hasGovtProcessing={service.has_govt_processing ?? false}
@@ -801,6 +802,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           gstRate={priceBreakdown?.gstRate || 18}
           isProcessing={isProcessing}
           canSubmit={canSubmit || false}
+          paymentReady={razorpayReady}
           onSubmit={handleCheckout}
           guaranteedDate={
             getCompletionEstimate(
@@ -814,10 +816,12 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         />
       </div>
 
-      {/* Razorpay Script - preload for faster payment */}
+      {/* Razorpay checkout script — lazy-loaded on idle so it never competes
+          with LCP. The `handleCheckout` call shows a "Payment loading..." toast
+          if the user clicks Pay before the script finishes arriving. */}
       <Script
         src="https://checkout.razorpay.com/v1/checkout.js"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
         onLoad={() => setRazorpayReady(true)}
       />
 
@@ -1018,6 +1022,7 @@ interface OrderSummarySidebarProps {
   promoApplied: { code: string; discount: number } | null
   isProcessing: boolean
   canSubmit: boolean
+  paymentReady: boolean
   onSubmit: () => void
   isMobile?: boolean
   slaDays?: number
@@ -1046,6 +1051,7 @@ function OrderSummarySidebar({
   promoApplied,
   isProcessing,
   canSubmit,
+  paymentReady,
   onSubmit,
   isMobile = false,
   slaDays = 15,
@@ -1203,10 +1209,11 @@ function OrderSummarySidebar({
         </div>
       )}
 
-      {/* Pay button */}
+      {/* Pay button — disabled until Razorpay checkout.js has loaded so a tap
+          never silently fails on slow connections. */}
       <Button
         onClick={onSubmit}
-        disabled={!canSubmit || isProcessing}
+        disabled={!canSubmit || isProcessing || !paymentReady}
         size="lg"
         className="w-full mt-5"
       >
@@ -1214,6 +1221,11 @@ function OrderSummarySidebar({
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Processing...
+          </>
+        ) : !paymentReady ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Preparing payment…
           </>
         ) : (
           `Pay ${formatPrice(total)}`
@@ -1393,6 +1405,7 @@ interface MobileBottomBarComponentProps {
   gstRate: number
   isProcessing: boolean
   canSubmit: boolean
+  paymentReady: boolean
   onSubmit: () => void
   guaranteedDate: string
   mrpPaisa?: number
@@ -1406,6 +1419,7 @@ function MobileBottomBarComponent({
   gstRate,
   isProcessing,
   canSubmit,
+  paymentReady,
   onSubmit,
   guaranteedDate,
   mrpPaisa,
@@ -1453,13 +1467,18 @@ function MobileBottomBarComponent({
           {/* Right side - Pay Now button */}
           <Button
             onClick={onSubmit}
-            disabled={isProcessing || !canSubmit}
+            disabled={isProcessing || !canSubmit || !paymentReady}
             className="h-11 px-6 text-base font-medium rounded-md bg-[hsl(var(--ollvy-green))] hover:bg-[hsl(var(--ollvy-green))]/90 text-white"
           >
             {isProcessing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Processing...
+              </>
+            ) : !paymentReady ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading…
               </>
             ) : (
               <>
