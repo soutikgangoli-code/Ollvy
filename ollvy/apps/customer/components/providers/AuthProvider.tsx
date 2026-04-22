@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from 'react'
 import { useAuthStore } from '@/lib/stores/auth-store'
-import { getClient } from '@/lib/supabase'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { refreshSession, setSession, setUser } = useAuthStore()
@@ -22,50 +21,61 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return
     }
 
-    const supabase = getClient()
     let isMounted = true
+    let unsubscribe: (() => void) | null = null
 
     console.log('[AuthProvider] Mounting, starting hydration')
 
-    const hydrate = async () => {
-      await refreshSession()
-      initialHydrationComplete.current = true
-      console.log('[AuthProvider] Initial hydration complete')
-    }
-
-    hydrate()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('[AuthProvider] Auth event:', event)
+    const init = async () => {
+      // Dynamic import keeps @supabase/ssr out of the homepage shared chunk.
+      // Only runs when an auth cookie is present (logged-in users).
+      const { getClient } = await import('@/lib/supabase')
       if (!isMounted) return
+      const supabase = getClient()
 
-      if (initialHydrationComplete.current) {
-        if (event === 'SIGNED_OUT') {
+      const hydrate = async () => {
+        await refreshSession()
+        initialHydrationComplete.current = true
+        console.log('[AuthProvider] Initial hydration complete')
+      }
+
+      hydrate()
+
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        console.log('[AuthProvider] Auth event:', event)
+        if (!isMounted) return
+
+        if (initialHydrationComplete.current) {
+          if (event === 'SIGNED_OUT') {
+            setSession(null)
+            setUser(null)
+          } else if (event === 'TOKEN_REFRESHED' && session) {
+            setSession(session)
+          } else if (event === 'SIGNED_IN' && session) {
+            const hasPendingFreshLogin = sessionStorage.getItem('ollvy_fresh_login') === '1'
+            if (hasPendingFreshLogin) {
+              console.log('[AuthProvider] SIGNED_IN with pending fresh login, calling refreshSession')
+              await refreshSession()
+            }
+          }
+          return
+        }
+
+        if (session) {
+          await refreshSession()
+        } else {
           setSession(null)
           setUser(null)
-        } else if (event === 'TOKEN_REFRESHED' && session) {
-          setSession(session)
-        } else if (event === 'SIGNED_IN' && session) {
-          const hasPendingFreshLogin = sessionStorage.getItem('ollvy_fresh_login') === '1'
-          if (hasPendingFreshLogin) {
-            console.log('[AuthProvider] SIGNED_IN with pending fresh login, calling refreshSession')
-            await refreshSession()
-          }
         }
-        return
-      }
+      })
+      unsubscribe = () => subscription.unsubscribe()
+    }
 
-      if (session) {
-        await refreshSession()
-      } else {
-        setSession(null)
-        setUser(null)
-      }
-    })
+    init()
 
     return () => {
       isMounted = false
-      subscription.unsubscribe()
+      if (unsubscribe) unsubscribe()
     }
   }, [])
 

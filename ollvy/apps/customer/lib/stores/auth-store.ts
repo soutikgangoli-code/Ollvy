@@ -1,6 +1,5 @@
 import { create } from 'zustand'
-import { Session } from '@supabase/supabase-js'
-import { getClient, getEdgeFunctionUrl } from '../supabase'
+import type { Session } from '@supabase/supabase-js'
 import { fetchWithTimeout, TIMEOUTS } from '../fetch-with-timeout'
 
 export interface User {
@@ -139,6 +138,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     set({ isLoading: true })
 
     try {
+      const { getClient } = await import('../supabase')
       const supabase = getClient()
 
       // Build redirect URL with next parameter if returnUrl provided
@@ -262,6 +262,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     set({ isLoading: true })
 
     try {
+      const { getClient } = await import('../supabase')
       const supabase = getClient()
       await supabase.auth.signOut()
     } catch (error) {
@@ -315,6 +316,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     console.log('[auth-store] refreshSession starting')
 
     try {
+      const { getClient } = await import('../supabase')
       const supabase = getClient()
       const { data: { session } } = await supabase.auth.getSession()
       console.log('[auth-store] getSession result:', session ? 'has session' : 'no session')
@@ -410,6 +412,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     if (!user) return false
 
     try {
+      const { getClient } = await import('../supabase')
       const supabase = getClient()
 
       const { error } = await supabase
