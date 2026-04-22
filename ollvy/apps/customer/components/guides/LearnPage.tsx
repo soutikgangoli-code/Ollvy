@@ -21,10 +21,24 @@ import { LearnInternalLinks } from './LearnInternalLinks';
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions';
 
 // Each guide page renders only one of these — load the matching one on demand.
-const EligibilityTool = dynamic(() => import('./tools/EligibilityTool').then(m => ({ default: m.EligibilityTool })));
-const PenaltyTool = dynamic(() => import('./tools/PenaltyTool').then(m => ({ default: m.PenaltyTool })));
-const ComparisonTool = dynamic(() => import('./tools/ComparisonTool').then(m => ({ default: m.ComparisonTool })));
-const DeadlineTracker = dynamic(() => import('./tools/DeadlineTracker').then(m => ({ default: m.DeadlineTracker })));
+// Each skeleton reserves the initial-state height of its tool so chunk arrival
+// doesn't push the first content section below.
+const EligibilityTool = dynamic(
+  () => import('./tools/EligibilityTool').then(m => ({ default: m.EligibilityTool })),
+  { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+);
+const PenaltyTool = dynamic(
+  () => import('./tools/PenaltyTool').then(m => ({ default: m.PenaltyTool })),
+  { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+);
+const ComparisonTool = dynamic(
+  () => import('./tools/ComparisonTool').then(m => ({ default: m.ComparisonTool })),
+  { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+);
+const DeadlineTracker = dynamic(
+  () => import('./tools/DeadlineTracker').then(m => ({ default: m.DeadlineTracker })),
+  { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+);
 
 export function LearnPage({ page, ctaService, secondaryService }: {
   page: LearnPageConfig;

@@ -165,11 +165,15 @@ export function LearnSectionBlock({ section }: { section: LearnSection }) {
       )}
 
       {section.componentSlot === 'faq-list' && faqs && faqs.length > 0 && (
-        <FaqList faqs={faqs} />
+        <div className="min-h-[400px]">
+          <FaqList faqs={faqs} />
+        </div>
       )}
 
       {section.componentSlot === 'process-stepper' && steps && steps.length > 0 && (
-        <ProcessStepper steps={steps} />
+        <div className="min-h-[400px]">
+          <ProcessStepper steps={steps} />
+        </div>
       )}
 
       {section.note && (

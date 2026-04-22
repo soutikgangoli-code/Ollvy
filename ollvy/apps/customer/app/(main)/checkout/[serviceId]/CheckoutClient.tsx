@@ -688,22 +688,25 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         <div className="grid lg:grid-cols-[1fr_380px] gap-8">
           {/* Left column - Main flow */}
           <div className="space-y-8">
-            {/* Pre-cursor answers summary (if present) */}
-            {Object.keys(preCursorAnswers).length > 0 && (
-              <PreCursorSummaryCard
-                answers={preCursorAnswers}
-                serviceSlug={service.slug}
-                serviceId={serviceId}
-                onEdit={() => {
-                  // Redirect to eligibility page with edit flag (keep answers for editing)
-                  const params = new URLSearchParams()
-                  params.set('edit', 'true')
-                  if (variantFromUrl) params.set('variant', variantFromUrl)
-                  if (addonsFromUrl) params.set('addons', addonsFromUrl)
-                  router.push(`/checkout/${serviceId}/eligibility?${params.toString()}`)
-                }}
-              />
-            )}
+            {/* Pre-cursor answers summary (if present). Wrapper reserves height so
+                the card appearing post-hydration doesn't shift the flow below. */}
+            <div className="min-h-[120px]">
+              {Object.keys(preCursorAnswers).length > 0 && (
+                <PreCursorSummaryCard
+                  answers={preCursorAnswers}
+                  serviceSlug={service.slug}
+                  serviceId={serviceId}
+                  onEdit={() => {
+                    // Redirect to eligibility page with edit flag (keep answers for editing)
+                    const params = new URLSearchParams()
+                    params.set('edit', 'true')
+                    if (variantFromUrl) params.set('variant', variantFromUrl)
+                    if (addonsFromUrl) params.set('addons', addonsFromUrl)
+                    router.push(`/checkout/${serviceId}/eligibility?${params.toString()}`)
+                  }}
+                />
+              )}
+            </div>
 
             {/* Step 1: Stepper */}
             <CheckoutStepper currentStep={1} />

@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { useEffect, useRef, useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { WorkflowDisplayStage } from '@/lib/types'
 
 interface FilingTimelineProps {
@@ -36,6 +36,10 @@ interface LayoutConfig {
 
 // Card dimensions
 const CARD_WIDTH = 130
+// Fixed card height so SVG dimensions are deterministic on SSR + client.
+// Sized to fit worst-case title wrap: 4 lines of `font-mono text-[11px] leading-snug`
+// (longest DB title is 56 chars → ~4 lines inside a 130px card) + timeline line + padding.
+const CARD_HEIGHT = 110
 const CARD_GAP = 12 // Gap between number and card
 const MARKER_RADIUS = 12 // Radius of the number circle
 
@@ -160,9 +164,6 @@ function resolveOverlaps(positions: CardPosition[], markers: MarkerConfig[]): Ca
 export function FilingTimeline({ className, steps, serviceName }: FilingTimelineProps) {
   const workflowSteps = steps && steps.length > 0 ? steps : DEFAULT_STEPS
   const layout = getLayoutForStepCount(workflowSteps.length)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [cardHeights, setCardHeights] = useState<number[]>([])
-  const hasMeasured = useRef(false)
 
   // Memoize displaySteps to prevent infinite re-renders
   const displaySteps = useMemo(() => workflowSteps.map((step, index) => ({
@@ -172,39 +173,21 @@ export function FilingTimeline({ className, steps, serviceName }: FilingTimeline
     isCompletion: step.isCompletion || false,
   })), [workflowSteps])
 
-  // Measure card heights after render - only once per mount
-  useEffect(() => {
-    if (containerRef.current && !hasMeasured.current) {
-      // Use requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        if (containerRef.current) {
-          const cards = containerRef.current.querySelectorAll('[data-card]')
-          const heights = Array.from(cards).map(card => card.getBoundingClientRect().height)
-          if (heights.length > 0) {
-            setCardHeights(heights)
-            hasMeasured.current = true
-          }
-        }
-      })
-    }
-  }, [displaySteps.length])
-
-  // Calculate initial positions - ensure cards never overlap with marker circles
-  const initialPositions: CardPosition[] = layout.markers.map((marker, index) => {
-    // Use measured height + buffer to account for rendering differences
-    const height = (cardHeights[index] || 70) + 14
+  // Deterministic card positions — same value on SSR and client.
+  // No post-mount re-measurement, so dynamicHeight doesn't shift on hydration.
+  const initialPositions: CardPosition[] = layout.markers.map((marker) => {
     const x = marker.x - CARD_WIDTH / 2
-    // Position card with gap from the edge of the marker circle (not center)
     const y = marker.boxPosition === 'above'
-      ? marker.y - MARKER_RADIUS - CARD_GAP - height
+      ? marker.y - MARKER_RADIUS - CARD_GAP - CARD_HEIGHT
       : marker.y + MARKER_RADIUS + CARD_GAP
-    return { x, y, width: CARD_WIDTH, height }
+    return { x, y, width: CARD_WIDTH, height: CARD_HEIGHT }
   })
 
   // Resolve any overlaps
   const cardPositions = resolveOverlaps(initialPositions, layout.markers)
 
-  // Calculate dynamic height based on card positions
+  // Height bounds for the SVG viewBox. Purely arithmetic on constants + hardcoded marker positions,
+  // so server and client compute identical values.
   const maxCardBottom = cardPositions.reduce((max, pos) => {
     return Math.max(max, pos.y + pos.height)
   }, 0)
@@ -212,7 +195,6 @@ export function FilingTimeline({ className, steps, serviceName }: FilingTimeline
     return Math.min(min, pos.y)
   }, Infinity)
 
-  // Dynamic height: from top of highest card to bottom of lowest card, plus small padding
   const dynamicHeight = Math.max(layout.height, maxCardBottom + 20)
 
   return (
@@ -227,7 +209,7 @@ export function FilingTimeline({ className, steps, serviceName }: FilingTimeline
       </div>
 
       {/* Desktop Roadmap */}
-      <div ref={containerRef} className="hidden lg:block relative" style={{ height: dynamicHeight }}>
+      <div className="hidden lg:block relative" style={{ height: dynamicHeight }}>
         <svg
           viewBox={`-${SIDE_PADDING} ${minCardTop < 0 ? minCardTop - 10 : -10} ${layout.width} ${dynamicHeight + 20}`}
           className="w-full"

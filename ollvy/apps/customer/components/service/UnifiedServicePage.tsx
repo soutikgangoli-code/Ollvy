@@ -10,15 +10,36 @@ import { ProcessStepper } from './ProcessStepper'
 
 // Below-fold sections — code-split via next/dynamic. Default ssr:true means
 // the HTML is still server-rendered for Googlebot; only the JS chunk defers.
-// This is the real Medium-tier LCP fix: a ~1455-line client component gets sliced
-// so the hero + process stepper hydrate first.
-const BookingPanel = dynamic(() => import('./BookingPanel').then(m => ({ default: m.BookingPanel })))
-const ExplainerStepper = dynamic(() => import('./ExplainerStepper').then(m => ({ default: m.ExplainerStepper })))
-const ServiceRisks = dynamic(() => import('./ServiceRisks').then(m => ({ default: m.ServiceRisks })))
-const ProfilePersonas = dynamic(() => import('./ProfilePersonas').then(m => ({ default: m.ProfilePersonas })))
-const RelatedServices = dynamic(() => import('./RelatedServices').then(m => ({ default: m.RelatedServices })))
-const HowWeReviewed = dynamic(() => import('./HowWeReviewed').then(m => ({ default: m.HowWeReviewed })))
-const DIYvsOllvy = dynamic(() => import('@/components/service/DIYvsOllvy').then(m => ({ default: m.DIYvsOllvy })))
+// Each import has a loading skeleton matching the real component's rendered
+// height so chunks arriving post-paint don't push content below them.
+const BookingPanel = dynamic(
+  () => import('./BookingPanel').then(m => ({ default: m.BookingPanel })),
+  { loading: () => <div className="min-h-[500px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+)
+const ExplainerStepper = dynamic(
+  () => import('./ExplainerStepper').then(m => ({ default: m.ExplainerStepper })),
+  { loading: () => <div className="min-h-[300px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+)
+const ServiceRisks = dynamic(
+  () => import('./ServiceRisks').then(m => ({ default: m.ServiceRisks })),
+  { loading: () => <div className="min-h-[420px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+)
+const ProfilePersonas = dynamic(
+  () => import('./ProfilePersonas').then(m => ({ default: m.ProfilePersonas })),
+  { loading: () => <div className="min-h-[360px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+)
+const RelatedServices = dynamic(
+  () => import('./RelatedServices').then(m => ({ default: m.RelatedServices })),
+  { loading: () => <div className="min-h-[580px] sm:min-h-[320px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+)
+const HowWeReviewed = dynamic(
+  () => import('./HowWeReviewed').then(m => ({ default: m.HowWeReviewed })),
+  { loading: () => <div className="min-h-[260px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+)
+const DIYvsOllvy = dynamic(
+  () => import('@/components/service/DIYvsOllvy').then(m => ({ default: m.DIYvsOllvy })),
+  { loading: () => <div className="min-h-[700px] rounded-xl bg-muted/10" aria-hidden="true" /> }
+)
 import { getClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -1054,19 +1075,20 @@ export function UnifiedServicePage({
                   />
                 </section>
 
-                {/* Section: Unlocks (what this service unlocks) */}
-                {service.unlocks && service.unlocks.length > 0 && (
-                  <section className="py-16 border-b border-border">
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
-                      NEXT STEPS
-                    </p>
-                    <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
-                      What {service.shortName} unlocks
-                    </h2>
-                    <p className="text-sm text-muted-foreground mb-8">
-                      Services that become available or mandatory after completion.
-                    </p>
+                {/* Section: Unlocks (what this service unlocks) — renders unconditionally
+                    so the section height is reserved; falls back to a single line when empty. */}
+                <section className="py-16 border-b border-border">
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-3 font-mono">
+                    NEXT STEPS
+                  </p>
+                  <h2 className="text-2xl md:text-3xl font-semibold text-foreground mb-2">
+                    What {service.shortName} unlocks
+                  </h2>
+                  <p className="text-sm text-muted-foreground mb-8">
+                    Services that become available or mandatory after completion.
+                  </p>
 
+                  {service.unlocks && service.unlocks.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {service.unlocks.map((item, i) => (
                         <Card
@@ -1111,8 +1133,12 @@ export function UnifiedServicePage({
                         </Card>
                       ))}
                     </div>
-                  </section>
-                )}
+                  ) : (
+                    <p className="text-sm text-muted-foreground">
+                      Nothing else follows this one.
+                    </p>
+                  )}
+                </section>
 
                 {/* Section: Reviews */}
                 <section
