@@ -38,7 +38,7 @@ export function ServiceRisks({
                 <Icon className="w-3.5 h-3.5 sm:w-[18px] sm:h-[18px] text-[hsl(var(--ollvy-amber))]" />
               </div>
               <div>
-                <h3 className="text-xs sm:text-sm font-semibold text-foreground">
+                <h3 className="text-sm font-medium text-foreground">
                   {risk.title}
                 </h3>
                 {(() => {
@@ -46,9 +46,12 @@ export function ServiceRisks({
                     ? risk.body.split('\n').filter(Boolean)
                     : risk.body.split(/(?<=\.)\s+/).filter(Boolean)
                   return (
-                    <ul className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed list-disc pl-5 space-y-0.5">
+                    <ul className="text-xs sm:text-sm text-muted-foreground mt-0.5 sm:mt-1 leading-relaxed space-y-0.5">
                       {lines.map((line, j) => (
-                        <li key={j}>{line}</li>
+                        <li key={j} className="flex gap-1.5">
+                          <span aria-hidden="true" className="shrink-0">•</span>
+                          <span>{line}</span>
+                        </li>
                       ))}
                     </ul>
                   )

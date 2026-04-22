@@ -722,7 +722,7 @@ export function UnifiedServicePage({
           {/* === HERO SECTION === */}
           <section
             ref={heroRef}
-            className="relative min-h-[60vh] md:min-h-[65vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-8 md:pb-10"
+            className="relative min-h-[58vh] md:min-h-[63vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-6 md:pb-8"
           >
             <div className="relative z-10 text-center w-full max-w-[800px] px-4 md:px-6">
               {/* Service name - large and bold */}
@@ -949,7 +949,7 @@ export function UnifiedServicePage({
                                     <p className="text-[10px] sm:text-xs uppercase tracking-widest text-muted-foreground mb-1.5 sm:mb-3 font-mono">
                                       Others
                                     </p>
-                                    <p className="text-sm font-medium text-foreground leading-snug">
+                                    <p className="text-sm font-normal text-muted-foreground leading-snug">
                                       {item.comparisonWithout && formatWithMonoNumbers(item.comparisonWithout)}
                                     </p>
                                   </div>
@@ -957,7 +957,7 @@ export function UnifiedServicePage({
                                     <p className="text-[10px] sm:text-xs uppercase tracking-widest text-[hsl(var(--ollvy-green-fg))] mb-1.5 sm:mb-3 font-mono">
                                       Ollvy
                                     </p>
-                                    <p className="text-sm font-medium text-foreground leading-snug">
+                                    <p className="text-sm font-normal text-foreground leading-snug">
                                       {item.comparisonWithOllvy && formatWithMonoNumbers(item.comparisonWithOllvy)}
                                     </p>
                                   </div>
