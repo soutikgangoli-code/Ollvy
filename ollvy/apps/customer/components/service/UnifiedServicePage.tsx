@@ -5,6 +5,10 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { servicesBySlug } from '@/lib/services/data'
+import {
+  PRICE_VARIES_BY_QUESTIONNAIRE_SLUGS,
+  isEligibilityFlow,
+} from '@/lib/services/eligibility'
 import { fallbackReviews, defaultFallbackReviews, type FallbackReview } from '@/lib/data/fallback-reviews'
 import { ProcessStepper } from './ProcessStepper'
 
@@ -386,7 +390,6 @@ export function UnifiedServicePage({
 
   // Prefetch checkout service data on CTA hover — warms browser cache
   const prefetchedRef = useRef(false)
-  const PREFETCH_QUESTIONNAIRE_SLUGS = ['trademark-registration', 'pvt-ltd-incorporation', 'llp-incorporation', 'iepf-consultation']
   const prefetchCheckout = useCallback(() => {
     if (prefetchedRef.current) return
     prefetchedRef.current = true
@@ -395,7 +398,7 @@ export function UnifiedServicePage({
       .then(({ data }) => {
         if (!data) return
         // Also prefetch questionnaire count for services that go through eligibility
-        if (PREFETCH_QUESTIONNAIRE_SLUGS.includes(service.slug)) {
+        if (isEligibilityFlow(service.slug)) {
           supabase
             .from('service_questionnaires')
             .select('*', { count: 'exact', head: true })
@@ -482,17 +485,9 @@ export function UnifiedServicePage({
 
   // Services where govt fees vary based on questionnaire answers
   // These show "Starting from" prefix and use eligibility flow
-  const priceVariesByQuestionnaire = [
-    'trademark-registration',
-    'pvt-ltd-incorporation',
-    'llp-incorporation',
-  ].includes(service.slug)
-
-  // Services with pre-payment questions that don't affect pricing
-  // These route through eligibility for context collection but keep fixed pricing labels
-  const hasPrePaymentQuestions = [
-    'iepf-consultation',
-  ].includes(service.slug)
+  const priceVariesByQuestionnaire = (
+    PRICE_VARIES_BY_QUESTIONNAIRE_SLUGS as readonly string[]
+  ).includes(service.slug)
 
   // Determine CTA label and URL for this service
   const ctaLabel = service.priceVariesByState
@@ -508,7 +503,7 @@ export function UnifiedServicePage({
     const serviceId = service.id || service.slug
     const baseUrl = service.priceVariesByState
       ? `/quote/request/${serviceId}`
-      : (priceVariesByQuestionnaire || hasPrePaymentQuestions)
+      : isEligibilityFlow(service.slug)
       ? `/checkout/${serviceId}/eligibility`
       : `/checkout/${serviceId}`
     if (includeVariant && service.variants && selectedVariant) {

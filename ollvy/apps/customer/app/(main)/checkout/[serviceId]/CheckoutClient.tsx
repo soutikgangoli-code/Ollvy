@@ -11,6 +11,7 @@ import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { getFullAttributionData, clearAllAttributionData } from '@/lib/utm'
 import { getPreCursorAnswers, clearPreCursorAnswers } from '@/lib/pre-cursor'
+import { isEligibilityFlow } from '@/lib/services/eligibility'
 import type { ServicePackage, ServiceAddon, ServiceVariant } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { getCompletionEstimate } from '@/lib/dates'
@@ -54,15 +55,6 @@ interface PriceBreakdown {
 // Session storage helpers for checkout persistence
 const CHECKOUT_STATE_KEY = 'ollvy_checkout_state'
 
-// Services that route through the /checkout/[slug]/eligibility flow. Only these
-// write preCursorAnswers to sessionStorage, so only they need the placeholder
-// height reserved pre-hydration.
-const ELIGIBILITY_FLOW_SLUGS = [
-  'trademark-registration',
-  'pvt-ltd-incorporation',
-  'llp-incorporation',
-  'iepf-consultation',
-]
 
 // Cloud kitchen add-on display labels for "What's Included" section
 const CLOUD_KITCHEN_ADDON_LABELS: Record<string, string> = {
@@ -718,7 +710,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
                   router.push(`/checkout/${serviceId}/eligibility?${params.toString()}`)
                 }}
               />
-            ) : ELIGIBILITY_FLOW_SLUGS.includes(service.slug) ? (
+            ) : isEligibilityFlow(service.slug) ? (
               <div className="min-h-[120px]" aria-hidden="true" />
             ) : null}
 
