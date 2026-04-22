@@ -498,23 +498,33 @@ export function UnifiedServicePage({
     }
   }, [])
 
-  // Track active section on scroll
+  // Track active section on scroll — rAF-throttled, skips redundant state updates
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 150 // Offset for header
+    const reversedSections = [...SECTIONS].reverse()
+    let rafId: number | null = null
 
-      // Find the current section
-      for (const section of [...SECTIONS].reverse()) {
+    const runDetection = () => {
+      rafId = null
+      const scrollPosition = window.scrollY + 150
+      for (const section of reversedSections) {
         const element = sectionRefs.current[section.id]
         if (element && element.offsetTop <= scrollPosition) {
-          setActiveSection(section.id)
-          break
+          setActiveSection((prev) => (prev === section.id ? prev : section.id))
+          return
         }
       }
     }
 
+    const handleScroll = () => {
+      if (rafId !== null) return
+      rafId = requestAnimationFrame(runDetection)
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (rafId !== null) cancelAnimationFrame(rafId)
+    }
   }, [])
 
   // Update indicator position when active section changes

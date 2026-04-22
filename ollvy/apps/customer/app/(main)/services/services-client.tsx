@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useDeferredValue } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { SearchBar } from '@/components/services/SearchBar'
 import { FilterChips } from '@/components/services/FilterChips'
@@ -39,8 +39,18 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
     searchParams.get('filter')?.split(',').filter(Boolean) || []
   )
 
+  // Debounce search (250ms) so we don't re-query / re-URL on every keystroke
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery)
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(searchQuery), 250)
+    return () => clearTimeout(t)
+  }, [searchQuery])
+
+  // Snippet computation is non-urgent — let the input update first
+  const deferredQuery = useDeferredValue(debouncedQuery)
+
   // Only fetch when there are active filters or search query
-  const hasActiveFilters = searchQuery || selectedFilters.length > 0
+  const hasActiveFilters = debouncedQuery || selectedFilters.length > 0
 
   const fetchServices = useCallback(async () => {
     // If no filters/search, use initial server-rendered data
@@ -60,8 +70,8 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
         .eq('is_active', true)
         .order('display_order', { ascending: true })
 
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,short_description.ilike.%${searchQuery}%`)
+      if (debouncedQuery) {
+        query = query.or(`name.ilike.%${debouncedQuery}%,short_description.ilike.%${debouncedQuery}%`)
       }
 
       // Separate special filters from situation_tag filters
@@ -83,17 +93,17 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
 
       if (error) {
         console.error('Error fetching services:', error)
-        setServices(filterServicesLocally(initialServices, searchQuery, selectedFilters))
+        setServices(filterServicesLocally(initialServices, debouncedQuery, selectedFilters))
       } else {
         setServices(data || [])
       }
     } catch (err) {
       console.error('Failed to fetch services:', err)
-      setServices(filterServicesLocally(initialServices, searchQuery, selectedFilters))
+      setServices(filterServicesLocally(initialServices, debouncedQuery, selectedFilters))
     } finally {
       setIsLoading(false)
     }
-  }, [searchQuery, selectedFilters, hasActiveFilters, initialServices])
+  }, [debouncedQuery, selectedFilters, hasActiveFilters, initialServices])
 
   useEffect(() => {
     fetchServices()
@@ -101,19 +111,19 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
 
   useEffect(() => {
     const params = new URLSearchParams()
-    if (searchQuery) params.set('q', searchQuery)
+    if (debouncedQuery) params.set('q', debouncedQuery)
     if (selectedFilters.length > 0) params.set('filter', selectedFilters.join(','))
 
     const newUrl = params.toString() ? `?${params.toString()}` : '/services'
     router.replace(newUrl, { scroll: false })
-  }, [searchQuery, selectedFilters, router])
+  }, [debouncedQuery, selectedFilters, router])
 
   // Deep search: find snippets from service content for the current query
   const snippetsBySlug = useMemo(() => {
     const map: Record<string, { source: string; snippet: string }> = {}
-    if (!searchQuery.trim()) return map
+    if (!deferredQuery.trim()) return map
 
-    const q = searchQuery.toLowerCase()
+    const q = deferredQuery.toLowerCase()
 
     for (const entry of searchIndex) {
       for (const { source, text } of entry.texts) {
@@ -129,24 +139,24 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
     }
 
     return map
-  }, [searchQuery, searchIndex])
+  }, [deferredQuery, searchIndex])
 
   // When searching, also include services matched by deep content search
   const deepMatchSlugs = useMemo(() => {
-    if (!searchQuery.trim()) return new Set<string>()
+    if (!deferredQuery.trim()) return new Set<string>()
     return new Set(Object.keys(snippetsBySlug))
-  }, [searchQuery, snippetsBySlug])
+  }, [deferredQuery, snippetsBySlug])
 
   // Merge deep matches into services list (add any that Supabase query missed)
   const mergedServices = useMemo(() => {
-    if (!searchQuery.trim() || deepMatchSlugs.size === 0) return services
+    if (!deferredQuery.trim() || deepMatchSlugs.size === 0) return services
 
     const existingSlugs = new Set(services.map(s => s.slug))
     const extraServices = initialServices.filter(
       s => deepMatchSlugs.has(s.slug) && !existingSlugs.has(s.slug)
     )
     return [...services, ...extraServices]
-  }, [services, deepMatchSlugs, searchQuery, initialServices])
+  }, [services, deepMatchSlugs, deferredQuery, initialServices])
 
   return (
     <div className="container pb-12">
@@ -176,8 +186,8 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
       <ServiceGrid
         services={mergedServices}
         isLoading={isLoading}
-        snippets={searchQuery.trim() ? snippetsBySlug : undefined}
-        query={searchQuery}
+        snippets={deferredQuery.trim() ? snippetsBySlug : undefined}
+        query={deferredQuery}
       />
     </div>
   )
