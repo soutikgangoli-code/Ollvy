@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 const popularServices = [
-  { name: 'Private Limited Registration', href: '/services/private-limited-company-registration' },
+  { name: 'Private Limited Registration', href: '/services/pvt-ltd-incorporation' },
   { name: 'GST Registration', href: '/services/gst-registration' },
   { name: 'Trademark Registration', href: '/services/trademark-registration' },
   { name: 'FSSAI License', href: '/services/fssai-license' },
