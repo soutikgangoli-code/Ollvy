@@ -11,14 +11,10 @@ const PROTECTED_ROUTES = ['/orders', '/profile', '/retainers', '/compliance', '/
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Redirect non-www to www (SEO canonical enforcement)
-  const host = request.headers.get('host') || ''
-  if (host === 'ollvy.com') {
-    const url = request.nextUrl.clone()
-    url.host = 'www.ollvy.com'
-    url.protocol = 'https'
-    return NextResponse.redirect(url, 308) // 308 = permanent redirect
-  }
+  // Note: ollvy.com → www.ollvy.com redirect is configured at the edge via the
+  // Vercel dashboard (Domains → ollvy.com redirects to www.ollvy.com). Doing it
+  // here would wake a serverless function just to issue a 308, adding ~300ms to
+  // every bare-domain hit. See DEPLOYMENT_NOTES.md.
 
   // Skip auth for public routes entirely — no Supabase client needed
   const isPublicRoute = PUBLIC_ROUTES.includes(pathname) ||
