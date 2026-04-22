@@ -2,7 +2,42 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import { LEARN_PAGES, LearnCategory } from '@/lib/guides/pages';
-import { GuidesSearch } from './guides-search';
+import { GuidesSearch, type GuideSearchEntry } from './guides-search';
+
+/**
+ * Build a minimal search index on the server so the full LEARN_PAGES config
+ * (~480KB of sections, bullets, table schemas, componentProps etc.) never ships
+ * to the client. We serialize only plain text + display metadata.
+ */
+function buildSearchIndex(): GuideSearchEntry[] {
+  return LEARN_PAGES.map((p) => {
+    const searchBlocks: { source: string; text: string }[] = [];
+
+    for (const section of p.sections) {
+      searchBlocks.push({ source: section.heading, text: section.body });
+      const bullets = section.bullets || section.list || [];
+      if (bullets.length > 0) {
+        searchBlocks.push({ source: section.heading, text: bullets.join(' \n ') });
+      }
+    }
+
+    if (p.faqs) {
+      for (const faq of p.faqs) {
+        searchBlocks.push({ source: 'FAQ', text: faq.q + ' ' + faq.a });
+      }
+    }
+
+    return {
+      slug: p.slug,
+      title: p.title,
+      seoDescription: p.seoDescription,
+      category: p.category,
+      lastReviewed: p.lastReviewed,
+      toolType: p.tool?.type,
+      searchBlocks,
+    };
+  });
+}
 
 export const metadata: Metadata = {
   title: 'Business Compliance Guides | Ollvy',
@@ -127,8 +162,9 @@ export default function LearnIndexPage() {
             ))}
           </div>
 
-          {/* Client-side filterable guide list */}
-          <GuidesSearch />
+          {/* Client-side filterable guide list. Index built server-side to keep
+              the full LEARN_PAGES configs out of the client bundle. */}
+          <GuidesSearch entries={buildSearchIndex()} />
         </div>
       </div>
     </>

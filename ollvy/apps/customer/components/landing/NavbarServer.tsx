@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { getNavbarServices } from '@/lib/data/services'
 import { Navbar } from './Navbar'
 
-const getCachedNavbarServices = unstable_cache(getNavbarServices, ['navbar-services'], { revalidate: 3600 })
+const getCachedNavbarServices = unstable_cache(getNavbarServices, ['navbar-services'], { tags: ['service-packages'] })
 
 /**
  * Server component wrapper for Navbar

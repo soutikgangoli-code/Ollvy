@@ -1,11 +1,9 @@
 import { Metadata } from 'next'
-import { Suspense } from 'react'
 import { unstable_cache } from 'next/cache'
 import { ServicesClient } from './services-client'
 import { supabaseServer } from '@/lib/supabase-server'
 import { SERVICES } from '@/lib/services'
 import type { ServicePackage } from '@/lib/types'
-import { Skeleton } from '@/components/ui/skeleton'
 
 // ISR: revalidate every hour to keep content fresh
 export const revalidate = 3600
@@ -203,31 +201,21 @@ function buildSearchIndex(services: ServicePackage[]): ServiceSearchEntry[] {
   })
 }
 
-function ServicesLoadingSkeleton() {
-  return (
-    <div className="container pb-12">
-      <div className="space-y-6 mb-10">
-        <Skeleton className="h-12 w-full" />
-        <div className="flex gap-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-10 w-24 rounded-full" />
-          ))}
-        </div>
-      </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-44 rounded-2xl" />
-        ))}
-      </div>
-    </div>
-  )
+interface PageProps {
+  searchParams: Promise<{ q?: string; filter?: string }>
 }
 
-export default async function ServicesPage() {
+export default async function ServicesPage({ searchParams }: PageProps) {
   // Fetch services server-side for SEO
-  const getCachedServices = unstable_cache(fetchServices, ['all-services'], { revalidate: 3600 })
+  const getCachedServices = unstable_cache(fetchServices, ['all-services'], { tags: ['service-packages'] })
   const services = await getCachedServices()
   const servicesSchema = generateServicesSchema(services)
+
+  // Read initial query + filters from URL on the server — avoids the client-side
+  // useSearchParams Suspense boundary that caused a ~400px skeleton-to-grid shift.
+  const { q, filter } = await searchParams
+  const initialQuery = q ?? ''
+  const initialFilters = filter?.split(',').filter(Boolean) ?? []
 
   return (
     <>
@@ -239,7 +227,7 @@ export default async function ServicesPage() {
           '@graph': [breadcrumbSchema, servicesSchema].map(({ '@context': _, ...rest }) => rest),
         }) }}
       />
-      {/* H1 outside Suspense for SEO crawlers */}
+      {/* H1 — SEO crawlable */}
       <div className="container pt-12 pb-6">
         <h1 className="text-3xl font-semibold text-foreground">All Services</h1>
         <p className="text-muted-foreground mt-2">
@@ -258,10 +246,13 @@ export default async function ServicesPage() {
         ))}
       </div>
 
-      {/* Client component for interactive search/filter with initial services */}
-      <Suspense fallback={<ServicesLoadingSkeleton />}>
-        <ServicesClient initialServices={services} searchIndex={buildSearchIndex(services)} />
-      </Suspense>
+      {/* Client grid — renders real content on first paint (no Suspense fallback). */}
+      <ServicesClient
+        initialServices={services}
+        searchIndex={buildSearchIndex(services)}
+        initialQuery={initialQuery}
+        initialFilters={initialFilters}
+      />
     </>
   )
 }

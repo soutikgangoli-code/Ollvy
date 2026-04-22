@@ -1,19 +1,24 @@
 'use client'
 
 import { useRef, useEffect, useState, useCallback, useLayoutEffect } from 'react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { servicesBySlug } from '@/lib/services/data'
 import { fallbackReviews, defaultFallbackReviews, type FallbackReview } from '@/lib/data/fallback-reviews'
-import { BookingPanel } from './BookingPanel'
 import { ProcessStepper } from './ProcessStepper'
-import { ExplainerStepper } from './ExplainerStepper'
-import { ServiceRisks } from './ServiceRisks'
-import { ProfilePersonas } from './ProfilePersonas'
-// Import directly for SEO crawlability - dynamic imports hide content from Google
-import { RelatedServices } from './RelatedServices'
-import { HowWeReviewed } from './HowWeReviewed'
-import { DIYvsOllvy } from '@/components/service/DIYvsOllvy'
+
+// Below-fold sections — code-split via next/dynamic. Default ssr:true means
+// the HTML is still server-rendered for Googlebot; only the JS chunk defers.
+// This is the real Medium-tier LCP fix: a ~1455-line client component gets sliced
+// so the hero + process stepper hydrate first.
+const BookingPanel = dynamic(() => import('./BookingPanel').then(m => ({ default: m.BookingPanel })))
+const ExplainerStepper = dynamic(() => import('./ExplainerStepper').then(m => ({ default: m.ExplainerStepper })))
+const ServiceRisks = dynamic(() => import('./ServiceRisks').then(m => ({ default: m.ServiceRisks })))
+const ProfilePersonas = dynamic(() => import('./ProfilePersonas').then(m => ({ default: m.ProfilePersonas })))
+const RelatedServices = dynamic(() => import('./RelatedServices').then(m => ({ default: m.RelatedServices })))
+const HowWeReviewed = dynamic(() => import('./HowWeReviewed').then(m => ({ default: m.HowWeReviewed })))
+const DIYvsOllvy = dynamic(() => import('@/components/service/DIYvsOllvy').then(m => ({ default: m.DIYvsOllvy })))
 import { getClient } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'

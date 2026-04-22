@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import {
@@ -17,11 +18,13 @@ import { LearnHero } from './LearnHero';
 import { LearnSectionBlock } from './LearnSectionBlock';
 import { LearnServiceCTA } from './LearnServiceCTA';
 import { LearnInternalLinks } from './LearnInternalLinks';
-import { EligibilityTool } from './tools/EligibilityTool';
-import { PenaltyTool } from './tools/PenaltyTool';
-import { ComparisonTool } from './tools/ComparisonTool';
-import { DeadlineTracker } from './tools/DeadlineTracker';
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions';
+
+// Each guide page renders only one of these — load the matching one on demand.
+const EligibilityTool = dynamic(() => import('./tools/EligibilityTool').then(m => ({ default: m.EligibilityTool })));
+const PenaltyTool = dynamic(() => import('./tools/PenaltyTool').then(m => ({ default: m.PenaltyTool })));
+const ComparisonTool = dynamic(() => import('./tools/ComparisonTool').then(m => ({ default: m.ComparisonTool })));
+const DeadlineTracker = dynamic(() => import('./tools/DeadlineTracker').then(m => ({ default: m.DeadlineTracker })));
 
 export function LearnPage({ page, ctaService, secondaryService }: {
   page: LearnPageConfig;

@@ -11,9 +11,9 @@ import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
 import { unstable_cache } from 'next/cache'
 import { getPopularServices, getFAQServicePrices, getAggregateRating, FAQServicePrices } from '@/lib/data/services'
 
-const getCachedPopularServices = unstable_cache(getPopularServices, ['popular-services'], { revalidate: 3600 })
-const getCachedFAQServicePrices = unstable_cache(getFAQServicePrices, ['faq-service-prices'], { revalidate: 3600 })
-const getCachedAggregateRating = unstable_cache(getAggregateRating, ['aggregate-rating'], { revalidate: 3600 })
+const getCachedPopularServices = unstable_cache(getPopularServices, ['popular-services'], { tags: ['service-packages'] })
+const getCachedFAQServicePrices = unstable_cache(getFAQServicePrices, ['faq-service-prices'], { tags: ['service-packages'] })
+const getCachedAggregateRating = unstable_cache(getAggregateRating, ['aggregate-rating'], { tags: ['service-packages'] })
 import dynamic from 'next/dynamic'
 
 const ProductShowcase = dynamic(() => import('@/components/landing/ProductShowcase').then(m => ({ default: m.ProductShowcase })))

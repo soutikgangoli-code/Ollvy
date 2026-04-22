@@ -5,7 +5,19 @@ import Link from 'next/link'
 import { Search, ArrowRight, SlidersHorizontal, X, FileText, AlertTriangle, Clock, Check } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { LEARN_PAGES, LearnCategory } from '@/lib/guides/pages'
+import type { LearnCategory } from '@/lib/guides/pages'
+
+// Minimal per-guide entry shipped to the client. Built server-side from
+// LEARN_PAGES to keep the full config (~480KB) out of the client bundle.
+export interface GuideSearchEntry {
+  slug: string
+  title: string
+  seoDescription: string
+  category: LearnCategory
+  lastReviewed: string
+  toolType?: 'eligibility' | 'penalty' | 'comparison' | 'deadline'
+  searchBlocks: { source: string; text: string }[]
+}
 
 const CATEGORY_LABELS: Record<LearnCategory, string> = {
   GST: 'GST',
@@ -45,23 +57,27 @@ function getToolBadge(toolType?: string) {
   }
 }
 
-// Unique categories that actually have pages
-const FILTER_TAGS = (() => {
-  const seen = new Set<LearnCategory>()
-  const tags: LearnCategory[] = []
-  for (const page of LEARN_PAGES) {
-    if (!seen.has(page.category)) {
-      seen.add(page.category)
-      tags.push(page.category)
-    }
-  }
-  return tags
-})()
+interface GuidesSearchProps {
+  entries: GuideSearchEntry[]
+}
 
-export function GuidesSearch() {
+export function GuidesSearch({ entries }: GuidesSearchProps) {
   const [query, setQuery] = useState('')
   const [activeFilters, setActiveFilters] = useState<Set<LearnCategory>>(new Set())
   const [filterOpen, setFilterOpen] = useState(false)
+
+  // Unique categories that actually have entries
+  const filterTags = useMemo(() => {
+    const seen = new Set<LearnCategory>()
+    const tags: LearnCategory[] = []
+    for (const entry of entries) {
+      if (!seen.has(entry.category)) {
+        seen.add(entry.category)
+        tags.push(entry.category)
+      }
+    }
+    return tags
+  }, [entries])
 
   const toggleFilter = (cat: LearnCategory) => {
     setActiveFilters(prev => {
@@ -85,11 +101,11 @@ export function GuidesSearch() {
 
   // Search results with matched snippet from within the guide content
   const filtered = useMemo(() => {
-    let pages = LEARN_PAGES
+    let pages = entries
     if (activeFilters.size > 0) pages = pages.filter(p => activeFilters.has(p.category))
 
     if (!query.trim()) {
-      return pages.map(p => ({ page: p, snippet: null as string | null, snippetSource: null as string | null }))
+      return pages.map(p => ({ entry: p, snippet: null as string | null, snippetSource: null as string | null }))
     }
 
     const q = query.toLowerCase()
@@ -99,57 +115,27 @@ export function GuidesSearch() {
         // Check title/description first
         const titleMatch = p.title.toLowerCase().includes(q) || p.seoDescription.toLowerCase().includes(q)
 
-        // Search within section bodies
+        // Search within pre-built blocks
         let snippet: string | null = null
         let snippetSource: string | null = null
 
-        for (const section of p.sections) {
-          const bodyLower = section.body.toLowerCase()
+        for (const block of p.searchBlocks) {
+          const bodyLower = block.text.toLowerCase()
           const idx = bodyLower.indexOf(q)
           if (idx !== -1) {
-            // Extract ~120 chars around the match
             const start = Math.max(0, idx - 40)
-            const end = Math.min(section.body.length, idx + q.length + 80)
-            snippet = (start > 0 ? '...' : '') + section.body.slice(start, end).trim() + (end < section.body.length ? '...' : '')
-            snippetSource = section.heading
+            const end = Math.min(block.text.length, idx + q.length + 80)
+            snippet = (start > 0 ? '...' : '') + block.text.slice(start, end).trim() + (end < block.text.length ? '...' : '')
+            snippetSource = block.source
             break
-          }
-          // Also search bullets
-          const bullets = section.bullets || section.list || []
-          for (const bullet of bullets) {
-            if (bullet.toLowerCase().includes(q)) {
-              snippet = bullet.length > 120 ? bullet.slice(0, 120) + '...' : bullet
-              snippetSource = section.heading
-              break
-            }
-          }
-          if (snippet) break
-        }
-
-        // Search FAQs
-        if (!snippet && p.faqs) {
-          for (const faq of p.faqs) {
-            if (faq.q.toLowerCase().includes(q)) {
-              snippet = faq.a.length > 120 ? faq.a.slice(0, 120) + '...' : faq.a
-              snippetSource = 'FAQ'
-              break
-            }
-            const aIdx = faq.a.toLowerCase().indexOf(q)
-            if (aIdx !== -1) {
-              const start = Math.max(0, aIdx - 40)
-              const end = Math.min(faq.a.length, aIdx + q.length + 80)
-              snippet = (start > 0 ? '...' : '') + faq.a.slice(start, end).trim() + (end < faq.a.length ? '...' : '')
-              snippetSource = 'FAQ'
-              break
-            }
           }
         }
 
         const hasMatch = titleMatch || snippet !== null
-        return hasMatch ? { page: p, snippet, snippetSource } : null
+        return hasMatch ? { entry: p, snippet, snippetSource } : null
       })
       .filter((r): r is NonNullable<typeof r> => r !== null)
-  }, [query, activeFilters])
+  }, [query, activeFilters, entries])
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -184,7 +170,7 @@ export function GuidesSearch() {
 
           {filterOpen && (
             <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-lg z-50 py-1 max-h-[60vh] overflow-y-auto">
-              {FILTER_TAGS.map(cat => (
+              {filterTags.map(cat => (
                 <button
                   key={cat}
                   onClick={() => toggleFilter(cat)}
@@ -231,12 +217,12 @@ export function GuidesSearch() {
       ) : (
         <div className="space-y-3">
           {filtered.map(result => {
-            const page = result.page
-            const Icon = getCategoryIcon(page.category)
-            const toolBadge = getToolBadge(page.tool?.type)
+            const entry = result.entry
+            const Icon = getCategoryIcon(entry.category)
+            const toolBadge = getToolBadge(entry.toolType)
 
             return (
-              <Link key={page.slug} href={`/guides/${page.slug}`}>
+              <Link key={entry.slug} href={`/guides/${entry.slug}`}>
                 <Card className="border border-border hover:border-[hsl(var(--ollvy-green))] transition-colors cursor-pointer group">
                   <CardHeader className="flex flex-row items-start gap-3 py-4 px-4">
                     <div className="p-2 rounded-lg bg-muted shrink-0">
@@ -244,11 +230,11 @@ export function GuidesSearch() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <CardTitle className="text-sm font-medium flex items-center justify-between gap-2 text-foreground/80">
-                        <span className="line-clamp-1">{page.title}</span>
+                        <span className="line-clamp-1">{entry.title}</span>
                         <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-[hsl(var(--ollvy-green))] transition-colors shrink-0" />
                       </CardTitle>
                       <CardDescription className="mt-1 text-xs line-clamp-2">
-                        {page.seoDescription}
+                        {entry.seoDescription}
                       </CardDescription>
                       {/* Matched snippet from within the guide */}
                       {result.snippet && query.trim() && (
@@ -263,7 +249,7 @@ export function GuidesSearch() {
                       )}
                       <div className="flex items-center gap-2 mt-2">
                         <span className="text-[10px] text-muted-foreground font-mono">
-                          {page.lastReviewed}
+                          {entry.lastReviewed}
                         </span>
                         {toolBadge && (
                           <span className="text-[10px] px-2 py-0.5 rounded-full bg-[hsl(var(--ollvy-green))]/10 text-[hsl(var(--ollvy-green-fg))] font-medium">

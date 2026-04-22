@@ -9,3 +9,10 @@ Razorpay keys.csv
 Razorpay test keys.csv
 rzp-key.csv
 rzp-test Keys.csv
+
+# Stray Next.js build output if a tool runs from the repo root cwd
+# (the real app lives in ollvy/apps/customer/)
+.next/
+
+# Playwright MCP session logs
+.playwright-mcp/

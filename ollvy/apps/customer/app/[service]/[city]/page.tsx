@@ -49,7 +49,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { service: serviceSlug, city: citySlug } = await params
-  const getCachedGeoService = unstable_cache(() => getServiceBySlugFromDB(serviceSlug), [`geo-service-${serviceSlug}`], { revalidate: 3600 })
+  const getCachedGeoService = unstable_cache(() => getServiceBySlugFromDB(serviceSlug), [`geo-service-${serviceSlug}`], { tags: ['service-packages'] })
   const { service } = await getCachedGeoService()
   const city = getCityBySlug(citySlug)
 
@@ -97,7 +97,7 @@ export default async function GeoPage({ params }: PageProps) {
   }
 
   // Fetch complete service data from database (cached)
-  const getCachedGeoServiceData = unstable_cache(() => getServiceBySlugFromDB(serviceSlug), [`geo-service-${serviceSlug}`], { revalidate: 3600 })
+  const getCachedGeoServiceData = unstable_cache(() => getServiceBySlugFromDB(serviceSlug), [`geo-service-${serviceSlug}`], { tags: ['service-packages'] })
   const { service, pricing: basePricing } = await getCachedGeoServiceData()
 
   if (!service) {
@@ -109,7 +109,7 @@ export default async function GeoPage({ params }: PageProps) {
   // Fetch state-specific pricing override (cached)
   let adjustedService = { ...service }
   if (basePricing?.id) {
-    const getCachedStatePricing = unstable_cache(() => getStatePricing(basePricing.id, city.state), [`geo-state-pricing-${serviceSlug}-${citySlug}`], { revalidate: 3600 })
+    const getCachedStatePricing = unstable_cache(() => getStatePricing(basePricing.id, city.state), [`geo-state-pricing-${serviceSlug}-${citySlug}`], { tags: ['service-packages'] })
     const statePricing = await getCachedStatePricing()
 
     if (statePricing) {
@@ -123,8 +123,8 @@ export default async function GeoPage({ params }: PageProps) {
   }
 
   // Fetch reviews and related services in parallel (cached)
-  const getCachedGeoReviews = unstable_cache(() => getServiceReviews(service.id), [`geo-reviews-${serviceSlug}`], { revalidate: 3600 })
-  const getCachedGeoRelated = unstable_cache(() => getRelatedServicesBySlugs(service.relatedSlugs), [`geo-related-${serviceSlug}`], { revalidate: 3600 })
+  const getCachedGeoReviews = unstable_cache(() => getServiceReviews(service.id), [`geo-reviews-${serviceSlug}`], { tags: ['service-packages'] })
+  const getCachedGeoRelated = unstable_cache(() => getRelatedServicesBySlugs(service.relatedSlugs), [`geo-related-${serviceSlug}`], { tags: ['service-packages'] })
   const [reviews, relatedServices] = await Promise.all([
     getCachedGeoReviews(),
     getCachedGeoRelated(),

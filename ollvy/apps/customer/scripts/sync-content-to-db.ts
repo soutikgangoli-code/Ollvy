@@ -238,6 +238,29 @@ async function main() {
   })
 
   console.log('\nDone! Run the audit script to verify.')
+
+  // Invalidate the `service-packages` cache tag so live pages pick up the
+  // new content without waiting for any TTL. Requires REVALIDATE_SECRET set
+  // and REVALIDATE_URL pointed at the deployed host (e.g. https://www.ollvy.com).
+  const revalidateUrl = process.env.REVALIDATE_URL
+  const revalidateSecret = process.env.REVALIDATE_SECRET
+  if (revalidateUrl && revalidateSecret) {
+    try {
+      const res = await fetch(`${revalidateUrl}/api/revalidate-services`, {
+        method: 'POST',
+        headers: { authorization: `Bearer ${revalidateSecret}` },
+      })
+      if (res.ok) {
+        console.log('✓ Cache tag service-packages revalidated')
+      } else {
+        console.warn(`Cache revalidate failed: ${res.status} ${await res.text()}`)
+      }
+    } catch (err) {
+      console.warn('Cache revalidate request threw:', err)
+    }
+  } else {
+    console.log('(Set REVALIDATE_URL + REVALIDATE_SECRET to auto-invalidate the cache)')
+  }
 }
 
 main().catch(console.error)
