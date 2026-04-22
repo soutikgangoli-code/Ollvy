@@ -343,8 +343,11 @@ export function UnifiedServicePage({
     : SECTIONS.filter(s => s.id !== 'documents')
 
   const [heroVisible, setHeroVisible] = useState(true)
-  const [activeSection, setActiveSection] = useState<SectionId>('process')
   const heroRef = useRef<HTMLDivElement>(null)
+  // activeSection is tracked in a ref — never re-renders the component
+  const activeSectionRef = useRef<SectionId>('process')
+  // Flag set during tap-triggered smooth-scroll so IO doesn't flicker through intermediate sections
+  const programmaticScrollRef = useRef(false)
 
   // Variant selection state (shared with BookingPanel via callback)
   const [selectedVariant, setSelectedVariant] = useState<string>(
@@ -397,12 +400,12 @@ export function UnifiedServicePage({
     }
   }, [service, pricing, hasTrackedView, trackViewService])
 
-  // Refs for smooth underline indicator
+  // Refs for smooth underline indicator — indicator position is updated imperatively
   const heroNavRef = useRef<HTMLDivElement>(null)
   const stickyNavRef = useRef<HTMLElement>(null)
   const mobileTabsRef = useRef<HTMLDivElement>(null)
-  const [heroIndicator, setHeroIndicator] = useState({ left: 0, width: 0 })
-  const [stickyIndicator, setStickyIndicator] = useState({ left: 0, width: 0 })
+  const heroIndicatorRef = useRef<HTMLDivElement>(null)
+  const stickyIndicatorRef = useRef<HTMLDivElement>(null)
 
   // Section refs for scroll tracking
   const sectionRefs = useRef<Record<SectionId, HTMLElement | null>>({
@@ -488,89 +491,106 @@ export function UnifiedServicePage({
     return baseUrl
   }
 
-  // Scroll to section
+  // Imperatively set active nav state — no React state, no re-renders.
+  // Runs from IO callbacks (scrolling) and from tab taps.
+  const applyActiveSection = useCallback((id: SectionId) => {
+    activeSectionRef.current = id
+
+    const paintNav = (container: HTMLElement | null): HTMLElement | null => {
+      if (!container) return null
+      const buttons = container.querySelectorAll<HTMLButtonElement>('[data-section]')
+      let activeBtn: HTMLButtonElement | null = null
+      buttons.forEach((btn) => {
+        const isActive = btn.dataset.section === id
+        btn.setAttribute('aria-selected', isActive ? 'true' : 'false')
+        btn.classList.toggle('text-foreground', isActive)
+        btn.classList.toggle('text-muted-foreground', !isActive)
+        btn.classList.toggle('hover:text-foreground', !isActive)
+        // Mobile sticky tabs also toggle a bottom border color
+        if (btn.dataset.navVariant === 'mobile-sticky') {
+          btn.classList.toggle('border-foreground', isActive)
+          btn.classList.toggle('border-transparent', !isActive)
+        }
+        if (isActive) activeBtn = btn
+      })
+      return activeBtn
+    }
+
+    const heroActive = paintNav(heroNavRef.current)
+    const stickyActive = paintNav(stickyNavRef.current)
+    paintNav(mobileTabsRef.current)
+
+    // Position underline indicators imperatively
+    if (heroActive && heroIndicatorRef.current) {
+      heroIndicatorRef.current.style.transform = `translateX(${heroActive.offsetLeft}px)`
+      heroIndicatorRef.current.style.width = `${heroActive.offsetWidth}px`
+    }
+    if (stickyActive && stickyIndicatorRef.current) {
+      stickyIndicatorRef.current.style.transform = `translateX(${stickyActive.offsetLeft}px)`
+      stickyIndicatorRef.current.style.width = `${stickyActive.offsetWidth}px`
+    }
+
+    // Center active tab inside mobile horizontal scroller
+    if (mobileTabsRef.current) {
+      const btn = mobileTabsRef.current.querySelector<HTMLButtonElement>(`[data-section="${id}"]`)
+      if (btn) {
+        const scrollLeft = btn.offsetLeft - mobileTabsRef.current.offsetWidth / 2 + btn.offsetWidth / 2
+        mobileTabsRef.current.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' })
+      }
+    }
+  }, [])
+
+  // Scroll to section — tap handler. Suppresses IO-driven flicker during the smooth-scroll animation.
   const scrollToSection = useCallback((sectionId: SectionId) => {
     const element = sectionRefs.current[sectionId]
-    if (element) {
-      const offset = 100 // Account for sticky header
-      const top = element.getBoundingClientRect().top + window.scrollY - offset
-      window.scrollTo({ top, behavior: 'smooth' })
-    }
-  }, [])
+    if (!element) return
+    programmaticScrollRef.current = true
+    applyActiveSection(sectionId)
+    const offset = 100
+    const top = element.getBoundingClientRect().top + window.scrollY - offset
+    window.scrollTo({ top, behavior: 'smooth' })
+    setTimeout(() => {
+      programmaticScrollRef.current = false
+    }, 600)
+  }, [applyActiveSection])
 
-  // Track active section on scroll — rAF-throttled, skips redundant state updates
+  // Track active section via IntersectionObserver — off main thread, no layout reads
   useEffect(() => {
-    const reversedSections = [...SECTIONS].reverse()
-    let rafId: number | null = null
-
-    const runDetection = () => {
-      rafId = null
-      const scrollPosition = window.scrollY + 150
-      for (const section of reversedSections) {
-        const element = sectionRefs.current[section.id]
-        if (element && element.offsetTop <= scrollPosition) {
-          setActiveSection((prev) => (prev === section.id ? prev : section.id))
-          return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (programmaticScrollRef.current) return
+        const intersectingIds = new Set(
+          entries.filter((e) => e.isIntersecting).map((e) => e.target.id)
+        )
+        if (intersectingIds.size === 0) return
+        // Prefer the topmost section (earliest in SECTIONS order)
+        for (const section of SECTIONS) {
+          if (intersectingIds.has(section.id)) {
+            if (activeSectionRef.current !== section.id) {
+              applyActiveSection(section.id)
+            }
+            break
+          }
         }
-      }
+      },
+      { rootMargin: '-150px 0px -70% 0px', threshold: 0 }
+    )
+
+    for (const section of SECTIONS) {
+      const el = sectionRefs.current[section.id]
+      if (el) observer.observe(el)
     }
 
-    const handleScroll = () => {
-      if (rafId !== null) return
-      rafId = requestAnimationFrame(runDetection)
-    }
+    return () => observer.disconnect()
+  }, [applyActiveSection])
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      if (rafId !== null) cancelAnimationFrame(rafId)
-    }
-  }, [])
-
-  // Update indicator position when active section changes
+  // Initial mount + resize: sync nav to whichever section is currently active
   useEffect(() => {
-    const updateIndicators = () => {
-      // Hero nav indicator
-      if (heroNavRef.current) {
-        const activeButton = heroNavRef.current.querySelector(`[data-section="${activeSection}"]`) as HTMLElement
-        if (activeButton) {
-          setHeroIndicator({
-            left: activeButton.offsetLeft,
-            width: activeButton.offsetWidth,
-          })
-        }
-      }
-
-      // Sticky nav indicator
-      if (stickyNavRef.current) {
-        const activeButton = stickyNavRef.current.querySelector(`[data-section="${activeSection}"]`) as HTMLElement
-        if (activeButton) {
-          setStickyIndicator({
-            left: activeButton.offsetLeft,
-            width: activeButton.offsetWidth,
-          })
-        }
-      }
-
-      // Mobile tabs: scroll active tab into center of container
-      if (mobileTabsRef.current) {
-        const activeButton = mobileTabsRef.current.querySelector(`[data-section="${activeSection}"]`) as HTMLElement
-        if (activeButton) {
-          const container = mobileTabsRef.current
-          const scrollLeft = activeButton.offsetLeft - (container.offsetWidth / 2) + (activeButton.offsetWidth / 2)
-          container.scrollTo({
-            left: Math.max(0, scrollLeft),
-            behavior: 'smooth'
-          })
-        }
-      }
-    }
-
-    updateIndicators()
-    // Also update on resize
-    window.addEventListener('resize', updateIndicators)
-    return () => window.removeEventListener('resize', updateIndicators)
-  }, [activeSection])
+    applyActiveSection(activeSectionRef.current)
+    const handleResize = () => applyActiveSection(activeSectionRef.current)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [applyActiveSection])
 
   // Sticky bar: show when hero scrolls out of view
   useEffect(() => {
@@ -626,11 +646,10 @@ export function UnifiedServicePage({
                   key={section.id}
                   data-section={section.id}
                   role="tab"
-                  aria-selected={activeSection === section.id}
                   onClick={() => scrollToSection(section.id)}
                   className={cn(
                     'shrink-0 px-3 md:px-5 py-3 text-xs md:text-sm font-medium transition-colors whitespace-nowrap',
-                    activeSection === section.id
+                    section.id === 'process'
                       ? 'text-foreground'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
@@ -638,13 +657,11 @@ export function UnifiedServicePage({
                   {section.label}
                 </button>
               ))}
-              {/* Sliding underline indicator */}
+              {/* Sliding underline indicator — position updated imperatively */}
               <div
-                className="absolute bottom-0 h-0.5 bg-foreground transition-all duration-300 ease-out"
-                style={{
-                  left: stickyIndicator.left,
-                  width: stickyIndicator.width,
-                }}
+                ref={stickyIndicatorRef}
+                className="absolute bottom-0 left-0 h-0.5 bg-foreground transition-[transform,width] duration-300 ease-out"
+                style={{ width: 0 }}
               />
             </nav>
           </div>
@@ -657,12 +674,12 @@ export function UnifiedServicePage({
               <button
                 key={section.id}
                 data-section={section.id}
+                data-nav-variant="mobile-sticky"
                 role="tab"
-                aria-selected={activeSection === section.id}
                 onClick={() => scrollToSection(section.id)}
                 className={cn(
                   'shrink-0 px-3 py-3 text-xs font-medium transition-colors whitespace-nowrap border-b-2',
-                  activeSection === section.id
+                  section.id === 'process'
                     ? 'text-foreground border-foreground'
                     : 'text-muted-foreground border-transparent hover:text-foreground'
                 )}
@@ -759,11 +776,10 @@ export function UnifiedServicePage({
                       key={section.id}
                       data-section={section.id}
                       role="tab"
-                      aria-selected={activeSection === section.id}
                       onClick={() => scrollToSection(section.id)}
                       className={cn(
                         'shrink-0 px-3 md:px-5 py-3 text-xs md:text-sm font-medium transition-colors whitespace-nowrap',
-                        activeSection === section.id
+                        section.id === 'process'
                           ? 'text-foreground'
                           : 'text-muted-foreground hover:text-foreground'
                       )}
@@ -771,13 +787,11 @@ export function UnifiedServicePage({
                       {section.label}
                     </button>
                   ))}
-                  {/* Sliding underline indicator */}
+                  {/* Sliding underline indicator — position updated imperatively */}
                   <div
-                    className="absolute bottom-0 h-0.5 bg-foreground transition-all duration-300 ease-out"
-                    style={{
-                      left: heroIndicator.left,
-                      width: heroIndicator.width,
-                    }}
+                    ref={heroIndicatorRef}
+                    className="absolute bottom-0 left-0 h-0.5 bg-foreground transition-[transform,width] duration-300 ease-out"
+                    style={{ width: 0 }}
                   />
                 </div>
               </div>

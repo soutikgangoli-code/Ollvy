@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo, useDeferredValue } from 'react'
-import { useSearchParams, useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import { SearchBar } from '@/components/services/SearchBar'
 import { FilterChips } from '@/components/services/FilterChips'
 import { ServiceGrid } from '@/components/services/ServiceGrid'
@@ -26,28 +26,36 @@ const SPECIAL_FILTERS = ['bundles', 'cloud_kitchen']
 interface ServicesClientProps {
   initialServices: ServicePackage[]
   searchIndex: ServiceSearchEntry[]
+  initialQuery?: string
+  initialFilters?: string[]
 }
 
-export function ServicesClient({ initialServices, searchIndex }: ServicesClientProps) {
-  const searchParams = useSearchParams()
+export function ServicesClient({
+  initialServices,
+  searchIndex,
+  initialQuery = '',
+  initialFilters = [],
+}: ServicesClientProps) {
   const router = useRouter()
 
   const [services, setServices] = useState<ServicePackage[]>(initialServices)
   const [isLoading, setIsLoading] = useState(false)
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
-  const [selectedFilters, setSelectedFilters] = useState<string[]>(
-    searchParams.get('filter')?.split(',').filter(Boolean) || []
-  )
+  const [searchQuery, setSearchQuery] = useState(initialQuery)
+  const [selectedFilters, setSelectedFilters] = useState<string[]>(initialFilters)
 
-  // Debounce search (250ms) so we don't re-query / re-URL on every keystroke
+  // 250ms debounce for the Supabase query (feeds fetchServices + snippet compute + grid)
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery)
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(searchQuery), 250)
     return () => clearTimeout(t)
   }, [searchQuery])
 
-  // Snippet computation is non-urgent — let the input update first
-  const deferredQuery = useDeferredValue(debouncedQuery)
+  // 500ms debounce for the URL sync so shareable URLs settle after typing stops
+  const [urlDebouncedQuery, setUrlDebouncedQuery] = useState(searchQuery)
+  useEffect(() => {
+    const t = setTimeout(() => setUrlDebouncedQuery(searchQuery), 500)
+    return () => clearTimeout(t)
+  }, [searchQuery])
 
   // Only fetch when there are active filters or search query
   const hasActiveFilters = debouncedQuery || selectedFilters.length > 0
@@ -111,19 +119,19 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
 
   useEffect(() => {
     const params = new URLSearchParams()
-    if (debouncedQuery) params.set('q', debouncedQuery)
+    if (urlDebouncedQuery) params.set('q', urlDebouncedQuery)
     if (selectedFilters.length > 0) params.set('filter', selectedFilters.join(','))
 
     const newUrl = params.toString() ? `?${params.toString()}` : '/services'
     router.replace(newUrl, { scroll: false })
-  }, [debouncedQuery, selectedFilters, router])
+  }, [urlDebouncedQuery, selectedFilters, router])
 
   // Deep search: find snippets from service content for the current query
   const snippetsBySlug = useMemo(() => {
     const map: Record<string, { source: string; snippet: string }> = {}
-    if (!deferredQuery.trim()) return map
+    if (!debouncedQuery.trim()) return map
 
-    const q = deferredQuery.toLowerCase()
+    const q = debouncedQuery.toLowerCase()
 
     for (const entry of searchIndex) {
       for (const { source, text } of entry.texts) {
@@ -139,24 +147,24 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
     }
 
     return map
-  }, [deferredQuery, searchIndex])
+  }, [debouncedQuery, searchIndex])
 
   // When searching, also include services matched by deep content search
   const deepMatchSlugs = useMemo(() => {
-    if (!deferredQuery.trim()) return new Set<string>()
+    if (!debouncedQuery.trim()) return new Set<string>()
     return new Set(Object.keys(snippetsBySlug))
-  }, [deferredQuery, snippetsBySlug])
+  }, [debouncedQuery, snippetsBySlug])
 
   // Merge deep matches into services list (add any that Supabase query missed)
   const mergedServices = useMemo(() => {
-    if (!deferredQuery.trim() || deepMatchSlugs.size === 0) return services
+    if (!debouncedQuery.trim() || deepMatchSlugs.size === 0) return services
 
     const existingSlugs = new Set(services.map(s => s.slug))
     const extraServices = initialServices.filter(
       s => deepMatchSlugs.has(s.slug) && !existingSlugs.has(s.slug)
     )
     return [...services, ...extraServices]
-  }, [services, deepMatchSlugs, deferredQuery, initialServices])
+  }, [services, deepMatchSlugs, debouncedQuery, initialServices])
 
   return (
     <div className="container pb-12">
@@ -186,8 +194,8 @@ export function ServicesClient({ initialServices, searchIndex }: ServicesClientP
       <ServiceGrid
         services={mergedServices}
         isLoading={isLoading}
-        snippets={deferredQuery.trim() ? snippetsBySlug : undefined}
-        query={deferredQuery}
+        snippets={debouncedQuery.trim() ? snippetsBySlug : undefined}
+        query={debouncedQuery}
       />
     </div>
   )
