@@ -54,6 +54,16 @@ interface PriceBreakdown {
 // Session storage helpers for checkout persistence
 const CHECKOUT_STATE_KEY = 'ollvy_checkout_state'
 
+// Services that route through the /checkout/[slug]/eligibility flow. Only these
+// write preCursorAnswers to sessionStorage, so only they need the placeholder
+// height reserved pre-hydration.
+const ELIGIBILITY_FLOW_SLUGS = [
+  'trademark-registration',
+  'pvt-ltd-incorporation',
+  'llp-incorporation',
+  'iepf-consultation',
+]
+
 // Cloud kitchen add-on display labels for "What's Included" section
 const CLOUD_KITCHEN_ADDON_LABELS: Record<string, string> = {
   'gst-registration': 'GST Registration',
@@ -688,25 +698,29 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         <div className="grid lg:grid-cols-[1fr_380px] gap-8">
           {/* Left column - Main flow */}
           <div className="space-y-8">
-            {/* Pre-cursor answers summary (if present). Wrapper reserves height so
-                the card appearing post-hydration doesn't shift the flow below. */}
-            <div className="min-h-[120px]">
-              {Object.keys(preCursorAnswers).length > 0 && (
-                <PreCursorSummaryCard
-                  answers={preCursorAnswers}
-                  serviceSlug={service.slug}
-                  serviceId={serviceId}
-                  onEdit={() => {
-                    // Redirect to eligibility page with edit flag (keep answers for editing)
-                    const params = new URLSearchParams()
-                    params.set('edit', 'true')
-                    if (variantFromUrl) params.set('variant', variantFromUrl)
-                    if (addonsFromUrl) params.set('addons', addonsFromUrl)
-                    router.push(`/checkout/${serviceId}/eligibility?${params.toString()}`)
-                  }}
-                />
-              )}
-            </div>
+            {/* Pre-cursor answers summary.
+                - When answers are present: render the card.
+                - When empty AND the service uses the eligibility flow: reserve height
+                  so the card arriving from sessionStorage post-hydration doesn't shift.
+                - For services without an eligibility flow (gst, esop, monthly filings, etc.)
+                  preCursorAnswers will never populate — render nothing, no wasted space. */}
+            {Object.keys(preCursorAnswers).length > 0 ? (
+              <PreCursorSummaryCard
+                answers={preCursorAnswers}
+                serviceSlug={service.slug}
+                serviceId={serviceId}
+                onEdit={() => {
+                  // Redirect to eligibility page with edit flag (keep answers for editing)
+                  const params = new URLSearchParams()
+                  params.set('edit', 'true')
+                  if (variantFromUrl) params.set('variant', variantFromUrl)
+                  if (addonsFromUrl) params.set('addons', addonsFromUrl)
+                  router.push(`/checkout/${serviceId}/eligibility?${params.toString()}`)
+                }}
+              />
+            ) : ELIGIBILITY_FLOW_SLUGS.includes(service.slug) ? (
+              <div className="min-h-[120px]" aria-hidden="true" />
+            ) : null}
 
             {/* Step 1: Stepper */}
             <CheckoutStepper currentStep={1} />
