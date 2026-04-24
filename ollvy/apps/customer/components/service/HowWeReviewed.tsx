@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { DBServiceConfig } from '@/lib/data/services'
 import { FileText, History, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { LAST_REVIEWED } from '@/constants/accuracy'
+import { LAST_REVIEWED, getReviewerForSlug } from '@/constants/accuracy'
 
 export function HowWeReviewed({ service }: { service: DBServiceConfig }) {
   const [activeTab, setActiveTab] = useState<'sources' | 'history'>('sources')
@@ -67,6 +67,13 @@ export function HowWeReviewed({ service }: { service: DBServiceConfig }) {
           <span className="text-foreground font-medium">
             {LAST_REVIEWED[service.slug] ?? 'April 2026'}
           </span>
+        </p>
+        <p className="text-xs text-muted-foreground mt-1">
+          Reviewed by{' '}
+          <span className="text-foreground font-medium">
+            {getReviewerForSlug(service.slug)}
+          </span>
+          , Ollvy CA team
         </p>
         <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
           Penalty amounts and deadlines are manually verified against source

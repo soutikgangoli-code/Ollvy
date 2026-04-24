@@ -1,5 +1,6 @@
 // Structured Data for individual service pages
-// Includes BreadcrumbList, Service, AggregateRating, and FAQPage schemas
+// Includes BreadcrumbList, Service, AggregateRating, FAQPage schemas + E-E-A-T (reviewedBy, dateModified)
+import { LAST_REVIEWED, getReviewerForSlug, parseReviewedToISO } from '@/constants/accuracy'
 
 interface ReviewData {
   rating: number
@@ -175,7 +176,12 @@ export function ServiceStructuredData({
     })),
   } : null
 
-  // Build service schema with optional aggregate rating
+  // E-E-A-T signals for YMYL content (tax/compliance)
+  const reviewerName = getReviewerForSlug(serviceSlug)
+  const lastReviewedStr = LAST_REVIEWED[serviceSlug] ?? 'April 2026'
+  const dateModifiedISO = parseReviewedToISO(lastReviewedStr)
+
+  // Build service schema with optional aggregate rating + E-E-A-T
   const serviceSchema = {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -193,12 +199,24 @@ export function ServiceStructuredData({
       name: 'India',
     },
     serviceType: category,
+    // E-E-A-T: named CA reviewer with affiliation for YMYL credibility
+    reviewedBy: {
+      '@type': 'Person',
+      name: reviewerName,
+      jobTitle: 'Chartered Accountant',
+      worksFor: {
+        '@type': 'Organization',
+        name: 'Ollvy',
+        url: 'https://www.ollvy.com',
+      },
+    },
+    ...(dateModifiedISO ? { dateModified: dateModifiedISO } : {}),
     offers: offersSchema,
     // Estimated duration in ISO 8601 format (P = period, D = days)
     ...(slaDays ? { estimatedDuration: `P${slaDays}D` } : {}),
     // Include what's included as offer catalog
     ...(offerCatalog ? { hasOfferCatalog: offerCatalog } : {}),
-    // Include aggregate rating if we have enough reviews (10+)
+    // Include aggregate rating if we have enough reviews (>=5)
     ...(avgRating && totalRatings && totalRatings >= 5
       ? {
           aggregateRating: {

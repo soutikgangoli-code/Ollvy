@@ -40,6 +40,7 @@ const HowWeReviewed = dynamic(
   () => import('./HowWeReviewed').then(m => ({ default: m.HowWeReviewed })),
   { loading: () => <div className="min-h-[260px] rounded-xl bg-muted/10" aria-hidden="true" /> }
 )
+import { RelatedGuides } from './RelatedGuides'
 const DIYvsOllvy = dynamic(
   () => import('@/components/service/DIYvsOllvy').then(m => ({ default: m.DIYvsOllvy })),
   { loading: () => <div className="min-h-[700px] rounded-xl bg-muted/10" aria-hidden="true" /> }
@@ -1360,6 +1361,12 @@ export function UnifiedServicePage({
                 <section className="py-16 border-b border-border">
                   <RelatedServices services={relatedServices} />
                 </section>
+
+                {/* Section: Related Guides (cross-links to deep-dive guides) */}
+                <RelatedGuides
+                  serviceSlug={service.slug}
+                  serviceShortName={service.shortName}
+                />
 
                 {/* Section: How We Reviewed */}
                 <HowWeReviewed service={service} />
