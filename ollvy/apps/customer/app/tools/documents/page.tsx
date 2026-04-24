@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, Building2, Users, Handshake, Receipt, User, FileText, Briefcase, Shield } from 'lucide-react'
+import { ArrowRight, Building2, Users, Handshake, Receipt, User, FileText, Briefcase, Shield, CreditCard } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Document Checklists for Business Registration & Compliance | Ollvy',
@@ -71,6 +71,12 @@ const documentTypes = [
     description: 'Brand name, logo, applicant identity, and business documents needed to register and protect your trademark.',
     href: '/tools/documents/trademark',
     icon: Shield,
+  },
+  {
+    title: 'Documents for Business PAN',
+    description: 'PAN application for a Company, LLP, or Partnership Firm. Form 49A, identity + address proof of directors/partners, and entity documents required.',
+    href: '/tools/documents/business-pan',
+    icon: CreditCard,
   },
 ]
 

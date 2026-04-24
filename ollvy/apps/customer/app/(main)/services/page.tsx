@@ -12,16 +12,12 @@ export const metadata: Metadata = {
   title: 'All Services - Business Compliance & Registration | Ollvy',
   description:
     'Browse all compliance services: GST registration, Pvt Ltd incorporation, ITR filing, trademark registration, and more. Fixed pricing, fast delivery, expert support.',
-  keywords: [
-    'business registration services India',
-    'GST registration service',
-    'company incorporation India',
-    'ITR filing service',
-    'trademark registration India',
-    'compliance services for startups',
-  ],
   alternates: {
     canonical: 'https://www.ollvy.com/services',
+    languages: {
+      'en-IN': 'https://www.ollvy.com/services',
+      'x-default': 'https://www.ollvy.com/services',
+    },
   },
   openGraph: {
     title: 'All Services - Business Compliance & Registration | Ollvy',
@@ -123,11 +119,28 @@ function generateServicesSchema(services: ServicePackage[]) {
         },
         offers: {
           '@type': 'Offer',
-          price: Math.round(service.price_base_paisa / 100).toString(),
+          price: Math.round((service.price_base_paisa + (service.price_govt_fees_paisa ?? 0)) / 100).toString(),
           priceCurrency: 'INR',
           availability: 'https://schema.org/InStock',
+          eligibleRegion: { '@type': 'Country', name: 'IN' },
+          ...(service.price_govt_fees_paisa > 0 && {
+            priceSpecification: [
+              {
+                '@type': 'UnitPriceSpecification',
+                price: Math.round(service.price_base_paisa / 100).toString(),
+                priceCurrency: 'INR',
+                name: 'Professional Fee',
+              },
+              {
+                '@type': 'UnitPriceSpecification',
+                price: Math.round(service.price_govt_fees_paisa / 100).toString(),
+                priceCurrency: 'INR',
+                name: 'Government Fee',
+              },
+            ],
+          }),
         },
-        ...(service.avg_rating && service.rating_count >= 10 ? {
+        ...(service.avg_rating && service.rating_count >= 5 ? {
           aggregateRating: {
             '@type': 'AggregateRating',
             ratingValue: service.avg_rating.toFixed(1),

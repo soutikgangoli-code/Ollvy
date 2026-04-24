@@ -36,7 +36,14 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
   viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
 }
 
 export const metadata: Metadata = {
@@ -58,6 +65,10 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
   alternates: {
     canonical: 'https://www.ollvy.com',
+    languages: {
+      'en-IN': 'https://www.ollvy.com',
+      'x-default': 'https://www.ollvy.com',
+    },
   },
   openGraph: {
     title: 'Ollvy - Company Registration & Compliance, Sorted',
@@ -89,7 +100,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-IN" suppressHydrationWarning>
       <head>
         {/* Preconnect to origins that block paint or first interaction.
             Supabase: used for client-side auth + service fetches on every page.

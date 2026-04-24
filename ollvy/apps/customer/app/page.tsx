@@ -184,6 +184,13 @@ export default async function LandingPage() {
             faqJsonLd,
             ...(servicesItemListJsonLd ? [servicesItemListJsonLd] : []),
             ...(aggregateRatingJsonLd ? [aggregateRatingJsonLd] : []),
+            {
+              '@context': 'https://schema.org',
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.ollvy.com' },
+              ],
+            },
           ].map(({ '@context': _, ...rest }) => rest),
         }) }}
       />

@@ -221,8 +221,8 @@ This calculator shows the total late fee based on the number of years you have m
 export const mcaFilingPage: ToolPageConfig = {
   slug: 'mca-annual-filing',
   title: 'MCA Annual Filing Penalty Calculator (AOC-4 & MGT-7)',
-  seoTitle: 'MCA Annual Filing Penalty Calculator 2026 | AOC-4 & MGT-7 | Ollvy',
-  seoDescription: 'Calculate MCA annual filing late fee for Pvt Ltd companies. AOC-4 due 30 days after AGM, MGT-7 due 60 days. Rs. 100/day per form. Director disqualification risk.',
+  seoTitle: 'MCA Annual Filing Penalty Calculator India 2026 | AOC-4 & MGT-7 | Ollvy',
+  seoDescription: 'Calculate MCA annual filing late fee for Pvt Ltd. AOC-4 due 30 days after AGM, MGT-7 due 60 days. Rs 100/day per form. Director disqualification risk.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/mca-annual-filing',
   lastReviewed: 'April 2026',
   category: 'MCA',
@@ -289,7 +289,7 @@ This calculator helps you see the additional fee exposure for both forms so you 
 export const itrLateFilingPage: ToolPageConfig = {
   slug: 'itr-late-filing',
   title: 'ITR Late Filing Penalty Calculator',
-  seoTitle: 'Income Tax Return Late Filing Penalty Calculator India 2026 | Ollvy',
+  seoTitle: 'ITR Late Filing Penalty Calculator India 2026 | Ollvy',
   seoDescription: 'Calculate ITR late filing fee, Section 234A interest, and 234B advance tax interest. Company and LLP ITR due October 31. Individual ITR due July 31.',
   canonicalUrl: 'https://www.ollvy.com/tools/penalty-calculator/itr-late-filing',
   lastReviewed: 'April 2026',
@@ -534,7 +534,7 @@ The maximum PT any state can charge is Rs. 2,500 per year per person, set by Art
 
 Penalty rates for late payment vary by state: Maharashtra charges 10% per month on the outstanding amount. Karnataka charges 2% per month. Tamil Nadu imposes a flat 10% penalty plus 2% monthly interest. This calculator uses your state's specific rates.`,
 
-  howToUse: `**Check your state first.** If you are in Delhi, UP, Haryana, Rajasthan, Punjab, or HP - Professional Tax does not apply. No calculation needed.
+  howToUse: `**Check your state first:** If you are in Delhi, UP, Haryana, Rajasthan, Punjab, or HP - Professional Tax does not apply. No calculation needed.
 
 **Two separate registrations:** If you have employees in a PT state, you need both PTEC (for yourself as the employer/professional) and PTRC (to deduct and remit PT from employees). These are separate registrations with separate filing obligations.
 
@@ -670,7 +670,7 @@ The remedy is compounding - a formal process where you approach RBI, disclose th
 
 This calculator provides indicative ranges based on the investment amount and delay period. The actual fee is determined by RBI and can only be confirmed through the compounding application process. Consider this a planning tool, not a definitive liability figure.`,
 
-  howToUse: `**This calculator is indicative only.** RBI sets compounding fees case by case. The ranges shown are based on reported compounding orders for similar contraventions - actual fees may differ.
+  howToUse: `**This calculator is indicative only:** RBI sets compounding fees case by case. The ranges shown are based on reported compounding orders for similar contraventions - actual fees may differ.
 
 **Voluntary disclosure:** If you file a compounding application yourself before the contravention is detected by the department, RBI consistently applies lower compounding fees. Once detected, you lose this benefit.
 

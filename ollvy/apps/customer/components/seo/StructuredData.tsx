@@ -7,6 +7,7 @@ export function StructuredData() {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'Ollvy',
+    legalName: 'Ollvy Technologies Private Limited',
     alternateName: 'Ollvy India',
     url: 'https://www.ollvy.com',
     logo: 'https://www.ollvy.com/android-chrome-512x512.png',

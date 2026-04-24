@@ -86,6 +86,12 @@ export function ServiceStructuredData({
     ],
   }
 
+  // Price validity: 90 days from today. Re-computed on each ISR rebuild (hourly),
+  // so the date always stays ~90 days forward. Signals current pricing to Google.
+  const priceValidUntil = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split('T')[0]
+
   // Build offers with price specification if govt fee exists
   const offersSchema = govtFee
     ? {
@@ -93,6 +99,8 @@ export function ServiceStructuredData({
         price: price + govtFee,
         priceCurrency: 'INR',
         availability: 'https://schema.org/InStock',
+        priceValidUntil,
+        eligibleRegion: { '@type': 'Country', name: 'IN' },
         priceSpecification: [
           {
             '@type': 'UnitPriceSpecification',
@@ -113,6 +121,8 @@ export function ServiceStructuredData({
         price: price,
         priceCurrency: 'INR',
         availability: 'https://schema.org/InStock',
+        priceValidUntil,
+        eligibleRegion: { '@type': 'Country', name: 'IN' },
       }
 
   // Build review array for schema (real reviews or fallback)
@@ -162,16 +172,21 @@ export function ServiceStructuredData({
   } : null
 
   // Build hasOfferCatalog from whatsIncluded (shows what's included in the service)
+  // Each entry wraps an Offer inside a ListItem per schema.org spec
+  // (position is a ListItem property, not an Offer property).
   const offerCatalog = whatsIncluded.length > 0 ? {
     '@type': 'OfferCatalog',
     name: `What's included in ${serviceName}`,
     itemListElement: whatsIncluded.map((item, index) => ({
-      '@type': 'Offer',
+      '@type': 'ListItem',
       position: index + 1,
-      itemOffered: {
-        '@type': 'Service',
-        name: item.title,
-        description: item.body,
+      item: {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: item.title,
+          description: item.body,
+        },
       },
     })),
   } : null

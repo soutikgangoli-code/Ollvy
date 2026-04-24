@@ -17,6 +17,7 @@ import { getFallbackReviews } from '@/lib/data/fallback-reviews'
  */
 
 export const revalidate = 3600
+export const dynamicParams = true
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -53,6 +54,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     alternates: {
       canonical: service.canonicalUrl,
+      languages: {
+        'en-IN': service.canonicalUrl,
+        'x-default': service.canonicalUrl,
+      },
     },
     openGraph: {
       title,
