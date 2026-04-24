@@ -74,6 +74,27 @@ import {
 } from 'lucide-react'
 
 // Mapping from service slug to document checklist page path
+/**
+ * For Tier A services, the first N FAQs render expanded by default; any
+ * beyond N go behind a "Show more questions" expander. N = the pre-Phase-2
+ * FAQ count for each service, so users see the curated original set on
+ * first paint and can opt into the newer long-tail questions.
+ *
+ * Services not in this map show all FAQs unconditionally.
+ *
+ * Crawl/SEO: extra FAQs remain in the DOM when collapsed (max-h-0
+ * overflow-hidden pattern) AND are duplicated as semantic HTML in the
+ * sr-only block in app/(main)/services/[slug]/page.tsx AND appear in the
+ * FAQPage JSON-LD schema. Three paths to Google; expander is visual only.
+ */
+const FAQ_INITIAL_VISIBLE_COUNT: Record<string, number> = {
+  'gst-registration': 6,
+  'pvt-ltd-incorporation': 10,
+  'llp-incorporation': 5,
+  'business-itr': 4,
+  'trademark-registration': 5,
+}
+
 const documentChecklistPaths: Record<string, string> = {
   'pvt-ltd-incorporation': '/tools/documents/private-limited-company',
   'llp-incorporation': '/tools/documents/llp',
@@ -362,7 +383,15 @@ export function UnifiedServicePage({
     : SECTIONS.filter(s => s.id !== 'documents')
 
   const [heroVisible, setHeroVisible] = useState(true)
+  const [showAllFaqs, setShowAllFaqs] = useState(false)
   const heroRef = useRef<HTMLDivElement>(null)
+
+  // Split FAQs: first N visible, rest behind a "Show more" expander.
+  // Tier A services get the split; others show all.
+  const faqInitialCount = FAQ_INITIAL_VISIBLE_COUNT[service.slug] ?? service.faqs.length
+  const visibleFaqs = service.faqs.slice(0, faqInitialCount)
+  const extraFaqs = service.faqs.slice(faqInitialCount)
+  const hasExtraFaqs = extraFaqs.length > 0
   // activeSection is tracked in a ref — never re-renders the component
   const activeSectionRef = useRef<SectionId>('process')
   // Flag set during tap-triggered smooth-scroll so IO doesn't flicker through intermediate sections
@@ -1272,7 +1301,8 @@ export function UnifiedServicePage({
                   </h2>
 
                   <Accordion type="single" collapsible className="space-y-0 max-w-[720px]">
-                    {service.faqs.map((faq, i) => (
+                    {/* Initial visible FAQs — always rendered normally */}
+                    {visibleFaqs.map((faq, i) => (
                       <AccordionItem
                         key={i}
                         value={`faq-${i}`}
@@ -1294,6 +1324,46 @@ export function UnifiedServicePage({
                         </AccordionContent>
                       </AccordionItem>
                     ))}
+
+                    {/* Extra FAQs — crawlable but visually collapsed until user expands.
+                        max-h-0 overflow-hidden pattern keeps them in DOM for Google
+                        (FAQPage schema + sr-only block on page.tsx already duplicate
+                        the same content, so this wrapper is visual-only). */}
+                    {hasExtraFaqs && (
+                      <div
+                        id="faq-extras"
+                        aria-hidden={!showAllFaqs}
+                        className={cn(
+                          'grid transition-[grid-template-rows] duration-300 ease-out',
+                          showAllFaqs ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                        )}
+                      >
+                        <div className="overflow-hidden">
+                          {extraFaqs.map((faq, i) => (
+                            <AccordionItem
+                              key={`extra-${i}`}
+                              value={`faq-extra-${i}`}
+                              className="border-b border-border last:border-0"
+                            >
+                              <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+                                {faq.q}
+                              </AccordionTrigger>
+                              <AccordionContent forceMount className="text-sm text-muted-foreground leading-relaxed pb-5">
+                                {faq.a.includes('\n') ? (
+                                  faq.a.split('\n').filter(Boolean).map((line, j) => (
+                                    <p key={j} className={j > 0 ? 'mt-2' : ''}>
+                                      {line}
+                                    </p>
+                                  ))
+                                ) : (
+                                  faq.a
+                                )}
+                              </AccordionContent>
+                            </AccordionItem>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Government fees FAQ with rich table */}
                     {staticConfig?.govtFees && (
@@ -1355,6 +1425,30 @@ export function UnifiedServicePage({
                       </AccordionItem>
                     )}
                   </Accordion>
+
+                  {/* Show-more / show-less toggle for extra FAQs.
+                      Extras are already in DOM above (aria-hidden toggled);
+                      this button switches the max-height animation. */}
+                  {hasExtraFaqs && (
+                    <button
+                      type="button"
+                      onClick={() => setShowAllFaqs(!showAllFaqs)}
+                      aria-expanded={showAllFaqs}
+                      aria-controls="faq-extras"
+                      className="mt-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground font-medium transition-colors"
+                    >
+                      {showAllFaqs
+                        ? `Show fewer questions`
+                        : `Show ${extraFaqs.length} more ${extraFaqs.length === 1 ? 'question' : 'questions'}`}
+                      <ChevronDown
+                        size={14}
+                        className={cn(
+                          'transition-transform duration-200',
+                          showAllFaqs && 'rotate-180'
+                        )}
+                      />
+                    </button>
+                  )}
                 </section>
 
                 {/* Section: Related Services */}
