@@ -250,7 +250,7 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
     slaDays: pkg.sla_working_days,
     isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
     // Use DB rating if >= 10 reviews, otherwise null (per §23 spec)
-    avgRating: (pkg.rating_count ?? 0) >= 10 ? pkg.avg_rating : null,
+    avgRating: (pkg.rating_count ?? 0) >= 5 ? pkg.avg_rating : null,
     totalRatings: pkg.rating_count ?? 0,
     isBundle: pkg.is_bundle ?? false,
   }))
@@ -327,7 +327,7 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
   }
 
   const isRetainer = pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly'
-  const avgRating = (pkg.rating_count ?? 0) >= 10 ? pkg.avg_rating : null
+  const avgRating = (pkg.rating_count ?? 0) >= 5 ? pkg.avg_rating : null
 
   // Calculate next due date for retainers
   let nextDueDateValue: string | undefined
@@ -702,31 +702,6 @@ export async function getServiceReviews(servicePackageId: string, limit = 20): P
   reviews.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
   return reviews.slice(0, limit)
-}
-
-/**
- * Fetch state-specific pricing override
- * Per §23 Connection Point 8: Geo Pages Pricing
- */
-export async function getStatePricing(
-  servicePackageId: string,
-  state: string
-): Promise<{ price_base_paisa: number; price_govt_fees_paisa: number } | null> {
-  if (!supabaseServer) return null
-
-  const { data, error } = await supabaseServer
-    .from('service_state_pricing')
-    .select('price_base_paisa, price_govt_fees_paisa')
-    .eq('service_package_id', servicePackageId)
-    .eq('state', state)
-    .maybeSingle()
-
-  if (error) {
-    console.error('Error fetching state pricing:', error)
-    return null
-  }
-
-  return data
 }
 
 /**

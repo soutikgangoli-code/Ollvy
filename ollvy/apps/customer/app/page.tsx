@@ -38,20 +38,20 @@ const HomeFAQ = dynamic(() => import('@/components/landing/HomeFAQ').then(m => (
 // Homepage metadata for SEO
 export const metadata: Metadata = {
   title: 'Company Registration, GST & Compliance Services India | Ollvy',
-  description: 'Register your Pvt Ltd, LLP, get GST, trademark, FSSAI with verified CAs. 98% on-time delivery. Track everything in one dashboard.',
+  description: 'Register your Pvt Ltd, LLP, get GST, trademark, FSSAI in India with verified CAs. 98% on-time delivery. Track everything in one dashboard.',
   alternates: {
     canonical: 'https://www.ollvy.com',
   },
   openGraph: {
     title: 'Company Registration, GST & Compliance Services | Ollvy',
-    description: 'Register your business with verified CAs. 98% on-time delivery.',
+    description: 'Register your business in India with verified CAs. 98% on-time delivery.',
     url: 'https://www.ollvy.com',
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Company Registration & Compliance Services | Ollvy',
-    description: 'Register your business with verified CAs. 98% on-time delivery.',
+    description: 'Register your business in India with verified CAs. 98% on-time delivery.',
   },
 }
 

@@ -199,7 +199,7 @@ export function ServiceStructuredData({
     // Include what's included as offer catalog
     ...(offerCatalog ? { hasOfferCatalog: offerCatalog } : {}),
     // Include aggregate rating if we have enough reviews (10+)
-    ...(avgRating && totalRatings && totalRatings >= 10
+    ...(avgRating && totalRatings && totalRatings >= 5
       ? {
           aggregateRating: {
             '@type': 'AggregateRating',

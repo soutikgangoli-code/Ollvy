@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getAllServiceSlugs } from '@/lib/data/services'
 import { LEARN_PAGES, PENALTY_CALCULATOR_METADATA, DOCUMENT_CHECKLIST_METADATA } from '@/lib/guides/pages'
-import { GEO_ENABLED_SERVICES, CITIES } from '@/lib/geo'
 import { DEADLINES } from '@/lib/deadlines'
 
 /**
@@ -82,14 +81,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: parseReviewDate(page.lastReviewed),
   }))
 
-  // Geo pages - all service/city combinations (DB-backed pricing, use build date)
-  const geoRoutes: MetadataRoute.Sitemap = GEO_ENABLED_SERVICES.flatMap((service) =>
-    CITIES.map((city) => ({
-      url: `${BASE_URL}/${service}/${city.slug}`,
-      lastModified: buildDate,
-    }))
-  )
-
   // Deadline campaign pages - use each page's lastReviewed date
   const deadlineRoutes: MetadataRoute.Sitemap = DEADLINES.map((d) => ({
     url: `${BASE_URL}/${d.slug}`,
@@ -103,6 +94,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...penaltyRoutes,
     ...learnRoutes,
     ...deadlineRoutes,
-    ...geoRoutes,
   ]
 }

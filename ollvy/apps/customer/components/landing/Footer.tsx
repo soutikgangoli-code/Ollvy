@@ -136,6 +136,8 @@ export function Footer() {
               { label: 'TDS Compliance', href: '/services/tds-monthly-compliance' },
               { label: 'Company Name Change', href: '/services/company-name-change' },
               { label: 'DIN Reactivation', href: '/services/din-reactivation' },
+              { label: 'ESOP Structuring', href: '/services/esop-structuring' },
+              { label: 'IEPF Claim Consultation', href: '/services/iepf-consultation' },
               { label: 'All Services', href: '/services' },
             ]}
           />

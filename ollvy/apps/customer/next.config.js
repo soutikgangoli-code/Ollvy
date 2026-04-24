@@ -74,6 +74,33 @@ const nextConfig = {
         destination: '/services/trademark-registration',
         permanent: true,
       },
+      // Killed geo/city pages (2026-04-24) — 5 explicit service-scoped redirects.
+      // NOT a /:service/:city wildcard — that would match /services/:slug and break prod.
+      {
+        source: '/pvt-ltd-incorporation/:city',
+        destination: '/services/pvt-ltd-incorporation',
+        permanent: true,
+      },
+      {
+        source: '/llp-incorporation/:city',
+        destination: '/services/llp-incorporation',
+        permanent: true,
+      },
+      {
+        source: '/gst-registration/:city',
+        destination: '/services/gst-registration',
+        permanent: true,
+      },
+      {
+        source: '/trademark-registration/:city',
+        destination: '/services/trademark-registration',
+        permanent: true,
+      },
+      {
+        source: '/business-itr/:city',
+        destination: '/services/business-itr',
+        permanent: true,
+      },
     ];
   },
 }

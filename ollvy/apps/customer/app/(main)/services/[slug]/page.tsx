@@ -39,15 +39,24 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     }
   }
 
+  // Interpolate {PRICE} placeholder in seoTitle/seoDescription with live total (Ollvy + govt fee)
+  // so SEO meta always reflects current DB pricing — zero drift via ISR (revalidate: 3600).
+  const totalPrice = service.ollvyFee + (service.govtFee ?? 0)
+  const priceStr = `₹${totalPrice.toLocaleString('en-IN')}`
+  const interpolate = (s: string | null | undefined): string =>
+    (s ?? '').replaceAll('{PRICE}', priceStr)
+  const title = interpolate(service.seoTitle)
+  const description = interpolate(service.seoDescription)
+
   return {
-    title: service.seoTitle,
-    description: service.seoDescription,
+    title,
+    description,
     alternates: {
       canonical: service.canonicalUrl,
     },
     openGraph: {
-      title: service.seoTitle,
-      description: service.seoDescription,
+      title,
+      description,
       url: service.canonicalUrl,
       siteName: 'Ollvy',
       type: 'website',
@@ -55,8 +64,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     twitter: {
       card: 'summary_large_image',
-      title: service.seoTitle,
-      description: service.seoDescription,
+      title,
+      description,
       images: ['https://www.ollvy.com/logo.png'],
     },
   }
