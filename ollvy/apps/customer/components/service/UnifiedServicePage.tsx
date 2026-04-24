@@ -1437,9 +1437,7 @@ export function UnifiedServicePage({
                       aria-controls="faq-extras"
                       className="mt-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground font-medium transition-colors"
                     >
-                      {showAllFaqs
-                        ? `Show fewer questions`
-                        : `Show ${extraFaqs.length} more ${extraFaqs.length === 1 ? 'question' : 'questions'}`}
+                      {showAllFaqs ? 'Show less' : 'Show more'}
                       <ChevronDown
                         size={14}
                         className={cn(
