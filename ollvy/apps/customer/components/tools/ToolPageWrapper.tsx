@@ -284,19 +284,6 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
           buttonHref={`/services/${config.relatedServiceSlug}`}
           triggerId="tool-section"
         />
-
-        {/* Print styles */}
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-              @media print {
-                .print-hidden {
-                  display: none !important;
-                }
-              }
-            `,
-          }}
-        />
       </div>
     </div>
   )

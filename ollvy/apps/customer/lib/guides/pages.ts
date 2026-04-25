@@ -168,11 +168,6 @@ export interface LearnSection {
   componentProps?: Record<string, unknown>;
 }
 
-/** @deprecated Use LearnSectionTable instead */
-export interface TableRow {
-  [key: string]: string;
-}
-
 // Import all learn page configs
 // Tier 1 - Core Business Decisions
 import { gstRegistration } from './pages/gst-registration';
