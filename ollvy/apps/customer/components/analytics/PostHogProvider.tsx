@@ -10,6 +10,15 @@ const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posth
 
 let posthogInitialized = false
 
+function detectDeviceType(): 'mobile' | 'tablet' | 'desktop' {
+  if (typeof window === 'undefined') return 'desktop'
+  const ua = navigator.userAgent
+  const isTablet = /iPad|Android(?!.*Mobile)/i.test(ua) || (window.innerWidth >= 768 && window.innerWidth <= 1024 && 'ontouchstart' in window)
+  if (isTablet) return 'tablet'
+  const isMobile = /Mobi|Android|iPhone|iPod|BlackBerry|Opera Mini|IEMobile/i.test(ua) || window.innerWidth < 768
+  return isMobile ? 'mobile' : 'desktop'
+}
+
 function initPostHog() {
   if (posthogInitialized || !POSTHOG_KEY) return
   posthogInitialized = true
@@ -18,7 +27,19 @@ function initPostHog() {
     person_profiles: 'identified_only',
     capture_pageview: false,
     capture_pageleave: true,
+    autocapture: true,
+    session_recording: {
+      maskAllInputs: true,
+      maskInputOptions: { password: true, email: true },
+    },
+    disable_session_recording: false,
     loaded: (ph) => {
+      // Tag every event with device_type so funnels can split mobile vs desktop
+      ph.register({
+        device_type: detectDeviceType(),
+        viewport_width: window.innerWidth,
+        viewport_height: window.innerHeight,
+      })
       if (process.env.NODE_ENV === 'development') {
         ph.debug()
       }

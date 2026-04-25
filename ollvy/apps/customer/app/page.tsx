@@ -8,6 +8,7 @@ import { ServicesSimplified } from '@/components/landing/ServicesSimplified'
 import { FinalCTA } from '@/components/landing/FinalCTA'
 import { Footer } from '@/components/landing/Footer'
 import { MobileBottomCTA } from '@/components/landing/MobileBottomCTA'
+import { TrackedSection } from '@/components/analytics/TrackedSection'
 import { unstable_cache } from 'next/cache'
 import { getPopularServices, getFAQServicePrices, getAggregateRating, FAQServicePrices } from '@/lib/data/services'
 
@@ -199,28 +200,44 @@ export default async function LandingPage() {
       {/* Main content with padding for fixed navbar */}
       <main className="pt-16">
         {/* Section 1 - Hero: Bold claim + product screenshot */}
-        <Hero />
+        <TrackedSection id="hero" label="Hero" component="Hero" pageType="homepage">
+          <Hero />
+        </TrackedSection>
 
         {/* Section 2 - Social Proof Bar: Founder avatars + rating */}
-        <SocialProofBar />
+        <TrackedSection id="social_proof" label="Social Proof Bar" component="SocialProofBar" pageType="homepage">
+          <SocialProofBar />
+        </TrackedSection>
 
         {/* Section 3 - Services: Simplified grid (moved up) */}
-        <ServicesSimplified services={popularServices} />
+        <TrackedSection id="services_grid" label="Services Grid" component="ServicesSimplified" pageType="homepage">
+          <ServicesSimplified services={popularServices} />
+        </TrackedSection>
 
         {/* Section 4 - Fear -> Relief: Penalty costs vs Ollvy peace */}
-        <FearRelief />
+        <TrackedSection id="fear_relief" label="Fear → Relief" component="FearRelief" pageType="homepage">
+          <FearRelief />
+        </TrackedSection>
 
         {/* Section 5 - Product Showcase: Dashboard screenshots */}
-        <ProductShowcase />
+        <TrackedSection id="product_showcase" label="Product Showcase" component="ProductShowcase" pageType="homepage">
+          <ProductShowcase />
+        </TrackedSection>
 
         {/* Section 6 - Single Testimonial: One powerful story */}
-        <SingleTestimonial />
+        <TrackedSection id="testimonial" label="Single Testimonial" component="SingleTestimonial" pageType="homepage">
+          <SingleTestimonial />
+        </TrackedSection>
 
         {/* Section 7 - FAQ: Key questions */}
-        <HomeFAQ prices={faqPrices} />
+        <TrackedSection id="faqs" label="FAQs" component="HomeFAQ" pageType="homepage">
+          <HomeFAQ prices={faqPrices} />
+        </TrackedSection>
 
         {/* Section 8 - Final CTA: Strong close */}
-        <FinalCTA />
+        <TrackedSection id="final_cta" label="Final CTA" component="FinalCTA" pageType="homepage">
+          <FinalCTA />
+        </TrackedSection>
       </main>
 
       {/* Footer */}

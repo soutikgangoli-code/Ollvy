@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -15,6 +16,7 @@ import {
   Info,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 
 interface PenaltyResult {
   penaltyAmount: number
@@ -70,6 +72,9 @@ export function PenaltyCalculatorPage({
   const [daysLate, setDaysLate] = useState([30])
   const [outstandingAmount, setOutstandingAmount] = useState('')
   const [showResult, setShowResult] = useState(false)
+  const pathname = usePathname()
+  const toolSlug = pathname?.split('/').filter(Boolean).pop() ?? 'unknown'
+  const { trackToolInteraction } = usePostHogEvents()
 
   const result = calculatePenalty(daysLate[0], parseInt(outstandingAmount) || 0)
 
@@ -163,7 +168,15 @@ export function PenaltyCalculatorPage({
 
               <Button
                 className="w-full"
-                onClick={() => setShowResult(true)}
+                onClick={() => {
+                  setShowResult(true)
+                  trackToolInteraction('penalty_calculator', toolSlug, 'result_shown', {
+                    days_late: daysLate[0],
+                    outstanding_amount: parseInt(outstandingAmount) || 0,
+                    total_penalty: result.totalAmount,
+                    risk_level: risk.level,
+                  })
+                }}
               >
                 Calculate Penalty
               </Button>
@@ -218,7 +231,16 @@ export function PenaltyCalculatorPage({
 
                 {/* CTA */}
                 <Button className="w-full" asChild>
-                  <Link href={ctaButtonHref}>
+                  <Link
+                    href={ctaButtonHref}
+                    onClick={() =>
+                      trackToolInteraction('penalty_calculator', toolSlug, 'cta_clicked', {
+                        cta_position: 'result_card',
+                        destination: ctaButtonHref,
+                        total_penalty: result.totalAmount,
+                      })
+                    }
+                  >
                     {ctaButtonText}
                     <ChevronRight className="h-4 w-4 ml-1" />
                   </Link>
@@ -264,7 +286,17 @@ export function PenaltyCalculatorPage({
           <h3 className="text-xl font-semibold text-foreground">{ctaTitle}</h3>
           <p className="text-muted-foreground mt-2 max-w-lg mx-auto">{ctaDescription}</p>
           <Button className="mt-6" size="lg" asChild>
-            <Link href={ctaButtonHref}>{ctaButtonText}</Link>
+            <Link
+              href={ctaButtonHref}
+              onClick={() =>
+                trackToolInteraction('penalty_calculator', toolSlug, 'cta_clicked', {
+                  cta_position: 'final_card',
+                  destination: ctaButtonHref,
+                })
+              }
+            >
+              {ctaButtonText}
+            </Link>
           </Button>
         </Card>
       </div>

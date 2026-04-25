@@ -10,6 +10,7 @@ import { getClient } from '@/lib/supabase'
 import { DBServiceConfig } from '@/lib/data/services'
 import { cn } from '@/lib/utils'
 import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 
 interface BookingPanelProps {
   service: DBServiceConfig
@@ -144,6 +145,8 @@ export function BookingPanel({
     urlParams.set('addons', selectedAddonIds.join(','))
   }
   const ctaUrl = urlParams.toString() ? `${baseCheckoutUrl}?${urlParams.toString()}` : baseCheckoutUrl
+
+  const { trackCheckoutCTAClick } = usePostHogEvents()
 
   // Prefetch checkout service data on CTA hover
   const prefetchedRef = useRef(false)
@@ -368,7 +371,23 @@ export function BookingPanel({
 
       {/* CTA button */}
       <Button className="w-full mt-5" size="lg" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
-        <Link href={ctaUrl} prefetch={true}>
+        <Link
+          href={ctaUrl}
+          prefetch={true}
+          onClick={() =>
+            trackCheckoutCTAClick(service.slug, {
+              cta_label: ctaLabel,
+              variant_id: selectedVariant || undefined,
+              addon_ids: selectedAddonIds,
+              total_paisa: Math.round(totalFee * 100),
+              flow: priceVariesByState
+                ? 'quote'
+                : priceVariesByQuestionnaire || hasPrePaymentQuestions
+                ? 'eligibility'
+                : 'direct_checkout',
+            })
+          }
+        >
           {ctaLabel}
         </Link>
       </Button>

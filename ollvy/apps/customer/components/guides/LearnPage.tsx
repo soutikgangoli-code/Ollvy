@@ -19,6 +19,7 @@ import { LearnSectionBlock } from './LearnSectionBlock';
 import { LearnServiceCTA } from './LearnServiceCTA';
 import { LearnInternalLinks } from './LearnInternalLinks';
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions';
+import { TrackedSection } from '@/components/analytics/TrackedSection';
 
 // Each guide page renders only one of these — load the matching one on demand.
 // Each skeleton reserves the initial-state height of its tool so chunk arrival
@@ -37,58 +38,80 @@ export function LearnPage({ page, ctaService, secondaryService }: {
   ctaService: ServiceConfig;
   secondaryService?: ServiceConfig;
 }) {
+  const guideProps = { guide_slug: page.slug, guide_category: page.category };
   return (
     <div className="py-16 md:py-24">
       <div className="container max-w-5xl">
-        <LearnHero page={page} />
+        <TrackedSection id="guide_hero" label="Hero" component="LearnHero" pageType="guide" properties={guideProps}>
+          <LearnHero page={page} />
+        </TrackedSection>
 
         <div className="max-w-3xl mx-auto">
 
         {/* Tool - always at top, before first section */}
         {page.tool && (
-          <div className="mb-12">
-            {page.tool.type === 'eligibility' && (
-              <EligibilityTool config={page.tool} ctaService={ctaService} />
-            )}
-            {page.tool.type === 'comparison' && (
-              <ComparisonTool config={page.tool} />
-            )}
-          </div>
+          <TrackedSection
+            id="guide_tool"
+            label={`Tool (${page.tool.type})`}
+            component={`LearnTool_${page.tool.type}`}
+            pageType="guide"
+            properties={{ ...guideProps, tool_type: page.tool.type }}
+          >
+            <div className="mb-12">
+              {page.tool.type === 'eligibility' && (
+                <EligibilityTool config={page.tool} ctaService={ctaService} />
+              )}
+              {page.tool.type === 'comparison' && (
+                <ComparisonTool config={page.tool} />
+              )}
+            </div>
+          </TrackedSection>
         )}
 
         {/* Sections */}
         {page.sections.map((section, i) => (
-          <div key={i} className="mb-12">
-            <LearnSectionBlock section={section} />
-          </div>
+          <TrackedSection
+            key={i}
+            id={`guide_section_${i + 1}`}
+            label={section.heading || `Section ${i + 1}`}
+            component="LearnSectionBlock"
+            pageType="guide"
+            properties={{ ...guideProps, section_index: i + 1, section_heading: section.heading }}
+          >
+            <div className="mb-12">
+              <LearnSectionBlock section={section} />
+            </div>
+          </TrackedSection>
         ))}
 
         {/* FAQs */}
         {page.faqs && page.faqs.length > 0 && (
-          <div className="mb-12">
-            <div className="flex items-baseline gap-3 mb-4">
-              <span className="font-mono text-[10px] text-muted-foreground">FAQ</span>
-              <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-                Frequently Asked Questions
-              </h2>
+          <TrackedSection id="guide_faqs" label="FAQs" component="GuideFAQs" pageType="guide" properties={guideProps}>
+            <div className="mb-12">
+              <div className="flex items-baseline gap-3 mb-4">
+                <span className="font-mono text-[10px] text-muted-foreground">FAQ</span>
+                <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
+                  Frequently Asked Questions
+                </h2>
+              </div>
+              <Accordion type="single" collapsible className="space-y-0">
+                {page.faqs.map((faq, i) => (
+                  <AccordionItem
+                    key={i}
+                    value={`faq-${i}`}
+                    className="border-b border-border last:border-0"
+                  >
+                    <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
+                      {faq.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
-            <Accordion type="single" collapsible className="space-y-0">
-              {page.faqs.map((faq, i) => (
-                <AccordionItem
-                  key={i}
-                  value={`faq-${i}`}
-                  className="border-b border-border last:border-0"
-                >
-                  <AccordionTrigger className="text-sm font-medium text-foreground text-left py-4 hover:no-underline">
-                    {faq.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
-                    {faq.a}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
+          </TrackedSection>
         )}
 
         {/* Last Reviewed / Sources */}
@@ -98,19 +121,25 @@ export function LearnPage({ page, ctaService, secondaryService }: {
         />
 
         {/* Service CTA */}
-        <LearnServiceCTA
-          primary={ctaService}
-          secondary={secondaryService}
-        />
+        <TrackedSection id="guide_service_cta" label="Service CTA" component="LearnServiceCTA" pageType="guide" properties={guideProps}>
+          <LearnServiceCTA
+            primary={ctaService}
+            secondary={secondaryService}
+          />
+        </TrackedSection>
 
         {/* Related Tools Section */}
-        <RelatedToolsSection relatedTools={page.relatedTools} />
+        <TrackedSection id="guide_related_tools" label="Related Tools" component="RelatedToolsSection" pageType="guide" properties={guideProps}>
+          <RelatedToolsSection relatedTools={page.relatedTools} />
+        </TrackedSection>
 
         {/* Related guides */}
-        <LearnInternalLinks
-          learnSlugs={page.relatedLearnSlugs}
-          serviceSlugs={page.relatedServiceSlugs}
-        />
+        <TrackedSection id="guide_internal_links" label="Related Guides" component="LearnInternalLinks" pageType="guide" properties={guideProps}>
+          <LearnInternalLinks
+            learnSlugs={page.relatedLearnSlugs}
+            serviceSlugs={page.relatedServiceSlugs}
+          />
+        </TrackedSection>
       </div>
       </div>
     </div>
