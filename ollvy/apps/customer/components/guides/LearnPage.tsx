@@ -27,16 +27,8 @@ const EligibilityTool = dynamic(
   () => import('./tools/EligibilityTool').then(m => ({ default: m.EligibilityTool })),
   { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
 );
-const PenaltyTool = dynamic(
-  () => import('./tools/PenaltyTool').then(m => ({ default: m.PenaltyTool })),
-  { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
-);
 const ComparisonTool = dynamic(
   () => import('./tools/ComparisonTool').then(m => ({ default: m.ComparisonTool })),
-  { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
-);
-const DeadlineTracker = dynamic(
-  () => import('./tools/DeadlineTracker').then(m => ({ default: m.DeadlineTracker })),
   { loading: () => <div className="min-h-[200px] rounded-xl bg-muted/10" aria-hidden="true" /> }
 );
 
@@ -58,14 +50,8 @@ export function LearnPage({ page, ctaService, secondaryService }: {
             {page.tool.type === 'eligibility' && (
               <EligibilityTool config={page.tool} ctaService={ctaService} />
             )}
-            {page.tool.type === 'penalty' && (
-              <PenaltyTool config={page.tool} ctaService={ctaService} />
-            )}
             {page.tool.type === 'comparison' && (
               <ComparisonTool config={page.tool} />
-            )}
-            {page.tool.type === 'deadline' && (
-              <DeadlineTracker config={page.tool} ctaService={ctaService} />
             )}
           </div>
         )}

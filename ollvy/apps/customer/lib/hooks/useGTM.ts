@@ -64,16 +64,6 @@ function clearEcommerce() {
 
 export function useGTM() {
   /**
-   * Track page view (called automatically by GTM, but can be used for SPAs)
-   */
-  const trackPageView = (pagePath?: string, pageTitle?: string) => {
-    pushToDataLayer('page_view', {
-      page_path: pagePath || window.location.pathname,
-      page_title: pageTitle || document.title,
-    })
-  }
-
-  /**
    * Track when user views a service page
    * GA4 Event: view_item
    */
@@ -159,62 +149,11 @@ export function useGTM() {
     })
   }
 
-  /**
-   * Track form submissions (e.g., quote requests, contact forms)
-   */
-  const trackFormSubmit = (formName: string, formData?: Record<string, unknown>) => {
-    pushToDataLayer('form_submit', {
-      form_name: formName,
-      ...formData,
-    })
-  }
-
-  /**
-   * Track CTA button clicks
-   */
-  const trackButtonClick = (buttonName: string, buttonLocation?: string) => {
-    pushToDataLayer('button_click', {
-      button_name: buttonName,
-      button_location: buttonLocation,
-    })
-  }
-
-  /**
-   * Track user sign up
-   */
-  const trackSignUp = (method?: string) => {
-    pushToDataLayer('sign_up', {
-      method: method || 'phone',
-    })
-  }
-
-  /**
-   * Track user login
-   */
-  const trackLogin = (method?: string) => {
-    pushToDataLayer('login', {
-      method: method || 'phone',
-    })
-  }
-
-  /**
-   * Track custom events
-   */
-  const trackCustomEvent = (eventName: string, eventData?: Record<string, unknown>) => {
-    pushToDataLayer(eventName, eventData)
-  }
-
   return {
-    trackPageView,
     trackViewService,
     trackBeginCheckout,
     trackAddPaymentInfo,
     trackPurchase,
-    trackFormSubmit,
-    trackButtonClick,
-    trackSignUp,
-    trackLogin,
-    trackCustomEvent,
   }
 }
 

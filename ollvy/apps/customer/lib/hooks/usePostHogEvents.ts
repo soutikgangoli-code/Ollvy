@@ -10,19 +10,6 @@ import { useCallback } from 'react'
 export function usePostHogEvents() {
   const posthog = usePostHog()
 
-  // Identify a user (call after login)
-  const identifyUser = useCallback(
-    (userId: string, properties?: Record<string, unknown>) => {
-      posthog?.identify(userId, properties)
-    },
-    [posthog]
-  )
-
-  // Reset user identity (call on logout)
-  const resetUser = useCallback(() => {
-    posthog?.reset()
-  }, [posthog])
-
   // Track a custom event
   const trackEvent = useCallback(
     (eventName: string, properties?: Record<string, unknown>) => {
@@ -75,17 +62,6 @@ export function usePostHogEvents() {
     [posthog]
   )
 
-  // Track form submission
-  const trackFormSubmit = useCallback(
-    (formName: string, formData?: Record<string, unknown>) => {
-      posthog?.capture('form_submitted', {
-        form_name: formName,
-        ...formData,
-      })
-    },
-    [posthog]
-  )
-
   // Track button click
   const trackButtonClick = useCallback(
     (buttonName: string, location?: string, properties?: Record<string, unknown>) => {
@@ -98,48 +74,12 @@ export function usePostHogEvents() {
     [posthog]
   )
 
-  // Track signup
-  const trackSignup = useCallback(
-    (method: string, userId?: string) => {
-      posthog?.capture('user_signed_up', {
-        method,
-        user_id: userId,
-      })
-    },
-    [posthog]
-  )
-
-  // Track login
-  const trackLogin = useCallback(
-    (method: string, userId?: string) => {
-      posthog?.capture('user_logged_in', {
-        method,
-        user_id: userId,
-      })
-    },
-    [posthog]
-  )
-
-  // Set user properties
-  const setUserProperties = useCallback(
-    (properties: Record<string, unknown>) => {
-      posthog?.setPersonProperties(properties)
-    },
-    [posthog]
-  )
-
   return {
     posthog,
-    identifyUser,
-    resetUser,
     trackEvent,
     trackServiceView,
     trackCheckoutStarted,
     trackPurchase,
-    trackFormSubmit,
     trackButtonClick,
-    trackSignup,
-    trackLogin,
-    setUserProperties,
   }
 }

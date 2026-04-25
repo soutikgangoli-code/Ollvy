@@ -700,7 +700,6 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
               <PreCursorSummaryCard
                 answers={preCursorAnswers}
                 serviceSlug={service.slug}
-                serviceId={serviceId}
                 onEdit={() => {
                   // Redirect to eligibility page with edit flag (keep answers for editing)
                   const params = new URLSearchParams()
@@ -1033,7 +1032,6 @@ interface OrderSummarySidebarProps {
   canSubmit: boolean
   paymentReady: boolean
   onSubmit: () => void
-  isMobile?: boolean
   slaDays?: number
   // Completion estimate fields for govt processing awareness
   hasGovtProcessing?: boolean
@@ -1062,7 +1060,6 @@ function OrderSummarySidebar({
   canSubmit,
   paymentReady,
   onSubmit,
-  isMobile = false,
   slaDays = 15,
   hasGovtProcessing = false,
   completionMaxDays,
@@ -1079,7 +1076,7 @@ function OrderSummarySidebar({
   const guaranteedDate = completionEstimate?.guaranteedDate ?? ''
 
   return (
-    <div className={cn('bg-card border border-border rounded-xl p-6', isMobile && 'border-0 p-0')}>
+    <div className="bg-card border border-border rounded-xl p-6">
       {/* Guaranteed date at top */}
       <div className="pb-5 border-b border-border mb-5">
         <div className="flex items-center gap-2">
@@ -1278,11 +1275,10 @@ function OrderSummarySidebar({
 interface PreCursorSummaryCardProps {
   answers: Record<string, unknown>
   serviceSlug: string
-  serviceId: string
   onEdit: () => void
 }
 
-function PreCursorSummaryCard({ answers, serviceSlug, serviceId, onEdit }: PreCursorSummaryCardProps) {
+function PreCursorSummaryCard({ answers, serviceSlug, onEdit }: PreCursorSummaryCardProps) {
   // Human-readable labels for question keys
   const getLabel = (key: string): string => {
     const labels: Record<string, string> = {

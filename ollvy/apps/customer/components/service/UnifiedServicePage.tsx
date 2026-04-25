@@ -709,7 +709,7 @@ export function UnifiedServicePage({
         {/* Mobile: Only section tabs */}
         <div ref={mobileTabsRef} className="md:hidden overflow-x-auto scrollbar-hide">
           <div className="flex gap-0 min-w-max px-4">
-            {visibleSections.map((section) => (
+            {visibleSections.filter(s => s.id !== 'included').map((section) => (
               <button
                 key={section.id}
                 data-section={section.id}
@@ -815,6 +815,7 @@ export function UnifiedServicePage({
                       onClick={() => scrollToSection(section.id)}
                       className={cn(
                         'shrink-0 px-3 md:px-5 py-3 text-xs md:text-sm font-medium transition-colors whitespace-nowrap',
+                        section.id === 'included' && 'hidden md:block',
                         section.id === 'process'
                           ? 'text-foreground'
                           : 'text-muted-foreground hover:text-foreground'
@@ -892,11 +893,11 @@ export function UnifiedServicePage({
                   )}
                 </section>
 
-                {/* Section: What's Included */}
+                {/* Section: What's Included — desktop only */}
                 <section
                   id="included"
                   ref={(el) => { sectionRefs.current.included = el }}
-                  className="py-10 sm:py-16 border-b border-border scroll-mt-28"
+                  className="hidden md:block py-10 sm:py-16 border-b border-border scroll-mt-28"
                 >
                   <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2 sm:mb-3 font-mono">
                     WHAT YOU GET

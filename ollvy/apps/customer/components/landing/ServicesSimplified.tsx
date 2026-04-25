@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import type { PopularServiceData } from '@/lib/data/services'
+import { TrackedServiceLink } from './TrackedServiceLink'
 
 // Calculate guaranteed date based on SLA days (working days)
 function getGuaranteedDate(slaDays: number): string {
@@ -49,10 +50,13 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
             const tag = getServiceTag(service.slug, service.isRetainer)
 
             return (
-              <Link
+              <TrackedServiceLink
                 key={i}
-                href={`/services/${service.slug}`}
-                prefetch={true}
+                slug={service.slug}
+                serviceName={service.name}
+                pricePaisa={(service.ollvyFee + service.govtFee) * 100}
+                isRetainer={service.isRetainer}
+                source="homepage_carousel"
                 className="p-6 rounded-2xl border border-border bg-card shadow-sm hover:bg-muted/30 transition-colors duration-200 group flex flex-col"
               >
                 {/* Row 1: Name + Tag - fixed height for 2 lines */}
@@ -97,7 +101,7 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
 
                 {/* Arrow */}
                 <ArrowRight className="pt-4 h-4 w-4 text-muted-foreground" />
-              </Link>
+              </TrackedServiceLink>
             )
           })}
         </div>
