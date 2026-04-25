@@ -150,6 +150,24 @@ export function ServiceStructuredData({
         reviewBody: review.comment,
       }))
 
+  // Aggregate rating: prefer DB-sourced (real reviews) if present,
+  // otherwise compute from the fallback reviews actually emitted in `review:`.
+  // Google requires aggregateRating whenever multiple Review items are present
+  // on the same parent entity (Service here).
+  const ratingSource = reviews.length > 0
+    ? { rated: reviews, useFallback: false }
+    : { rated: fallbackReviews, useFallback: true }
+  const aggregateRatingValue = (avgRating != null && totalRatings != null && totalRatings > 0)
+    ? { value: avgRating, count: totalRatings }
+    : ratingSource.rated.length > 0
+      ? {
+          value: Number(
+            (ratingSource.rated.reduce((sum, r) => sum + r.rating, 0) / ratingSource.rated.length).toFixed(1)
+          ),
+          count: ratingSource.rated.length,
+        }
+      : null
+
   // Build HowTo schema from process steps (for "how to" rich results)
   const howToSchema = processSteps.length > 0 ? {
     '@context': 'https://schema.org',
@@ -231,13 +249,14 @@ export function ServiceStructuredData({
     ...(slaDays ? { estimatedDuration: `P${slaDays}D` } : {}),
     // Include what's included as offer catalog
     ...(offerCatalog ? { hasOfferCatalog: offerCatalog } : {}),
-    // Include aggregate rating if we have enough reviews (>=5)
-    ...(avgRating && totalRatings && totalRatings >= 5
+    // AggregateRating MUST accompany multiple Review items per Google's spec.
+    // Compute from whichever review set we're emitting (real or fallback).
+    ...(aggregateRatingValue
       ? {
           aggregateRating: {
             '@type': 'AggregateRating',
-            ratingValue: avgRating,
-            ratingCount: totalRatings,
+            ratingValue: aggregateRatingValue.value,
+            reviewCount: aggregateRatingValue.count,
             bestRating: 5,
             worstRating: 1,
           },
