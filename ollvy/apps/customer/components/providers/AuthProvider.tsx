@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import { posthog } from '@/components/analytics/PostHogProvider'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { refreshSession, setSession, setUser } = useAuthStore()
@@ -49,9 +50,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           if (event === 'SIGNED_OUT') {
             setSession(null)
             setUser(null)
+            posthog?.reset()
           } else if (event === 'TOKEN_REFRESHED' && session) {
             setSession(session)
           } else if (event === 'SIGNED_IN' && session) {
+            posthog?.identify(session.user.id, {
+              email: session.user.email,
+              phone: session.user.phone,
+            })
             const hasPendingFreshLogin = sessionStorage.getItem('ollvy_fresh_login') === '1'
             if (hasPendingFreshLogin) {
               console.log('[AuthProvider] SIGNED_IN with pending fresh login, calling refreshSession')
@@ -62,6 +68,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         if (session) {
+          posthog?.identify(session.user.id, {
+            email: session.user.email,
+            phone: session.user.phone,
+          })
           await refreshSession()
         } else {
           setSession(null)

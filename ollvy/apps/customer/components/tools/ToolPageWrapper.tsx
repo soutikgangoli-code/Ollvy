@@ -12,6 +12,7 @@ import { PenaltyCalculatorSelector } from '@/components/penalty-calculator/Penal
 import { StickyToolCTA } from '@/components/tools/StickyToolCTA'
 import { penaltyCalculators } from '@/components/penalty-calculator/penalty-calculator-data'
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
+import { TrackedSection } from '@/components/analytics/TrackedSection'
 
 interface ToolPageWrapperProps {
   config: ToolPageConfig
@@ -244,36 +245,54 @@ export function ToolPageWrapper({ config, children, showCalculatorSelector }: To
         </header>
 
         {/* The actual tool widget (calculator or checklist) */}
-        <div id="tool-section" className="mb-8">
-          {children}
-        </div>
+        <TrackedSection
+          id="tool_widget"
+          label="Tool Widget"
+          component="ToolWidget"
+          pageType="tool"
+          properties={{ tool_slug: config.canonicalUrl.split('/').pop(), tool_category: config.category }}
+        >
+          <div id="tool-section" className="mb-8">
+            {children}
+          </div>
+        </TrackedSection>
 
         {/* Intro section - rendered BELOW the widget */}
-        <IntroSection text={config.intro} />
+        <TrackedSection id="tool_intro" label="Intro" component="IntroSection" pageType="tool">
+          <IntroSection text={config.intro} />
+        </TrackedSection>
 
         {/* How to Use section - rendered BELOW the widget */}
-        <HowToUseSection text={config.howToUse} title={config.title} />
+        <TrackedSection id="tool_how_to_use" label="How To Use" component="HowToUseSection" pageType="tool">
+          <HowToUseSection text={config.howToUse} title={config.title} />
+        </TrackedSection>
 
         {/* FAQ Section */}
-        <FAQSection faqs={config.faqs} />
+        <TrackedSection id="tool_faqs" label="FAQs" component="FAQSection" pageType="tool">
+          <FAQSection faqs={config.faqs} />
+        </TrackedSection>
 
         {/* Related Links */}
-        <RelatedLinks config={config} />
+        <TrackedSection id="tool_related" label="Related Links" component="RelatedLinks" pageType="tool">
+          <RelatedLinks config={config} />
+        </TrackedSection>
 
         {/* CTA */}
-        <section className="mt-16">
-          <p className="font-medium text-foreground mb-2">Need help with {config.category.toLowerCase()} compliance?</p>
-          <p className="text-sm text-foreground/70 mb-4">
-            Our team handles the paperwork so you can focus on your business.
-          </p>
-          <Link
-            href={`/services/${config.relatedServiceSlug}`}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium rounded-full hover:bg-[hsl(var(--ollvy-green))]/90 transition-colors"
-          >
-            {config.relatedServiceLabel}
-            <ChevronRight className="h-4 w-4" />
-          </Link>
-        </section>
+        <TrackedSection id="tool_cta" label="Final CTA" component="ToolFinalCTA" pageType="tool">
+          <section className="mt-16">
+            <p className="font-medium text-foreground mb-2">Need help with {config.category.toLowerCase()} compliance?</p>
+            <p className="text-sm text-foreground/70 mb-4">
+              Our team handles the paperwork so you can focus on your business.
+            </p>
+            <Link
+              href={`/services/${config.relatedServiceSlug}`}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[hsl(var(--ollvy-green))] text-white text-sm font-medium rounded-full hover:bg-[hsl(var(--ollvy-green))]/90 transition-colors"
+            >
+              {config.relatedServiceLabel}
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          </section>
+        </TrackedSection>
 
         {/* How we reviewed - at bottom like service pages */}
         <ToolLastReviewed lastReviewed={config.lastReviewed} sources={config.reviewSources} />

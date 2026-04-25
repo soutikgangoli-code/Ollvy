@@ -58,6 +58,7 @@ import {
 import { getCompletionEstimate } from '@/lib/dates'
 import { cn } from '@/lib/utils'
 import { useGTM } from '@/lib/hooks/useGTM'
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 import {
   CheckCircle,
   Star,
@@ -113,13 +114,13 @@ interface UnifiedServicePageProps {
 
 // Section definitions for navigation
 const SECTIONS = [
-  { id: 'process', label: 'How it works' },
-  { id: 'included', label: 'What you get' },
-  { id: 'why-ollvy', label: 'Why Ollvy' },
-  { id: 'risks', label: 'Risks' },
-  { id: 'reviews', label: 'Reviews' },
-  { id: 'documents', label: 'Documents' },
-  { id: 'faqs', label: 'FAQs' },
+  { id: 'process', label: 'How it works', component: 'ProcessStepper' },
+  { id: 'included', label: 'What you get', component: 'WhatsIncluded' },
+  { id: 'why-ollvy', label: 'Why Ollvy', component: 'DIYvsOllvy' },
+  { id: 'risks', label: 'Risks', component: 'ServiceRisks' },
+  { id: 'reviews', label: 'Reviews', component: 'Reviews_HowWeReviewed' },
+  { id: 'documents', label: 'Documents', component: 'DocumentChecklist' },
+  { id: 'faqs', label: 'FAQs', component: 'FAQs' },
 ] as const
 
 type SectionId = typeof SECTIONS[number]['id']
@@ -427,11 +428,16 @@ export function UnifiedServicePage({
       })
   }, [service.slug])
 
-  // GTM tracking
+  // GTM + PostHog tracking
   const { trackViewService } = useGTM()
+  const { trackServiceView, trackSectionView, trackSectionDwellTime } = usePostHogEvents()
   const [hasTrackedView, setHasTrackedView] = useState(false)
+  const sectionsViewedRef = useRef<Set<string>>(new Set())
+  // Per-section dwell tracking: when a section enters viewport, store ms timestamp.
+  const sectionDwellStartRef = useRef<Record<string, number>>({})
+  const DWELL_THRESHOLD_MS = 3000
 
-  // Track view_item in GTM when service page loads
+  // Track view_item in GTM + service_viewed in PostHog when service page loads
   useEffect(() => {
     if (service && !hasTrackedView) {
       const priceInPaisa = (pricing?.ollvyFee ?? service.ollvyFee ?? 0) * 100 +
@@ -443,9 +449,13 @@ export function UnifiedServicePage({
         category: service.category,
         price: priceInPaisa,
       })
+      trackServiceView(service.id, service.name, priceInPaisa, {
+        service_slug: service.slug,
+        category: service.category,
+      })
       setHasTrackedView(true)
     }
-  }, [service, pricing, hasTrackedView, trackViewService])
+  }, [service, pricing, hasTrackedView, trackViewService, trackServiceView])
 
   // Refs for smooth underline indicator — indicator position is updated imperatively
   const heroNavRef = useRef<HTMLDivElement>(null)
@@ -595,13 +605,51 @@ export function UnifiedServicePage({
 
   // Track active section via IntersectionObserver — off main thread, no layout reads
   useEffect(() => {
+    const flushSectionDwell = (id: string) => {
+      const startedAt = sectionDwellStartRef.current[id]
+      if (!startedAt) return
+      const dwellMs = Date.now() - startedAt
+      delete sectionDwellStartRef.current[id]
+      if (dwellMs < DWELL_THRESHOLD_MS) return
+      const meta = SECTIONS.find((s) => s.id === id)
+      trackSectionDwellTime(id, dwellMs, 'service', {
+        service_slug: service.slug,
+        section_label: meta?.label,
+        component: meta?.component,
+      })
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
+        // Per-section dwell time: track entry/exit timestamps regardless of programmaticScroll
+        for (const entry of entries) {
+          const id = entry.target.id
+          if (entry.isIntersecting) {
+            if (!sectionDwellStartRef.current[id]) {
+              sectionDwellStartRef.current[id] = Date.now()
+            }
+          } else {
+            flushSectionDwell(id)
+          }
+        }
+
         if (programmaticScrollRef.current) return
         const intersectingIds = new Set(
           entries.filter((e) => e.isIntersecting).map((e) => e.target.id)
         )
         if (intersectingIds.size === 0) return
+        // Fire PostHog section_viewed once per section per pageview
+        for (const id of intersectingIds) {
+          if (!sectionsViewedRef.current.has(id)) {
+            sectionsViewedRef.current.add(id)
+            const meta = SECTIONS.find((s) => s.id === id)
+            trackSectionView(id, 'service', {
+              service_slug: service.slug,
+              section_label: meta?.label,
+              component: meta?.component,
+            })
+          }
+        }
         // Prefer the topmost section (earliest in SECTIONS order)
         for (const section of SECTIONS) {
           if (intersectingIds.has(section.id)) {
@@ -620,8 +668,24 @@ export function UnifiedServicePage({
       if (el) observer.observe(el)
     }
 
-    return () => observer.disconnect()
-  }, [applyActiveSection])
+    // Flush any active dwell when the user leaves the page
+    const flushAll = () => {
+      for (const id of Object.keys(sectionDwellStartRef.current)) flushSectionDwell(id)
+    }
+    const onPageHide = () => flushAll()
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flushAll()
+    }
+    window.addEventListener('pagehide', onPageHide)
+    document.addEventListener('visibilitychange', onVisibility)
+
+    return () => {
+      flushAll()
+      observer.disconnect()
+      window.removeEventListener('pagehide', onPageHide)
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
+  }, [applyActiveSection, trackSectionView, trackSectionDwellTime, service.slug])
 
   // Initial mount + resize: sync nav to whichever section is currently active
   useEffect(() => {

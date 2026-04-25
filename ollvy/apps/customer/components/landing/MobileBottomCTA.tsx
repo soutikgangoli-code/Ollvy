@@ -4,9 +4,11 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 
 export function MobileBottomCTA() {
   const [isVisible, setIsVisible] = useState(false)
+  const { trackButtonClick } = usePostHogEvents()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,7 +37,16 @@ export function MobileBottomCTA() {
         isVisible ? "translate-y-0" : "translate-y-full"
       )}
     >
-      <Link href="/services" prefetch={true} className="block">
+      <Link
+        href="/services"
+        prefetch={true}
+        className="block"
+        onClick={() =>
+          trackButtonClick('book_now', 'mobile_sticky_cta', {
+            destination: '/services',
+          })
+        }
+      >
         <Button size="lg" className="w-full">
           Book Now
         </Button>

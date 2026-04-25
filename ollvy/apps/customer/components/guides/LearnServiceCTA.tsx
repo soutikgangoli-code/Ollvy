@@ -1,14 +1,18 @@
+'use client';
+
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { CheckCircle } from 'lucide-react';
 import { ServiceConfig } from '@/lib/services';
 import { getGuaranteedDate } from '@/lib/dates';
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents';
 
 export function LearnServiceCTA({ primary, secondary }: {
   primary: ServiceConfig;
   secondary?: ServiceConfig;
 }) {
+  const { trackServiceCardClick } = usePostHogEvents();
   const totalFee = primary.ollvyFee + (primary.govtFee ?? 0);
   const guaranteedDate = getGuaranteedDate(primary.slaDays);
 
@@ -44,6 +48,12 @@ export function LearnServiceCTA({ primary, secondary }: {
             <Link
               href={`/services/${primary.slug}`}
               prefetch={true}
+              onClick={() =>
+                trackServiceCardClick(primary.slug, 'guide_cta_primary', {
+                  service_name: primary.name,
+                  price_paisa: totalFee * 100,
+                })
+              }
             >
               Book Now →
             </Link>
@@ -63,7 +73,14 @@ export function LearnServiceCTA({ primary, secondary }: {
                 </p>
               </div>
               <Button variant="outline" size="sm" asChild>
-                <Link href={`/services/${secondary.slug}`}>
+                <Link
+                  href={`/services/${secondary.slug}`}
+                  onClick={() =>
+                    trackServiceCardClick(secondary.slug, 'guide_cta_secondary', {
+                      service_name: secondary.name,
+                    })
+                  }
+                >
                   View →
                 </Link>
               </Button>

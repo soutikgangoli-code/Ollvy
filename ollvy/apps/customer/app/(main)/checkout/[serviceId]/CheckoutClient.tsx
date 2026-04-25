@@ -19,6 +19,7 @@ import { useToast } from '@/lib/hooks/use-toast'
 import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
 import { fetchWithTimeout, TIMEOUTS } from '@/lib/fetch-with-timeout'
 import { useGTM, paisaToRupees } from '@/lib/hooks/useGTM'
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 
 import dynamic from 'next/dynamic'
 import {
@@ -120,6 +121,11 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
   const { user, session, isHydrated, openAuthModal, isAuthModalOpen } = useAuthStore()
   const { toast } = useToast()
   const { trackBeginCheckout, trackAddPaymentInfo, trackPurchase } = useGTM()
+  const {
+    trackCheckoutStarted,
+    trackPaymentInitiated,
+    trackEvent,
+  } = usePostHogEvents()
 
   // Service is server-fetched and passed in as prop — guaranteed non-null.
   const service = initialService
@@ -255,21 +261,23 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
   useEffect(() => {
     if (!service || hasTrackedCheckout) return
 
+    const totalPaisa = service.price_base_paisa + (service.price_govt_fees_paisa || 0)
     trackBeginCheckout({
-      value: paisaToRupees(service.price_base_paisa + (service.price_govt_fees_paisa || 0)),
+      value: paisaToRupees(totalPaisa),
       currency: 'INR',
       items: [
         {
           item_id: service.id,
           item_name: service.name,
           item_category: 'Services',
-          price: paisaToRupees(service.price_base_paisa + (service.price_govt_fees_paisa || 0)),
+          price: paisaToRupees(totalPaisa),
           quantity: 1,
         },
       ],
     })
+    trackCheckoutStarted(service.id, service.name, totalPaisa)
     setHasTrackedCheckout(true)
-  }, [service, hasTrackedCheckout, trackBeginCheckout])
+  }, [service, hasTrackedCheckout, trackBeginCheckout, trackCheckoutStarted])
 
   // Get selected variant data for price adjustments
   const selectedVariantData = useMemo(() => {
@@ -595,6 +603,13 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         modal: {
           ondismiss: () => {
             // Show retry modal when user dismisses without paying
+            trackEvent('payment_dismissed', {
+              order_id: data.order_id,
+              order_number: data.order_number,
+              service_id: service.id,
+              service_name: service.name,
+              amount_paisa: data.amount,
+            })
             setShowRetryModal(true)
             setIsProcessing(false)
           },
@@ -614,7 +629,30 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
       const razorpay = new (window as any).Razorpay(options)
       razorpayRef.current = razorpay
+      // Razorpay fires `payment.failed` for declined cards, OTP failure, network errors, etc.
+      razorpay.on('payment.failed', (resp: any) => {
+        trackEvent('payment_failed', {
+          order_id: data.order_id,
+          order_number: data.order_number,
+          service_id: service.id,
+          service_name: service.name,
+          amount_paisa: data.amount,
+          error_code: resp?.error?.code,
+          error_description: resp?.error?.description,
+          error_source: resp?.error?.source,
+          error_step: resp?.error?.step,
+          error_reason: resp?.error?.reason,
+          payment_method: resp?.error?.metadata?.payment_id ? 'attempted' : 'unknown',
+        })
+      })
       razorpay.open()
+      trackPaymentInitiated(
+        data.order_id,
+        service.id,
+        service.name,
+        paisaToRupees(data.amount),
+        { order_number: data.order_number }
+      )
     } catch (err: any) {
       console.error('Checkout error:', err)
       alert(err.message || 'Checkout failed')

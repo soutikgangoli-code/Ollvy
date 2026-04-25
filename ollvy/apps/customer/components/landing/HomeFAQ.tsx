@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import type { FAQServicePrices } from '@/lib/data/services'
+import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 
 // Show all FAQs on homepage
 
@@ -490,6 +491,7 @@ function getFaqData(prices: FAQServicePrices) {
 // Homepage FAQ - shows all questions, prices from DB
 export function HomeFAQ({ prices }: { prices: FAQServicePrices }) {
   const FAQ_DATA = getFaqData(prices)
+  const { trackEvent } = usePostHogEvents()
   return (
     <section id="faqs" className="bg-background py-12 md:py-16 lg:py-20">
       <div className="container max-w-4xl">
@@ -500,7 +502,20 @@ export function HomeFAQ({ prices }: { prices: FAQServicePrices }) {
           </h2>
         </div>
 
-        <Accordion type="single" collapsible className="w-full space-y-3">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full space-y-3"
+          onValueChange={(value) => {
+            if (!value) return
+            const faq = FAQ_DATA.find((f) => f.id === value)
+            trackEvent('faq_expanded', {
+              faq_id: value,
+              question: faq?.question,
+              page_type: 'homepage',
+            })
+          }}
+        >
           {FAQ_DATA.map((faq, index) => (
             <AccordionItem
               key={faq.id}
