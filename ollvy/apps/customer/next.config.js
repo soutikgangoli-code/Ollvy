@@ -101,6 +101,13 @@ const nextConfig = {
         destination: '/services/business-itr',
         permanent: true,
       },
+      // /join (CA recruitment landing) deleted — was orphaned and supply-side.
+      // 301 to homepage so any cached SERP entries / external links don't 404.
+      {
+        source: '/join',
+        destination: '/',
+        permanent: true,
+      },
     ];
   },
 }

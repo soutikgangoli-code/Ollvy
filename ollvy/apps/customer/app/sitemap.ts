@@ -54,7 +54,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // /cancellation and /refunds are noindexed (legal pages, kept off SERP). Excluded
     // from sitemap so Google doesn't re-discover them as primary content.
     { url: `${BASE_URL}/startup`, lastModified: legalDate },
-    { url: `${BASE_URL}/join`, lastModified: legalDate },
   ]
 
   // Service detail pages - DB-backed, use build date
