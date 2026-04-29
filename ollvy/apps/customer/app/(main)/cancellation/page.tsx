@@ -3,6 +3,9 @@ import { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Cancellation Policy | Ollvy',
   description: 'Cancellation policy for Ollvy compliance services. Learn about our order cancellation terms, timelines, and conditions for GST, company registration, and other services.',
+  // Legal/policy page — required to be publicly accessible (Razorpay compliance) but
+  // shouldn't compete with service pages in SERP. follow:true so footer links still pass juice.
+  robots: { index: false, follow: true },
   alternates: {
     canonical: 'https://www.ollvy.com/cancellation',
   },

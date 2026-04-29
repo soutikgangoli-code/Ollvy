@@ -51,8 +51,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/tools/penalty-calculator`, lastModified: buildDate },
     { url: `${BASE_URL}/privacy`, lastModified: legalDate },
     { url: `${BASE_URL}/terms`, lastModified: legalDate },
-    { url: `${BASE_URL}/cancellation`, lastModified: legalDate },
-    { url: `${BASE_URL}/refunds`, lastModified: legalDate },
+    // /cancellation and /refunds are noindexed (legal pages, kept off SERP). Excluded
+    // from sitemap so Google doesn't re-discover them as primary content.
     { url: `${BASE_URL}/startup`, lastModified: legalDate },
     { url: `${BASE_URL}/join`, lastModified: legalDate },
   ]

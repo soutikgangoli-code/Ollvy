@@ -4,6 +4,9 @@ import Link from 'next/link'
 export const metadata: Metadata = {
   title: 'Refund Policy | Ollvy',
   description: 'Refund policy for Ollvy compliance services. Understand our refund process, eligibility criteria, and timelines for GST registration, company incorporation, and other services.',
+  // Legal/policy page — required to be publicly accessible (Razorpay compliance) but
+  // shouldn't compete with service pages in SERP. follow:true so footer links still pass juice.
+  robots: { index: false, follow: true },
   alternates: {
     canonical: 'https://www.ollvy.com/refunds',
   },
