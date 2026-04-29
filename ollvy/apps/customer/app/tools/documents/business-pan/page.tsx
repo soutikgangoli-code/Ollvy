@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { DocumentChecklistContent } from '@/components/tools/DocumentChecklistContent'
 import { DocumentTimelineCost, DocumentEditorialIntro, DocumentWhoNeedsThis } from '@/components/tools/DocumentPageIntro'
 import { DocumentSteps } from '@/components/tools/DocumentSteps'
-import { DocumentFAQSection, generateFAQSchema } from '@/components/tools/DocumentFAQSection'
+import { DocumentFAQSection, generateMergedDocFAQSchema } from '@/components/tools/DocumentFAQSection'
 import { DocumentCommonMistakes } from '@/components/tools/DocumentCommonMistakes'
 import { DocumentNextSteps } from '@/components/tools/DocumentNextSteps'
 import { DocumentPageHeader } from '@/components/tools/DocumentPageHeader'
@@ -11,7 +11,6 @@ import { businessPanDocuments } from '@/lib/data/document-checklists'
 import { businessPanContent } from '@/lib/tools/document-content'
 import { generateDocumentListSchema } from '@/lib/tools/document-schemas'
 import { businessPanChecklistPage } from '@/lib/tools/document-checklist-pages'
-import { generateToolFAQSchema } from '@/lib/tools/types'
 
 const config = businessPanChecklistPage
 
@@ -45,7 +44,7 @@ const howToJsonLd = {
   })),
 }
 
-const faqJsonLd = generateFAQSchema(businessPanContent)
+const faqJsonLd = generateMergedDocFAQSchema(businessPanContent, config)
 
 const documentListJsonLd = generateDocumentListSchema(
   businessPanDocuments,
@@ -53,7 +52,6 @@ const documentListJsonLd = generateDocumentListSchema(
   'https://www.ollvy.com/tools/documents/business-pan'
 )
 
-const configFaqJsonLd = generateToolFAQSchema(config)
 
 export const metadata: Metadata = {
   title: config.seoTitle,
@@ -96,11 +94,6 @@ export default function BusinessPanDocumentsPage() {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(documentListJsonLd) }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(configFaqJsonLd) }}
-        />
-
         {/* Header with H1 - Server Rendered */}
         <DocumentPageHeader
           h1="How to Get PAN for Your Company or LLP"

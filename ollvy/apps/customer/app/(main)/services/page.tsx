@@ -109,12 +109,14 @@ function generateServicesSchema(services: ServicePackage[]) {
       '@type': 'ListItem',
       position: index + 1,
       item: {
-        '@type': 'Service',
+        // Product (not Service) so per-item aggregateRating validates as a Review Snippet —
+        // matches the @type used on the individual /services/[slug] page schema.
+        '@type': 'Product',
         name: service.name,
         description: service.short_description,
         url: `https://www.ollvy.com/services/${service.slug}`,
-        provider: {
-          '@type': 'Organization',
+        brand: {
+          '@type': 'Brand',
           name: 'Ollvy',
         },
         offers: {

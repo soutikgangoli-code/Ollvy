@@ -1,5 +1,7 @@
 // Structured Data for individual service pages
-// Includes BreadcrumbList, Service, AggregateRating, FAQPage schemas + E-E-A-T (reviewedBy, dateModified)
+// Emits: BreadcrumbList + Product (with AggregateRating + Review for star snippets) + FAQPage + HowTo
+// @type is Product, not Service: Google's Review Snippet rich result requires Product/LocalBusiness/etc.
+// as parent — Service is not in the supported list, so review/aggregateRating fail validation on it.
 import { LAST_REVIEWED, getReviewerForSlug, parseReviewedToISO } from '@/constants/accuracy'
 
 interface ReviewData {
@@ -92,7 +94,18 @@ export function ServiceStructuredData({
     .toISOString()
     .split('T')[0]
 
-  // Build offers with price specification if govt fee exists
+  // Build offers with price specification if govt fee exists.
+  // SLA days now move to Offer.deliveryLeadTime (Product has no estimatedDuration).
+  const deliveryLeadTime = slaDays
+    ? {
+        deliveryLeadTime: {
+          '@type': 'QuantitativeValue',
+          value: slaDays,
+          unitCode: 'DAY',
+        },
+      }
+    : {}
+
   const offersSchema = govtFee
     ? {
         '@type': 'Offer',
@@ -101,6 +114,7 @@ export function ServiceStructuredData({
         availability: 'https://schema.org/InStock',
         priceValidUntil,
         eligibleRegion: { '@type': 'Country', name: 'IN' },
+        ...deliveryLeadTime,
         priceSpecification: [
           {
             '@type': 'UnitPriceSpecification',
@@ -123,6 +137,7 @@ export function ServiceStructuredData({
         availability: 'https://schema.org/InStock',
         priceValidUntil,
         eligibleRegion: { '@type': 'Country', name: 'IN' },
+        ...deliveryLeadTime,
       }
 
   // Build review array for schema (real reviews or fallback)
@@ -153,7 +168,7 @@ export function ServiceStructuredData({
   // Aggregate rating: prefer DB-sourced (real reviews) if present,
   // otherwise compute from the fallback reviews actually emitted in `review:`.
   // Google requires aggregateRating whenever multiple Review items are present
-  // on the same parent entity (Service here).
+  // on the same Product entity.
   const ratingSource = reviews.length > 0
     ? { rated: reviews, useFallback: false }
     : { rated: fallbackReviews, useFallback: true }
@@ -214,24 +229,22 @@ export function ServiceStructuredData({
   const lastReviewedStr = LAST_REVIEWED[serviceSlug] ?? 'April 2026'
   const dateModifiedISO = parseReviewedToISO(lastReviewedStr)
 
-  // Build service schema with optional aggregate rating + E-E-A-T
-  const serviceSchema = {
+  // Product schema with optional aggregate rating + reviews + E-E-A-T.
+  // Product (not Service) is required for Review Snippet rich results.
+  // Field mapping vs prior Service: provider→brand, serviceType→category, areaServed dropped
+  // (Offer.eligibleRegion already conveys IN), estimatedDuration moved to Offer.deliveryLeadTime.
+  const productSchema = {
     '@context': 'https://schema.org',
-    '@type': 'Service',
+    '@type': 'Product',
     name: serviceName,
     description: description,
     url: `https://www.ollvy.com/services/${serviceSlug}`,
-    provider: {
-      '@type': 'Organization',
+    brand: {
+      '@type': 'Brand',
       name: 'Ollvy',
-      url: 'https://www.ollvy.com',
       logo: 'https://www.ollvy.com/logo.png',
     },
-    areaServed: {
-      '@type': 'Country',
-      name: 'India',
-    },
-    serviceType: category,
+    category: category,
     // E-E-A-T: named CA reviewer with affiliation for YMYL credibility
     reviewedBy: {
       '@type': 'Person',
@@ -245,9 +258,7 @@ export function ServiceStructuredData({
     },
     ...(dateModifiedISO ? { dateModified: dateModifiedISO } : {}),
     offers: offersSchema,
-    // Estimated duration in ISO 8601 format (P = period, D = days)
-    ...(slaDays ? { estimatedDuration: `P${slaDays}D` } : {}),
-    // Include what's included as offer catalog
+    // What's included — kept as hasOfferCatalog; Google ignores unsupported props on Product gracefully
     ...(offerCatalog ? { hasOfferCatalog: offerCatalog } : {}),
     // AggregateRating MUST accompany multiple Review items per Google's spec.
     // Compute from whichever review set we're emitting (real or fallback).
@@ -291,7 +302,7 @@ export function ServiceStructuredData({
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
       {faqPageSchema && (
         <script

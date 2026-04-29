@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import type { DocumentPageContent } from '@/lib/tools/document-content'
+import type { ToolPageConfig } from '@/lib/tools/types'
 
 interface DocumentFAQSectionProps {
   content: DocumentPageContent
@@ -42,7 +43,8 @@ export function DocumentFAQSection({ content, sectionNumber }: DocumentFAQSectio
   )
 }
 
-// Generate FAQPage JSON-LD schema
+// Generate FAQPage JSON-LD schema (single content source — kept for any callers that
+// only render the editorial FAQ list).
 export function generateFAQSchema(content: DocumentPageContent) {
   return {
     '@context': 'https://schema.org',
@@ -55,5 +57,37 @@ export function generateFAQSchema(content: DocumentPageContent) {
         text: faq.answer,
       },
     })),
+  }
+}
+
+// Document checklist pages render two visible FAQ blocks (editorial DocumentFAQSection +
+// "More Questions" ToolFAQSection). Google's rich-result rules allow only one FAQPage per
+// page; emit a single merged schema covering both sets to avoid the "Duplicate field
+// 'FAQPage'" validation error.
+export function generateMergedDocFAQSchema(
+  content: DocumentPageContent,
+  config: ToolPageConfig,
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      ...content.faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
+      ...config.faqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.a,
+        },
+      })),
+    ],
   }
 }
