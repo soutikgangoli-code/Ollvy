@@ -257,6 +257,72 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
 }
 
 /**
+ * Fetch multiple services by slug in a single query.
+ * Used by /startup (live pricing for the bundle stack) and /checkout/bundle.
+ * Returned in the same order as `slugs`; missing slugs are silently skipped.
+ */
+export interface BundleServiceData {
+  id: string
+  slug: string
+  name: string
+  shortDescription: string
+  ollvyFeePaisa: number
+  govtFeePaisa: number
+  mrpPaisa: number
+  slaDays: number
+  isRetainer: boolean
+  isActive: boolean
+}
+
+export async function getServicesBySlugs(slugs: string[]): Promise<BundleServiceData[]> {
+  if (!supabaseServer || slugs.length === 0) return []
+
+  const { data, error } = await supabaseServer
+    .from('service_packages')
+    .select(`
+      id,
+      slug,
+      name,
+      short_description,
+      price_base_paisa,
+      price_govt_fees_paisa,
+      price_mrp_paisa,
+      sla_working_days,
+      billing_cycle,
+      is_active
+    `)
+    .in('slug', slugs)
+    .eq('is_active', true)
+
+  if (error) {
+    console.error('[services] getServicesBySlugs:', error.message)
+    return []
+  }
+
+  const bySlug = new Map<string, BundleServiceData>()
+  for (const pkg of data ?? []) {
+    bySlug.set(pkg.slug, {
+      id: pkg.id,
+      slug: pkg.slug,
+      name: pkg.name,
+      shortDescription: pkg.short_description ?? '',
+      ollvyFeePaisa: pkg.price_base_paisa ?? 0,
+      govtFeePaisa: pkg.price_govt_fees_paisa ?? 0,
+      mrpPaisa: pkg.price_mrp_paisa ?? 0,
+      slaDays: pkg.sla_working_days ?? 0,
+      isRetainer:
+        pkg.billing_cycle === 'monthly' ||
+        pkg.billing_cycle === 'quarterly' ||
+        pkg.billing_cycle === 'yearly',
+      isActive: pkg.is_active ?? false,
+    })
+  }
+
+  // Preserve caller-supplied order; drop slugs not found in DB.
+  return slugs.map((s) => bySlug.get(s)).filter((s): s is BundleServiceData => Boolean(s))
+}
+
+/**
  * Fetch single service by slug for Service Detail Page (§18)
  * ALL content is fetched from the database - no static configs needed.
  * Returns null gracefully on any error to not break static generation

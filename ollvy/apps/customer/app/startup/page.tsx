@@ -1,12 +1,19 @@
 import { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
 import { StartupPage } from '@/components/startup/StartupPage';
+import { getServicesBySlugs } from '@/lib/data/services';
+import { STARTUP_STACK_SLUGS } from '@/components/startup/startup-stack-config';
+
+// ISR — revalidate hourly so DB price edits flow through.
+export const revalidate = 3600;
 
 // Service schema for startup compliance stack
 const startupServiceSchema = {
   '@context': 'https://schema.org',
   '@type': 'Service',
   name: 'Startup Compliance Stack',
-  description: 'Complete compliance solution for Indian startups - from Pvt Ltd incorporation to Series A readiness. Includes company registration, DPIIT recognition, GST, MSME, and monthly filings.',
+  description:
+    'Complete compliance solution for Indian startups - from Pvt Ltd incorporation to Series A readiness. Includes company registration, DPIIT recognition, GST, MSME, and monthly filings.',
   provider: {
     '@type': 'Organization',
     name: 'Ollvy Technologies Private Limited',
@@ -26,7 +33,6 @@ const startupServiceSchema = {
   },
 };
 
-// BreadcrumbList schema
 const breadcrumbSchema = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -38,23 +44,35 @@ const breadcrumbSchema = {
 
 export const metadata: Metadata = {
   title: 'Startup Compliance Stack - Incorporation to Series A | Ollvy',
-  description: 'Everything a startup needs: Pvt Ltd incorporation, Startup India DPIIT recognition, GST, MSME, monthly filings, ITR. Fixed prices. CAs assigned same day.',
+  description:
+    'Everything a startup needs: Pvt Ltd incorporation, Startup India DPIIT recognition, GST, MSME, monthly filings, ITR. Fixed prices. CAs assigned same day.',
   alternates: { canonical: 'https://www.ollvy.com/startup' },
   openGraph: {
     title: 'Startup Compliance Stack | Ollvy',
-    description: 'The complete compliance stack for Indian startups. Incorporation, DPIIT, GST, MSME. All in one place.',
+    description:
+      'The complete compliance stack for Indian startups. Incorporation, DPIIT, GST, MSME. All in one place.',
     url: 'https://www.ollvy.com/startup',
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Startup Compliance Stack | Ollvy',
-    description: 'The complete compliance stack for Indian startups. Incorporation, DPIIT, GST, MSME. All in one place.',
+    description:
+      'The complete compliance stack for Indian startups. Incorporation, DPIIT, GST, MSME. All in one place.',
     images: ['https://www.ollvy.com/logo.png'],
   },
 };
 
-export default function StartupPageRoute() {
+export default async function StartupPageRoute() {
+  // Live DB pricing for every slug referenced in the stack.
+  // Slugs missing from the DB are silently dropped so the page never hard-fails.
+  const getCached = unstable_cache(
+    () => getServicesBySlugs(STARTUP_STACK_SLUGS),
+    ['startup-stack-services'],
+    { tags: ['service-packages'] }
+  );
+  const services = await getCached();
+
   return (
     <>
       <script
@@ -65,7 +83,7 @@ export default function StartupPageRoute() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(startupServiceSchema) }}
       />
-      <StartupPage />
+      <StartupPage services={services} />
     </>
   );
 }
