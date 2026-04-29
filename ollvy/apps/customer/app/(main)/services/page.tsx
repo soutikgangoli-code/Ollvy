@@ -115,6 +115,8 @@ function generateServicesSchema(services: ServicePackage[]) {
         name: service.name,
         description: service.short_description,
         url: `https://www.ollvy.com/services/${service.slug}`,
+        // Required by Merchant Listings spec when @type is Product
+        image: ['https://www.ollvy.com/logo.png'],
         brand: {
           '@type': 'Brand',
           name: 'Ollvy',

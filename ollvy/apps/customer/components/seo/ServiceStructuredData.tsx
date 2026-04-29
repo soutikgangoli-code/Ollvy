@@ -239,6 +239,10 @@ export function ServiceStructuredData({
     name: serviceName,
     description: description,
     url: `https://www.ollvy.com/services/${serviceSlug}`,
+    // Required by Google's Merchant Listings rich-result spec when @type is Product.
+    // Without `image` Google flags "Missing field 'image'" as a critical error even
+    // though we only care about Review Snippets (which doesn't require image).
+    image: ['https://www.ollvy.com/logo.png'],
     brand: {
       '@type': 'Brand',
       name: 'Ollvy',
