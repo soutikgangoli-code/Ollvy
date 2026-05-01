@@ -205,6 +205,8 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 8000)
+    const warmupStart = performance.now()
+    console.log('[checkout-perf] warmup: starting POST with user JWT')
     fetch(`${url}/functions/v1/create-razorpay-order`, {
       method: 'POST',
       headers: {
@@ -216,7 +218,16 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
       signal: controller.signal,
       keepalive: true,
     })
-      .catch(() => {})
+      .then((r) =>
+        console.log(
+          `[checkout-perf] warmup: HTTP ${r.status} in ${Math.round(performance.now() - warmupStart)}ms (expect 204)`
+        )
+      )
+      .catch((e) =>
+        console.log(
+          `[checkout-perf] warmup: failed in ${Math.round(performance.now() - warmupStart)}ms — ${e?.name ?? 'unknown'}`
+        )
+      )
       .finally(() => clearTimeout(timeoutId))
   }, [isHydrated, session?.access_token])
 
@@ -481,6 +492,8 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
   }
 
   const handleCheckout = async () => {
+    const __t0 = performance.now()
+    console.log('[checkout-perf] click: handleCheckout entered')
     if (!service || !priceBreakdown) return
 
     // Require auth to checkout
@@ -492,8 +505,10 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     setIsProcessing(true)
     try {
       // Get fresh session token before checkout (handles expired tokens)
+      const __tSession = performance.now()
       const supabase = getClient()
       const { data: { session: freshSession } } = await supabase.auth.getSession()
+      console.log(`[checkout-perf] getSession: ${Math.round(performance.now() - __tSession)}ms`)
 
       if (!freshSession?.access_token) {
         openAuthModal()
@@ -503,6 +518,8 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
       const attribution = getFullAttributionData()
 
+      const __tFetch = performance.now()
+      console.log('[checkout-perf] create-order: starting fetch')
       const response = await fetchWithTimeout(
         `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`,
         {
@@ -528,6 +545,9 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           }),
           timeout: TIMEOUTS.PAYMENT,
         }
+      )
+      console.log(
+        `[checkout-perf] create-order: HTTP ${response.status} in ${Math.round(performance.now() - __tFetch)}ms`
       )
 
       const data = await response.json()
@@ -667,6 +687,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         return
       }
 
+      const __tRzp = performance.now()
       const razorpay = new (window as any).Razorpay(options)
       razorpayRef.current = razorpay
       // Razorpay fires `payment.failed` for declined cards, OTP failure, network errors, etc.
@@ -686,6 +707,9 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         })
       })
       razorpay.open()
+      console.log(
+        `[checkout-perf] razorpay.open() called: ${Math.round(performance.now() - __tRzp)}ms after Razorpay ctor; total click→open ${Math.round(performance.now() - __t0)}ms`
+      )
       trackPaymentInitiated(
         data.order_id,
         service.id,
