@@ -182,19 +182,24 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
   // Warm up the create-razorpay-order edge function on mount.
   // The Deno isolate is cold after ~30s of inactivity; clicking Pay then pays a
-  // 1-3s cold-start penalty. A throwaway POST starts the isolate AND warms the
-  // browser's CORS-preflight cache, so the user's actual click hits a hot
-  // function with no preflight roundtrip. We expect 401 (no auth) — and that's
-  // fine, all we need is the isolate to spin up.
+  // 1-3s cold-start penalty. A bare OPTIONS request bypasses Supabase's gateway
+  // auth (CORS preflights must be unauthenticated by spec), reaches the function's
+  // OPTIONS short-circuit, and starts the isolate. Side-benefit: primes the
+  // browser's CORS-preflight cache so the real Pay click skips its preflight
+  // roundtrip.
   useEffect(() => {
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return
     const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 8000)
     fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Warmup': '1' },
-      body: '{}',
+      method: 'OPTIONS',
+      headers: {
+        // Mimic what the browser sends as a real preflight before the Pay POST.
+        // Without these, Supabase may not route OPTIONS to the function isolate.
+        'Access-Control-Request-Method': 'POST',
+        'Access-Control-Request-Headers': 'authorization,content-type',
+      },
       signal: controller.signal,
       keepalive: true,
     })
