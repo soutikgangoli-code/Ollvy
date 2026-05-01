@@ -66,12 +66,15 @@ function StartupDPIITCalculatorInner() {
   }
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('types', complianceTypes.join(','))
-    params.set('amount', foreignInvestmentAmount.toString())
-    params.set('months', monthsLate.toString())
-    params.set('dpiit', isDPIITRecognised.toString())
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('types', complianceTypes.join(','))
+      params.set('amount', foreignInvestmentAmount.toString())
+      params.set('months', monthsLate.toString())
+      params.set('dpiit', isDPIITRecognised.toString())
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    }, 250)
+    return () => clearTimeout(id)
   }, [complianceTypes, foreignInvestmentAmount, monthsLate, isDPIITRecognised])
 
   const breakdown = useMemo(() => {

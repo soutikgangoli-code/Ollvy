@@ -85,10 +85,13 @@ function TDSCalculatorInner() {
   )
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('form', returnType); params.set('quarter', quarter); params.set('tds_amount', tdsAmount.toString())
-    params.set('deposit_status', depositStatus); params.set('days_return', daysLateReturn.toString()); params.set('days_deposit', daysLateDeposit.toString())
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('form', returnType); params.set('quarter', quarter); params.set('tds_amount', tdsAmount.toString())
+      params.set('deposit_status', depositStatus); params.set('days_return', daysLateReturn.toString()); params.set('days_deposit', daysLateDeposit.toString())
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    }, 250)
+    return () => clearTimeout(id)
   }, [returnType, quarter, tdsAmount, depositStatus, daysLateReturn, daysLateDeposit])
 
   const breakdown = useMemo(() => {

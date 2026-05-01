@@ -59,11 +59,14 @@ function ITRCalculatorInner() {
   const showLongDefaultWarning = outstandingTax > 0 && result.monthsLate > 6
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('entity', entityType); params.set('fy', financialYear); params.set('audit', isAuditRequired.toString())
-    params.set('income', totalIncome.toString()); params.set('tax', outstandingTax.toString()); params.set('days', daysLate.toString())
-    params.set('advance_paid', wasAdvanceTaxPaid.toString()); params.set('advance_amount', advanceTaxPaid.toString()); params.set('tds', tdsDeducted.toString())
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('entity', entityType); params.set('fy', financialYear); params.set('audit', isAuditRequired.toString())
+      params.set('income', totalIncome.toString()); params.set('tax', outstandingTax.toString()); params.set('days', daysLate.toString())
+      params.set('advance_paid', wasAdvanceTaxPaid.toString()); params.set('advance_amount', advanceTaxPaid.toString()); params.set('tds', tdsDeducted.toString())
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    }, 250)
+    return () => clearTimeout(id)
   }, [entityType, financialYear, isAuditRequired, totalIncome, outstandingTax, daysLate, wasAdvanceTaxPaid, advanceTaxPaid, tdsDeducted])
 
   const breakdown = useMemo(() => {

@@ -154,13 +154,16 @@ function GSTDemandCalculatorInner() {
   )
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('type', defaultType)
-    params.set('fraud', isFraud.toString())
-    params.set('amount', demandAmount.toString())
-    params.set('stage', noticeStage)
-    params.set('days', daysSinceNotice.toString())
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('type', defaultType)
+      params.set('fraud', isFraud.toString())
+      params.set('amount', demandAmount.toString())
+      params.set('stage', noticeStage)
+      params.set('days', daysSinceNotice.toString())
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    }, 250)
+    return () => clearTimeout(id)
   }, [defaultType, isFraud, demandAmount, noticeStage, daysSinceNotice])
 
   const breakdown = useMemo(() => [

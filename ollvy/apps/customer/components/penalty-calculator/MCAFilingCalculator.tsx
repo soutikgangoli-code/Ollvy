@@ -61,15 +61,18 @@ function MCACalculatorInner() {
   const showStrikeOffWarning = daysLate > 365
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('entity', entityType)
-    params.set('forms', formsSelected.join(','))
-    params.set('days', daysLate.toString())
-    params.set('years', yearsInDefault.toString())
-    params.set('directors', numberOfDirectors.toString())
-    params.set('capital', paidUpCapital)
-    const newUrl = `${window.location.pathname}?${params.toString()}`
-    window.history.replaceState(null, '', newUrl)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('entity', entityType)
+      params.set('forms', formsSelected.join(','))
+      params.set('days', daysLate.toString())
+      params.set('years', yearsInDefault.toString())
+      params.set('directors', numberOfDirectors.toString())
+      params.set('capital', paidUpCapital)
+      const newUrl = `${window.location.pathname}?${params.toString()}`
+      window.history.replaceState(null, '', newUrl)
+    }, 250)
+    return () => clearTimeout(id)
   }, [entityType, formsSelected, daysLate, yearsInDefault, numberOfDirectors, paidUpCapital])
 
   const toggleForm = (form: FormType) => {

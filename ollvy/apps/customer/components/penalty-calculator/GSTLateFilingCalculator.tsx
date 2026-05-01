@@ -159,17 +159,20 @@ function GSTCalculatorInner() {
   const isQRMPEligible = turnover <= 50000000 && returnType === 'GSTR-3B'
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('return', returnType)
-    params.set('nil', isNilReturn.toString())
-    params.set('turnover', turnover.toString())
-    params.set('days', daysLate.toString())
-    params.set('liability', outstandingTax.toString())
-    params.set('frequency', filingFrequency)
-    params.set('state', state)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('return', returnType)
+      params.set('nil', isNilReturn.toString())
+      params.set('turnover', turnover.toString())
+      params.set('days', daysLate.toString())
+      params.set('liability', outstandingTax.toString())
+      params.set('frequency', filingFrequency)
+      params.set('state', state)
 
-    const newUrl = `${window.location.pathname}?${params.toString()}`
-    window.history.replaceState(null, '', newUrl)
+      const newUrl = `${window.location.pathname}?${params.toString()}`
+      window.history.replaceState(null, '', newUrl)
+    }, 250)
+    return () => clearTimeout(id)
   }, [returnType, isNilReturn, turnover, daysLate, outstandingTax, filingFrequency, state])
 
   const breakdown = useMemo(() => {

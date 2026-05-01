@@ -80,10 +80,13 @@ function ProfessionalTaxCalculatorInner() {
   )
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('state', state); params.set('employees', employeeCount.toString())
-    params.set('salary', avgMonthlySalary.toString()); params.set('months', monthsLate.toString())
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('state', state); params.set('employees', employeeCount.toString())
+      params.set('salary', avgMonthlySalary.toString()); params.set('months', monthsLate.toString())
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    }, 250)
+    return () => clearTimeout(id)
   }, [state, employeeCount, avgMonthlySalary, monthsLate])
 
   const breakdown = useMemo(() => {

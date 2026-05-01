@@ -23,11 +23,14 @@ function DirectorKYCCalculatorInner() {
   const totalPenalty = numberOfDirectors * PENALTY_PER_DIRECTOR
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('directors', numberOfDirectors.toString())
-    params.set('deactivated', isDINDeactivated.toString())
-    const newUrl = `${window.location.pathname}?${params.toString()}`
-    window.history.replaceState(null, '', newUrl)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('directors', numberOfDirectors.toString())
+      params.set('deactivated', isDINDeactivated.toString())
+      const newUrl = `${window.location.pathname}?${params.toString()}`
+      window.history.replaceState(null, '', newUrl)
+    }, 250)
+    return () => clearTimeout(id)
   }, [numberOfDirectors, isDINDeactivated])
 
   const breakdown = useMemo(() => [

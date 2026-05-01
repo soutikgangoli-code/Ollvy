@@ -87,10 +87,13 @@ function ShopsEstablishmentCalculatorInner() {
   )
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('state', state); params.set('type', defaultType)
-    params.set('employees', employeeCount.toString()); params.set('months', monthsLate.toString())
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('state', state); params.set('type', defaultType)
+      params.set('employees', employeeCount.toString()); params.set('months', monthsLate.toString())
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    }, 250)
+    return () => clearTimeout(id)
   }, [state, defaultType, employeeCount, monthsLate])
 
   const breakdown = useMemo(() => [{

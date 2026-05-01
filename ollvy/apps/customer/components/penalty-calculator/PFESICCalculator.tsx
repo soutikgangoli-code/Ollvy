@@ -70,10 +70,13 @@ function PFESICCalculatorInner() {
   const isHighSalaryWarning = avgMonthlySalary > 21000 && isESICApplicable
 
   useEffect(() => {
-    const params = new URLSearchParams()
-    params.set('employees', employeeCount.toString()); params.set('salary', avgMonthlySalary.toString())
-    params.set('months', monthsLate.toString()); params.set('type', defaultType); params.set('notice', showCauseNotice.toString())
-    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    const id = setTimeout(() => {
+      const params = new URLSearchParams()
+      params.set('employees', employeeCount.toString()); params.set('salary', avgMonthlySalary.toString())
+      params.set('months', monthsLate.toString()); params.set('type', defaultType); params.set('notice', showCauseNotice.toString())
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
+    }, 250)
+    return () => clearTimeout(id)
   }, [employeeCount, avgMonthlySalary, monthsLate, defaultType, showCauseNotice])
 
   const breakdown = useMemo(() => {
