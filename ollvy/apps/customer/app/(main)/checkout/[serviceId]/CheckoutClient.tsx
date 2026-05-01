@@ -180,6 +180,28 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     }
   }, [])
 
+  // Warm up the create-razorpay-order edge function on mount.
+  // The Deno isolate is cold after ~30s of inactivity; clicking Pay then pays a
+  // 1-3s cold-start penalty. A throwaway POST starts the isolate AND warms the
+  // browser's CORS-preflight cache, so the user's actual click hits a hot
+  // function with no preflight roundtrip. We expect 401 (no auth) — and that's
+  // fine, all we need is the isolate to spin up.
+  useEffect(() => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return
+    const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 8000)
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Warmup': '1' },
+      body: '{}',
+      signal: controller.signal,
+      keepalive: true,
+    })
+      .catch(() => {})
+      .finally(() => clearTimeout(timeoutId))
+  }, [])
+
   // Open auth modal once on initial load if user is not logged in
   useEffect(() => {
     if (!isHydrated) return
@@ -862,12 +884,14 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         />
       </div>
 
-      {/* Razorpay checkout script — lazy-loaded on idle so it never competes
-          with LCP. The `handleCheckout` call shows a "Payment loading..." toast
-          if the user clicks Pay before the script finishes arriving. */}
+      {/* Razorpay checkout script. Loaded `afterInteractive` rather than
+          `lazyOnload` because we're already on /checkout — the user is here
+          to pay, so the SDK should be ready as soon as the page is interactive
+          rather than waiting for browser idle (which on a heavy checkout page
+          can take 3-5s and leave the Pay button disabled). */}
       <Script
         src="https://checkout.razorpay.com/v1/checkout.js"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
         onLoad={() => setRazorpayReady(true)}
       />
 
@@ -1264,7 +1288,7 @@ function OrderSummarySidebar({
         {isProcessing ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Processing...
+            Securing your payment…
           </>
         ) : !paymentReady ? (
           <>
@@ -1516,7 +1540,7 @@ function MobileBottomBarComponent({
             {isProcessing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Processing...
+                Securing payment…
               </>
             ) : !paymentReady ? (
               <>

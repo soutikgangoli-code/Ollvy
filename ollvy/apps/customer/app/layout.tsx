@@ -103,11 +103,13 @@ export default function RootLayout({
       <head>
         {/* Preconnect to origins that block paint or first interaction.
             Supabase: used for client-side auth + service fetches on every page.
-            Razorpay: loaded on /checkout — preconnecting globally warms the TCP+TLS
-            so the Razorpay modal opens faster on click. `crossOrigin=""` is required
-            since the eventual script is loaded cross-origin. */}
+            Razorpay checkout.js: SDK loaded on /checkout.
+            Razorpay api: the modal iframe and the create-order edge fn both call
+            api.razorpay.com — preconnect saves ~200–400ms on modal-open TLS handshake.
+            `crossOrigin=""` is required since both Razorpay endpoints are cross-origin. */}
         <link rel="preconnect" href="https://wsuleaypyjazcmmntcru.supabase.co" />
         <link rel="preconnect" href="https://checkout.razorpay.com" crossOrigin="" />
+        <link rel="preconnect" href="https://api.razorpay.com" crossOrigin="" />
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
