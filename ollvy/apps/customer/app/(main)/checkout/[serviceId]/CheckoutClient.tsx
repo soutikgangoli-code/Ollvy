@@ -182,24 +182,28 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
   // Warm up the create-razorpay-order edge function on mount.
   // The Deno isolate is cold after ~30s of inactivity; clicking Pay then pays a
-  // 1-3s cold-start penalty. A bare OPTIONS request bypasses Supabase's gateway
-  // auth (CORS preflights must be unauthenticated by spec), reaches the function's
-  // OPTIONS short-circuit, and starts the isolate. Side-benefit: primes the
-  // browser's CORS-preflight cache so the real Pay click skips its preflight
-  // roundtrip.
+  // 1-3s cold-start penalty. We send a POST authenticated with the public anon
+  // key (passes Supabase's gateway verify_jwt) carrying X-Warmup: 1. The
+  // function's X-Warmup short-circuit returns 204 immediately — no DB queries,
+  // no JWT parsing, just the isolate spinning up so the user's real Pay click
+  // hits a hot function.
+  //
+  // (We previously tried OPTIONS-only here, but Supabase's shared cors helper
+  // didn't declare Access-Control-Allow-Methods, so browsers blocked it.)
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return
-    const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    if (!url || !anonKey) return
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 8000)
-    fetch(url, {
-      method: 'OPTIONS',
+    fetch(`${url}/functions/v1/create-razorpay-order`, {
+      method: 'POST',
       headers: {
-        // Mimic what the browser sends as a real preflight before the Pay POST.
-        // Without these, Supabase may not route OPTIONS to the function isolate.
-        'Access-Control-Request-Method': 'POST',
-        'Access-Control-Request-Headers': 'authorization,content-type',
+        Authorization: `Bearer ${anonKey}`,
+        'Content-Type': 'application/json',
+        'X-Warmup': '1',
       },
+      body: '{}',
       signal: controller.signal,
       keepalive: true,
     })
