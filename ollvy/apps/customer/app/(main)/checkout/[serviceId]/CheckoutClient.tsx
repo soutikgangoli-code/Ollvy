@@ -180,26 +180,35 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     }
   }, [])
 
-  // Warm up the create-razorpay-order edge function on mount.
-  // The Deno isolate is cold after ~30s of inactivity; clicking Pay then pays a
-  // 1-3s cold-start penalty. We send a POST authenticated with the public anon
-  // key (passes Supabase's gateway verify_jwt) carrying X-Warmup: 1. The
-  // function's X-Warmup short-circuit returns 204 immediately — no DB queries,
-  // no JWT parsing, just the isolate spinning up so the user's real Pay click
-  // hits a hot function.
+  // Warm up the create-razorpay-order edge function once the user has a
+  // session. The Deno isolate is cold after ~30s of inactivity; without a
+  // warmup the user's Pay click pays a 1-3s cold-start penalty. We send a
+  // POST authenticated with the user's real JWT carrying X-Warmup: 1. The
+  // function's X-Warmup short-circuit returns 204 immediately — no DB
+  // queries, no inner JWT parsing — just the isolate spinning up so the
+  // real Pay click hits a hot function.
   //
-  // (We previously tried OPTIONS-only here, but Supabase's shared cors helper
-  // didn't declare Access-Control-Allow-Methods, so browsers blocked it.)
+  // Why we wait for session.access_token: Supabase's gateway with
+  // verify_jwt:true rejects anon-role JWTs at the gateway level (they lack
+  // the user claim). Sending the anon key returned 401 BEFORE the function
+  // ran, so the X-Warmup short-circuit was dead code. The user's real JWT
+  // passes the gateway and reaches the function.
+  const hasWarmedRef = useRef(false)
   useEffect(() => {
+    if (hasWarmedRef.current) return
+    if (!isHydrated) return
+    const accessToken = session?.access_token
+    if (!accessToken) return
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    if (!url || !anonKey) return
+    if (!url) return
+    hasWarmedRef.current = true
+
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 8000)
     fetch(`${url}/functions/v1/create-razorpay-order`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${anonKey}`,
+        Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
         'X-Warmup': '1',
       },
@@ -209,7 +218,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     })
       .catch(() => {})
       .finally(() => clearTimeout(timeoutId))
-  }, [])
+  }, [isHydrated, session?.access_token])
 
   // Open auth modal once on initial load if user is not logged in
   useEffect(() => {
