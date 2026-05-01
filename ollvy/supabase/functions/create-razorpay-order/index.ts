@@ -106,6 +106,13 @@ serve(async (req) => {
     return new Response('ok', { headers: corsHeaders });
   }
 
+  // Warmup short-circuit — frontend fires X-Warmup on /checkout mount to spin up
+  // the Deno isolate before the user clicks Pay. Skipping JWT verify + DB queries
+  // here keeps the warmup ~200ms instead of ~500ms and avoids unnecessary compute.
+  if (req.headers.get('X-Warmup') === '1') {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
   try {
     // Verify JWT and extract user_id
     const authResult = await verifyUser(req);
@@ -212,10 +219,15 @@ serve(async (req) => {
         );
       }
 
-      // Fetch service package
+      // Fetch service package — narrow column list to only the 9 fields this
+      // function actually reads. `select('*')` was pulling 30+ columns including
+      // 5+ heavy JSONB fields (workflow_stages, faqs, service_risks, etc.) that
+      // are never accessed here. Saves ~100-300ms of DB read + serialization.
       const { data: pkg, error: pkgError } = await supabase
         .from('service_packages')
-        .select('*')
+        .select(
+          'id, is_active, price_varies_by_state, price_base_paisa, price_govt_fees_paisa, price_gst_rate, order_type, variants, addons'
+        )
         .eq('id', quote.service_package_id)
         .single();
 
@@ -245,7 +257,9 @@ serve(async (req) => {
           .single(),
         supabase
           .from('service_packages')
-          .select('*')
+          .select(
+            'id, is_active, price_varies_by_state, price_base_paisa, price_govt_fees_paisa, price_gst_rate, order_type, variants, addons'
+          )
           .eq('id', service_package_id)
           .single(),
       ]);
