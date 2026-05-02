@@ -446,9 +446,9 @@ export function ProductShowcase() {
             }`}
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {FEATURES.map((item, i) => (
+            {FEATURES.map((item) => (
               <div
-                key={i}
+                key={item.title}
                 className="flex-shrink-0 w-full md:w-[calc(50%-16px)]"
               >
                 {/* Mockup card - auto height on mobile, fixed aspect on desktop */}
