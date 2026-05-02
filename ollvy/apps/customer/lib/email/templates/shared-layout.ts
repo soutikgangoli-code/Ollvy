@@ -19,14 +19,15 @@ export function wrapHTML(bodyHTML: string): string {
     </div>
     <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid #eee; color: #666; font-size: 12px;">
       Ollvy Collective Private Limited<br/>
-      {{REGISTERED_OFFICE_ADDRESS_TODO}}<br/>
+      123, DK1, Dhaula Kuan<br/>
+      New Delhi, 110010<br/>
+      Delhi, India<br/><br/>
       Email: support@ollvy.com<br/><br/>
       You're receiving this because you placed an order with us.
     </div>
   </div>
 </body>
 </html>`;
-  // TODO: Replace with Ollvy Collective Pvt Ltd registered office address
 }
 
 export function ctaButton(text: string, href: string): string {
