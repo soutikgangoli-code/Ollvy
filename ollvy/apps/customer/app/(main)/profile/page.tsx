@@ -104,6 +104,8 @@ export default async function ProfilePage({ searchParams }: PageProps) {
             order_number,
             status,
             total_paisa_snapshot,
+            paid_at,
+            retainer_subscription_id,
             created_at,
             questionnaire_completed_at,
             service_package:service_packages(
@@ -194,8 +196,13 @@ export default async function ProfilePage({ searchParams }: PageProps) {
         service_package: Array.isArray(o.service_package) ? o.service_package[0] : o.service_package
       })
 
+      // Match the /orders page filter: only show orders that are actually paid
+      // (or are retainer-subscription children, which don't use paid_at). Without
+      // this, orders that ended up at pending_assignment without paid_at (e.g.
+      // abandoned/admin-tweaked rows) leak into the active list — diverging
+      // from /orders which always required paid_at.
       const active_orders = orders
-        .filter(o => activeStatuses.includes(o.status))
+        .filter(o => activeStatuses.includes(o.status) && ((o as any).paid_at || (o as any).retainer_subscription_id))
         .slice(0, 5)
         .map(transformOrder)
 
