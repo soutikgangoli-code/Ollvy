@@ -309,10 +309,13 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
             )
           `)
           .neq('status', 'cancelled'),
-        // All orders for vault - no dependency
+        // All orders for vault - exclude pending_payment so eager-created
+        // orphan orders (from /checkout pre-fetch) don't appear in the user's
+        // document vault as empty entries.
         supabase
           .from('orders')
           .select('id, order_number, service_package:service_packages(name)')
+          .neq('status', 'pending_payment')
           .order('created_at', { ascending: false })
           .limit(50),
         // Vault documents - no dependency
