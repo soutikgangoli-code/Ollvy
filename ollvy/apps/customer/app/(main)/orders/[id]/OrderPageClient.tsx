@@ -166,13 +166,16 @@ export function OrderPageClient({ orderId, initialData, __perfTimings }: OrderPa
     const sinceNav = nav ? Math.round(performance.now() - nav.startTime) : Math.round(performance.now())
     const ttfb = nav ? Math.round(nav.responseStart - nav.startTime) : null
     const t = __perfTimings as any
+    const authBreakdown = t
+      ? `auth=${t.auth}ms [headers=${t.authHeaders}ms, headerPresent=${t.authHeaderPresent}, getUserFast=${t.authUser}ms]`
+      : ''
     if (t && t.orderError) {
       console.log(
-        `[order-detail-perf] server query FAILED: ${t.orderError} | server total=${t.total}ms (auth=${t.auth}ms, batch=${t.batch}ms) | TTFB=${ttfb}ms | client falling back`
+        `[order-detail-perf] server query FAILED: ${t.orderError} | server total=${t.total}ms (${authBreakdown}, batch=${t.batch}ms) | TTFB=${ttfb}ms | client falling back`
       )
     } else if (t) {
       console.log(
-        `[order-detail-perf] server: total=${t.total}ms (auth=${t.auth}ms, setup=${t.setup}ms, batch=${t.batch}ms, servicePackage=${t.servicePackage}ms) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+        `[order-detail-perf] server: total=${t.total}ms (${authBreakdown}, setup=${t.setup}ms, batch=${t.batch}ms, servicePackage=${t.servicePackage}ms) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
       )
     } else {
       console.log(

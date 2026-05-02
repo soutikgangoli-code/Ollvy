@@ -49,7 +49,20 @@ interface RoundNotification {
 export default async function OrderDetailPage({ params }: PageProps) {
   const __tStart = performance.now()
   const { id: orderId } = await params
+
+  // Split the auth phase into sub-stages so we can see whether the slowness
+  // is in headers() (Next.js dynamic-headers cost), the middleware header
+  // being absent (forcing fallback), or the DB user lookup itself. This page
+  // was showing auth=3505ms while neighbors show 200-300ms — narrowing.
+  const { headers: __headersImport } = await import('next/headers')
+  const __tHdrStart = performance.now()
+  const __headerStore = await __headersImport()
+  const __hasAuthHeader = !!__headerStore.get('x-auth-user-id')
+  const __tHdr = performance.now() - __tHdrStart
+
+  const __tUserStart = performance.now()
   const user = await getUserFast()
+  const __tUser = performance.now() - __tUserStart
   const __tAuth = performance.now() - __tStart
 
   if (!user) {
@@ -143,6 +156,9 @@ export default async function OrderDetailPage({ params }: PageProps) {
       batch: Math.round(__tBatch),
       servicePackage: 0,
       total: Math.round(performance.now() - __tStart),
+      authHeaders: Math.round(__tHdr),
+      authUser: Math.round(__tUser),
+      authHeaderPresent: __hasAuthHeader,
       orderError: orderResult.error
         ? `${orderResult.error.code ?? ''}: ${orderResult.error.message ?? 'unknown'}${orderResult.error.details ? ' / ' + orderResult.error.details : ''}`
         : 'no rows returned',
@@ -203,7 +219,11 @@ export default async function OrderDetailPage({ params }: PageProps) {
     batch: Math.round(__tBatch),
     servicePackage: Math.round(__tSp),
     total: Math.round(performance.now() - __tStart),
-  }
+    // Diagnostic sub-timings for the auth phase — see [order-detail-perf]
+    authHeaders: Math.round(__tHdr),
+    authUser: Math.round(__tUser),
+    authHeaderPresent: __hasAuthHeader,
+  } as any
 
   return <OrderPageClient orderId={orderId} initialData={initialData} __perfTimings={__perfTimings} />
 }
