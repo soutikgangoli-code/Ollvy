@@ -38,6 +38,12 @@ export default function EligibilityPage() {
   // No auth needed — eligibility page is open to all users
   useEffect(() => {
     const fetchService = async () => {
+      const __t0 = performance.now()
+      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+      const sinceNav = nav ? Math.round(performance.now() - nav.startTime) : null
+      console.log(
+        `[eligibility-perf] fetch starting (mount @ ${sinceNav}ms since navigation)`
+      )
       setIsLoading(true)
       setError(null)
 
@@ -45,14 +51,22 @@ export default function EligibilityPage() {
         const supabase = getClient()
 
         // Fetch service first to get the resolved UUID
+        // NOTE: this is a sequential waterfall — service fetch then questions
+        // count. Could be parallelized if we accept that the question count
+        // query keys off slug-or-uuid (extra OR clause) instead of resolved id.
+        const __tSvcStart = performance.now()
         const { data: serviceData, error: serviceError } = await supabase
           .from('service_packages')
           .select('*')
           .or(`id.eq.${serviceId},slug.eq.${serviceId}`)
           .eq('is_active', true)
           .single()
+        const __tSvcMs = Math.round(performance.now() - __tSvcStart)
 
         if (serviceError || !serviceData) {
+          console.log(
+            `[eligibility-perf] service fetch failed in ${__tSvcMs}ms`
+          )
           setError('Service not found')
           setIsLoading(false)
           return
@@ -61,12 +75,14 @@ export default function EligibilityPage() {
         setService(serviceData as ServicePackage)
 
         // Now use the resolved UUID for the questionnaire count
+        const __tCntStart = performance.now()
         const { count, error: countError } = await supabase
           .from('service_questionnaires')
           .select('*', { count: 'exact', head: true })
           .eq('service_package_id', serviceData.id)
           .eq('is_active', true)
           .eq('is_pre_payment', true)
+        const __tCntMs = Math.round(performance.now() - __tCntStart)
 
         if (countError) {
           console.error('Error checking pre-payment questions:', countError)
@@ -75,6 +91,11 @@ export default function EligibilityPage() {
         } else {
           setHasPrePaymentQuestions((count ?? 0) > 0)
         }
+
+        const total = Math.round(performance.now() - __t0)
+        console.log(
+          `[eligibility-perf] done: total=${total}ms (servicePackage=${__tSvcMs}ms, questionsCount=${__tCntMs}ms, hasQuestions=${(count ?? 0) > 0})`
+        )
 
         setIsLoading(false)
       } catch (err) {

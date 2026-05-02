@@ -9,10 +9,12 @@ interface PageProps {
 }
 
 export default async function DocumentsUploadPage({ params }: PageProps) {
+  const __tStart = performance.now()
   const { id: orderId } = await params
 
   // Check if user is logged in
   const user = await getUserFast()
+  const __tAuth = performance.now() - __tStart
   if (!user) {
     redirect('/login')
   }
@@ -20,10 +22,12 @@ export default async function DocumentsUploadPage({ params }: PageProps) {
   const supabase = await createServerSupabase()
 
   // Fetch order and documents in parallel
+  const __tBatchStart = performance.now()
   const [orderResult, docsResult] = await Promise.all([
     supabase.rpc('get_user_order', { p_order_id: orderId }),
     supabase.rpc('initialize_order_documents', { p_order_id: orderId }),
   ])
+  const __tBatch = performance.now() - __tBatchStart
 
   if (orderResult.error || !orderResult.data) {
     return (
@@ -40,13 +44,16 @@ export default async function DocumentsUploadPage({ params }: PageProps) {
   const servicePackage = orderData.service_package as { id: string; name: string; slug: string }
 
   // Check if questionnaire needs to be completed first
+  let __tQCount = 0
   if (!orderData.questionnaire_completed_at) {
     // Check if service has questionnaire questions (include in parallel query would be better)
+    const __qStart = performance.now()
     const { count: questionCount } = await supabase
       .from('service_questionnaires')
       .select('id', { count: 'exact', head: true })
       .eq('service_package_id', servicePackage.id)
       .eq('is_active', true)
+    __tQCount = performance.now() - __qStart
 
     if (questionCount && questionCount > 0) {
       redirect(`/orders/${orderId}/questionnaire`)
@@ -60,10 +67,19 @@ export default async function DocumentsUploadPage({ params }: PageProps) {
     service_package: servicePackage,
   }
 
+  const __perfTimings = {
+    auth: Math.round(__tAuth),
+    batch: Math.round(__tBatch),
+    questionCountQuery: Math.round(__tQCount),
+    docsCount: Array.isArray(docsResult.data) ? docsResult.data.length : 0,
+    total: Math.round(performance.now() - __tStart),
+  }
+
   return (
     <DocumentsPageClient
       order={order}
       initialDocuments={docsResult.data || []}
+      __perfTimings={__perfTimings}
     />
   )
 }

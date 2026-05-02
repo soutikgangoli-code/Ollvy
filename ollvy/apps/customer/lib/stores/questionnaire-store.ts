@@ -93,13 +93,19 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
     ...initialState,
 
     loadQuestionnaire: async (orderId: string, forceEdit: boolean = false, prefetchedOrder?: PrefetchedOrderData) => {
+      const __t0 = performance.now()
+      console.log(
+        `[questionnaire-store-perf] loadQuestionnaire start (orderId=${orderId.slice(0, 8)}, prefetched=${Boolean(prefetchedOrder)})`
+      )
       set({ isLoading: true, error: null, orderId })
 
       try {
         const supabase = getClient()
 
         // Get current session first
+        const __tSesStart = performance.now()
         const { data: { session: currentSession } } = await supabase.auth.getSession()
+        const __tSesMs = Math.round(performance.now() - __tSesStart)
 
         if (!currentSession) {
           throw new Error('Not authenticated')
@@ -107,11 +113,14 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
 
         // Use prefetched order data if available, otherwise fetch via RPC
         let orderData: PrefetchedOrderData | null = prefetchedOrder || null
+        let __tOrderMs = 0
 
         if (!orderData) {
           // Use RPC function for reliable order fetching (bypasses RLS chain issues)
+          const __tOrderStart = performance.now()
           const { data: fetchedOrder, error: orderError } = await supabase
             .rpc('get_user_order', { p_order_id: orderId })
+          __tOrderMs = Math.round(performance.now() - __tOrderStart)
 
           if (orderError) throw orderError
 
@@ -131,6 +140,9 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
 
         // If questionnaire already completed and not forcing edit mode, show completed state
         if (orderData.questionnaire_completed_at && !forceEdit) {
+          console.log(
+            `[questionnaire-store-perf] already completed: total=${Math.round(performance.now() - __t0)}ms (session=${__tSesMs}ms, order=${__tOrderMs}ms)`
+          )
           set({
             isLoading: false,
             hasInitialized: true,
@@ -142,6 +154,7 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         }
 
         // Fetch all data in PARALLEL for better performance
+        const __tBatchStart = performance.now()
         const [questionsResult, prePaymentQuestionsResult, responsesResult, userResult] = await Promise.all([
           // Post-payment questions
           supabase
@@ -172,6 +185,10 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
             .eq('auth_user_id', currentSession.user.id)
             .single()
         ])
+        const __tBatchMs = Math.round(performance.now() - __tBatchStart)
+        console.log(
+          `[questionnaire-store-perf] loadQuestionnaire done: total=${Math.round(performance.now() - __t0)}ms (session=${__tSesMs}ms, order=${__tOrderMs}ms, batch=${__tBatchMs}ms, questions=${questionsResult.data?.length ?? 0}, responses=${responsesResult.data?.length ?? 0})`
+        )
 
         const questionsData = questionsResult.data
         const questionsError = questionsResult.error

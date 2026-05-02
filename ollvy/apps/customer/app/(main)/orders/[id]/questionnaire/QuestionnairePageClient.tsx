@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { QuestionnaireWizard } from '@/components/questionnaire'
@@ -19,9 +20,33 @@ interface OrderData {
 interface QuestionnairePageClientProps {
   order: OrderData
   forceEdit: boolean
+  __perfTimings?: {
+    auth: number
+    rpc: number
+    rpcAttempts: number
+    rpcBackoffWait: number
+    total: number
+  }
 }
 
-export function QuestionnairePageClient({ order, forceEdit }: QuestionnairePageClientProps) {
+export function QuestionnairePageClient({ order, forceEdit, __perfTimings }: QuestionnairePageClientProps) {
+  // Perf instrumentation — see [questionnaire-perf] lines in console.
+  // Especially watch rpcAttempts: if >1, the user hit the webhook race
+  // condition and waited for backoff (1s, 2s, 4s, 8s, 16s).
+  useEffect(() => {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+    const sinceNav = nav ? Math.round(performance.now() - nav.startTime) : Math.round(performance.now())
+    const ttfb = nav ? Math.round(nav.responseStart - nav.startTime) : null
+    if (__perfTimings) {
+      const retryNote = __perfTimings.rpcAttempts > 1
+        ? ` ⚠ ${__perfTimings.rpcAttempts} attempts, ${__perfTimings.rpcBackoffWait}ms backoff wait`
+        : ''
+      console.log(
+        `[questionnaire-perf] server: total=${__perfTimings.total}ms (auth=${__perfTimings.auth}ms, rpc=${__perfTimings.rpc}ms${retryNote}) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   return (
     <div className="container py-12 max-w-2xl">
       {/* Header */}

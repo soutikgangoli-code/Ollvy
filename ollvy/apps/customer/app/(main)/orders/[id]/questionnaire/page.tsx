@@ -10,12 +10,14 @@ interface PageProps {
 }
 
 export default async function QuestionnairePage({ params, searchParams }: PageProps) {
+  const __tStart = performance.now()
   const { id: orderId } = await params
   const { edit } = await searchParams
   const forceEdit = edit === 'true'
 
   // Check if user is logged in
   const user = await getUserFast()
+  const __tAuth = performance.now() - __tStart
   if (!user) {
     redirect('/login')
   }
@@ -27,16 +29,22 @@ export default async function QuestionnairePage({ params, searchParams }: PagePr
   const delays = [1000, 2000, 4000, 8000, 16000]
   let orderData: any = null
   let error: any = null
+  let __attemptCount = 0
+  let __waitTotal = 0
+  const __rpcStart = performance.now()
 
   for (let attempt = 0; attempt <= delays.length; attempt++) {
+    __attemptCount = attempt + 1
     const res = await supabase.rpc('get_user_order', { p_order_id: orderId })
     orderData = res.data
     error = res.error
     if (orderData) break
     if (attempt < delays.length) {
+      __waitTotal += delays[attempt]
       await new Promise(r => setTimeout(r, delays[attempt]))
     }
   }
+  const __tRpc = performance.now() - __rpcStart
 
   if (error || !orderData) {
     return (
@@ -56,5 +64,13 @@ export default async function QuestionnairePage({ params, searchParams }: PagePr
     service_package: orderData.service_package as { name: string; slug: string },
   }
 
-  return <QuestionnairePageClient order={order} forceEdit={forceEdit} />
+  const __perfTimings = {
+    auth: Math.round(__tAuth),
+    rpc: Math.round(__tRpc),
+    rpcAttempts: __attemptCount,
+    rpcBackoffWait: __waitTotal,
+    total: Math.round(performance.now() - __tStart),
+  }
+
+  return <QuestionnairePageClient order={order} forceEdit={forceEdit} __perfTimings={__perfTimings} />
 }
