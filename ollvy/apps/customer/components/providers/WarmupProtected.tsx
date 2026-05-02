@@ -50,10 +50,8 @@ export function WarmupProtected() {
     if (hasFiredRef.current) return
     // Only logged-in users — anon users hitting /orders just bounce to /login.
     if (!session) return
-    // Wait until the auth flow has fully settled. isHydrated flips true once
-    // refreshSession() resolves; isLoading should also be false. Together they
-    // mean the SIGNED_IN event has been processed and any post-login redirect
-    // has had time to start, so we're not stealing CPU/network from the user.
+    // Wait until auth-store has settled (post-login event processed, any
+    // redirect underway).
     if (!isHydrated || isLoading) return
     hasFiredRef.current = true
 
@@ -74,19 +72,44 @@ export function WarmupProtected() {
       }
     }
 
-    // Defer to browser idle so the post-login redirect, hydration, and any
-    // analytics calls all complete first. requestIdleCallback isn't available
-    // in Safari < 17, so fall back to a 1.5s setTimeout — still plenty of
-    // buffer past the typical post-login redirect.
-    const ric = (
-      window as unknown as {
-        requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number
-      }
-    ).requestIdleCallback
-    if (typeof ric === 'function') {
-      ric(fire, { timeout: 3000 })
+    // Three-stage deferral to make sure the warmup pings never compete with
+    // anything the user can perceive:
+    //
+    //   1. Wait for window.load (full page load including images/iframes,
+    //      not just DOMContentLoaded). If the page is already loaded, we
+    //      proceed immediately — but typically auth settles slightly after
+    //      load, so this gate is mostly for first-page-visit timing.
+    //
+    //   2. Wait an additional 3.5s. LoginSuccessBanner auto-dismisses at 3s;
+    //      we add 500ms slack so warmup never overlaps with the banner's
+    //      animation or any post-login redirect work.
+    //
+    //   3. Run inside requestIdleCallback (with setTimeout fallback for
+    //      Safari < 17) so the actual fetches happen during the next idle
+    //      window — not while React is reconciling, not while images are
+    //      loading.
+    const scheduleWarmup = () => {
+      setTimeout(() => {
+        const ric = (
+          window as unknown as {
+            requestIdleCallback?: (
+              cb: () => void,
+              opts?: { timeout: number }
+            ) => number
+          }
+        ).requestIdleCallback
+        if (typeof ric === 'function') {
+          ric(fire, { timeout: 4000 })
+        } else {
+          setTimeout(fire, 200)
+        }
+      }, 3500)
+    }
+
+    if (document.readyState === 'complete') {
+      scheduleWarmup()
     } else {
-      setTimeout(fire, 1500)
+      window.addEventListener('load', scheduleWarmup, { once: true })
     }
   }, [session, isHydrated, isLoading, pathname])
 
