@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
 import { AuthProvider } from '@/components/providers/AuthProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import { WarmupProtected } from '@/components/providers/WarmupProtected'
 import { LoginSuccessBanner } from '@/components/auth/LoginSuccessBanner'
 import { StructuredData } from '@/components/seo/StructuredData'
 import { GTMProvider, GTMNoScript } from '@/components/analytics/GTMProvider'
@@ -124,6 +125,7 @@ export default function RootLayout({
           <PostHogProvider>
             <AuthProvider>
               <LoginSuccessBanner />
+              <WarmupProtected />
               <UTMProvider>
                 {children}
               </UTMProvider>
