@@ -147,8 +147,15 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
   }
 
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      setScrolled(window.scrollY > 8)
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 24)
+          ticking = false
+        })
+        ticking = true
+      }
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
@@ -171,7 +178,7 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
     <>
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 w-full transition-all duration-200 bg-background/80 backdrop-blur-xl',
+        'fixed top-0 left-0 right-0 z-50 w-full transition-[height] duration-200 bg-background/80 backdrop-blur-xl',
         'transform-gpu will-change-transform',
         scrolled ? 'h-[52px] border-b border-border' : 'h-16'
       )}
