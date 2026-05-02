@@ -88,7 +88,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .select(`
         *,
         professional:professionals(id, name, full_name, email, phone, avatar_url, professional_type, years_of_experience, average_rating),
-        service_package:service_packages(id, name, slug, sla_working_days, workflow_stages, questionnaire, variants, whats_included)
+        service_package:service_packages(id, name, slug, sla_working_days, workflow_stages, variants, whats_included)
       `)
       .eq('id', orderId)
       .eq('user_id', user.id)
@@ -133,9 +133,21 @@ export default async function OrderDetailPage({ params }: PageProps) {
   ])
   const __tBatch = performance.now() - __tBatchStart
 
-  // If order not found or user doesn't own it, let client handle it
+  // If order not found or user doesn't own it, let client handle it.
+  // Surface the actual error reason via __perfTimings so it shows up in the
+  // browser console — otherwise this fallback hides why the query failed.
   if (orderResult.error || !orderResult.data) {
-    return <OrderPageClient orderId={orderId} initialData={null} />
+    const __failPerf = {
+      auth: Math.round(__tAuth),
+      setup: Math.round(__tSetup),
+      batch: Math.round(__tBatch),
+      servicePackage: 0,
+      total: Math.round(performance.now() - __tStart),
+      orderError: orderResult.error
+        ? `${orderResult.error.code ?? ''}: ${orderResult.error.message ?? 'unknown'}${orderResult.error.details ? ' / ' + orderResult.error.details : ''}`
+        : 'no rows returned',
+    } as any
+    return <OrderPageClient orderId={orderId} initialData={null} __perfTimings={__failPerf} />
   }
 
   // Service package now comes joined inside orderResult.data — no second

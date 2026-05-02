@@ -158,18 +158,25 @@ export function OrderPageClient({ orderId, initialData, __perfTimings }: OrderPa
 
   // Perf instrumentation — see [order-detail-perf] lines in console.
   // Server timings come from page.tsx; client logs them on mount alongside
-  // its own hydration time + TTFB.
+  // its own hydration time + TTFB. If the server query failed, the error
+  // detail is included so we can debug column / RLS / FK issues without
+  // needing access to Vercel server logs.
   useEffect(() => {
     const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
     const sinceNav = nav ? Math.round(performance.now() - nav.startTime) : Math.round(performance.now())
     const ttfb = nav ? Math.round(nav.responseStart - nav.startTime) : null
-    if (__perfTimings) {
+    const t = __perfTimings as any
+    if (t && t.orderError) {
       console.log(
-        `[order-detail-perf] server: total=${__perfTimings.total}ms (auth=${__perfTimings.auth}ms, setup=${__perfTimings.setup}ms, batch=${__perfTimings.batch}ms, servicePackage=${__perfTimings.servicePackage}ms) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+        `[order-detail-perf] server query FAILED: ${t.orderError} | server total=${t.total}ms (auth=${t.auth}ms, batch=${t.batch}ms) | TTFB=${ttfb}ms | client falling back`
+      )
+    } else if (t) {
+      console.log(
+        `[order-detail-perf] server: total=${t.total}ms (auth=${t.auth}ms, setup=${t.setup}ms, batch=${t.batch}ms, servicePackage=${t.servicePackage}ms) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
       )
     } else {
       console.log(
-        `[order-detail-perf] server data missing — using client fallback. TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+        `[order-detail-perf] server data missing (no timings) — using client fallback. TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
