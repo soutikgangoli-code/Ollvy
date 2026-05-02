@@ -110,6 +110,21 @@ function formatPrice(paisa: number): string {
   return '\u20B9' + Math.ceil(paisa / 100).toLocaleString('en-IN')
 }
 
+// Snapshot of an order pre-created in the background while the user is still on
+// the checkout page, so the Pay click can skip the ~2s create-razorpay-order
+// roundtrip and open the Razorpay modal almost instantly. The fingerprint
+// captures every input that affects price (variant, addons, promo); if the user
+// changes any of them, the existing eager order becomes stale and we fire a new
+// one. Stale eager orders sit in the DB at status='pending_payment' until a
+// cleanup job (or Razorpay's 24h auto-expiry) marks them abandoned.
+interface EagerOrder {
+  orderId: string
+  orderNumber: string
+  razorpayOrderId: string
+  amount: number
+  fingerprint: string
+}
+
 interface CheckoutClientProps {
   initialService: ServicePackage
   serviceId: string
@@ -164,6 +179,12 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
   // Razorpay instance ref (for retry functionality)
   const razorpayRef = useRef<any>(null)
+
+  // Eager pre-created order. See EagerOrder type comment for rationale.
+  // Ref because we never need to re-render on its change — only consume it
+  // synchronously inside handleCheckout.
+  const eagerOrderRef = useRef<EagerOrder | null>(null)
+  const eagerInflightRef = useRef<Promise<EagerOrder | null> | null>(null)
 
   // Track if we've shown the initial auth prompt (don't keep re-opening if user dismisses)
   const [hasShownAuthPrompt, setHasShownAuthPrompt] = useState(false)
@@ -432,6 +453,133 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     }
   }, [service, selectedAddonIds, promoApplied, selectedVariantData, preCursorAnswers])
 
+  // Fingerprint for the eager-order cache. Anything that affects the order
+  // body sent to create-razorpay-order belongs here. NOTE: attribution (UTM,
+  // referral_code, landing_page) intentionally excluded — those are tracking
+  // metadata that don't change pricing, and they would otherwise invalidate the
+  // eager order on every render due to subtle param parsing differences.
+  const orderFingerprint = useMemo(
+    () =>
+      [
+        service?.id ?? '',
+        selectedVariant ?? '',
+        [...selectedAddonIds].sort().join(','),
+        promoApplied?.code ?? '',
+        // Pre-cursor answers feed into pricing for some services (LLP). Hash
+        // them so any change invalidates the eager order.
+        JSON.stringify(preCursorAnswers),
+      ].join('|'),
+    [service?.id, selectedVariant, selectedAddonIds, promoApplied?.code, preCursorAnswers]
+  )
+
+  // Eager order creation: fire create-razorpay-order in the background once
+  // we know who the user is and what they're buying. By the time they click
+  // Pay, the razorpay_order_id is already in eagerOrderRef.current, and
+  // handleCheckout below skips the ~2s fetch. If the user changes
+  // variant/addon/promo, the fingerprint shifts and we fire a fresh order;
+  // the previous one becomes orphan-pending until 24h cleanup.
+  useEffect(() => {
+    if (!isHydrated) return
+    if (!user || !session?.access_token) return
+    if (!service || !priceBreakdown || priceBreakdown.total <= 0) return
+    if (service.price_varies_by_state) return // these route to /quote, no eager order
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (!url) return
+
+    // Already have a fresh order for this exact config — no work to do.
+    if (eagerOrderRef.current?.fingerprint === orderFingerprint) return
+
+    const accessToken = session.access_token
+    const fingerprint = orderFingerprint
+    const userId = user.id
+    const serviceId = service.id
+    const promoCode = promoApplied?.code
+    const addonIds = selectedAddonIds
+    const variantId = selectedVariant
+
+    const promise = (async (): Promise<EagerOrder | null> => {
+      const t0 = performance.now()
+      console.log('[checkout-perf] eager: starting background create-order')
+      try {
+        const attribution = getFullAttributionData()
+        const response = await fetchWithTimeout(
+          `${url}/functions/v1/create-razorpay-order`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+              service_package_id: serviceId,
+              user_id: userId,
+              promo_code: promoCode,
+              addon_ids: addonIds.length > 0 ? addonIds : undefined,
+              variant_id: variantId || undefined,
+              engagement_agreed: true,
+              utm_source: attribution.utm?.utm_source,
+              utm_medium: attribution.utm?.utm_medium,
+              utm_campaign: attribution.utm?.utm_campaign,
+              utm_content: attribution.utm?.utm_content,
+              utm_term: attribution.utm?.utm_term,
+              referral_code: attribution.referralCode,
+              landing_page: attribution.landingPage,
+            }),
+            timeout: TIMEOUTS.PAYMENT,
+          }
+        )
+        const data = await response.json()
+        if (!response.ok || data.error || !data.razorpay_order_id) {
+          console.log(
+            `[checkout-perf] eager: failed in ${Math.round(performance.now() - t0)}ms — ${data.error ?? response.status}`
+          )
+          return null
+        }
+        const order: EagerOrder = {
+          orderId: data.order_id,
+          orderNumber: data.order_number,
+          razorpayOrderId: data.razorpay_order_id,
+          amount: data.amount,
+          fingerprint,
+        }
+        // Only adopt this result if the user hasn't moved on to a different
+        // config in the meantime. If the fingerprints differ, this order
+        // becomes orphan-pending and a newer effect already fired for the
+        // current config.
+        if (orderFingerprintAtSettleRef.current === fingerprint) {
+          eagerOrderRef.current = order
+          console.log(
+            `[checkout-perf] eager: order ready in ${Math.round(performance.now() - t0)}ms (razorpay_order_id ${order.razorpayOrderId})`
+          )
+        } else {
+          console.log(
+            `[checkout-perf] eager: order arrived in ${Math.round(performance.now() - t0)}ms but fingerprint changed; dropping`
+          )
+        }
+        return order
+      } catch (e: any) {
+        console.log(
+          `[checkout-perf] eager: exception in ${Math.round(performance.now() - t0)}ms — ${e?.name ?? 'error'}`
+        )
+        return null
+      }
+    })()
+
+    eagerInflightRef.current = promise
+    promise.finally(() => {
+      if (eagerInflightRef.current === promise) {
+        eagerInflightRef.current = null
+      }
+    })
+  }, [isHydrated, user, session?.access_token, service, priceBreakdown, orderFingerprint, selectedVariant, selectedAddonIds, promoApplied?.code])
+
+  // Mirror of orderFingerprint for the async eager closure to compare against
+  // *current* fingerprint at settle time (closures see stale values).
+  const orderFingerprintAtSettleRef = useRef(orderFingerprint)
+  useEffect(() => {
+    orderFingerprintAtSettleRef.current = orderFingerprint
+  }, [orderFingerprint])
+
   const handleToggleAddon = (id: string) => {
     // Don't toggle required addons
     const addon = service?.addons?.find(a => a.id === id)
@@ -518,41 +666,96 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
       const attribution = getFullAttributionData()
 
-      const __tFetch = performance.now()
-      console.log('[checkout-perf] create-order: starting fetch')
-      const response = await fetchWithTimeout(
-        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${freshSession.access_token}`,
-          },
-          body: JSON.stringify({
-            service_package_id: service.id,
-            user_id: user.id,
-            promo_code: promoApplied?.code,
-            addon_ids: selectedAddonIds.length > 0 ? selectedAddonIds : undefined,
-            variant_id: selectedVariant || undefined,
-            engagement_agreed: true,
-            utm_source: attribution.utm?.utm_source,
-            utm_medium: attribution.utm?.utm_medium,
-            utm_campaign: attribution.utm?.utm_campaign,
-            utm_content: attribution.utm?.utm_content,
-            utm_term: attribution.utm?.utm_term,
-            referral_code: attribution.referralCode,
-            landing_page: attribution.landingPage,
-          }),
-          timeout: TIMEOUTS.PAYMENT,
-        }
-      )
-      console.log(
-        `[checkout-perf] create-order: HTTP ${response.status} in ${Math.round(performance.now() - __tFetch)}ms`
-      )
+      // Fast path: eager order pre-created in the background already matches
+      // the current price config — use it directly, no fetch needed.
+      // Slow path: no eager order or fingerprint mismatch — fall back to the
+      // original on-click fetch.
+      let data: {
+        order_id: string
+        order_number: string
+        razorpay_order_id: string
+        amount: number
+      }
 
-      const data = await response.json()
-      if (!response.ok || data.error) {
-        throw new Error(data.error || 'Failed to create order')
+      const eager = eagerOrderRef.current
+      const inflight = eagerInflightRef.current
+      const __tEager = performance.now()
+
+      if (eager && eager.fingerprint === orderFingerprint) {
+        console.log('[checkout-perf] eager: cache hit — skipping fetch')
+        data = {
+          order_id: eager.orderId,
+          order_number: eager.orderNumber,
+          razorpay_order_id: eager.razorpayOrderId,
+          amount: eager.amount,
+        }
+      } else if (inflight) {
+        // Eager creation is still in flight — wait for it instead of firing
+        // a parallel duplicate request.
+        console.log('[checkout-perf] eager: in-flight, awaiting')
+        const result = await inflight
+        if (result && result.fingerprint === orderFingerprint) {
+          console.log(
+            `[checkout-perf] eager: in-flight resolved in ${Math.round(performance.now() - __tEager)}ms`
+          )
+          data = {
+            order_id: result.orderId,
+            order_number: result.orderNumber,
+            razorpay_order_id: result.razorpayOrderId,
+            amount: result.amount,
+          }
+        } else {
+          // Fingerprint shifted between when in-flight started and now (e.g.
+          // user toggled an addon while the request was traveling). Fall back
+          // to a fresh fetch with the current config.
+          console.log('[checkout-perf] eager: in-flight result stale; falling back to live fetch')
+          data = await createOrderLive()
+        }
+      } else {
+        console.log('[checkout-perf] eager: miss — falling back to live fetch')
+        data = await createOrderLive()
+      }
+
+      // Helper, declared as a closure to capture freshSession + auth + body args.
+      // Hoisted by JS, so calling it above the declaration is fine.
+      // eslint-disable-next-line no-inner-declarations
+      async function createOrderLive() {
+        const __tFetch = performance.now()
+        console.log('[checkout-perf] create-order: starting fetch')
+        const response = await fetchWithTimeout(
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-razorpay-order`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${freshSession!.access_token}`,
+            },
+            body: JSON.stringify({
+              service_package_id: service!.id,
+              user_id: user!.id,
+              promo_code: promoApplied?.code,
+              addon_ids: selectedAddonIds.length > 0 ? selectedAddonIds : undefined,
+              variant_id: selectedVariant || undefined,
+              engagement_agreed: true,
+              utm_source: attribution.utm?.utm_source,
+              utm_medium: attribution.utm?.utm_medium,
+              utm_campaign: attribution.utm?.utm_campaign,
+              utm_content: attribution.utm?.utm_content,
+              utm_term: attribution.utm?.utm_term,
+              referral_code: attribution.referralCode,
+              landing_page: attribution.landingPage,
+            }),
+            timeout: TIMEOUTS.PAYMENT,
+          }
+        )
+        console.log(
+          `[checkout-perf] create-order: HTTP ${response.status} in ${Math.round(performance.now() - __tFetch)}ms`
+        )
+        const liveData = await response.json()
+        if (!response.ok || liveData.error) {
+          throw new Error(liveData.error || 'Failed to create order')
+        }
+        return liveData
       }
 
       // For test mode (no Razorpay credentials), the edge function still creates
