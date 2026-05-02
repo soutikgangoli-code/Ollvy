@@ -5,8 +5,11 @@ import { getAdminUser } from '@/lib/admin/get-admin-user'
 import { logActivity, LOG_ACTIONS } from '@/lib/admin/log-activity'
 import { revalidatePath } from 'next/cache'
 import { sendEmail } from '@/lib/email/send'
-import { formatDateHuman, resolveCustomerGreeting } from '@/lib/email/format'
+import { formatDateHuman, formatTimestampIST, resolveCustomerGreeting } from '@/lib/email/format'
 import { buildOrderCompleted } from '@/lib/email/templates/order-completed'
+import { countWorkingDaysBetween } from '@/lib/utils'
+import { postToSlack } from '@/lib/slack/notify'
+import { ADMIN_ROOT_URL, buildOrderCompletedMessage } from '@/lib/slack/messages'
 
 type CustomerNotificationEvent =
   | 'admin_document_uploaded'
@@ -73,9 +76,18 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
 
   const oldStatus = order?.status
 
+  // Stamp completed_at when transitioning to 'completed' so the daily-summary
+  // cron's "completions today" query and Slack 3's working-days math both work.
+  // Pre-fix orders left this column null, so historical reports were undercounting.
+  const completedAtNow = new Date().toISOString()
+  const orderUpdates: Record<string, string> = { status: newStatus }
+  if (newStatus === 'completed') {
+    orderUpdates.completed_at = completedAtNow
+  }
+
   await supabaseServer
     .from('orders')
-    .update({ status: newStatus })
+    .update(orderUpdates)
     .eq('id', orderId)
 
   await logActivity({
@@ -99,8 +111,11 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
           id,
           order_number,
           total_paisa_snapshot,
+          paid_at,
+          professional_id,
           users!inner (id, email, business_name),
-          service_packages!inner (id, name)
+          service_packages!inner (id, name, sla_working_days),
+          professionals (id, full_name)
         `)
         .eq('id', orderId)
         .single()
@@ -112,6 +127,11 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
         ? Array.isArray(orderForEmail.service_packages)
           ? orderForEmail.service_packages[0]
           : orderForEmail.service_packages
+        : null
+      const proRow = orderForEmail
+        ? Array.isArray(orderForEmail.professionals)
+          ? orderForEmail.professionals[0]
+          : orderForEmail.professionals
         : null
 
       const customerEmail = userRow?.email as string | null | undefined
@@ -151,6 +171,42 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
             event: 'order_completed_email_failed',
             order_id: orderId,
             error: result.error,
+          }))
+        }
+      }
+
+      // Post to Slack #ops "completed". Best effort - never breaks the action.
+      // We post even if the email was skipped (no customer email); ops still
+      // wants to know the order finished.
+      if (orderForEmail) {
+        try {
+          const completedAtDate = new Date(completedAtNow)
+          const workingDaysTaken = orderForEmail.paid_at
+            ? countWorkingDaysBetween(new Date(orderForEmail.paid_at), completedAtDate)
+            : 0
+          const slaWorkingDays = (serviceRow?.sla_working_days as number | null | undefined) ?? 0
+          const customerNameForSlack =
+            (userRow?.business_name as string | null | undefined) ||
+            (customerEmail ? customerEmail.split('@')[0] : 'Unknown')
+          const proName = (proRow?.full_name as string | null | undefined) ?? 'Unassigned'
+
+          const text = buildOrderCompletedMessage({
+            customer_name: customerNameForSlack,
+            service_name: serviceRow?.name ?? 'your order',
+            order_number: orderForEmail.order_number,
+            order_id: orderForEmail.id,
+            working_days_taken: workingDaysTaken,
+            sla_working_days: slaWorkingDays,
+            completed_by_name: adminUser.name,
+            completed_at_ist: formatTimestampIST(completedAtDate),
+            admin_root_url: ADMIN_ROOT_URL,
+          })
+          await postToSlack({ channel: 'ops', text })
+        } catch (slackErr) {
+          console.error(JSON.stringify({
+            event: 'order_completed_slack_error',
+            order_id: orderId,
+            error: slackErr instanceof Error ? slackErr.message : String(slackErr),
           }))
         }
       }

@@ -16,6 +16,7 @@ import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { sendEmail } from '../_shared/email.ts';
 import { resolveCustomerGreeting } from '../_shared/format.ts';
 import { buildAdminUpdate } from '../_shared/email-templates/admin-update.ts';
+import { notifySlackError } from '../_shared/slack.ts';
 
 const QUIET_WINDOW_MS = 10 * 60 * 1000;
 const MAX_ATTEMPTS = 3;
@@ -200,6 +201,12 @@ serve(async (req) => {
               attempts: newCount,
               error: sendResult.error,
             }));
+            await notifySlackError({
+              function_name: 'drain-customer-notifications-queue',
+              error: `admin_update email gave up after ${newCount} attempts: ${sendResult.error}`,
+              order_id: orderId,
+              context: 'customer_notifications_queue final-attempt failure',
+            });
           }
           await supabase
             .from('customer_notifications_queue')

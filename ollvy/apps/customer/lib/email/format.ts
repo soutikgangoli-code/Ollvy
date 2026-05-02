@@ -20,6 +20,21 @@ export function formatDateHuman(date: string | Date): string {
   return `${month} ${day}, ${year}`;
 }
 
+// "2 May 2026, 4:32 PM IST" - for Slack message timestamps. Mirrors Deno helper.
+export function formatTimestampIST(date: string | Date): string {
+  const d = date instanceof Date ? date : new Date(date);
+  const ist = new Date(d.getTime() + IST_OFFSET_MS);
+  const day = ist.getUTCDate();
+  const month = MONTHS_SHORT[ist.getUTCMonth()];
+  const year = ist.getUTCFullYear();
+  const hour24 = ist.getUTCHours();
+  const minute = ist.getUTCMinutes();
+  const period = hour24 >= 12 ? 'PM' : 'AM';
+  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+  const minStr = minute.toString().padStart(2, '0');
+  return `${day} ${month} ${year}, ${hour12}:${minStr} ${period} IST`;
+}
+
 export function buildOrderUrl(orderId: string): string {
   return `https://www.ollvy.com/orders/${orderId}`;
 }

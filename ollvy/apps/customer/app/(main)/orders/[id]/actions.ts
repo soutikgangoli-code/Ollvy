@@ -3,8 +3,10 @@
 import { createServerSupabase, getUser, supabaseServer } from '@/lib/supabase-server'
 import { logActivity, LOG_ACTIONS } from '@/lib/admin/log-activity'
 import { sendEmail } from '@/lib/email/send'
-import { formatDateHuman, resolveCustomerGreeting } from '@/lib/email/format'
+import { formatDateHuman, formatTimestampIST, resolveCustomerGreeting } from '@/lib/email/format'
 import { buildSubmissionComplete } from '@/lib/email/templates/submission-complete'
+import { postToSlack } from '@/lib/slack/notify'
+import { ADMIN_ROOT_URL, buildReadyForWorkMessage } from '@/lib/slack/messages'
 
 /**
  * Log customer document upload to activity log
@@ -101,18 +103,22 @@ export async function checkAndFireSubmissionEmail(orderId: string): Promise<void
     return
   }
 
-  // Single query: ownership check + completion timestamps + service/user context.
+  // Single query: ownership check + completion timestamps + service/user context
+  // + payment timing + assignment for the Slack #ops ready-for-work ping.
   const { data: order, error } = await supabaseServer
     .from('orders')
     .select(`
       id,
       user_id,
       order_number,
+      paid_at,
+      professional_id,
       questionnaire_completed_at,
       documents_completed_at,
       submission_complete_email_sent_at,
       users!inner (id, email, business_name),
-      service_packages!inner (id, name)
+      service_packages!inner (id, name),
+      professionals (id, full_name)
     `)
     .eq('id', orderId)
     .single()
@@ -207,6 +213,47 @@ export async function checkAndFireSubmissionEmail(orderId: string): Promise<void
       event: 'submission_complete_email_stamp_failed',
       order_id: order.id,
       error: stampError.message,
+    }))
+  }
+
+  // Post to Slack #ops "ready for work". Best effort - never breaks the action.
+  try {
+    const proRow = Array.isArray(order.professionals)
+      ? order.professionals[0]
+      : order.professionals
+    const professionalName = (proRow?.full_name as string | null | undefined) ?? null
+
+    // Time-since-payment: prefer paid_at, fall back to questionnaire/docs window
+    // start (the earlier of the two completion timestamps) if paid_at is missing.
+    const paidAtMs = order.paid_at
+      ? new Date(order.paid_at).getTime()
+      : Math.min(qDone, dDone)
+    const submittedMs = submittedAt.getTime()
+    const elapsedMs = Math.max(0, submittedMs - paidAtMs)
+    const hoursAfterPayment = Math.floor(elapsedMs / (60 * 60 * 1000))
+    const daysAfterPayment = Math.floor(elapsedMs / (24 * 60 * 60 * 1000))
+
+    const customerNameForSlack =
+      (userRow?.business_name as string | null | undefined) ||
+      customerEmail.split('@')[0]
+
+    const text = buildReadyForWorkMessage({
+      customer_name: customerNameForSlack,
+      service_name: serviceRow?.name ?? 'your order',
+      order_number: order.order_number,
+      order_id: order.id,
+      hours_after_payment: hoursAfterPayment,
+      days_after_payment: daysAfterPayment,
+      assigned_professional_name: professionalName,
+      submitted_at_ist: formatTimestampIST(submittedAt),
+      admin_root_url: ADMIN_ROOT_URL,
+    })
+    await postToSlack({ channel: 'ops', text })
+  } catch (slackErr) {
+    console.error(JSON.stringify({
+      event: 'ready_for_work_slack_error',
+      order_id: order.id,
+      error: slackErr instanceof Error ? slackErr.message : String(slackErr),
     }))
   }
 }

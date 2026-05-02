@@ -3,6 +3,8 @@
 // Returns a structured result rather than throwing - customer-facing email
 // failures should not break the server action that triggered them.
 
+import { notifySlackEmailFailure } from '@/lib/slack/notify';
+
 export interface SendEmailParams {
   to: string | string[];
   subject: string;
@@ -88,6 +90,7 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
         error: errorMessage,
         status: res.status,
       }));
+      await postSlackFailureNotice(params, errorMessage);
       return { success: false, error: errorMessage, status: res.status };
     }
 
@@ -110,6 +113,30 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
       subject: params.subject,
       error,
     }));
+    await postSlackFailureNotice(params, error);
     return { success: false, error };
+  }
+}
+
+// Best-effort #errors notification on email failure. Pulls template_name and
+// order_id out of params.tags so callers don't need to pass extra fields.
+async function postSlackFailureNotice(
+  params: SendEmailParams,
+  errorMessage: string,
+): Promise<void> {
+  try {
+    const tagFor = (name: string): string | undefined =>
+      params.tags?.find((t) => t.name === name)?.value;
+    const templateName = tagFor('template') ?? 'unknown_template';
+    const orderId = tagFor('order_id');
+    const recipient = Array.isArray(params.to) ? params.to.join(',') : params.to;
+    await notifySlackEmailFailure({
+      template_name: templateName,
+      recipient_email: recipient,
+      order_id: orderId,
+      error_message: errorMessage,
+    });
+  } catch {
+    // notifySlackEmailFailure is internally try/catched, but belt-and-braces.
   }
 }

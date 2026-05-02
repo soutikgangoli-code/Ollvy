@@ -19,8 +19,10 @@ import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { crypto } from 'https://deno.land/std@0.177.0/crypto/mod.ts';
 import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 import { sendEmail } from '../_shared/email.ts';
-import { formatDateHuman, resolveCustomerGreeting } from '../_shared/format.ts';
+import { formatDateHuman, formatTimestampIST, resolveCustomerGreeting } from '../_shared/format.ts';
 import { buildPaymentConfirmation } from '../_shared/email-templates/payment-confirmation.ts';
+import { postToSlack, notifySlackError } from '../_shared/slack.ts';
+import { ADMIN_ROOT_URL, buildPaymentCapturedMessage } from '../_shared/slack-messages.ts';
 
 // Verify Razorpay webhook signature using HMAC SHA256
 async function verifyRazorpaySignature(body: string, signature: string, secret: string): Promise<boolean> {
@@ -660,6 +662,40 @@ serve(async (req) => {
       }));
     }
 
+    // 9. Post to Slack #payments. Best effort - never fails the webhook.
+    // Reuses the order/users/service_packages query from line 420; no extra DB call.
+    try {
+      const customerEmailForSlack = (order.users?.email as string | null | undefined) ?? null;
+      // users.phone is read at the SELECT before the post-payment phone capture
+      // (~line 478) updates the row. Fall back to the Razorpay payment payload
+      // so the Slack ping has the correct phone even on first-time Google signups.
+      const phoneForSlack: string | null =
+        (order.users?.phone as string | null | undefined) ?? payment.contact ?? null;
+
+      const customerNameForSlack =
+        (order.users?.business_name as string | null | undefined) ||
+        (customerEmailForSlack ? customerEmailForSlack.split('@')[0] : 'Unknown');
+
+      const text = buildPaymentCapturedMessage({
+        customer_name: customerNameForSlack,
+        customer_email: customerEmailForSlack ?? '(no email on file)',
+        customer_phone: phoneForSlack,
+        service_name: order.service_packages.name,
+        total_paisa: order.total_paisa_snapshot ?? 0,
+        order_number: order.order_number,
+        order_id: order.id,
+        paid_at_ist: formatTimestampIST(new Date()),
+        admin_root_url: ADMIN_ROOT_URL,
+      });
+      await postToSlack({ channel: 'payments', text });
+    } catch (slackErr) {
+      console.error(JSON.stringify({
+        event: 'payment_captured_slack_error',
+        order_id: order.id,
+        error: slackErr instanceof Error ? slackErr.message : String(slackErr),
+      }));
+    }
+
     return new Response(
       JSON.stringify({
         ok: true,
@@ -673,6 +709,12 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Webhook processing error:', error);
+    // Notify #errors channel. Wrapped helper never throws.
+    await notifySlackError({
+      function_name: 'razorpay-webhook',
+      error: error instanceof Error ? error : String(error),
+      context: 'top-level webhook handler caught an unexpected error',
+    });
     // Still return 200 to prevent Razorpay from retrying
     // But log the error for investigation
     return new Response(

@@ -97,3 +97,20 @@ export function addWorkingDays(date: Date, days: number): Date {
   }
   return result
 }
+
+// Counts working days between startDate (inclusive) and endDate (exclusive).
+// Used for "X working days taken" on completed orders. Sat/Sun skipped.
+export function countWorkingDaysBetween(startDate: Date, endDate: Date): number {
+  if (endDate <= startDate) return 0
+  const cursor = new Date(startDate)
+  cursor.setHours(0, 0, 0, 0)
+  const end = new Date(endDate)
+  end.setHours(0, 0, 0, 0)
+  let count = 0
+  while (cursor < end) {
+    const dayOfWeek = cursor.getDay()
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) count++
+    cursor.setDate(cursor.getDate() + 1)
+  }
+  return count
+}
