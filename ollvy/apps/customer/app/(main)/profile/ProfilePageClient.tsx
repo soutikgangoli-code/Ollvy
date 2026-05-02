@@ -167,14 +167,38 @@ interface ProfilePageClientProps {
   userData: UserData
   isSetup: boolean
   initialData?: ProfileInitialData | null
+  __perfTimings?: {
+    auth: number
+    batch1: number
+    batch2: number
+    total: number
+    ordersCount: number
+  }
 }
 
-function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientProps) {
+function ProfileContent({ userData, isSetup, initialData, __perfTimings }: ProfilePageClientProps) {
   const router = useRouter()
   const { refreshSession, isHydrated, isLoading: authLoading } = useAuthStore()
 
   const [isSaving, setIsSaving] = useState(false)
   const [copied, setCopied] = useState(false)
+
+  // Perf instrumentation — see [profile-perf] lines in console.
+  useEffect(() => {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+    const sinceNav = nav ? Math.round(performance.now() - nav.startTime) : Math.round(performance.now())
+    const ttfb = nav ? Math.round(nav.responseStart - nav.startTime) : null
+    if (__perfTimings) {
+      console.log(
+        `[profile-perf] server: total=${__perfTimings.total}ms (auth=${__perfTimings.auth}ms, batch1=${__perfTimings.batch1}ms, batch2=${__perfTimings.batch2}ms, rows=${__perfTimings.ordersCount}) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+      )
+    } else {
+      console.log(
+        `[profile-perf] server data missing — using client fallback. TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Only show loading if no initial data was provided from server
   const [isLoading, setIsLoading] = useState(!initialData)
@@ -276,6 +300,8 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
 
   // Full client-side fetch - only used as fallback when server data not available
   const fetchAllDashboardData = async () => {
+    const __t0 = performance.now()
+    console.log('[profile-perf] client fallback: starting BATCH 1 (6 parallel queries)')
     try {
       const supabase = getClient()
 
@@ -331,6 +357,7 @@ function ProfileContent({ userData, isSetup, initialData }: ProfilePageClientPro
           .select('id, status, due_date')
           .order('due_date', { ascending: true })
       ])
+      console.log(`[profile-perf] client fallback: BATCH 1 done in ${Math.round(performance.now() - __t0)}ms`)
 
       if (activeResult.error) console.error('Error fetching active orders:', activeResult.error)
       if (completedResult.error) console.error('Error fetching completed orders:', completedResult.error)

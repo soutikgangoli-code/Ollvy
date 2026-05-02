@@ -73,10 +73,12 @@ export interface ProfileInitialData {
 }
 
 export default async function ProfilePage({ searchParams }: PageProps) {
+  const __tStart = performance.now()
   const params = await searchParams
   const isSetup = params.setup === 'true'
 
   const user = await getUserFast()
+  const __tAuth = performance.now() - __tStart
 
   if (!user) {
     redirect('/login?returnUrl=/profile')
@@ -85,9 +87,13 @@ export default async function ProfilePage({ searchParams }: PageProps) {
   // Server-side data fetching using service role client
   // This bypasses RLS, so we explicitly filter by user_id
   let initialData: ProfileInitialData | null = null
+  let __tBatch1 = 0
+  let __tBatch2 = 0
+  let __ordersCount = 0
 
   if (supabaseServer) {
     try {
+      const __b1Start = performance.now()
       // Parallel server-side fetches (service role bypasses RLS)
       // Single orders query — used for both active/completed tabs AND vault
       const [ordersResult, retainersResult, complianceResult] = await Promise.all([
@@ -134,14 +140,17 @@ export default async function ProfilePage({ searchParams }: PageProps) {
           .eq('user_id', user.id)
           .order('due_date', { ascending: true }),
       ])
+      __tBatch1 = performance.now() - __b1Start
 
       const orders = ordersResult.data || []
       const orderIds = orders.map(o => o.id)
+      __ordersCount = orders.length
 
       // BATCH 2: Queries that depend on order IDs — run in parallel
       const activeStatuses = ['pending_assignment', 'waitlisted', 'in_progress']
       const activeOrderIds = orders.filter(o => activeStatuses.includes(o.status)).map(o => o.id)
 
+      const __b2Start = performance.now()
       const [vaultDocsResult, docCountsResult, stagesResult, workDocsResult] = await Promise.all([
         // Vault documents — filtered to user's orders only (not full table scan)
         orderIds.length > 0
@@ -177,6 +186,7 @@ export default async function ProfilePage({ searchParams }: PageProps) {
               .eq('direction', 'from_customer')
           : Promise.resolve({ data: [], error: null }),
       ])
+      __tBatch2 = performance.now() - __b2Start
 
       // Transform service_package arrays to single objects (Supabase returns arrays for joins)
       const transformOrder = (o: any): ServerOrderData => ({
@@ -253,11 +263,20 @@ export default async function ProfilePage({ searchParams }: PageProps) {
     }
   }
 
+  const __perfTimings = {
+    auth: Math.round(__tAuth),
+    batch1: Math.round(__tBatch1),
+    batch2: Math.round(__tBatch2),
+    total: Math.round(performance.now() - __tStart),
+    ordersCount: __ordersCount,
+  }
+
   return (
     <ProfilePageClient
       userData={user}
       isSetup={isSetup}
       initialData={initialData}
+      __perfTimings={__perfTimings}
     />
   )
 }

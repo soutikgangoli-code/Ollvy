@@ -13,9 +13,15 @@ import { Package, ArrowRight, ArrowLeft } from 'lucide-react'
 
 interface OrdersPageClientProps {
   initialData?: { active: Order[]; completed: Order[] } | null
+  __perfTimings?: {
+    auth: number
+    query: number
+    total: number
+    ordersCount: number
+  }
 }
 
-export function OrdersPageClient({ initialData }: OrdersPageClientProps) {
+export function OrdersPageClient({ initialData, __perfTimings }: OrdersPageClientProps) {
   const { session, user, isHydrated, isLoading: authLoading } = useAuthStore()
 
   // Initialize with server data if available
@@ -29,6 +35,24 @@ export function OrdersPageClient({ initialData }: OrdersPageClientProps) {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  // Perf instrumentation — see [orders-perf] lines in console.
+  // Server timings come from page.tsx; client measures hydration + any
+  // fallback fetch.
+  useEffect(() => {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+    const sinceNav = nav ? Math.round(performance.now() - nav.startTime) : Math.round(performance.now())
+    const ttfb = nav ? Math.round(nav.responseStart - nav.startTime) : null
+    if (__perfTimings) {
+      console.log(
+        `[orders-perf] server: total=${__perfTimings.total}ms (auth=${__perfTimings.auth}ms, query=${__perfTimings.query}ms, rows=${__perfTimings.ordersCount}) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms since navigation`
+      )
+    } else {
+      console.log(
+        `[orders-perf] server data missing — using client fallback. TTFB=${ttfb}ms | client mount @ ${sinceNav}ms since navigation`
+      )
+    }
+  }, [__perfTimings])
 
   useEffect(() => {
     // Skip client fetch if server already provided data
@@ -50,6 +74,8 @@ export function OrdersPageClient({ initialData }: OrdersPageClientProps) {
     if (!session) return
 
     setIsLoading(true)
+    const __t0 = performance.now()
+    console.log('[orders-perf] client fallback: starting parallel get_user_orders RPCs')
 
     try {
       const supabase = getClient()
@@ -63,6 +89,7 @@ export function OrdersPageClient({ initialData }: OrdersPageClientProps) {
           p_statuses: ['completed', 'cancelled', 'disputed']
         })
       ])
+      console.log(`[orders-perf] client fallback: RPCs done in ${Math.round(performance.now() - __t0)}ms`)
 
       if (activeResult.error) {
         console.error('[Orders Page] Error fetching active orders:', activeResult.error)

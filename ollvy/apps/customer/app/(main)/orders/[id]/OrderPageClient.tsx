@@ -139,15 +139,41 @@ interface InitialData {
 interface OrderPageClientProps {
   orderId: string
   initialData?: InitialData | null
+  __perfTimings?: {
+    auth: number
+    setup: number
+    batch: number
+    servicePackage: number
+    total: number
+  }
 }
 
-export function OrderPageClient({ orderId, initialData }: OrderPageClientProps) {
+export function OrderPageClient({ orderId, initialData, __perfTimings }: OrderPageClientProps) {
   const router = useRouter()
   const { isHydrated, isLoading: authLoading } = useAuthStore()
 
   // Loading and error states - if we have initial data, start as not loading
   const [isLoading, setIsLoading] = useState(!initialData)
   const [error, setError] = useState<string | null>(null)
+
+  // Perf instrumentation — see [order-detail-perf] lines in console.
+  // Server timings come from page.tsx; client logs them on mount alongside
+  // its own hydration time + TTFB.
+  useEffect(() => {
+    const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
+    const sinceNav = nav ? Math.round(performance.now() - nav.startTime) : Math.round(performance.now())
+    const ttfb = nav ? Math.round(nav.responseStart - nav.startTime) : null
+    if (__perfTimings) {
+      console.log(
+        `[order-detail-perf] server: total=${__perfTimings.total}ms (auth=${__perfTimings.auth}ms, setup=${__perfTimings.setup}ms, batch=${__perfTimings.batch}ms, servicePackage=${__perfTimings.servicePackage}ms) | TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+      )
+    } else {
+      console.log(
+        `[order-detail-perf] server data missing — using client fallback. TTFB=${ttfb}ms | client mount @ ${sinceNav}ms`
+      )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Order data states - initialize with server-side data if available
   const [order, setOrder] = useState<Order | null>(initialData?.order || null)

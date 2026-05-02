@@ -10,7 +10,9 @@ export const metadata: Metadata = {
 }
 
 export default async function OrdersPage() {
+  const __tStart = performance.now()
   const user = await getUserFast()
+  const __tAuth = performance.now() - __tStart
 
   if (!user) {
     redirect('/login?returnUrl=/orders')
@@ -19,11 +21,14 @@ export default async function OrdersPage() {
   // Server-side data fetching using service role client
   // This bypasses RLS, so we explicitly filter by user_id
   let initialData: { active: Order[]; completed: Order[] } | null = null
+  let __tQuery = 0
+  let __ordersCount = 0
 
   if (supabaseServer) {
     try {
       // Fetch ALL orders in ONE query (not 2 separate RPCs)
       // Exclude pending_payment at SQL level - these are unpaid abandoned orders
+      const __qStart = performance.now()
       const { data: orders, error } = await supabaseServer
         .from('orders')
         .select(`
@@ -44,8 +49,10 @@ export default async function OrdersPage() {
         .eq('user_id', user.id)
         .neq('status', 'pending_payment')
         .order('created_at', { ascending: false })
+      __tQuery = performance.now() - __qStart
 
       if (!error && orders) {
+        __ordersCount = orders.length
         // Split on server (no extra query)
         const activeStatuses = ['pending_assignment', 'waitlisted', 'in_progress']
         const completedStatuses = ['completed', 'disputed']
@@ -63,5 +70,12 @@ export default async function OrdersPage() {
     }
   }
 
-  return <OrdersPageClient initialData={initialData} />
+  const __perfTimings = {
+    auth: Math.round(__tAuth),
+    query: Math.round(__tQuery),
+    total: Math.round(performance.now() - __tStart),
+    ordersCount: __ordersCount,
+  }
+
+  return <OrdersPageClient initialData={initialData} __perfTimings={__perfTimings} />
 }

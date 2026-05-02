@@ -47,8 +47,10 @@ interface RoundNotification {
 }
 
 export default async function OrderDetailPage({ params }: PageProps) {
+  const __tStart = performance.now()
   const { id: orderId } = await params
   const user = await getUserFast()
+  const __tAuth = performance.now() - __tStart
 
   if (!user) {
     redirect(`/login?returnUrl=/orders/${orderId}`)
@@ -56,8 +58,11 @@ export default async function OrderDetailPage({ params }: PageProps) {
 
   // Server-side data fetching — all queries in a single parallel batch
   // Queries that only need orderId run alongside the order fetch (no waterfall)
+  const __tSetupStart = performance.now()
   const supabase = await createServerSupabase()
+  const __tSetup = performance.now() - __tSetupStart
 
+  const __tBatchStart = performance.now()
   const [
     orderResult, stageResult, docsResult, workDocsResult,
     invoiceResult, notificationResult, responsesResult, addonsResult
@@ -109,6 +114,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .select('id, addon_id, addon_name, price_paisa_snapshot, govt_fee_paisa_snapshot')
       .eq('order_id', orderId),
   ])
+  const __tBatch = performance.now() - __tBatchStart
 
   // If order not found or error, let client handle it
   if (orderResult.error || !orderResult.data) {
@@ -117,6 +123,11 @@ export default async function OrderDetailPage({ params }: PageProps) {
 
   // Service package fetch — needs service_package_id from order result
   // Uses service role client to bypass RLS on inactive packages
+  // NOTE: this is a SEQUENTIAL roundtrip after the batch above. Could be folded
+  // into the batch with a service_packages join, but that needs RLS analysis
+  // (current implementation uses service role specifically to surface inactive
+  // packages that the customer-RLS query would hide).
+  const __tSpStart = performance.now()
   const servicePackageResult = orderResult.data.service_package_id && supabaseServer
     ? await supabaseServer
         .from('service_packages')
@@ -124,6 +135,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
         .eq('id', orderResult.data.service_package_id)
         .single()
     : { data: null, error: null }
+  const __tSp = performance.now() - __tSpStart
 
   // Extract service package data
   const servicePackageData = servicePackageResult.data || null
@@ -159,5 +171,13 @@ export default async function OrderDetailPage({ params }: PageProps) {
     orderAddons: (addonsResult.data || []) as OrderAddon[],
   }
 
-  return <OrderPageClient orderId={orderId} initialData={initialData} />
+  const __perfTimings = {
+    auth: Math.round(__tAuth),
+    setup: Math.round(__tSetup),
+    batch: Math.round(__tBatch),
+    servicePackage: Math.round(__tSp),
+    total: Math.round(performance.now() - __tStart),
+  }
+
+  return <OrderPageClient orderId={orderId} initialData={initialData} __perfTimings={__perfTimings} />
 }
