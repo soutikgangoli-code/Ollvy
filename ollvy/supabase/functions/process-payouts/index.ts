@@ -12,6 +12,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { verifyCron } from '../_shared/auth.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
+import { sendEmail } from '../_shared/email.ts';
 
 const MIN_PAYOUT_PAISA = 50000; // Rs 500 minimum
 
@@ -25,45 +26,43 @@ interface PayoutSummary {
   payout_ids: string[];
 }
 
-// Send admin email helper (calls send-admin-email function)
+// Send admin email helper. Wraps the shared sendEmail with the admin-recipients
+// lookup so existing call sites in this file don't need to change.
 async function sendAdminEmail(
   supabase: any,
   subject: string,
   body: string
 ): Promise<void> {
-  try {
-    // Get admin email recipients from app_settings
-    const { data: settings } = await supabase
-      .from('app_settings')
-      .select('value')
-      .eq('key', 'admin_email_recipients')
-      .single();
+  const { data: settings } = await supabase
+    .from('app_settings')
+    .select('value')
+    .eq('key', 'admin_email_recipients')
+    .single();
 
-    if (!settings?.value) return;
+  if (!settings?.value) {
+    console.error(JSON.stringify({
+      event: 'admin_email_skipped',
+      reason: 'no_admin_recipients_configured',
+      subject,
+    }));
+    return;
+  }
 
-    const recipients = typeof settings.value === 'string'
-      ? JSON.parse(settings.value)
-      : settings.value;
+  const recipients = typeof settings.value === 'string'
+    ? JSON.parse(settings.value)
+    : settings.value;
 
-    // Use Resend API
-    const resendApiKey = Deno.env.get('RESEND_API_KEY');
-    if (!resendApiKey) return;
-
-    await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Ollvy <no-reply@ollvy.com>',
-        to: recipients,
-        subject: subject,
-        text: body,
-      }),
-    });
-  } catch (error) {
-    console.error('Failed to send admin email:', error);
+  const result = await sendEmail({
+    to: recipients,
+    subject,
+    text: body,
+  });
+  if (!result.success) {
+    console.error(JSON.stringify({
+      event: 'admin_email_failed',
+      subject,
+      error: result.error,
+    }));
   }
 }
 
@@ -337,7 +336,7 @@ ${adminAlerts.map(a => `- ${a}`).join('\n')}
 
       await sendAdminEmail(
         supabase,
-        `[Ollvy] Weekly Payouts Processed - ${results.success} paid, ${results.failed + results.skipped_no_bank} need attention`,
+        `[Ops] Weekly payouts - ${results.success} paid, ${results.failed + results.skipped_no_bank} need attention`,
         emailBody
       );
     }

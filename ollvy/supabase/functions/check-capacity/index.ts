@@ -10,6 +10,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { verifyCron } from '../_shared/auth.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
+import { sendEmail } from '../_shared/email.ts';
 
 const WARNING_THRESHOLD = 0.80;
 const CRITICAL_THRESHOLD = 0.95;
@@ -94,24 +95,18 @@ serve(async (req) => {
 
         // Send admin email for critical alerts
         const adminEmail = Deno.env.get('ADMIN_EMAIL');
-        const resendKey = Deno.env.get('RESEND_API_KEY');
-        if (adminEmail && resendKey) {
-          try {
-            await fetch('https://api.resend.com/emails', {
-              method: 'POST',
-              headers: {
-                'Authorization': `Bearer ${resendKey}`,
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                from: 'Ollvy System <system@ollvy.com>',
-                to: adminEmail,
-                subject: `CRITICAL: ${city} at ${Math.round(utilization * 100)}% capacity`,
-                text: `${city} has reached critical capacity (${currentOrders}/${capacity.total} orders). Please add more professionals or adjust capacity.`,
-              }),
-            });
-          } catch (e) {
-            console.error('Failed to send capacity email:', e);
+        if (adminEmail) {
+          const result = await sendEmail({
+            to: adminEmail,
+            subject: `[Ops] CRITICAL: ${city} at ${Math.round(utilization * 100)}% capacity`,
+            text: `${city} has reached critical capacity (${currentOrders}/${capacity.total} orders). Please add more professionals or adjust capacity.`,
+          });
+          if (!result.success) {
+            console.error(JSON.stringify({
+              event: 'capacity_email_failed',
+              city,
+              error: result.error,
+            }));
           }
         }
       } else if (utilization >= WARNING_THRESHOLD) {

@@ -8,6 +8,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { verifyAdmin } from '../_shared/auth.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
+import { sendEmail } from '../_shared/email.ts';
 
 interface ApproveInput {
   professional_id: string;
@@ -158,21 +159,12 @@ serve(async (req) => {
       }
     }
 
-    // Send welcome email (if configured)
-    const resendApiKey = Deno.env.get('RESEND_API_KEY');
-    if (resendApiKey && professional.email) {
-      try {
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${resendApiKey}`,
-          },
-          body: JSON.stringify({
-            from: 'Ollvy <noreply@ollvy.com>',
-            to: professional.email,
-            subject: 'Welcome to Ollvy - Your Application is Approved!',
-            html: `
+    // Send welcome email
+    if (professional.email) {
+      const result = await sendEmail({
+        to: professional.email,
+        subject: 'Welcome to Ollvy - Your Application is Approved!',
+        html: `
               <h1>Welcome to Ollvy, ${professional.display_name || professional.name}!</h1>
               <p>Great news! Your application has been reviewed and approved.</p>
               <p>You can now:</p>
@@ -184,11 +176,13 @@ serve(async (req) => {
               <p>If you have any questions, our support team is here to help.</p>
               <p>Best regards,<br>The Ollvy Team</p>
             `,
-          }),
-        });
-      } catch (emailError) {
-        console.error('Failed to send welcome email:', emailError);
-        // Don't fail the approval if email fails
+      });
+      if (!result.success) {
+        console.error(JSON.stringify({
+          event: 'professional_welcome_email_failed',
+          professional_id,
+          error: result.error,
+        }));
       }
     }
 

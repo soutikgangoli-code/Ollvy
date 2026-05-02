@@ -4,6 +4,49 @@ import { supabaseServer } from '@/lib/supabase-server'
 import { getAdminUser } from '@/lib/admin/get-admin-user'
 import { logActivity, LOG_ACTIONS } from '@/lib/admin/log-activity'
 import { revalidatePath } from 'next/cache'
+import { sendEmail } from '@/lib/email/send'
+import { formatDateHuman, resolveCustomerGreeting } from '@/lib/email/format'
+import { buildOrderCompleted } from '@/lib/email/templates/order-completed'
+
+type CustomerNotificationEvent =
+  | 'admin_document_uploaded'
+  | 'round_created'
+  | 'question_added'
+  | 'round_completed'
+
+// Enqueues a debounced customer-notification row. Failures are logged but
+// never thrown - missing one email beats failing the parent admin action.
+async function enqueueCustomerNotification(
+  orderId: string,
+  eventType: CustomerNotificationEvent,
+  actorUserId: string | null,
+): Promise<void> {
+  if (!supabaseServer) return
+  try {
+    const { error } = await supabaseServer
+      .from('customer_notifications_queue')
+      .insert({
+        order_id: orderId,
+        event_type: eventType,
+        actor_user_id: actorUserId,
+      })
+    if (error) {
+      console.error(JSON.stringify({
+        event: 'customer_notification_enqueue_failed',
+        order_id: orderId,
+        event_type: eventType,
+        error: error.message,
+      }))
+    }
+  } catch (err) {
+    console.error(JSON.stringify({
+      event: 'customer_notification_enqueue_failed',
+      order_id: orderId,
+      event_type: eventType,
+      error: err instanceof Error ? err.message : String(err),
+    }))
+  }
+}
 
 // Cancellation reason labels
 const CANCELLATION_REASON_LABELS: Record<string, string> = {
@@ -44,6 +87,81 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
     description: `Status changed from ${oldStatus} to ${newStatus}`,
     metadata: { from: oldStatus, to: newStatus },
   })
+
+  // Fire order-completed customer email when transitioning to 'completed'.
+  // Other status transitions don't email; admin-update emails go through the
+  // debounced queue, not this path.
+  if (newStatus === 'completed') {
+    try {
+      const { data: orderForEmail } = await supabaseServer
+        .from('orders')
+        .select(`
+          id,
+          order_number,
+          total_paisa_snapshot,
+          users!inner (id, email, business_name),
+          service_packages!inner (id, name)
+        `)
+        .eq('id', orderId)
+        .single()
+
+      const userRow = orderForEmail
+        ? Array.isArray(orderForEmail.users) ? orderForEmail.users[0] : orderForEmail.users
+        : null
+      const serviceRow = orderForEmail
+        ? Array.isArray(orderForEmail.service_packages)
+          ? orderForEmail.service_packages[0]
+          : orderForEmail.service_packages
+        : null
+
+      const customerEmail = userRow?.email as string | null | undefined
+
+      if (!orderForEmail || !customerEmail) {
+        console.warn(JSON.stringify({
+          event: 'email_skipped',
+          reason: customerEmail ? 'order_lookup_failed' : 'no_email_on_user',
+          order_id: orderId,
+          intended_template: 'order_completed',
+        }))
+      } else {
+        const { subject, html } = buildOrderCompleted({
+          customer_greeting: resolveCustomerGreeting({
+            business_name: userRow?.business_name ?? null,
+            email: customerEmail,
+          }),
+          service_name: serviceRow?.name ?? 'your order',
+          order_number: orderForEmail.order_number,
+          order_id: orderForEmail.id,
+          completed_at_human: formatDateHuman(new Date()),
+          total_paisa: orderForEmail.total_paisa_snapshot ?? 0,
+        })
+
+        const result = await sendEmail({
+          to: customerEmail,
+          subject,
+          html,
+          tags: [
+            { name: 'template', value: 'order_completed' },
+            { name: 'order_id', value: orderForEmail.id },
+          ],
+        })
+
+        if (!result.success) {
+          console.error(JSON.stringify({
+            event: 'order_completed_email_failed',
+            order_id: orderId,
+            error: result.error,
+          }))
+        }
+      }
+    } catch (err) {
+      console.error(JSON.stringify({
+        event: 'order_completed_email_error',
+        order_id: orderId,
+        error: err instanceof Error ? err.message : String(err),
+      }))
+    }
+  }
 
   revalidatePath(`/admin/orders/${orderId}`)
 }
@@ -378,6 +496,8 @@ export async function markRoundComplete(roundId: string, orderId: string) {
     metadata: { round_id: roundId, round_number: round?.round_number, round_title: round?.title },
   })
 
+  await enqueueCustomerNotification(orderId, 'round_completed', adminUser.id)
+
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
@@ -406,6 +526,8 @@ export async function addQuestionToRound(roundId: string, orderId: string, quest
   await supabaseServer.from('order_rounds')
     .update({ status: 'awaiting_user' })
     .eq('id', roundId)
+
+  await enqueueCustomerNotification(orderId, 'question_added', adminUser.id)
 
   revalidatePath(`/admin/orders/${orderId}`)
 }
@@ -660,6 +782,8 @@ export async function uploadAdminDocument(
       .eq('id', roundId)
   }
 
+  await enqueueCustomerNotification(orderId, 'admin_document_uploaded', adminUser.id)
+
   revalidatePath(`/admin/orders/${orderId}`)
   return toCustomerRow
 }
@@ -827,6 +951,8 @@ export async function createRound(orderId: string, formData: AddRoundFormData) {
     description: `Round ${nextRoundNumber} created: ${formData.title}`,
     metadata: { round_number: nextRoundNumber, round_title: formData.title, round_id: newRound.id },
   })
+
+  await enqueueCustomerNotification(orderId, 'round_created', adminUser.id)
 
   revalidatePath(`/admin/orders/${orderId}`)
   return newRound

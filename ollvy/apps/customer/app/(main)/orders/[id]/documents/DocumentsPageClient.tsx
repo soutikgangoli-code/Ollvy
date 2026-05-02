@@ -8,7 +8,7 @@ import { getClient } from '@/lib/supabase'
 import { getSignedUrl } from '@/lib/storage'
 import { DocumentUploadWizard, DocumentPreview } from '@/components/documents'
 import { ArrowLeft } from 'lucide-react'
-import { logCustomerDocumentUpload } from '../actions'
+import { logCustomerDocumentUpload, checkAndFireSubmissionEmail } from '../actions'
 
 interface Document {
   id: string
@@ -142,6 +142,10 @@ export function DocumentsPageClient({ order, initialDocuments, __perfTimings }: 
     const __tRefStart = performance.now()
     await fetchDocuments()
     const __tRefMs = Math.round(performance.now() - __tRefStart)
+
+    // Fire submission-complete email if questionnaire is also done.
+    // Idempotent server-side, so safe to call after every upload.
+    await checkAndFireSubmissionEmail(order.id)
 
     const total = Math.round(performance.now() - __t0)
     console.log(

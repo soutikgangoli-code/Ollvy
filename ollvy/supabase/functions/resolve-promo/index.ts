@@ -16,6 +16,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { verifyUser } from '../_shared/auth.ts';
+import { sendEmail } from '../_shared/email.ts';
 
 export interface ResolvePromoInput {
   code: string;
@@ -93,21 +94,18 @@ async function logPromoAbuse(
         ? JSON.parse(settings.value)
         : settings.value;
 
-      const resendApiKey = Deno.env.get('RESEND_API_KEY');
-      if (resendApiKey) {
-        await fetch('https://api.resend.com/emails', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${resendApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            from: 'Ollvy <no-reply@ollvy.com>',
-            to: recipients,
-            subject: '[Ollvy] Promo Abuse Alert',
-            text: `A user (ID: ${userId}) has applied 3+ distinct promo codes in a 24-hour window. Latest code: ${code}. Please review in the admin panel.`,
-          }),
-        });
+      const result = await sendEmail({
+        to: recipients,
+        subject: '[Ops] Promo abuse alert',
+        text: `A user (ID: ${userId}) has applied 3+ distinct promo codes in a 24-hour window. Latest code: ${code}. Please review in the admin panel.`,
+      });
+      if (!result.success) {
+        console.error(JSON.stringify({
+          event: 'promo_abuse_email_failed',
+          userId,
+          code,
+          error: result.error,
+        }));
       }
     }
   } catch (error) {

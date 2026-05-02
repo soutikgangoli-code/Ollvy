@@ -14,6 +14,7 @@ import type { QuestionnaireFormValues } from '@/lib/questionnaire/types'
 import { shouldShowQuestion } from '@/lib/questionnaire/types'
 import { ArrowLeft, ArrowRight, Loader2, CheckCircle, Sparkles, Info, AlertCircle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { checkAndFireSubmissionEmail } from '@/app/(main)/orders/[id]/actions'
 
 interface QuestionnaireWizardProps {
   orderId?: string                    // optional - not available in pre_payment mode
@@ -205,6 +206,9 @@ export function QuestionnaireWizard({
         // Complete questionnaire and redirect
         const completed = await completeQuestionnaire()
         if (completed && orderId) {
+          // Fire submission-complete email if documents are also done.
+          // Idempotent server-side, so safe to call without checking docs state here.
+          await checkAndFireSubmissionEmail(orderId)
           router.push(`/orders/${orderId}/documents`)
         }
       }

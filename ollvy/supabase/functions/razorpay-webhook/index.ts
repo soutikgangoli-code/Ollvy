@@ -18,6 +18,9 @@ import { corsHeaders } from '../_shared/cors.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { crypto } from 'https://deno.land/std@0.177.0/crypto/mod.ts';
 import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
+import { sendEmail } from '../_shared/email.ts';
+import { formatDateHuman, resolveCustomerGreeting } from '../_shared/format.ts';
+import { buildPaymentConfirmation } from '../_shared/email-templates/payment-confirmation.ts';
 
 // Verify Razorpay webhook signature using HMAC SHA256
 async function verifyRazorpaySignature(body: string, signature: string, secret: string): Promise<boolean> {
@@ -421,7 +424,7 @@ serve(async (req) => {
       .from('orders')
       .select(`
         *,
-        users!inner (id, fcm_token, state, city, business_name, phone),
+        users!inner (id, fcm_token, state, city, business_name, phone, email),
         service_packages!inner (id, name, workflow_stages, sla_working_days)
       `)
       .eq('razorpay_order_id', razorpayOrderId)
@@ -599,6 +602,63 @@ serve(async (req) => {
     }
 
     console.log(`Successfully processed payment for order ${order.id}`);
+
+    // 8. Send payment confirmation email to customer.
+    // Wrapped in try/catch and never fails the webhook - the outer catch
+    // already returns 200, but a successful payment must always succeed
+    // even if email is broken.
+    try {
+      const customerEmail = order.users?.email as string | null | undefined;
+      if (!customerEmail) {
+        console.warn(JSON.stringify({
+          event: 'email_skipped',
+          reason: 'no_email_on_user',
+          user_id: order.user_id,
+          order_id: order.id,
+          intended_template: 'payment_confirmation',
+        }));
+      } else {
+        const baseSnap = order.price_base_paisa_snapshot ?? 0;
+        const govtSnap = order.price_govt_fees_paisa_snapshot ?? 0;
+        const gstSnap = order.price_gst_paisa_snapshot ?? 0;
+        const totalSnap = order.total_paisa_snapshot ?? 0;
+        const proDiscSnap = order.pro_discount_paisa_snapshot ?? 0;
+        const promoDiscSnap = order.promo_discount_paisa_snapshot ?? 0;
+
+        const { subject, html } = buildPaymentConfirmation({
+          customer_greeting: resolveCustomerGreeting({
+            business_name: order.users.business_name,
+            email: customerEmail,
+          }),
+          service_name: order.service_packages.name,
+          order_number: order.order_number,
+          order_id: order.id,
+          base_paisa: baseSnap,
+          govt_fees_paisa: govtSnap,
+          gst_paisa: gstSnap,
+          discount_paisa: proDiscSnap + promoDiscSnap,
+          total_paisa: totalSnap,
+          paid_at_human: formatDateHuman(new Date()),
+          razorpay_payment_id: razorpayPaymentId,
+        });
+
+        await sendEmail({
+          to: customerEmail,
+          subject,
+          html,
+          tags: [
+            { name: 'template', value: 'payment_confirmation' },
+            { name: 'order_id', value: order.id },
+          ],
+        });
+      }
+    } catch (emailErr) {
+      console.error(JSON.stringify({
+        event: 'payment_confirmation_email_error',
+        order_id: order.id,
+        error: emailErr instanceof Error ? emailErr.message : String(emailErr),
+      }));
+    }
 
     return new Response(
       JSON.stringify({
