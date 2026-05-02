@@ -26,30 +26,22 @@ function formatIndianNumber(n: number): string {
   return (negative ? '-' : '') + grouped + ',' + lastThree
 }
 
-// Always renders dates as UTC-based "9 Apr 2026" (matches the date portion
-// of the stored ISO string, no timezone drift between server and client).
+// Always renders dates in IST (Asia/Kolkata, UTC+5:30, no DST). The strategy:
+// 1. Get the raw UTC milliseconds since epoch (same on server and client).
+// 2. Shift forward by 5h30m so reading UTC* methods yields the IST values.
+// India doesn't observe daylight saving, so the offset is a constant — no
+// timezone library needed and no server-vs-client divergence.
+const IST_OFFSET_MS = (5 * 60 + 30) * 60 * 1000
+
 function getDateParts(date: string | Date): { day: number; month: number; year: number; hour: number; minute: number } {
-  // For ISO date-only strings (YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS...), parse directly
-  // to avoid timezone normalization differences.
-  if (typeof date === 'string') {
-    const m = date.match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/)
-    if (m) {
-      return {
-        year: parseInt(m[1], 10),
-        month: parseInt(m[2], 10),
-        day: parseInt(m[3], 10),
-        hour: m[4] ? parseInt(m[4], 10) : 0,
-        minute: m[5] ? parseInt(m[5], 10) : 0,
-      }
-    }
-  }
   const d = date instanceof Date ? date : new Date(date)
+  const ist = new Date(d.getTime() + IST_OFFSET_MS)
   return {
-    year: d.getUTCFullYear(),
-    month: d.getUTCMonth() + 1,
-    day: d.getUTCDate(),
-    hour: d.getUTCHours(),
-    minute: d.getUTCMinutes(),
+    year: ist.getUTCFullYear(),
+    month: ist.getUTCMonth() + 1,
+    day: ist.getUTCDate(),
+    hour: ist.getUTCHours(),
+    minute: ist.getUTCMinutes(),
   }
 }
 
