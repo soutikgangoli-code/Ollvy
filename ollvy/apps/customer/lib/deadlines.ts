@@ -8,7 +8,10 @@ export interface Testimonial {
 
 export interface DeadlineConfig {
   slug: string
-  serviceSlug: string // Maps to the service page for booking
+  serviceSlug: string // Maps to the service page for DB price lookup
+  // Override the booking CTA href when no /services/[serviceSlug] page exists
+  // (e.g. GSTR-9 and TDS quarterly returns route to the closest real service).
+  bookingHref?: string
   serviceName: string
   eventLabel: string
   dueDate: string
@@ -121,6 +124,7 @@ export const DEADLINES: DeadlineConfig[] = [
   {
     slug: 'gst-annual-2026',
     serviceSlug: 'gst-annual',
+    bookingHref: '/services/gst-monthly',
     serviceName: 'GST Annual Return (GSTR-9)',
     eventLabel: 'FY 2025-26 Annual Return',
     dueDate: '2026-12-31',
@@ -281,6 +285,7 @@ export const DEADLINES: DeadlineConfig[] = [
   {
     slug: 'tds-return-q1-2027',
     serviceSlug: 'tds-return',
+    bookingHref: '/services/tds-monthly-compliance',
     serviceName: 'TDS Return Filing',
     eventLabel: 'Q1 FY 2027-28 (April - June 2027)',
     dueDate: '2027-07-31',
@@ -447,6 +452,7 @@ export const DEADLINES: DeadlineConfig[] = [
   {
     slug: 'gst-annual-2027',
     serviceSlug: 'gst-annual',
+    bookingHref: '/services/gst-monthly',
     serviceName: 'GST Annual Return (GSTR-9)',
     eventLabel: 'FY 2026-27 Annual Return',
     dueDate: '2027-12-31',

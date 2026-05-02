@@ -106,6 +106,37 @@ export function ServiceStructuredData({
       }
     : {}
 
+  // Digital service: zero shipping cost, delivered electronically. Required by
+  // Google's Merchant Listings spec when @type is Product.
+  const shippingDetails = {
+    '@type': 'OfferShippingDetails',
+    shippingRate: {
+      '@type': 'MonetaryAmount',
+      value: 0,
+      currency: 'INR',
+    },
+    shippingDestination: {
+      '@type': 'DefinedRegion',
+      addressCountry: 'IN',
+    },
+    deliveryTime: {
+      '@type': 'ShippingDeliveryTime',
+      handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 0, unitCode: 'DAY' },
+      transitTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 0, unitCode: 'DAY' },
+    },
+  }
+
+  // Mirrors the published refund policy at /refunds: refundable before work begins,
+  // processed in 7-10 business days. Govt fees are excluded (handled in copy, not schema).
+  const merchantReturnPolicy = {
+    '@type': 'MerchantReturnPolicy',
+    applicableCountry: 'IN',
+    returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+    merchantReturnDays: 7,
+    returnMethod: 'https://schema.org/ReturnByMail',
+    returnFees: 'https://schema.org/FreeReturn',
+  }
+
   const offersSchema = govtFee
     ? {
         '@type': 'Offer',
@@ -115,6 +146,8 @@ export function ServiceStructuredData({
         priceValidUntil,
         eligibleRegion: { '@type': 'Country', name: 'IN' },
         ...deliveryLeadTime,
+        shippingDetails,
+        hasMerchantReturnPolicy: merchantReturnPolicy,
         priceSpecification: [
           {
             '@type': 'UnitPriceSpecification',
@@ -138,6 +171,8 @@ export function ServiceStructuredData({
         priceValidUntil,
         eligibleRegion: { '@type': 'Country', name: 'IN' },
         ...deliveryLeadTime,
+        shippingDetails,
+        hasMerchantReturnPolicy: merchantReturnPolicy,
       }
 
   // Build review array for schema (real reviews or fallback)
@@ -243,6 +278,9 @@ export function ServiceStructuredData({
     // Without `image` Google flags "Missing field 'image'" as a critical error even
     // though we only care about Review Snippets (which doesn't require image).
     image: ['https://www.ollvy.com/logo.png'],
+    // Product identifier required by Merchant Listings + Product Snippet specs.
+    sku: `OLLVY-${serviceSlug.toUpperCase()}`,
+    mpn: `OLLVY-${serviceSlug.toUpperCase()}`,
     brand: {
       '@type': 'Brand',
       name: 'Ollvy',

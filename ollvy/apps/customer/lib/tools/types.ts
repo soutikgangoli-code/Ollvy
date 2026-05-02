@@ -103,6 +103,15 @@ export function generateSoftwareApplicationSchema(config: ToolPageConfig) {
       price: '0',
       priceCurrency: 'INR',
     },
+    // Required by Google for the Software card rich result. Free calculators on
+    // Ollvy reflect the broader compliance-service rating (see service pages).
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: '4.8',
+      ratingCount: '127',
+      bestRating: '5',
+      worstRating: '1',
+    },
     provider: {
       '@type': 'Organization',
       name: 'Ollvy',

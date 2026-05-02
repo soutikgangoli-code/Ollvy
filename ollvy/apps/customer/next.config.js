@@ -74,6 +74,18 @@ const nextConfig = {
         destination: '/services/trademark-registration',
         permanent: true,
       },
+      // Orphan service slugs referenced by deadline pages — no standalone
+      // /services/[slug] exists, route to the closest real service.
+      {
+        source: '/services/gst-annual',
+        destination: '/services/gst-monthly',
+        permanent: true,
+      },
+      {
+        source: '/services/tds-return',
+        destination: '/services/tds-monthly-compliance',
+        permanent: true,
+      },
       // Killed geo/city pages (2026-04-24) — 5 explicit service-scoped redirects.
       // NOT a /:service/:city wildcard — that would match /services/:slug and break prod.
       {

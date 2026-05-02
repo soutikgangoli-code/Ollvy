@@ -22,6 +22,7 @@ interface DeadlinePageProps {
 
 export function DeadlinePage({ deadline }: DeadlinePageProps) {
   const dueDate = new Date(deadline.dueDate)
+  const bookingHref = deadline.bookingHref ?? `/services/${deadline.serviceSlug}`
 
   return (
     <div className="min-h-screen bg-background">
@@ -71,7 +72,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
 
               {/* CTA */}
               <Button size="lg" className="mt-8" asChild>
-                <Link href={`/services/${deadline.serviceSlug}`}>Start Filing Now</Link>
+                <Link href={bookingHref}>Start Filing Now</Link>
               </Button>
 
               {/* Countdown */}
@@ -127,7 +128,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                   </div>
 
                   <Button className="w-full mt-5" asChild>
-                    <Link href={`/services/${deadline.serviceSlug}`}>
+                    <Link href={bookingHref}>
                       Book This Service - Rs. {deadline.ollvyFee.toLocaleString('en-IN')}
                     </Link>
                   </Button>
@@ -235,7 +236,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                   Fixed price. Verified CA. Done within {deadline.slaDays} working days.
                 </p>
                 <Button size="lg" asChild>
-                  <Link href={`/services/${deadline.serviceSlug}`}>
+                  <Link href={bookingHref}>
                     Start Filing - Rs. {deadline.ollvyFee.toLocaleString('en-IN')}
                   </Link>
                 </Button>
