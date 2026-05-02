@@ -50,23 +50,68 @@ export default function EligibilityPage() {
       try {
         const supabase = getClient()
 
-        // Fetch service first to get the resolved UUID
-        // NOTE: this is a sequential waterfall — service fetch then questions
-        // count. Could be parallelized if we accept that the question count
-        // query keys off slug-or-uuid (extra OR clause) instead of resolved id.
+        // Two-phase fetch with a fast path:
+        //  - If serviceId looks like a UUID, fire BOTH queries in parallel
+        //    (service_questionnaires can key off the UUID directly, no need
+        //    to wait for the service_packages roundtrip first).
+        //  - If it's a slug, fall back to sequential (resolve slug→id, then
+        //    query questions). Slug usage is rare; UUID is the common path
+        //    coming from /services or BookingPanel.
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(serviceId)
         const __tSvcStart = performance.now()
+
+        if (isUuid) {
+          const [serviceResult, countResult] = await Promise.all([
+            supabase
+              .from('service_packages')
+              .select('*')
+              .eq('id', serviceId)
+              .eq('is_active', true)
+              .single(),
+            supabase
+              .from('service_questionnaires')
+              .select('*', { count: 'exact', head: true })
+              .eq('service_package_id', serviceId)
+              .eq('is_active', true)
+              .eq('is_pre_payment', true),
+          ])
+          const __tParallelMs = Math.round(performance.now() - __tSvcStart)
+
+          if (serviceResult.error || !serviceResult.data) {
+            console.log(`[eligibility-perf] service fetch failed in ${__tParallelMs}ms`)
+            setError('Service not found')
+            setIsLoading(false)
+            return
+          }
+
+          setService(serviceResult.data as ServicePackage)
+
+          if (countResult.error) {
+            console.error('Error checking pre-payment questions:', countResult.error)
+            setHasPrePaymentQuestions(null)
+            setError('Failed to load eligibility questions. Please refresh the page.')
+          } else {
+            setHasPrePaymentQuestions((countResult.count ?? 0) > 0)
+          }
+
+          console.log(
+            `[eligibility-perf] done (parallel): total=${Math.round(performance.now() - __t0)}ms (parallel=${__tParallelMs}ms, hasQuestions=${(countResult.count ?? 0) > 0})`
+          )
+          setIsLoading(false)
+          return
+        }
+
+        // Slug path — sequential waterfall (rare)
         const { data: serviceData, error: serviceError } = await supabase
           .from('service_packages')
           .select('*')
-          .or(`id.eq.${serviceId},slug.eq.${serviceId}`)
+          .eq('slug', serviceId)
           .eq('is_active', true)
           .single()
         const __tSvcMs = Math.round(performance.now() - __tSvcStart)
 
         if (serviceError || !serviceData) {
-          console.log(
-            `[eligibility-perf] service fetch failed in ${__tSvcMs}ms`
-          )
+          console.log(`[eligibility-perf] service fetch failed in ${__tSvcMs}ms`)
           setError('Service not found')
           setIsLoading(false)
           return
@@ -74,7 +119,6 @@ export default function EligibilityPage() {
 
         setService(serviceData as ServicePackage)
 
-        // Now use the resolved UUID for the questionnaire count
         const __tCntStart = performance.now()
         const { count, error: countError } = await supabase
           .from('service_questionnaires')
@@ -92,9 +136,8 @@ export default function EligibilityPage() {
           setHasPrePaymentQuestions((count ?? 0) > 0)
         }
 
-        const total = Math.round(performance.now() - __t0)
         console.log(
-          `[eligibility-perf] done: total=${total}ms (servicePackage=${__tSvcMs}ms, questionsCount=${__tCntMs}ms, hasQuestions=${(count ?? 0) > 0})`
+          `[eligibility-perf] done (slug-sequential): total=${Math.round(performance.now() - __t0)}ms (servicePackage=${__tSvcMs}ms, questionsCount=${__tCntMs}ms, hasQuestions=${(count ?? 0) > 0})`
         )
 
         setIsLoading(false)
