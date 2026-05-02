@@ -87,19 +87,25 @@ export function SingleTestimonial() {
   }, [getCardWidth])
 
   const scrollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const scrollTickingRef = useRef(false)
 
   const handleScroll = useCallback(() => {
-    if (!scrollRef.current || isDragging) return
-    const cardWidth = getCardWidth()
-    if (cardWidth === 0) return
-    const newIndex = Math.round(scrollRef.current.scrollLeft / cardWidth)
-    setCurrentIndex(Math.min(Math.max(0, newIndex), REVIEWS.length - 1))
+    if (scrollTickingRef.current) return
+    scrollTickingRef.current = true
+    requestAnimationFrame(() => {
+      scrollTickingRef.current = false
+      if (!scrollRef.current || isDragging) return
+      const cardWidth = getCardWidth()
+      if (cardWidth === 0) return
+      const newIndex = Math.round(scrollRef.current.scrollLeft / cardWidth)
+      setCurrentIndex(Math.min(Math.max(0, newIndex), REVIEWS.length - 1))
 
-    // Debounced snap for touch/native scroll
-    if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current)
-    scrollTimerRef.current = setTimeout(() => {
-      snapToNearest()
-    }, 150)
+      // Debounced snap for touch/native scroll
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current)
+      scrollTimerRef.current = setTimeout(() => {
+        snapToNearest()
+      }, 150)
+    })
   }, [getCardWidth, isDragging, snapToNearest])
 
   const scrollToIndex = useCallback((index: number) => {
