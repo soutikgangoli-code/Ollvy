@@ -16,27 +16,38 @@ export async function middleware(request: NextRequest) {
   // here would wake a serverless function just to issue a 308, adding ~300ms to
   // every bare-domain hit. See DEPLOYMENT_NOTES.md.
 
-  // Skip auth for public routes entirely — no Supabase client needed
-  const isPublicRoute = PUBLIC_ROUTES.includes(pathname) ||
-    pathname.startsWith('/services') ||
-    pathname.startsWith('/guides') ||
-    pathname.startsWith('/tools') ||
-    pathname.startsWith('/join') ||
-    pathname.startsWith('/startup') ||
-    pathname.startsWith('/auth/') ||
-    pathname.startsWith('/director-kyc') ||
-    pathname.startsWith('/itr-') ||
-    pathname.startsWith('/gst-annual') ||
-    pathname.startsWith('/tds-return') ||
-    pathname.startsWith('/privacy') ||
-    pathname.startsWith('/terms') ||
-    pathname.startsWith('/cancellation') ||
-    pathname.startsWith('/refunds') ||
-    pathname.startsWith('/about') ||
-    /^\/[^/]+\/[^/]+$/.test(pathname)
+  // Check protected routes FIRST. Previously the public-route check below
+  // included a generic 2-segment regex (/^\/[^/]+\/[^/]+$/) that was meant
+  // to catch /services/<slug>, /guides/<slug>, etc. — but it also matched
+  // /orders/<id>, /retainers/<id>, and /admin/<page>, causing those routes
+  // to skip the entire auth header logic. Result: getUserFast() always fell
+  // through to its slow fallback, adding ~1-3 seconds to every protected
+  // detail-page load.
+  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
 
-  if (isPublicRoute) {
-    return NextResponse.next()
+  if (!isProtectedRoute) {
+    // Skip auth for public routes entirely — no Supabase client needed
+    const isPublicRoute = PUBLIC_ROUTES.includes(pathname) ||
+      pathname.startsWith('/services') ||
+      pathname.startsWith('/guides') ||
+      pathname.startsWith('/tools') ||
+      pathname.startsWith('/join') ||
+      pathname.startsWith('/startup') ||
+      pathname.startsWith('/auth/') ||
+      pathname.startsWith('/director-kyc') ||
+      pathname.startsWith('/itr-') ||
+      pathname.startsWith('/gst-annual') ||
+      pathname.startsWith('/tds-return') ||
+      pathname.startsWith('/privacy') ||
+      pathname.startsWith('/terms') ||
+      pathname.startsWith('/cancellation') ||
+      pathname.startsWith('/refunds') ||
+      pathname.startsWith('/about') ||
+      /^\/[^/]+\/[^/]+$/.test(pathname)
+
+    if (isPublicRoute) {
+      return NextResponse.next()
+    }
   }
 
   // Build a forwarded-request header set so we can pass auth context to server
@@ -82,8 +93,7 @@ export async function middleware(request: NextRequest) {
   // Pages verify auth independently via getUser()/getUserFast()/getAdminUser().
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Check if route is protected
-  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
+  // isProtectedRoute already determined at the top
   const isAuthRoute = pathname === '/login' || pathname === '/verify'
 
   // Redirect to login if accessing protected route without session
