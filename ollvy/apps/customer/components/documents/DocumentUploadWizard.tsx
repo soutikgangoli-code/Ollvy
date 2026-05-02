@@ -76,6 +76,11 @@ export function DocumentUploadWizard({
     }
   }, [documents])
 
+  // Scroll to top on every doc change (Next/Skip/Back/auto-advance/completion)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentIndex, showCompletion])
+
   const currentDoc = documents[currentIndex]
   const totalDocs = documents.length
   const uploadedCount = documents.filter(d => d.uploaded_at || uploadedInSession.has(d.document_key)).length

@@ -97,6 +97,11 @@ export function QuestionnaireWizard({
     mode: 'onBlur',
   })
 
+  // Scroll to top on every step change (Next/Skip/Back/jump)
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentStep])
+
   // Reset form values when step changes or responses load
   useEffect(() => {
     if (currentStepData) {
