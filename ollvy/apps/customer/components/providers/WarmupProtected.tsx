@@ -72,38 +72,31 @@ export function WarmupProtected() {
       }
     }
 
-    // Three-stage deferral to make sure the warmup pings never compete with
-    // anything the user can perceive:
+    // Two-stage deferral so warmup never competes with the page load itself:
     //
-    //   1. Wait for window.load (full page load including images/iframes,
-    //      not just DOMContentLoaded). If the page is already loaded, we
-    //      proceed immediately — but typically auth settles slightly after
-    //      load, so this gate is mostly for first-page-visit timing.
+    //   1. Wait for window.load (full page load — images, iframes, all
+    //      of it). The login banner can be on screen at this point; that's
+    //      fine — the banner is just a CSS animation, not server work, so
+    //      our network pings don't slow it down.
     //
-    //   2. Wait an additional 3.5s. LoginSuccessBanner auto-dismisses at 3s;
-    //      we add 500ms slack so warmup never overlaps with the banner's
-    //      animation or any post-login redirect work.
-    //
-    //   3. Run inside requestIdleCallback (with setTimeout fallback for
-    //      Safari < 17) so the actual fetches happen during the next idle
-    //      window — not while React is reconciling, not while images are
-    //      loading.
+    //   2. Run inside requestIdleCallback so the actual fetches fire during
+    //      a genuine browser idle window — not while React is reconciling
+    //      or images are decoding. Falls back to setTimeout(0) on Safari < 17
+    //      which lacks rIC.
     const scheduleWarmup = () => {
-      setTimeout(() => {
-        const ric = (
-          window as unknown as {
-            requestIdleCallback?: (
-              cb: () => void,
-              opts?: { timeout: number }
-            ) => number
-          }
-        ).requestIdleCallback
-        if (typeof ric === 'function') {
-          ric(fire, { timeout: 4000 })
-        } else {
-          setTimeout(fire, 200)
+      const ric = (
+        window as unknown as {
+          requestIdleCallback?: (
+            cb: () => void,
+            opts?: { timeout: number }
+          ) => number
         }
-      }, 3500)
+      ).requestIdleCallback
+      if (typeof ric === 'function') {
+        ric(fire, { timeout: 2000 })
+      } else {
+        setTimeout(fire, 0)
+      }
     }
 
     if (document.readyState === 'complete') {
