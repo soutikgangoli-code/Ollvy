@@ -87,7 +87,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .from('orders')
       .select(`
         *,
-        professional:professionals(id, name, email, phone, specializations, avg_rating, total_ratings),
+        professional:professionals(id, name, full_name, email, phone, avatar_url, professional_type, years_of_experience, average_rating),
         service_package:service_packages(id, name, slug, sla_working_days, workflow_stages, questionnaire, variants, whats_included)
       `)
       .eq('id', orderId)
