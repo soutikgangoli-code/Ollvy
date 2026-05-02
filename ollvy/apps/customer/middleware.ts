@@ -39,9 +39,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Build a forwarded-request header set so we can pass auth context to server
+  // components. Mutating response.headers (the previous behavior) does NOT
+  // reach next/headers — server components read REQUEST headers, so the
+  // x-auth-user-id was never visible and getUserFast() always fell through
+  // to its slow auth.getUser() fallback (+~200-500ms per page; observed
+  // ~1.3-1.6s in production due to network jitter). Setting it on the
+  // forwarded request makes getUserFast take its single-DB-query fast path.
+  const forwardedHeaders = new Headers(request.headers)
+
   let response = NextResponse.next({
     request: {
-      headers: request.headers,
+      headers: forwardedHeaders,
     },
   })
 
@@ -58,7 +67,7 @@ export async function middleware(request: NextRequest) {
             request.cookies.set(name, value)
           })
           response = NextResponse.next({
-            request,
+            request: { headers: forwardedHeaders },
           })
           cookiesToSet.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options)
@@ -89,9 +98,16 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-  // Pass auth user ID to page via header so pages can skip redundant auth.getUser()
+  // Pass auth user ID to page via FORWARDED REQUEST header so pages can skip
+  // the redundant auth.getUser() roundtrip. Setting on response.headers
+  // (previous behavior) only affects the response sent to the browser; server
+  // components see request headers, so this must be set on the forwarded
+  // headers, then re-applied via NextResponse.next.
   if (session?.user) {
-    response.headers.set('x-auth-user-id', session.user.id)
+    forwardedHeaders.set('x-auth-user-id', session.user.id)
+    response = NextResponse.next({
+      request: { headers: forwardedHeaders },
+    })
   }
 
   return response
