@@ -807,8 +807,8 @@ export function UnifiedServicePage({
                 {service.name}
               </h1>
 
-              {/* Tagline */}
-              <p className="text-sm md:text-base text-muted-foreground mt-3 md:mt-4 px-2">
+              {/* Tagline — sr-only: kept in DOM for crawlers + JSON-LD fallback (description={seoDescription || tagline}), hidden from visible hero */}
+              <p className="sr-only">
                 {service.tagline}
               </p>
 
