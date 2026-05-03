@@ -217,7 +217,7 @@ function ReviewsList({
                   ))}
                   <span className="text-xs text-muted-foreground ml-2">{formatReviewDate(r.created_at)}</span>
                 </div>
-                {r.comment && <p className="text-sm text-foreground leading-relaxed">"{r.comment}"</p>}
+                {r.comment && <p className="text-sm text-foreground leading-relaxed">{r.comment}</p>}
                 <p className="text-xs text-muted-foreground mt-3">- Verified customer</p>
               </Card>
             )
@@ -232,7 +232,7 @@ function ReviewsList({
                   ))}
                   <span className="text-xs text-muted-foreground ml-2">{r.date}</span>
                 </div>
-                <p className="text-sm text-foreground leading-relaxed">"{r.comment}"</p>
+                <p className="text-sm text-foreground leading-relaxed">{r.comment}</p>
                 <p className="text-xs text-muted-foreground mt-3">- {r.name}</p>
               </Card>
             )
