@@ -146,12 +146,14 @@ export function Footer() {
           <FooterColumn
             title="Deadlines"
             links={[
-              { label: 'Director KYC 2026', href: '/director-kyc-2026' },
-              { label: 'Business ITR 2026', href: '/itr-2026' },
-              { label: 'GSTR-9 2026', href: '/gst-annual-2026' },
-              { label: 'TDS Return Q1 2027', href: '/tds-return-q1-2027' },
-              { label: 'Business ITR 2027', href: '/itr-2027' },
-              { label: 'GSTR-9 2027', href: '/gst-annual-2027' },
+              { label: 'Salaried ITR 2026 (Jul 31)', href: '/guides/salaried-itr-2026' },
+              { label: 'Business ITR 2026 (Oct 31)', href: '/guides/business-itr-2026' },
+              { label: 'Tax Audit 2026 (Sep 30)', href: '/tax-audit-2026' },
+              { label: 'Advance Tax Q1 (Jun 15)', href: '/guides/advance-tax-q1-2026' },
+              { label: 'GSTR-9 2026 (Dec 31)', href: '/guides/gst-annual-2026' },
+              { label: 'TDS Return Q4 (May 31)', href: '/guides/tds-return-q4-fy2026-27' },
+              { label: 'MGT-7 2026 (Nov 28)', href: '/guides/mgt-7-2026' },
+              { label: 'Director KYC 2026', href: '/guides/director-kyc-2026' },
             ]}
           />
 

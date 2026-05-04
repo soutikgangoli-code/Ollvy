@@ -130,8 +130,10 @@ export interface LearnFaq {
 }
 
 export interface LearnToolConfig {
-  type: 'eligibility' | 'penalty' | 'comparison' | 'deadline';
-  title: string;                       // shown above tool
+  type: 'eligibility' | 'penalty' | 'comparison' | 'deadline' | 'calculator';
+  title?: string;                      // shown above tool
+  name?: string;                       // alias used by some new content
+  description?: string;                // optional sub-line
   questions?: EligibilityQuestion[];   // for eligibility tool
   defaultResult?: EligibilityResult;   // fallback result after all questions answered
   penaltyType?: string;                // for penalty tool - maps to PENALTY_TABLE
@@ -158,6 +160,7 @@ export interface EligibilityResult {
 
 export interface LearnSection {
   number?: string;                     // "01", "02", etc. - for numbered sections
+  id?: string;                         // alias for number, used by unified deadline schema
   heading: string;
   body: string;                        // markdown - rendered as prose
   bullets?: string[];                  // bullet points for the section
@@ -166,6 +169,12 @@ export interface LearnSection {
   note?: string;                       // italicised note at bottom of section
   componentSlot?: 'document-checklist' | 'process-stepper' | 'faq-list';
   componentProps?: Record<string, unknown>;
+}
+
+export interface LearnSource {
+  name: string;
+  url: string;
+  description: string;
 }
 
 // Import all learn page configs
@@ -225,10 +234,43 @@ import { businessPanGuide } from './pages/business-pan';
 // Deadline Guides
 import { tdsQ4FY2526 } from './pages/tds-return-q4-fy2025-26';
 import { tdsQ1FY2627 } from './pages/tds-return-q1-fy2026-27';
-import { directorKYC2026 } from './pages/director-kyc-2026';
 import { tdsQ2FY2627 } from './pages/tds-return-q2-fy2026-27';
 import { businessITRFY2526 } from './pages/business-itr-fy2025-26';
 import { gstr9FY2526 } from './pages/gstr-9-fy2025-26';
+
+// May 2026 deadline-to-guide migration (20 pages converted from /lib/deadlines)
+import { itr2026 } from './pages/itr-2026';
+import { itr2027 } from './pages/itr-2027';
+import { gstAnnual2026 } from './pages/gst-annual-2026';
+import { gstAnnual2027 } from './pages/gst-annual-2027';
+import { directorKyc2026 } from './pages/director-kyc-2026';
+import { tdsReturnQ12027 } from './pages/tds-return-q1-2027';
+import { salariedItr2026 } from './pages/salaried-itr-2026';
+import { businessItr2026 } from './pages/business-itr-2026';
+import { mgt72026 } from './pages/mgt-7-2026';
+import { llpForm82026 } from './pages/llp-form-8-2026';
+import { adt12026 } from './pages/adt-1-2026';
+import { dpt32026 } from './pages/dpt-3-2026';
+import { advanceTaxQ12026 } from './pages/advance-tax-q1-2026';
+import { advanceTaxQ22026 } from './pages/advance-tax-q2-2026';
+import { advanceTaxQ32026 } from './pages/advance-tax-q3-2026';
+import { advanceTaxQ42027 } from './pages/advance-tax-q4-2027';
+import { tdsReturnQ3Fy202627 as tdsReturnQ3Fy2627Guide } from './pages/tds-return-q3-fy2026-27';
+import { tdsReturnQ4Fy202627 as tdsReturnQ4Fy2627Guide } from './pages/tds-return-q4-fy2026-27';
+import { msmeForm1H12026 } from './pages/msme-form-1-h1-2026';
+import { msmeForm1H22027 } from './pages/msme-form-1-h2-2027';
+
+// May 2026 expansion guides (rewritten + new)
+import { mcaAnnualFilingAoc4Mgt7 } from './pages/mca-annual-filing-aoc-4-mgt-7';
+import { advanceTaxExplained } from './pages/advance-tax-explained';
+import { iecImportExportCode } from './pages/iec-import-export-code';
+import { lutForExports } from './pages/lut-for-exports';
+import { iepfClaim } from './pages/iepf-claim';
+import { esopStructuring } from './pages/esop-structuring';
+import { tdsOnRent } from './pages/tds-on-rent-194i-194ib';
+import { tdsOnPropertyPurchase } from './pages/tds-on-property-purchase-194ia';
+import { agmCompliance } from './pages/agm-compliance';
+import { dir3KycExplained } from './pages/dir-3-kyc-explained';
 
 export const LEARN_PAGES: LearnPageConfig[] = [
   // Tier 1 - Core Business Decisions
@@ -287,10 +329,43 @@ export const LEARN_PAGES: LearnPageConfig[] = [
   // Deadline Guides
   tdsQ4FY2526,
   tdsQ1FY2627,
-  directorKYC2026,
   tdsQ2FY2627,
   businessITRFY2526,
   gstr9FY2526,
+
+  // May 2026 deadline-to-guide migration
+  itr2026,
+  itr2027,
+  gstAnnual2026,
+  gstAnnual2027,
+  directorKyc2026,
+  tdsReturnQ12027,
+  salariedItr2026,
+  businessItr2026,
+  mgt72026,
+  llpForm82026,
+  adt12026,
+  dpt32026,
+  advanceTaxQ12026,
+  advanceTaxQ22026,
+  advanceTaxQ32026,
+  advanceTaxQ42027,
+  tdsReturnQ3Fy2627Guide,
+  tdsReturnQ4Fy2627Guide,
+  msmeForm1H12026,
+  msmeForm1H22027,
+
+  // May 2026 expansion guides
+  mcaAnnualFilingAoc4Mgt7,
+  advanceTaxExplained,
+  iecImportExportCode,
+  lutForExports,
+  iepfClaim,
+  esopStructuring,
+  tdsOnRent,
+  tdsOnPropertyPurchase,
+  agmCompliance,
+  dir3KycExplained,
 ];
 
 export function getLearnPageBySlug(slug: string): LearnPageConfig | undefined {

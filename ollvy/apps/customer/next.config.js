@@ -120,6 +120,29 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
+      // Deadline → Guide migration (May 2026). 20 deadline pages converted to
+      // LearnPageConfig and moved under /guides/[slug]. Old top-level URLs 301
+      // to preserve SEO and inbound links.
+      { source: '/itr-2026', destination: '/guides/itr-2026', permanent: true },
+      { source: '/itr-2027', destination: '/guides/itr-2027', permanent: true },
+      { source: '/gst-annual-2026', destination: '/guides/gst-annual-2026', permanent: true },
+      { source: '/gst-annual-2027', destination: '/guides/gst-annual-2027', permanent: true },
+      { source: '/director-kyc-2026', destination: '/guides/director-kyc-2026', permanent: true },
+      { source: '/tds-return-q1-2027', destination: '/guides/tds-return-q1-2027', permanent: true },
+      { source: '/salaried-itr-2026', destination: '/guides/salaried-itr-2026', permanent: true },
+      { source: '/business-itr-2026', destination: '/guides/business-itr-2026', permanent: true },
+      { source: '/mgt-7-2026', destination: '/guides/mgt-7-2026', permanent: true },
+      { source: '/llp-form-8-2026', destination: '/guides/llp-form-8-2026', permanent: true },
+      { source: '/adt-1-2026', destination: '/guides/adt-1-2026', permanent: true },
+      { source: '/dpt-3-2026', destination: '/guides/dpt-3-2026', permanent: true },
+      { source: '/advance-tax-q1-2026', destination: '/guides/advance-tax-q1-2026', permanent: true },
+      { source: '/advance-tax-q2-2026', destination: '/guides/advance-tax-q2-2026', permanent: true },
+      { source: '/advance-tax-q3-2026', destination: '/guides/advance-tax-q3-2026', permanent: true },
+      { source: '/advance-tax-q4-2027', destination: '/guides/advance-tax-q4-2027', permanent: true },
+      { source: '/tds-return-q3-fy2026-27', destination: '/guides/tds-return-q3-fy2026-27', permanent: true },
+      { source: '/tds-return-q4-fy2026-27', destination: '/guides/tds-return-q4-fy2026-27', permanent: true },
+      { source: '/msme-form-1-h1-2026', destination: '/guides/msme-form-1-h1-2026', permanent: true },
+      { source: '/msme-form-1-h2-2027', destination: '/guides/msme-form-1-h2-2027', permanent: true },
     ];
   },
 }

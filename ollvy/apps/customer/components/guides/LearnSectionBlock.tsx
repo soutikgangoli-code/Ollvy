@@ -97,12 +97,14 @@ export function LearnSectionBlock({ section }: { section: LearnSection }) {
   const steps = section.componentProps?.steps as ProcessStepItem[] | undefined;
   const bullets = section.bullets || section.list;
 
+  const sectionNumber = section.number ?? section.id;
+
   return (
     <div>
       {/* Section header - with optional number */}
-      {section.number ? (
+      {sectionNumber ? (
         <div className="flex items-baseline gap-3 mb-4">
-          <span className="font-mono text-[10px] text-muted-foreground">{section.number}</span>
+          <span className="font-mono text-[10px] text-muted-foreground">{sectionNumber}</span>
           <h2 className="text-sm font-semibold text-foreground tracking-wide">
             {toTitleCase(section.heading)}
           </h2>

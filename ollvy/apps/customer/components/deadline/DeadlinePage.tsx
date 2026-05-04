@@ -3,7 +3,8 @@ import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Clock, AlertTriangle, Check, ArrowLeft, ChevronRight } from 'lucide-react'
-import { DeadlineConfig } from '@/lib/deadlines'
+import { DeadlineConfig, DEADLINES } from '@/lib/deadlines'
+import { LEARN_PAGES } from '@/lib/guides/pages'
 import {
   Accordion,
   AccordionContent,
@@ -14,6 +15,7 @@ import { NavbarServer } from '@/components/landing/NavbarServer'
 import { Footer } from '@/components/landing/Footer'
 import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
 import { ToolLastReviewed } from '@/components/tools/DocumentPageToolExtensions'
+import { LearnSectionBlock } from '@/components/guides/LearnSectionBlock'
 import { DeadlineCountdown, GuaranteedBadge } from './DeadlineCountdown'
 
 interface DeadlinePageProps {
@@ -144,6 +146,15 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                 />
               </section>
 
+              {/* Numbered educational sections (unified schema) */}
+              {deadline.sections && deadline.sections.length > 0 && (
+                <section className="space-y-10">
+                  {deadline.sections.map((s, i) => (
+                    <LearnSectionBlock key={s.id ?? s.number ?? i} section={s} />
+                  ))}
+                </section>
+              )}
+
               {/* Why this deadline matters */}
               <section>
                 <h2 className="text-xl font-semibold text-foreground mb-6">Why this deadline matters</h2>
@@ -248,6 +259,43 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                   variant="footer"
                 />
               </section>
+
+              {/* Related guides and deadlines */}
+              {((deadline.relatedLearnSlugs && deadline.relatedLearnSlugs.length > 0) ||
+                (deadline.relatedServiceSlugs && deadline.relatedServiceSlugs.length > 0)) && (
+                <section>
+                  <h2 className="text-xl font-semibold text-foreground mb-6">Related</h2>
+                  <div className="space-y-2">
+                    {deadline.relatedLearnSlugs?.map((slug) => {
+                      const guide = LEARN_PAGES.find((p) => p.slug === slug)
+                      const relatedDeadline = !guide ? DEADLINES.find((d) => d.slug === slug) : undefined
+                      const href = guide ? `/guides/${slug}` : relatedDeadline ? `/${slug}` : null
+                      const title = guide?.title ?? relatedDeadline?.serviceName ?? slug
+                      if (!href) return null
+                      return (
+                        <Link
+                          key={`learn-${slug}`}
+                          href={href}
+                          className="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors"
+                        >
+                          <span className="text-sm text-foreground">{title}</span>
+                          <ChevronRight size={14} className="text-muted-foreground" />
+                        </Link>
+                      )
+                    })}
+                    {deadline.relatedServiceSlugs?.map((slug) => (
+                      <Link
+                        key={`service-${slug}`}
+                        href={`/services/${slug}`}
+                        className="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:border-foreground/20 transition-colors"
+                      >
+                        <span className="text-sm text-foreground">Service: {slug}</span>
+                        <ChevronRight size={14} className="text-muted-foreground" />
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               {/* How we reviewed this page */}
               <ToolLastReviewed

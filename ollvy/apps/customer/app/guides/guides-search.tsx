@@ -15,7 +15,7 @@ export interface GuideSearchEntry {
   seoDescription: string
   category: LearnCategory
   lastReviewed: string
-  toolType?: 'eligibility' | 'penalty' | 'comparison' | 'deadline'
+  toolType?: 'eligibility' | 'penalty' | 'comparison' | 'deadline' | 'calculator'
   searchBlocks: { source: string; text: string }[]
 }
 
