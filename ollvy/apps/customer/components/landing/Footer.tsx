@@ -179,12 +179,8 @@ export function Footer() {
               { label: 'Shop & Establishment', href: '/guides/do-i-need-shop-establishment-registration' },
               { label: 'Professional Tax', href: '/guides/do-i-need-professional-tax-registration' },
               { label: 'When PF Becomes Mandatory', href: '/guides/when-does-pf-registration-become-mandatory' },
-              { label: 'When ESI Becomes Mandatory', href: '/guides/when-does-esi-registration-become-mandatory' },
               { label: 'MCA Annual Filing', href: '/guides/mca-annual-filing-aoc-4-mgt-7' },
-              { label: 'AGM Compliance', href: '/guides/agm-compliance' },
               { label: 'DIR-3 KYC', href: '/guides/dir-3-kyc-explained' },
-              { label: 'ESOP Structuring', href: '/guides/esop-structuring' },
-              { label: 'IEPF Claim', href: '/guides/iepf-claim' },
               { label: 'All Guides', href: '/guides' },
             ]}
           />
