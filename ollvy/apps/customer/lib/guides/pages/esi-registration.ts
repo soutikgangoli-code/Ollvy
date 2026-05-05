@@ -31,7 +31,7 @@ export const esiRegistration: LearnPageConfig = {
               headline: 'ESI registration is mandatory.',
               body: 'The threshold is 10 employees for factories and most establishments. Register within 15 days of crossing this number.',
               ctaLabel: 'Get Payroll Help',
-              ctaHref: '/checkout/payroll-management',
+              ctaHref: '/services',
             }
           }
           return null

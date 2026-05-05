@@ -19,7 +19,7 @@ export const gstAnnual2026: LearnPageConfig = {
   category: "GST",
   relatedServiceSlugs: ["gst-annual-return", "gst-registration", "gst-return-filing"],
   relatedLearnSlugs: ["lut-for-exports", "iec-import-export-code"],
-  ctaServiceSlug: "gst-monthly-filing",
+  ctaServiceSlug: "gst-monthly",
   sections: [
     {
       id: "01",

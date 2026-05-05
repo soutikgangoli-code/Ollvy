@@ -18,7 +18,7 @@ export const tdsOnRent: LearnPageConfig = {
   category: "Tax",
   relatedServiceSlugs: ["tds-quarterly-return", "tds-monthly"],
   relatedLearnSlugs: ["advance-tax-explained", "tds-on-property-purchase-194ia"],
-  ctaServiceSlug: "tds-quarterly-return",
+  ctaServiceSlug: "tds-monthly-compliance",
   sections: [
     {
       id: "01",

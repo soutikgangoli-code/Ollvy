@@ -182,7 +182,7 @@ function PFESICCalculatorInner() {
           dueDate="15th of the following month"
           statute="EPF Act 1952, ESI Act 1948"
           ctaText="Get PF/ESIC Compliance Help"
-          ctaHref="/services/payroll-compliance"
+          ctaHref="/services"
           showCta={result.total > 0}
         >
           {(result.totalPFArrears > 0 || result.totalESICArrears > 0) && (

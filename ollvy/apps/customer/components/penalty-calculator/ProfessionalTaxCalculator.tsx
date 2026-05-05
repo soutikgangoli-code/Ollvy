@@ -180,7 +180,7 @@ function ProfessionalTaxCalculatorInner() {
             dueDate="Varies by state (typically monthly or quarterly)"
             statute={`${state} Professional Tax Act`}
             ctaText="Get PT Compliance Help"
-            ctaHref="/services/payroll-compliance"
+            ctaHref="/services"
             showCta={result.total > 0}
           >
             <InfoBanner

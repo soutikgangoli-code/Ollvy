@@ -19,7 +19,7 @@ export const iecImportExportCode: LearnPageConfig = {
     "lut-for-exports",
     "msme-udyam",
   ],
-  ctaServiceSlug: "iec-registration",
+  ctaServiceSlug: "iec-code",
   ctaSecondarySlug: "gst-registration",
   sections: [
     {

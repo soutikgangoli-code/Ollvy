@@ -19,7 +19,7 @@ export const lutForExports: LearnPageConfig = {
     "iec-import-export-code",
     "gst-cancellation",
   ],
-  ctaServiceSlug: "lut-filing",
+  ctaServiceSlug: "gst-monthly",
   ctaSecondarySlug: "gst-registration",
   sections: [
     {

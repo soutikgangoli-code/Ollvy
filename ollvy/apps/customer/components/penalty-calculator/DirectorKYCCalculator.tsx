@@ -93,7 +93,7 @@ function DirectorKYCCalculatorInner() {
           dueDate="Triennial - next due June 30, 2028"
           statute="Companies Act 2013, Rule 12A"
           ctaText="File DIR-3 KYC"
-          ctaHref="/services/director-kyc"
+          ctaHref="/services/din-reactivation"
           showCta={totalPenalty > 0}
           docChecklistHref="/tools/documents/private-limited-company"
           docChecklistText="Company compliance documents"

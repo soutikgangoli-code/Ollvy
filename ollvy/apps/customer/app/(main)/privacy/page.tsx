@@ -54,7 +54,7 @@ export default function PrivacyPage() {
             including government portals (for{' '}
             <Link href="/services/gst-registration" className="text-foreground underline hover:no-underline">GST</Link>,{' '}
             <Link href="/services/pvt-ltd-incorporation" className="text-foreground underline hover:no-underline">MCA</Link>,{' '}
-            <Link href="/services/fssai-license" className="text-foreground underline hover:no-underline">FSSAI</Link>, etc.) for filing purposes, and vetted CAs
+            <Link href="/services/cloud-kitchen-setup" className="text-foreground underline hover:no-underline">FSSAI</Link>, etc.) for filing purposes, and vetted CAs
             and lawyers who handle your compliance work. We do not sell your personal information.
           </p>
         </section>

@@ -22,7 +22,7 @@ export const mcaAnnualFilingAoc4Mgt7: LearnPageConfig = {
     "pvt-ltd-vs-llp",
   ],
   ctaServiceSlug: "mca-annual-filing",
-  ctaSecondarySlug: "tax-audit",
+  ctaSecondarySlug: "business-itr",
   sections: [
     {
       id: "01",

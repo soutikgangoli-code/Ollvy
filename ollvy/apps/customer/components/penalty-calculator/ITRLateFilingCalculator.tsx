@@ -184,7 +184,7 @@ function ITRCalculatorInner() {
           dueDate={dueDateInfo.dateString}
           statute="Income Tax Act, 1961"
           ctaText="File ITR Now"
-          ctaHref="/services/itr-filing"
+          ctaHref="/services/business-itr"
           showCta={result.total > 0}
           docChecklistHref="/tools/documents/business-itr"
           docChecklistText="ITR filing documents"

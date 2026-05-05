@@ -102,7 +102,6 @@ const documentChecklistPaths: Record<string, string> = {
   'gst-registration': '/tools/documents/gst-registration',
   'trademark-registration': '/tools/documents/trademark',
   'business-itr': '/tools/documents/business-itr',
-  'cloud-kitchen-setup': '/tools/documents/fssai',
 }
 
 interface UnifiedServicePageProps {

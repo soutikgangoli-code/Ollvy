@@ -108,7 +108,7 @@ function getFaqData(prices: FAQServicePrices) {
                 <td className="py-3 pr-4 text-muted-foreground">Examination process is fixed by government</td>
               </tr>
               <tr>
-                <td className="py-3 pr-4 pl-4"><Link href="/services/fssai-license" className="text-primary hover:underline">FSSAI License (State)</Link></td>
+                <td className="py-3 pr-4 pl-4"><Link href="/services/cloud-kitchen-setup" className="text-primary hover:underline">FSSAI License (State)</Link></td>
                 <td className="py-3 pr-4 font-mono text-sm">30-45 working days</td>
                 <td className="py-3 pr-4 font-mono text-sm">20 working days</td>
                 <td className="py-3 pr-4 text-muted-foreground">State authority processing time</td>
@@ -313,7 +313,7 @@ function getFaqData(prices: FAQServicePrices) {
         </ul>
         <p>
           Ollvy sends automated compliance reminders 30 days, 7 days, and 1 day before the{' '}
-          <Link href="/services/director-kyc" className="text-primary underline hover:no-underline">Director KYC</Link>{' '}
+          <Link href="/services/din-reactivation" className="text-primary underline hover:no-underline">Director KYC</Link>{' '}
           deadline to all users who have a company on our platform. Filing is available as a standalone service at Rs 999 per director.
         </p>
       </>
@@ -447,7 +447,7 @@ function getFaqData(prices: FAQServicePrices) {
         </p>
         <p>
           <strong>Renewal:</strong>{' '}
-          <Link href="/services/fssai-license" className="text-primary underline hover:no-underline">FSSAI licences</Link>{' '}
+          <Link href="/services/cloud-kitchen-setup" className="text-primary underline hover:no-underline">FSSAI licences</Link>{' '}
           must be renewed before expiry. Ollvy sends renewal reminders 60 days before expiry for all FSSAI clients on the platform.
         </p>
       </>

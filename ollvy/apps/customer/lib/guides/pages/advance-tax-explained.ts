@@ -20,8 +20,8 @@ export const advanceTaxExplained: LearnPageConfig = {
     "tds-on-rent-194i-194ib",
     "tds-on-property-purchase-194ia",
   ],
-  ctaServiceSlug: "advance-tax-payment",
-  ctaSecondarySlug: "individual-itr-filing",
+  ctaServiceSlug: "business-itr",
+  ctaSecondarySlug: "tds-monthly-compliance",
   tool: {
     type: "calculator",
     name: "Do I owe advance tax?",

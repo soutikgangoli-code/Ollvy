@@ -16,8 +16,8 @@ export const esopStructuring: LearnPageConfig = {
   category: "Compliance",
   relatedServiceSlugs: ["esop-structuring", "private-limited-incorporation"],
   relatedLearnSlugs: ["advance-tax-explained", "mca-annual-filing-aoc-4-mgt-7"],
-  ctaServiceSlug: "esop-structuring",
-  ctaSecondarySlug: "private-limited-incorporation",
+  ctaServiceSlug: "pvt-ltd-incorporation",
+  ctaSecondarySlug: "llp-incorporation",
   sections: [
     {
       id: "01",

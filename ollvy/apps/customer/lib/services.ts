@@ -142,12 +142,14 @@ import { gstCancellation } from './services/gst-cancellation'
 import { gstRevocation } from './services/gst-revocation'
 import { companyNameChange } from './services/company-name-change'
 import { dinReactivation } from './services/din-reactivation'
+import { businessPan } from './services/business-pan'
 
 // Export all services
 export const SERVICES: ServiceConfig[] = [
   // Registrations
   pvtLtdIncorporation,
   llpIncorporation,
+  businessPan,
   gstRegistration,
   directorKyc,
   trademarkRegistration,

@@ -16,7 +16,7 @@ export const iepfClaim: LearnPageConfig = {
   category: "Compliance",
   relatedServiceSlugs: ["iepf-consultation"],
   relatedLearnSlugs: ["mca-annual-filing-aoc-4-mgt-7"],
-  ctaServiceSlug: "iepf-consultation",
+  ctaServiceSlug: "pvt-ltd-incorporation",
   sections: [
     {
       id: "01",

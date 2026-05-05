@@ -12,7 +12,6 @@ export const aoc42026: DeadlineConfig = {
   // ====== SERVICE/MARKETING FIELDS ======
   slug: "aoc-4-2026",
   serviceSlug: "mca-annual-filing",
-  bookingHref: "/book/aoc-4",
   serviceName: "AOC-4 Filing (Financial Statements)",
   eventLabel: "AOC-4 filing for FY 2025-26",
   dueDate: "2026-10-30",
@@ -78,7 +77,7 @@ export const aoc42026: DeadlineConfig = {
   category: "Compliance",
   relatedServiceSlugs: ["mca-annual-filing", "private-limited-incorporation"],
   relatedLearnSlugs: ["mca-annual-filing-aoc-4-mgt-7", "agm-compliance", "dir-3-kyc-explained"],
-  ctaSecondarySlug: "private-limited-incorporation",
+  ctaSecondarySlug: "pvt-ltd-incorporation",
   sections: [
     {
       id: "01",

@@ -154,7 +154,7 @@ function ShopsEstablishmentCalculatorInner() {
           breakdown={breakdown}
           statute={`Indicative range only. ${result.notes || 'State Shops and Establishments Act'}`}
           ctaText="Get S&E Registration"
-          ctaHref="/services/shops-establishment-registration"
+          ctaHref="/services"
           showCta={result.penaltyMax > 0}
         >
           {showRepeatWarning && (

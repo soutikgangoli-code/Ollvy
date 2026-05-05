@@ -244,7 +244,7 @@ export function StartupPage({ services }: StartupPageProps) {
 
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Button asChild>
-              <Link href="/services/startup-india">
+              <Link href="/startup">
                 Apply for DPIIT Recognition →
               </Link>
             </Button>

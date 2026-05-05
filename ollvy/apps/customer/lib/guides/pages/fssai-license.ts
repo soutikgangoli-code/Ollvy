@@ -32,7 +32,7 @@ export const fssaiLicense: LearnPageConfig = {
               headline: 'You need a Central FSSAI Licence.',
               body: 'Food importers and exporters require a Central FSSAI Licence regardless of turnover. This is issued by the FSSAI central office in New Delhi.',
               ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/checkout/fssai-license',
+              ctaHref: '/services/cloud-kitchen-setup',
             }
           }
           return null
@@ -52,7 +52,7 @@ export const fssaiLicense: LearnPageConfig = {
               headline: 'You need Basic FSSAI Registration.',
               body: 'Even the smallest food business needs at minimum a Basic Registration (Form A). Issued by your local Food Safety Officer, it is the simplest and cheapest option.',
               ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/checkout/fssai-license',
+              ctaHref: '/services/cloud-kitchen-setup',
             }
           }
           if (answer === '12l_to_20cr') {
@@ -61,7 +61,7 @@ export const fssaiLicense: LearnPageConfig = {
               headline: 'You need a State FSSAI Licence.',
               body: 'Businesses with turnover between Rs. 12 lakh and Rs. 20 crore operating within one state need a State FSSAI Licence (Form B - State). Issued by the State Food Safety Authority.',
               ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/checkout/fssai-license',
+              ctaHref: '/services/cloud-kitchen-setup',
             }
           }
           if (answer === 'above_20cr') {
@@ -70,7 +70,7 @@ export const fssaiLicense: LearnPageConfig = {
               headline: 'You need a Central FSSAI Licence.',
               body: 'Businesses above Rs. 20 crore turnover, multi-state operations, importers, and exporters need a Central FSSAI Licence (Form B - Central). Issued by the FSSAI central office.',
               ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/checkout/fssai-license',
+              ctaHref: '/services/cloud-kitchen-setup',
             }
           }
           return null

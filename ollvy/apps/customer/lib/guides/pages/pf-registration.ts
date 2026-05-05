@@ -32,7 +32,7 @@ export const pfRegistration: LearnPageConfig = {
               headline: 'PF registration is mandatory.',
               body: 'You have crossed the 20-employee threshold. Register with EPFO within 30 days if you have not done so.',
               ctaLabel: 'Get Payroll Help',
-              ctaHref: '/checkout/payroll-management',
+              ctaHref: '/services',
             }
           }
           return null
@@ -53,7 +53,7 @@ export const pfRegistration: LearnPageConfig = {
               headline: 'PF registration is mandatory.',
               body: 'Scheduled industries (cinema, beedi, textile mills) have a lower threshold of 10 employees, not 20. You are above this.',
               ctaLabel: 'Get Payroll Help',
-              ctaHref: '/checkout/payroll-management',
+              ctaHref: '/services',
             }
           }
           return null
@@ -81,7 +81,7 @@ export const pfRegistration: LearnPageConfig = {
               headline: 'Register proactively.',
               body: 'If clients are already asking and you are close to 20 employees, register now. Late registration after crossing the threshold means retroactive contributions from the date you became eligible.',
               ctaLabel: 'Get Payroll Help',
-              ctaHref: '/checkout/payroll-management',
+              ctaHref: '/services',
             }
           }
           return null

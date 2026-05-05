@@ -238,7 +238,7 @@ Everything happens online through the MCA portal at mca.gov.in using the SPICe+ 
   nextSteps: [
     { title: 'Company GST Registration', href: '/services/gst-registration' },
     { title: 'MCA Annual Filing (ROC)', href: '/services/mca-annual-filing' },
-    { title: 'Statutory Audit', href: '/services/statutory-audit' },
+    { title: 'Statutory Audit', href: '/services/gst-monthly' },
     { title: 'Trademark Registration', href: '/tools/documents/trademark' },
   ],
 }
@@ -544,7 +544,6 @@ The upside: minimal compliance, easy to start. The downside: you bear unlimited 
     { title: 'GST Registration', href: '/tools/documents/gst-registration' },
     { title: 'ITR Filing (Individual / Proprietor)', href: '/tools/documents/individual-itr' },
     { title: 'Udyam MSME Registration', href: '/services/msme-registration' },
-    { title: 'Shop and Establishment Licence', href: '/services/shop-establishment' },
   ],
 }
 

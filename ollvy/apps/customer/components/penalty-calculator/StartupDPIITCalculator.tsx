@@ -173,7 +173,7 @@ function StartupDPIITCalculatorInner() {
             : 'Section 15, FEMA 1999 - compounding of contraventions'
           }
           ctaText="Get FEMA Compliance Help"
-          ctaHref="/services/startup-compliance"
+          ctaHref="/services/mca-annual-filing"
           showCta={hasCalculablePenalty && result.totalMax > 0}
         >
           {showAngelTaxInfo && (

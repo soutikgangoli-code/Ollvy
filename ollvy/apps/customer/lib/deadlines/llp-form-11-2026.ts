@@ -13,7 +13,6 @@ export const llpForm112026: DeadlineConfig = {
   // ====== SERVICE/MARKETING FIELDS ======
   slug: "llp-form-11-2026",
   serviceSlug: "llp-annual-filing",
-  bookingHref: "/book/llp-form-11",
   serviceName: "LLP Form 11 (Annual Return) Filing",
   eventLabel: "LLP Form 11 filing for FY 2025-26",
   dueDate: "2026-05-30",

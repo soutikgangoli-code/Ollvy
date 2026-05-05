@@ -12,7 +12,6 @@ export const taxAudit2026: DeadlineConfig = {
   // ====== SERVICE/MARKETING FIELDS ======
   slug: "tax-audit-2026",
   serviceSlug: "tax-audit",
-  bookingHref: "/book/tax-audit",
   serviceName: "Tax Audit Report Filing (Form 3CA-3CB-3CD)",
   eventLabel: "Tax audit report for FY 2025-26",
   dueDate: "2026-09-30",
@@ -73,7 +72,7 @@ export const taxAudit2026: DeadlineConfig = {
   category: "Tax",
   relatedServiceSlugs: ["tax-audit", "itr-filing", "advance-tax-payment"],
   relatedLearnSlugs: ["advance-tax-explained", "esop-structuring"],
-  ctaSecondarySlug: "itr-filing",
+  ctaSecondarySlug: "business-itr",
   sections: [
     {
       id: "01",

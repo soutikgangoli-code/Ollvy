@@ -282,7 +282,7 @@ function GSTDemandCalculatorInner() {
           dueDate={daysSinceNotice > 30 ? 'Overdue' : '30 days from SCN'}
           statute={`Section ${result.section}, CGST Act 2017`}
           ctaText="Get GST Notice Help"
-          ctaHref="/services/gst-notice-response"
+          ctaHref="/services/gst-monthly"
           showCta={result.currentTotal > 0}
         >
           <InfoBanner

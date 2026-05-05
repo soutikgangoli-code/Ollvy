@@ -174,7 +174,7 @@ function RelatedToolsSection({ relatedTools }: { relatedTools?: LearnPageConfig[
         {deadlines.map((tool) => (
           <Link
             key={tool!.slug}
-            href={`/${tool!.slug}`}
+            href={`/guides/${tool!.slug}`}
             className="flex items-center justify-between p-4 rounded-lg border border-border hover:border-foreground/30 hover:bg-muted/20 transition-colors group"
           >
             <div>
