@@ -4,20 +4,20 @@ import { Linkedin, Mail } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'About | Ollvy',
-  description: 'Ollvy Technologies Private Limited. Who runs the company, where we are registered, and who to contact if something goes wrong.',
+  description: 'Ollvy Collective Private Limited. Who runs the company, where we are registered, and who to contact if something goes wrong.',
   alternates: {
     canonical: 'https://www.ollvy.com/about',
   },
   openGraph: {
     title: 'About | Ollvy',
-    description: 'Ollvy Technologies Private Limited. Who runs the company, where we are registered, and who to contact if something goes wrong.',
+    description: 'Ollvy Collective Private Limited. Who runs the company, where we are registered, and who to contact if something goes wrong.',
     url: 'https://www.ollvy.com/about',
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'About | Ollvy',
-    description: 'Ollvy Technologies Private Limited. Who runs the company, where we are registered, and who to contact if something goes wrong.',
+    description: 'Ollvy Collective Private Limited. Who runs the company, where we are registered, and who to contact if something goes wrong.',
     images: ['https://www.ollvy.com/logo.png'],
   },
 }
@@ -118,7 +118,7 @@ export default function AboutPage() {
           {/* Company details */}
           <section className="pt-8 border-t border-border">
             <div className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-muted-foreground font-mono">
-              <span>Ollvy Technologies Private Limited</span>
+              <span>Ollvy Collective Private Limited</span>
               <span>Incorporated 2026</span>
             </div>
             <p className="text-xs text-muted-foreground mt-2">

@@ -41,7 +41,7 @@ export async function DeadlineRouteRender({ slug }: { slug: string }) {
     description: deadline.seoDescription,
     provider: {
       '@type': 'Organization',
-      name: 'Ollvy Technologies Private Limited',
+      name: 'Ollvy Collective Private Limited',
       url: 'https://www.ollvy.com',
     },
     offers: {

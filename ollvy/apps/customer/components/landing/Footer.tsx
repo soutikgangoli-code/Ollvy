@@ -198,9 +198,12 @@ export function Footer() {
         </div>
 
         {/* Bottom row */}
-        <div className="border-t border-border mt-10 pt-6">
+        <div className="border-t border-border mt-10 pt-6 space-y-3">
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-3xl">
+            Ollvy is a private professional services firm. Not affiliated with any government department. Government fees, where applicable, are paid directly to the relevant authority.
+          </p>
           <p className="text-xs text-muted-foreground">
-            © 2026 Ollvy Technologies Private Limited. All rights reserved.
+            © 2026 Ollvy Collective Private Limited. All rights reserved.
           </p>
         </div>
       </div>

@@ -3,20 +3,20 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Terms of Service | Ollvy',
-  description: 'Terms of service for Ollvy Technologies Private Limited. Read our terms and conditions for using our business compliance and registration services in India.',
+  description: 'Terms of service for Ollvy Collective Private Limited. Read our terms and conditions for using our business compliance and registration services in India.',
   alternates: {
     canonical: 'https://www.ollvy.com/terms',
   },
   openGraph: {
     title: 'Terms of Service | Ollvy',
-    description: 'Terms of service for Ollvy Technologies Private Limited. Read our terms and conditions for using our business compliance and registration services in India.',
+    description: 'Terms of service for Ollvy Collective Private Limited. Read our terms and conditions for using our business compliance and registration services in India.',
     url: 'https://www.ollvy.com/terms',
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Terms of Service | Ollvy',
-    description: 'Terms of service for Ollvy Technologies Private Limited. Read our terms and conditions for using our business compliance and registration services in India.',
+    description: 'Terms of service for Ollvy Collective Private Limited. Read our terms and conditions for using our business compliance and registration services in India.',
     images: ['https://www.ollvy.com/logo.png'],
   },
 }

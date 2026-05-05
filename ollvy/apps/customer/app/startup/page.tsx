@@ -16,7 +16,7 @@ const startupServiceSchema = {
     'Complete compliance solution for Indian startups - from Pvt Ltd incorporation to Series A readiness. Includes company registration, DPIIT recognition, GST, MSME, and monthly filings.',
   provider: {
     '@type': 'Organization',
-    name: 'Ollvy Technologies Private Limited',
+    name: 'Ollvy Collective Private Limited',
     url: 'https://www.ollvy.com',
   },
   areaServed: {

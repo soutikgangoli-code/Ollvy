@@ -3,20 +3,20 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Ollvy',
-  description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
+  description: 'Privacy policy for Ollvy Collective Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
   alternates: {
     canonical: 'https://www.ollvy.com/privacy',
   },
   openGraph: {
     title: 'Privacy Policy | Ollvy',
-    description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
+    description: 'Privacy policy for Ollvy Collective Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
     url: 'https://www.ollvy.com/privacy',
     images: [{ url: 'https://www.ollvy.com/logo.png', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Privacy Policy | Ollvy',
-    description: 'Privacy policy for Ollvy Technologies Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
+    description: 'Privacy policy for Ollvy Collective Private Limited. Learn how we collect, use, protect, and share your personal information when you use our compliance services.',
     images: ['https://www.ollvy.com/logo.png'],
   },
 }

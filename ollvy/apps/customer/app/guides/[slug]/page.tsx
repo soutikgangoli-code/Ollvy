@@ -86,7 +86,7 @@ export default async function LearnPageRoute({ params }: Props) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Ollvy Technologies Private Limited',
+      name: 'Ollvy Collective Private Limited',
       url: 'https://www.ollvy.com',
       logo: {
         '@type': 'ImageObject',
