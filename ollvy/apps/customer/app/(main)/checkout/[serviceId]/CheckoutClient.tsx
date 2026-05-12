@@ -11,6 +11,11 @@ import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { getFullAttributionData, clearAllAttributionData } from '@/lib/utm'
 import { getPreCursorAnswers, clearPreCursorAnswers } from '@/lib/pre-cursor'
+import {
+  getCachedPreCreatedOrder,
+  getInflightPreCreatedOrder,
+  clearCachedPreCreatedOrder,
+} from '@/lib/checkout-warmup'
 import { isEligibilityFlow } from '@/lib/services/eligibility'
 import type { ServicePackage, ServiceAddon, ServiceVariant } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -501,6 +506,57 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
     // Already have a fresh order for this exact config — no work to do.
     if (eagerOrderRef.current?.fingerprint === orderFingerprint) return
+
+    // /eligibility may have pre-created an order for this exact config and
+    // dropped it in the module-level cache. Adopt it instead of firing a
+    // duplicate create-order. This is the fast path that makes the
+    // eligibility-routed flow (pvt-ltd, llp, trademark, iepf-consultation)
+    // open the Razorpay modal instantly on Pay click.
+    const preCreated = getCachedPreCreatedOrder()
+    if (preCreated && preCreated.fingerprint === orderFingerprint) {
+      eagerOrderRef.current = {
+        orderId: preCreated.orderId,
+        orderNumber: preCreated.orderNumber,
+        razorpayOrderId: preCreated.razorpayOrderId,
+        amount: preCreated.amount,
+        fingerprint: preCreated.fingerprint,
+      }
+      clearCachedPreCreatedOrder()
+      console.log('[checkout-perf] eager: adopted pre-created order from /eligibility')
+      return
+    }
+
+    // Pre-create is still in flight from /eligibility. Piggy-back on its
+    // Promise instead of firing a duplicate request.
+    const preCreatedInflight = getInflightPreCreatedOrder()
+    if (preCreatedInflight) {
+      console.log('[checkout-perf] eager: awaiting /eligibility inflight pre-create')
+      const adoptedPromise: Promise<EagerOrder | null> = preCreatedInflight.then((result) => {
+        if (result && result.fingerprint === orderFingerprint) {
+          const adopted: EagerOrder = {
+            orderId: result.orderId,
+            orderNumber: result.orderNumber,
+            razorpayOrderId: result.razorpayOrderId,
+            amount: result.amount,
+            fingerprint: result.fingerprint,
+          }
+          if (orderFingerprintAtSettleRef.current === orderFingerprint) {
+            eagerOrderRef.current = adopted
+            clearCachedPreCreatedOrder()
+            console.log('[checkout-perf] eager: pre-created order adopted post-settle')
+          }
+          return adopted
+        }
+        return null
+      })
+      eagerInflightRef.current = adoptedPromise
+      adoptedPromise.finally(() => {
+        if (eagerInflightRef.current === adoptedPromise) {
+          eagerInflightRef.current = null
+        }
+      })
+      return
+    }
 
     const accessToken = session.access_token
     const fingerprint = orderFingerprint
