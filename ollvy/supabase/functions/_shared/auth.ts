@@ -21,8 +21,68 @@ export interface AdminAuthResult extends AuthResult {
 }
 
 /**
+ * Hit Supabase Auth API directly with a hard timeout.
+ *
+ * The Supabase JS client doesn't expose a timeout on supabase.auth.getUser,
+ * and that call has been observed in production to hang for 10+ seconds
+ * before returning an HTML 5xx that the JS client then mis-parses as JSON.
+ * Doing the fetch ourselves lets us:
+ *   - bail out at a fixed timeout (no 10s waits while users stare at "Pay")
+ *   - distinguish HTTP-status auth failures (401/403 = real token problem,
+ *     do not retry) from network/5xx blips (= transient, retry)
+ *   - return a clean structured error instead of a parsed-SyntaxError mess
+ *
+ * Returns the parsed user object on success, or throws an Error with a
+ * `.status` property (when an HTTP status was returned) so the caller can
+ * decide whether to retry.
+ */
+async function fetchAuthUser(
+  supabaseUrl: string,
+  anonKey: string,
+  token: string,
+  timeoutMs: number,
+): Promise<{ id: string }> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(`${supabaseUrl}/auth/v1/user`, {
+      headers: {
+        apikey: anonKey,
+        Authorization: `Bearer ${token}`,
+      },
+      signal: controller.signal,
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      let errorMsg = `Auth API ${res.status}`;
+      try {
+        const parsed = JSON.parse(text);
+        errorMsg = parsed.error_description || parsed.msg || parsed.error || errorMsg;
+      } catch {
+        errorMsg = `Auth API ${res.status}: ${text.slice(0, 80)}`;
+      }
+      const err = new Error(errorMsg) as Error & { status?: number };
+      err.status = res.status;
+      throw err;
+    }
+    const data = await res.json();
+    if (!data?.id) {
+      throw new Error('Auth API response missing user id');
+    }
+    return data;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+/**
  * Verify JWT and extract user_id
  * For: HTTP POST (auth) endpoints
+ *
+ * Two-attempt loop with per-attempt 3s timeout. Retries on network errors,
+ * timeouts, and 5xx responses (transient). Does NOT retry on 401/403 from
+ * Auth (real token problem — retry won't help). Worst case ~6.5s; previous
+ * implementation was unbounded and observed at 10.6s in production.
  */
 export async function verifyUser(req: Request): Promise<AuthResult> {
   const authHeader = req.headers.get('Authorization');
@@ -43,31 +103,57 @@ export async function verifyUser(req: Request): Promise<AuthResult> {
     return { success: false, error: 'Server configuration error', status: 500 };
   }
 
-  const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-    global: {
-      headers: { Authorization: authHeader },
-    },
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  });
+  let authUser: { id: string } | null = null;
+  let lastErrorMessage: string | undefined;
 
-  const { data: { user }, error } = await supabase.auth.getUser(token);
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const t0 = Date.now();
+    try {
+      authUser = await fetchAuthUser(supabaseUrl, supabaseAnonKey, token, 3000);
+      if (attempt > 0) {
+        console.log(`Auth: getUser succeeded on retry (${Date.now() - t0}ms)`);
+      }
+      break;
+    } catch (e: unknown) {
+      const elapsed = Date.now() - t0;
+      const err = e as Error & { status?: number; name?: string };
+      lastErrorMessage = err.message || 'unknown';
+      console.error(
+        `Auth: getUser failed (attempt ${attempt + 1}, ${elapsed}ms, status=${err.status ?? 'n/a'}, name=${err.name ?? 'n/a'}) -`,
+        lastErrorMessage,
+      );
 
-  if (error || !user) {
-    console.error('Auth: getUser failed -', error?.message || 'no user');
-    return { success: false, error: `Invalid or expired token: ${error?.message || 'unknown'}`, status: 401 };
+      // Real auth failures (401/403) are not retryable — the token won't
+      // become valid on a second try. Bail immediately.
+      if (err.status === 401 || err.status === 403) {
+        break;
+      }
+
+      // Everything else (timeout/AbortError, 5xx, network) is transient.
+      // Short backoff then retry. Supabase 5xx blips usually clear in
+      // <200ms; 250ms is enough without piling on latency.
+      if (attempt === 0) {
+        await new Promise((r) => setTimeout(r, 250));
+      }
+    }
   }
 
-  console.log('Auth: User verified, auth_user_id:', user.id);
+  if (!authUser) {
+    return {
+      success: false,
+      error: `Invalid or expired token: ${lastErrorMessage || 'unknown'}`,
+      status: 401,
+    };
+  }
+
+  console.log('Auth: User verified, auth_user_id:', authUser.id);
 
   // Get the user's row from users table
   const supabaseAdmin = getSupabaseAdmin();
   const { data: userData, error: userError } = await supabaseAdmin
     .from('users')
     .select('id')
-    .eq('auth_user_id', user.id)
+    .eq('auth_user_id', authUser.id)
     .single();
 
   if (userError || !userData) {
