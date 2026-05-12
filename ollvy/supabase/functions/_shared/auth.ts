@@ -76,6 +76,83 @@ async function fetchAuthUser(
 }
 
 /**
+ * Decode (NOT verify) a JWT payload. Use only when something upstream has
+ * already verified the signature — currently the Supabase Edge Functions
+ * gateway when verify_jwt=true in the function's config.toml.
+ *
+ * Bare base64url decode + JSON parse. No crypto. The payload's `sub` is the
+ * auth_user_id; `exp` is the expiry seconds.
+ */
+function decodeJwtPayloadUnsafe(token: string): { sub?: string; exp?: number } {
+  const parts = token.split('.');
+  if (parts.length !== 3) {
+    throw new Error('Invalid JWT format');
+  }
+  const segment = parts[1];
+  const padded = segment + '='.repeat((4 - (segment.length % 4)) % 4);
+  const json = atob(padded.replace(/-/g, '+').replace(/_/g, '/'));
+  return JSON.parse(json);
+}
+
+/**
+ * Verify user assuming the Supabase gateway has already validated the JWT.
+ *
+ * REQUIRES the function's config.toml to set `verify_jwt = true`. The gateway
+ * validates signature + expiry with the project's signing key (local, no
+ * external HTTP) and rejects bad JWTs before they reach the function.
+ * Because of that, we can trust the `sub` claim and skip the previously-
+ * required supabase.auth.getUser external HTTP call entirely — saves
+ * 300-500ms per request and removes a flaky dependency on Supabase Auth
+ * being responsive.
+ *
+ * DO NOT USE in functions with verify_jwt=false — that would accept any
+ * forged JWT. Use the older verifyUser() helper instead.
+ */
+export async function verifyUserFromGateway(req: Request): Promise<AuthResult> {
+  const authHeader = req.headers.get('Authorization');
+
+  if (!authHeader) {
+    return { success: false, error: 'Missing Authorization header', status: 401 };
+  }
+
+  const token = authHeader.replace('Bearer ', '');
+
+  let authUserId: string;
+  try {
+    const payload = decodeJwtPayloadUnsafe(token);
+
+    if (!payload.sub) {
+      return { success: false, error: 'JWT missing sub claim', status: 401 };
+    }
+    authUserId = payload.sub;
+
+    // Defense in depth: gateway already checks expiry, but if config drift
+    // ever lands verify_jwt=false here without anyone noticing, this catches
+    // an expired token before we issue user rows for it.
+    if (typeof payload.exp === 'number' && payload.exp * 1000 < Date.now()) {
+      return { success: false, error: 'JWT expired', status: 401 };
+    }
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : 'unknown';
+    return { success: false, error: `Invalid JWT: ${msg}`, status: 401 };
+  }
+
+  // Translate auth_user_id (Supabase Auth's uuid) → users.id (our row pk)
+  const supabaseAdmin = getSupabaseAdmin();
+  const { data: userData, error: userError } = await supabaseAdmin
+    .from('users')
+    .select('id')
+    .eq('auth_user_id', authUserId)
+    .single();
+
+  if (userError || !userData) {
+    return { success: false, error: 'User not found', status: 401 };
+  }
+
+  return { success: true, userId: userData.id };
+}
+
+/**
  * Verify JWT and extract user_id
  * For: HTTP POST (auth) endpoints
  *
@@ -83,6 +160,9 @@ async function fetchAuthUser(
  * timeouts, and 5xx responses (transient). Does NOT retry on 401/403 from
  * Auth (real token problem — retry won't help). Worst case ~6.5s; previous
  * implementation was unbounded and observed at 10.6s in production.
+ *
+ * PREFER verifyUserFromGateway when the function has verify_jwt=true — it
+ * skips the external HTTP entirely and is 300-500ms faster.
  */
 export async function verifyUser(req: Request): Promise<AuthResult> {
   const authHeader = req.headers.get('Authorization');

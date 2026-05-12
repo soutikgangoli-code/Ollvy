@@ -207,7 +207,11 @@ export function BookingPanel({
     selectedAddonIds,
   ])
 
-  // Prefetch checkout service data on CTA hover
+  // Prefetch checkout service data on CTA hover. Also kicks off the Razorpay
+  // pre-create for direct-checkout flows: hover-to-click latency is typically
+  // 300-1500ms, which is "free" head-start time the pre-create can use. The
+  // module-level cache in firePreCreateOrder dedupes against the click-time
+  // fire, so calling both is safe.
   const prefetchedRef = useRef(false)
   const prefetchCheckout = useCallback(() => {
     if (prefetchedRef.current) return
@@ -225,7 +229,11 @@ export function BookingPanel({
             .eq('is_pre_payment', true)
         }
       })
-  }, [service.slug, priceVariesByQuestionnaire, hasPrePaymentQuestions])
+    // Fire the actual Razorpay order pre-create at hover time for
+    // direct-checkout services. No-ops for eligibility / quote flows and
+    // when the user isn't logged in (which is also when there's no token).
+    fireDirectCheckoutPreCreate()
+  }, [service.slug, priceVariesByQuestionnaire, hasPrePaymentQuestions, fireDirectCheckoutPreCreate])
 
   return (
     <Card className="border border-border bg-card p-6 w-full rounded-xl shadow-sm">

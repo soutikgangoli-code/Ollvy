@@ -15,7 +15,7 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { corsHeaders } from '../_shared/cors.ts';
-import { verifyUser } from '../_shared/auth.ts';
+import { verifyUserFromGateway } from '../_shared/auth.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 
@@ -169,8 +169,10 @@ serve(async (req) => {
   }
 
   try {
-    // Verify JWT and extract user_id
-    const authResult = await verifyUser(req);
+    // Verify JWT and extract user_id. Gateway has already validated the
+    // signature/expiry (verify_jwt=true in config.toml), so this just decodes
+    // the payload locally and translates sub → users.id via one DB query.
+    const authResult = await verifyUserFromGateway(req);
     if (!authResult.success) {
       return new Response(
         JSON.stringify({ ok: false, error: authResult.error }),

@@ -1,4 +1,12 @@
-# Disable automatic JWT verification at gateway level
-# We handle JWT verification ourselves using supabase.auth.getUser()
+# Let the Supabase gateway validate the JWT signature + expiry at the edge,
+# using the project's signing key. The gateway already has the keys locally
+# — no external HTTP, ~5ms — and rejects bad/expired JWTs before the request
+# reaches our function. We then trust the JWT's sub claim and skip the
+# previously-required supabase.auth.getUser external call, saving 300-500ms
+# per request.
+#
+# REQUIRED PAIRING: the function MUST use verifyUserFromGateway (not the
+# older verifyUser) since we rely on the gateway having done signature
+# validation. See _shared/auth.ts.
 [functions.create-razorpay-order]
-verify_jwt = false
+verify_jwt = true
