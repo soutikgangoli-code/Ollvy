@@ -11,6 +11,9 @@ import { DBServiceConfig } from '@/lib/data/services'
 import { cn } from '@/lib/utils'
 import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
 import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
+import { useAuthStore } from '@/lib/stores/auth-store'
+import { firePreCreateOrder } from '@/lib/checkout-warmup'
+import { getFullAttributionData } from '@/lib/utm'
 
 interface BookingPanelProps {
   service: DBServiceConfig
@@ -147,6 +150,62 @@ export function BookingPanel({
   const ctaUrl = urlParams.toString() ? `${baseCheckoutUrl}?${urlParams.toString()}` : baseCheckoutUrl
 
   const { trackCheckoutCTAClick } = usePostHogEvents()
+  const { session, user } = useAuthStore()
+
+  // For direct-checkout flows (GST, ITR, MCA filing, etc — services with no
+  // /eligibility step), fire the pre-create on CTA click. Mirror of what
+  // /eligibility/page.tsx does in handleComplete: kick off
+  // create-razorpay-order in the background so by the time CheckoutClient
+  // mounts and the user clicks Pay, the order is already in Razorpay's
+  // system. Without this, the GST/ITR/etc. checkout pays the full cold
+  // create-order roundtrip on first Pay click (~2-3s).
+  //
+  // Eligibility-routed services (pvt-ltd, llp, trademark, iepf) intentionally
+  // skip this — they fire their own pre-create at the END of /eligibility
+  // (with pre-cursor answers included), so firing here would be redundant
+  // and create an orphaned Razorpay order.
+  const fireDirectCheckoutPreCreate = useCallback(() => {
+    if (priceVariesByState || priceVariesByQuestionnaire || hasPrePaymentQuestions) return
+    if (!serviceId) return
+    const accessToken = session?.access_token
+    const userId = user?.id
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (!accessToken || !userId || !url) return
+
+    // Fingerprint format MUST mirror CheckoutClient.tsx orderFingerprint
+    const fingerprint = [
+      serviceId,
+      selectedVariant ?? '',
+      [...selectedAddonIds].sort().join(','),
+      '', // no promo applied yet
+      JSON.stringify({}), // no pre-cursor answers on direct flow
+    ].join('|')
+
+    firePreCreateOrder(
+      {
+        supabaseUrl: url,
+        accessToken,
+        servicePackageId: serviceId,
+        userId,
+        variantId: selectedVariant || null,
+        addonIds: selectedAddonIds,
+        preCursorAnswers: {},
+        attribution: getFullAttributionData(),
+      },
+      fingerprint,
+    ).catch((err) => {
+      console.error('[BookingPanel] pre-create unexpected rejection:', err)
+    })
+  }, [
+    priceVariesByState,
+    priceVariesByQuestionnaire,
+    hasPrePaymentQuestions,
+    serviceId,
+    session?.access_token,
+    user?.id,
+    selectedVariant,
+    selectedAddonIds,
+  ])
 
   // Prefetch checkout service data on CTA hover
   const prefetchedRef = useRef(false)
@@ -374,7 +433,12 @@ export function BookingPanel({
         <Link
           href={ctaUrl}
           prefetch={true}
-          onClick={() =>
+          onClick={() => {
+            // For direct-checkout services (GST and friends) this fires
+            // create-razorpay-order in the background so /checkout opens
+            // with the order already created. No-op for eligibility-routed
+            // and quote-routed flows.
+            fireDirectCheckoutPreCreate()
             trackCheckoutCTAClick(service.slug, {
               cta_label: ctaLabel,
               variant_id: selectedVariant || undefined,
@@ -386,7 +450,7 @@ export function BookingPanel({
                 ? 'eligibility'
                 : 'direct_checkout',
             })
-          }
+          }}
         >
           {ctaLabel}
         </Link>
