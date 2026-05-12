@@ -189,8 +189,12 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
   // Track if we've shown the initial auth prompt (don't keep re-opening if user dismisses)
   const [hasShownAuthPrompt, setHasShownAuthPrompt] = useState(false)
 
-  // Pre-cursor answers from eligibility page (stored in sessionStorage)
+  // Pre-cursor answers from eligibility page (stored in sessionStorage).
+  // `preCursorReady` flips true after the first load attempt completes — used to
+  // gate the eager-order effect so it doesn't fire twice (once with empty
+  // answers, once with the real ones) and waste a cold-start round-trip.
   const [preCursorAnswers, setPreCursorAnswers] = useState<Record<string, unknown>>({})
+  const [preCursorReady, setPreCursorReady] = useState(false)
 
   // Service data is now provided by the server component — no client fetch needed.
 
@@ -261,13 +265,16 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     }
   }, [user, isHydrated, hasShownAuthPrompt, openAuthModal])
 
-  // Load pre-cursor answers from sessionStorage when service is available
+  // Load pre-cursor answers from sessionStorage when service is available.
+  // Flip preCursorReady afterward so the eager-order effect fires exactly once
+  // with the final fingerprint.
   useEffect(() => {
     if (!service) return
     const stored = getPreCursorAnswers(service.slug)
     if (stored) {
       setPreCursorAnswers(stored)
     }
+    setPreCursorReady(true)
   }, [service])
 
   // Initialize variant and addons from sessionStorage, URL params, or service defaults
@@ -483,6 +490,12 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     if (!user || !session?.access_token) return
     if (!service || !priceBreakdown || priceBreakdown.total <= 0) return
     if (service.price_varies_by_state) return // these route to /quote, no eager order
+    // Wait until pre-cursor answers have been loaded from sessionStorage so we
+    // don't fire a first (empty) request whose result is then dropped at settle
+    // time because the fingerprint shifted under it. For non-eligibility flows
+    // this flips true on first render's effect; for eligibility flows it flips
+    // after the stored answers arrive — either way, exactly one request fires.
+    if (!preCursorReady) return
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
     if (!url) return
 
@@ -496,6 +509,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     const promoCode = promoApplied?.code
     const addonIds = selectedAddonIds
     const variantId = selectedVariant
+    const preCursorAnswersSnapshot = preCursorAnswers
 
     const promise = (async (): Promise<EagerOrder | null> => {
       const t0 = performance.now()
@@ -517,6 +531,9 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
               addon_ids: addonIds.length > 0 ? addonIds : undefined,
               variant_id: variantId || undefined,
               engagement_agreed: true,
+              // Govt fee for pvt-ltd / llp / trademark is computed server-side
+              // from these. For all other slugs they're ignored.
+              pre_cursor_answers: Object.keys(preCursorAnswersSnapshot).length > 0 ? preCursorAnswersSnapshot : undefined,
               utm_source: attribution.utm?.utm_source,
               utm_medium: attribution.utm?.utm_medium,
               utm_campaign: attribution.utm?.utm_campaign,
@@ -571,7 +588,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         eagerInflightRef.current = null
       }
     })
-  }, [isHydrated, user, session?.access_token, service, priceBreakdown, orderFingerprint, selectedVariant, selectedAddonIds, promoApplied?.code])
+  }, [isHydrated, user, session?.access_token, service, priceBreakdown, orderFingerprint, selectedVariant, selectedAddonIds, promoApplied?.code, preCursorReady])
 
   // Mirror of orderFingerprint for the async eager closure to compare against
   // *current* fingerprint at settle time (closures see stale values).
@@ -737,6 +754,9 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
               addon_ids: selectedAddonIds.length > 0 ? selectedAddonIds : undefined,
               variant_id: selectedVariant || undefined,
               engagement_agreed: true,
+              // Govt fee for pvt-ltd / llp / trademark is computed server-side
+              // from these. For all other slugs they're ignored.
+              pre_cursor_answers: Object.keys(preCursorAnswers).length > 0 ? preCursorAnswers : undefined,
               utm_source: attribution.utm?.utm_source,
               utm_medium: attribution.utm?.utm_medium,
               utm_campaign: attribution.utm?.utm_campaign,

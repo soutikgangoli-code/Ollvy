@@ -10,6 +10,7 @@ import { getClient } from '@/lib/supabase'
 import { QuestionnaireWizard } from '@/components/questionnaire/QuestionnaireWizard'
 import { LivePricePreview, LivePricePreviewCompact } from '@/components/questionnaire/LivePricePreview'
 import { storePreCursorAnswers } from '@/lib/pre-cursor'
+import { useAuthStore } from '@/lib/stores/auth-store'
 import type { ServicePackage } from '@/lib/types'
 
 export default function EligibilityPage() {
@@ -17,6 +18,7 @@ export default function EligibilityPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const serviceId = params.serviceId as string
+  const { session } = useAuthStore()
 
   // Live values for price preview (updated in real-time as user fills form)
   const [liveValues, setLiveValues] = useState<Record<string, unknown>>({})
@@ -171,9 +173,33 @@ export default function EligibilityPage() {
 
     storePreCursorAnswers(service.slug, answers)
 
+    // Warm up create-razorpay-order so /checkout's eager order request hits a
+    // hot isolate. The Deno isolate goes cold after ~30s and the user has
+    // typically spent 30s-2min on this page filling the questionnaire. Without
+    // this, the eligibility-routed flow pays a 1-3s cold-start tax that the
+    // direct-checkout flow (e.g. GST) avoids. keepalive=true lets the request
+    // continue through the navigation. Requires a real user JWT — the Supabase
+    // gateway rejects anon-role tokens before the X-Warmup short-circuit runs.
+    const accessToken = session?.access_token
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (accessToken && url) {
+      fetch(`${url}/functions/v1/create-razorpay-order`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          'X-Warmup': '1',
+        },
+        body: '{}',
+        keepalive: true,
+      }).catch(() => {
+        // Best-effort — never block navigation on warmup
+      })
+    }
+
     const checkoutUrl = `/checkout/${serviceId}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
     router.push(checkoutUrl)
-  }, [service, serviceId, router, searchParams])
+  }, [service, serviceId, router, searchParams, session?.access_token])
 
   // Loading — show questionnaire skeleton (matches final layout)
   if (isLoading || hasPrePaymentQuestions === null) {

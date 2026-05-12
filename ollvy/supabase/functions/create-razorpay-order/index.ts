@@ -28,6 +28,11 @@ interface CreateOrderBody {
   variant_id?: string;
   addon_ids?: string[];
   engagement_agreed?: boolean;
+  // Pre-payment questionnaire answers from /eligibility. Used by services
+  // where the govt fee depends on user input (pvt-ltd authorized capital, LLP
+  // contribution slab, trademark class count). Optional — services that don't
+  // route through /eligibility never send this.
+  pre_cursor_answers?: Record<string, any>;
   // UTM attribution
   utm_source?: string;
   utm_medium?: string;
@@ -36,6 +41,56 @@ interface CreateOrderBody {
   utm_term?: string;
   referral_code?: string;
   landing_page?: string;
+}
+
+// Compute govt fee override for services whose fee depends on pre-cursor
+// answers. MUST mirror the client logic in
+// apps/customer/app/(main)/checkout/[serviceId]/CheckoutClient.tsx priceBreakdown
+// — any change to slab tables here must also change there, and vice-versa. The
+// client computes for UI display; the server is the source of truth for what
+// Razorpay actually charges.
+function computeGovtFeeOverride(
+  slug: string | undefined,
+  baseGovtFeePaisa: number,
+  answers: Record<string, any> | undefined,
+): number {
+  if (!slug || !answers) return baseGovtFeePaisa;
+
+  if (slug === 'trademark-registration' && answers.trademark_class_count) {
+    const classCount = Number(answers.trademark_class_count);
+    const applicantType = String(answers.applicant_type || '');
+    const isDiscountEligible = ['individual', 'proprietorship', 'msme', 'startup'].includes(applicantType);
+    return (isDiscountEligible ? 450000 : 900000) * classCount;
+  }
+
+  if (slug === 'pvt-ltd-incorporation' && answers.authorized_capital) {
+    const capital = String(answers.authorized_capital);
+    const directors = Number(answers.number_of_directors) || 2;
+    const additionalDSCCost = Math.max(0, directors - 2) * 120000;
+    const capitalSlabs: Record<string, number> = {
+      '100000':   799900,
+      '500000':   1000000,
+      '1000000':  1500000,
+      '2500000':  2500000,
+      '5000000':  3500000,
+    };
+    return (capitalSlabs[capital] ?? 799900) + additionalDSCCost;
+  }
+
+  if (slug === 'llp-incorporation' && answers.total_contribution) {
+    const contribution = String(answers.total_contribution);
+    const partners = Number(answers.number_of_partners) || 2;
+    const additionalDSCCost = Math.max(0, partners - 2) * 120000;
+    const contributionSlabs: Record<string, number> = {
+      'upto_1l':    50000,
+      '1l_to_5l':   200000,
+      '5l_to_10l':  400000,
+      'above_10l':  500000,
+    };
+    return (contributionSlabs[contribution] ?? 500000) + additionalDSCCost;
+  }
+
+  return baseGovtFeePaisa;
 }
 
 interface ServicePackage {
@@ -139,6 +194,7 @@ serve(async (req) => {
       variant_id,
       addon_ids,
       engagement_agreed,
+      pre_cursor_answers,
     } = body;
 
     // Validate: must have either service_package_id or quote_request_id
@@ -226,7 +282,7 @@ serve(async (req) => {
       const { data: pkg, error: pkgError } = await supabase
         .from('service_packages')
         .select(
-          'id, is_active, price_varies_by_state, price_base_paisa, price_govt_fees_paisa, price_gst_rate, order_type, variants, addons'
+          'id, slug, is_active, price_varies_by_state, price_base_paisa, price_govt_fees_paisa, price_gst_rate, order_type, variants, addons'
         )
         .eq('id', quote.service_package_id)
         .single();
@@ -258,7 +314,7 @@ serve(async (req) => {
         supabase
           .from('service_packages')
           .select(
-            'id, is_active, price_varies_by_state, price_base_paisa, price_govt_fees_paisa, price_gst_rate, order_type, variants, addons'
+            'id, slug, is_active, price_varies_by_state, price_base_paisa, price_govt_fees_paisa, price_gst_rate, order_type, variants, addons'
           )
           .eq('id', service_package_id)
           .single(),
@@ -320,6 +376,13 @@ serve(async (req) => {
           govtFeesPaisa += selectedVariant.govtFeeAdjustment || 0;
         }
       }
+
+      // Override govt fee based on pre-payment questionnaire answers. Replaces
+      // (does not add to) the variant-adjusted base for slugs whose fee is
+      // entirely a function of pre-cursor inputs: pvt-ltd capital slab, LLP
+      // contribution slab, trademark per-class fee. For other slugs this is a
+      // no-op and govt fees flow through unchanged.
+      govtFeesPaisa = computeGovtFeeOverride((pkg as any).slug, govtFeesPaisa, pre_cursor_answers);
 
       // Add addon prices to the base price (addons are part of the service bundle)
       if (addon_ids && addon_ids.length > 0 && pkg.addons && Array.isArray(pkg.addons)) {
