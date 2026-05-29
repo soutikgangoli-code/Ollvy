@@ -20,7 +20,10 @@ export default function EligibilityPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const serviceId = params.serviceId as string
-  const { session, user } = useAuthStore()
+  // Narrow selectors: subscribing to the whole store re-rendered this page on
+  // every isLoading / isHydrated / banner flip during the AuthProvider hydrate.
+  const session = useAuthStore((s) => s.session)
+  const user = useAuthStore((s) => s.user)
 
   // Live values for price preview (updated in real-time as user fills form)
   const [liveValues, setLiveValues] = useState<Record<string, unknown>>({})
@@ -38,9 +41,15 @@ export default function EligibilityPage() {
   // Check if user is editing (coming from checkout Edit button)
   const isEditing = searchParams.get('edit') === 'true'
 
-  // Fetch service data + pre-payment question count in parallel
-  // No auth needed — eligibility page is open to all users
+  // Fetch service data + pre-payment question count.
+  // No auth needed — eligibility page is open to all users.
+  // Bounded by an 8s timeout + AbortController so a stalled Supabase call
+  // (auto-refresh of an expired sb-* cookie has been observed to wedge the
+  // singleton client) can never strand the user on skeletons forever.
   useEffect(() => {
+    let cancelled = false
+    const FETCH_TIMEOUT_MS = 8000
+
     const fetchService = async () => {
       const __t0 = performance.now()
       const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined
@@ -51,38 +60,48 @@ export default function EligibilityPage() {
       setIsLoading(true)
       setError(null)
 
+      const withTimeout = <T,>(p: PromiseLike<T>, label: string): Promise<T> =>
+        Promise.race<T>([
+          Promise.resolve(p),
+          new Promise<T>((_, reject) =>
+            setTimeout(
+              () => reject(new Error(`timeout: ${label} > ${FETCH_TIMEOUT_MS}ms`)),
+              FETCH_TIMEOUT_MS,
+            ),
+          ),
+        ])
+
       try {
         const supabase = getClient()
-
-        // Two-phase fetch with a fast path:
-        //  - If serviceId looks like a UUID, fire BOTH queries in parallel
-        //    (service_questionnaires can key off the UUID directly, no need
-        //    to wait for the service_packages roundtrip first).
-        //  - If it's a slug, fall back to sequential (resolve slug→id, then
-        //    query questions). Slug usage is rare; UUID is the common path
-        //    coming from /services or BookingPanel.
         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(serviceId)
         const __tSvcStart = performance.now()
 
         if (isUuid) {
-          const [serviceResult, countResult] = await Promise.all([
-            supabase
-              .from('service_packages')
-              .select('*')
-              .eq('id', serviceId)
-              .eq('is_active', true)
-              .single(),
-            supabase
-              .from('service_questionnaires')
-              .select('*', { count: 'exact', head: true })
-              .eq('service_package_id', serviceId)
-              .eq('is_active', true)
-              .eq('is_pre_payment', true),
-          ])
+          // Fire both queries in parallel — service_questionnaires can key off
+          // the UUID directly without waiting for the service_packages row.
+          const [serviceResult, countResult] = await withTimeout(
+            Promise.all([
+              supabase
+                .from('service_packages')
+                .select('*')
+                .eq('id', serviceId)
+                .eq('is_active', true)
+                .single(),
+              supabase
+                .from('service_questionnaires')
+                .select('*', { count: 'exact', head: true })
+                .eq('service_package_id', serviceId)
+                .eq('is_active', true)
+                .eq('is_pre_payment', true),
+            ]),
+            'service+questions (uuid)',
+          )
+
+          if (cancelled) return
           const __tParallelMs = Math.round(performance.now() - __tSvcStart)
 
           if (serviceResult.error || !serviceResult.data) {
-            console.log(`[eligibility-perf] service fetch failed in ${__tParallelMs}ms`)
+            console.log(`[eligibility-perf] service fetch failed in ${__tParallelMs}ms`, serviceResult.error)
             setError('Service not found')
             setIsLoading(false)
             return
@@ -105,17 +124,21 @@ export default function EligibilityPage() {
           return
         }
 
-        // Slug path — sequential waterfall (rare)
-        const { data: serviceData, error: serviceError } = await supabase
-          .from('service_packages')
-          .select('*')
-          .eq('slug', serviceId)
-          .eq('is_active', true)
-          .single()
+        // Slug path — sequential waterfall (rare).
+        const { data: serviceData, error: serviceError } = await withTimeout(
+          supabase
+            .from('service_packages')
+            .select('*')
+            .eq('slug', serviceId)
+            .eq('is_active', true)
+            .single(),
+          'service (slug)',
+        )
+        if (cancelled) return
         const __tSvcMs = Math.round(performance.now() - __tSvcStart)
 
         if (serviceError || !serviceData) {
-          console.log(`[eligibility-perf] service fetch failed in ${__tSvcMs}ms`)
+          console.log(`[eligibility-perf] service fetch failed in ${__tSvcMs}ms`, serviceError)
           setError('Service not found')
           setIsLoading(false)
           return
@@ -124,12 +147,16 @@ export default function EligibilityPage() {
         setService(serviceData as ServicePackage)
 
         const __tCntStart = performance.now()
-        const { count, error: countError } = await supabase
-          .from('service_questionnaires')
-          .select('*', { count: 'exact', head: true })
-          .eq('service_package_id', serviceData.id)
-          .eq('is_active', true)
-          .eq('is_pre_payment', true)
+        const { count, error: countError } = await withTimeout(
+          supabase
+            .from('service_questionnaires')
+            .select('*', { count: 'exact', head: true })
+            .eq('service_package_id', serviceData.id)
+            .eq('is_active', true)
+            .eq('is_pre_payment', true),
+          'questions (slug)',
+        )
+        if (cancelled) return
         const __tCntMs = Math.round(performance.now() - __tCntStart)
 
         if (countError) {
@@ -146,13 +173,22 @@ export default function EligibilityPage() {
 
         setIsLoading(false)
       } catch (err) {
-        console.error('Failed to fetch service:', err)
-        setError('Failed to load service')
+        if (cancelled) return
+        const msg = err instanceof Error ? err.message : String(err)
+        console.error('[eligibility-perf] fetch failed:', msg)
+        setError(
+          msg.startsWith('timeout:')
+            ? 'This is taking longer than usual. Please retry.'
+            : 'Failed to load service. Please retry.',
+        )
         setIsLoading(false)
       }
     }
 
     fetchService()
+    return () => {
+      cancelled = true
+    }
   }, [serviceId])
 
   // No auth prompt on eligibility — let users fill the questionnaire freely.
@@ -280,6 +316,27 @@ export default function EligibilityPage() {
       }
     }
   }, [service, serviceId, router, searchParams, session?.access_token, user?.id])
+
+  // Error state — checked BEFORE the loading guard so a failed fetch (timeout
+  // or service-not-found) actually surfaces the error instead of staying on
+  // skeletons forever. Previously the loading guard `isLoading ||
+  // hasPrePaymentQuestions === null` masked the error case because the fetch
+  // failure path never set hasPrePaymentQuestions, leaving it null.
+  if (error && !isLoading) {
+    return (
+      <div className="container max-w-3xl mx-auto py-12 px-4">
+        <div className="rounded-xl border border-destructive/50 bg-destructive/5 p-8 text-center">
+          <p className="text-destructive mb-4">{error}</p>
+          <div className="flex gap-2 justify-center">
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+            <Button variant="outline" asChild>
+              <Link href="/services">Browse Services</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   // Loading — show questionnaire skeleton (matches final layout)
   if (isLoading || hasPrePaymentQuestions === null) {
