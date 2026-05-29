@@ -121,6 +121,9 @@ export function OrdersListClient({ orders, currentPage, totalCount, pageSize, ac
                 <div
                   key={order.id}
                   className="py-4 flex items-center justify-between gap-4"
+                  onMouseEnter={() => router.prefetch(`/admin/orders/${order.id}`)}
+                  onFocus={() => router.prefetch(`/admin/orders/${order.id}`)}
+                  tabIndex={0}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">

@@ -1205,14 +1205,25 @@ export async function adminGetSignedUrls(
   const results = await Promise.all(
     files.map(async ({ url, bucket }) => {
       try {
-        // Extract path from URL
-        // URL format: https://xxx.supabase.co/storage/v1/object/public/bucket/path
-        const urlObj = new URL(url)
-        const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/public\/[^/]+\/(.+)/)
-        if (!pathMatch) {
+        let filePath: string | null = null
+
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+          // Legacy full public URL: https://xxx.supabase.co/storage/v1/object/public/<bucket>/<path>
+          const urlObj = new URL(url)
+          const pathMatch = urlObj.pathname.match(/\/storage\/v1\/object\/(?:public|sign)\/[^/]+\/(.+)/)
+          if (pathMatch) {
+            filePath = decodeURIComponent(pathMatch[1])
+          }
+        } else {
+          // Storage-path format: "<bucket>/<path>" or bare "<path>"
+          const prefix = `${bucket}/`
+          filePath = url.startsWith(prefix) ? url.slice(prefix.length) : url
+        }
+
+        if (!filePath) {
+          console.error('Could not parse file path from url:', url)
           return { originalUrl: url, signedUrl: null }
         }
-        const filePath = decodeURIComponent(pathMatch[1])
 
         // Create signed URL (valid for 1 hour)
         const { data, error } = await supabaseServer!.storage
@@ -1220,7 +1231,7 @@ export async function adminGetSignedUrls(
           .createSignedUrl(filePath, 3600)
 
         if (error || !data?.signedUrl) {
-          console.error('Failed to create signed URL:', error)
+          console.error('Failed to create signed URL:', { url, bucket, filePath, error })
           return { originalUrl: url, signedUrl: null }
         }
 

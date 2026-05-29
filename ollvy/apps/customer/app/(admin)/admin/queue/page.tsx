@@ -44,7 +44,11 @@ export default async function AdminQueuePage({ searchParams }: Props) {
   // Non-super_admin can only see their own assigned orders
   const isSuper = adminUser.role === 'super_admin'
 
-  // Fetch orders with bucket calculation
+  // Fetch orders with bucket calculation.
+  // count: 'estimated' uses pg_class.reltuples instead of a full COUNT(*) —
+  // turns a 200-800ms blocking scan into a single planner-stat lookup. The
+  // queue UI only uses this for "Showing X-Y of N" and pagination math; an
+  // approximation is fine for an active-orders queue that changes constantly.
   let ordersQuery = supabaseServer
     .from('orders')
     .select(`
@@ -57,7 +61,7 @@ export default async function AdminQueuePage({ searchParams }: Props) {
       assigned_admin_id,
       service_packages (name),
       users (business_name, email, phone)
-    `, { count: 'exact' })
+    `, { count: 'estimated' })
     .not('status', 'in', '("completed","cancelled")')
     .order('paid_at', { ascending: false })
     .range(offset, offset + PAGE_SIZE - 1)

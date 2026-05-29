@@ -23,7 +23,14 @@ export async function middleware(request: NextRequest) {
   // to skip the entire auth header logic. Result: getUserFast() always fell
   // through to its slow fallback, adding ~1-3 seconds to every protected
   // detail-page load.
-  const isProtectedRoute = PROTECTED_ROUTES.some(route => pathname.startsWith(route))
+  //
+  // /admin/login must be reachable without a session (it IS the way you sign
+  // in). Without this carve-out, pathname.startsWith('/admin') matched it as
+  // protected, redirecting unauthenticated admins to the customer /login
+  // (phone-OTP modal) instead of the admin email+password form.
+  const isProtectedRoute =
+    PROTECTED_ROUTES.some(route => pathname.startsWith(route)) &&
+    pathname !== '/admin/login'
 
   if (!isProtectedRoute) {
     // Skip auth for public routes entirely — no Supabase client needed

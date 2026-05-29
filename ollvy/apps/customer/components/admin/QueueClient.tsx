@@ -676,6 +676,9 @@ export function QueueClient({ orders, adminUser, adminUsers = [], currentPage, t
                   key={order.id}
                   className="py-4 flex items-center justify-between gap-4 cursor-pointer hover:bg-muted/50 transition-colors -mx-4 px-4"
                   onClick={() => router.push(`/admin/orders/${order.id}`)}
+                  onMouseEnter={() => router.prefetch(`/admin/orders/${order.id}`)}
+                  onFocus={() => router.prefetch(`/admin/orders/${order.id}`)}
+                  tabIndex={0}
                 >
                   {/* Checkbox for bulk assignment */}
                   {selectedAdmin && (
