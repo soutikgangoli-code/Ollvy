@@ -6,10 +6,10 @@ import {
 
 export const metadata: Metadata = buildDeadlineMetadata('aoc-4-2026')
 
-// ISR: revalidate hourly so live DB price changes propagate without a redeploy.
-// Matches the /services/[slug] pattern. If a build ever falls back to static
-// price (Supabase slow at build time), the next revalidation self-corrects.
-export const revalidate = 3600
+// Render per request. Price comes from DB on every load — no static caching,
+// no stale prices, no build-time Supabase coupling that would block deploys
+// when the project is rate-limited or returning Cloudflare 522s.
+export const dynamic = 'force-dynamic'
 
 export default async function Page() {
   return <DeadlineRouteRender slug="aoc-4-2026" />

@@ -604,9 +604,23 @@ const FALLBACK_SERVICE_SLUGS = [
 ]
 
 /**
- * Get all service slugs for generateStaticParams
- * Uses fallback slugs if Supabase is unavailable to ensure build succeeds
+ * Get all service slugs for sitemap.xml and generateStaticParams.
+ *
+ * sitemap.xml MUST be a static file (Google fetches a single URL), so the
+ * slug list has to be available at build time. The existing fallback to
+ * FALLBACK_SERVICE_SLUGS already covered the "Supabase unreachable" case —
+ * but only when the fetch *threw*. When Supabase returns Cloudflare 522
+ * with an HTML body, the supabase-js call has been observed to hang on the
+ * response stream instead of throwing, so the catch never fired and Next's
+ * 60s per-route build budget tripped instead.
+ *
+ * Wrap the call in a 5s Promise.race so a hung fetch falls into the
+ * existing fallback path. This affects URL listing only — not prices, not
+ * any rendered DB content. Pages themselves still fetch live data per
+ * request.
  */
+const SLUGS_FETCH_TIMEOUT_MS = 5000
+
 export async function getAllServiceSlugs(): Promise<string[]> {
   if (!supabaseServer) {
     console.warn('[services] Using fallback slugs - Supabase not configured')
@@ -614,11 +628,17 @@ export async function getAllServiceSlugs(): Promise<string[]> {
   }
 
   try {
-    const { data, error } = await supabaseServer
-      .from('service_packages')
-      .select('slug')
-      .eq('is_active', true)
+    const result = await Promise.race([
+      supabaseServer.from('service_packages').select('slug').eq('is_active', true),
+      new Promise<never>((_, reject) =>
+        setTimeout(
+          () => reject(new Error(`getAllServiceSlugs timeout > ${SLUGS_FETCH_TIMEOUT_MS}ms`)),
+          SLUGS_FETCH_TIMEOUT_MS,
+        ),
+      ),
+    ])
 
+    const { data, error } = result as { data: { slug: string }[] | null; error: unknown }
     if (error) {
       console.error('Error fetching service slugs:', error)
       return FALLBACK_SERVICE_SLUGS
