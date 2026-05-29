@@ -103,10 +103,16 @@ export async function middleware(request: NextRequest) {
   // isProtectedRoute already determined at the top
   const isAuthRoute = pathname === '/login' || pathname === '/verify'
 
-  // Redirect to login if accessing protected route without session
+  // Redirect to login if accessing protected route without session.
+  // Admin routes go to /admin/login (email+password form); customer routes go
+  // to /login (phone-OTP modal). Without this split, /admin/* would dump the
+  // admin into the customer Google/OTP flow.
   if (isProtectedRoute && !session) {
-    const redirectUrl = new URL('/login', request.url)
-    redirectUrl.searchParams.set('returnUrl', pathname)
+    const isAdminRoute = pathname.startsWith('/admin')
+    const redirectUrl = new URL(isAdminRoute ? '/admin/login' : '/login', request.url)
+    if (!isAdminRoute) {
+      redirectUrl.searchParams.set('returnUrl', pathname)
+    }
     return NextResponse.redirect(redirectUrl)
   }
 
