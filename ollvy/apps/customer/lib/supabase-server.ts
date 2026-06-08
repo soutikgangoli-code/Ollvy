@@ -1,6 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
+import { withTimeout, AUTH_TIMEOUT_MS } from './with-timeout'
 
 // Service role client for ISR/SSG fetching - bypasses RLS
 // Per §23: "Server-side client for ISR/SSG fetching - has unrestricted reads"
@@ -51,16 +52,17 @@ export async function createServerSupabase() {
 
 export async function getUser() {
   const supabase = await createServerSupabase()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user } } = await withTimeout(
+    supabase.auth.getUser(), AUTH_TIMEOUT_MS, 'getUser.auth',
+  )
 
   if (!user) return null
 
   // Fetch full user data from users table
-  const { data: userData } = await supabase
-    .from('users')
-    .select('*')
-    .eq('auth_user_id', user.id)
-    .single()
+  const { data: userData } = await withTimeout(
+    supabase.from('users').select('*').eq('auth_user_id', user.id).single(),
+    AUTH_TIMEOUT_MS, 'getUser.users',
+  )
 
   return userData
 }
@@ -85,17 +87,18 @@ export async function getUserFast() {
   // Just fetch user data from the users table (single DB query)
   if (!supabaseServer) return getUser()
 
-  const { data: userData } = await supabaseServer
-    .from('users')
-    .select('*')
-    .eq('auth_user_id', authUserId)
-    .single()
+  const { data: userData } = await withTimeout(
+    supabaseServer.from('users').select('*').eq('auth_user_id', authUserId).single(),
+    AUTH_TIMEOUT_MS, 'getUserFast.users',
+  )
 
   return userData
 }
 
 export async function getSession() {
   const supabase = await createServerSupabase()
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { session } } = await withTimeout(
+    supabase.auth.getSession(), AUTH_TIMEOUT_MS, 'getSession',
+  )
   return session
 }

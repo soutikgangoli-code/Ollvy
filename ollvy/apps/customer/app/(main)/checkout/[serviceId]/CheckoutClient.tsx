@@ -8,6 +8,7 @@ import { ArrowLeft, Loader2, ArrowRight, Check, X, ChevronDown, ChevronUp, Check
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getClient } from '@/lib/supabase'
+import { withTimeout, AUTH_TIMEOUT_MS } from '@/lib/with-timeout'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { getFullAttributionData, clearAllAttributionData } from '@/lib/utm'
 import { getPreCursorAnswers, clearPreCursorAnswers } from '@/lib/pre-cursor'
@@ -670,7 +671,9 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
     try {
       const supabase = getClient()
-      const { data: { session: promoSession } } = await supabase.auth.getSession()
+      const { data: { session: promoSession } } = await withTimeout(
+        supabase.auth.getSession(), AUTH_TIMEOUT_MS, 'checkout.promoSession',
+      )
       if (!promoSession?.access_token) {
         setPromoError('Please log in to apply promo codes')
         setPromoLoading(false)
@@ -728,7 +731,9 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
       // Get fresh session token before checkout (handles expired tokens)
       const __tSession = performance.now()
       const supabase = getClient()
-      const { data: { session: freshSession } } = await supabase.auth.getSession()
+      const { data: { session: freshSession } } = await withTimeout(
+        supabase.auth.getSession(), AUTH_TIMEOUT_MS, 'checkout.freshSession',
+      )
       console.log(`[checkout-perf] getSession: ${Math.round(performance.now() - __tSession)}ms`)
 
       if (!freshSession?.access_token) {

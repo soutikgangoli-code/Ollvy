@@ -8,6 +8,7 @@
  */
 
 import { supabaseServer } from '../supabase-server'
+import { withTimeout, DB_TIMEOUT_MS } from '../with-timeout'
 
 // Frontend service card data
 export interface ServiceCardData {
@@ -209,51 +210,61 @@ export async function getActiveServices(): Promise<ServiceCardData[]> {
     return []
   }
 
-  const { data, error } = await supabaseServer
-    .from('service_packages')
-    .select(`
-      id,
-      slug,
-      name,
-      short_description,
-      price_base_paisa,
-      price_govt_fees_paisa,
-      price_mrp_paisa,
-      sla_working_days,
-      billing_cycle,
-      urgency_score,
-      avg_rating,
-      rating_count,
-      is_bundle,
-      filter_category:service_filter_categories (
-        name
-      )
-    `)
-    .eq('is_active', true)
-    .order('display_order', { ascending: true })
+  try {
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select(`
+          id,
+          slug,
+          name,
+          short_description,
+          price_base_paisa,
+          price_govt_fees_paisa,
+          price_mrp_paisa,
+          sla_working_days,
+          billing_cycle,
+          urgency_score,
+          avg_rating,
+          rating_count,
+          is_bundle,
+          filter_category:service_filter_categories (
+            name
+          )
+        `)
+        .eq('is_active', true)
+        .order('display_order', { ascending: true }),
+      DB_TIMEOUT_MS,
+      'getActiveServices',
+    )
 
-  if (error) {
-    console.error('Error fetching services:', error)
+    if (error) {
+      console.error('Error fetching services:', error)
+      return []
+    }
+
+    return data.map(pkg => ({
+      id: pkg.id,
+      slug: pkg.slug,
+      name: pkg.name,
+      // Get category from join, fallback to 'Services'
+      category: (pkg.filter_category as any)?.name ?? 'Services',
+      description: pkg.short_description ?? '',
+      ollvyFee: pkg.price_base_paisa / 100,
+      govtFee: pkg.price_govt_fees_paisa / 100,
+      mrp: (pkg as any).price_mrp_paisa ? (pkg as any).price_mrp_paisa / 100 : undefined,
+      slaDays: pkg.sla_working_days,
+      isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
+      // Use DB rating if >= 10 reviews, otherwise null (per §23 spec)
+      avgRating: (pkg.rating_count ?? 0) >= 5 ? pkg.avg_rating : null,
+      totalRatings: pkg.rating_count ?? 0,
+      isBundle: pkg.is_bundle ?? false,
+    }))
+  } catch (err) {
+    // Service grid degrades to empty rather than 500 on a transient blip.
+    console.error('Failed to fetch active services:', err)
     return []
   }
-
-  return data.map(pkg => ({
-    id: pkg.id,
-    slug: pkg.slug,
-    name: pkg.name,
-    // Get category from join, fallback to 'Services'
-    category: (pkg.filter_category as any)?.name ?? 'Services',
-    description: pkg.short_description ?? '',
-    ollvyFee: pkg.price_base_paisa / 100,
-    govtFee: pkg.price_govt_fees_paisa / 100,
-    mrp: (pkg as any).price_mrp_paisa ? (pkg as any).price_mrp_paisa / 100 : undefined,
-    slaDays: pkg.sla_working_days,
-    isRetainer: pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly',
-    // Use DB rating if >= 10 reviews, otherwise null (per §23 spec)
-    avgRating: (pkg.rating_count ?? 0) >= 5 ? pkg.avg_rating : null,
-    totalRatings: pkg.rating_count ?? 0,
-    isBundle: pkg.is_bundle ?? false,
-  }))
 }
 
 /**
@@ -277,49 +288,59 @@ export interface BundleServiceData {
 export async function getServicesBySlugs(slugs: string[]): Promise<BundleServiceData[]> {
   if (!supabaseServer || slugs.length === 0) return []
 
-  const { data, error } = await supabaseServer
-    .from('service_packages')
-    .select(`
-      id,
-      slug,
-      name,
-      short_description,
-      price_base_paisa,
-      price_govt_fees_paisa,
-      price_mrp_paisa,
-      sla_working_days,
-      billing_cycle,
-      is_active
-    `)
-    .in('slug', slugs)
-    .eq('is_active', true)
+  try {
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select(`
+          id,
+          slug,
+          name,
+          short_description,
+          price_base_paisa,
+          price_govt_fees_paisa,
+          price_mrp_paisa,
+          sla_working_days,
+          billing_cycle,
+          is_active
+        `)
+        .in('slug', slugs)
+        .eq('is_active', true),
+      DB_TIMEOUT_MS,
+      'getServicesBySlugs',
+    )
 
-  if (error) {
-    console.error('[services] getServicesBySlugs:', error.message)
+    if (error) {
+      console.error('[services] getServicesBySlugs:', error.message)
+      return []
+    }
+
+    const bySlug = new Map<string, BundleServiceData>()
+    for (const pkg of data ?? []) {
+      bySlug.set(pkg.slug, {
+        id: pkg.id,
+        slug: pkg.slug,
+        name: pkg.name,
+        shortDescription: pkg.short_description ?? '',
+        ollvyFeePaisa: pkg.price_base_paisa ?? 0,
+        govtFeePaisa: pkg.price_govt_fees_paisa ?? 0,
+        mrpPaisa: pkg.price_mrp_paisa ?? 0,
+        slaDays: pkg.sla_working_days ?? 0,
+        isRetainer:
+          pkg.billing_cycle === 'monthly' ||
+          pkg.billing_cycle === 'quarterly' ||
+          pkg.billing_cycle === 'yearly',
+        isActive: pkg.is_active ?? false,
+      })
+    }
+
+    // Preserve caller-supplied order; drop slugs not found in DB.
+    return slugs.map((s) => bySlug.get(s)).filter((s): s is BundleServiceData => Boolean(s))
+  } catch (err) {
+    // /startup is documented to never hard-fail; degrade to empty on a blip.
+    console.error('[services] getServicesBySlugs failed:', err)
     return []
   }
-
-  const bySlug = new Map<string, BundleServiceData>()
-  for (const pkg of data ?? []) {
-    bySlug.set(pkg.slug, {
-      id: pkg.id,
-      slug: pkg.slug,
-      name: pkg.name,
-      shortDescription: pkg.short_description ?? '',
-      ollvyFeePaisa: pkg.price_base_paisa ?? 0,
-      govtFeePaisa: pkg.price_govt_fees_paisa ?? 0,
-      mrpPaisa: pkg.price_mrp_paisa ?? 0,
-      slaDays: pkg.sla_working_days ?? 0,
-      isRetainer:
-        pkg.billing_cycle === 'monthly' ||
-        pkg.billing_cycle === 'quarterly' ||
-        pkg.billing_cycle === 'yearly',
-      isActive: pkg.is_active ?? false,
-    })
-  }
-
-  // Preserve caller-supplied order; drop slugs not found in DB.
-  return slugs.map((s) => bySlug.get(s)).filter((s): s is BundleServiceData => Boolean(s))
 }
 
 /**
@@ -342,7 +363,8 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
     // columns that were selected but never consumed on any caller (admin pages
     // hit service_packages via their own queries, not through this function).
     // If you add a feature that reads a new field, add the column here.
-    const { data: pkg, error } = await supabaseServer
+    const { data: pkg, error } = await withTimeout(
+      supabaseServer
     .from('service_packages')
     .select(`
       id,
@@ -385,11 +407,17 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
       completion_range_text
     `)
     .eq('slug', slug)
-    .single()
+    .single(),
+      DB_TIMEOUT_MS,
+      `getServiceBySlugFromDB(${slug})`,
+    )
 
   if (error) {
-    console.error('Error fetching service:', error)
-    return { service: null, pricing: null }
+    // PGRST116 = zero rows → service genuinely does not exist → real 404 (cacheable).
+    if (error.code === 'PGRST116') return { service: null, pricing: null }
+    // Any other error = transient (network/5xx/timeout) → THROW so unstable_cache
+    // does NOT cache a false 404. Page falls to error.tsx (retryable).
+    throw new Error(`getServiceBySlugFromDB query failed: ${error.message}`)
   }
 
   const isRetainer = pkg.billing_cycle === 'monthly' || pkg.billing_cycle === 'quarterly' || pkg.billing_cycle === 'yearly'
@@ -485,7 +513,7 @@ export async function getServiceBySlugFromDB(slug: string): Promise<{
   return { service, pricing }
   } catch (err) {
     console.error('Failed to fetch service by slug:', err)
-    return { service: null, pricing: null }
+    throw err   // never return null on failure → never poison the cache
   }
 }
 
@@ -512,7 +540,8 @@ export async function getPopularServices(): Promise<PopularServiceData[]> {
   }
 
   try {
-    const { data, error } = await supabaseServer
+    const { data, error } = await withTimeout(
+      supabaseServer
       .from('service_packages')
       .select(`
         slug,
@@ -526,9 +555,14 @@ export async function getPopularServices(): Promise<PopularServiceData[]> {
       `)
       .eq('is_active', true)
       .order('display_order', { ascending: true })
-      .limit(6)
+      .limit(6),
+      DB_TIMEOUT_MS,
+      'getPopularServices',
+    )
 
     if (error) {
+      // Degrade to empty rather than error the homepage. revalidate:3600 +
+      // tag-purge refresh it; the page always loads.
       console.error('Error fetching popular services:', error)
       return []
     }
@@ -628,17 +662,11 @@ export async function getAllServiceSlugs(): Promise<string[]> {
   }
 
   try {
-    const result = await Promise.race([
+    const { data, error } = await withTimeout(
       supabaseServer.from('service_packages').select('slug').eq('is_active', true),
-      new Promise<never>((_, reject) =>
-        setTimeout(
-          () => reject(new Error(`getAllServiceSlugs timeout > ${SLUGS_FETCH_TIMEOUT_MS}ms`)),
-          SLUGS_FETCH_TIMEOUT_MS,
-        ),
-      ),
-    ])
-
-    const { data, error } = result as { data: { slug: string }[] | null; error: unknown }
+      SLUGS_FETCH_TIMEOUT_MS,
+      'getAllServiceSlugs',
+    )
     if (error) {
       console.error('Error fetching service slugs:', error)
       return FALLBACK_SERVICE_SLUGS
@@ -670,21 +698,25 @@ export async function getRelatedServicesBySlugs(slugs: string[]): Promise<Relate
   if (!supabaseServer || slugs.length === 0) return []
 
   try {
-    const { data, error } = await supabaseServer
-      .from('service_packages')
-      .select(`
-        slug,
-        short_name,
-        name,
-        tagline,
-        short_description,
-        price_base_paisa,
-        price_govt_fees_paisa,
-        sla_working_days,
-        billing_cycle
-      `)
-      .in('slug', slugs)
-      .eq('is_active', true)
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select(`
+          slug,
+          short_name,
+          name,
+          tagline,
+          short_description,
+          price_base_paisa,
+          price_govt_fees_paisa,
+          sla_working_days,
+          billing_cycle
+        `)
+        .in('slug', slugs)
+        .eq('is_active', true),
+      DB_TIMEOUT_MS,
+      'getRelatedServicesBySlugs',
+    )
 
     if (error) {
       console.error('Error fetching related services:', error)
@@ -714,11 +746,15 @@ export async function getAggregateRating(): Promise<{ ratingValue: number; revie
   if (!supabaseServer) return null
 
   try {
-    const { data, error } = await supabaseServer
-      .from('service_packages')
-      .select('avg_rating, rating_count')
-      .eq('is_active', true)
-      .gt('rating_count', 0)
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select('avg_rating, rating_count')
+        .eq('is_active', true)
+        .gt('rating_count', 0),
+      DB_TIMEOUT_MS,
+      'getAggregateRating',
+    )
 
     if (error || !data || data.length === 0) return null
 
@@ -738,7 +774,8 @@ export async function getAggregateRating(): Promise<{ ratingValue: number; revie
       ratingValue: Math.round((totalWeightedRating / totalReviews) * 10) / 10,
       reviewCount: totalReviews,
     }
-  } catch {
+  } catch (err) {
+    console.error('Failed to fetch aggregate rating:', err)
     return null
   }
 }
@@ -752,42 +789,52 @@ export async function getServiceReviews(servicePackageId: string, limit = 20): P
     return []
   }
 
-  // Feedback is linked to orders, and orders have service_package_id
-  const { data, error } = await supabaseServer
-    .from('orders')
-    .select(`
-      feedback (
-        rating,
-        comment,
-        created_at
-      )
-    `)
-    .eq('service_package_id', servicePackageId)
-    .not('feedback', 'is', null)
-    .limit(limit)
+  try {
+    // Feedback is linked to orders, and orders have service_package_id
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('orders')
+        .select(`
+          feedback (
+            rating,
+            comment,
+            created_at
+          )
+        `)
+        .eq('service_package_id', servicePackageId)
+        .not('feedback', 'is', null)
+        .limit(limit),
+      DB_TIMEOUT_MS,
+      'getServiceReviews',
+    )
 
-  if (error) {
-    console.error('Error fetching reviews:', error)
+    if (error) {
+      console.error('Error fetching reviews:', error)
+      return []
+    }
+
+    // Flatten and filter out nulls
+    const reviews: ServiceReview[] = []
+    for (const order of data ?? []) {
+      const feedback = order.feedback as any
+      if (feedback && feedback.rating) {
+        reviews.push({
+          rating: feedback.rating,
+          comment: feedback.comment,
+          created_at: feedback.created_at,
+        })
+      }
+    }
+
+    // Sort by most recent first
+    reviews.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+    return reviews.slice(0, limit)
+  } catch (err) {
+    // Reviews are non-critical — never let a blip 500 the whole service page.
+    console.error('Failed to fetch reviews:', err)
     return []
   }
-
-  // Flatten and filter out nulls
-  const reviews: ServiceReview[] = []
-  for (const order of data ?? []) {
-    const feedback = order.feedback as any
-    if (feedback && feedback.rating) {
-      reviews.push({
-        rating: feedback.rating,
-        comment: feedback.comment,
-        created_at: feedback.created_at,
-      })
-    }
-  }
-
-  // Sort by most recent first
-  reviews.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-
-  return reviews.slice(0, limit)
 }
 
 /**
@@ -842,23 +889,34 @@ export async function getNavbarServices(): Promise<NavbarServiceData[]> {
     return []
   }
 
-  const { data, error } = await supabaseServer
-    .from('service_packages')
-    .select('slug, name, short_description, billing_cycle')
-    .eq('is_active', true)
-    .order('display_order', { ascending: true })
+  try {
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select('slug, name, short_description, billing_cycle')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true }),
+      DB_TIMEOUT_MS,
+      'getNavbarServices',
+    )
 
-  if (error) {
-    console.error('Error fetching navbar services:', error)
+    if (error) {
+      console.error('Error fetching navbar services:', error)
+      return []
+    }
+
+    return (data || []).map(pkg => ({
+      slug: pkg.slug,
+      name: pkg.name,
+      short_description: pkg.short_description,
+      order_type: pkg.billing_cycle === 'one_time' ? 'one_time' : 'recurring' as const,
+    }))
+  } catch (err) {
+    // Navbar renders on every page — degrade to an empty nav rather than take
+    // the whole page down. Timeout still prevents the hang.
+    console.error('Failed to fetch navbar services (degrading to empty nav):', err)
     return []
   }
-
-  return (data || []).map(pkg => ({
-    slug: pkg.slug,
-    name: pkg.name,
-    short_description: pkg.short_description,
-    order_type: pkg.billing_cycle === 'one_time' ? 'one_time' : 'recurring' as const,
-  }))
 }
 
 /**
@@ -934,11 +992,15 @@ export async function getFAQServicePrices(): Promise<FAQServicePrices> {
 
   try {
     const slugs = Object.keys(FAQ_SLUG_MAP)
-    const { data, error } = await supabaseServer
-      .from('service_packages')
-      .select('slug, price_base_paisa, price_govt_fees_paisa')
-      .in('slug', slugs)
-      .eq('is_active', true)
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select('slug, price_base_paisa, price_govt_fees_paisa')
+        .in('slug', slugs)
+        .eq('is_active', true),
+      DB_TIMEOUT_MS,
+      'getFAQServicePrices',
+    )
 
     if (error) {
       console.error('Error fetching FAQ service prices:', error)

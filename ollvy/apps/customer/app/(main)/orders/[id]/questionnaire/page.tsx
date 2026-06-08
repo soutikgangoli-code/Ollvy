@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { createServerSupabase, getUserFast } from '@/lib/supabase-server'
+import { withTimeout, DB_TIMEOUT_MS } from '@/lib/with-timeout'
 import { QuestionnairePageClient } from './QuestionnairePageClient'
 
 interface PageProps {
@@ -35,9 +36,19 @@ export default async function QuestionnairePage({ params, searchParams }: PagePr
 
   for (let attempt = 0; attempt <= delays.length; attempt++) {
     __attemptCount = attempt + 1
-    const res = await supabase.rpc('get_user_order', { p_order_id: orderId })
-    orderData = res.data
-    error = res.error
+    try {
+      const res = await withTimeout(
+        supabase.rpc('get_user_order', { p_order_id: orderId }),
+        DB_TIMEOUT_MS,
+        'questionnaire.get_user_order',
+      )
+      orderData = res.data
+      error = res.error
+    } catch (err) {
+      // A hung RPC counts as a failed attempt — retry rather than stall the
+      // post-payment page on a single stalled call.
+      error = err
+    }
     if (orderData) break
     if (attempt < delays.length) {
       __waitTotal += delays[attempt]

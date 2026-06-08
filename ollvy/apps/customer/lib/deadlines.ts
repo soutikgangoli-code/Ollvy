@@ -88,8 +88,16 @@ export async function getDeadlineWithLivePrice(slug: string): Promise<DeadlineCo
   const deadline = getDeadlineBySlug(slug)
   if (!deadline) return undefined
 
-  const { getServiceBySlugFromDB } = await import('./data/services')
-  const { pricing } = await getServiceBySlugFromDB(deadline.serviceSlug)
+  let pricing = null
+  try {
+    const { getServiceBySlugFromDB } = await import('./data/services')
+    ;({ pricing } = await getServiceBySlugFromDB(deadline.serviceSlug))
+  } catch (err) {
+    // DB unreachable / timeout — fall back to the static deadline price so the
+    // force-dynamic deadline page never hard-fails on a Supabase 522.
+    console.error('[deadlines] live price fetch failed, using static fallback:', err)
+  }
+
   if (pricing) {
     return {
       ...deadline,

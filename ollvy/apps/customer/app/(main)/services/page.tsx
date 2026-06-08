@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import { ServicesClient } from './services-client'
 import { supabaseServer } from '@/lib/supabase-server'
+import { withTimeout, DB_TIMEOUT_MS } from '@/lib/with-timeout'
 import { SERVICES } from '@/lib/services'
 import type { ServicePackage } from '@/lib/types'
 
@@ -72,17 +73,21 @@ async function fetchServices(): Promise<ServicePackage[]> {
   }
 
   try {
-    const { data, error } = await supabaseServer
-      .from('service_packages')
-      .select(`
-        *,
-        filter_category:service_filter_categories (
-          name,
-          icon_name
-        )
-      `)
-      .eq('is_active', true)
-      .order('display_order', { ascending: true })
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select(`
+          *,
+          filter_category:service_filter_categories (
+            name,
+            icon_name
+          )
+        `)
+        .eq('is_active', true)
+        .order('display_order', { ascending: true }),
+      DB_TIMEOUT_MS,
+      'servicesPage.list',
+    )
 
     if (error) {
       console.error('Error fetching services:', error)

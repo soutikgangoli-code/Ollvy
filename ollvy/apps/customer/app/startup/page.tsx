@@ -69,7 +69,7 @@ export default async function StartupPageRoute() {
   const getCached = unstable_cache(
     () => getServicesBySlugs(STARTUP_STACK_SLUGS),
     ['startup-stack-services'],
-    { tags: ['service-packages'] }
+    { tags: ['service-packages'], revalidate: 3600 }
   );
   const services = await getCached();
 

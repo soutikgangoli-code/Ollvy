@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getUserFast, supabaseServer } from '@/lib/supabase-server'
+import { withTimeout, DB_TIMEOUT_MS } from '@/lib/with-timeout'
 import { OrderPageClient } from './OrderPageClient'
 import type { Order, OrderStageHistory, OrderWorkDocument } from '@/lib/types'
 
@@ -90,10 +91,10 @@ export default async function OrderDetailPage({ params }: PageProps) {
   }
 
   const __tBatchStart = performance.now()
-  const [
-    orderResult, stageResult, docsResult, workDocsResult,
-    invoiceResult, notificationResult, responsesResult, addonsResult
-  ] = await Promise.all([
+  let batch
+  try {
+    batch = await withTimeout(
+      Promise.all([
     // Core order data — service role + manual user ownership check.
     // Joins service_packages here so we don't pay a second roundtrip later.
     supabaseServer
@@ -143,7 +144,18 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .from('order_addons')
       .select('id, addon_id, addon_name, price_paisa_snapshot, govt_fee_paisa_snapshot')
       .eq('order_id', orderId),
-  ])
+      ]),
+      DB_TIMEOUT_MS,
+      'orderDetail.batch',
+    )
+  } catch (err) {
+    console.error('[Order Detail] batch fetch timed out/failed, falling back to client:', err)
+    return <OrderPageClient orderId={orderId} initialData={null} />
+  }
+  const [
+    orderResult, stageResult, docsResult, workDocsResult,
+    invoiceResult, notificationResult, responsesResult, addonsResult
+  ] = batch
   const __tBatch = performance.now() - __tBatchStart
 
   // If order not found or user doesn't own it, let client handle it.
