@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { createServerSupabase, getUserFast } from '@/lib/supabase-server'
+import { withTimeout, DB_TIMEOUT_MS } from '@/lib/with-timeout'
 import { DocumentsPageClient } from './DocumentsPageClient'
 
 interface PageProps {
@@ -23,10 +24,21 @@ export default async function DocumentsUploadPage({ params }: PageProps) {
 
   // Fetch order and documents in parallel
   const __tBatchStart = performance.now()
-  const [orderResult, docsResult] = await Promise.all([
-    supabase.rpc('get_user_order', { p_order_id: orderId }),
-    supabase.rpc('initialize_order_documents', { p_order_id: orderId }),
-  ])
+  let batch
+  try {
+    batch = await withTimeout(
+      Promise.all([
+        supabase.rpc('get_user_order', { p_order_id: orderId }),
+        supabase.rpc('initialize_order_documents', { p_order_id: orderId }),
+      ]),
+      DB_TIMEOUT_MS,
+      'documents.batch',
+    )
+  } catch (err) {
+    console.error('[Documents] batch timed out/failed:', err)
+    batch = [{ data: null, error: err }, { data: null, error: err }] as any
+  }
+  const [orderResult, docsResult] = batch
   const __tBatch = performance.now() - __tBatchStart
 
   if (orderResult.error || !orderResult.data) {
@@ -48,11 +60,21 @@ export default async function DocumentsUploadPage({ params }: PageProps) {
   if (!orderData.questionnaire_completed_at) {
     // Check if service has questionnaire questions (include in parallel query would be better)
     const __qStart = performance.now()
-    const { count: questionCount } = await supabase
-      .from('service_questionnaires')
-      .select('id', { count: 'exact', head: true })
-      .eq('service_package_id', servicePackage.id)
-      .eq('is_active', true)
+    let questionCount: number | null = 0
+    try {
+      const res = await withTimeout(
+        supabase
+          .from('service_questionnaires')
+          .select('id', { count: 'exact', head: true })
+          .eq('service_package_id', servicePackage.id)
+          .eq('is_active', true),
+        DB_TIMEOUT_MS,
+        'documents.questionnaireCount',
+      )
+      questionCount = res.count
+    } catch (err) {
+      console.error('[Documents] questionnaire count timed out:', err)
+    }
     __tQCount = performance.now() - __qStart
 
     if (questionCount && questionCount > 0) {

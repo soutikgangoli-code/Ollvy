@@ -2,6 +2,7 @@ import { supabaseServer, createServerSupabase } from '@/lib/supabase-server'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
+import { withTimeout, AUTH_TIMEOUT_MS } from '@/lib/with-timeout'
 
 export interface AdminUser {
   id: string
@@ -23,11 +24,15 @@ const adminCache = new Map<string, CacheEntry>()
 
 async function fetchAdminByAuthId(authUserId: string): Promise<AdminUser | null> {
   if (!supabaseServer) return null
-  const { data } = await supabaseServer
-    .from('admin_users')
-    .select('id, auth_user_id, name, email, role, is_active')
-    .eq('auth_user_id', authUserId)
-    .single()
+  const { data } = await withTimeout(
+    supabaseServer
+      .from('admin_users')
+      .select('id, auth_user_id, name, email, role, is_active')
+      .eq('auth_user_id', authUserId)
+      .single(),
+    AUTH_TIMEOUT_MS,
+    'fetchAdminByAuthId',
+  )
   return (data as AdminUser | null) ?? null
 }
 
@@ -45,7 +50,9 @@ export const getAdminUser = cache(async (): Promise<AdminUser> => {
   if (!resolvedAuthUserId) {
     // Fallback: middleware didn't set the header. Verify via auth.getUser().
     const supabase = await createServerSupabase()
-    const { data: { user } } = await supabase.auth.getUser()
+    const { data: { user } } = await withTimeout(
+      supabase.auth.getUser(), AUTH_TIMEOUT_MS, 'getAdminUser.auth',
+    )
     if (!user) redirect('/admin/login')
     resolvedAuthUserId = user.id
   }

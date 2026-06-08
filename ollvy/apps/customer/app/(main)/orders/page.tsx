@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { getUserFast, supabaseServer } from '@/lib/supabase-server'
+import { withTimeout, DB_TIMEOUT_MS } from '@/lib/with-timeout'
 import { OrdersPageClient } from './OrdersPageClient'
 import type { Order } from '@/lib/types'
 
@@ -29,26 +30,30 @@ export default async function OrdersPage() {
       // Fetch ALL orders in ONE query (not 2 separate RPCs)
       // Exclude pending_payment at SQL level - these are unpaid abandoned orders
       const __qStart = performance.now()
-      const { data: orders, error } = await supabaseServer
-        .from('orders')
-        .select(`
-          *,
-          service_package:service_packages(
-            id,
-            name,
-            slug,
-            sla_working_days,
-            workflow_stages
-          ),
-          professional:professionals(
-            id,
-            full_name,
-            avatar_url
-          )
-        `)
-        .eq('user_id', user.id)
-        .neq('status', 'pending_payment')
-        .order('created_at', { ascending: false })
+      const { data: orders, error } = await withTimeout(
+        supabaseServer
+          .from('orders')
+          .select(`
+            *,
+            service_package:service_packages(
+              id,
+              name,
+              slug,
+              sla_working_days,
+              workflow_stages
+            ),
+            professional:professionals(
+              id,
+              full_name,
+              avatar_url
+            )
+          `)
+          .eq('user_id', user.id)
+          .neq('status', 'pending_payment')
+          .order('created_at', { ascending: false }),
+        DB_TIMEOUT_MS,
+        'ordersPage.list',
+      )
       __tQuery = performance.now() - __qStart
 
       if (!error && orders) {

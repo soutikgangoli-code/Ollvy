@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import type { Session } from '@supabase/supabase-js'
 import { fetchWithTimeout, TIMEOUTS } from '../fetch-with-timeout'
+import { withTimeout, AUTH_TIMEOUT_MS } from '../with-timeout'
 
 export interface User {
   id: string
@@ -318,33 +319,45 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     try {
       const { getClient } = await import('../supabase')
       const supabase = getClient()
-      const { data: { session } } = await supabase.auth.getSession()
+      const { data: { session } } = await withTimeout(
+        supabase.auth.getSession(), AUTH_TIMEOUT_MS, 'refreshSession.getSession',
+      )
       console.log('[auth-store] getSession result:', session ? 'has session' : 'no session')
 
       if (session) {
-        // Fetch user data from our users table
-        // User creation happens server-side in /auth/callback route
-        let { data: userData } = await supabase
-          .from('users')
-          .select('*')
-          .eq('auth_user_id', session.user.id)
-          .single()
+        // Fetch user data from our users table. Wrapped so a DB blip can't hang
+        // hydration — on failure we keep the session and retry on the next auth
+        // event. User creation happens server-side in /auth/callback route.
+        let userData: any = null
+        try {
+          const res = await withTimeout(
+            supabase.from('users').select('*').eq('auth_user_id', session.user.id).single(),
+            AUTH_TIMEOUT_MS, 'refreshSession.users',
+          )
+          userData = res.data
 
-        // If user not found, create via RPC (fallback for failed callback creation)
-        if (!userData) {
-          console.log('[auth-store] User not found, creating via ensure_user_exists RPC')
-          const { data: rpcResult, error: rpcError } = await supabase.rpc('ensure_user_exists', {
-            p_email: session.user.email,
-            p_avatar_url: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture,
-            p_full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name,
-          })
+          // If user not found, create via RPC (fallback for failed callback creation)
+          if (!userData) {
+            console.log('[auth-store] User not found, creating via ensure_user_exists RPC')
+            const { data: rpcResult, error: rpcError } = await withTimeout(
+              supabase.rpc('ensure_user_exists', {
+                p_email: session.user.email,
+                p_avatar_url: session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture,
+                p_full_name: session.user.user_metadata?.full_name || session.user.user_metadata?.name,
+              }),
+              AUTH_TIMEOUT_MS, 'refreshSession.ensureUser',
+            )
 
-          if (rpcError) {
-            console.error('[auth-store] Error creating user:', rpcError)
-          } else if (rpcResult && !rpcResult.error) {
-            userData = rpcResult
-            console.log('[auth-store] User created via RPC:', userData?.id)
+            if (rpcError) {
+              console.error('[auth-store] Error creating user:', rpcError)
+            } else if (rpcResult && !rpcResult.error) {
+              userData = rpcResult
+              console.log('[auth-store] User created via RPC:', userData?.id)
+            }
           }
+        } catch (profileErr) {
+          // Keep the session — user stays logged in; profile retries on next auth event.
+          console.error('[auth-store] profile load failed (keeping session):', profileErr)
         }
 
         console.log('[auth-store] User data:', userData?.id || 'not found')

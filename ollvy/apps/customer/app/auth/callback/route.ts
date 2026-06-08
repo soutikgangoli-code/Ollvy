@@ -2,6 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { withTimeout, AUTH_TIMEOUT_MS } from '@/lib/with-timeout'
 
 // Service role client for user creation - bypasses RLS
 function getServiceRoleClient() {
@@ -51,45 +52,74 @@ export async function GET(request: NextRequest) {
     }
   )
 
-  const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-
-  if (error) {
-    console.error('OAuth error:', error.message)
-    return NextResponse.redirect(`${origin}/auth/error?message=${encodeURIComponent(error.message)}`)
+  let session
+  try {
+    const { data, error } = await withTimeout(
+      supabase.auth.exchangeCodeForSession(code),
+      AUTH_TIMEOUT_MS,
+      'auth/callback.exchangeCode',
+    )
+    if (error) {
+      console.error('OAuth error:', error.message)
+      return NextResponse.redirect(`${origin}/auth/error?message=${encodeURIComponent(error.message)}`)
+    }
+    session = data.session
+  } catch (err) {
+    // Timed out / network failure exchanging the code — send the user to a
+    // retryable error instead of hanging the login redirect indefinitely.
+    console.error('[auth/callback] code exchange timed out/failed:', err)
+    return NextResponse.redirect(
+      `${origin}/auth/error?message=${encodeURIComponent('Sign-in timed out. Please try again.')}`,
+    )
   }
 
-  if (data.session) {
-    // Use service role client for user creation (bypasses RLS)
+  if (session) {
+    // Use service role client for user creation (bypasses RLS).
     const serviceClient = getServiceRoleClient()
 
     if (serviceClient) {
-      const { data: existingUser } = await serviceClient
-        .from('users')
-        .select('id')
-        .eq('auth_user_id', data.session.user.id)
-        .single()
+      try {
+        const { data: existingUser } = await withTimeout(
+          serviceClient
+            .from('users')
+            .select('id')
+            .eq('auth_user_id', session.user.id)
+            .single(),
+          AUTH_TIMEOUT_MS,
+          'auth/callback.userLookup',
+        )
 
-      if (!existingUser) {
-        const avatarUrl = data.session.user.user_metadata?.avatar_url || data.session.user.user_metadata?.picture
-        const fullName = data.session.user.user_metadata?.full_name || data.session.user.user_metadata?.name
+        if (!existingUser) {
+          const avatarUrl = session.user.user_metadata?.avatar_url || session.user.user_metadata?.picture
+          const fullName = session.user.user_metadata?.full_name || session.user.user_metadata?.name
 
-        console.log('[auth/callback] Creating new user for:', data.session.user.email)
+          console.log('[auth/callback] Creating new user for:', session.user.email)
 
-        const { error: insertError } = await serviceClient.from('users').insert({
-          auth_user_id: data.session.user.id,
-          email: data.session.user.email,
-          phone: null,
-          auth_provider: 'google',
-          avatar_url: avatarUrl,
-          business_name: fullName,
-          referral_code: `OLV${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
-        })
+          const { error: insertError } = await withTimeout(
+            serviceClient.from('users').insert({
+              auth_user_id: session.user.id,
+              email: session.user.email,
+              phone: null,
+              auth_provider: 'google',
+              avatar_url: avatarUrl,
+              business_name: fullName,
+              referral_code: `OLV${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+            }),
+            AUTH_TIMEOUT_MS,
+            'auth/callback.userInsert',
+          )
 
-        if (insertError) {
-          console.error('[auth/callback] Error creating user:', insertError)
-        } else {
-          console.log('[auth/callback] User created successfully')
+          if (insertError) {
+            console.error('[auth/callback] Error creating user:', insertError)
+          } else {
+            console.log('[auth/callback] User created successfully')
+          }
         }
+      } catch (err) {
+        // Never block the login redirect on user provisioning — the row is
+        // re-created idempotently by refreshSession's ensure_user_exists RPC on
+        // the next load if this timed out or failed.
+        console.error('[auth/callback] user provisioning failed (will retry on next load):', err)
       }
     }
   }

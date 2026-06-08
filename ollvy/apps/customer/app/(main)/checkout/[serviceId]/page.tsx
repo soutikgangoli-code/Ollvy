@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { unstable_cache } from 'next/cache'
 import { supabaseServer } from '@/lib/supabase-server'
+import { withTimeout, DB_TIMEOUT_MS } from '@/lib/with-timeout'
 import type { ServicePackage } from '@/lib/types'
 import CheckoutClient from './CheckoutClient'
 
@@ -26,11 +27,15 @@ async function fetchService(serviceId: string): Promise<ServicePackage | null> {
   const isUUID = UUID_RE.test(serviceId)
 
   if (isUUID) {
-    const { data, error } = await supabaseServer
-      .from('service_packages')
-      .select('*')
-      .eq('id', serviceId)
-      .single()
+    const { data, error } = await withTimeout(
+      supabaseServer
+        .from('service_packages')
+        .select('*')
+        .eq('id', serviceId)
+        .single(),
+      DB_TIMEOUT_MS,
+      `fetchService.byId(${serviceId})`,
+    )
     if (error && error.code !== POSTGREST_NO_ROWS) {
       // Transient DB / network / RLS error — throw so this result is NEVER
       // cached. Previously we discarded `error` and returned null here,
@@ -41,11 +46,15 @@ async function fetchService(serviceId: string): Promise<ServicePackage | null> {
     if (data) return data as ServicePackage
   }
 
-  const { data, error } = await supabaseServer
-    .from('service_packages')
-    .select('*')
-    .eq('slug', serviceId)
-    .single()
+  const { data, error } = await withTimeout(
+    supabaseServer
+      .from('service_packages')
+      .select('*')
+      .eq('slug', serviceId)
+      .single(),
+    DB_TIMEOUT_MS,
+    `fetchService.bySlug(${serviceId})`,
+  )
 
   if (error && error.code !== POSTGREST_NO_ROWS) {
     throw new Error(`fetchService(${serviceId}) DB error: ${error.message}`)

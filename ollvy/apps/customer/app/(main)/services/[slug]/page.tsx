@@ -30,7 +30,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const getCachedService = unstable_cache(() => getServiceBySlugFromDB(slug), [`service-${slug}`], { tags: ['service-packages'] })
+  const getCachedService = unstable_cache(() => getServiceBySlugFromDB(slug), [`service-${slug}`], { tags: ['service-packages'], revalidate: 3600 })
   const { service } = await getCachedService()
 
   if (!service) {
@@ -80,7 +80,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   const { slug } = await params
 
   // Fetch complete service data from database (cached)
-  const getCachedService = unstable_cache(() => getServiceBySlugFromDB(slug), [`service-${slug}`], { tags: ['service-packages'] })
+  const getCachedService = unstable_cache(() => getServiceBySlugFromDB(slug), [`service-${slug}`], { tags: ['service-packages'], revalidate: 3600 })
   const { service, pricing } = await getCachedService()
 
   if (!service) {
@@ -88,8 +88,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   }
 
   // Fetch reviews and related services in parallel (cached)
-  const getCachedReviews = unstable_cache(() => getServiceReviews(service.id), [`service-reviews-${slug}`], { tags: ['service-packages'] })
-  const getCachedRelated = unstable_cache(() => getRelatedServicesBySlugs(service.relatedSlugs), [`service-related-${slug}`], { tags: ['service-packages'] })
+  const getCachedReviews = unstable_cache(() => getServiceReviews(service.id), [`service-reviews-${slug}`], { tags: ['service-packages'], revalidate: 3600 })
+  const getCachedRelated = unstable_cache(() => getRelatedServicesBySlugs(service.relatedSlugs), [`service-related-${slug}`], { tags: ['service-packages'], revalidate: 3600 })
   const [reviews, relatedServices] = await Promise.all([
     getCachedReviews(),
     getCachedRelated(),
