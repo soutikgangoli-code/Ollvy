@@ -46,9 +46,6 @@ export function PaymentRetryModal({
       <DialogContent className="sm:max-w-[400px] border-border bg-card p-0 overflow-hidden gap-0">
         {/* Header */}
         <div className="px-6 pt-8 pb-6 text-center">
-          <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
-            <ArrowRight className="h-7 w-7 text-muted-foreground stroke-[2]" />
-          </div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono mb-3">
             PAYMENT INCOMPLETE
           </p>

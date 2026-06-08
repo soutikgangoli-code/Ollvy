@@ -943,7 +943,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           contact: user.phone || undefined,
           email: user.email || undefined,
         },
-        theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.9)' },
+        theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.6)' },
         modal: {
           ondismiss: () => {
             // Show retry modal when user dismisses without paying
