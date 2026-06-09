@@ -184,13 +184,125 @@ export function captureAndStoreReferral(): void {
 }
 
 /**
+ * Google Click Identifier (gclid / gbraid / wbraid) Capture & Persistence
+ *
+ * Forward-looking plumbing for server-side (offline) Google Ads conversion
+ * import. Captures the first click id seen on landing and persists it (with a
+ * timestamp) in sessionStorage, using the same first-touch mechanism as UTM.
+ * Retrieved at checkout and written onto the order at creation.
+ *
+ * `gclid` is the standard web click id. `gbraid` / `wbraid` are the
+ * iOS/privacy-safe variants Google sends instead of gclid. We store whichever
+ * is present first; the matched param name is kept alongside the value so a
+ * later offline-import job can route it to the correct Google Ads field.
+ */
+
+const GCLID_STORAGE_KEY = 'ollvy_google_click_id'
+
+export type GoogleClickParam = 'gclid' | 'gbraid' | 'wbraid'
+
+export interface StoredGoogleClickId {
+  value: string
+  param: GoogleClickParam
+  capturedAt: string // ISO timestamp
+}
+
+/**
+ * Read the first Google click id present in the URL (gclid, then gbraid, then wbraid)
+ */
+export function captureGclidFromURL(
+  searchParams: URLSearchParams
+): { value: string; param: GoogleClickParam } | null {
+  const params: GoogleClickParam[] = ['gclid', 'gbraid', 'wbraid']
+  for (const param of params) {
+    const value = searchParams.get(param)
+    if (value) return { value, param }
+  }
+  return null
+}
+
+/**
+ * Store the click id in sessionStorage (first-touch only - never overwrite)
+ */
+export function storeGclid(found: { value: string; param: GoogleClickParam }): void {
+  if (typeof window === 'undefined') return
+
+  const existing = sessionStorage.getItem(GCLID_STORAGE_KEY)
+  if (existing) return
+
+  const record: StoredGoogleClickId = {
+    value: found.value,
+    param: found.param,
+    capturedAt: new Date().toISOString(),
+  }
+  sessionStorage.setItem(GCLID_STORAGE_KEY, JSON.stringify(record))
+}
+
+/**
+ * Get the stored click id value (the raw gclid/gbraid/wbraid string), or null
+ */
+export function getStoredGclid(): string | null {
+  if (typeof window === 'undefined') return null
+
+  const stored = sessionStorage.getItem(GCLID_STORAGE_KEY)
+  if (!stored) return null
+
+  try {
+    return (JSON.parse(stored) as StoredGoogleClickId).value
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Get the matched param name of the stored click id (gclid / gbraid / wbraid), or null.
+ * Used so the offline-import job can route each id to the correct Google Ads field.
+ */
+export function getStoredGclidSource(): GoogleClickParam | null {
+  if (typeof window === 'undefined') return null
+
+  const stored = sessionStorage.getItem(GCLID_STORAGE_KEY)
+  if (!stored) return null
+
+  try {
+    return (JSON.parse(stored) as StoredGoogleClickId).param
+  } catch {
+    return null
+  }
+}
+
+/**
+ * Clear the stored click id (e.g., after successful checkout)
+ */
+export function clearGclid(): void {
+  if (typeof window === 'undefined') return
+  sessionStorage.removeItem(GCLID_STORAGE_KEY)
+}
+
+/**
+ * Capture the click id from the current URL and store if present
+ */
+export function captureAndStoreGclid(): void {
+  if (typeof window === 'undefined') return
+
+  const searchParams = new URLSearchParams(window.location.search)
+  const found = captureGclidFromURL(searchParams)
+
+  if (found) {
+    storeGclid(found)
+  }
+}
+
+/**
  * Get all attribution data for order creation
- * Returns UTM params, referral code, and landing page
+ * Returns UTM params, referral code, landing page, and Google click id
  */
 export function getFullAttributionData(): {
   utm: UTMParams | null
   referralCode: string | null
   landingPage: string | null
+  gclid: string | null
+  gclidSource: GoogleClickParam | null
 } {
   const utm = getStoredUTMParams()
   const referralCode = getStoredReferralCode()
@@ -198,7 +310,13 @@ export function getFullAttributionData(): {
     ? sessionStorage.getItem('ollvy_landing_page')
     : null
 
-  return { utm, referralCode, landingPage }
+  return {
+    utm,
+    referralCode,
+    landingPage,
+    gclid: getStoredGclid(),
+    gclidSource: getStoredGclidSource(),
+  }
 }
 
 /**
@@ -207,6 +325,7 @@ export function getFullAttributionData(): {
 export function clearAllAttributionData(): void {
   clearUTMParams()
   clearReferralCode()
+  clearGclid()
   if (typeof window !== 'undefined') {
     sessionStorage.removeItem('ollvy_landing_page')
   }

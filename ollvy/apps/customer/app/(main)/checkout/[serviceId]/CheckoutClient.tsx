@@ -146,6 +146,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
     trackCheckoutStarted,
     trackPaymentInitiated,
     trackEvent,
+    trackPurchase: trackPurchasePH,
   } = usePostHogEvents()
 
   // Service is server-fetched and passed in as prop — guaranteed non-null.
@@ -598,6 +599,8 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
               utm_term: attribution.utm?.utm_term,
               referral_code: attribution.referralCode,
               landing_page: attribution.landingPage,
+              gclid: attribution.gclid,
+              gclid_source: attribution.gclidSource,
             }),
             timeout: TIMEOUTS.PAYMENT,
           }
@@ -825,6 +828,8 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
               utm_term: attribution.utm?.utm_term,
               referral_code: attribution.referralCode,
               landing_page: attribution.landingPage,
+              gclid: attribution.gclid,
+              gclid_source: attribution.gclidSource,
             }),
             timeout: TIMEOUTS.PAYMENT,
           }
@@ -903,7 +908,17 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         name: 'Ollvy',
         description: service.name,
         order_id: data.razorpay_order_id,
-        handler: async () => {
+        handler: async (response: {
+          razorpay_payment_id?: string
+          razorpay_order_id?: string
+          razorpay_signature?: string
+        }) => {
+          // Razorpay Standard Checkout invokes handler() only after a genuine
+          // captured/authorized payment, passing { razorpay_payment_id,
+          // razorpay_order_id, razorpay_signature }. razorpay_payment_id is the
+          // canonical transaction id used for the Google Ads conversion below.
+          const razorpayPaymentId = response?.razorpay_payment_id
+
           // Save pre-cursor answers to order_questionnaire_responses if present
           if (Object.keys(preCursorAnswers).length > 0) {
             const supabaseClient = getClient()
@@ -919,20 +934,34 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           clearPreCursorAnswers()
           clearAllAttributionData()
           clearCheckoutState()
-          trackPurchase({
-            transaction_id: data.order_number,
-            value: paisaToRupees(data.amount),
-            currency: 'INR',
-            items: [
-              {
-                item_id: service.id,
-                item_name: service.name,
-                item_category: 'Services',
-                price: paisaToRupees(data.amount),
-                quantity: 1,
-              },
-            ],
+
+          // Google Ads purchase conversion. Fires exactly once here, on the
+          // verified payment-success callback — NOT on the /orders success page
+          // (which re-fired on every reload / back-navigation). The GTM "purchase"
+          // custom-event trigger reads ecommerce.value / .currency / .transaction_id.
+          // value = full order total (data.amount is the full amount charged, in
+          // paise); transaction_id = Razorpay payment id, not the internal order #.
+          window.dataLayer = window.dataLayer || []
+          window.dataLayer.push({ ecommerce: null })
+          window.dataLayer.push({
+            event: 'purchase',
+            ecommerce: {
+              value: paisaToRupees(data.amount),
+              currency: 'INR',
+              transaction_id: razorpayPaymentId,
+            },
           })
+
+          // PostHog purchase — moved here from the success page so it likewise
+          // fires once per payment, not on every success-page reload.
+          trackPurchasePH(
+            data.order_number,
+            service.id,
+            service.name,
+            paisaToRupees(data.amount),
+            'INR'
+          )
+
           setSuccessModal({
             isOpen: true,
             orderId: data.order_id,

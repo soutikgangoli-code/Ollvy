@@ -22,8 +22,6 @@ import {
 import { getCompletionEstimate } from '@/lib/dates'
 import { cn } from '@/lib/utils'
 import { getWhatsAppLink } from '@/lib/constants'
-import { useGTM, paisaToRupees } from '@/lib/hooks/useGTM'
-import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 
 interface OrderData {
   id: string
@@ -55,13 +53,10 @@ export default function PaymentSuccessPage() {
   const router = useRouter()
   const orderId = params.id as string
   const { user } = useAuthStore()
-  const { trackPurchase } = useGTM()
-  const { trackPurchase: trackPurchasePH } = usePostHogEvents()
 
   const [order, setOrder] = useState<OrderData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [showConfetti, setShowConfetti] = useState(true)
-  const [hasTrackedPurchase, setHasTrackedPurchase] = useState(false)
 
   useEffect(() => {
     if (!user) {
@@ -73,34 +68,6 @@ export default function PaymentSuccessPage() {
     const timer = setTimeout(() => setShowConfetti(false), 3000)
     return () => clearTimeout(timer)
   }, [orderId, user])
-
-  // Track purchase in GTM when order data is loaded
-  useEffect(() => {
-    if (order && !hasTrackedPurchase) {
-      trackPurchase({
-        transaction_id: order.order_number,
-        value: paisaToRupees(order.total_paisa_snapshot),
-        currency: 'INR',
-        items: [
-          {
-            item_id: order.service_package?.id || '',
-            item_name: order.service_package?.name || '',
-            item_category: 'Services',
-            price: paisaToRupees(order.total_paisa_snapshot),
-            quantity: 1,
-          },
-        ],
-      })
-      trackPurchasePH(
-        order.order_number,
-        order.service_package?.id || '',
-        order.service_package?.name || '',
-        paisaToRupees(order.total_paisa_snapshot),
-        'INR'
-      )
-      setHasTrackedPurchase(true)
-    }
-  }, [order, hasTrackedPurchase, trackPurchase, trackPurchasePH])
 
   const fetchOrder = async (retryCount = 0) => {
     if (!orderId) return

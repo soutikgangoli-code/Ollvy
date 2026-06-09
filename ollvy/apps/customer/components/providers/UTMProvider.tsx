@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
-import { captureAndStoreUTM, captureAndStoreReferral, storeLandingPage } from '@/lib/utm'
+import { captureAndStoreUTM, captureAndStoreReferral, storeLandingPage, captureAndStoreGclid } from '@/lib/utm'
 
 /**
  * Attribution Provider
@@ -12,10 +12,11 @@ import { captureAndStoreUTM, captureAndStoreReferral, storeLandingPage } from '@
  */
 export function UTMProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Capture UTM params, referral code, and landing page on mount
+    // Capture UTM params, referral code, landing page, and Google click id on mount
     captureAndStoreUTM()
     captureAndStoreReferral()
     storeLandingPage()
+    captureAndStoreGclid()
   }, [])
 
   return <>{children}</>

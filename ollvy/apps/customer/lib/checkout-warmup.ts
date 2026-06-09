@@ -58,6 +58,8 @@ interface FireOptions {
     } | null
     referralCode?: string | null
     landingPage?: string | null
+    gclid?: string | null
+    gclidSource?: string | null
   }
 }
 
@@ -96,6 +98,8 @@ export function firePreCreateOrder(opts: FireOptions, fingerprint: string): Prom
           utm_term: opts.attribution.utm?.utm_term,
           referral_code: opts.attribution.referralCode,
           landing_page: opts.attribution.landingPage,
+          gclid: opts.attribution.gclid,
+          gclid_source: opts.attribution.gclidSource,
         }),
         keepalive: true,
       })

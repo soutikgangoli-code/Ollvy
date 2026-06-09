@@ -41,6 +41,11 @@ interface CreateOrderBody {
   utm_term?: string;
   referral_code?: string;
   landing_page?: string;
+  // Google click id (gclid / gbraid / wbraid value) for offline conversion import
+  gclid?: string;
+  // Which param the click id came from (gclid / gbraid / wbraid) — routes the
+  // id to the correct Google Ads field in the offline-import job
+  gclid_source?: string;
 }
 
 // Compute govt fee override for services whose fee depends on pre-cursor
@@ -197,6 +202,8 @@ serve(async (req) => {
       addon_ids,
       engagement_agreed,
       pre_cursor_answers,
+      gclid,
+      gclid_source,
     } = body;
 
     // Validate: must have either service_package_id or quote_request_id
@@ -569,6 +576,8 @@ serve(async (req) => {
         // variant_id and engagement_agreed_at require migration 20260320000000
         variant_id: variant_id || null,
         engagement_agreed_at: engagement_agreed ? new Date().toISOString() : null,
+        gclid: gclid || null,
+        gclid_source: gclid_source || null,
       })
       .select()
       .single();
