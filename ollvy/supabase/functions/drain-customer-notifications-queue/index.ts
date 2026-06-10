@@ -157,6 +157,27 @@ serve(async (req) => {
         continue;
       }
 
+      // Map queued event types to customer-facing lines. Internal "round
+      // moving" events (round_created / round_completed) are not shown to the
+      // customer. If the batch has nothing customer-relevant, skip the email.
+      const RELEVANT: Record<string, string> = {
+        admin_document_uploaded: 'We have uploaded a document to your order for you to review.',
+        question_added: 'We have added a few questions for you to answer.',
+      };
+      const eventTypes = new Set(group.rows.map((r) => r.event_type));
+      const updates = Object.keys(RELEVANT)
+        .filter((t) => eventTypes.has(t))
+        .map((t) => RELEVANT[t]);
+
+      if (updates.length === 0) {
+        // Internal-only batch: mark handled so it does not requeue, no email.
+        await supabase
+          .from('customer_notifications_queue')
+          .update({ sent_at: new Date().toISOString(), last_error: 'no_customer_relevant_events' })
+          .in('id', queueIds);
+        continue;
+      }
+
       const { subject, html } = buildAdminUpdate({
         customer_greeting: resolveCustomerGreeting({
           business_name: userRow?.business_name ?? null,
@@ -167,6 +188,7 @@ serve(async (req) => {
         order_id: order.id,
         // Date of the most recent queued event in this coalesced batch.
         update_date_human: formatDateHuman(new Date(group.lastCreated)),
+        updates,
       });
 
       const sendResult = await sendEmail({
