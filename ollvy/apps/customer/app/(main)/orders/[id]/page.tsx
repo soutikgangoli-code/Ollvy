@@ -102,7 +102,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
       .select(`
         *,
         professional:professionals(id, name, full_name, email, phone, avatar_url, professional_type, years_of_experience, average_rating),
-        service_package:service_packages(id, name, slug, sla_working_days, workflow_stages, variants, whats_included)
+        service_package:service_packages(id, name, slug, sla_working_days, workflow_stages, variants)
       `)
       .eq('id', orderId)
       .eq('user_id', user.id)

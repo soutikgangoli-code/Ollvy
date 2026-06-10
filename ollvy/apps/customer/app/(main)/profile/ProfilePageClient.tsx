@@ -8,12 +8,16 @@ import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
+import dynamic from 'next/dynamic'
 import {
   DashboardOrderCard,
   ComplianceScoreGauge,
-  DocumentVaultSection,
   AccountInfoCard,
 } from '@/components/profile'
+
+// Below-the-fold document vault. Lazy so it (and lib/storage) stays out of the
+// initial profile bundle; the data it renders is already computed server-side.
+const DocumentVaultSection = dynamic(() => import('@/components/profile/DocumentVaultSection').then(m => ({ default: m.DocumentVaultSection })))
 import {
   Building2,
   MapPin,

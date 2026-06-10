@@ -29,18 +29,21 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { OrderStatusBadge } from '@/components/orders/OrderStatusBadge'
-const DocumentPreview = dynamic(() => import('@/components/documents').then(m => ({ default: m.DocumentPreview })))
+const DocumentPreview = dynamic(() => import('@/components/documents/DocumentPreview').then(m => ({ default: m.DocumentPreview })))
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { formatPaisa, formatDate, cn } from '@/lib/utils'
 import type { Order, OrderStageHistory, OrderWorkDocument, ServicePackage, WorkflowDisplayStage } from '@/lib/types'
-import { WorkDocumentsSection } from '@/components/orders/WorkDocumentsSection'
 import { RoundNotificationBanner } from '@/components/orders/RoundNotificationBanner'
 import { FinalOutputBanner } from '@/components/orders/FinalOutputBanner'
 import dynamic from 'next/dynamic'
 
 const RoundsTimeline = dynamic(() => import('@/components/orders/RoundsTimeline').then(m => ({ default: m.RoundsTimeline })))
 const ChatWindow = dynamic(() => import('@/components/chat/ChatWindow').then(m => ({ default: m.ChatWindow })))
+// Heavy (bundles react-dropzone + a large dialog) and only renders for orders
+// that have a professional + work documents, behind a "View Documents" modal.
+// Lazy so its JS stays out of the initial order-page chunk.
+const WorkDocumentsSection = dynamic(() => import('@/components/orders/WorkDocumentsSection').then(m => ({ default: m.WorkDocumentsSection })))
 import { getEdgeFunctionUrl } from '@/lib/supabase'
 import { getSignedUrl, downloadFile } from '@/lib/storage'
 import {
