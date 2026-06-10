@@ -544,20 +544,14 @@ Timelines shown are working days and depend on:
 - URL: https://www.ollvy.com/startup
 - Description: Dedicated resources for early-stage startups. Curated service bundles, startup-friendly pricing, guidance on compliance priorities.
 
-### Join Ollvy Network
-- URL: https://www.ollvy.com/join
-- Description: Partner with Ollvy as a CA/CS professional. Join our network of compliance experts.
-
----
-
 ## Deadline Campaigns (2026-27)
 
-- [Director KYC 2026](https://www.ollvy.com/director-kyc-2026) - DIR-3 KYC Web triennial filing. Next due June 30, 2028.
-- [ITR 2026](https://www.ollvy.com/itr-2026) - Business ITR filing for FY 2025-26. Due October 31, 2026.
-- [GST Annual 2026](https://www.ollvy.com/gst-annual-2026) - GSTR-9 annual return for FY 2025-26. Due December 31, 2026.
-- [ITR 2027](https://www.ollvy.com/itr-2027) - Business ITR filing for FY 2026-27. Due October 31, 2027.
-- [GST Annual 2027](https://www.ollvy.com/gst-annual-2027) - GSTR-9 annual return for FY 2026-27. Due December 31, 2027.
-- [TDS Return Q1 2027](https://www.ollvy.com/tds-return-q1-2027) - TDS return for Q1 FY 2027-28. Due July 31, 2027.
+- [Director KYC 2026](https://www.ollvy.com/guides/director-kyc-2026) - DIR-3 KYC Web triennial filing. Next due June 30, 2028.
+- [ITR 2026](https://www.ollvy.com/guides/itr-2026) - Business ITR filing for FY 2025-26. Due October 31, 2026.
+- [GST Annual 2026](https://www.ollvy.com/guides/gst-annual-2026) - GSTR-9 annual return for FY 2025-26. Due December 31, 2026.
+- [ITR 2027](https://www.ollvy.com/guides/itr-2027) - Business ITR filing for FY 2026-27. Due October 31, 2027.
+- [GST Annual 2027](https://www.ollvy.com/guides/gst-annual-2027) - GSTR-9 annual return for FY 2026-27. Due December 31, 2027.
+- [TDS Return Q1 2027](https://www.ollvy.com/guides/tds-return-q1-2027) - TDS return for Q1 FY 2027-28. Due July 31, 2027.
 
 ### Deadline Guides (Detailed)
 
