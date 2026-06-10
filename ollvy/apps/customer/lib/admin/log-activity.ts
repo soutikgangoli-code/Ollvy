@@ -38,6 +38,8 @@ export const LOG_ACTIONS = {
   DOCUMENT_REJECTED: 'document_rejected',
   DOCUMENT_SKIPPED: 'document_skipped',
   ADMIN_UPLOAD_ADDED: 'admin_upload_added',
+  SETUP_APPROVED: 'setup_approved',
+  SETUP_UNLOCKED: 'setup_unlocked',
   QUESTION_ADDED: 'question_added',
   QUESTION_ANSWERED: 'question_answered',
   NOTE_ADDED: 'note_added',

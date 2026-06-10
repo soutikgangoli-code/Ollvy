@@ -10,6 +10,8 @@ import { formatDateTime, cn } from '@/lib/utils'
 import { getSignedUrl } from '@/lib/storage'
 import type { OrderRound, OrderWorkDocument, WorkflowDisplayStage } from '@/lib/types'
 import { Download, Upload, Loader2, FileText, MessageSquare, Eye } from 'lucide-react'
+import { DocumentPreview } from '@/components/documents/DocumentPreview'
+import { DOC_STATUS_META, initialDocStatus, workDocStatus } from '@/lib/documents/doc-status'
 
 interface RoundsTimelineProps {
   orderId: string
@@ -20,6 +22,7 @@ interface RoundsTimelineProps {
   // realtime subscription; answers are static for the life of this page.
   initialDocs?: Round0Data['initialDocs']
   initialAnswers?: Round0Data['answers']
+  locked?: boolean   // setup approved by admin — hide customer edit/upload affordances
 }
 
 interface Round0Data {
@@ -41,12 +44,13 @@ interface Round0Data {
   }>
 }
 
-export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [], initialDocs = [], initialAnswers = [] }: RoundsTimelineProps) {
+export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [], initialDocs = [], initialAnswers = [], locked = false }: RoundsTimelineProps) {
   const { user } = useAuthStore()
   const supabase = getClient()
   const [rounds, setRounds] = useState<OrderRound[]>([])
   const [questions, setQuestions] = useState<Round0Data['questions']>([])
-  const [activeTab, setActiveTab] = useState<'documents' | 'answers'>('documents')
+  const [activeTab, setActiveTab] = useState<'documents' | 'final' | 'answers'>('documents')
+  const [previewDoc, setPreviewDoc] = useState<{ documentLabel: string; fileUrl: string; fileName?: string } | null>(null)
 
   // Documents (initialDocs) and questionnaire answers (initialAnswers) are
   // already fetched by the order page's server render and handed in as props,
@@ -141,24 +145,51 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
   // Compute documents grouped by stage
   const documentsByStage = groupDocumentsByStage(initialDocs, rounds, workflowStages)
 
+  // "Final Documents" = only the completed deliverables (tag final_output). Everything
+  // else Ollvy exchanges mid-process — requests, for-signing, acknowledgements, info —
+  // stays in the Documents tab; the row UI already shows whether it's from Ollvy or you.
+  const roundsWithWork = rounds.filter(r => r.round_number > 0)
+  const documentsByRound = roundsWithWork
+    .map(r => ({ round: r, docs: (r.order_work_documents || []).filter(d => d.tag !== 'final_output') }))
+    .filter(x => x.docs.length > 0)
+  const finalByRound = roundsWithWork
+    .map(r => ({ round: r, docs: (r.order_work_documents || []).filter(d => d.tag === 'final_output') }))
+    .filter(x => x.docs.length > 0)
+
   const hasData = allAnswers.length > 0 || initialDocs.length > 0 || rounds.some(r =>
     (r.round_question_requests?.length ?? 0) > 0 || (r.order_work_documents?.length ?? 0) > 0
   )
 
-  // Count documents and answers for badges
-  const docsCount = initialDocs.length + rounds.reduce((acc, r) =>
-    acc + (r.order_work_documents?.length || 0), 0
-  )
+  // Counts for the badges/pings (one consistent green style throughout).
+  const docsCount = initialDocs.length + documentsByRound.reduce((acc, x) => acc + x.docs.length, 0)
+  const finalCount = finalByRound.reduce((acc, x) => acc + x.docs.length, 0)
   const answersCount = allAnswers.filter(a => a.response_value != null).length + roundQuestionResponses.length
+  // Documents the customer still needs to provide (asked for, not yet uploaded).
+  const pendingDocsCount =
+    initialDocs.filter(d => !d.file_url).length +
+    documentsByRound.reduce(
+      (acc, x) => acc + x.docs.filter(d => d.direction === 'from_customer' && !d.file_url).length,
+      0,
+    )
 
   if (!hasData) return null
 
   return (
     <Card className="mt-6 overflow-hidden rounded-xl border border-border bg-card">
       <CardHeader className="border-b border-border/50 px-6 py-4">
-        <CardTitle className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-          Documents and Answers
-        </CardTitle>
+        <div className="flex items-center justify-between gap-3">
+          <CardTitle className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+            Documents and Answers
+          </CardTitle>
+          {/* Pending = amber + grey "pending", matching the small service-card badges
+              and the order page's existing amber "Documents Requested" convention. */}
+          {pendingDocsCount > 0 && (
+            <span className="inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-wider px-2 py-1 rounded-md bg-amber-500/10 border border-amber-500/20">
+              <span className="font-semibold text-amber-600 dark:text-amber-400">{pendingDocsCount}</span>
+              <span className="text-muted-foreground">pending</span>
+            </span>
+          )}
+        </div>
       </CardHeader>
 
       <div className="grid grid-cols-1 md:grid-cols-[180px,1fr] min-h-[400px]">
@@ -175,11 +206,21 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
           >
             <FileText className="h-4 w-4" />
             Documents
-            {docsCount > 0 && (
-              <Badge variant="secondary" className="ml-auto text-xs font-mono">
-                {docsCount}
-              </Badge>
+            <CountPill count={docsCount} className="ml-auto" />
+          </button>
+
+          <button
+            onClick={() => setActiveTab('final')}
+            className={cn(
+              "w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors text-left",
+              activeTab === 'final'
+                ? "bg-background text-foreground shadow-sm border border-border/50"
+                : "text-muted-foreground hover:text-foreground hover:bg-background/50"
             )}
+          >
+            <Download className="h-4 w-4" />
+            Final Documents
+            <CountPill count={finalCount} className="ml-auto" />
           </button>
 
           <button
@@ -193,11 +234,7 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
           >
             <MessageSquare className="h-4 w-4" />
             Answers
-            {answersCount > 0 && (
-              <Badge variant="secondary" className="ml-auto text-xs font-mono">
-                {answersCount}
-              </Badge>
-            )}
+            <CountPill count={answersCount} className="ml-auto" />
           </button>
         </div>
 
@@ -215,41 +252,65 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
 
                 return (
                   <div key={stageKey} className="space-y-3">
-                    <h4 className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    <h4 className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
                       {stageTitle}
+                      <CountPill count={docs.length} />
                     </h4>
                     <div className="space-y-2">
                       {docs.map(doc => (
-                        <DocumentRow key={doc.id} doc={doc} orderId={orderId} />
+                        <DocumentRow key={doc.id} doc={doc} orderId={orderId} onPreview={setPreviewDoc} locked={locked} />
                       ))}
                     </div>
                   </div>
                 )
               })}
 
-              {/* Work documents from rounds */}
-              {rounds.filter(r => r.round_number > 0).map(round => {
-                const workDocs = round.order_work_documents || []
-                if (workDocs.length === 0) return null
-
-                return (
-                  <div key={round.id} className="space-y-3">
-                    <h4 className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                      {round.title}
-                    </h4>
-                    <div className="space-y-2">
-                      {workDocs.map(doc => (
-                        <WorkDocumentRow key={doc.id} doc={doc} orderId={orderId} roundId={round.id} />
-                      ))}
-                    </div>
+              {/* Mid-process round documents — your uploads AND Ollvy's non-final docs (the row icon shows which). Only final_output lives in the Final Documents tab. */}
+              {documentsByRound.map(({ round, docs }) => (
+                <div key={round.id} className="space-y-3">
+                  <h4 className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    {round.title}
+                    <CountPill count={docs.length} />
+                  </h4>
+                  <div className="space-y-2">
+                    {docs.map(doc => (
+                      <WorkDocumentRow key={doc.id} doc={doc} orderId={orderId} roundId={round.id} locked={locked} />
+                    ))}
                   </div>
-                )
-              })}
+                </div>
+              ))}
 
               {docsCount === 0 && (
                 <div className="text-center py-12 text-muted-foreground">
                   <FileText className="h-8 w-8 mx-auto mb-3 opacity-40" />
                   <p className="text-sm">No documents yet</p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Final Documents Tab Content — Ollvy's deliverables (to_customer) */}
+          {activeTab === 'final' && (
+            <div className="space-y-6">
+              {finalByRound.map(({ round, docs }) => (
+                <div key={round.id} className="space-y-3">
+                  <h4 className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+                    {round.title}
+                    <CountPill count={docs.length} />
+                  </h4>
+                  <div className="space-y-2">
+                    {docs.map(doc => (
+                      <WorkDocumentRow key={doc.id} doc={doc} orderId={orderId} roundId={round.id} locked={locked} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+
+              {finalCount === 0 && (
+                <div className="text-center py-12 text-muted-foreground">
+                  <Download className="h-8 w-8 mx-auto mb-3 opacity-40" />
+                  <p className="text-sm">No final documents yet</p>
+                  <p className="text-xs mt-1">Completed deliverables will appear here to download.</p>
                 </div>
               )}
             </div>
@@ -283,7 +344,7 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
                           )}>
                             {renderResponseValue(answer.response_value, answer.question_type, answer.options)}
                           </span>
-                          {answer.response_value == null && (
+                          {!locked && answer.response_value == null && (
                             <Link href={`/orders/${orderId}/questionnaire`}>
                               <button className="shrink-0 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50 hover:bg-muted transition-colors">
                                 Answer
@@ -338,12 +399,38 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
           )}
         </div>
       </div>
+      {previewDoc && (
+        <DocumentPreview
+          isOpen
+          onClose={() => setPreviewDoc(null)}
+          documentLabel={previewDoc.documentLabel}
+          fileUrl={previewDoc.fileUrl}
+          fileName={previewDoc.fileName}
+        />
+      )}
     </Card>
   )
 }
 
+// Small neutral count circle, reused wherever a plain doc count appears so the
+// styling stays consistent. Neutral grey — colour (amber=pending, green=new) is
+// reserved for the status badges, matching the order page's existing convention.
+function CountPill({ count, className }: { count: number; className?: string }) {
+  if (count <= 0) return null
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-muted text-muted-foreground text-[10px] font-mono font-semibold leading-none',
+        className,
+      )}
+    >
+      {count}
+    </span>
+  )
+}
+
 // Document Row Component - for initial order_documents
-function DocumentRow({ doc, orderId }: { doc: Round0Data['initialDocs'][0]; orderId: string }) {
+function DocumentRow({ doc, orderId, onPreview, locked = false }: { doc: Round0Data['initialDocs'][0]; orderId: string; onPreview: (d: { documentLabel: string; fileUrl: string; fileName?: string }) => void; locked?: boolean }) {
   const [loading, setLoading] = useState(false)
 
   const handleView = async () => {
@@ -352,7 +439,7 @@ function DocumentRow({ doc, orderId }: { doc: Round0Data['initialDocs'][0]; orde
     try {
       const signedUrl = await getSignedUrl(doc.file_url)
       if (signedUrl) {
-        window.open(signedUrl, '_blank')
+        onPreview({ documentLabel: doc.document_label, fileUrl: signedUrl, fileName: doc.file_name })
       }
     } catch (error) {
       console.error('Failed to get signed URL:', error)
@@ -362,42 +449,13 @@ function DocumentRow({ doc, orderId }: { doc: Round0Data['initialDocs'][0]; orde
   }
 
   const getStatusBadge = () => {
-    if (doc.rejection_reason) {
-      return (
-        <Badge
-          variant="outline"
-          className="font-mono text-[10px] uppercase tracking-wider border-red-500/30 text-red-600 dark:text-red-400 bg-red-500/5"
-        >
-          Rejected
-        </Badge>
-      )
-    }
-    if (doc.verified_at) {
-      return (
-        <Badge
-          variant="outline"
-          className="font-mono text-[10px] uppercase tracking-wider border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5"
-        >
-          Verified
-        </Badge>
-      )
-    }
-    if (doc.file_url) {
-      return (
-        <Badge
-          variant="outline"
-          className="font-mono text-[10px] uppercase tracking-wider border-amber-500/30 text-amber-600 dark:text-amber-400 bg-amber-500/5"
-        >
-          Uploaded
-        </Badge>
-      )
-    }
+    const meta = DOC_STATUS_META[initialDocStatus(doc)]
     return (
       <Badge
         variant="outline"
-        className="font-mono text-[10px] uppercase tracking-wider border-border text-muted-foreground"
+        className={cn('font-mono text-[10px] uppercase tracking-wider', meta.className)}
       >
-        Pending
+        {meta.label}
       </Badge>
     )
   }
@@ -426,7 +484,7 @@ function DocumentRow({ doc, orderId }: { doc: Round0Data['initialDocs'][0]; orde
               <Eye className="h-4 w-4" />
             )}
           </Button>
-        ) : (
+        ) : locked ? null : (
           <Link href={`/orders/${orderId}/documents`}>
             <button className="shrink-0 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50 hover:bg-muted transition-colors">
               Upload
@@ -442,11 +500,13 @@ function DocumentRow({ doc, orderId }: { doc: Round0Data['initialDocs'][0]; orde
 function WorkDocumentRow({
   doc,
   orderId,
-  roundId
+  roundId,
+  locked = false
 }: {
   doc: OrderWorkDocument
   orderId: string
   roundId: string
+  locked?: boolean
 }) {
   const [loading, setLoading] = useState(false)
 
@@ -472,42 +532,13 @@ function WorkDocumentRow({
   }
 
   const getStatusBadge = () => {
-    if (doc.status === 'rejected') {
-      return (
-        <Badge
-          variant="outline"
-          className="font-mono text-[10px] uppercase tracking-wider border-red-500/30 text-red-600 dark:text-red-400 bg-red-500/5"
-        >
-          Rejected
-        </Badge>
-      )
-    }
-    if (doc.status === 'verified') {
-      return (
-        <Badge
-          variant="outline"
-          className="font-mono text-[10px] uppercase tracking-wider border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5"
-        >
-          Verified
-        </Badge>
-      )
-    }
-    if (doc.status === 'uploaded') {
-      return (
-        <Badge
-          variant="outline"
-          className="font-mono text-[10px] uppercase tracking-wider border-blue-500/30 text-blue-600 dark:text-blue-400 bg-blue-500/5"
-        >
-          Under Review
-        </Badge>
-      )
-    }
+    const meta = DOC_STATUS_META[workDocStatus(doc.status)]
     return (
       <Badge
         variant="outline"
-        className="font-mono text-[10px] uppercase tracking-wider border-border text-muted-foreground"
+        className={cn('font-mono text-[10px] uppercase tracking-wider', meta.className)}
       >
-        Pending
+        {meta.label}
       </Badge>
     )
   }
@@ -585,7 +616,7 @@ function WorkDocumentRow({
             Download
           </Button>
         )}
-        {isFromCustomer && !doc.file_url && (
+        {isFromCustomer && !doc.file_url && !locked && (
           <Link href={`/orders/${orderId}/round-uploads/${roundId}`}>
             <Button size="sm" variant="outline" className="h-8 text-xs gap-1.5">
               <Upload className="h-3.5 w-3.5" />

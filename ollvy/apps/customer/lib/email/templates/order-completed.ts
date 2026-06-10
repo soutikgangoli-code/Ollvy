@@ -29,9 +29,9 @@ export function buildOrderCompleted(
       <tr><td style="${labelTd}">Total paid</td><td style="${valueTd}">${mono(formatPaisa(input.total_paisa))}</td></tr>
     </table>
     <h3>Your documents</h3>
-    <p>Save your documents and keep them somewhere safe. You can download everything from your order page whenever you need it.</p>
+    <p>Keep your documents somewhere safe. You can download them from your order page any time.</p>
     <p style="margin: 24px 0;">${ctaButton('View and download your documents', buildOrderUrl(input.order_id))}</p>
-    <p>And if any part of this did not go the way you hoped, reply to this email and tell me directly. I will make it right.</p>
+    <p>If any part of this fell short, reply and tell me directly. I will make it right.</p>
     <p>Soutik<br>Founder, Ollvy</p>
   `;
 

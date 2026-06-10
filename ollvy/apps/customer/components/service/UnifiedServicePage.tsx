@@ -798,7 +798,7 @@ export function UnifiedServicePage({
           {/* === HERO SECTION === */}
           <section
             ref={heroRef}
-            className="relative min-h-[58vh] md:min-h-[63vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-6 md:pb-8"
+            className="relative min-h-[48vh] md:min-h-[63vh] flex flex-col items-center justify-center bg-background overflow-hidden pb-4 md:pb-8"
           >
             <div className="relative z-10 text-center w-full max-w-[800px] px-4 md:px-6">
               {/* Service name - large and bold */}
@@ -820,7 +820,7 @@ export function UnifiedServicePage({
                       <CheckCircle size={14} className="inline mr-1 text-[hsl(var(--ollvy-green))]" />
                       {service.isRetainer
                         ? `Current cycle due: ${guaranteedDate}`
-                        : `Guaranteed by ${guaranteedDate}`}
+                        : `Delivery by ${guaranteedDate}`}
                     </p>
                   </div>
                 )}
@@ -1583,7 +1583,7 @@ export function UnifiedServicePage({
                 <p className="text-[11px] text-muted-foreground font-mono">
                   {service.isRetainer
                     ? `Due: ${guaranteedDate}`
-                    : `Guaranteed by ${guaranteedDate}`}
+                    : `Delivery by ${guaranteedDate}`}
                 </p>
               </div>
             )}

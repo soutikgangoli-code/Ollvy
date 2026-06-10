@@ -56,7 +56,7 @@ export function wrapHTML(bodyHTML: string): string {
           </tr>
           <tr>
             <td style="padding: 16px 32px 28px;">
-              <img src="https://www.ollvy.com/logo.png" width="30" height="30" alt="Ollvy" style="display: block; border: 0; border-radius: 7px;">
+              <img src="https://www.ollvy.com/logo.png" width="30" height="30" alt="Ollvy" style="display: block; width: 30px; height: 30px; border: 0; border-radius: 7px;">
             </td>
           </tr>
           <tr>

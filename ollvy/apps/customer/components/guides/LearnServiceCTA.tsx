@@ -40,7 +40,7 @@ export function LearnServiceCTA({ primary, secondary }: {
             <div className="flex items-center gap-1.5 mt-2">
               <CheckCircle size={12} className="text-[hsl(var(--ollvy-green))]" />
               <span className="text-xs text-muted-foreground">
-                Guaranteed by {guaranteedDate}
+                Delivery by {guaranteedDate}
               </span>
             </div>
           </div>

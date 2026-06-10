@@ -53,7 +53,7 @@ export function RelatedServices({ services }: { services: RelatedServiceCard[] }
                         size={10}
                         className="text-[hsl(var(--ollvy-green))]"
                       />
-                      By {guaranteedDate}
+                      Delivery by {guaranteedDate}
                     </span>
                   )}
                   {service.isRetainer && (

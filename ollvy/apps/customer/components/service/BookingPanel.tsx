@@ -248,7 +248,7 @@ export function BookingPanel({
             <p className="text-[16px] font-semibold text-foreground font-mono">
               {service.isRetainer
                 ? `Current cycle due: ${guaranteedDate}`
-                : `Guaranteed by ${guaranteedDate}`}
+                : `Delivery by ${guaranteedDate}`}
             </p>
           </div>
         </div>

@@ -34,7 +34,7 @@ export function buildAdminUpdate(
       <tr><td style="${labelTd}">Order number</td><td style="${valueTd}">${mono(input.order_number)}</td></tr>
       <tr><td style="${labelTd}">Update posted</td><td style="${valueTd}">${mono(input.update_date_human)}</td></tr>
     </table>
-    <p>Head to your order page to take a look and pick up from there.</p>
+    <p>Take a look on your order page and pick up from there.</p>
     <p style="margin: 24px 0;">${ctaButton('View your order', buildOrderUrl(input.order_id))}</p>
     <p>Team Ollvy</p>
   `;

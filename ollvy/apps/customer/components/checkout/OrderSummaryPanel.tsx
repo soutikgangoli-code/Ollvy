@@ -93,7 +93,7 @@ export function OrderSummaryPanel({
             </div>
             <div>
               <p className="text-xs text-[hsl(var(--ollvy-green))] font-medium uppercase tracking-wider">
-                Guaranteed by
+                Delivery by
               </p>
               <p className="font-mono text-lg font-semibold text-[hsl(var(--ollvy-green))]">
                 {completionDate}

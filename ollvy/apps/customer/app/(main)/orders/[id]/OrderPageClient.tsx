@@ -968,10 +968,10 @@ export function OrderPageClient({ orderId, initialData, __perfTimings }: OrderPa
               </div>
             </div>
 
-            {/* SLA */}
+            {/* Delivery time */}
             <div className="space-y-1">
               <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                SLA
+                Delivery time
               </p>
               <p className="text-2xl font-mono font-semibold tracking-tight text-foreground">
                 {stats.slaDays} days
@@ -1033,7 +1033,7 @@ export function OrderPageClient({ orderId, initialData, __perfTimings }: OrderPa
             <div className="px-6 py-4 border-t border-border/30 bg-muted/30">
               <div className="flex items-center gap-2">
                 <p className="text-sm text-muted-foreground">
-                  Expected completion: <span className="font-mono font-medium text-foreground">{stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                  Delivery by <span className="font-mono font-medium text-foreground">{stats.estimatedCompletion.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                 </p>
                 {!stats.customerSetupComplete && (
                   <TooltipProvider>
@@ -1295,6 +1295,7 @@ export function OrderPageClient({ orderId, initialData, __perfTimings }: OrderPa
               workflowStages={servicePackage.workflow_stages || []}
               initialDocs={documents}
               initialAnswers={questionnaireResponses}
+              locked={!!order.setup_locked_at}
             />
           )}
         </div>

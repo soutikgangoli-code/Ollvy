@@ -135,6 +135,10 @@ export interface Order {
   variant_id?: string
   questionnaire_completed_at?: string
   questionnaire_step?: number
+  // Set when the admin/CA approves the customer's setup. While set, the customer
+  // can no longer edit questionnaire answers or replace uploaded documents.
+  setup_locked_at?: string
+  setup_locked_by?: string
   completed_at?: string
   created_at: string
   updated_at: string

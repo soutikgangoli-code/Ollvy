@@ -102,7 +102,7 @@ export function OrderTimeline({ stages, stageHistory }: OrderTimelineProps) {
 
               {history?.sla_breached && (
                 <p className="text-xs text-muted-foreground mt-1 bg-muted inline-block px-2 py-0.5 rounded">
-                  SLA breached
+                  Delivery delayed
                 </p>
               )}
             </div>

@@ -44,7 +44,7 @@ export function buildPaymentConfirmation(
 
   const body = `
     <p>Hi ${input.customer_greeting},</p>
-    <p>Your payment has gone through and your order is confirmed. Thank you for choosing Ollvy.</p>
+    <p>Your payment is in and your order is confirmed. Thanks for choosing Ollvy.</p>
     <h3>Order summary</h3>
     <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; font-size: 14px;">
       <tr><td style="${labelTd}">Service</td><td style="${valueTd}">${input.service_name}</td></tr>
@@ -60,13 +60,14 @@ export function buildPaymentConfirmation(
     <h3>What happens next</h3>
     <p>Two quick things from your side, then we get to work:</p>
     <ol style="margin: 0 0 14px; padding-left: 20px;">
-      <li style="margin-bottom: 6px;">Fill in the questionnaire so our team understands your specifics.</li>
-      <li style="margin-bottom: 6px;">Upload the documents we need to file for you.</li>
+      <li style="margin-bottom: 6px;">Answer a short questionnaire.</li>
+      <li style="margin-bottom: 6px;">Upload the documents we need.</li>
     </ol>
     ${documentsTable}
-    <p>Do both today and your ${input.service_name} is guaranteed by ${mono(input.guaranteed_date)}. That date only starts counting once we have your questionnaire and documents, so it shifts if they wait. Knock them out now and we will get straight to work for you.</p>
+    <p>Find both on your order page: ollvy.com &rarr; Profile &rarr; your order.</p>
+    <p>Your guaranteed date of ${mono(input.guaranteed_date)} starts once both are in.</p>
     <p style="margin: 24px 0;">${ctaButton('Continue to your order', buildOrderUrl(input.order_id))}</p>
-    <p style="color: #666;">Got a question? Just reply to this email and a real person will get back to you, usually within a few hours on working days.</p>
+    <p style="color: #666;">Got a question? Just reply and our team will get back to you.</p>
     <p>Team Ollvy</p>
   `;
 

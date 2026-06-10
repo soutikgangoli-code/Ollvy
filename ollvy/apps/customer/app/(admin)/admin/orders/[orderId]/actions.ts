@@ -450,6 +450,56 @@ export async function rejectWorkDocument(documentId: string, orderId: string, do
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
+// Approve the customer's setup — locks BOTH their questionnaire answers and their
+// uploaded documents from further customer edits in one step. The admin can still
+// request changes via round questions, and can reopen with unlockSetup().
+export async function approveSetup(orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('orders')
+    .update({
+      setup_locked_at: new Date().toISOString(),
+      setup_locked_by: adminUser.id,
+    })
+    .eq('id', orderId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.SETUP_APPROVED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: 'Setup approved — answers and documents locked from customer edits',
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
+// Reopen the customer's setup for editing (clears the approval lock).
+export async function unlockSetup(orderId: string) {
+  const adminUser = await getAdminUser()
+  if (!supabaseServer) throw new Error('Service client unavailable')
+
+  await supabaseServer.from('orders')
+    .update({
+      setup_locked_at: null,
+      setup_locked_by: null,
+    })
+    .eq('id', orderId)
+
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.SETUP_UNLOCKED,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: 'Setup reopened — customer can edit answers and documents again',
+  })
+
+  revalidatePath(`/admin/orders/${orderId}`)
+}
+
 // Skip work document
 export async function skipWorkDocument(documentId: string, orderId: string, documentLabel: string, skipReason: string) {
   const adminUser = await getAdminUser()

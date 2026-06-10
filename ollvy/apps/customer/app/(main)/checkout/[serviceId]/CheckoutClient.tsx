@@ -972,7 +972,16 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           contact: user.phone || undefined,
           email: user.email || undefined,
         },
-        theme: { color: '#2D5A27', backdrop_color: 'rgba(0,0,0,0.6)' },
+        // Razorpay's own modal backdrop (the gentle translucent dim behind the card).
+        // Theme-aware: a normal dark dim in light mode; a lighter dim in dark mode so
+        // the page still reads through it instead of stacking black-on-black (blank).
+        theme: {
+          color: '#2D5A27',
+          backdrop_color:
+            typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+              ? 'rgba(0, 0, 0, 0.45)'
+              : 'rgba(0, 0, 0, 0.6)',
+        },
         modal: {
           ondismiss: () => {
             // Show retry modal when user dismisses without paying
@@ -1499,7 +1508,7 @@ function OrderSummarySidebar({
         <div className="flex items-center gap-2">
           <CheckCircle className="h-3.5 w-3.5 text-[hsl(var(--ollvy-green))] shrink-0" />
           <p className="text-sm font-semibold text-foreground font-mono">
-            Guaranteed by {guaranteedDate}
+            Delivery by {guaranteedDate}
           </p>
         </div>
         {completionEstimate?.govtDisclaimer && (
@@ -1864,10 +1873,10 @@ function MobileBottomBarComponent({
             onClick={() => setIsExpanded(!isExpanded)}
             className="text-left flex-1"
           >
-            {/* Guaranteed by date - green badge style */}
+            {/* Delivery by date - green badge style */}
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 mb-1 rounded-full text-xs font-medium bg-[hsl(var(--ollvy-green))]/10 border border-[hsl(var(--ollvy-green))]/30 text-[hsl(var(--ollvy-green-fg))]">
               <div className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--ollvy-green))]" />
-              Guaranteed by {guaranteedDate}
+              Delivery by {guaranteedDate}
             </span>
             {/* Total with chevron - UP when collapsed (tap to expand), DOWN when expanded */}
             <div className="flex items-baseline gap-1.5">

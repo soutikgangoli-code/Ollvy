@@ -341,7 +341,7 @@ export default function PaymentSuccessPage() {
                     order.service_package?.completion_range_text
                   )
                   return estimate?.guaranteedDate
-                    ? `Guaranteed by ${estimate.guaranteedDate}`
+                    ? `Delivery by ${estimate.guaranteedDate}`
                     : `Your ${order.service_package?.name} will be completed in ${order.service_package?.sla_working_days} working days`
                 })()}
               </p>

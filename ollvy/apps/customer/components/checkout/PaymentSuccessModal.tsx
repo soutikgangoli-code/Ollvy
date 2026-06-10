@@ -43,7 +43,7 @@ export function PaymentRetryModal({
 }: PaymentRetryModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[400px] border-border bg-card p-0 overflow-hidden gap-0">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-[400px] max-h-[90vh] overflow-y-auto rounded-2xl border-border bg-card p-0 gap-0">
         {/* Header */}
         <div className="px-6 pt-8 pb-6 text-center">
           <p className="text-xs uppercase tracking-widest text-muted-foreground font-mono mb-3">
@@ -149,7 +149,7 @@ export function PaymentSuccessModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleViewOrder()}>
-      <DialogContent className="sm:max-w-[400px] border-border bg-card p-0 overflow-hidden gap-0">
+      <DialogContent className="w-[calc(100%-2rem)] max-w-[400px] max-h-[90vh] overflow-y-auto rounded-2xl border-border bg-card p-0 gap-0">
         {/* Header with success indicator */}
         <div className="px-6 pt-8 pb-6 text-center">
           {/* Success checkmark */}
@@ -196,11 +196,11 @@ export function PaymentSuccessModal({
               </span>
             </div>
 
-            {/* Guaranteed by */}
+            {/* Delivery by */}
             <div className="px-4 py-3">
               <div className="flex justify-between items-center">
                 <span className="text-xs uppercase tracking-widest text-muted-foreground font-mono">
-                  GUARANTEED BY
+                  DELIVERY BY
                 </span>
                 <span className="text-sm font-mono font-medium text-[hsl(var(--ollvy-green))]">
                   {guaranteedDate}

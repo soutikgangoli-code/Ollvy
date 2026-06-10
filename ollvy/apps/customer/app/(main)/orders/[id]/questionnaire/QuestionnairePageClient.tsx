@@ -11,6 +11,7 @@ interface OrderData {
   id: string
   order_number: string
   questionnaire_completed_at: string | null
+  setup_locked_at?: string | null
   service_package: {
     name: string
     slug: string
@@ -77,7 +78,11 @@ export function QuestionnairePageClient({ order, forceEdit, __perfTimings }: Que
       </div>
 
       {/* Questionnaire Wizard */}
-      <QuestionnaireWizard orderId={order.id} forceEdit={forceEdit} />
+      <QuestionnaireWizard
+        orderId={order.id}
+        forceEdit={forceEdit && !order.setup_locked_at}
+        locked={!!order.setup_locked_at}
+      />
 
       {/* Help Section */}
       <div className="mt-8 p-5 bg-muted/30 rounded-xl">

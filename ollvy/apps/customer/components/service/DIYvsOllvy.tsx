@@ -29,7 +29,7 @@ export const DATA: Record<string, DIYData> = {
   'gst-registration': {
     off_stat: '14 hrs of your time. No deadline. No accountability.',
     on_stat: 'Save 14 hrs + \u20B98,000 in wasted effort.',
-    on_date_label: 'Guaranteed by',
+    on_date_label: 'Delivery by',
     rows: [
       { task: 'Documents', own: ' 3-4 hrs. One mismatch and you\'re back to square one.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% go through.' },
       { task: 'Application', own: '4-6 hrs on a portal that gives no error messages.', ollvy_head: 'Ollvy CA checks every field.', ollvy_badge: 'Reference number same day.' },
@@ -41,7 +41,7 @@ export const DATA: Record<string, DIYData> = {
   'pvt-ltd-incorporation': {
     off_stat: '2 full days. 3 professionals. Nobody owns the outcome.',
     on_stat: 'Save 2 days + \u20B922,000 in extra fees.',
-    on_date_label: 'Guaranteed by',
+    on_date_label: 'Delivery by',
     rows: [
       { task: 'Documents', own: 'Physical signature visit. One wrong doc and you restart.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% go through.' },
       { task: 'Application', own: '6-10 hrs. Wrong name costs \u20B91,000 and 5 days.', ollvy_head: 'Ollvy CA and CS handle everything.', ollvy_badge: 'Company number to your app.' },
@@ -53,7 +53,7 @@ export const DATA: Record<string, DIYData> = {
   'llp-incorporation': {
     off_stat: '15 hrs of your time. Physical signature visit. No accountability.',
     on_stat: 'Save 15 hrs + \u20B914,000 in extra fees.',
-    on_date_label: 'Guaranteed by',
+    on_date_label: 'Delivery by',
     rows: [
       { task: 'Documents', own: 'Physical signature visit. Wrong doc = full day gone.', ollvy_head: 'AI picks your exact list.', ollvy_badge: '98% go through.' },
       { task: 'Application', own: 'Wrong name = 10-day delay. Agreement errors are worse.', ollvy_head: 'Ollvy CS handles everything.', ollvy_badge: 'LLP number to your app.' },
@@ -101,7 +101,7 @@ export const DATA: Record<string, DIYData> = {
   'business-itr': {
     off_stat: '12 hours of your time. Wrong form, wrong numbers, no one checking.',
     on_stat: 'Save 12 hours + \u20B97,000 in refile costs.',
-    on_date_label: 'Guaranteed by',
+    on_date_label: 'Delivery by',
     rows: [
       { task: 'Profit & loss and balance sheet', own: 'Errors in your financials invite government scrutiny that lasts years.', ollvy_head: 'Ollvy CA reviews your financials.', ollvy_badge: 'Every number checked before filing.' },
       { task: 'Selecting form and filing', own: 'Three different forms for three entity types. Wrong one means a defective return and refiling.', ollvy_head: 'Ollvy CA picks the right form.', ollvy_badge: 'Acknowledgement same day.' },
@@ -113,7 +113,7 @@ export const DATA: Record<string, DIYData> = {
   'mca-annual-filing': {
     off_stat: '12 hours. Two forms. Two deadlines. No one tracking either.',
     on_stat: 'Save 12 hours + \u20B910,000 in penalties.',
-    on_date_label: 'Guaranteed by',
+    on_date_label: 'Delivery by',
     rows: [
       { task: 'Financials and board resolution', own: 'Government rejects wrong format. Refile fees on top.', ollvy_head: 'Ollvy CS reviews your documents.', ollvy_badge: 'Ollvy CS formats everything correctly.' },
       { task: 'Both annual forms', own: '\u20B9100/day per form. Two forms. Two deadlines.', ollvy_head: 'Ollvy CS files both on time.', ollvy_badge: 'Guaranteed.' },
@@ -161,7 +161,7 @@ export const DATA: Record<string, DIYData> = {
   'gst-cancellation': {
     off_stat: '8 hours. Wrong tax credit calculation. 18% interest. No one checking.',
     on_stat: 'Save 8 hours + \u20B95,000 in interest.',
-    on_date_label: 'Guaranteed by',
+    on_date_label: 'Delivery by',
     rows: [
       { task: 'Tax credits and remaining stock', own: 'Wrong calculation = government demand plus 18% interest.', ollvy_head: 'Ollvy CA reviews your credit balance.', ollvy_badge: 'Exact amount calculated before filing.' },
       { task: 'Final return and cancellation application', own: 'Errors in your final return are the most common reason for post-closure demands.', ollvy_head: 'Ollvy CA files both at once.', ollvy_badge: 'Before the deadline.' },

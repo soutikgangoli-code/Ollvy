@@ -196,7 +196,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
               {guaranteedDate && !isRetainer && (
                 <span className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[10px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                   <CheckCircle2 className="h-3 w-3" />
-                  Guaranteed by {guaranteedDate}
+                  Delivery by {guaranteedDate}
                 </span>
               )}
               {service.avg_rating && service.rating_count > 0 && (
@@ -207,12 +207,17 @@ export function ServiceCard({ service }: ServiceCardProps) {
               )}
             </div>
             <div className="flex items-center gap-1.5">
+              {isRetainer && (
+                <span className="font-mono text-[9px] px-2 py-1 rounded-md uppercase tracking-wider bg-muted/60 text-muted-foreground border border-border/50">
+                  Retainer
+                </span>
+              )}
               {isUrgent && (
                 <span className="font-mono text-[9px] px-2 py-1 rounded-md uppercase tracking-wider bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20">
                   Urgent
                 </span>
               )}
-              {service.tier_label && (
+              {service.tier_label && !isRetainer && (
                 <span className="font-mono text-[9px] px-2 py-1 rounded-md bg-muted/60 text-muted-foreground border border-border/50">
                   {service.tier_label}
                 </span>

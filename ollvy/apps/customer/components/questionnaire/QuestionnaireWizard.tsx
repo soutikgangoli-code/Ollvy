@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm, FormProvider, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -25,6 +25,7 @@ interface QuestionnaireWizardProps {
   loadExisting?: boolean              // load existing answers from sessionStorage (for editing)
   onComplete?: (answers: Record<string, unknown>) => void  // required in pre_payment mode
   onValuesChange?: (values: Record<string, unknown>) => void  // real-time value updates for live pricing
+  locked?: boolean                    // setup approved by admin — answers are read-only
 }
 
 export function QuestionnaireWizard({
@@ -36,6 +37,7 @@ export function QuestionnaireWizard({
   loadExisting = false,
   onComplete,
   onValuesChange,
+  locked = false,
 }: QuestionnaireWizardProps) {
   const router = useRouter()
   const {
@@ -59,6 +61,11 @@ export function QuestionnaireWizard({
     completeQuestionnaire,
     enableEditMode,
   } = useQuestionnaireStore()
+
+  // While we complete the questionnaire and navigate to documents, show the
+  // transition (loading) state instead of letting the "all done" success screen
+  // flash for a moment before the route changes.
+  const [isNavigating, setIsNavigating] = useState(false)
 
   // Load questionnaire on mount
   useEffect(() => {
@@ -190,6 +197,8 @@ export function QuestionnaireWizard({
 
   // Handle form submission for current step
   const onSubmit = async (data: QuestionnaireFormValues) => {
+    // Setup approved by admin — answers are locked, ignore any save attempt.
+    if (locked) return
     const isLastStep = currentStep === totalSteps
 
     // Save step responses
@@ -198,18 +207,26 @@ export function QuestionnaireWizard({
 
     if (isLastStep) {
       if (mode === 'pre_payment') {
+        // Flip to the transition (loading) state first so the form doesn't flash
+        // or the button revert from "Processing..." during the router.push hand-off
+        // to /checkout. onComplete always navigates away, so this never strands.
+        setIsNavigating(true)
         // In pre_payment mode, call onComplete with all answers
         // Get fresh responses from store (includes all saved steps including current)
         const freshResponses = useQuestionnaireStore.getState().responses
         onComplete?.(freshResponses)
       } else {
-        // Complete questionnaire and redirect
+        // Complete questionnaire and redirect. Flip to the transition state first
+        // so the "all done" success screen never flashes before navigation.
+        setIsNavigating(true)
         const completed = await completeQuestionnaire()
         if (completed && orderId) {
-          // Fire submission-complete email if documents are also done.
-          // Idempotent server-side, so safe to call without checking docs state here.
-          await checkAndFireSubmissionEmail(orderId)
+          // Idempotent server-side and a no-op until documents are also done, so
+          // fire-and-forget — don't block navigation on a cross-region round-trip.
+          void checkAndFireSubmissionEmail(orderId)
           router.push(`/orders/${orderId}/documents`)
+        } else {
+          setIsNavigating(false)
         }
       }
     } else {
@@ -251,7 +268,7 @@ export function QuestionnaireWizard({
 
   // Loading state - also show loading if we haven't loaded data yet in pre_payment mode
   const isWaitingForData = mode === 'pre_payment' && !serviceName && !error
-  if (isLoading || isWaitingForData) {
+  if (isLoading || isWaitingForData || isNavigating) {
     return (
       <div className="space-y-6">
         <div className="space-y-3">
@@ -341,10 +358,15 @@ export function QuestionnaireWizard({
           <p className="text-muted-foreground mb-6">
             Complete the remaining questions to help us process your order faster.
           </p>
+          {locked && (
+            <p className="text-xs text-muted-foreground mb-4">Approved by Ollvy — your answers are locked.</p>
+          )}
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button onClick={handleEditAnswers}>
-              Complete Now
-            </Button>
+            {!locked && (
+              <Button onClick={handleEditAnswers}>
+                Complete Now
+              </Button>
+            )}
             <Button variant="outline" onClick={() => router.push(`/orders/${orderId}/documents`)}>
               Continue to Documents
             </Button>
@@ -365,10 +387,15 @@ export function QuestionnaireWizard({
         <p className="text-muted-foreground mb-6">
           You've completed all the questions for this order.
         </p>
+        {locked && (
+          <p className="text-xs text-muted-foreground mb-4">Approved by Ollvy — your answers are locked.</p>
+        )}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button variant="outline" onClick={handleEditAnswers}>
-            Edit Answers
-          </Button>
+          {!locked && (
+            <Button variant="outline" onClick={handleEditAnswers}>
+              Edit Answers
+            </Button>
+          )}
           <Button onClick={() => router.push(`/orders/${orderId}/documents`)}>
             Continue to Documents
           </Button>

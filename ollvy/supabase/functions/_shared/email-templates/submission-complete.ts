@@ -23,8 +23,8 @@ export function buildSubmissionComplete(
 
   const body = `
     <p>Hi ${input.customer_greeting},</p>
-    <p>That is everything we needed. Thanks for completing the questionnaire and getting your documents in for ${input.service_name}.</p>
-    <p>Your order is now with our team and your guaranteed delivery date is active. You can see the exact date any time on your order page.</p>
+    <p>That is everything we needed. Thanks for completing the questionnaire and getting your documents in.</p>
+    <p>Your order is with our team now and your guaranteed delivery date is live. You can see it any time on your order page.</p>
     <h3>Order details</h3>
     <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; font-size: 14px;">
       <tr><td style="${labelTd}">Service</td><td style="${valueTd}">${input.service_name}</td></tr>
@@ -33,7 +33,7 @@ export function buildSubmissionComplete(
       <tr><td style="${labelTd}">Guaranteed by</td><td style="${valueTd}">${mono(input.guaranteed_date)}</td></tr>
     </table>
     <h3>What happens next</h3>
-    <p>A specialist picks this up and gets started. If we need anything else from you along the way, we will email you and it will be clearly marked on your order page. Otherwise there is nothing more for you to do. We will keep you posted as things move.</p>
+    <p>A specialist takes it from here. If we need anything else, we will email you and flag it on your order page. Otherwise, sit tight, we will keep you posted.</p>
     <p style="margin: 24px 0;">${ctaButton('View your order', buildOrderUrl(input.order_id))}</p>
     <p>Team Ollvy</p>
   `;

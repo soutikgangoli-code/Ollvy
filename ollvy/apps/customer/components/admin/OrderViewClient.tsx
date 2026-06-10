@@ -28,6 +28,8 @@ import {
   insertCompletionNotification,
   cancelOrderWithReason,
   adminGetSignedUrls,
+  approveSetup,
+  unlockSetup,
 } from '@/app/(admin)/admin/orders/[orderId]/actions'
 import type { AdminUser } from '@/lib/admin/get-admin-user'
 import type { OrderRound, OrderDocument, OrderAdminNote, OrderActivityLog as ActivityLogEntry } from '@/lib/types'
@@ -269,6 +271,24 @@ export function OrderViewClient({
       toast({ title: 'Status updated' })
     } catch (err) {
       toast({ title: 'Error', description: 'Failed to update status', variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Approve the customer setup (locks answers + documents), or reopen it.
+  const handleSetupApproval = async () => {
+    setLoading(true)
+    try {
+      if (order.setup_locked_at) {
+        await unlockSetup(order.id)
+        toast({ title: 'Setup reopened for editing' })
+      } else {
+        await approveSetup(order.id)
+        toast({ title: 'Setup approved — answers and documents locked' })
+      }
+    } catch (err) {
+      toast({ title: 'Error', description: 'Failed to update setup lock', variant: 'destructive' })
     } finally {
       setLoading(false)
     }
@@ -614,6 +634,24 @@ export function OrderViewClient({
               ) : (
                 <Button variant="outline" size="sm" onClick={() => setAssignDialogOpen(true)}>
                   Assign
+                </Button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Label className="text-sm">Setup:</Label>
+              {order.setup_locked_at ? (
+                <>
+                  <Badge variant="outline" className="border-emerald-500/30 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400">
+                    Approved &amp; locked
+                  </Badge>
+                  <Button variant="ghost" size="sm" onClick={handleSetupApproval} disabled={loading} className="text-xs h-6">
+                    Reopen
+                  </Button>
+                </>
+              ) : (
+                <Button variant="outline" size="sm" onClick={handleSetupApproval} disabled={loading}>
+                  Approve setup
                 </Button>
               )}
             </div>

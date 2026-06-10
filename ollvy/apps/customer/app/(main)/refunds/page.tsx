@@ -62,7 +62,7 @@ export default function RefundsPage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold text-foreground mb-4">4. Service Guarantee</h2>
           <p className="text-muted-foreground leading-relaxed">
-            If we fail to deliver the promised service within the stated SLA and the delay is solely
+            If we fail to deliver the promised service within the stated delivery timeline and the delay is solely
             due to Ollvy, you may be eligible for a full refund of the Ollvy service fee. This does
             not apply to delays caused by government processing times, document issues, or client
             response delays.

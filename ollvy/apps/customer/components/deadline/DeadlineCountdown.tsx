@@ -58,9 +58,9 @@ export function GuaranteedBadge({ slaDays }: GuaranteedBadgeProps) {
   return (
     <Badge
       className="bg-ollvy-green/10 text-ollvy-green border border-ollvy-green/20"
-      aria-label={`Guaranteed by ${guaranteedDate}`}
+      aria-label={`Delivery by ${guaranteedDate}`}
     >
-      Guaranteed by {guaranteedDate}
+      Delivery by {guaranteedDate}
     </Badge>
   )
 }

@@ -30,6 +30,7 @@ interface OrderData {
   id: string
   order_number: string
   questionnaire_completed_at: string | null
+  setup_locked_at?: string | null
   service_package: {
     id: string
     name: string
@@ -87,6 +88,10 @@ export function DocumentsPageClient({ order, initialDocuments, __perfTimings }: 
   }
 
   const handleUpload = async (documentKey: string, file: File) => {
+    // Setup approved by admin — documents are locked from replacement.
+    if (order.setup_locked_at) {
+      throw new Error('Your documents have been approved and locked. Contact support if a change is needed.')
+    }
     const __t0 = performance.now()
     const fileSizeKb = Math.round(file.size / 1024)
     console.log(`[documents-perf] upload start: ${documentKey} (${file.name}, ${fileSizeKb}KB)`)

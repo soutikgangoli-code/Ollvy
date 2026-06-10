@@ -89,6 +89,9 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
 
     const supabase = getClient()
 
+    // Capture whether this is the customer's first message BEFORE inserting it.
+    const isFirstCustomerMessage = !messages.some((m) => m.sender_type === 'user')
+
     const { data, error } = await supabase.from('chat_messages').insert({
       conversation_id: conversationId,
       sender_id: user.id,
@@ -100,6 +103,17 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
     if (error) {
       console.error('[ChatWindow] Error sending message:', error)
       throw error
+    }
+
+    // The instant a customer first reaches out, auto-acknowledge so they know we
+    // got it. Fires once per conversation (no prior 'user' message existed).
+    if (isFirstCustomerMessage) {
+      await supabase.from('chat_messages').insert({
+        conversation_id: conversationId,
+        sender_type: 'system',
+        content: "Hi there! Thanks for texting Ollvy. Our team will get back to you in a couple of hours.",
+        message_type: 'text',
+      })
     }
   }
 

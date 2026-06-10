@@ -49,28 +49,28 @@ export function buildIncompleteOrderReminder(
   if (qPending && dPending) {
     subject = `A quick nudge to finish setting up your ${input.service_name}`;
     middle = `
-      <p>Your order for ${input.service_name} was placed on ${mono(input.paid_at_human)}, and we are ready to start. We just need two things from you first. Until they are in, your guaranteed delivery date stays on hold.</p>
+      <p>Your ${input.service_name} order (placed ${mono(input.paid_at_human)}) is ready to start. We just need two things from you, and your guaranteed delivery date is on hold until they are in.</p>
       <h3>1. Your questionnaire</h3>
       <p>${questionnaireLine(input.remaining_questions, input.total_questions)}.</p>
       <h3>2. Your documents</h3>
       <p>Please upload these:</p>
       ${documentList(input.pending_documents, input.uploaded_documents)}
-      <p>It takes about ten minutes. If a document is not handy right now, upload what you have and come back for the rest.</p>
+      <p>It takes about ten minutes. Not got a document handy? Upload what you have and come back for the rest.</p>
     `;
     cta = ctaButton('Finish your setup', buildOrderUrl(input.order_id));
   } else if (!qPending && dPending) {
     subject = `Almost there. Just your documents for ${input.service_name}`;
     middle = `
-      <p>Thanks for completing the questionnaire for ${input.service_name}. The last thing we need is your documents, and then our team starts straight away. Your guaranteed delivery date stays on hold until they are in.</p>
+      <p>Thanks for completing the questionnaire for ${input.service_name}. Last thing we need is your documents, then our team starts straight away. Your guaranteed delivery date is on hold until they are in.</p>
       <h3>Documents still needed</h3>
       ${documentList(input.pending_documents, input.uploaded_documents)}
-      <p>If a document is not handy right now, upload what you have and come back for the rest.</p>
+      <p>Not got a document handy? Upload what you have and come back for the rest.</p>
     `;
     cta = ctaButton('Upload your documents', buildOrderUrl(input.order_id));
   } else {
     subject = `One step left for your ${input.service_name}`;
     middle = `
-      <p>Your documents for ${input.service_name} are in, thank you. The last step is the questionnaire, and then we get started. Your guaranteed delivery date stays on hold until it is done.</p>
+      <p>Your documents for ${input.service_name} are in, thank you. Last step is the questionnaire, then we get started. Your guaranteed delivery date is on hold until it is done.</p>
       <h3>Your questionnaire</h3>
       <p>${questionnaireLine(input.remaining_questions, input.total_questions)}.</p>
     `;
@@ -78,15 +78,16 @@ export function buildIncompleteOrderReminder(
   }
 
   const finalNote = input.reminder_number >= 3
-    ? `<p style="color: #8a8a8a;">This is the last reminder we will send. Your order stays saved, so you can pick up where you left off whenever you are ready.</p>`
+    ? `<p style="color: #8a8a8a;">This is our last reminder. Your order stays saved, so pick up whenever you are ready.</p>`
     : '';
 
   const body = `
     <p>Hi ${input.customer_greeting},</p>
     ${middle}
+    <p>To do this: ollvy.com &rarr; Profile &rarr; your order. Everything is right there, or just tap below.</p>
     <p style="margin: 24px 0;">${cta}</p>
     ${finalNote}
-    <p style="color: #666;">Stuck on anything? Just reply to this email and a real person will help you through it.</p>
+    <p style="color: #666;">Stuck on anything? Just reply and our team will help you through it.</p>
     <p>Team Ollvy</p>
   `;
 

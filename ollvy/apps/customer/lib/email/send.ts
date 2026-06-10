@@ -61,6 +61,16 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
   if (text) payload.text = text;
   if (params.tags) payload.tags = params.tags;
 
+  // Mark as high priority. This forces the high-importance flag in Outlook and
+  // signals importance to Gmail. (Gmail's yellow importance marker is ultimately
+  // algorithmic — based on recipient behaviour — so it can't be guaranteed by a
+  // sender, but these are the standard headers that nudge it.)
+  payload.headers = {
+    'X-Priority': '1',
+    'X-MSMail-Priority': 'High',
+    'Importance': 'high',
+  };
+
   const recipientForLog = Array.isArray(params.to) ? params.to.join(',') : params.to;
 
   try {

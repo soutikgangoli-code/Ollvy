@@ -91,7 +91,7 @@ export function ServicesSimplified({ services }: ServicesSimplifiedProps) {
                 <div className="h-5">
                   {guaranteedDate && (
                     <p className="text-sm text-emerald-600 dark:text-emerald-400 font-medium">
-                      Guaranteed by {guaranteedDate}
+                      Delivery by {guaranteedDate}
                     </p>
                   )}
                   {service.isRetainer && (

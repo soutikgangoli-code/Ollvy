@@ -66,9 +66,10 @@ export function DocumentPreview({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
+      <DialogContent className="w-[calc(100%-1.5rem)] max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader className="flex-shrink-0">
-          <div className="flex items-center justify-between">
+          {/* pr-8 keeps the Open/Download buttons clear of the dialog's absolute close X (right-4) */}
+          <div className="flex items-center justify-between gap-2 pr-8">
             <DialogTitle>{documentLabel}</DialogTitle>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={handleOpenInNewTab} disabled={opening}>
