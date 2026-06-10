@@ -29,7 +29,7 @@ export function buildOrderCompleted(
       <tr><td style="${labelTd}">Total paid</td><td style="${valueTd}">${mono(formatPaisa(input.total_paisa))}</td></tr>
     </table>
     <h3>Your documents</h3>
-    <p>Every deliverable is on your order page, ready to download. It is worth saving them somewhere safe, like a dedicated Drive folder, so they are easy to find later.</p>
+    <p>Every deliverable is on your order page, ready to download. It is worth saving them somewhere safe so they are easy to find later.</p>
     <p style="margin: 24px 0;">${ctaButton('View and download your documents', buildOrderUrl(input.order_id))}</p>
     <p>And if any part of this did not go the way you hoped, reply to this email and tell me directly. I will make it right.</p>
     <p>Soutik<br>Founder, Ollvy</p>

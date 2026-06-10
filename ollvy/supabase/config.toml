@@ -386,3 +386,19 @@ s3_region = "env(S3_REGION)"
 s3_access_key = "env(S3_ACCESS_KEY)"
 # Configures AWS_SECRET_ACCESS_KEY for S3 bucket
 s3_secret_key = "env(S3_SECRET_KEY)"
+
+# ---------------------------------------------------------------------------
+# Edge functions that authenticate their own callers and must NOT have the
+# gateway JWT check. Razorpay signs its webhooks (HMAC), and the cron jobs send
+# the service-role key (verifyCron). Without verify_jwt = false here, a plain
+# `supabase functions deploy <fn>` re-enables the gateway JWT check and breaks
+# them (Razorpay payments stop processing, crons 401).
+# ---------------------------------------------------------------------------
+[functions.razorpay-webhook]
+verify_jwt = false
+
+[functions.drain-customer-notifications-queue]
+verify_jwt = false
+
+[functions.process-order-followups]
+verify_jwt = false

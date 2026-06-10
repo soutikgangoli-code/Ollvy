@@ -428,7 +428,7 @@ serve(async (req) => {
       .select(`
         *,
         users!inner (id, fcm_token, state, city, business_name, phone, email),
-        service_packages!inner (id, name, workflow_stages, sla_working_days, has_govt_processing, completion_max_days, completion_range_text)
+        service_packages!inner (id, name, workflow_stages, sla_working_days, has_govt_processing, completion_max_days, completion_range_text, service_document_templates (document_label, is_required, display_order))
       `)
       .eq('razorpay_order_id', razorpayOrderId)
       .single();
@@ -639,6 +639,13 @@ serve(async (req) => {
         );
         const guaranteedDate = guaranteedEstimate?.guaranteedDate ?? 'your order page';
 
+        // Required documents for this service, in display order, for the email's
+        // "Documents we will need" table.
+        const requiredDocs = ((order.service_packages.service_document_templates ?? []) as Array<{ document_label: string; is_required: boolean; display_order: number | null }>)
+          .filter((d) => d.is_required)
+          .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
+          .map((d) => d.document_label);
+
         const { subject, html } = buildPaymentConfirmation({
           customer_greeting: resolveCustomerGreeting({
             business_name: order.users.business_name,
@@ -655,6 +662,7 @@ serve(async (req) => {
           paid_at_human: formatDateHuman(new Date()),
           razorpay_payment_id: razorpayPaymentId,
           guaranteed_date: guaranteedDate,
+          documents: requiredDocs,
         });
 
         await sendEmail({

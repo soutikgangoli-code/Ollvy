@@ -31,6 +31,9 @@ import { notifySlackError } from '../_shared/slack.ts';
 
 // Reminder thresholds in days-since-paid. reminder N (1..3) fires at REMINDER_DAYS[N-1].
 const REMINDER_DAYS = [3, 6, 9];
+// Only chase orders paid within this window. Anything older is treated as
+// abandoned and never reminded, so turning the cron on cannot blast stale orders.
+const REMINDER_MAX_AGE_DAYS = 14;
 const SUBMISSION_SETTLE_MS = 2 * 60 * 60 * 1000; // 2 hours
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -253,10 +256,12 @@ async function runReminderPass(
   // Paid, fewer than 3 reminders sent, and NOT both complete (one of the two
   // completion stamps is still null). Once both are complete the order drops
   // out of this set forever.
+  const reminderCutoffIso = new Date(Date.now() - REMINDER_MAX_AGE_DAYS * DAY_MS).toISOString();
   const { data, error } = await supabase
     .from('orders')
     .select(ORDER_SELECT)
     .not('paid_at', 'is', null)
+    .gte('paid_at', reminderCutoffIso)
     .lt('incomplete_reminders_sent', REMINDER_DAYS.length)
     .or('questionnaire_completed_at.is.null,documents_completed_at.is.null');
 

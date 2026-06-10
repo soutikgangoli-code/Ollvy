@@ -17,6 +17,7 @@ export interface PaymentConfirmationInput {
   paid_at_human: string;
   razorpay_payment_id: string;
   guaranteed_date: string;
+  documents: string[];
 }
 
 const labelTd = 'padding: 4px 16px 4px 0; color: #666; white-space: nowrap; vertical-align: top;';
@@ -33,6 +34,13 @@ export function buildPaymentConfirmation(
     : '';
 
   const subject = `Order confirmed: ${input.service_name} (${input.order_number})`;
+
+  const documentsTable = input.documents.length > 0
+    ? `<h3>Documents we will need</h3>
+    <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; font-size: 14px;">
+      ${input.documents.map((d) => `<tr><td style="padding: 3px 0;">${d}</td></tr>`).join('')}
+    </table>`
+    : '';
 
   const body = `
     <p>Hi ${input.customer_greeting},</p>
@@ -53,9 +61,10 @@ export function buildPaymentConfirmation(
     <p>Two quick things from your side, then we get to work:</p>
     <ol style="margin: 0 0 14px; padding-left: 20px;">
       <li style="margin-bottom: 6px;">Fill in the questionnaire so our team understands your specifics.</li>
-      <li style="margin-bottom: 6px;">Upload your documents. The exact list is waiting on your order page.</li>
+      <li style="margin-bottom: 6px;">Upload the documents we need to file for you.</li>
     </ol>
-    <p>Do both today and your work is guaranteed by ${mono(input.guaranteed_date)}. That date only starts counting once we have your questionnaire and documents, so it shifts if they wait. Knock them out now and we will get straight to work for you.</p>
+    ${documentsTable}
+    <p>Do both today and your ${input.service_name} is guaranteed by ${mono(input.guaranteed_date)}. That date only starts counting once we have your questionnaire and documents, so it shifts if they wait. Knock them out now and we will get straight to work for you.</p>
     <p style="margin: 24px 0;">${ctaButton('Continue to your order', buildOrderUrl(input.order_id))}</p>
     <p style="color: #666;">Got a question? Just reply to this email and a real person will get back to you, usually within a few hours on working days.</p>
     <p>Team Ollvy</p>
