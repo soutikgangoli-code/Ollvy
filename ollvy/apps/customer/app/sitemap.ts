@@ -57,10 +57,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Service detail pages - DB-backed, use build date
-  const serviceRoutes: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
-    url: `${BASE_URL}/services/${slug}`,
-    lastModified: buildDate,
-  }))
+  const serviceRoutes: MetadataRoute.Sitemap = serviceSlugs
+    .filter((slug) => slug !== 'test') // hidden ₹1 test service — direct-link only
+    .map((slug) => ({
+      url: `${BASE_URL}/services/${slug}`,
+      lastModified: buildDate,
+    }))
 
   // Document checklist pages - use each page's lastReviewed date
   const documentRoutes: MetadataRoute.Sitemap = DOCUMENT_CHECKLIST_METADATA.map((tool) => ({

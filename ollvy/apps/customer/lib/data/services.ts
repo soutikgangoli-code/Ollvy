@@ -554,6 +554,7 @@ export async function getPopularServices(): Promise<PopularServiceData[]> {
         billing_cycle
       `)
       .eq('is_active', true)
+      .neq('slug', 'test')
       .order('display_order', { ascending: true })
       .limit(6),
       DB_TIMEOUT_MS,

@@ -84,6 +84,7 @@ async function fetchServices(): Promise<ServicePackage[]> {
           )
         `)
         .eq('is_active', true)
+        .neq('slug', 'test')
         .order('display_order', { ascending: true }),
       DB_TIMEOUT_MS,
       'servicesPage.list',

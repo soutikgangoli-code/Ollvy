@@ -52,6 +52,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    // The hidden ₹1 test service is direct-link only — keep it out of search engines.
+    robots: slug === 'test' ? 'noindex, nofollow' : undefined,
     alternates: {
       canonical: service.canonicalUrl,
       languages: {
