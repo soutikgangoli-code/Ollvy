@@ -1,4 +1,4 @@
-import { wrapHTML, ctaButton } from './shared-layout';
+import { wrapHTML, ctaButton, mono } from './shared-layout';
 import { formatPaisa, buildOrderUrl } from '../format';
 
 export interface PaymentConfirmationInput {
@@ -13,43 +13,48 @@ export interface PaymentConfirmationInput {
   total_paisa: number;
   paid_at_human: string;
   razorpay_payment_id: string;
+  guaranteed_date: string;
 }
+
+const labelTd = 'padding: 4px 16px 4px 0; color: #666; white-space: nowrap; vertical-align: top;';
+const valueTd = 'padding: 4px 0; vertical-align: top;';
 
 export function buildPaymentConfirmation(
   input: PaymentConfirmationInput
 ): { subject: string; html: string } {
   const govtFeesRow = input.govt_fees_paisa > 0
-    ? `<tr><td>Government fees:</td><td>${formatPaisa(input.govt_fees_paisa)}</td></tr>`
+    ? `<tr><td style="${labelTd}">Government fees</td><td style="${valueTd}">${mono(formatPaisa(input.govt_fees_paisa))}</td></tr>`
     : '';
   const discountRow = input.discount_paisa > 0
-    ? `<tr><td>Discount:</td><td>-${formatPaisa(input.discount_paisa)}</td></tr>`
+    ? `<tr><td style="${labelTd}">Discount</td><td style="${valueTd}">-${mono(formatPaisa(input.discount_paisa))}</td></tr>`
     : '';
 
   const subject = `Order confirmed: ${input.service_name} (${input.order_number})`;
 
   const body = `
     <p>Hi ${input.customer_greeting},</p>
-    <p>Thanks for choosing Ollvy. We've received your payment and your order is confirmed.</p>
+    <p>Your payment has gone through and your order is confirmed. Thank you for choosing Ollvy.</p>
     <h3>Order summary</h3>
-    <table cellpadding="6" style="border-collapse: collapse;">
-      <tr><td>Service:</td><td>${input.service_name}</td></tr>
-      <tr><td>Order number:</td><td>${input.order_number}</td></tr>
-      <tr><td>Professional fee:</td><td>${formatPaisa(input.base_paisa)}</td></tr>
+    <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; font-size: 14px;">
+      <tr><td style="${labelTd}">Service</td><td style="${valueTd}">${input.service_name}</td></tr>
+      <tr><td style="${labelTd}">Order number</td><td style="${valueTd}">${mono(input.order_number)}</td></tr>
+      <tr><td style="${labelTd}">Professional fee</td><td style="${valueTd}">${mono(formatPaisa(input.base_paisa))}</td></tr>
       ${govtFeesRow}
-      <tr><td>GST:</td><td>${formatPaisa(input.gst_paisa)}</td></tr>
+      <tr><td style="${labelTd}">GST</td><td style="${valueTd}">${mono(formatPaisa(input.gst_paisa))}</td></tr>
       ${discountRow}
-      <tr><td><strong>Total paid:</strong></td><td><strong>${formatPaisa(input.total_paisa)}</strong></td></tr>
-      <tr><td>Payment date:</td><td>${input.paid_at_human}</td></tr>
-      <tr><td>Payment ID:</td><td>${input.razorpay_payment_id}</td></tr>
+      <tr><td style="padding: 8px 16px 4px 0; font-weight: 600;">Total paid</td><td style="padding: 8px 0 4px; font-weight: 600;">${mono(formatPaisa(input.total_paisa))}</td></tr>
+      <tr><td style="${labelTd}">Payment date</td><td style="${valueTd}">${mono(input.paid_at_human)}</td></tr>
+      <tr><td style="${labelTd}">Payment ID</td><td style="${valueTd}">${mono(input.razorpay_payment_id)}</td></tr>
     </table>
     <h3>What happens next</h3>
-    <ol>
-      <li>Head to your order page and complete the questionnaire so our team understands your specifics.</li>
-      <li>Upload the documents we'll need to file on your behalf. The exact list is on your order page.</li>
-      <li>Once both are submitted, our team gets started. Your guaranteed timeline is paused until we have everything from you.</li>
+    <p>Two quick things from your side, then we get to work:</p>
+    <ol style="margin: 0 0 14px; padding-left: 20px;">
+      <li style="margin-bottom: 6px;">Fill in the questionnaire so our team understands your specifics.</li>
+      <li style="margin-bottom: 6px;">Upload your documents. The exact list is waiting on your order page.</li>
     </ol>
-    <p style="margin-top: 24px;">${ctaButton('Continue to your order', buildOrderUrl(input.order_id))}</p>
-    <p style="margin-top: 24px; color: #666;">If you have any questions, just reply to this email and we'll get back within a few hours during business days.</p>
+    <p>Do both today and your work is guaranteed by ${mono(input.guaranteed_date)}. That date only starts counting once we have your questionnaire and documents, so it shifts if they wait. Knock them out now and we will get straight to work for you.</p>
+    <p style="margin: 24px 0;">${ctaButton('Continue to your order', buildOrderUrl(input.order_id))}</p>
+    <p style="color: #666;">Got a question? Just reply to this email and a real person will get back to you, usually within a few hours on working days.</p>
     <p>Team Ollvy</p>
   `;
 

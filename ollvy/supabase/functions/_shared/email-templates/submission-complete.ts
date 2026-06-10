@@ -1,5 +1,8 @@
-import { wrapHTML, ctaButton, mono } from './shared-layout';
-import { buildOrderUrl } from '../format';
+// Deno mirror of apps/customer/lib/email/templates/submission-complete.ts.
+// Kept in sync by hand - if you edit one, edit the other.
+
+import { wrapHTML, ctaButton, mono } from './shared-layout.ts';
+import { buildOrderUrl } from '../format.ts';
 
 export interface SubmissionCompleteInput {
   customer_greeting: string;
@@ -14,7 +17,7 @@ const labelTd = 'padding: 4px 16px 4px 0; color: #666; white-space: nowrap; vert
 const valueTd = 'padding: 4px 0; vertical-align: top;';
 
 export function buildSubmissionComplete(
-  input: SubmissionCompleteInput
+  input: SubmissionCompleteInput,
 ): { subject: string; html: string } {
   const subject = `We have everything. Work on your ${input.service_name} starts now (${input.order_number})`;
 

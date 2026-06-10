@@ -14,7 +14,7 @@ import { corsHeaders } from '../_shared/cors.ts';
 import { verifyCron } from '../_shared/auth.ts';
 import { getSupabaseAdmin } from '../_shared/supabase-admin.ts';
 import { sendEmail } from '../_shared/email.ts';
-import { resolveCustomerGreeting } from '../_shared/format.ts';
+import { resolveCustomerGreeting, formatDateHuman } from '../_shared/format.ts';
 import { buildAdminUpdate } from '../_shared/email-templates/admin-update.ts';
 import { notifySlackError } from '../_shared/slack.ts';
 
@@ -165,6 +165,8 @@ serve(async (req) => {
         service_name: serviceRow?.name ?? 'your order',
         order_number: order.order_number,
         order_id: order.id,
+        // Date of the most recent queued event in this coalesced batch.
+        update_date_human: formatDateHuman(new Date(group.lastCreated)),
       });
 
       const sendResult = await sendEmail({

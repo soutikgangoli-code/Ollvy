@@ -1,12 +1,7 @@
 'use server'
 
-import { createServerSupabase, getUser, supabaseServer } from '@/lib/supabase-server'
+import { createServerSupabase, getUser } from '@/lib/supabase-server'
 import { logActivity, LOG_ACTIONS } from '@/lib/admin/log-activity'
-import { sendEmail } from '@/lib/email/send'
-import { formatDateHuman, formatTimestampIST, resolveCustomerGreeting } from '@/lib/email/format'
-import { buildSubmissionComplete } from '@/lib/email/templates/submission-complete'
-import { postToSlack } from '@/lib/slack/notify'
-import { ADMIN_ROOT_URL, buildReadyForWorkMessage } from '@/lib/slack/messages'
 
 /**
  * Log customer document upload to activity log
@@ -86,174 +81,22 @@ export async function logCustomerQuestionnaireAnswer(
 }
 
 /**
- * Fires the "submission complete" customer email when BOTH the questionnaire
- * and required documents are done. Idempotent via submission_complete_email_sent_at.
+ * No-op retained for backward compatibility.
  *
- * Called from QuestionnaireWizard (after final-step save) and DocumentsPageClient
- * (after each upload completes). Whichever finishes second triggers the send.
+ * The "submission complete" customer email (and the Slack #ops ready-for-work
+ * ping that accompanied it) used to fire synchronously from here the moment the
+ * questionnaire AND documents were both done. That immediate send has been moved
+ * to the process-order-followups cron, which enforces a 2-hour settle window
+ * before sending and computes a guaranteed delivery date at send time. See
+ * supabase/functions/process-order-followups/index.ts.
  *
- * Failures are logged but never thrown - this should not break the calling flow.
+ * Callers (QuestionnaireWizard, DocumentsPageClient) still invoke this after a
+ * save; we keep the exported signature so they compile unchanged, but there is
+ * nothing to do here now. The completion timestamps themselves are written by
+ * the questionnaire / document save paths, not by this function, so dropping the
+ * email send does not affect them.
  */
-export async function checkAndFireSubmissionEmail(orderId: string): Promise<void> {
-  const user = await getUser()
-  if (!user) return
-
-  if (!supabaseServer) {
-    console.error('checkAndFireSubmissionEmail: service client unavailable')
-    return
-  }
-
-  // Single query: ownership check + completion timestamps + service/user context
-  // + payment timing + assignment for the Slack #ops ready-for-work ping.
-  const { data: order, error } = await supabaseServer
-    .from('orders')
-    .select(`
-      id,
-      user_id,
-      order_number,
-      paid_at,
-      professional_id,
-      questionnaire_completed_at,
-      documents_completed_at,
-      submission_complete_email_sent_at,
-      users!inner (id, email, business_name),
-      service_packages!inner (id, name),
-      professionals (id, full_name)
-    `)
-    .eq('id', orderId)
-    .single()
-
-  if (error || !order) {
-    console.error('checkAndFireSubmissionEmail: order lookup failed', error)
-    return
-  }
-
-  if (order.user_id !== user.id) {
-    console.warn(JSON.stringify({
-      event: 'submission_email_skipped',
-      reason: 'not_owner',
-      order_id: orderId,
-      user_id: user.id,
-    }))
-    return
-  }
-
-  if (
-    !order.questionnaire_completed_at ||
-    !order.documents_completed_at ||
-    order.submission_complete_email_sent_at
-  ) {
-    return
-  }
-
-  // users!inner / service_packages!inner come back as objects; PostgREST types
-  // sometimes infer them as arrays under generated typings.
-  const userRow = Array.isArray(order.users) ? order.users[0] : order.users
-  const serviceRow = Array.isArray(order.service_packages)
-    ? order.service_packages[0]
-    : order.service_packages
-
-  const customerEmail = userRow?.email as string | null | undefined
-  if (!customerEmail) {
-    console.warn(JSON.stringify({
-      event: 'email_skipped',
-      reason: 'no_email_on_user',
-      user_id: order.user_id,
-      order_id: order.id,
-      intended_template: 'submission_complete',
-    }))
-    return
-  }
-
-  // The "submitted at" instant is whichever completion happened second.
-  const qDone = new Date(order.questionnaire_completed_at).getTime()
-  const dDone = new Date(order.documents_completed_at).getTime()
-  const submittedAt = new Date(Math.max(qDone, dDone))
-
-  const { subject, html } = buildSubmissionComplete({
-    customer_greeting: resolveCustomerGreeting({
-      business_name: userRow?.business_name ?? null,
-      email: customerEmail,
-    }),
-    service_name: serviceRow?.name ?? 'your order',
-    order_number: order.order_number,
-    order_id: order.id,
-    submitted_at_human: formatDateHuman(submittedAt),
-  })
-
-  const result = await sendEmail({
-    to: customerEmail,
-    subject,
-    html,
-    tags: [
-      { name: 'template', value: 'submission_complete' },
-      { name: 'order_id', value: order.id },
-    ],
-  })
-
-  if (!result.success) {
-    console.error(JSON.stringify({
-      event: 'submission_complete_email_failed',
-      order_id: order.id,
-      error: result.error,
-    }))
-    return
-  }
-
-  // Idempotency guard in the WHERE clause prevents a double-send if a second
-  // caller raced past our null check above.
-  const { error: stampError } = await supabaseServer
-    .from('orders')
-    .update({ submission_complete_email_sent_at: new Date().toISOString() })
-    .eq('id', orderId)
-    .is('submission_complete_email_sent_at', null)
-
-  if (stampError) {
-    console.error(JSON.stringify({
-      event: 'submission_complete_email_stamp_failed',
-      order_id: order.id,
-      error: stampError.message,
-    }))
-  }
-
-  // Post to Slack #ops "ready for work". Best effort - never breaks the action.
-  try {
-    const proRow = Array.isArray(order.professionals)
-      ? order.professionals[0]
-      : order.professionals
-    const professionalName = (proRow?.full_name as string | null | undefined) ?? null
-
-    // Time-since-payment: prefer paid_at, fall back to questionnaire/docs window
-    // start (the earlier of the two completion timestamps) if paid_at is missing.
-    const paidAtMs = order.paid_at
-      ? new Date(order.paid_at).getTime()
-      : Math.min(qDone, dDone)
-    const submittedMs = submittedAt.getTime()
-    const elapsedMs = Math.max(0, submittedMs - paidAtMs)
-    const hoursAfterPayment = Math.floor(elapsedMs / (60 * 60 * 1000))
-    const daysAfterPayment = Math.floor(elapsedMs / (24 * 60 * 60 * 1000))
-
-    const customerNameForSlack =
-      (userRow?.business_name as string | null | undefined) ||
-      customerEmail.split('@')[0]
-
-    const text = buildReadyForWorkMessage({
-      customer_name: customerNameForSlack,
-      service_name: serviceRow?.name ?? 'your order',
-      order_number: order.order_number,
-      order_id: order.id,
-      hours_after_payment: hoursAfterPayment,
-      days_after_payment: daysAfterPayment,
-      assigned_professional_name: professionalName,
-      submitted_at_ist: formatTimestampIST(submittedAt),
-      admin_root_url: ADMIN_ROOT_URL,
-    })
-    await postToSlack({ channel: 'ops', text })
-  } catch (slackErr) {
-    console.error(JSON.stringify({
-      event: 'ready_for_work_slack_error',
-      order_id: order.id,
-      error: slackErr instanceof Error ? slackErr.message : String(slackErr),
-    }))
-  }
+export async function checkAndFireSubmissionEmail(_orderId: string): Promise<void> {
+  // Intentionally a no-op. The submission-complete email is now sent by the
+  // process-order-followups cron after a 2-hour settle window.
 }

@@ -21,6 +21,7 @@ import { getEnvironment, getRequiredEnv } from '../_shared/env.ts';
 import { sendEmail } from '../_shared/email.ts';
 import { formatDateHuman, formatTimestampIST, resolveCustomerGreeting } from '../_shared/format.ts';
 import { buildPaymentConfirmation } from '../_shared/email-templates/payment-confirmation.ts';
+import { getCompletionEstimate } from '../_shared/guaranteed-date.ts';
 import { postToSlack, notifySlackError } from '../_shared/slack.ts';
 import { ADMIN_ROOT_URL, buildPaymentCapturedMessage } from '../_shared/slack-messages.ts';
 
@@ -427,7 +428,7 @@ serve(async (req) => {
       .select(`
         *,
         users!inner (id, fcm_token, state, city, business_name, phone, email),
-        service_packages!inner (id, name, workflow_stages, sla_working_days)
+        service_packages!inner (id, name, workflow_stages, sla_working_days, has_govt_processing, completion_max_days, completion_range_text)
       `)
       .eq('razorpay_order_id', razorpayOrderId)
       .single();
@@ -627,6 +628,17 @@ serve(async (req) => {
         const proDiscSnap = order.pro_discount_paisa_snapshot ?? 0;
         const promoDiscSnap = order.promo_discount_paisa_snapshot ?? 0;
 
+        // Guaranteed date as the customer would see it on the site today. The
+        // clock is paused until they complete the questionnaire + documents, so
+        // the email frames this as the date IF they finish now.
+        const guaranteedEstimate = getCompletionEstimate(
+          order.service_packages.sla_working_days,
+          order.service_packages.has_govt_processing ?? false,
+          order.service_packages.completion_max_days,
+          order.service_packages.completion_range_text,
+        );
+        const guaranteedDate = guaranteedEstimate?.guaranteedDate ?? 'your order page';
+
         const { subject, html } = buildPaymentConfirmation({
           customer_greeting: resolveCustomerGreeting({
             business_name: order.users.business_name,
@@ -642,6 +654,7 @@ serve(async (req) => {
           total_paisa: totalSnap,
           paid_at_human: formatDateHuman(new Date()),
           razorpay_payment_id: razorpayPaymentId,
+          guaranteed_date: guaranteedDate,
         });
 
         await sendEmail({
