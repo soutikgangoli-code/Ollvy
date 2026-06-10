@@ -38,11 +38,12 @@ export function calculateServicePrice(
   if (service.slug === 'trademark-registration') {
     const applicantType = String(preCursorAnswers.applicant_type || '')
     const classCount = Number(preCursorAnswers.trademark_class_count) || 1 // Default to 1 class
-    const isDiscountEligible = ['individual', 'proprietorship', 'msme', 'startup'].includes(applicantType)
+    const isDiscountEligible = ['individual', 'sole_proprietor', 'msme', 'startup'].includes(applicantType)
     // Individual/Proprietor/MSME/Startup: Rs 4,500/class (450000 paisa)
     // Company/LLP/Partnership/Others: Rs 9,000/class (900000 paisa)
-    // If no applicant type selected yet, use full rate as default
-    const ratePerClass = applicantType ? (isDiscountEligible ? 450000 : 900000) : 900000
+    // If no applicant type is selected yet, default to the discounted rate so the
+    // live price matches the advertised "starting from" floor (never above it).
+    const ratePerClass = applicantType ? (isDiscountEligible ? 450000 : 900000) : 450000
     govtFeePaisa = ratePerClass * classCount
   }
 
@@ -53,14 +54,18 @@ export function calculateServicePrice(
     const directors = Number(preCursorAnswers.number_of_directors) || 2
     const additionalDSCCost = Math.max(0, directors - 2) * 120000 // Rs 1,200 per director beyond 2
 
-    // Delhi-based stamp duty + MCA ROC fee slabs (approximate)
+    // Floor (Rs 1L) holds the fixed statutory cost (DSC, name reservation, forms,
+    // PAN/TAN, base stamp). Above the floor the ONLY real increase is Delhi stamp
+    // duty on the Articles = 0.15% of authorized capital. MCA's registration fee is
+    // waived up to Rs 15L, so we do not inflate beyond actual stamp duty. (Any small
+    // ROC fee above Rs 15L is finalised at filing.)
     const capitalSlabs: Record<string, number> = {
-      '100000':   799900,   // Rs 1L   -> Rs 7,999 govt fee
-      '500000':   1000000,  // Rs 5L   -> Rs 10,000 govt fee
-      '1000000':  1500000,  // Rs 10L  -> Rs 15,000 govt fee
-      '2500000':  2500000,  // Rs 25L  -> Rs 25,000 govt fee
-      '5000000':  3500000,  // Rs 50L  -> Rs 35,000 govt fee
-      '10000000': 4500000,  // Rs 1Cr  -> Rs 45,000 govt fee
+      '100000':   799900,   // Rs 1L   -> Rs 7,999 (incl ~Rs 150 stamp at 0.15%)
+      '500000':   859900,   // Rs 5L   -> +Rs 600 stamp duty
+      '1000000':  934900,   // Rs 10L  -> +Rs 1,350 stamp duty
+      '2500000':  1159900,  // Rs 25L  -> +Rs 3,600 stamp duty
+      '5000000':  1534900,  // Rs 50L  -> +Rs 7,350 stamp duty
+      '10000000': 2284900,  // Rs 1Cr  -> +Rs 14,850 stamp duty
     }
 
     govtFeePaisa = (capitalSlabs[capital] ?? 799900) + additionalDSCCost
@@ -73,14 +78,18 @@ export function calculateServicePrice(
     const partners = Number(preCursorAnswers.number_of_partners) || 2
     const additionalDSCCost = Math.max(0, partners - 2) * 120000 // Rs 1,200 per partner beyond 2
 
-    // FiLLiP govt fee slabs (central government - uniform across states)
+    // FiLLiP govt fee slabs (central government - uniform across states), keyed by
+    // the actual rupee contribution values the questionnaire stores. MCA tiers:
+    //   up to Rs 1L -> Rs 500, Rs 1L-5L -> Rs 2,000, Rs 5L-10L -> Rs 4,000, above -> Rs 5,000
     const contributionSlabs: Record<string, number> = {
-      'upto_1l':    50000,   // Up to Rs 1L   -> Rs 500 govt fee
-      '1l_to_5l':   200000,  // Rs 1L-Rs 5L   -> Rs 2,000 govt fee
-      '5l_to_10l':  400000,  // Rs 5L-Rs 10L  -> Rs 4,000 govt fee
-      'above_10l':  500000,  // Above Rs 10L  -> Rs 5,000 govt fee
+      '10000':   50000,   // Rs 10,000 -> up to Rs 1L -> Rs 500
+      '50000':   50000,   // Rs 50,000 -> up to Rs 1L -> Rs 500
+      '100000':  50000,   // Rs 1L     -> up to Rs 1L -> Rs 500
+      '500000':  200000,  // Rs 5L     -> Rs 1L-5L    -> Rs 2,000
+      '1000000': 400000,  // Rs 10L    -> Rs 5L-10L   -> Rs 4,000
     }
 
+    // Unknown / "other" (specify later, typically above Rs 10L) -> Rs 5,000.
     govtFeePaisa = (contributionSlabs[contribution] ?? 500000) + additionalDSCCost
   }
 
