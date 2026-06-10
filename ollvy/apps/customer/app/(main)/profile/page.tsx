@@ -121,19 +121,10 @@ export default async function ProfilePage({ searchParams }: PageProps) {
           .order('created_at', { ascending: false })
           .limit(50),
 
-        // Retainer subscriptions
-        supabaseServer
-          .from('retainer_subscriptions')
-          .select(`
-            id,
-            status,
-            monthly_price_paisa,
-            next_billing_date,
-            current_cycle_end,
-            service_package:service_packages(name)
-          `)
-          .eq('user_id', user.id)
-          .neq('status', 'cancelled'),
+        // Retainer subscriptions: the fetched data is never rendered anywhere
+        // (RetainerStatusCard is a dead export), so we skip the DB round-trip and
+        // return an empty set. Downstream mapping/shape is preserved (maps over []).
+        Promise.resolve({ data: [], error: null }),
 
         // Compliance obligations
         supabaseServer

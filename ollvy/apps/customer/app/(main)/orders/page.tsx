@@ -39,8 +39,7 @@ export default async function OrdersPage() {
               id,
               name,
               slug,
-              sla_working_days,
-              workflow_stages
+              sla_working_days
             ),
             professional:professionals(
               id,

@@ -41,15 +41,12 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
     // Fetch messages
     const fetchMessages = async () => {
       setIsLoading(true)
-      console.log('[ChatWindow] Fetching messages for conversation:', conversationId)
 
       const { data, error } = await supabase
         .from('chat_messages')
         .select('*')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true })
-
-      console.log('[ChatWindow] Fetch result:', { data, error, count: data?.length })
 
       if (error) {
         console.error('[ChatWindow] Error fetching messages:', error)
@@ -92,8 +89,6 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
 
     const supabase = getClient()
 
-    console.log('[ChatWindow] Sending message:', { conversationId, userId: user.id, content })
-
     const { data, error } = await supabase.from('chat_messages').insert({
       conversation_id: conversationId,
       sender_id: user.id,
@@ -101,8 +96,6 @@ export function ChatWindow({ conversationId, professionalName }: ChatWindowProps
       content,
       message_type: 'text',
     }).select()
-
-    console.log('[ChatWindow] Send result:', { data, error })
 
     if (error) {
       console.error('[ChatWindow] Error sending message:', error)
