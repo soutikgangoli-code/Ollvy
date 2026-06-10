@@ -15,6 +15,11 @@ interface RoundsTimelineProps {
   orderId: string
   servicePackageId: string
   workflowStages?: WorkflowDisplayStage[]
+  // Already fetched by the order page's server render and passed in, so this
+  // component does NOT re-query them. Documents stay live via the parent's own
+  // realtime subscription; answers are static for the life of this page.
+  initialDocs?: Round0Data['initialDocs']
+  initialAnswers?: Round0Data['answers']
 }
 
 interface Round0Data {
@@ -36,19 +41,22 @@ interface Round0Data {
   }>
 }
 
-export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] }: RoundsTimelineProps) {
+export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [], initialDocs = [], initialAnswers = [] }: RoundsTimelineProps) {
   const { user } = useAuthStore()
   const supabase = getClient()
   const [rounds, setRounds] = useState<OrderRound[]>([])
-  const [round0Data, setRound0Data] = useState<Round0Data>({ answers: [], questions: [], initialDocs: [] })
+  const [questions, setQuestions] = useState<Round0Data['questions']>([])
   const [activeTab, setActiveTab] = useState<'documents' | 'answers'>('documents')
 
-  // Fetch function that can be called on initial load and on realtime updates
+  // Documents (initialDocs) and questionnaire answers (initialAnswers) are
+  // already fetched by the order page's server render and handed in as props,
+  // so we do NOT re-query them here. We only fetch what the server batch does
+  // not already have: the rounds and the question definitions.
   const fetchData = useCallback(async () => {
     if (!user?.id) return
 
-    const [roundsRes, answersRes, questionsRes, docsRes] = await Promise.all([
-      // Fetch all visible rounds with their questions and doc requests
+    const [roundsRes, questionsRes] = await Promise.all([
+      // All visible rounds with their questions and doc requests
       supabase
         .from('order_rounds')
         .select(`
@@ -62,53 +70,33 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] 
         .eq('order_id', orderId)
         .eq('is_visible_to_user', true)
         .order('round_number', { ascending: true }),
-      // Questionnaire responses
-      supabase
-        .from('order_questionnaire_responses')
-        .select('question_key, response_value')
-        .eq('order_id', orderId),
-      // Service questionnaires (questions with labels)
+      // Service questionnaires (question definitions: labels, types, options)
       supabase
         .from('service_questionnaires')
         .select('question_key, question_label, question_type, options, display_order')
         .eq('service_package_id', servicePackageId)
         .order('display_order', { ascending: true }),
-      // All order documents (not just doc_collection stage)
-      supabase
-        .from('order_documents')
-        .select('id, document_label, file_url, file_name, verified_at, rejection_reason, stage_key')
-        .eq('order_id', orderId),
     ])
 
     setRounds((roundsRes.data as OrderRound[]) || [])
-    setRound0Data({
-      answers: answersRes.data || [],
-      questions: questionsRes.data || [],
-      initialDocs: docsRes.data || [],
-    })
+    setQuestions(questionsRes.data || [])
   }, [orderId, servicePackageId, user?.id, supabase])
 
-  // Initial data fetch
+  // Initial fetch — rounds + question definitions only.
   useEffect(() => {
     fetchData()
   }, [fetchData])
 
-  // Real-time subscriptions
+  // Real-time subscriptions for the data this component owns: rounds + work
+  // documents. order_documents / order_questionnaire_responses changes reach
+  // this component via the parent's `initialDocs` prop (kept live by the parent's
+  // own subscription) and a fresh server render, so we don't subscribe to them.
   useEffect(() => {
     if (!user?.id) return
 
     const channel = supabase
       .channel(`rounds-timeline-${orderId}`)
-      // Subscribe to order_documents changes
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'order_documents',
-        filter: `order_id=eq.${orderId}`,
-      }, () => {
-        fetchData()
-      })
-      // Subscribe to order_work_documents changes
+      // order_work_documents changes
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
@@ -117,16 +105,7 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] 
       }, () => {
         fetchData()
       })
-      // Subscribe to order_questionnaire_responses changes
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'order_questionnaire_responses',
-        filter: `order_id=eq.${orderId}`,
-      }, () => {
-        fetchData()
-      })
-      // Subscribe to round_question_requests changes via order_rounds
+      // round_question_requests changes via order_rounds
       .on('postgres_changes', {
         event: '*',
         schema: 'public',
@@ -143,8 +122,8 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] 
   }, [orderId, user?.id, supabase, fetchData])
 
   // Compute all answers for the Answers tab
-  const allAnswers = round0Data.questions.map(q => {
-    const answer = round0Data.answers.find(a => a.question_key === q.question_key)
+  const allAnswers = questions.map(q => {
+    const answer = initialAnswers.find(a => a.question_key === q.question_key)
     return {
       question_key: q.question_key,
       question_label: q.question_label,
@@ -160,14 +139,14 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [] 
     .flatMap(r => (r.round_question_requests || []).filter(q => q.answered_at))
 
   // Compute documents grouped by stage
-  const documentsByStage = groupDocumentsByStage(round0Data.initialDocs, rounds, workflowStages)
+  const documentsByStage = groupDocumentsByStage(initialDocs, rounds, workflowStages)
 
-  const hasData = allAnswers.length > 0 || round0Data.initialDocs.length > 0 || rounds.some(r =>
+  const hasData = allAnswers.length > 0 || initialDocs.length > 0 || rounds.some(r =>
     (r.round_question_requests?.length ?? 0) > 0 || (r.order_work_documents?.length ?? 0) > 0
   )
 
   // Count documents and answers for badges
-  const docsCount = round0Data.initialDocs.length + rounds.reduce((acc, r) =>
+  const docsCount = initialDocs.length + rounds.reduce((acc, r) =>
     acc + (r.order_work_documents?.length || 0), 0
   )
   const answersCount = allAnswers.filter(a => a.response_value != null).length + roundQuestionResponses.length

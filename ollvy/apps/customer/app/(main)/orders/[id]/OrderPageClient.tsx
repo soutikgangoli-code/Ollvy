@@ -1293,6 +1293,8 @@ export function OrderPageClient({ orderId, initialData, __perfTimings }: OrderPa
               orderId={orderId}
               servicePackageId={servicePackage.id}
               workflowStages={servicePackage.workflow_stages || []}
+              initialDocs={documents}
+              initialAnswers={questionnaireResponses}
             />
           )}
         </div>
