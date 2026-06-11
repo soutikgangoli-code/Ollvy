@@ -258,6 +258,33 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
           })
         }
 
+        // Trademark: expand a goods/services textarea per class chosen in the
+        // pre-questionnaire. The shared questions above are answered once; only
+        // this class-specific description repeats, one field per selected class.
+        const selectedClasses = Array.isArray(prePaymentResponses['trademark_classes'])
+          ? (prePaymentResponses['trademark_classes'] as string[])
+          : []
+        if (servicePackage.slug === 'trademark-registration' && selectedClasses.length > 0) {
+          const perClassStep = steps.reduce((m, s) => Math.max(m, s.stepNumber), 0) + 1
+          steps.push({
+            stepNumber: perClassStep,
+            title: 'Goods & services per class',
+            description: 'Tell us what you actually sell in each class. Be specific - this is exactly what your trademark protects.',
+            questions: selectedClasses.map((cls, i): ServiceQuestion => ({
+              id: `goods_services_class_${cls}`,
+              service_package_id: servicePackage.id,
+              question_key: `goods_services_class_${cls}`,
+              question_label: `Goods & services in Class ${cls}`,
+              question_type: 'textarea',
+              validation: { required: false },
+              placeholder: 'List the specific products or services you offer in this class.',
+              step_number: perClassStep,
+              display_order: i,
+              is_active: true,
+            })),
+          })
+        }
+
         // Sort steps by step number
         steps.sort((a, b) => a.stepNumber - b.stepNumber)
 
