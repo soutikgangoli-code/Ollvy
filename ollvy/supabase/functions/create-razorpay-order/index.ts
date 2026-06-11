@@ -49,48 +49,56 @@ interface CreateOrderBody {
 }
 
 // Compute govt fee override for services whose fee depends on pre-cursor
-// answers. MUST mirror the client logic in
-// apps/customer/app/(main)/checkout/[serviceId]/CheckoutClient.tsx priceBreakdown
-// — any change to slab tables here must also change there, and vice-versa. The
-// client computes for UI display; the server is the source of truth for what
-// Razorpay actually charges.
+// answers. This is the source of truth for what Razorpay actually charges, and it
+// MUST stay byte-for-byte identical to resolveGovtFeePaisa() in
+// apps/customer/lib/pricing/calculate-price.ts (Deno can't import the client lib,
+// so it's hand-mirrored). Any change to a slab table here must change there too.
 function computeGovtFeeOverride(
   slug: string | undefined,
   baseGovtFeePaisa: number,
   answers: Record<string, any> | undefined,
 ): number {
-  if (!slug || !answers) return baseGovtFeePaisa;
+  if (!slug) return baseGovtFeePaisa;
+  const a = answers || {};
 
-  if (slug === 'trademark-registration' && answers.trademark_class_count) {
-    const classCount = Number(answers.trademark_class_count);
-    const applicantType = String(answers.applicant_type || '');
-    const isDiscountEligible = ['individual', 'proprietorship', 'msme', 'startup'].includes(applicantType);
-    return (isDiscountEligible ? 450000 : 900000) * classCount;
+  // TRADEMARK: rate per class x classes. Individual/Proprietor/MSME/Startup = Rs 4,500,
+  // others = Rs 9,000. No applicant type selected -> discounted rate (the floor).
+  if (slug === 'trademark-registration') {
+    const applicantType = String(a.applicant_type || '');
+    const classCount = Number(a.trademark_class_count) || 1;
+    const isDiscountEligible = ['individual', 'sole_proprietor', 'msme', 'startup'].includes(applicantType);
+    const ratePerClass = applicantType ? (isDiscountEligible ? 450000 : 900000) : 450000;
+    return ratePerClass * classCount;
   }
 
-  if (slug === 'pvt-ltd-incorporation' && answers.authorized_capital) {
-    const capital = String(answers.authorized_capital);
-    const directors = Number(answers.number_of_directors) || 2;
+  // PVT LTD: floor (Rs 1L) + Delhi stamp duty (0.15% of capital); MCA reg fee waived
+  // up to Rs 15L. +Rs 1,200 DSC per director beyond 2.
+  if (slug === 'pvt-ltd-incorporation' && a.authorized_capital) {
+    const capital = String(a.authorized_capital);
+    const directors = Number(a.number_of_directors) || 2;
     const additionalDSCCost = Math.max(0, directors - 2) * 120000;
     const capitalSlabs: Record<string, number> = {
-      '100000':   799900,
-      '500000':   1000000,
-      '1000000':  1500000,
-      '2500000':  2500000,
-      '5000000':  3500000,
+      '100000':   799900,   // Rs 1L
+      '500000':   859900,   // Rs 5L
+      '1000000':  934900,   // Rs 10L
+      '2500000':  1159900,  // Rs 25L
+      '5000000':  1534900,  // Rs 50L
+      '10000000': 2284900,  // Rs 1Cr
     };
     return (capitalSlabs[capital] ?? 799900) + additionalDSCCost;
   }
 
-  if (slug === 'llp-incorporation' && answers.total_contribution) {
-    const contribution = String(answers.total_contribution);
-    const partners = Number(answers.number_of_partners) || 2;
+  // LLP: FiLLiP fee by contribution tier; +Rs 1,200 DSC per partner beyond 2.
+  if (slug === 'llp-incorporation' && a.total_contribution) {
+    const contribution = String(a.total_contribution);
+    const partners = Number(a.number_of_partners) || 2;
     const additionalDSCCost = Math.max(0, partners - 2) * 120000;
     const contributionSlabs: Record<string, number> = {
-      'upto_1l':    50000,
-      '1l_to_5l':   200000,
-      '5l_to_10l':  400000,
-      'above_10l':  500000,
+      '10000':   50000,   // up to Rs 1L -> Rs 500
+      '50000':   50000,
+      '100000':  50000,
+      '500000':  200000,  // Rs 1L-5L -> Rs 2,000
+      '1000000': 400000,  // Rs 5L-10L -> Rs 4,000
     };
     return (contributionSlabs[contribution] ?? 500000) + additionalDSCCost;
   }
