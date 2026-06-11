@@ -45,3 +45,16 @@ export const GOVT_FEE_INCLUDES: Record<string, string[]> = {
 export function govtFeeIncludes(slug: string): string[] {
   return GOVT_FEE_INCLUDES[slug] ?? []
 }
+
+// For services whose govt fee CHANGES with the answers, a short note on what
+// actually drives the change, shown in brackets under the Government Fees row.
+// Services not listed here have a fixed govt fee — no note (just "Government Fees").
+export const GOVT_FEE_DRIVER: Record<string, string> = {
+  'pvt-ltd-incorporation': 'stamp duty',
+  'llp-incorporation': 'filing fee',
+  'trademark-registration': 'per class',
+}
+
+export function govtFeeDriver(slug: string): string | null {
+  return GOVT_FEE_DRIVER[slug] ?? null
+}

@@ -15,7 +15,7 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 import { firePreCreateOrder } from '@/lib/checkout-warmup'
 import { getFullAttributionData } from '@/lib/utm'
 import { GovtFeeRow } from '@/components/pricing/GovtFeeRow'
-import { govtFeeIncludes } from '@/lib/pricing/govt-fee-includes'
+import { govtFeeIncludes, govtFeeDriver } from '@/lib/pricing/govt-fee-includes'
 
 interface BookingPanelProps {
   service: DBServiceConfig
@@ -416,6 +416,7 @@ export function BookingPanel({
           <GovtFeeRow
             amountLabel={`₹${govtFeeAmount.toLocaleString('en-IN')}`}
             includes={govtFeeIncludes(service.slug)}
+            driver={govtFeeDriver(service.slug)}
             rowClassName="pl-3.5"
             labelClassName="text-sm text-muted-foreground"
             valueClassName="font-mono text-sm text-foreground"

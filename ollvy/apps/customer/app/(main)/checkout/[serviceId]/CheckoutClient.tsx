@@ -37,7 +37,8 @@ import {
 } from '@/components/checkout'
 import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
 import { GovtFeeRow } from '@/components/pricing/GovtFeeRow'
-import { govtFeeIncludes } from '@/lib/pricing/govt-fee-includes'
+import { govtFeeIncludes, govtFeeDriver } from '@/lib/pricing/govt-fee-includes'
+import { resolveGovtFeePaisa } from '@/lib/pricing/calculate-price'
 
 // Below-fold modals - only rendered after user triggers payment / success / dismissal.
 // Import the module file directly — the barrel (@/components/checkout) pulls every
@@ -383,63 +384,14 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
     const serviceFee = service.price_base_paisa + variantPriceAdjustment
 
-    // Calculate govt fees - may be overridden by pre-cursor answers
-    let govtFeePaisa = (service.price_govt_fees_paisa || 0) + variantGovtFeeAdjustment
-
-    // --- TRADEMARK ---
-    // Govt fee = rate per class x number of classes
-    // Ollvy fee stays fixed at price_base_paisa
-    if (service.slug === 'trademark-registration' && preCursorAnswers.trademark_class_count) {
-      const classCount = Number(preCursorAnswers.trademark_class_count)
-      const applicantType = String(preCursorAnswers.applicant_type || '')
-      const isDiscountEligible = ['individual', 'proprietorship', 'msme', 'startup'].includes(applicantType)
-      // Individual/Proprietor/MSME/Startup: Rs 4,500/class (450000 paisa)
-      // Company/LLP/Partnership/Others: Rs 9,000/class (900000 paisa)
-      govtFeePaisa = (isDiscountEligible ? 450000 : 900000) * classCount
-    }
-
-    // --- PRIVATE LIMITED COMPANY ---
-    // Govt fee = MCA ROC filing fee + Delhi stamp duty on authorized capital
-    // Ollvy fee stays fixed at price_base_paisa
-    // Base case (Rs 1L capital, 2 directors) = Rs 7,999 govt fee (current seeded value)
-    // DSC base covers 2 directors. Each additional director = Rs 1,200 extra
-    if (service.slug === 'pvt-ltd-incorporation' && preCursorAnswers.authorized_capital) {
-      const capital = String(preCursorAnswers.authorized_capital)
-      const directors = Number(preCursorAnswers.number_of_directors) || 2
-      const additionalDSCCost = Math.max(0, directors - 2) * 120000 // Rs 1,200 per director beyond 2
-
-      // Delhi-based stamp duty + MCA ROC fee slabs (approximate)
-      const capitalSlabs: Record<string, number> = {
-        '100000':   799900,   // Rs 1L   -> Rs 7,999 govt fee  (current base)
-        '500000':   1000000,  // Rs 5L   -> Rs 10,000 govt fee
-        '1000000':  1500000,  // Rs 10L  -> Rs 15,000 govt fee
-        '2500000':  2500000,  // Rs 25L  -> Rs 25,000 govt fee
-        '5000000':  3500000,  // Rs 50L  -> Rs 35,000 govt fee
-      }
-
-      govtFeePaisa = (capitalSlabs[capital] ?? 799900) + additionalDSCCost
-    }
-
-    // --- LLP ---
-    // Govt fee = FiLLiP stamp duty on total capital contribution
-    // Ollvy fee stays fixed at price_base_paisa
-    // Base case (up to Rs 1L contribution, 2 partners) = Rs 5,000 govt fee
-    // DSC/DPIN base covers 2 partners. Each additional partner = Rs 1,200 extra
-    if (service.slug === 'llp-incorporation' && preCursorAnswers.total_contribution) {
-      const contribution = String(preCursorAnswers.total_contribution)
-      const partners = Number(preCursorAnswers.number_of_partners) || 2
-      const additionalDSCCost = Math.max(0, partners - 2) * 120000 // Rs 1,200 per partner beyond 2
-
-      // FiLLiP govt fee slabs (central government - uniform across states)
-      const contributionSlabs: Record<string, number> = {
-        'upto_1l':    50000,   // Up to Rs 1L   -> Rs 500 govt fee
-        '1l_to_5l':   200000,  // Rs 1L-Rs 5L   -> Rs 2,000 govt fee
-        '5l_to_10l':  400000,  // Rs 5L-Rs 10L  -> Rs 4,000 govt fee
-        'above_10l':  500000,  // Above Rs 10L  -> Rs 5,000 govt fee
-      }
-
-      govtFeePaisa = (contributionSlabs[contribution] ?? 500000) + additionalDSCCost
-    }
+    // Govt fee — resolved through the single shared resolver (lib/pricing/
+    // calculate-price.ts) so the eligibility live-price and this checkout can never
+    // compute a different number for the same answers.
+    const govtFeePaisa = resolveGovtFeePaisa(
+      service.slug,
+      (service.price_govt_fees_paisa || 0) + variantGovtFeeAdjustment,
+      preCursorAnswers,
+    )
 
     const gstRate = service.price_gst_rate || 18
 
@@ -1102,11 +1054,15 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
         {/* Header */}
         <div className="mb-8">
           <Link
-            href={`/services/${service.slug}`}
+            href={
+              isEligibilityFlow(service.slug)
+                ? `/checkout/${service.slug}/eligibility?edit=true${searchParams.toString() ? `&${searchParams.toString()}` : ''}`
+                : `/services/${service.slug}`
+            }
             className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-4"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to Service
+            {isEligibilityFlow(service.slug) ? 'Back to questions' : 'Back to Service'}
           </Link>
           <h1 className="text-2xl font-semibold text-foreground">Checkout</h1>
           <p className="text-muted-foreground mt-1">{service.name}</p>
@@ -1571,6 +1527,7 @@ function OrderSummarySidebar({
           <GovtFeeRow
             amountLabel={formatPrice(govtFees)}
             includes={govtFeeIncludes(serviceSlug)}
+            driver={govtFeeDriver(serviceSlug)}
             rowClassName="pl-7"
             labelClassName="text-sm text-muted-foreground"
             valueClassName="font-mono text-sm text-foreground"
@@ -1759,6 +1716,8 @@ function PreCursorSummaryCard({ answers, serviceSlug, onEdit }: PreCursorSummary
         '1000000': 'Rs 10 Lakhs',
         '2500000': 'Rs 25 Lakhs',
         '5000000': 'Rs 50 Lakhs',
+        '10000000': 'Rs 1 Crore',
+        'other': 'Other (specify later)',
       }
       return capitalLabels[String(value)] || String(value)
     }
@@ -1766,10 +1725,12 @@ function PreCursorSummaryCard({ answers, serviceSlug, onEdit }: PreCursorSummary
     // Format contribution amounts
     if (key === 'total_contribution') {
       const contributionLabels: Record<string, string> = {
-        'upto_1l': 'Up to Rs 1 Lakh',
-        '1l_to_5l': 'Rs 1 Lakh - Rs 5 Lakhs',
-        '5l_to_10l': 'Rs 5 Lakhs - Rs 10 Lakhs',
-        'above_10l': 'Above Rs 10 Lakhs',
+        '10000': 'Rs 10,000',
+        '50000': 'Rs 50,000',
+        '100000': 'Rs 1 Lakh',
+        '500000': 'Rs 5 Lakhs',
+        '1000000': 'Rs 10 Lakhs',
+        'other': 'Other (specify later)',
       }
       return contributionLabels[String(value)] || String(value)
     }
@@ -1778,13 +1739,14 @@ function PreCursorSummaryCard({ answers, serviceSlug, onEdit }: PreCursorSummary
     if (key === 'applicant_type') {
       const typeLabels: Record<string, string> = {
         'individual': 'Individual',
-        'proprietorship': 'Proprietorship',
-        'msme': 'MSME',
-        'startup': 'Startup India Registered',
-        'company': 'Company',
+        'sole_proprietor': 'Sole Proprietor',
+        'partnership': 'Partnership Firm',
+        'pvt_ltd': 'Private Limited Company',
         'llp': 'LLP',
-        'partnership': 'Partnership',
-        'others': 'Others',
+        'opc': 'One Person Company',
+        'trust': 'Trust / Society',
+        'startup': 'DPIIT Recognized Startup',
+        'msme': 'MSME / Udyam Registered',
       }
       return typeLabels[String(value)] || String(value)
     }
