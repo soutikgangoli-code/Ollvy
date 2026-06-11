@@ -1,0 +1,27 @@
+name: Guards
+
+# Drift guards for the hand-mirrored code (email templates across Node/Deno,
+# and the client/server govt-fee pricing). These run in CI on a full checkout so
+# every path resolves — they are intentionally NOT in the Vercel build, so a guard
+# failure surfaces here without ever breaking a production deploy.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  guards:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ollvy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Email templates in sync (Node source == Deno copies)
+        run: node scripts/sync-email-templates.mjs --check
+      - name: Govt-fee pricing parity (client == server)
+        run: node scripts/check-pricing-parity.mjs

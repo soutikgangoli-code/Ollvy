@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "prebuild": "node ../../scripts/sync-email-templates.mjs --check && node ../../scripts/check-pricing-parity.mjs",
+    "prebuild": "node ../../scripts/sync-email-templates.mjs --check",
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint"
