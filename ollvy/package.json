@@ -6,6 +6,7 @@
   "scripts": {
     "sync:emails": "node scripts/sync-email-templates.mjs",
     "check:emails": "node scripts/sync-email-templates.mjs --check",
+    "check:pricing": "node scripts/check-pricing-parity.mjs",
     "build": "pnpm --filter @ollvy/customer build",
     "mobile": "pnpm --filter @ollvy/mobile",
     "professional": "pnpm --filter @ollvy/professional",
