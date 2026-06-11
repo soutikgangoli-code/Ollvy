@@ -11,6 +11,13 @@ import { STEP_TITLES, DEFAULT_STEP_TITLES } from '../questionnaire/types'
 
 type QuestionnaireMode = 'pre_payment' | 'post_payment'
 
+// Server-prefetched pre-payment data, passed in to skip the two client-side
+// Supabase round-trips that otherwise gate the eligibility page on hydration.
+export interface PrefetchedPrePayment {
+  service: { id: string; slug: string; name: string }
+  questions: ServiceQuestion[]
+}
+
 interface QuestionnaireState {
   // Data
   orderId: string | null
@@ -48,7 +55,7 @@ interface PrefetchedOrderData {
 interface QuestionnaireActions {
   // Initialize
   loadQuestionnaire: (orderId: string, forceEdit?: boolean, prefetchedOrder?: PrefetchedOrderData) => Promise<void>
-  loadPrePaymentQuestionnaire: (serviceId: string, serviceSlug: string, loadExisting?: boolean) => Promise<void>
+  loadPrePaymentQuestionnaire: (serviceId: string, serviceSlug: string, loadExisting?: boolean, prefetched?: PrefetchedPrePayment) => Promise<void>
 
   // Navigation
   goToStep: (step: number) => void
@@ -356,33 +363,47 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
       }
     },
 
-    loadPrePaymentQuestionnaire: async (serviceId: string, serviceSlug: string, loadExisting: boolean = false) => {
+    loadPrePaymentQuestionnaire: async (serviceId: string, serviceSlug: string, loadExisting: boolean = false, prefetched?: PrefetchedPrePayment) => {
       // Reset store to clear any cached data from previous loads
       set({ ...initialState, isLoading: true, error: null, serviceId, serviceSlug, mode: 'pre_payment' })
 
       try {
-        const supabase = getClient()
+        // Fast path: the eligibility page already fetched the service + its
+        // pre-payment questions server-side (cached, ISR). Use that instead of
+        // firing two more client-side Supabase round-trips after hydration.
+        let servicePackage: { id: string; slug: string; name: string }
+        let questionsData: ServiceQuestion[]
 
-        // Fetch service package details
-        const { data: servicePackage, error: serviceError } = await supabase
-          .from('service_packages')
-          .select('id, slug, name')
-          .eq('id', serviceId)
-          .single()
+        if (prefetched) {
+          servicePackage = prefetched.service
+          questionsData = prefetched.questions
+        } else {
+          const supabase = getClient()
 
-        if (serviceError) throw serviceError
+          // Fetch service package details
+          const { data: servicePackageData, error: serviceError } = await supabase
+            .from('service_packages')
+            .select('id, slug, name')
+            .eq('id', serviceId)
+            .single()
 
-        // Fetch only pre-payment questions for this service
-        const { data: questionsData, error: questionsError } = await supabase
-          .from('service_questionnaires')
-          .select('*')
-          .eq('service_package_id', serviceId)
-          .eq('is_active', true)
-          .eq('is_pre_payment', true)
-          .order('step_number', { ascending: true })
-          .order('display_order', { ascending: true })
+          if (serviceError) throw serviceError
 
-        if (questionsError) throw questionsError
+          // Fetch only pre-payment questions for this service
+          const { data: rows, error: questionsError } = await supabase
+            .from('service_questionnaires')
+            .select('*')
+            .eq('service_package_id', serviceId)
+            .eq('is_active', true)
+            .eq('is_pre_payment', true)
+            .order('step_number', { ascending: true })
+            .order('display_order', { ascending: true })
+
+          if (questionsError) throw questionsError
+
+          servicePackage = servicePackageData
+          questionsData = (rows || []) as ServiceQuestion[]
+        }
 
         // Load existing responses from sessionStorage only when editing
         let responses: QuestionnaireFormValues = {}

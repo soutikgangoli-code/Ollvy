@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { QuestionnaireProgress } from './QuestionnaireProgress'
 import { QuestionField } from './QuestionField'
 import { useQuestionnaireStore } from '@/lib/stores/questionnaire-store'
+import type { ServiceQuestion } from '@/lib/questionnaire/types'
 import { createStepSchema } from '@/lib/questionnaire/schemas'
 import type { QuestionnaireFormValues } from '@/lib/questionnaire/types'
 import { shouldShowQuestion } from '@/lib/questionnaire/types'
@@ -26,6 +27,8 @@ interface QuestionnaireWizardProps {
   onComplete?: (answers: Record<string, unknown>) => void  // required in pre_payment mode
   onValuesChange?: (values: Record<string, unknown>) => void  // real-time value updates for live pricing
   locked?: boolean                    // setup approved by admin — answers are read-only
+  serviceName?: string                // pre_payment: service name (when prefetched server-side)
+  prefetchedQuestions?: ServiceQuestion[]  // pre_payment: questions fetched server-side, skips client round-trips
 }
 
 export function QuestionnaireWizard({
@@ -38,6 +41,8 @@ export function QuestionnaireWizard({
   onComplete,
   onValuesChange,
   locked = false,
+  serviceName: prefetchedServiceName,
+  prefetchedQuestions,
 }: QuestionnaireWizardProps) {
   const router = useRouter()
   const {
@@ -70,11 +75,14 @@ export function QuestionnaireWizard({
   // Load questionnaire on mount
   useEffect(() => {
     if (mode === 'pre_payment' && serviceId && serviceSlug) {
-      loadPrePaymentQuestionnaire(serviceId, serviceSlug, loadExisting)
+      const prefetched = prefetchedQuestions
+        ? { service: { id: serviceId, slug: serviceSlug, name: prefetchedServiceName ?? '' }, questions: prefetchedQuestions }
+        : undefined
+      loadPrePaymentQuestionnaire(serviceId, serviceSlug, loadExisting, prefetched)
     } else if (orderId) {
       loadQuestionnaire(orderId, forceEdit)
     }
-  }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadExisting, loadQuestionnaire, loadPrePaymentQuestionnaire])
+  }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadExisting, loadQuestionnaire, loadPrePaymentQuestionnaire, prefetchedQuestions, prefetchedServiceName])
 
   // Handle case where there are no pre-payment questions (redirect to checkout)
   // Only trigger after data has loaded (serviceName is set) AND store has initialized
