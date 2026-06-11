@@ -981,7 +981,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           color: '#2D5A27',
           backdrop_color:
             typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
-              ? 'rgba(0, 0, 0, 0.45)'
+              ? 'rgba(0, 0, 0, 0.85)' // near-solid in dark mode so the surround never reads as washed/light
               : 'rgba(0, 0, 0, 0.6)',
         },
         modal: {
