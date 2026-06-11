@@ -255,6 +255,46 @@ function renderField(
   }
 }
 
+// Edit distance for typo tolerance.
+function levenshtein(a: string, b: string): number {
+  const m = a.length
+  const n = b.length
+  if (!m) return n
+  if (!n) return m
+  let prev = Array.from({ length: n + 1 }, (_, j) => j)
+  for (let i = 1; i <= m; i++) {
+    const curr = [i]
+    for (let j = 1; j <= n; j++) {
+      curr[j] = Math.min(
+        prev[j] + 1,
+        curr[j - 1] + 1,
+        prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1),
+      )
+    }
+    prev = curr
+  }
+  return prev[n]
+}
+
+// Forgiving search: matches on substring, on out-of-order/partial typing
+// (subsequence), and on typos (per-word edit distance). So "clothign", "footwer"
+// or "25" all still surface the right class.
+function fuzzyMatch(query: string, label: string): boolean {
+  const q = query.toLowerCase().trim()
+  if (!q) return true
+  const t = label.toLowerCase()
+  if (t.includes(q)) return true
+  // subsequence: query characters appear in order somewhere in the label
+  let i = 0
+  for (let k = 0; k < t.length && i < q.length; k++) {
+    if (t[k] === q[i]) i++
+  }
+  if (i === q.length) return true
+  // typo tolerance against each word
+  const threshold = q.length <= 4 ? 1 : 2
+  return t.split(/[^a-z0-9]+/).some((w) => w.length > 0 && levenshtein(q, w) <= threshold)
+}
+
 // Multi-select with an optional search box (shown for long lists, e.g. trademark
 // classes). Selected values are an array of option values.
 function MultiSelectField({
@@ -270,8 +310,7 @@ function MultiSelectField({
 }) {
   const [query, setQuery] = useState('')
   const showSearch = options.length > 12
-  const q = query.trim().toLowerCase()
-  const filtered = q ? options.filter((o) => o.label.toLowerCase().includes(q)) : options
+  const filtered = query.trim() ? options.filter((o) => fuzzyMatch(query, o.label)) : options
 
   const toggle = (val: string) =>
     onChange(value.includes(val) ? value.filter((v) => v !== val) : [...value, val])
