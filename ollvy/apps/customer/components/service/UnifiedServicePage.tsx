@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { DBServiceConfig, ServicePricingData, ServiceReview, RelatedServiceCard } from '@/lib/data/services'
 import { servicesBySlug } from '@/lib/services/data'
+import { serviceProfessional } from '@/lib/services/professional'
 import {
   PRICE_VARIES_BY_QUESTIONNAIRE_SLUGS,
   isEligibilityFlow,
@@ -1548,7 +1549,7 @@ export function UnifiedServicePage({
                 Get {service.shortName} done now
               </h2>
               <p className="text-base text-muted-foreground mt-4 whitespace-nowrap">
-                Fixed price. Verified CA. Done within {service.slaDays} working days.
+                Fixed price. Verified {serviceProfessional(service.slug)}. Done within {service.slaDays} working days.
               </p>
               <Button size="lg" className="mt-8" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
                 <Link href={getCtaUrl()} prefetch={true}>

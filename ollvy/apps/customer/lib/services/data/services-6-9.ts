@@ -26,28 +26,28 @@ export const trademarkRegistration: ServicePageConfig = {
       step: 1,
       title: 'Tell us your brand name and category',
       timeframe: 'Day 0',
-      description: 'Trademark attorney assigned within 4 hours. You provide the mark, the classes you want to protect, and your business details. Preliminary search started immediately.',
-      milestone: 'Attorney assigned, search started',
+      description: 'Trademark lawyer assigned within 4 hours. You provide the mark, the classes you want to protect, and your business details. Preliminary search started immediately.',
+      milestone: 'Lawyer assigned, search started',
     },
     {
       step: 2,
       title: 'Trademark search report delivered',
       timeframe: 'Day 1-2',
-      description: 'Ollvy attorney searches the Trademark Registry for identical and similar marks in your categories. If your mark is clear, Ollvy proceeds to filing. If conflicts exist, Ollvy suggests modifications before you spend the government fee.',
+      description: 'Ollvy lawyer searches the Trademark Registry for identical and similar marks in your categories. If your mark is clear, Ollvy proceeds to filing. If conflicts exist, Ollvy suggests modifications before you spend the government fee.',
       milestone: 'Search report delivered',
     },
     {
       step: 3,
       title: 'Application filed with Trademark Registry',
       timeframe: 'Day 3-7',
-      description: 'Ollvy attorney drafts the application, selects the correct categories, and files. You receive your application number and filing receipt. Your rights are protected from this filing date - you don\'t have to wait for the certificate.',
+      description: 'Ollvy lawyer drafts the application, selects the correct categories, and files. You receive your application number and filing receipt. Your rights are protected from this filing date - you don\'t have to wait for the certificate.',
       milestone: 'Application filed, receipt received',
     },
     {
       step: 4,
       title: 'Examination and publication',
       timeframe: '6-12 months (government processing)',
-      description: 'The Trademark Registry examines your application. If objections are raised, your Ollvy attorney responds - included in the price. Once cleared, the mark is published in the Trademark Journal for 4 months.',
+      description: 'The Trademark Registry examines your application. If objections are raised, your Ollvy lawyer responds - included in the price. Once cleared, the mark is published in the Trademark Journal for 4 months.',
       milestone: 'Under examination',
     },
     {
@@ -62,17 +62,17 @@ export const trademarkRegistration: ServicePageConfig = {
   included: [
     {
       title: 'Trademark search before filing',
-      description: 'Ollvy attorney searches the Registry before spending your government fee. If your exact mark is already taken in your category, Ollvy tells you upfront.',
+      description: 'Ollvy lawyer searches the Registry before spending your government fee. If your exact mark is already taken in your category, Ollvy tells you upfront.',
       without: 'File without searching, wait months, get rejected',
       withOllvy: 'Search first, modify if needed, then file',
     },
     {
       title: 'Category selection guidance',
-      description: 'Trademarks are registered per category (45 categories). Ollvy attorney recommends only the ones you actually need - most businesses need 1-3.',
+      description: 'Trademarks are registered per category (45 categories). Ollvy lawyer recommends only the ones you actually need - most businesses need 1-3.',
     },
     {
       title: 'Objection response included',
-      description: 'If the government raises objections, your Ollvy attorney responds. Included in the price - not a separate charge.',
+      description: 'If the government raises objections, your Ollvy lawyer responds. Included in the price - not a separate charge.',
     },
     {
       title: 'Renewal reminder',
@@ -153,7 +153,7 @@ export const trademarkRegistration: ServicePageConfig = {
     {
       category: 'General',
       q: 'Can I trademark a common word like "Fresh" or "Quick"?',
-      a: 'Descriptive or generic words are difficult to register on their own. A distinctive combination, stylised logo, or word used in an unexpected context (Apple for computers) can be protected. Ollvy attorney checks whether your name can be registered before you spend the government fee.',
+      a: 'Descriptive or generic words are difficult to register on their own. A distinctive combination, stylised logo, or word used in an unexpected context (Apple for computers) can be protected. Ollvy lawyer checks whether your name can be registered before you spend the government fee.',
     },
   ],
 
