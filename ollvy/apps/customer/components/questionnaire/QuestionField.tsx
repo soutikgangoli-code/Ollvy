@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -207,45 +208,14 @@ function renderField(
           name={question.question_key}
           control={control}
           defaultValue={[]}
-          render={({ field }) => {
-            const selectedValues = Array.isArray(field.value) ? field.value : []
-
-            const handleToggle = (value: string) => {
-              const newValues = selectedValues.includes(value)
-                ? selectedValues.filter((v: string) => v !== value)
-                : [...selectedValues, value]
-              field.onChange(newValues)
-            }
-
-            return (
-              <div className="grid grid-cols-2 gap-3">
-                {question.options?.map((option) => {
-                  const isSelected = selectedValues.includes(option.value)
-                  return (
-                    <label
-                      key={option.value}
-                      htmlFor={`${question.question_key}-${option.value}`}
-                      className={cn(
-                        'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors',
-                        isSelected
-                          ? 'border-primary bg-primary/5'
-                          : 'border-border hover:border-primary/50 hover:bg-muted/30'
-                      )}
-                    >
-                      <Checkbox
-                        id={`${question.question_key}-${option.value}`}
-                        checked={isSelected}
-                        onCheckedChange={() => handleToggle(option.value)}
-                      />
-                      <span className="text-sm font-medium text-foreground">
-                        {option.label}
-                      </span>
-                    </label>
-                  )
-                })}
-              </div>
-            )
-          }}
+          render={({ field }) => (
+            <MultiSelectField
+              questionKey={question.question_key}
+              options={question.options ?? []}
+              value={Array.isArray(field.value) ? field.value : []}
+              onChange={field.onChange}
+            />
+          )}
         />
       )
 
@@ -283,4 +253,69 @@ function renderField(
         />
       )
   }
+}
+
+// Multi-select with an optional search box (shown for long lists, e.g. trademark
+// classes). Selected values are an array of option values.
+function MultiSelectField({
+  questionKey,
+  options,
+  value,
+  onChange,
+}: {
+  questionKey: string
+  options: { value: string; label: string }[]
+  value: string[]
+  onChange: (next: string[]) => void
+}) {
+  const [query, setQuery] = useState('')
+  const showSearch = options.length > 12
+  const q = query.trim().toLowerCase()
+  const filtered = q ? options.filter((o) => o.label.toLowerCase().includes(q)) : options
+
+  const toggle = (val: string) =>
+    onChange(value.includes(val) ? value.filter((v) => v !== val) : [...value, val])
+
+  return (
+    <div className="space-y-3">
+      {showSearch && (
+        <Input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search categories..."
+          className="w-full"
+        />
+      )}
+      <div className={cn('grid grid-cols-1 sm:grid-cols-2 gap-2.5', showSearch && 'max-h-72 overflow-y-auto pr-1')}>
+        {filtered.map((option) => {
+          const isSelected = value.includes(option.value)
+          return (
+            <label
+              key={option.value}
+              htmlFor={`${questionKey}-${option.value}`}
+              className={cn(
+                'flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-colors',
+                isSelected
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50 hover:bg-muted/30'
+              )}
+            >
+              <Checkbox
+                id={`${questionKey}-${option.value}`}
+                checked={isSelected}
+                onCheckedChange={() => toggle(option.value)}
+              />
+              <span className="text-sm font-medium text-foreground">{option.label}</span>
+            </label>
+          )
+        })}
+        {filtered.length === 0 && (
+          <p className="col-span-full text-sm text-muted-foreground py-2">
+            No categories match "{query}".
+          </p>
+        )}
+      </div>
+    </div>
+  )
 }

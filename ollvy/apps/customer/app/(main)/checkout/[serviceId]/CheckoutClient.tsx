@@ -1685,6 +1685,7 @@ function PreCursorSummaryCard({ answers, serviceSlug, onEdit }: PreCursorSummary
       applicant_type: 'Applicant Type',
       trademark_type: 'Trademark Type',
       trademark_class_count: 'Number of Classes',
+      trademark_classes: 'Trademark classes',
       // Pvt Ltd
       authorized_capital: 'Authorized Capital',
       number_of_directors: 'Number of Directors',
@@ -1706,6 +1707,11 @@ function PreCursorSummaryCard({ answers, serviceSlug, onEdit }: PreCursorSummary
   // Format value for display
   const formatValue = (key: string, value: unknown): string => {
     if (value === null || value === undefined) return '-'
+
+    // Selected trademark classes (multiselect of class numbers)
+    if (key === 'trademark_classes' && Array.isArray(value)) {
+      return value.length ? value.map((v) => `Class ${v}`).join(', ') : '-'
+    }
 
     // Format capital amounts
     if (key === 'authorized_capital') {
