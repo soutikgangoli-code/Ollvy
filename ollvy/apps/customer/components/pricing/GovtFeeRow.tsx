@@ -51,18 +51,17 @@ export function GovtFeeRow({
             )}
           </span>
           {driver && (
-            <span className="text-[10px] text-muted-foreground/70 mt-0.5">({driver})</span>
+            <span className="text-[11px] text-muted-foreground/60 mt-0.5">({driver})</span>
           )}
         </span>
         <span className={valueClassName}>{amountLabel}</span>
       </button>
 
       {expandable && open && (
-        <ul className="mt-2 mb-1 space-y-1">
+        <ul className="mt-2 mb-1 ml-0.5 space-y-1.5 border-l border-border/50 pl-3">
           {includes.map((item, i) => (
-            <li key={i} className="flex gap-2 text-xs text-muted-foreground">
-              <span className="text-muted-foreground/40">·</span>
-              <span>{item}</span>
+            <li key={i} className="text-[11px] leading-snug text-muted-foreground/80">
+              {item}
             </li>
           ))}
         </ul>
