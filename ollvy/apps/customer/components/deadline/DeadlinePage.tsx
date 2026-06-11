@@ -180,7 +180,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
                 <h2 className="text-xl font-semibold text-foreground mb-6">Every filing includes</h2>
                 <div className="space-y-3">
                   {[
-                    { title: 'Verified CA assigned within 24 hours', description: 'A background-checked professional matched to your filing type and location.' },
+                    { title: 'Ollvy CA assigned within 24 hours', description: 'A background-checked professional matched to your filing type and location.' },
                     { title: 'Engagement letter at checkout', description: "Exact scope of work before you pay. No ambiguity about what's covered." },
                     { title: 'Acknowledgement proof on completion', description: 'Filing confirmation with acknowledgement number sent to your dashboard.' },
                   ].map((item, i) => (
@@ -244,7 +244,7 @@ export function DeadlinePage({ deadline }: DeadlinePageProps) {
               <section className="text-center pt-8 border-t border-border">
                 <p className="font-medium text-foreground mb-2">File {deadline.serviceName} now</p>
                 <p className="text-sm text-muted-foreground mb-4">
-                  Fixed price. Verified CA. Done within {deadline.slaDays} working days.
+                  Fixed price. Ollvy CA. Done within {deadline.slaDays} working days.
                 </p>
                 <Button size="lg" asChild>
                   <Link href={bookingHref}>

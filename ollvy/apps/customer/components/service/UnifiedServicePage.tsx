@@ -1549,7 +1549,7 @@ export function UnifiedServicePage({
                 Get {service.shortName} done now
               </h2>
               <p className="text-base text-muted-foreground mt-4 whitespace-nowrap">
-                Fixed price. Verified {serviceProfessional(service.slug)}. Done within {service.slaDays} working days.
+                Fixed price. Ollvy {serviceProfessional(service.slug)}. Done within {service.slaDays} working days.
               </p>
               <Button size="lg" className="mt-8" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
                 <Link href={getCtaUrl()} prefetch={true}>
