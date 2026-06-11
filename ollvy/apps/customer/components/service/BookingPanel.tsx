@@ -14,6 +14,8 @@ import { usePostHogEvents } from '@/lib/hooks/usePostHogEvents'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import { firePreCreateOrder } from '@/lib/checkout-warmup'
 import { getFullAttributionData } from '@/lib/utm'
+import { GovtFeeRow } from '@/components/pricing/GovtFeeRow'
+import { govtFeeIncludes } from '@/lib/pricing/govt-fee-includes'
 
 interface BookingPanelProps {
   service: DBServiceConfig
@@ -99,6 +101,9 @@ export function BookingPanel({
 
   // Combine Ollvy fee + govt fee into single "service fee"
   const baseServiceFee = service.ollvyFee + (service.govtFee ?? 0) + (priceAdjustment / 100) + (govtFeeAdjustment / 100)
+  // Split out for the expandable breakdown: Ollvy's flat fee vs the govt pass-through.
+  const ollvyServiceFee = service.ollvyFee + (priceAdjustment / 100)
+  const govtFeeAmount = (service.govtFee ?? 0) + (govtFeeAdjustment / 100)
 
   // Calculate addon totals (combine Ollvy fees + govt fees into single price)
   const addonTotals = useMemo(() => {
@@ -402,9 +407,20 @@ export function BookingPanel({
             </div>
           </div>
           <span className="font-mono text-sm font-semibold text-foreground">
-            ₹{baseServiceFee.toLocaleString('en-IN')}
+            ₹{ollvyServiceFee.toLocaleString('en-IN')}
           </span>
         </div>
+
+        {/* Government fees — expand the chevron to see what they cover */}
+        {govtFeeAmount > 0 && (
+          <GovtFeeRow
+            amountLabel={`₹${govtFeeAmount.toLocaleString('en-IN')}`}
+            includes={govtFeeIncludes(service.slug)}
+            rowClassName="pl-3.5"
+            labelClassName="text-sm text-muted-foreground"
+            valueClassName="font-mono text-sm text-foreground"
+          />
+        )}
 
         {/* Selected addon fees */}
         {service.addons?.filter(addon => selectedAddonIds.includes(addon.id)).map(addon => {

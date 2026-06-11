@@ -36,6 +36,8 @@ import {
   WhatsNotIncludedCard,
 } from '@/components/checkout'
 import { DocumentChecklist } from '@/components/landing/DocumentChecklist'
+import { GovtFeeRow } from '@/components/pricing/GovtFeeRow'
+import { govtFeeIncludes } from '@/lib/pricing/govt-fee-includes'
 
 // Below-fold modals - only rendered after user triggers payment / success / dismissal.
 // Import the module file directly — the barrel (@/components/checkout) pulls every
@@ -1196,6 +1198,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           <div className="hidden lg:block sticky top-20 self-start">
             <OrderSummarySidebar
                 serviceName={service.name}
+                serviceSlug={service.slug}
                 serviceDisplayName={selectedVariantData?.sublabel}
                 serviceFee={priceBreakdown?.serviceFee || 0}
                 govtFees={priceBreakdown?.govtFees || 0}
@@ -1230,6 +1233,7 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
           total={priceBreakdown?.total || 0}
           serviceFee={priceBreakdown?.serviceFee || 0}
           govtFees={priceBreakdown?.govtFees || 0}
+          serviceSlug={service.slug}
           gstAmount={priceBreakdown?.gst || 0}
           gstRate={priceBreakdown?.gstRate || 18}
           isProcessing={isProcessing}
@@ -1440,6 +1444,7 @@ function ScopeOfWorkCard({
 // Order Summary Sidebar Component
 interface OrderSummarySidebarProps {
   serviceName: string
+  serviceSlug?: string
   serviceDisplayName?: string // Optional variant label for display
   serviceFee: number
   govtFees: number
@@ -1468,6 +1473,7 @@ interface OrderSummarySidebarProps {
 
 function OrderSummarySidebar({
   serviceName,
+  serviceSlug = '',
   serviceDisplayName,
   serviceFee,
   govtFees,
@@ -1556,9 +1562,20 @@ function OrderSummarySidebar({
             </div>
           </div>
           <span className="font-mono text-sm font-semibold text-foreground">
-            {formatPrice(serviceFee + govtFees)}
+            {formatPrice(serviceFee)}
           </span>
         </div>
+
+        {/* Government fees — expand the chevron to see what they cover */}
+        {govtFees > 0 && (
+          <GovtFeeRow
+            amountLabel={formatPrice(govtFees)}
+            includes={govtFeeIncludes(serviceSlug)}
+            rowClassName="pl-7"
+            labelClassName="text-sm text-muted-foreground"
+            valueClassName="font-mono text-sm text-foreground"
+          />
+        )}
 
         {/* Selected addons */}
         {addons.map((addon, i) => (
@@ -1832,6 +1849,7 @@ interface MobileBottomBarComponentProps {
   total: number
   serviceFee: number
   govtFees: number
+  serviceSlug?: string
   gstAmount: number
   gstRate: number
   isProcessing: boolean
@@ -1846,6 +1864,7 @@ function MobileBottomBarComponent({
   total,
   serviceFee,
   govtFees,
+  serviceSlug = '',
   gstAmount,
   gstRate,
   isProcessing,
@@ -1856,9 +1875,6 @@ function MobileBottomBarComponent({
   mrpPaisa,
 }: MobileBottomBarComponentProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-
-  // Service fee for display = base service + govt fees (combined)
-  const displayServiceFee = serviceFee + govtFees
 
   return (
     <>
@@ -1927,8 +1943,16 @@ function MobileBottomBarComponent({
             <div className="space-y-2 pt-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">Service fee</span>
-                <span className="font-mono text-sm text-foreground">{formatPrice(displayServiceFee)}</span>
+                <span className="font-mono text-sm text-foreground">{formatPrice(serviceFee)}</span>
               </div>
+              {govtFees > 0 && (
+                <GovtFeeRow
+                  amountLabel={formatPrice(govtFees)}
+                  includes={govtFeeIncludes(serviceSlug)}
+                  labelClassName="text-sm text-muted-foreground"
+                  valueClassName="font-mono text-sm text-foreground"
+                />
+              )}
               <div className="flex justify-between items-center">
                 <span className="text-sm text-muted-foreground">GST ({gstRate}%)</span>
                 <span className="font-mono text-sm text-foreground">{formatPrice(gstAmount)}</span>
