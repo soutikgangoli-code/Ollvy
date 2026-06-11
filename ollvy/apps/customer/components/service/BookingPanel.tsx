@@ -15,7 +15,7 @@ import { useAuthStore } from '@/lib/stores/auth-store'
 import { firePreCreateOrder } from '@/lib/checkout-warmup'
 import { getFullAttributionData } from '@/lib/utm'
 import { GovtFeeRow } from '@/components/pricing/GovtFeeRow'
-import { govtFeeIncludes, govtFeeDriver } from '@/lib/pricing/govt-fee-includes'
+import { govtFeeIncludes } from '@/lib/pricing/govt-fee-includes'
 
 interface BookingPanelProps {
   service: DBServiceConfig
@@ -416,7 +416,6 @@ export function BookingPanel({
           <GovtFeeRow
             amountLabel={`₹${govtFeeAmount.toLocaleString('en-IN')}`}
             includes={govtFeeIncludes(service.slug)}
-            driver={govtFeeDriver(service.slug)}
             rowClassName="pl-3.5"
             labelClassName="text-sm text-muted-foreground"
             valueClassName="font-mono text-sm text-foreground"
@@ -486,23 +485,23 @@ export function BookingPanel({
         <p className="text-xs text-muted-foreground mb-3">
           Questions about documents, process, or price?
         </p>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
-            <a
-              href={getWhatsAppLink(`Hi, I have a question about ${service.name}`)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <MessageCircle size={13} />
-              WhatsApp
-            </a>
-          </Button>
-          <Button variant="outline" size="sm" className="flex-1 gap-1.5" asChild>
-            <a href={getPhoneLink()}>
-              <Phone size={13} />
-              Call
-            </a>
-          </Button>
+        <div className="grid grid-cols-2 gap-2.5">
+          <a
+            href={getWhatsAppLink(`Hi, I have a question about ${service.name}`)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 h-10 rounded-lg border border-border bg-muted/30 text-sm font-medium text-foreground transition-colors hover:bg-muted/60"
+          >
+            <MessageCircle className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
+            WhatsApp
+          </a>
+          <a
+            href={getPhoneLink()}
+            className="flex items-center justify-center gap-2 h-10 rounded-lg border border-border bg-muted/30 text-sm font-medium text-foreground transition-colors hover:bg-muted/60"
+          >
+            <Phone className="h-4 w-4 text-[hsl(var(--ollvy-green))]" />
+            Call
+          </a>
         </div>
       </div>
 

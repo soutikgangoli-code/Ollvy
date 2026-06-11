@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { calculateServicePrice, formatPrice, type ServicePriceConfig } from '@/lib/pricing/calculate-price'
+import { govtFeeDriver } from '@/lib/pricing/govt-fee-includes'
 import { TrendingUp, TrendingDown, IndianRupee } from 'lucide-react'
 
 interface LivePricePreviewProps {
@@ -63,6 +64,11 @@ export function LivePricePreview({
               <TrendingDown className="h-3.5 w-3.5" />
             )}
             {priceDifference > 0 ? '+' : ''}{formatPrice(Math.abs(priceDifference))}
+          </span>
+        )}
+        {priceDifference > 0 && hasAnyAnswer && govtFeeDriver(service.slug) && (
+          <span className="font-mono text-[11px] text-muted-foreground/60">
+            {govtFeeDriver(service.slug)}
           </span>
         )}
       </div>
