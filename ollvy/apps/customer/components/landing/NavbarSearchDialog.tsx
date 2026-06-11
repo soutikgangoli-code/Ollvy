@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
+import { fuzzyMatchAny } from '@/lib/fuzzy-match'
 import type { NavbarServiceData } from '@/lib/data/services'
 
 interface NavbarSearchDialogProps {
@@ -28,11 +29,7 @@ export default function NavbarSearchDialog({
   onServiceClick,
 }: NavbarSearchDialogProps) {
   const filteredServices = searchQuery.trim()
-    ? services.filter(
-        (s) =>
-          s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          s.short_description?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    ? services.filter((s) => fuzzyMatchAny(searchQuery, [s.name, s.short_description]))
     : services
 
   return (

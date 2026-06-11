@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useAuthStore } from '@/lib/stores/auth-store'
 import type { NavbarServiceData } from '@/lib/data/services'
+import { fuzzyMatchAny } from '@/lib/fuzzy-match'
 
 // Heavy overlay components - lazy loaded, not needed for initial paint (LCP fix)
 const NavbarMobileMenu = dynamic(() => import('./NavbarMobileMenu'), { ssr: false })
@@ -114,12 +115,7 @@ export function Navbar({ services: prefetchedServices = [], minimal: minimalProp
   // Filter services for mobile inline search
   const filteredServices = useMemo(() => {
     if (!searchQuery.trim()) return services
-    const query = searchQuery.toLowerCase()
-    return services.filter(
-      (service) =>
-        service.name.toLowerCase().includes(query) ||
-        service.short_description?.toLowerCase().includes(query)
-    )
+    return services.filter((service) => fuzzyMatchAny(searchQuery, [service.name, service.short_description]))
   }, [searchQuery, services])
 
   // Track if heavy overlays have been requested (lazy load on first interaction)

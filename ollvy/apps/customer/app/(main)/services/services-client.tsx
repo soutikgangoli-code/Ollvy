@@ -6,6 +6,7 @@ import { SearchBar } from '@/components/services/SearchBar'
 import { FilterChips } from '@/components/services/FilterChips'
 import { ServiceGrid } from '@/components/services/ServiceGrid'
 import { getClient } from '@/lib/supabase'
+import { fuzzyMatchAny } from '@/lib/fuzzy-match'
 import type { ServicePackage } from '@/lib/types'
 import type { ServiceSearchEntry } from './page'
 
@@ -210,12 +211,7 @@ function filterServicesLocally(
   let filtered = services
 
   if (query) {
-    const lowerQuery = query.toLowerCase()
-    filtered = filtered.filter(
-      (s) =>
-        s.name.toLowerCase().includes(lowerQuery) ||
-        s.short_description?.toLowerCase().includes(lowerQuery)
-    )
+    filtered = filtered.filter((s) => fuzzyMatchAny(query, [s.name, s.short_description]))
   }
 
   // Tags filter - check situation_tags if available
