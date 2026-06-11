@@ -12,6 +12,7 @@ import type { OrderRound, OrderWorkDocument, WorkflowDisplayStage } from '@/lib/
 import { Download, Upload, Loader2, FileText, MessageSquare, Eye } from 'lucide-react'
 import { DocumentPreview } from '@/components/documents/DocumentPreview'
 import { DOC_STATUS_META, initialDocStatus, workDocStatus } from '@/lib/documents/doc-status'
+import { deriveAnswerLabel } from '@/lib/questionnaire/answer-label'
 
 interface RoundsTimelineProps {
   orderId: string
@@ -126,16 +127,30 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
   }, [orderId, user?.id, supabase, fetchData])
 
   // Compute all answers for the Answers tab
-  const allAnswers = questions.map(q => {
-    const answer = initialAnswers.find(a => a.question_key === q.question_key)
-    return {
-      question_key: q.question_key,
-      question_label: q.question_label,
-      question_type: q.question_type,
-      options: q.options,
-      response_value: answer?.response_value,
-    }
-  })
+  const knownAnswerKeys = new Set(questions.map(q => q.question_key))
+  const allAnswers = [
+    ...questions.map(q => {
+      const answer = initialAnswers.find(a => a.question_key === q.question_key)
+      return {
+        question_key: q.question_key,
+        question_label: q.question_label,
+        question_type: q.question_type,
+        options: q.options,
+        response_value: answer?.response_value,
+      }
+    }),
+    // Orphan answers: saved responses with no question definition (e.g. the
+    // injected per-class trademark fields) so the customer sees them here too.
+    ...initialAnswers
+      .filter(a => !knownAnswerKeys.has(a.question_key) && a.response_value != null && a.response_value !== '')
+      .map(a => ({
+        question_key: a.question_key,
+        question_label: deriveAnswerLabel(a.question_key),
+        question_type: 'text',
+        options: undefined,
+        response_value: a.response_value,
+      })),
+  ]
 
   // Compute all round question responses
   const roundQuestionResponses = rounds

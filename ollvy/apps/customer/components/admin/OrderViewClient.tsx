@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Separator } from '@/components/ui/separator'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { formatPaisa, formatDate, formatDateTime } from '@/lib/utils'
+import { deriveAnswerLabel } from '@/lib/questionnaire/answer-label'
 import { useToast } from '@/lib/hooks/use-toast'
 import { getClient, getEdgeFunctionUrl } from '@/lib/supabase'
 import {
@@ -247,15 +248,26 @@ export function OrderViewClient({
   // Check if Round 1 exists
   const hasRound1 = rounds.some(r => r.round_number === 1)
 
-  // Merged questionnaire data
+  // Merged questionnaire data — DB-defined questions plus any "orphan" answers
+  // (saved responses with no DB question, e.g. injected per-class trademark fields)
+  // so the admin always sees everything the customer submitted.
   const mergedAnswers = useMemo(() => {
-    return questionnaireQuestions.map(q => {
-      const answer = answers.find(a => a.question_key === q.question_key)
-      return {
-        ...q,
-        response_value: answer?.response_value ?? null,
-      }
-    })
+    const knownKeys = new Set(questionnaireQuestions.map(q => q.question_key))
+    const known = questionnaireQuestions.map(q => ({
+      ...q,
+      response_value: answers.find(a => a.question_key === q.question_key)?.response_value ?? null,
+    }))
+    const orphans = answers
+      .filter(a => !knownKeys.has(a.question_key) && a.response_value != null && a.response_value !== '')
+      .map((a, i) => ({
+        question_key: a.question_key,
+        question_label: deriveAnswerLabel(a.question_key),
+        question_type: 'text',
+        options: undefined as Array<{ value: string; label: string }> | undefined,
+        display_order: 1000 + i,
+        response_value: a.response_value,
+      }))
+    return [...known, ...orphans]
   }, [questionnaireQuestions, answers])
 
   // Handle status change

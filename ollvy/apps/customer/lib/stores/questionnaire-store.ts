@@ -219,6 +219,16 @@ export const useQuestionnaireStore = create<QuestionnaireState & QuestionnaireAc
         // If user already has phone, skip the phone question entirely
         // (phone is captured from Razorpay payment or previous orders)
         let filteredQuestions = questionsData || []
+        // Trademark with >1 class: the per-class goods/services fields injected
+        // below replace the single general description, so drop the general one.
+        const tmClasses = prePaymentResponses['trademark_classes']
+        if (
+          servicePackage.slug === 'trademark-registration' &&
+          Array.isArray(tmClasses) &&
+          tmClasses.length > 0
+        ) {
+          filteredQuestions = filteredQuestions.filter(q => q.question_key !== 'goods_services_description')
+        }
         if (userData?.phone) {
           filteredQuestions = filteredQuestions.filter(q => q.question_key !== 'user_phone_number')
         } else if (!responses['user_phone_number']) {
