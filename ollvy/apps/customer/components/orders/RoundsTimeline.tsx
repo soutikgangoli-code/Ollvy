@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import Link from 'next/link'
 import { getClient } from '@/lib/supabase'
 import { useAuthStore } from '@/lib/stores/auth-store'
@@ -92,6 +92,17 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
     fetchData()
   }, [fetchData])
 
+  // Debounced refetch: a single admin action (e.g. createRound, which inserts a
+  // round plus several work-document rows) fires a BURST of realtime events.
+  // Previously each event triggered its own full nested refetch — a refetch
+  // storm. Coalesce a burst into one fetch shortly after it settles. Still a
+  // full refetch (correct + simple), just not N of them.
+  const refetchTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const scheduleRefetch = useCallback(() => {
+    if (refetchTimer.current) clearTimeout(refetchTimer.current)
+    refetchTimer.current = setTimeout(() => { fetchData() }, 250)
+  }, [fetchData])
+
   // Real-time subscriptions for the data this component owns: rounds + work
   // documents. order_documents / order_questionnaire_responses changes reach
   // this component via the parent's `initialDocs` prop (kept live by the parent's
@@ -108,7 +119,7 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
         table: 'order_work_documents',
         filter: `order_id=eq.${orderId}`,
       }, () => {
-        fetchData()
+        scheduleRefetch()
       })
       // round_question_requests changes via order_rounds
       .on('postgres_changes', {
@@ -117,14 +128,16 @@ export function RoundsTimeline({ orderId, servicePackageId, workflowStages = [],
         table: 'order_rounds',
         filter: `order_id=eq.${orderId}`,
       }, () => {
-        fetchData()
+        scheduleRefetch()
       })
       .subscribe()
 
     return () => {
+      if (refetchTimer.current) clearTimeout(refetchTimer.current)
+      channel.unsubscribe()
       supabase.removeChannel(channel)
     }
-  }, [orderId, user?.id, supabase, fetchData])
+  }, [orderId, user?.id, supabase, scheduleRefetch])
 
   // Compute all answers for the Answers tab
   const knownAnswerKeys = new Set(questions.map(q => q.question_key))
