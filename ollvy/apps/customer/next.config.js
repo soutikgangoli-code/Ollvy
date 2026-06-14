@@ -13,8 +13,14 @@ const nextConfig = {
       dynamic: 30,
       static: 180,
     },
+    // Tree-shake big barrel libs so only what's used ships. (Next 15 already
+    // does this for lucide-react by default; date-fns is the real add — listing
+    // both is explicit and harmless.)
+    optimizePackageImports: ['lucide-react', 'date-fns'],
   },
   images: {
+    // Serve modern formats to browsers that accept them (smaller than JPEG/PNG).
+    formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
         protocol: 'https',
