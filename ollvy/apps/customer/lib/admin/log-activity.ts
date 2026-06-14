@@ -12,7 +12,7 @@ interface LogActivityParams {
 
 export async function logActivity(params: LogActivityParams) {
   if (!supabaseServer) return
-  await supabaseServer.from('order_activity_log').insert({
+  const { error } = await supabaseServer.from('order_activity_log').insert({
     order_id: params.orderId,
     action_type: params.actionType,
     actor_type: params.actorType,
@@ -22,6 +22,16 @@ export async function logActivity(params: LogActivityParams) {
     metadata: params.metadata ?? null,
     created_at: new Date().toISOString(),
   })
+  // Surface audit-log failures instead of silently dropping them — a missing
+  // entry means the activity timeline is lying about what happened.
+  if (error) {
+    console.error(JSON.stringify({
+      event: 'activity_log_insert_failed',
+      order_id: params.orderId,
+      action_type: params.actionType,
+      error: error.message,
+    }))
+  }
 }
 
 export const LOG_ACTIONS = {
@@ -37,6 +47,8 @@ export const LOG_ACTIONS = {
   DOCUMENT_VERIFIED: 'document_verified',
   DOCUMENT_REJECTED: 'document_rejected',
   DOCUMENT_SKIPPED: 'document_skipped',
+  DOCUMENT_VERIFY_UNDONE: 'document_verify_undone',
+  DOCUMENT_REJECT_UNDONE: 'document_reject_undone',
   ADMIN_UPLOAD_ADDED: 'admin_upload_added',
   SETUP_APPROVED: 'setup_approved',
   SETUP_UNLOCKED: 'setup_unlocked',

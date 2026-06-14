@@ -61,62 +61,38 @@ export default async function AdminReportsPage() {
     }
   })
 
-  // Calculate summary metrics
-  const calculateSummary = (orders: typeof formattedOrders, startDate?: string) => {
-    const filtered = startDate
-      ? orders.filter(o => o.paidAt && o.paidAt >= startDate)
-      : orders
-
-    return {
-      totalRevenue: filtered.reduce((sum, o) => sum + o.totalPaisa, 0),
-      platformRevenue: filtered.reduce((sum, o) => sum + o.ollvyFeePaisa, 0),
-      govtFees: filtered.reduce((sum, o) => sum + o.govtFeePaisa, 0),
-      orderCount: filtered.length,
-    }
-  }
-
-  // Calculate revenue by user
-  const userRevenueMap = new Map<string, {
-    userId: string
-    name: string
-    orderCount: number
-    totalSpent: number
-    ollvyFees: number
-    govtFees: number
-  }>()
-
-  for (const order of formattedOrders) {
-    if (!order.customerId) continue
-
-    const existing = userRevenueMap.get(order.customerId)
-    if (existing) {
-      existing.orderCount += 1
-      existing.totalSpent += order.totalPaisa
-      existing.ollvyFees += order.ollvyFeePaisa
-      existing.govtFees += order.govtFeePaisa
-    } else {
-      userRevenueMap.set(order.customerId, {
-        userId: order.customerId,
-        name: order.customerName,
-        orderCount: 1,
-        totalSpent: order.totalPaisa,
-        ollvyFees: order.ollvyFeePaisa,
-        govtFees: order.govtFeePaisa,
-      })
-    }
-  }
-
-  const revenueByUser = Array.from(userRevenueMap.values())
-    .sort((a, b) => b.totalSpent - a.totalSpent)
+  // Summaries + per-user revenue are aggregated in SQL over ALL matching orders
+  // (not the display-capped list above), so totals stay correct past 1000 orders.
+  const emptySummary = { totalRevenue: 0, platformRevenue: 0, govtFees: 0, orderCount: 0 }
+  const { data: reportData } = await supabaseServer.rpc('get_admin_reports', {
+    p_since: ninetyDaysAgo,
+    p_today: todayStart,
+    p_week: weekStart,
+    p_month: monthStart,
+  })
+  const report = (reportData as {
+    summaryAll: typeof emptySummary
+    summaryToday: typeof emptySummary
+    summaryWeek: typeof emptySummary
+    summaryMonth: typeof emptySummary
+    revenueByUser: Array<{
+      userId: string
+      name: string
+      orderCount: number
+      totalSpent: number
+      ollvyFees: number
+      govtFees: number
+    }>
+  } | null) ?? null
 
   return (
     <ReportsClient
       orders={formattedOrders}
-      summaryAll={calculateSummary(formattedOrders)}
-      summaryToday={calculateSummary(formattedOrders, todayStart)}
-      summaryWeek={calculateSummary(formattedOrders, weekStart)}
-      summaryMonth={calculateSummary(formattedOrders, monthStart)}
-      revenueByUser={revenueByUser}
+      summaryAll={report?.summaryAll ?? emptySummary}
+      summaryToday={report?.summaryToday ?? emptySummary}
+      summaryWeek={report?.summaryWeek ?? emptySummary}
+      summaryMonth={report?.summaryMonth ?? emptySummary}
+      revenueByUser={report?.revenueByUser ?? []}
     />
   )
 }

@@ -18,9 +18,7 @@ export default async function AdminAnalyticsPage() {
     ordersToday,
     activeOrders,
     ordersAll,
-    revenueToday,
-    revenueAll,
-    topServicesRaw,
+    analytics,
     needsAttention,
     recentCompleted,
   ] = await Promise.all([
@@ -33,18 +31,8 @@ export default async function AdminAnalyticsPage() {
       .eq('status', 'in_progress'),
     supabaseServer.from('orders').select('id', { count: 'exact', head: true })
       .not('paid_at', 'is', null),
-    supabaseServer.from('orders')
-      .select('total_paisa_snapshot')
-      .gte('paid_at', todayStart)
-      .neq('status', 'cancelled'),
-    supabaseServer.from('orders')
-      .select('total_paisa_snapshot')
-      .not('paid_at', 'is', null)
-      .neq('status', 'cancelled'),
-    supabaseServer.from('orders')
-      .select('service_package_id, service_packages(name), total_paisa_snapshot')
-      .gte('paid_at', thirtyDaysAgo)
-      .neq('status', 'cancelled'),
+    // Revenue sums + top-services grouped in SQL over all matching rows.
+    supabaseServer.rpc('get_admin_analytics', { p_today: todayStart, p_thirty: thirtyDaysAgo }),
     supabaseServer.from('orders')
       .select('id, order_number, status, paid_at, total_paisa_snapshot, service_packages(name), users(business_name)')
       .in('status', ['pending_assignment', 'disputed'])
@@ -57,23 +45,14 @@ export default async function AdminAnalyticsPage() {
       .limit(20),
   ])
 
-  const revTodayPaisa = revenueToday.data?.reduce((s, o) => s + (o.total_paisa_snapshot || 0), 0) ?? 0
-  const revAllPaisa = revenueAll.data?.reduce((s, o) => s + (o.total_paisa_snapshot || 0), 0) ?? 0
-
-  // Calculate top services
-  const serviceMap = new Map<string, { name: string; count: number; revenue: number }>()
-  for (const row of topServicesRaw.data || []) {
-    const id = row.service_package_id
-    const existing = serviceMap.get(id) ?? { name: (row.service_packages as any)?.name ?? id, count: 0, revenue: 0 }
-    serviceMap.set(id, {
-      name: existing.name,
-      count: existing.count + 1,
-      revenue: existing.revenue + (row.total_paisa_snapshot ?? 0),
-    })
-  }
-  const topServices = Array.from(serviceMap.values())
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 10)
+  const analyticsData = (analytics.data as {
+    revTodayPaisa: number
+    revAllPaisa: number
+    topServices: Array<{ name: string; count: number; revenue: number }>
+  } | null) ?? null
+  const revTodayPaisa = analyticsData?.revTodayPaisa ?? 0
+  const revAllPaisa = analyticsData?.revAllPaisa ?? 0
+  const topServices = analyticsData?.topServices ?? []
 
   // Calculate days active for needs attention
   const needsAttentionFormatted = (needsAttention.data || []).map(order => {

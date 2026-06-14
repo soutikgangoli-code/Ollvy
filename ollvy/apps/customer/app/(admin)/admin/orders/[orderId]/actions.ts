@@ -51,6 +51,16 @@ async function enqueueCustomerNotification(
   }
 }
 
+// Trim + validate a required freeform text field before it hits the DB. Keeps
+// empty/whitespace-only and pathologically long values out of writes that admins
+// and customers later read back.
+function requireText(value: string | null | undefined, field: string, maxLen = 2000): string {
+  const trimmed = (value ?? '').trim()
+  if (!trimmed) throw new Error(`${field} is required`)
+  if (trimmed.length > maxLen) throw new Error(`${field} must be ${maxLen} characters or fewer`)
+  return trimmed
+}
+
 // Cancellation reason labels
 const CANCELLATION_REASON_LABELS: Record<string, string> = {
   user_requested: 'User requested cancellation',
@@ -75,6 +85,15 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
     .single()
 
   const oldStatus = order?.status
+
+  // Idempotency: if the order is already in the target state, do nothing.
+  // Without this, a double-click or a retried request re-stamps completed_at and
+  // re-fires the completion email + Slack post (duplicate customer notifications).
+  if (oldStatus === newStatus) {
+    revalidatePath(`/admin/orders/${orderId}`)
+    revalidatePath('/admin/queue')
+    return
+  }
 
   // Stamp completed_at when transitioning to 'completed' so the daily-summary
   // cron's "completions today" query and Slack 3's working-days math both work.
@@ -220,6 +239,7 @@ export async function updateOrderStatus(orderId: string, newStatus: string) {
   }
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Assign professional to order
@@ -310,6 +330,7 @@ export async function assignProfessional(orderId: string, professionalId: string
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Verify initial document (order_documents)
@@ -350,6 +371,7 @@ export async function verifyInitialDocument(documentId: string, orderId: string,
 export async function rejectInitialDocument(documentId: string, orderId: string, documentLabel: string, rejectionReason: string, internalNote?: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  rejectionReason = requireText(rejectionReason, 'Rejection reason', 500)
 
   const updateData: Record<string, any> = {
     rejection_reason: rejectionReason,
@@ -419,6 +441,7 @@ export async function verifyWorkDocument(documentId: string, orderId: string, do
 export async function rejectWorkDocument(documentId: string, orderId: string, documentLabel: string, rejectionReason: string, internalNote?: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  rejectionReason = requireText(rejectionReason, 'Rejection reason', 500)
 
   const updateData: Record<string, any> = {
     status: 'rejected',
@@ -504,6 +527,7 @@ export async function unlockSetup(orderId: string) {
 export async function skipWorkDocument(documentId: string, orderId: string, documentLabel: string, skipReason: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  skipReason = requireText(skipReason, 'Skip reason', 500)
 
   await supabaseServer.from('order_work_documents')
     .update({
@@ -540,6 +564,16 @@ export async function undoVerification(documentId: string, orderId: string, tabl
       .eq('id', documentId)
   }
 
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DOCUMENT_VERIFY_UNDONE,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: 'Document verification undone',
+    metadata: { document_id: documentId, table: tableType },
+  })
+
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
@@ -558,6 +592,16 @@ export async function undoRejection(documentId: string, orderId: string, tableTy
       .eq('id', documentId)
   }
 
+  await logActivity({
+    orderId,
+    actionType: LOG_ACTIONS.DOCUMENT_REJECT_UNDONE,
+    actorType: 'admin',
+    actorId: adminUser.id,
+    actorName: adminUser.name,
+    description: 'Document rejection undone',
+    metadata: { document_id: documentId, table: tableType },
+  })
+
   revalidatePath(`/admin/orders/${orderId}`)
 }
 
@@ -565,6 +609,7 @@ export async function undoRejection(documentId: string, orderId: string, tableTy
 export async function updateRoundTitle(roundId: string, orderId: string, newTitle: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  newTitle = requireText(newTitle, 'Round title', 200)
 
   await supabaseServer.from('order_rounds')
     .update({ title: newTitle })
@@ -605,12 +650,14 @@ export async function markRoundComplete(roundId: string, orderId: string) {
   await enqueueCustomerNotification(orderId, 'round_completed', adminUser.id)
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Add question to round
 export async function addQuestionToRound(roundId: string, orderId: string, questionText: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  questionText = requireText(questionText, 'Question', 1000)
 
   // Get max position
   const { data: existing } = await supabaseServer
@@ -636,12 +683,14 @@ export async function addQuestionToRound(roundId: string, orderId: string, quest
   await enqueueCustomerNotification(orderId, 'question_added', adminUser.id)
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Create admin note
 export async function createAdminNote(orderId: string, content: string) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  content = requireText(content, 'Note', 5000)
 
   const { error } = await supabaseServer.from('order_admin_notes').insert({
     order_id: orderId,
@@ -718,6 +767,7 @@ export async function resolveDisputeRefund(orderId: string) {
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Resolve dispute - Continue
@@ -757,6 +807,7 @@ export async function resolveDisputeContinue(orderId: string) {
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Resolve dispute - Close
@@ -796,6 +847,7 @@ export async function resolveDisputeClose(orderId: string) {
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Insert completion notification
@@ -891,6 +943,7 @@ export async function uploadAdminDocument(
   await enqueueCustomerNotification(orderId, 'admin_document_uploaded', adminUser.id)
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
   return toCustomerRow
 }
 
@@ -931,6 +984,7 @@ interface AddRoundFormData {
 export async function createRound(orderId: string, formData: AddRoundFormData) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  formData.title = requireText(formData.title, 'Round title', 200)
 
   // Step 1: Calculate the next round_number
   const { data: existingRounds } = await supabaseServer
@@ -964,87 +1018,108 @@ export async function createRound(orderId: string, formData: AddRoundFormData) {
 
   if (!newRound) throw new Error('Failed to create round')
 
-  // Step 4: Insert round_question_requests
-  if (formData.questions.length > 0) {
-    await supabaseServer.from('round_question_requests').insert(
-      formData.questions.map((q, i) => ({
-        round_id: newRound.id,
-        question_text: q,
-        position: i,
-      }))
-    )
-  }
+  // Steps 4-8 build the round's children. Previously each insert ignored its
+  // error, so a mid-sequence failure left a half-built round behind. Now any
+  // failure rolls the whole thing back by deleting the round — round_question_
+  // requests and order_work_documents cascade-delete with it. The happy path is
+  // unchanged; only the (rare) failure path now fails cleanly instead of
+  // orphaning rows.
+  try {
+    // Step 4: Insert round_question_requests
+    if (formData.questions.length > 0) {
+      const { error } = await supabaseServer.from('round_question_requests').insert(
+        formData.questions.map((q, i) => ({
+          round_id: newRound.id,
+          question_text: q,
+          position: i,
+        }))
+      )
+      if (error) throw error
+    }
 
-  // Step 5: Insert from_customer doc request rows
-  for (const docReq of formData.docRequests) {
-    await supabaseServer.from('order_work_documents').insert({
-      order_id: orderId,
-      direction: 'from_customer',
-      round_id: newRound.id,
-      document_label: docReq.label,
-      description: docReq.description || null,
-      status: 'pending',
-      linked_request_id: docReq.isReuploadOfWorkDocId ?? null,
-    })
-  }
-
-  // Step 6: Insert to_customer upload if admin uploaded a file
-  if (formData.adminUpload) {
-    const { data: toCustomerRow } = await supabaseServer
-      .from('order_work_documents')
-      .insert({
+    // Step 5: Insert from_customer doc request rows
+    for (const docReq of formData.docRequests) {
+      const { error } = await supabaseServer.from('order_work_documents').insert({
         order_id: orderId,
-        direction: 'to_customer',
+        direction: 'from_customer',
         round_id: newRound.id,
-        tag: formData.adminUpload.tag,
-        document_label: formData.adminUpload.label,
-        description: formData.adminUpload.description || null,
-        file_url: formData.adminUpload.fileUrl,
-        file_name: formData.adminUpload.fileName,
-        uploaded_at: new Date().toISOString(),
-        uploaded_by_type: 'admin',
-        status: 'uploaded',
+        document_label: docReq.label,
+        description: docReq.description || null,
+        status: 'pending',
+        linked_request_id: docReq.isReuploadOfWorkDocId ?? null,
       })
-      .select()
-      .single()
+      if (error) throw error
+    }
 
-    // If for_signing: create linked from_customer row and set linked_request_id
-    if (formData.adminUpload.tag === 'for_signing' && formData.adminUpload.signLabel && toCustomerRow) {
-      const { data: signingRequest } = await supabaseServer
+    // Step 6: Insert to_customer upload if admin uploaded a file
+    if (formData.adminUpload) {
+      const { data: toCustomerRow, error: uploadError } = await supabaseServer
         .from('order_work_documents')
         .insert({
           order_id: orderId,
-          direction: 'from_customer',
+          direction: 'to_customer',
           round_id: newRound.id,
-          document_label: formData.adminUpload.signLabel,
-          status: 'pending',
+          tag: formData.adminUpload.tag,
+          document_label: formData.adminUpload.label,
+          description: formData.adminUpload.description || null,
+          file_url: formData.adminUpload.fileUrl,
+          file_name: formData.adminUpload.fileName,
+          uploaded_at: new Date().toISOString(),
+          uploaded_by_type: 'admin',
+          status: 'uploaded',
         })
         .select()
         .single()
+      if (uploadError) throw uploadError
 
-      if (signingRequest) {
-        await supabaseServer
+      // If for_signing: create linked from_customer row and set linked_request_id
+      if (formData.adminUpload.tag === 'for_signing' && formData.adminUpload.signLabel && toCustomerRow) {
+        const { data: signingRequest, error: signingError } = await supabaseServer
           .from('order_work_documents')
-          .update({ linked_request_id: signingRequest.id })
-          .eq('id', toCustomerRow.id)
+          .insert({
+            order_id: orderId,
+            direction: 'from_customer',
+            round_id: newRound.id,
+            document_label: formData.adminUpload.signLabel,
+            status: 'pending',
+          })
+          .select()
+          .single()
+        if (signingError) throw signingError
+
+        if (signingRequest) {
+          const { error: linkError } = await supabaseServer
+            .from('order_work_documents')
+            .update({ linked_request_id: signingRequest.id })
+            .eq('id', toCustomerRow.id)
+          if (linkError) throw linkError
+        }
       }
     }
-  }
 
-  // Step 7: Insert round_notifications if visible to user
-  if (formData.isVisibleToUser && formData.notificationMessage) {
-    await supabaseServer.from('round_notifications').insert({
-      order_id: orderId,
-      round_id: newRound.id,
-      message: formData.notificationMessage,
-    })
-  }
+    // Step 7: Insert round_notifications if visible to user
+    if (formData.isVisibleToUser && formData.notificationMessage) {
+      const { error } = await supabaseServer.from('round_notifications').insert({
+        order_id: orderId,
+        round_id: newRound.id,
+        message: formData.notificationMessage,
+      })
+      if (error) throw error
+    }
 
-  // Step 8: Set user_response_deadline on round if awaiting_user
-  if (roundStatus === 'awaiting_user') {
-    await supabaseServer.from('order_rounds')
-      .update({ user_response_deadline: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString() })
-      .eq('id', newRound.id)
+    // Step 8: Set user_response_deadline on round if awaiting_user
+    if (roundStatus === 'awaiting_user') {
+      const { error } = await supabaseServer.from('order_rounds')
+        .update({ user_response_deadline: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString() })
+        .eq('id', newRound.id)
+      if (error) throw error
+    }
+  } catch (err) {
+    // Roll back the partially-created round. round_notifications.round_id is
+    // ON DELETE SET NULL, so clear those explicitly first; the rest cascade.
+    await supabaseServer.from('round_notifications').delete().eq('round_id', newRound.id)
+    await supabaseServer.from('order_rounds').delete().eq('id', newRound.id)
+    throw err
   }
 
   // Step 9: Log activity
@@ -1061,6 +1136,7 @@ export async function createRound(orderId: string, formData: AddRoundFormData) {
   await enqueueCustomerNotification(orderId, 'round_created', adminUser.id)
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
   return newRound
 }
 
@@ -1073,6 +1149,9 @@ export async function cancelOrderWithReason(
 ) {
   const adminUser = await getAdminUser()
   if (!supabaseServer) throw new Error('Service client unavailable')
+  reason = requireText(reason, 'Cancellation reason', 100)
+  userMessage = requireText(userMessage, 'Message to customer', 2000)
+  reasonDetail = reasonDetail?.trim() || null
 
   // Update order
   await supabaseServer.from('orders')
@@ -1104,6 +1183,7 @@ export async function cancelOrderWithReason(
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Assign admin to order
@@ -1160,6 +1240,7 @@ export async function assignAdminToOrder(
   })
 
   revalidatePath(`/admin/orders/${orderId}`)
+  revalidatePath('/admin/queue')
 }
 
 // Update SLA deadline

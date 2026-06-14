@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { formatPaisa, formatDate, formatDateTime } from '@/lib/utils'
 import { deriveAnswerLabel } from '@/lib/questionnaire/answer-label'
+import { shouldShowQuestion } from '@/lib/questionnaire/types'
 import { useToast } from '@/lib/hooks/use-toast'
 import { getClient, getEdgeFunctionUrl } from '@/lib/supabase'
 import {
@@ -68,6 +69,10 @@ interface OrderViewClientProps {
     question_type: string
     options?: Array<{ value: string; label: string }>
     display_order: number
+    validation?: { required?: boolean } | null
+    depends_on?: { question_key: string; value?: string; values?: string[]; contains?: string } | null
+    is_pre_payment?: boolean
+    is_active?: boolean
   }>
   adminNotes: Array<OrderAdminNote & { admin_users?: { name: string } }>
   professionals: Array<{ id: string; full_name: string; display_name?: string; email: string; professional_type: string }>
@@ -127,6 +132,7 @@ export function OrderViewClient({
   const [addRoundOpen, setAddRoundOpen] = useState(false)
   const [completeDialogOpen, setCompleteDialogOpen] = useState(false)
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false)
+  const [overrideLockOpen, setOverrideLockOpen] = useState(false)
   const [cancellationReason, setCancellationReason] = useState('')
   const [cancellationDetail, setCancellationDetail] = useState('')
   const [cancellationMessage, setCancellationMessage] = useState('')
@@ -269,6 +275,34 @@ export function OrderViewClient({
       }))
     return [...known, ...orphans]
   }, [questionnaireQuestions, answers])
+
+  // Setup-completeness gate for the "Approve & lock" action. The admin can only
+  // lock cleanly once every REQUIRED + APPLICABLE post-payment question is
+  // answered and every REQUIRED doc is verified — otherwise they must Override.
+  // (Conditional questions are only counted when their depends_on is satisfied.)
+  const answersByKey = useMemo(
+    () => Object.fromEntries(answers.map(a => [a.question_key, a.response_value])),
+    [answers],
+  )
+  const isAnswered = (v: unknown) =>
+    v != null && v !== '' && !(Array.isArray(v) && v.length === 0)
+  const missingAnswers = useMemo(
+    () =>
+      questionnaireQuestions.filter(
+        q =>
+          q.is_pre_payment === false &&
+          q.is_active !== false &&
+          q.validation?.required === true &&
+          shouldShowQuestion({ depends_on: q.depends_on ?? undefined }, answersByKey) &&
+          !isAnswered(answersByKey[q.question_key]),
+      ),
+    [questionnaireQuestions, answersByKey],
+  )
+  const missingDocs = useMemo(
+    () => documents.filter(d => d.is_required && !d.verified_at),
+    [documents],
+  )
+  const setupComplete = missingAnswers.length === 0 && missingDocs.length === 0
 
   // Handle status change
   const handleStatusChange = async (newStatus: string) => {
@@ -650,7 +684,7 @@ export function OrderViewClient({
               )}
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Label className="text-sm">Setup:</Label>
               {order.setup_locked_at ? (
                 <>
@@ -661,10 +695,22 @@ export function OrderViewClient({
                     Reopen
                   </Button>
                 </>
-              ) : (
+              ) : setupComplete ? (
                 <Button variant="outline" size="sm" onClick={handleSetupApproval} disabled={loading}>
-                  Approve setup
+                  Approve &amp; lock
                 </Button>
+              ) : (
+                <>
+                  <span className="text-xs text-amber-600 dark:text-amber-400">
+                    {[
+                      missingAnswers.length > 0 && `${missingAnswers.length} answer${missingAnswers.length === 1 ? '' : 's'}`,
+                      missingDocs.length > 0 && `${missingDocs.length} doc${missingDocs.length === 1 ? '' : 's'}`,
+                    ].filter(Boolean).join(' + ')} pending
+                  </span>
+                  <Button variant="outline" size="sm" onClick={() => setOverrideLockOpen(true)} disabled={loading} className="text-xs h-6 border-amber-500/40 text-amber-600 dark:text-amber-400">
+                    Override &amp; lock
+                  </Button>
+                </>
               )}
             </div>
 
@@ -1067,6 +1113,52 @@ export function OrderViewClient({
               disabled={loading || !cancellationReason}
             >
               Cancel Order
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Override lock confirmation — lets the admin lock despite an incomplete setup */}
+      <Dialog open={overrideLockOpen} onOpenChange={setOverrideLockOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Lock setup despite gaps?</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 text-sm">
+            <p className="text-muted-foreground">
+              This setup isn&apos;t complete. Locking now makes the answers and documents read-only for the customer, so they won&apos;t be able to finish:
+            </p>
+            {missingAnswers.length > 0 && (
+              <div>
+                <p className="font-medium mb-1">Unanswered required questions</p>
+                <ul className="list-disc pl-5 text-muted-foreground space-y-0.5">
+                  {missingAnswers.map(q => (
+                    <li key={q.question_key}>{q.question_label}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {missingDocs.length > 0 && (
+              <div>
+                <p className="font-medium mb-1">Unverified required documents</p>
+                <ul className="list-disc pl-5 text-muted-foreground space-y-0.5">
+                  {missingDocs.map(d => (
+                    <li key={d.id}>{d.document_label}{!d.file_url ? ' (not uploaded)' : ' (uploaded, not verified)'}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOverrideLockOpen(false)} disabled={loading}>
+              Cancel
+            </Button>
+            <Button
+              onClick={async () => { setOverrideLockOpen(false); await handleSetupApproval() }}
+              disabled={loading}
+              className="border-amber-500/40"
+            >
+              Override &amp; lock
             </Button>
           </DialogFooter>
         </DialogContent>

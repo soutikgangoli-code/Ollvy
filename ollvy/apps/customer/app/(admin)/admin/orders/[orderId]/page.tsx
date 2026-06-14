@@ -30,6 +30,10 @@ interface AdminOrderView {
     question_type: string
     options?: Array<{ value: string; label: string }>
     display_order: number
+    validation?: { required?: boolean } | null
+    depends_on?: { question_key: string; value?: string; values?: string[]; contains?: string } | null
+    is_pre_payment?: boolean
+    is_active?: boolean
   }>
   admin_notes: any[]
   professionals_available: Array<{ id: string; full_name: string; display_name?: string; email: string; professional_type: string }>
