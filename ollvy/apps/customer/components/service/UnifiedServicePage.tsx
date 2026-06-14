@@ -46,7 +46,7 @@ const DIYvsOllvy = dynamic(
   () => import('@/components/service/DIYvsOllvy').then(m => ({ default: m.DIYvsOllvy })),
   { loading: () => <div className="min-h-[700px] rounded-xl bg-muted/10" aria-hidden="true" /> }
 )
-import { getClient } from '@/lib/supabase'
+import { prefetchServiceCheckout } from '@/lib/prefetch-service-checkout'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -407,25 +407,10 @@ export function UnifiedServicePage({
   const [explainerOpen, setExplainerOpen] = useState(false)
   const [docsExpanded, setDocsExpanded] = useState(false)
 
-  // Prefetch checkout service data on CTA hover — warms browser cache
-  const prefetchedRef = useRef(false)
+  // Prefetch checkout service data on CTA hover — warms browser cache.
+  // Deduped across every CTA on the page via the shared module-level helper.
   const prefetchCheckout = useCallback(() => {
-    if (prefetchedRef.current) return
-    prefetchedRef.current = true
-    const supabase = getClient()
-    supabase.from('service_packages').select('*').eq('slug', service.slug).single()
-      .then(({ data }) => {
-        if (!data) return
-        // Also prefetch questionnaire count for services that go through eligibility
-        if (isEligibilityFlow(service.slug)) {
-          supabase
-            .from('service_questionnaires')
-            .select('*', { count: 'exact', head: true })
-            .eq('service_package_id', data.id)
-            .eq('is_active', true)
-            .eq('is_pre_payment', true)
-        }
-      })
+    prefetchServiceCheckout(service.slug, isEligibilityFlow(service.slug))
   }, [service.slug])
 
   // GTM + PostHog tracking

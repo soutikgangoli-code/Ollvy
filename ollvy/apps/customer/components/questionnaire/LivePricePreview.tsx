@@ -54,21 +54,23 @@ export function LivePricePreview({
           {formatPrice(priceBreakdown.total)}
         </span>
         {hasChange && hasAnyAnswer && (
-          <span className={cn(
-            "flex items-center gap-1 text-sm font-mono font-medium",
-            priceDifference > 0 ? "text-amber-600 dark:text-amber-400" : "text-[hsl(var(--ollvy-green))]"
-          )}>
-            {priceDifference > 0 ? (
-              <TrendingUp className="h-3.5 w-3.5" />
-            ) : (
-              <TrendingDown className="h-3.5 w-3.5" />
+          <span className="flex flex-col leading-tight">
+            <span className={cn(
+              "flex items-center gap-1 text-sm font-mono font-medium",
+              priceDifference > 0 ? "text-amber-600 dark:text-amber-400" : "text-[hsl(var(--ollvy-green))]"
+            )}>
+              {priceDifference > 0 ? (
+                <TrendingUp className="h-3.5 w-3.5" />
+              ) : (
+                <TrendingDown className="h-3.5 w-3.5" />
+              )}
+              {priceDifference > 0 ? '+' : ''}{formatPrice(Math.abs(priceDifference))}
+            </span>
+            {priceDifference > 0 && govtFeeDriver(service.slug) && (
+              <span className="font-mono text-[11px] text-muted-foreground/60 pl-[18px]">
+                {govtFeeDriver(service.slug)}
+              </span>
             )}
-            {priceDifference > 0 ? '+' : ''}{formatPrice(Math.abs(priceDifference))}
-          </span>
-        )}
-        {priceDifference > 0 && hasAnyAnswer && govtFeeDriver(service.slug) && (
-          <span className="font-mono text-[11px] text-muted-foreground/60">
-            {govtFeeDriver(service.slug)}
           </span>
         )}
       </div>

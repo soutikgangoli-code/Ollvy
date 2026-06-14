@@ -9,6 +9,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { QuestionnaireProgress } from './QuestionnaireProgress'
 import { QuestionField } from './QuestionField'
 import { useQuestionnaireStore } from '@/lib/stores/questionnaire-store'
+import type { PrefetchedOrderData } from '@/lib/stores/questionnaire-store'
 import type { ServiceQuestion } from '@/lib/questionnaire/types'
 import { createStepSchema } from '@/lib/questionnaire/schemas'
 import type { QuestionnaireFormValues } from '@/lib/questionnaire/types'
@@ -29,6 +30,7 @@ interface QuestionnaireWizardProps {
   locked?: boolean                    // setup approved by admin — answers are read-only
   serviceName?: string                // pre_payment: service name (when prefetched server-side)
   prefetchedQuestions?: ServiceQuestion[]  // pre_payment: questions fetched server-side, skips client round-trips
+  prefetchedOrder?: PrefetchedOrderData    // post_payment: order fetched server-side, skips the client get_user_order RPC
 }
 
 export function QuestionnaireWizard({
@@ -43,6 +45,7 @@ export function QuestionnaireWizard({
   locked = false,
   serviceName: prefetchedServiceName,
   prefetchedQuestions,
+  prefetchedOrder,
 }: QuestionnaireWizardProps) {
   const router = useRouter()
   const {
@@ -80,9 +83,9 @@ export function QuestionnaireWizard({
         : undefined
       loadPrePaymentQuestionnaire(serviceId, serviceSlug, loadExisting, prefetched)
     } else if (orderId) {
-      loadQuestionnaire(orderId, forceEdit)
+      loadQuestionnaire(orderId, forceEdit, prefetchedOrder)
     }
-  }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadExisting, loadQuestionnaire, loadPrePaymentQuestionnaire, prefetchedQuestions, prefetchedServiceName])
+  }, [orderId, serviceId, serviceSlug, mode, forceEdit, loadExisting, loadQuestionnaire, loadPrePaymentQuestionnaire, prefetchedQuestions, prefetchedServiceName, prefetchedOrder])
 
   // Handle case where there are no pre-payment questions (redirect to checkout)
   // Only trigger after data has loaded (serviceName is set) AND store has initialized

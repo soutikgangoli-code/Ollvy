@@ -77,16 +77,6 @@ export function DocumentsPageClient({ order, initialDocuments, __perfTimings }: 
     name?: string
   } | null>(null)
 
-  const fetchDocuments = async () => {
-    const supabase = getClient()
-    const { data, error } = await supabase
-      .rpc('initialize_order_documents', { p_order_id: order.id })
-
-    if (!error && data) {
-      setDocuments(data)
-    }
-  }
-
   const handleUpload = async (documentKey: string, file: File) => {
     // Setup approved by admin — documents are locked from replacement.
     if (order.setup_locked_at) {
@@ -143,9 +133,23 @@ export function DocumentsPageClient({ order, initialDocuments, __perfTimings }: 
     await logCustomerDocumentUpload(order.id, file.name)
     const __tLogMs = Math.round(performance.now() - __tLogStart)
 
-    // Refresh documents
+    // Reflect the upload locally instead of re-running the full
+    // initialize_order_documents RPC on every upload (it re-selects the whole
+    // document set each time). A fresh upload's fields are deterministic, so
+    // merge them into state directly — instant, and one fewer round-trip.
     const __tRefStart = performance.now()
-    await fetchDocuments()
+    setDocuments(prev => prev.map(d =>
+      d.document_key === documentKey
+        ? {
+            ...d,
+            file_url: storagePath,
+            file_name: file.name,
+            uploaded_at: new Date().toISOString(),
+            verified_at: undefined,
+            rejection_reason: undefined,
+          }
+        : d
+    ))
     const __tRefMs = Math.round(performance.now() - __tRefStart)
 
     // Fire submission-complete email if questionnaire is also done.

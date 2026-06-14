@@ -72,7 +72,8 @@ export default async function QuestionnairePage({ params, searchParams }: PagePr
     id: orderData.id,
     order_number: orderData.order_number,
     questionnaire_completed_at: orderData.questionnaire_completed_at,
-    service_package: orderData.service_package as { name: string; slug: string },
+    setup_locked_at: orderData.setup_locked_at as string | null,
+    service_package: orderData.service_package as { id: string; name: string; slug: string },
   }
 
   const __perfTimings = {

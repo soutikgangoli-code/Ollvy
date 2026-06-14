@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { getClient } from '@/lib/supabase'
+import { prefetchServiceCheckout } from '@/lib/prefetch-service-checkout'
 import {
   CheckCircle,
   ChevronLeft,
@@ -41,24 +41,9 @@ const QUESTIONNAIRE_BASED_SERVICES = [
 export function ProcessStepper({ steps, serviceId, serviceSlug, priceVariesByState }: ProcessStepperProps) {
   const [active, setActive] = useState(0)
 
-  // Prefetch checkout service data on CTA hover
-  const prefetchedRef = useRef(false)
+  // Prefetch checkout service data on CTA hover (deduped across all page CTAs)
   const prefetchCheckout = useCallback(() => {
-    if (prefetchedRef.current || !serviceSlug) return
-    prefetchedRef.current = true
-    const supabase = getClient()
-    supabase.from('service_packages').select('*').eq('slug', serviceSlug).single()
-      .then(({ data }) => {
-        if (!data || !serviceSlug) return
-        if (QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug)) {
-          supabase
-            .from('service_questionnaires')
-            .select('*', { count: 'exact', head: true })
-            .eq('service_package_id', data.id)
-            .eq('is_active', true)
-            .eq('is_pre_payment', true)
-        }
-      })
+    prefetchServiceCheckout(serviceSlug, !!serviceSlug && QUESTIONNAIRE_BASED_SERVICES.includes(serviceSlug))
   }, [serviceSlug])
 
   return (

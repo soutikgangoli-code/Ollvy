@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CheckCircle, Phone, MessageCircle, Square, CheckSquare, Info } from 'lucide-react'
 import { getCompletionEstimate } from '@/lib/dates'
-import { getClient } from '@/lib/supabase'
+import { prefetchServiceCheckout } from '@/lib/prefetch-service-checkout'
 import { DBServiceConfig } from '@/lib/data/services'
 import { cn } from '@/lib/utils'
 import { getWhatsAppLink, getPhoneLink } from '@/lib/constants'
@@ -217,23 +217,16 @@ export function BookingPanel({
   // 300-1500ms, which is "free" head-start time the pre-create can use. The
   // module-level cache in firePreCreateOrder dedupes against the click-time
   // fire, so calling both is safe.
+  // Guard the whole hover action with a ref: fireDirectCheckoutPreCreate must
+  // run AT MOST ONCE per mount. firePreCreateOrder only dedupes against its
+  // *completed* cache (not in-flight calls), so a second fire during the
+  // create-order window would spawn a duplicate Razorpay order. The shared
+  // prefetch helper has its own cross-component dedupe for the warmup query.
   const prefetchedRef = useRef(false)
   const prefetchCheckout = useCallback(() => {
     if (prefetchedRef.current) return
     prefetchedRef.current = true
-    const supabase = getClient()
-    supabase.from('service_packages').select('*').eq('slug', service.slug).single()
-      .then(({ data }) => {
-        if (!data) return
-        if (priceVariesByQuestionnaire || hasPrePaymentQuestions) {
-          supabase
-            .from('service_questionnaires')
-            .select('*', { count: 'exact', head: true })
-            .eq('service_package_id', data.id)
-            .eq('is_active', true)
-            .eq('is_pre_payment', true)
-        }
-      })
+    prefetchServiceCheckout(service.slug, priceVariesByQuestionnaire || hasPrePaymentQuestions)
     // Fire the actual Razorpay order pre-create at hover time for
     // direct-checkout services. No-ops for eligibility / quote flows and
     // when the user isn't logged in (which is also when there's no token).

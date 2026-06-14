@@ -41,8 +41,10 @@ interface QuestionnaireState {
   error: string | null
 }
 
-// Type for prefetched order data (from server-side fetch)
-interface PrefetchedOrderData {
+// Type for prefetched order data (from server-side fetch). Exported so the
+// post-payment questionnaire page can hand its already-fetched order down to
+// the wizard and skip the duplicate client-side get_user_order RPC.
+export interface PrefetchedOrderData {
   id: string
   questionnaire_completed_at?: string | null
   service_package: {

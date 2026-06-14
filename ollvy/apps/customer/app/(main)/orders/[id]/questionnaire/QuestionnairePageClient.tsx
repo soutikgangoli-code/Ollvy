@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { QuestionnaireWizard } from '@/components/questionnaire'
@@ -13,6 +13,7 @@ interface OrderData {
   questionnaire_completed_at: string | null
   setup_locked_at?: string | null
   service_package: {
+    id: string
     name: string
     slug: string
   }
@@ -31,6 +32,13 @@ interface QuestionnairePageClientProps {
 }
 
 export function QuestionnairePageClient({ order, forceEdit, __perfTimings }: QuestionnairePageClientProps) {
+  // Stable reference so the wizard's load effect (which has prefetchedOrder in
+  // its deps) fires exactly once and never re-loads/resets in-progress answers.
+  const prefetchedOrder = useMemo(() => ({
+    id: order.id,
+    questionnaire_completed_at: order.questionnaire_completed_at,
+    service_package: order.service_package,
+  }), [order.id, order.questionnaire_completed_at, order.service_package])
   // Perf instrumentation — see [questionnaire-perf] lines in console.
   // Especially watch rpcAttempts: if >1, the user hit the webhook race
   // condition and waited for backoff (1s, 2s, 4s, 8s, 16s).
@@ -77,11 +85,13 @@ export function QuestionnairePageClient({ order, forceEdit, __perfTimings }: Que
         </div>
       </div>
 
-      {/* Questionnaire Wizard */}
+      {/* Questionnaire Wizard — hand it the order we already fetched server-side
+          so it skips the duplicate client-side get_user_order RPC. */}
       <QuestionnaireWizard
         orderId={order.id}
         forceEdit={forceEdit && !order.setup_locked_at}
         locked={!!order.setup_locked_at}
+        prefetchedOrder={prefetchedOrder}
       />
 
       {/* Help Section */}
