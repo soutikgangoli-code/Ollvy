@@ -214,8 +214,8 @@ export function Footer() {
 
         {/* Bottom row */}
         <div className="border-t border-border mt-10 pt-6 space-y-3">
-          <p className="text-xs text-muted-foreground leading-relaxed max-w-3xl">
-            Ollvy is a private professional services firm. Not affiliated with any government department. Government fees, where applicable, are paid directly to the relevant authority.
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Ollvy is not affiliated with, endorsed by, or acting on behalf of any government agency. We are an independent, private service provider assisting with application and consulting services.
           </p>
           <p className="text-xs text-muted-foreground">
             © 2026 Ollvy Collective Private Limited. All rights reserved.
