@@ -446,7 +446,7 @@ export function BookingPanel({
       </div>
 
       {/* CTA button */}
-      <Button className="w-full mt-5" size="lg" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout}>
+      <Button className="w-full mt-5" size="lg" asChild onMouseEnter={prefetchCheckout} onTouchStart={prefetchCheckout} onPointerDown={prefetchCheckout}>
         <Link
           href={ctaUrl}
           prefetch={true}
