@@ -1,1 +1,14 @@
-> 0.5%, last 2 versions, not dead, not ie 11
+# Modern baseline — skip transpiling Baseline-available features so SWC stops
+# injecting legacy polyfills (Array.prototype.at, Object.hasOwn, flat/flatMap,
+# Object.fromEntries, trimStart/End, Math.trunc). Saves ~56 KiB of first-party JS.
+# Floor is set by Array.prototype.at + Object.hasOwn → Safari/iOS 15.4 (Mar 2022).
+chrome >= 92
+edge >= 92
+firefox >= 90
+safari >= 15.4
+ios_saf >= 15.4
+and_chr >= 92
+and_ff >= 90
+samsung >= 16
+opera >= 78
+not dead
