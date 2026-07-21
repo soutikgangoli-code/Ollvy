@@ -7,7 +7,7 @@ export const incomeTax1421Notice: LearnPageConfig = {
   seoTitle: 'Section 142(1) Notice: Return Filing or Document Production (2026) | Ollvy',
   seoDescription: 'A 142(1) notice has two purposes: asking you to file a return (142(1)(i)) or produce documents during scrutiny (142(1)(ii)). Non-compliance attracts Rs. 10,000 penalty per notice under 271(1)(b).',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-142-1-notice',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['business-itr'],

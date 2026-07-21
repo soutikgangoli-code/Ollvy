@@ -7,7 +7,7 @@ export const tdsShortDeductionNotice: LearnPageConfig = {
   seoTitle: 'TDS Short Deduction Notice: Interest and Penalty Explained (2026) | Ollvy',
   seoDescription: 'TRACES detected TDS short or non-deduction. Interest runs at 1-1.5 percent per month. Section 40(a)(ia) disallows 30 percent of the expense. File a correction return after depositing the shortfall.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-short-deduction-notice',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'TDS Notice',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],

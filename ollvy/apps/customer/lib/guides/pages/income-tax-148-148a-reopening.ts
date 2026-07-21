@@ -7,7 +7,7 @@ export const incomeTax148148aReopening: LearnPageConfig = {
   seoTitle: 'Section 148/148A Reassessment Notice: Your Defence Rights (2026) | Ollvy',
   seoDescription: 'A 148A notice is your chance to stop reassessment before it starts. Reply within 7-30 days explaining why the alleged income did not escape assessment. Strong 148A replies close cases early.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-148-148a-reopening',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,

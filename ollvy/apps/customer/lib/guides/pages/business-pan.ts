@@ -4,9 +4,9 @@ export const businessPanGuide: LearnPageConfig = {
   slug: 'what-is-business-pan',
   title: 'Business PAN: What It Is and Why Your Company Needs It',
   seoTitle: 'Business PAN Card for Company and LLP: Complete Guide (2026) | Ollvy',
-  seoDescription: 'Every company, LLP, and firm needs a PAN before opening a bank account or registering for GST. Understand what business PAN is, who needs it, and how to get it in 7 days.',
+  seoDescription: 'Companies and LLPs now get PAN automatically at incorporation via SPICe+ and FiLLiP. Who still needs to apply (firms, trusts, older entities), what you cannot do without PAN, and how Form 49A works.',
   canonicalUrl: 'https://www.ollvy.com/guides/what-is-business-pan',
-  lastReviewed: 'March 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   severity: 'moderate',
   deadline: 'Required before bank account opening, GST registration, or income tax filing',
@@ -23,13 +23,13 @@ export const businessPanGuide: LearnPageConfig = {
     {
       number: '01',
       heading: 'WHAT IS A BUSINESS PAN AND WHO NEEDS ONE',
-      body: 'PAN stands for Permanent Account Number. It is a 10-character alphanumeric identifier issued by the Income Tax Department of India to every taxpayer in the country.\n\nFor businesses, PAN is the foundational compliance document. Every company, LLP, partnership firm, trust, and society must have one. Without it, you cannot open a current bank account, register for GST, file income tax returns, or have TDS deducted and credited in your name.\n\nFor a company or LLP, PAN is typically the first compliance step after incorporation. MCA issues the Certificate of Incorporation but does not automatically issue a PAN. You must apply separately through the NSDL or UTI ITSL portal.',
+      body: 'PAN stands for Permanent Account Number. It is a 10-character alphanumeric identifier issued by the Income Tax Department of India to every taxpayer in the country.\n\nFor businesses, PAN is the foundational compliance document. Every company, LLP, partnership firm, trust, and society must have one. Without it, you cannot open a current bank account, register for GST, file income tax returns, or have TDS deducted and credited in your name.\n\nCompanies incorporated since February 2020 get PAN and TAN automatically: one government form (SPICe+, with the linked AGILE-PRO-S) covers incorporation, PAN, and TAN, and the PAN is printed on the Certificate of Incorporation itself. LLPs get the same through FiLLiP since March 2022. A separate application (Form 49A on the Protean or UTIITSL portal) is needed only for partnership firms, trusts, societies, and entities incorporated before these dates that never obtained one.',
       note: 'Source: Section 139A, Income Tax Act 1961; the requirement continues unchanged under the Income-tax Act 2025 from 1 April 2026. Mandatory for all companies, LLPs, and firms.',
     },
     {
       number: '02',
       heading: 'COMPANY PAN VS DIRECTOR PAN: NOT THE SAME THING',
-      body: 'This is the most common point of confusion among founders. A company is a separate legal entity from its directors. The company needs its own PAN. Each director also needs their own individual PAN. These are completely different numbers.\n\nThe company PAN is used for the company\'s income tax returns, TDS deductions made by the company on vendor and employee payments, and all financial transactions in the company\'s name.\n\nThe director\'s individual PAN is used for the director\'s personal income tax filing and their own financial transactions.\n\nWhen you receive your Certificate of Incorporation from MCA, you receive the company\'s CIN and legal name. PAN must be applied for separately within a reasonable time after incorporation.',
+      body: 'This is the most common point of confusion among founders. A company is a separate legal entity from its directors. The company needs its own PAN. Each director also needs their own individual PAN. These are completely different numbers.\n\nThe company PAN is used for the company\'s income tax returns, TDS deductions made by the company on vendor and employee payments, and all financial transactions in the company\'s name.\n\nThe director\'s individual PAN is used for the director\'s personal income tax filing and their own financial transactions.\n\nWhen you receive your Certificate of Incorporation from MCA, the company\'s PAN and TAN are printed on it - no separate application is needed. The directors\' individual PANs are unaffected by incorporation; they were quoted in SPICe+ but stay personal.',
     },
     {
       number: '03',
@@ -48,7 +48,7 @@ export const businessPanGuide: LearnPageConfig = {
     {
       number: '04',
       heading: 'HOW THE APPLICATION PROCESS WORKS',
-      body: 'Business PAN is applied through Form 49A on the NSDL or UTI ITSL portal. The process is online but requires supporting documents based on your entity type.\n\nThe steps are: document preparation and CA review, Form 49A completion with entity details, NSDL portal submission with documents attached, acknowledgement number generation (same day), NSDL verification and Income Tax Department processing, and e-PAN delivery to your registered email.\n\nNSDL processes applications within 5 to 7 working days from the date of submission. The e-PAN arrives by email and can be used immediately for all purposes. The physical PAN card takes an additional 10 to 15 days to arrive by post at your registered office.\n\nThe government fee for physical PAN card delivery within India is Rs. 107 including GST.',
+      body: 'This section applies to entities that did not get a PAN automatically at incorporation: partnership firms, trusts, societies, AOPs, and companies or LLPs from before the SPICe+ / FiLLiP integration. The application is Form 49A on the Protean (formerly NSDL) or UTIITSL portal. The process is online but requires supporting documents based on your entity type.\n\nThe steps are: document preparation and CA review, Form 49A completion with entity details, NSDL portal submission with documents attached, acknowledgement number generation (same day), NSDL verification and Income Tax Department processing, and e-PAN delivery to your registered email.\n\nNSDL processes applications within 5 to 7 working days from the date of submission. The e-PAN arrives by email and can be used immediately for all purposes. The physical PAN card takes an additional 10 to 15 days to arrive by post at your registered office.\n\nThe government fee for physical PAN card delivery within India is Rs. 107 including GST.',
       note: 'Source: NSDL e-Gov PAN Portal - https://www.onlineservices.nsdl.com/paam/endUserRegisterContact.html',
     },
     {
@@ -63,18 +63,18 @@ export const businessPanGuide: LearnPageConfig = {
         'Poor document quality: blurry, cropped, or partially visible documents',
         'Wrong CIN or LLPIN: even a single character error causes the application to fail verification',
       ],
-      note: 'Having a CA verify all documents before submission eliminates most rejection risk. We review every document before submitting to NSDL.',
+      note: 'Having a CA verify all documents before submission eliminates most rejection risk. Ollvy CA reviews every document before submitting to Protean.',
     },
   ],
 
   faqs: [
     {
-      q: 'My company was incorporated yesterday. How urgently do I need to apply for PAN?',
-      a: 'Apply within the first week. You cannot open a bank account without PAN, and you cannot receive or make business payments without a bank account. Start the PAN application and bank account application simultaneously. Banks accept the NSDL acknowledgement letter while the physical PAN card is being processed.',
+      q: 'My company was incorporated yesterday. Do I need to apply for PAN?',
+      a: 'Check your Certificate of Incorporation first - for companies incorporated via SPICe+ (mandatory since February 2020), the PAN and TAN are printed on it, and the e-PAN reaches the company email within a few days. You only need to apply if your entity is a partnership firm, trust, or society, or if the e-PAN never arrived (raise it with the CPC or apply for a reprint). Banks accept the Certificate of Incorporation showing the PAN for account opening.',
     },
     {
       q: 'Does an LLP need a different process than a Private Limited Company?',
-      a: 'The form (49A) and the NSDL portal are the same. The supporting documents differ. Companies submit the MOA and AOA. LLPs submit the LLP Agreement. The timeline and process are identical.',
+      a: 'Not anymore for new entities: companies get PAN through SPICe+ and LLPs through FiLLiP, both automatically at incorporation. For older entities applying manually, the form (49A) and the Protean portal are the same; only the supporting documents differ - companies submit the MOA and AOA, LLPs submit the LLP Agreement.',
     },
     {
       q: 'Can I use my personal PAN for company transactions until the company PAN arrives?',

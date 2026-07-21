@@ -7,7 +7,7 @@ export const incomeTax131Summons: LearnPageConfig = {
   seoTitle: 'Section 131 Summons: Appear or Face Prosecution (2026) | Ollvy',
   seoDescription: 'A Section 131 summons requires your personal attendance for examination on oath. Non-compliance is a criminal offence under Section 131(1A). Take a CA or advocate with you.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-131-summons',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['business-itr'],

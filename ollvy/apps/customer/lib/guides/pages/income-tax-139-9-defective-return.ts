@@ -7,7 +7,7 @@ export const incomeTax1399DefectiveReturn: LearnPageConfig = {
   seoTitle: 'Section 139(9) Defective Return: Fix Within 15 Days (2026) | Ollvy',
   seoDescription: 'A 139(9) notice means your ITR has a structural defect. Fix it within 15 days or your return becomes invalid. Common defects: wrong ITR form, missing schedules, or audit report not filed.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-139-9-defective-return',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['business-itr', 'mca-annual-filing', 'director-kyc'],

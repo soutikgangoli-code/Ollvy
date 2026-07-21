@@ -7,7 +7,7 @@ export const tds26q27qMismatch: LearnPageConfig = {
   seoTitle: 'TDS 26Q/27Q Mismatch: File Correction Return on TRACES (2026) | Ollvy',
   seoDescription: 'A TDS mismatch notice means your 26Q or 27Q return does not match challan deposits. File a correction return on TRACES to link challans correctly. Wrong deductee PAN blocks their TDS credit.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-26q-27q-mismatch',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'TDS Notice',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],

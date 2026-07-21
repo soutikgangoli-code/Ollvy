@@ -7,7 +7,7 @@ export const incomeTax156Demand: LearnPageConfig = {
   seoTitle: 'Section 156 Demand Notice: Pay, Appeal, or Rectify (2026) | Ollvy',
   seoDescription: 'A Section 156 notice is the formal demand for tax determined in an assessment order. Pay within 30 days, or interest at 1 percent per month starts. Appeal requires 20 percent pre-deposit for stay.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-156-demand',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['business-itr'],

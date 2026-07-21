@@ -7,7 +7,7 @@ export const incomeTaxAisSftNotice: LearnPageConfig = {
   seoTitle: 'AIS / SFT High Value Transaction Notice: Explain or Pay (2026) | Ollvy',
   seoDescription: 'AIS now shows every high-value transaction to the department. If your ITR does not reflect a transaction in your AIS, expect a notice. Respond proactively before it becomes a 148A.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-ais-sft-notice',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,

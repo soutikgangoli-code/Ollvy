@@ -7,7 +7,7 @@ export const incomeTax245RefundAdjustment: LearnPageConfig = {
   seoTitle: 'Section 245 Refund Adjustment: Object Within 30 Days (2026) | Ollvy',
   seoDescription: 'A Section 245 notice says your refund will be adjusted against an old demand. You have 30 days to object. Check if the demand was already paid or is under appeal.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-245-refund-adjustment',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,

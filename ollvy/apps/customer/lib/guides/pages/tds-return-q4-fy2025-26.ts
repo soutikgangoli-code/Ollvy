@@ -3,16 +3,16 @@ import { LearnPageConfig } from '../pages';
 
 export const tdsQ4FY2526: LearnPageConfig = {
   slug: 'tds-return-q4-fy2025-26',
-  title: 'TDS Return Q4 FY2025-26: Filing Guide and Due Date',
-  seoTitle: 'TDS Return Q4 FY2025-26 Filing Guide - Due May 31, 2026 | Ollvy',
+  title: 'TDS Return Q4 FY2025-26: Deadline Passed, Late Filing Guide',
+  seoTitle: 'TDS Return Q4 FY2025-26 Late Filing | Rs 200/Day Accruing | Ollvy',
   seoDescription:
-    'Complete guide to filing TDS Return for Q4 (Jan-Mar 2026) of FY2025-26. Due date is May 31, 2026. Learn about Form 24Q, 26Q, 27Q requirements and avoid late filing penalties.',
+    'The 31 May 2026 due date for Q4 FY2025-26 TDS returns has passed; Section 234E fees accrue at Rs 200 per day. How to file 24Q/26Q/27Q late, stop the fee, and issue the Form 16 your employees need for ITR season.',
   canonicalUrl: 'https://www.ollvy.com/guides/tds-return-q4-fy2025-26',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'TDS Filing',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],
-  relatedLearnSlugs: ['tds-return-q1-fy2026-27', 'tds-short-deduction-notice'],
+  relatedLearnSlugs: ['tds-return-q1-fy2026-27', 'tds-short-deduction-notice', 'new-tds-sections-fy2026-27'],
   relatedTools: {
     penaltyCalculators: ['tds-late-filing'],
     documentChecklists: ['business-itr'],
@@ -25,12 +25,18 @@ export const tdsQ4FY2526: LearnPageConfig = {
   sections: [
     {
       number: '01',
-      heading: 'TDS RETURN Q4 FY2025-26 OVERVIEW',
-      body: 'TDS Return for Q4 FY2025-26 covers tax deducted at source during January, February, and March 2026. As the final quarter of the financial year, this return is particularly important because it captures year-end transactions and must reconcile with Form 16/16A issuance.\n\nThe due date for filing Q4 TDS Return is May 31, 2026. Unlike other quarters where the due date is 31 days after quarter end, Q4 gets an extended deadline to allow for year-end reconciliation.',
-      note: 'Source: Rule 31A of Income Tax Rules, 1962.',
+      heading: '31 MAY HAS PASSED: WHAT LATE FILING COSTS NOW',
+      body: 'The Q4 FY2025-26 TDS return was due 31 May 2026. If it is still unfiled, the Section 234E fee has been accruing at Rs. 200 per day since 1 June - over Rs. 10,000 by late July, capped only at the total TDS deducted in the quarter. The fee stops on the day the return is filed, not the day you start preparing it.\n\nThe bigger pressure is Form 16. It could only be generated after the Q4 24Q was filed and was due to employees by 15 June 2026. With the 31 July ITR deadline weeks away, every salaried employee of a non-filed deductor is now blocked from filing comfortably, and vendors are missing the Form 16A they need to claim TDS credit.\n\nOne format note: Q4 FY2025-26 stays on the old forms (24Q, 26Q, 27Q) even though quarters from FY2026-27 use the new forms (138 for salary, 140 for resident non-salary, 144 for non-resident payments). TRACES accepts the old formats for old periods, so no re-learning is needed - just file.',
+      note: 'Beyond one year of delay, Section 271H penalty of Rs. 10,000 to Rs. 1,00,000 becomes available to the assessing officer. Filing now keeps this off the table.',
     },
     {
       number: '02',
+      heading: 'TDS RETURN Q4 FY2025-26 OVERVIEW',
+      body: 'TDS Return for Q4 FY2025-26 covers tax deducted at source during January, February, and March 2026. As the final quarter of the financial year, this return is particularly important because it captures year-end transactions and must reconcile with Form 16/16A issuance.\n\nThe due date for filing the Q4 TDS Return was May 31, 2026. Unlike other quarters where the due date is 31 days after quarter end, Q4 gets an extended deadline to allow for year-end reconciliation. Late filing remains possible on the same forms and portal, with the Section 234E daily fee added at submission.',
+      note: 'Source: Rule 31A of Income Tax Rules, 1962.',
+    },
+    {
+      number: '03',
       heading: 'WHICH TDS FORMS TO FILE',
       body: 'Different forms apply based on the type of TDS deducted:',
       bullets: [
@@ -42,7 +48,7 @@ export const tdsQ4FY2526: LearnPageConfig = {
       note: 'Most businesses file 24Q (if they have employees) and 26Q (for vendor payments).',
     },
     {
-      number: '03',
+      number: '04',
       heading: 'DOCUMENTS REQUIRED FOR Q4 TDS RETURN',
       body: 'Gather these documents before starting your TDS return filing:',
       bullets: [
@@ -56,7 +62,7 @@ export const tdsQ4FY2526: LearnPageConfig = {
       ],
     },
     {
-      number: '04',
+      number: '05',
       heading: 'PENALTY FOR LATE FILING',
       body: 'Missing the May 31, 2026 deadline results in multiple penalties:',
       bullets: [
@@ -68,7 +74,7 @@ export const tdsQ4FY2526: LearnPageConfig = {
       note: 'Section 234E fee accrues daily - file as early as possible even if late.',
     },
     {
-      number: '05',
+      number: '06',
       heading: 'HOW TO FILE TDS RETURN Q4',
       body: 'Follow these steps to file your Q4 TDS return:',
       bullets: [
@@ -83,7 +89,7 @@ export const tdsQ4FY2526: LearnPageConfig = {
       ],
     },
     {
-      number: '06',
+      number: '07',
       heading: 'Q4 SPECIFIC REQUIREMENTS',
       body: 'Q4 has additional requirements compared to other quarters:',
       bullets: [

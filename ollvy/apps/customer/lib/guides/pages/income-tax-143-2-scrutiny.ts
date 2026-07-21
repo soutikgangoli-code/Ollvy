@@ -7,7 +7,7 @@ export const incomeTax1432Scrutiny: LearnPageConfig = {
   seoTitle: 'Section 143(2) Scrutiny Notice: Step by Step Response (2026) | Ollvy',
   seoDescription: 'A 143(2) notice means your return was selected for detailed scrutiny. The process runs 12-18 months through the faceless assessment system. Engage a CA from day one.',
   canonicalUrl: 'https://www.ollvy.com/guides/income-tax-143-2-scrutiny',
-  lastReviewed: 'April 2026',
+  lastReviewed: 'July 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['business-itr'],
