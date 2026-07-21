@@ -14,7 +14,7 @@ export const advanceTaxExplained: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/advance-tax-explained",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["advance-tax-payment", "individual-itr-filing", "business-itr-filing"],
+  relatedServiceSlugs: ["business-itr"],
   relatedLearnSlugs: [
     "which-itr-form-should-i-use",
     "tds-on-rent-194i-194ib",

@@ -1,7 +1,96 @@
-import { LearnPageConfig } from '../pages'
+import { LearnPageConfig, EligibilityRule, EligibilityResult } from '../pages'
 
 // FACTUAL UPDATE: Thresholds updated to April 2025 revised limits
 // Source: Ministry of MSME Notification S.O. 1364(E), March 21, 2025
+
+// Builds the benefits-ranking result for every combination of answers to
+// Q0 (turnover), Q1 (main reason) and Q2 (supplies to large buyers). The rule
+// list is plain data, so it survives JSON serialization to the client.
+function msmeBenefitsResult(turnover: string, mainReason: string, suppliesAnswer: string): EligibilityResult {
+  const suppliesLarge = suppliesAnswer === 'yes' || suppliesAnswer === 'plan_to'
+
+  const benefits: { label: string; relevance: 'high' | 'medium' | 'low'; reason: string; description: string }[] = []
+
+  // Credit access
+  benefits.push({
+    label: 'Collateral-Free Credit (CGTMSE)',
+    description: 'Loans up to Rs. 10 crore without pledging assets or a third-party guarantee',
+    relevance: mainReason === 'credit' ? 'high' : 'medium',
+    reason: mainReason === 'credit'
+      ? 'This is your primary goal - CGTMSE is the most direct benefit'
+      : 'Useful for future credit needs even if not the primary driver',
+  })
+
+  // Payment protection
+  benefits.push({
+    label: 'Payment Protection (MSME Samadhaan)',
+    description: 'Compound interest at 3x RBI rate if large buyers delay beyond 45 days. File online, resolve in 90 days.',
+    relevance: suppliesLarge ? 'high' : mainReason === 'payments' ? 'high' : 'low',
+    reason: suppliesLarge
+      ? 'You supply to large companies - this is your legal leverage for delayed payments'
+      : 'Less relevant until you supply to companies above Rs. 250 crore turnover',
+  })
+
+  // Tenders
+  benefits.push({
+    label: 'Government Tender Preference',
+    description: 'MSME-exclusive categories on GeM. Government departments must buy a % of procurement from MSMEs.',
+    relevance: mainReason === 'tenders' ? 'high' : suppliesAnswer === 'yes' ? 'medium' : 'low',
+    reason: mainReason === 'tenders'
+      ? 'This is your primary goal - GeM and tender preference directly apply'
+      : 'Register and explore GeM listing even if tenders are not your immediate focus',
+  })
+
+  // Subsidies and schemes
+  benefits.push({
+    label: 'Subsidies and Schemes (ISO, CLSS)',
+    description: 'ISO certification cost reimbursement, Credit Linked Capital Subsidy for technology upgrades.',
+    relevance: mainReason === 'subsidies' ? 'high' : 'medium',
+    reason: mainReason === 'subsidies'
+      ? 'Several central and state government schemes are exclusively for registered MSMEs'
+      : 'Available on registration - worth exploring as you grow',
+  })
+
+  // Credit card (micro only)
+  if (turnover === 'below_10cr') {
+    benefits.push({
+      label: 'Udyam Credit Card',
+      description: 'Rs. 5 lakh credit limit specifically for micro enterprises registered on Udyam portal.',
+      relevance: mainReason === 'credit' ? 'high' : 'medium',
+      reason: 'As a micro enterprise, you are eligible for the new Udyam credit card launched in Budget 2025',
+    })
+  }
+
+  return {
+    type: 'recommended' as const,
+    headline: 'Yes - register. It is free and takes 15 minutes.',
+    body: 'Udyam is free, instant, and needs only your PAN and Aadhaar. Here is what matters most for your situation.',
+    ctaLabel: 'Register MSME (Free)',
+    ctaHref: '/checkout/msme-registration',
+    ranking: {
+      type: 'benefits' as const,
+      benefits,
+    },
+  }
+}
+
+// One rule per combination of the answers the benefits ranking depends on.
+// Turnover only changes the outcome via below_10cr (micro) vs the rest.
+const msmeResultRules: EligibilityRule[] = []
+for (const mainReason of ['credit', 'tenders', 'subsidies', 'payments', 'not_sure']) {
+  for (const suppliesAnswer of ['yes', 'plan_to', 'no']) {
+    for (const turnovers of [['below_10cr'], ['10cr_100cr', '100cr_500cr']]) {
+      msmeResultRules.push({
+        if: [
+          { q: 1, anyOf: [mainReason] },
+          { q: 2, anyOf: [suppliesAnswer] },
+          { q: 0, anyOf: turnovers },
+        ],
+        result: msmeBenefitsResult(turnovers[0], mainReason, suppliesAnswer),
+      })
+    }
+  }
+}
 
 export const msmeUdyam: LearnPageConfig = {
   slug: 'is-msme-registration-worth-it',
@@ -14,7 +103,7 @@ export const msmeUdyam: LearnPageConfig = {
   category: 'Registration',
   ctaServiceSlug: 'gst-registration',
   relatedServiceSlugs: ['gst-registration', 'msme-registration'],
-  relatedLearnSlugs: ['pvt-ltd-vs-llp', 'should-i-get-dpiit-startup-recognition'],
+  relatedLearnSlugs: ['pvt-ltd-vs-llp', 'should-i-get-dpiit-startup-recognition', 'do-i-need-trademark-registration', 'msme-form-1-h1-2026'],
 
   tool: {
     type: 'eligibility',
@@ -28,15 +117,12 @@ export const msmeUdyam: LearnPageConfig = {
           { value: '100cr_500cr', label: 'Rs. 100 crore to Rs. 500 crore (Medium Enterprise)' },
           { value: 'above_500cr', label: 'Above Rs. 500 crore' },
         ],
-        earlyExit: (answer: string) => {
-          if (answer === 'above_500cr') {
-            return {
-              type: 'ineligible' as const,
-              headline: 'Above the MSME ceiling.',
-              body: 'Maximum turnover for Medium Enterprise is Rs. 500 crore. Your business does not qualify.',
-            }
-          }
-          return null
+        exitOn: {
+          above_500cr: {
+            type: 'ineligible' as const,
+            headline: 'Above the MSME ceiling.',
+            body: 'Maximum turnover for Medium Enterprise is Rs. 500 crore. Your business does not qualify.',
+          },
         },
       },
       {
@@ -56,77 +142,9 @@ export const msmeUdyam: LearnPageConfig = {
           { value: 'no', label: 'No - mostly small businesses or end consumers' },
           { value: 'plan_to', label: 'Not yet, but planning to' },
         ],
-        evaluator: (answer: string, allAnswers: string[]) => {
-          const answers = [...allAnswers, answer]
-          const mainReason = answers[1]
-          const suppliesLarge = answers[2] === 'yes' || answers[2] === 'plan_to'
-
-          const benefits: { label: string; relevance: 'high' | 'medium' | 'low'; reason: string; description: string }[] = []
-
-          // Credit access
-          benefits.push({
-            label: 'Collateral-Free Credit (CGTMSE)',
-            description: 'Loans up to Rs. 10 crore without pledging assets or a third-party guarantee',
-            relevance: mainReason === 'credit' ? 'high' : 'medium',
-            reason: mainReason === 'credit'
-              ? 'This is your primary goal - CGTMSE is the most direct benefit'
-              : 'Useful for future credit needs even if not the primary driver',
-          })
-
-          // Payment protection
-          benefits.push({
-            label: 'Payment Protection (MSME Samadhaan)',
-            description: 'Compound interest at 3x RBI rate if large buyers delay beyond 45 days. File online, resolve in 90 days.',
-            relevance: suppliesLarge ? 'high' : mainReason === 'payments' ? 'high' : 'low',
-            reason: suppliesLarge
-              ? 'You supply to large companies - this is your legal leverage for delayed payments'
-              : 'Less relevant until you supply to companies above Rs. 250 crore turnover',
-          })
-
-          // Tenders
-          benefits.push({
-            label: 'Government Tender Preference',
-            description: 'MSME-exclusive categories on GeM. Government departments must buy a % of procurement from MSMEs.',
-            relevance: mainReason === 'tenders' ? 'high' : answers[2] === 'yes' ? 'medium' : 'low',
-            reason: mainReason === 'tenders'
-              ? 'This is your primary goal - GeM and tender preference directly apply'
-              : 'Register and explore GeM listing even if tenders are not your immediate focus',
-          })
-
-          // Subsidies and schemes
-          benefits.push({
-            label: 'Subsidies and Schemes (ISO, CLSS)',
-            description: 'ISO certification cost reimbursement, Credit Linked Capital Subsidy for technology upgrades.',
-            relevance: mainReason === 'subsidies' ? 'high' : 'medium',
-            reason: mainReason === 'subsidies'
-              ? 'Several central and state government schemes are exclusively for registered MSMEs'
-              : 'Available on registration - worth exploring as you grow',
-          })
-
-          // Credit card (micro only)
-          if (answers[0] === 'below_10cr') {
-            benefits.push({
-              label: 'Udyam Credit Card',
-              description: 'Rs. 5 lakh credit limit specifically for micro enterprises registered on Udyam portal.',
-              relevance: mainReason === 'credit' ? 'high' : 'medium',
-              reason: 'As a micro enterprise, you are eligible for the new Udyam credit card launched in Budget 2025',
-            })
-          }
-
-          return {
-            type: 'recommended' as const,
-            headline: 'Yes - register. It is free and takes 15 minutes.',
-            body: 'Udyam is free, instant, and needs only your PAN and Aadhaar. Here is what matters most for your situation.',
-            ctaLabel: 'Register MSME (Free)',
-            ctaHref: '/checkout/msme-registration',
-            ranking: {
-              type: 'benefits' as const,
-              benefits,
-            },
-          }
-        },
       },
     ],
+    resultRules: msmeResultRules,
     defaultResult: {
       type: 'recommended',
       headline: 'Yes - register. It is free and takes 15 minutes.',

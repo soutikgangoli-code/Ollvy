@@ -17,7 +17,7 @@ export const itr2026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/itr-2026",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["itr-filing", "tax-audit", "advance-tax-payment"],
+  relatedServiceSlugs: ["business-itr"],
   relatedLearnSlugs: ["salaried-itr-2026", "business-itr-2026", "advance-tax-explained"],
   ctaServiceSlug: "business-itr",
   sections: [

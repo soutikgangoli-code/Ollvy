@@ -10,8 +10,8 @@ export const incomeTax1432Scrutiny: LearnPageConfig = {
   lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
-  relatedServiceSlugs: ['itr-notice-response', 'itr-filing'],
-  relatedLearnSlugs: ['income-tax-142-1-notice', 'income-tax-148-148a-reopening', 'income-tax-156-demand'],
+  relatedServiceSlugs: ['business-itr'],
+  relatedLearnSlugs: ['income-tax-142-1-notice', 'income-tax-148-148a-reopening', 'income-tax-156-demand', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -101,6 +101,10 @@ export const incomeTax1432Scrutiny: LearnPageConfig = {
     {
       q: 'The notice says I must respond by a date that is only 15 days away. Is that enough time?',
       a: 'Legally, you have the right to request an extension if the original deadline is too short. Write to the officer (through the portal) requesting a reasonable extension with specific reasons. Officers typically grant 15-30 additional days for first requests.',
+    },
+    {
+      q: "Does the Income-tax Act 2025 change scrutiny notices?",
+      a: "Only the section number. Scrutiny selection for AY 2026-27 and earlier continues under Section 143(2) of the 1961 Act (savings clause, Section 536(2)(c) of the 2025 Act). For tax year 2026-27 onwards the same notice cites Section 270(2) of the 2025 Act. The faceless assessment procedure and response timelines are unchanged, so respond to the substance regardless of which number is printed.",
     },
   ],
 

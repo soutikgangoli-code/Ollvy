@@ -28,17 +28,14 @@ export const gstRegistration: LearnPageConfig = {
           { value: '20l_to_40l', label: 'Rs. 20 lakh to Rs. 40 lakh' },
           { value: 'above_40l', label: 'Above Rs. 40 lakh' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'above_40l') {
-            return {
-              type: 'mandatory',
-              headline: 'GST registration is mandatory.',
-              body: 'Your turnover is above Rs. 40 lakh. Register within 30 days of crossing this threshold.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            }
-          }
-          return null
+        exitOn: {
+          above_40l: {
+            type: 'mandatory',
+            headline: 'GST registration is mandatory.',
+            body: 'Your turnover is above Rs. 40 lakh. Register within 30 days of crossing this threshold.',
+            ctaLabel: 'Get GST Registration',
+            ctaHref: '/checkout/gst-registration',
+          },
         },
       },
       {
@@ -48,17 +45,14 @@ export const gstRegistration: LearnPageConfig = {
           { value: 'no_local', label: 'No, everything is within my state' },
           { value: 'not_sure', label: 'Not sure' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'yes_interstate') {
-            return {
-              type: 'mandatory',
-              headline: 'GST registration is mandatory.',
-              body: 'Any interstate supply triggers mandatory registration - there is no turnover threshold for this. Even a single sale to a customer in another state applies.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            }
-          }
-          return null
+        exitOn: {
+          yes_interstate: {
+            type: 'mandatory',
+            headline: 'GST registration is mandatory.',
+            body: 'Any interstate supply triggers mandatory registration - there is no turnover threshold for this. Even a single sale to a customer in another state applies.',
+            ctaLabel: 'Get GST Registration',
+            ctaHref: '/checkout/gst-registration',
+          },
         },
       },
       {
@@ -67,17 +61,14 @@ export const gstRegistration: LearnPageConfig = {
           { value: 'yes_ecommerce', label: 'Yes, I sell through e-commerce' },
           { value: 'no_ecommerce', label: 'No, I sell only through my own channels' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'yes_ecommerce') {
-            return {
-              type: 'mandatory',
-              headline: 'GST registration is mandatory.',
-              body: 'E-commerce sellers must register from day one - Section 24(ix), CGST Act. There is no Rs. 20 lakh threshold for this.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            }
-          }
-          return null
+        exitOn: {
+          yes_ecommerce: {
+            type: 'mandatory',
+            headline: 'GST registration is mandatory.',
+            body: 'E-commerce sellers must register from day one - Section 24(ix), CGST Act. There is no Rs. 20 lakh threshold for this.',
+            ctaLabel: 'Get GST Registration',
+            ctaHref: '/checkout/gst-registration',
+          },
         },
       },
       {
@@ -89,24 +80,31 @@ export const gstRegistration: LearnPageConfig = {
           { value: 'food', label: 'Restaurant or food business' },
           { value: 'other', label: 'Something else' },
         ],
-        evaluator: (answer, allAnswers) => {
-          if ((answer === 'services' || answer === 'food' || answer === 'other') && allAnswers[0] === '20l_to_40l') {
-            return {
-              type: 'mandatory',
-              headline: 'GST registration is mandatory for you.',
-              body: 'For service providers (including food, restaurants, and most other businesses), the threshold is Rs. 20 lakh. Your turnover is above it. The Rs. 40 lakh threshold applies only to businesses that exclusively sell goods.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            }
-          }
-          if ((answer === 'goods' || answer === 'manufacturing') && allAnswers[0] === '20l_to_40l') {
-            return {
-              type: 'not_required',
-              headline: 'Not mandatory yet - but check your state.',
-              body: 'For goods sellers in most states, the threshold is Rs. 40 lakh. Your turnover is below this. However, if you are in a special category state (J&K, Himachal Pradesh, Uttarakhand, or the North-Eastern states), the threshold drops to Rs. 20 lakh and registration would be mandatory.',
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [
+          { q: 3, anyOf: ['services', 'food', 'other'] },
+          { q: 0, anyOf: ['20l_to_40l'] },
+        ],
+        result: {
+          type: 'mandatory',
+          headline: 'GST registration is mandatory for you.',
+          body: 'For service providers (including food, restaurants, and most other businesses), the threshold is Rs. 20 lakh. Your turnover is above it. The Rs. 40 lakh threshold applies only to businesses that exclusively sell goods.',
+          ctaLabel: 'Get GST Registration',
+          ctaHref: '/checkout/gst-registration',
+        },
+      },
+      {
+        if: [
+          { q: 3, anyOf: ['goods', 'manufacturing'] },
+          { q: 0, anyOf: ['20l_to_40l'] },
+        ],
+        result: {
+          type: 'not_required',
+          headline: 'Not mandatory yet - but check your state.',
+          body: 'For goods sellers in most states, the threshold is Rs. 40 lakh. Your turnover is below this. However, if you are in a special category state (J&K, Himachal Pradesh, Uttarakhand, or the North-Eastern states), the threshold drops to Rs. 20 lakh and registration would be mandatory.',
         },
       },
     ],

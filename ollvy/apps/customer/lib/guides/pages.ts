@@ -135,6 +135,7 @@ export interface LearnToolConfig {
   name?: string;                       // alias used by some new content
   description?: string;                // optional sub-line
   questions?: EligibilityQuestion[];   // for eligibility tool
+  resultRules?: EligibilityRule[];     // serializable evaluation rules (see EligibilityRule)
   defaultResult?: EligibilityResult;   // fallback result after all questions answered
   penaltyType?: string;                // for penalty tool - maps to PENALTY_TABLE
   compareA?: string;                   // for comparison tool
@@ -147,6 +148,19 @@ export interface EligibilityQuestion {
   options: Array<{ value: string; label: string }>;
   evaluator?: (answer: string, allAnswers: string[]) => EligibilityResult | null;
   earlyExit?: (answer: string, allAnswers?: string[]) => EligibilityResult | null;
+  // Serializable alternative to earlyExit. Functions are stripped before the
+  // config reaches the client (see stripFunctions in app/guides/[slug]/page.tsx),
+  // so interactive behavior MUST be expressed with exitOn/resultRules.
+  exitOn?: Record<string, EligibilityResult>;
+}
+
+// Serializable alternative to per-question evaluator functions. Rules are
+// checked in order after the last question; the first rule whose conditions
+// all match wins. A condition matches when the answer to question `q`
+// (0-based index) is one of `anyOf`.
+export interface EligibilityRule {
+  if: Array<{ q: number; anyOf: string[] }>;
+  result: EligibilityResult;
 }
 
 export interface EligibilityResult {
@@ -272,6 +286,34 @@ import { tdsOnPropertyPurchase } from './pages/tds-on-property-purchase-194ia';
 import { agmCompliance } from './pages/agm-compliance';
 import { dir3KycExplained } from './pages/dir-3-kyc-explained';
 
+// July 2026 expansion — Aug 2026 to Jan 2027 window
+import { ccfs2026 } from './pages/ccfs-2026';
+import { newTdsSectionsFy202627 } from './pages/new-tds-sections-fy2026-27';
+import { incomeTaxAct2025SectionMapping } from './pages/income-tax-act-2025-section-mapping';
+import { belatedItr2026 } from './pages/belated-itr-2026';
+import { itrUUpdatedReturn } from './pages/itr-u-updated-return';
+import { scheduleFaForeignAssetsNotice } from './pages/schedule-fa-foreign-assets-notice';
+import { labourCodesCompliance2026 } from './pages/labour-codes-compliance-2026';
+import { epfScheme2026 } from './pages/epf-scheme-2026';
+import { pas62026 } from './pages/pas-6-2026';
+import { form141TdsPropertyRent } from './pages/form-141-tds-property-rent';
+import { gstInvoiceManagementSystemIms } from './pages/gst-invoice-management-system-ims';
+import { gstatAppealGuide } from './pages/gstat-appeal-guide';
+
+// July 2026 expansion — Feb 2027 to Jul 2027 window
+import { salariedItr2027 } from './pages/salaried-itr-2027';
+import { businessItr2027 } from './pages/business-itr-2027';
+import { incomeTax280281Reopening } from './pages/income-tax-280-281-reopening';
+import { incomeTax270Intimation } from './pages/income-tax-270-intimation';
+import { form16IsNowForm130 } from './pages/form-16-is-now-form-130';
+import { lutRenewal2027 } from './pages/lut-renewal-2027';
+import { llpForm112027 } from './pages/llp-form-11-2027';
+import { dpt32027 } from './pages/dpt-3-2027';
+import { advanceTaxQ12027 } from './pages/advance-tax-q1-2027';
+import { iecAnnualUpdate2027 } from './pages/iec-annual-update-2027';
+import { flaReturn2027 } from './pages/fla-return-2027';
+import { fssaiAnnualReturn2027 } from './pages/fssai-annual-return-2027';
+
 export const LEARN_PAGES: LearnPageConfig[] = [
   // Tier 1 - Core Business Decisions
   gstRegistration,
@@ -366,6 +408,34 @@ export const LEARN_PAGES: LearnPageConfig[] = [
   tdsOnPropertyPurchase,
   agmCompliance,
   dir3KycExplained,
+
+  // July 2026 expansion — Aug 2026 to Jan 2027 window
+  ccfs2026,
+  newTdsSectionsFy202627,
+  incomeTaxAct2025SectionMapping,
+  belatedItr2026,
+  itrUUpdatedReturn,
+  scheduleFaForeignAssetsNotice,
+  labourCodesCompliance2026,
+  epfScheme2026,
+  pas62026,
+  form141TdsPropertyRent,
+  gstInvoiceManagementSystemIms,
+  gstatAppealGuide,
+
+  // July 2026 expansion — Feb 2027 to Jul 2027 window
+  salariedItr2027,
+  businessItr2027,
+  incomeTax280281Reopening,
+  incomeTax270Intimation,
+  form16IsNowForm130,
+  lutRenewal2027,
+  llpForm112027,
+  dpt32027,
+  advanceTaxQ12027,
+  iecAnnualUpdate2027,
+  flaReturn2027,
+  fssaiAnnualReturn2027,
 ];
 
 export function getLearnPageBySlug(slug: string): LearnPageConfig | undefined {

@@ -16,7 +16,7 @@ export const tdsOnRent: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/tds-on-rent-194i-194ib",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["tds-quarterly-return", "tds-monthly"],
+  relatedServiceSlugs: ["tds-monthly-compliance"],
   relatedLearnSlugs: ["advance-tax-explained", "tds-on-property-purchase-194ia"],
   ctaServiceSlug: "tds-monthly-compliance",
   sections: [

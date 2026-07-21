@@ -550,14 +550,171 @@ Timelines shown are working days and depend on:
 - [ITR 2026](https://www.ollvy.com/guides/itr-2026) - Business ITR filing for FY 2025-26. Due October 31, 2026.
 - [GST Annual 2026](https://www.ollvy.com/guides/gst-annual-2026) - GSTR-9 annual return for FY 2025-26. Due December 31, 2026.
 - [ITR 2027](https://www.ollvy.com/guides/itr-2027) - Business ITR filing for FY 2026-27. Due October 31, 2027.
-- [GST Annual 2027](https://www.ollvy.com/guides/gst-annual-2027) - GSTR-9 annual return for FY 2026-27. Due December 31, 2027.
+- [GST Annual 2027](https://www.ollvy.com/guides/gst-annual-2027) - GSTR-9 and GSTR-9C annual return for FY 2025-26. Due December 31, 2026.
 - [TDS Return Q1 2027](https://www.ollvy.com/guides/tds-return-q1-2027) - TDS return for Q1 FY 2027-28. Due July 31, 2027.
 
 ### Deadline Guides (Detailed)
 
-- [TDS Return Q4 FY2025-26](https://www.ollvy.com/guides/tds-return-q4-fy2025-26) - Due May 31, 2026
 - [TDS Return Q1 FY2026-27](https://www.ollvy.com/guides/tds-return-q1-fy2026-27) - Due Jul 31, 2026
 - [Director KYC 2026 Guide](https://www.ollvy.com/guides/director-kyc-2026) - Triennial KYC, next due Jun 30, 2028
 - [TDS Return Q2 FY2026-27](https://www.ollvy.com/guides/tds-return-q2-fy2026-27) - Due Oct 31, 2026
 - [Business ITR FY2025-26](https://www.ollvy.com/guides/business-itr-fy2025-26) - Due Oct 31, 2026
 - [GSTR-9 FY2025-26](https://www.ollvy.com/guides/gstr-9-fy2025-26) - Due Dec 31, 2026
+
+---
+
+## Income-tax Act 2025 Transition (New Tax Law, Effective April 1, 2026)
+
+India replaced the Income-tax Act, 1961 with the Income-tax Act, 2025 from April 1, 2026. Section numbers, TDS provisions, and form numbers all changed. AY 2026-27 and earlier years stay under the 1961 Act; tax year 2026-27 onward uses the new Act.
+
+#### Old vs New Section Mapping (1961 Act to 2025 Act)
+- URL: https://www.ollvy.com/guides/income-tax-act-2025-section-mapping
+- Category: Tax
+- Description: Section finder mapping the Income-tax Act 1961 to the Income-tax Act 2025. Returns 139 to 263, intimation 143(1) to 270(1), scrutiny 143(2) to 270(2), inquiry 142(1) to 268(1), reopening 147/148/148A to 279/280/281, demand 156 to 289, advance tax 207-211 to 403-408, interest 234B/234C to 424/425, tax audit 44AB to 63, TDS to 392/393/394.
+- Key Points: Savings clause Section 536(2)(c) keeps pre-April-2026 proceedings under the 1961 Act. Which Act applies depends on when the notice was issued and which year it covers.
+
+#### New TDS Sections and Forms FY 2026-27
+- URL: https://www.ollvy.com/guides/new-tds-sections-fy2026-27
+- Category: TDS Filing
+- Description: The 194 series is abolished. Salary TDS is Section 392, all non-salary TDS is Section 393, TCS is Section 394. Challans use numeric payment codes 1001-1092 (194C is now code 1017). Form 24Q became Form 138, 26Q became 140, 27EQ became 143, 27Q became 144. Old-format uploads are rejected on TRACES.
+- Key Points: Q2 FY2026-27 return due October 31, 2026. Q3 due January 31, 2027. Late fee Rs. 200/day continues to run while formats are wrong.
+
+#### Form 141 for TDS on Property and Rent
+- URL: https://www.ollvy.com/guides/form-141-tds-property-rent
+- Category: TDS Filing
+- Description: Unified Form 141 challan-cum-statement replaces 26QB (property purchase), 26QC (rent), 26QD and 26QE for deductions from April 1, 2026. Applies to property buyers (1% TDS on Rs. 50 lakh+) and tenants paying Rs. 50,000+/month rent.
+- Key Points: Deposit within 30 days from month-end of deduction. Rs. 200/day late fee plus 1-1.5% monthly interest.
+
+#### Form 16 is Now Form 130
+- URL: https://www.ollvy.com/guides/form-16-is-now-form-130
+- Category: Payroll
+- Description: The salary TDS certificate for tax year 2026-27 is Form 130 (Form 16A became 131, 16B became 132, 16C became 133). Employers must issue Form 130 by June 15, 2027.
+- Key Points: Employees need Form 130 to file the 2027 ITR. Per-day penalty on employers for failure to issue.
+
+#### Section 280/281 Reopening Notice (New Act)
+- URL: https://www.ollvy.com/guides/income-tax-280-281-reopening
+- Category: Income Tax Notice
+- Description: Reassessment under the Income-tax Act 2025: Section 280 notice and Section 281 show-cause replace 148/148A for notices issued on or after April 1, 2026. Explains which Act applies to a given notice and how to respond on the faceless portal.
+- Severity: Urgent
+- Deadline: As stated in the notice (typically 30 days)
+
+#### Section 270(1) Intimation (New Act)
+- URL: https://www.ollvy.com/guides/income-tax-270-intimation
+- Category: Income Tax Notice
+- Description: Section 270(1) intimation replaces the 143(1) intimation for returns filed under the 2025 Act. Covers adjustments, demand and refund scenarios; an intimation with demand is deemed a notice of demand under Section 289.
+- Severity: Moderate
+- Deadline: 30 days to respond to proposed adjustments
+
+---
+
+## Upcoming Compliance Deadlines and New Requirements (2026-27)
+
+#### MCA Amnesty Scheme CCFS 2026
+- URL: https://www.ollvy.com/guides/ccfs-2026
+- Category: ROC Filing
+- Description: Companies Compliance Facilitation Scheme 2026 - one-time MCA window to clear pending AOC-4, MGT-7/7A, ADT-1 and FC forms at 10% of additional fees, dormant status at 50%, strike-off at 25%. Window ends August 31, 2026 (extended from July 15 by General Circular 03/2026).
+- Key Points: After August 31, full Rs. 100/day additional fees return, plus adjudication under Section 454 and director disqualification risk under Section 164(2).
+
+#### Belated and Revised ITR for AY 2026-27
+- URL: https://www.ollvy.com/guides/belated-itr-2026
+- Category: Income Tax Filing
+- Description: Missed the ITR deadline? Belated return under Section 139(4) and revised return under Section 139(5) can be filed until December 31, 2026 for AY 2026-27.
+- Key Points: Late fee Rs. 5,000 (Rs. 1,000 if income under Rs. 5 lakh), interest under 234A, loss carry-forward lost. After December 31, only ITR-U with 25-70% additional tax.
+
+#### ITR-U Updated Return
+- URL: https://www.ollvy.com/guides/itr-u-updated-return
+- Category: Income Tax Filing
+- Description: File or fix returns up to 48 months back under Section 139(8A)/140B. Additional tax: 25% within 12 months, 50% within 24, 60% within 36, 70% within 48.
+- Key Points: AY 2022-23 window closes March 31, 2027. Cannot be used for loss returns or to increase refunds.
+
+#### Foreign Assets NUDGE Notice (Schedule FA)
+- URL: https://www.ollvy.com/guides/schedule-fa-foreign-assets-notice
+- Category: Income Tax Notice
+- Description: Income tax department SMS/email campaign on undisclosed foreign assets, driven by AEOI/CRS/FATCA data in AIS. Affects employees with foreign ESOPs/RSUs and NRI-returnees. Fix by filing a revised return with Schedule FA before December 31, 2026.
+- Severity: Serious
+- Deadline: December 31, 2026 (revised return window)
+
+#### Labour Codes Compliance for Employers
+- URL: https://www.ollvy.com/guides/labour-codes-compliance-2026
+- Category: Payroll
+- Description: The four labour codes are in force (from November 21, 2025; central rules May 8, 2026). Key changes: 50% wages definition raises PF/gratuity, mandatory appointment letters, full-and-final settlement within 2 days, single registration under the Social Security Code.
+- Key Points: Penalties up to Rs. 3 lakh with imprisonment for repeat violations. April 2027 increment cycle is the first full CTC restructuring season.
+
+#### EPF Scheme 2026
+- URL: https://www.ollvy.com/guides/epf-scheme-2026
+- Category: Payroll
+- Description: The new EPF Scheme 2026 (notified June 29, 2026, effective July 1, 2026) replaces the 1952 scheme. Contributions computed on the Social Security Code wages definition; employer contribution above the Rs. 15,000 ceiling is explicitly voluntary; EPFO 3.0 is fully electronic.
+- Key Points: Late remittance draws 12% p.a. interest (7Q) plus damages (14B).
+
+#### PAS-6 Reconciliation Return
+- URL: https://www.ollvy.com/guides/pas-6-2026
+- Category: ROC Filing
+- Description: Half-yearly share capital reconciliation (Rule 9B/9A) for the April-September 2026 half year, due November 29, 2026. First season where most non-small private companies are in scope after the June 30, 2025 dematerialisation mandate.
+- Key Points: Section 450 penalty and inability to issue or transfer securities for defaulters.
+
+#### GST Invoice Management System (IMS)
+- URL: https://www.ollvy.com/guides/gst-invoice-management-system-ims
+- Category: GST
+- Description: IMS is mandatory from April 1, 2026; GSTR-3B Table 4 ITC is hard-locked from the July 2026 tax period. Accept/reject/pending workflow drives GSTR-2B; manual ITC edits in GSTR-3B are no longer possible.
+- Key Points: Unactioned or rejected invoices mean denied ITC, DRC-01B exposure and 18% interest.
+
+#### GST Appellate Tribunal (GSTAT) Appeals
+- URL: https://www.ollvy.com/guides/gstat-appeal-guide
+- Category: GST Notice
+- Description: How to appeal to GSTAT after a first-appeal (APL-01) rejection: 3-month window from the order, Form APL-05, 10% pre-deposit to stay recovery.
+- Severity: Moderate
+- Deadline: 3 months from the appellate order
+
+#### Salaried ITR 2027 (Tax Year 2026-27)
+- URL: https://www.ollvy.com/guides/salaried-itr-2027
+- Category: Income Tax Filing
+- Description: First ITR season under the Income-tax Act 2025. Salaried deadline July 31, 2027. New forms, Form 130 instead of Form 16, "tax year" terminology.
+- Key Points: Form 130 issued by June 15, 2027. Late fee up to Rs. 5,000 plus interest.
+
+#### Business ITR 2027 (Tax Year 2026-27)
+- URL: https://www.ollvy.com/guides/business-itr-2027
+- Category: Income Tax Filing
+- Description: Non-audit business ITR deadline is now August 31, 2027 (changed from July 31 by Budget staggering). Audit cases October 31, 2027.
+- Key Points: The deadline change is widely misreported; verify against the staggered schedule.
+
+#### LUT Renewal FY 2027-28
+- URL: https://www.ollvy.com/guides/lut-renewal-2027
+- Category: GST Filing
+- Description: Exporters and service exporters must file a fresh Letter of Undertaking (Rule 96A, Form RFD-11) before April 1, 2027 to continue zero-rated exports without paying IGST.
+- Key Points: No valid LUT means paying IGST upfront and claiming refunds later.
+
+#### LLP Form 11 2027
+- URL: https://www.ollvy.com/guides/llp-form-11-2027
+- Category: ROC Filing
+- Description: LLP annual return for FY 2026-27, due May 30, 2027 (Rule 25(1) LLP Rules).
+- Key Points: Late filing draws multiplier-based additional fees with no cap; designated partners are liable.
+
+#### DPT-3 2027
+- URL: https://www.ollvy.com/guides/dpt-3-2027
+- Category: ROC Filing
+- Description: Return of deposits and outstanding loan receipts for FY 2026-27, due June 30, 2027. Covers director loans, inter-corporate loans and advances.
+- Key Points: Rule 21 penalty plus Section 73/76A exposure for unreported deposits.
+
+#### Advance Tax Q1 FY 2027-28
+- URL: https://www.ollvy.com/guides/advance-tax-q1-2027
+- Category: Tax
+- Description: 15% of estimated tax due June 15, 2027, under Sections 404-408 of the Income-tax Act 2025 (formerly 207-211). Threshold Rs. 10,000.
+- Key Points: Shortfall draws interest under Sections 423-425 (formerly 234B/234C). Presumptive taxpayers pay a single instalment by March 15.
+
+#### IEC Annual Update 2027
+- URL: https://www.ollvy.com/guides/iec-annual-update-2027
+- Category: Licensing
+- Description: Mandatory annual Import Export Code confirmation on the DGFT portal between April 1 and June 30, 2027, even with no changes. Free within the window.
+- Key Points: Missing the window deactivates the IEC - imports, exports and bank trade transactions halt until updated.
+
+#### FLA Return 2027
+- URL: https://www.ollvy.com/guides/fla-return-2027
+- Category: Compliance
+- Description: RBI Foreign Liabilities and Assets return due July 15, 2027 on the FLAIR portal for any company or LLP with FDI or overseas investment on the FY 2026-27 balance sheet.
+- Key Points: FEMA contravention for non-filing; late submission fee Rs. 7,500, compounding up to 300% of the amount involved.
+
+#### FSSAI Annual Return D1 2027
+- URL: https://www.ollvy.com/guides/fssai-annual-return-2027
+- Category: Licensing
+- Description: Form D1 annual return for FY 2026-27, due May 31, 2027 on FoSCoS. Applies to food manufacturers, importers and processors with Rs. 12 lakh+ turnover licenses.
+- Key Points: Rs. 100/day penalty with no cap; blocks license renewal until filed.

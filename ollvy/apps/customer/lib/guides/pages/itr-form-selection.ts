@@ -1,4 +1,36 @@
-import { LearnPageConfig } from '../pages'
+import { LearnPageConfig, EligibilityResult } from '../pages'
+
+// Q2 early-exit results: every trigger answer leads to ITR-2, with the
+// trigger-specific reason. Built as plain data so it survives serialization.
+const itr2Triggers: Record<string, string> = {
+  director: 'ITR-1 cannot be used by directors or holders of unlisted shares',
+  foreign: 'ITR-1 cannot be used if you have foreign assets or income',
+  above_50l: 'ITR-1 is limited to income below Rs. 50 lakh',
+  capital_gains: 'Any capital gain - even a small mutual fund redemption - disqualifies ITR-1',
+}
+
+const itr2ExitResults: Record<string, EligibilityResult> = Object.fromEntries(
+  Object.entries(itr2Triggers).map(([answer, trigger]) => [
+    answer,
+    {
+      type: 'eligible' as const,
+      headline: 'Use ITR-2.',
+      body: trigger,
+      ranking: {
+        type: 'form-assignment' as const,
+        assignment: {
+          form: 'ITR-2',
+          reason: trigger,
+          eliminated: [
+            { form: 'ITR-1', why: trigger },
+            { form: 'ITR-3', why: 'ITR-3 is for business or professional income - not applicable if your income is from salary and capital gains' },
+            { form: 'ITR-4', why: 'ITR-4 is for presumptive taxation of business income - not for salaried individuals with capital gains' },
+          ],
+        },
+      },
+    },
+  ]),
+)
 
 export const itrFormSelection: LearnPageConfig = {
   slug: 'which-itr-form-should-i-use',
@@ -29,64 +61,57 @@ export const itrFormSelection: LearnPageConfig = {
           { value: 'company', label: 'A Private Limited or Public Limited company' },
           { value: 'trust_ngo', label: 'A trust, society, NGO, AOP, or BOI' },
         ],
-        earlyExit: (answer: string) => {
-          if (answer === 'company') {
-            return {
-              type: 'eligible' as const,
-              headline: 'Use ITR-6.',
-              body: 'All companies file ITR-6, every year, even with zero income.',
-              ranking: {
-                type: 'form-assignment' as const,
-                assignment: {
-                  form: 'ITR-6',
-                  reason: 'All companies (Pvt Ltd, Public Ltd, OPC) except those claiming Section 11 exemption use this form.',
-                  eliminated: [
-                    { form: 'ITR-1', why: 'Only for individual resident taxpayers' },
-                    { form: 'ITR-5', why: 'For firms and LLPs, not companies' },
-                    { form: 'ITR-7', why: 'For trusts and charitable institutions, not companies' },
-                  ],
-                },
+        exitOn: {
+          company: {
+            type: 'eligible' as const,
+            headline: 'Use ITR-6.',
+            body: 'All companies file ITR-6, every year, even with zero income.',
+            ranking: {
+              type: 'form-assignment' as const,
+              assignment: {
+                form: 'ITR-6',
+                reason: 'All companies (Pvt Ltd, Public Ltd, OPC) except those claiming Section 11 exemption use this form.',
+                eliminated: [
+                  { form: 'ITR-1', why: 'Only for individual resident taxpayers' },
+                  { form: 'ITR-5', why: 'For firms and LLPs, not companies' },
+                  { form: 'ITR-7', why: 'For trusts and charitable institutions, not companies' },
+                ],
               },
-            }
-          }
-          if (answer === 'firm_llp') {
-            return {
-              type: 'eligible' as const,
-              headline: 'Use ITR-5.',
-              body: 'Partnership firms and LLPs always file ITR-5 - regardless of size, profit, or activity.',
-              ranking: {
-                type: 'form-assignment' as const,
-                assignment: {
-                  form: 'ITR-5',
-                  reason: 'Partnership firms, LLPs, AOPs, and BOIs use this form. Each partner separately files their own personal ITR.',
-                  eliminated: [
-                    { form: 'ITR-3', why: 'ITR-3 is for individual partners, not the firm itself' },
-                    { form: 'ITR-4', why: 'ITR-4 applies to partners using presumptive taxation - not the firm' },
-                    { form: 'ITR-6', why: 'Only for companies, not LLPs or firms' },
-                  ],
-                },
+            },
+          },
+          firm_llp: {
+            type: 'eligible' as const,
+            headline: 'Use ITR-5.',
+            body: 'Partnership firms and LLPs always file ITR-5 - regardless of size, profit, or activity.',
+            ranking: {
+              type: 'form-assignment' as const,
+              assignment: {
+                form: 'ITR-5',
+                reason: 'Partnership firms, LLPs, AOPs, and BOIs use this form. Each partner separately files their own personal ITR.',
+                eliminated: [
+                  { form: 'ITR-3', why: 'ITR-3 is for individual partners, not the firm itself' },
+                  { form: 'ITR-4', why: 'ITR-4 applies to partners using presumptive taxation - not the firm' },
+                  { form: 'ITR-6', why: 'Only for companies, not LLPs or firms' },
+                ],
               },
-            }
-          }
-          if (answer === 'trust_ngo') {
-            return {
-              type: 'eligible' as const,
-              headline: 'Use ITR-7.',
-              body: 'Trusts, political parties, universities, and research institutions use ITR-7.',
-              ranking: {
-                type: 'form-assignment' as const,
-                assignment: {
-                  form: 'ITR-7',
-                  reason: 'For entities filing under Sections 139(4A), 139(4B), 139(4C), or 139(4D) - charitable trusts, political parties, educational institutions, and scientific research bodies.',
-                  eliminated: [
-                    { form: 'ITR-5', why: 'ITR-5 is for firms and LLPs without charitable status' },
-                    { form: 'ITR-6', why: 'For companies - trusts and societies are not companies' },
-                  ],
-                },
+            },
+          },
+          trust_ngo: {
+            type: 'eligible' as const,
+            headline: 'Use ITR-7.',
+            body: 'Trusts, political parties, universities, and research institutions use ITR-7.',
+            ranking: {
+              type: 'form-assignment' as const,
+              assignment: {
+                form: 'ITR-7',
+                reason: 'For entities filing under Sections 139(4A), 139(4B), 139(4C), or 139(4D) - charitable trusts, political parties, educational institutions, and scientific research bodies.',
+                eliminated: [
+                  { form: 'ITR-5', why: 'ITR-5 is for firms and LLPs without charitable status' },
+                  { form: 'ITR-6', why: 'For companies - trusts and societies are not companies' },
+                ],
               },
-            }
-          }
-          return null
+            },
+          },
         },
       },
       {
@@ -98,34 +123,7 @@ export const itrFormSelection: LearnPageConfig = {
           { value: 'capital_gains', label: 'I sold shares, mutual funds, property, or any other asset this year' },
           { value: 'none_of_these', label: 'None of these' },
         ],
-        earlyExit: (answer: string) => {
-          const triggers: Record<string, string> = {
-            director: 'ITR-1 cannot be used by directors or holders of unlisted shares',
-            foreign: 'ITR-1 cannot be used if you have foreign assets or income',
-            above_50l: 'ITR-1 is limited to income below Rs. 50 lakh',
-            capital_gains: 'Any capital gain - even a small mutual fund redemption - disqualifies ITR-1',
-          }
-          if (answer !== 'none_of_these') {
-            return {
-              type: 'eligible' as const,
-              headline: 'Use ITR-2.',
-              body: triggers[answer],
-              ranking: {
-                type: 'form-assignment' as const,
-                assignment: {
-                  form: 'ITR-2',
-                  reason: triggers[answer],
-                  eliminated: [
-                    { form: 'ITR-1', why: triggers[answer] },
-                    { form: 'ITR-3', why: 'ITR-3 is for business or professional income - not applicable if your income is from salary and capital gains' },
-                    { form: 'ITR-4', why: 'ITR-4 is for presumptive taxation of business income - not for salaried individuals with capital gains' },
-                  ],
-                },
-              },
-            }
-          }
-          return null
-        },
+        exitOn: itr2ExitResults,
       },
       {
         text: 'Where does your income come from?',
@@ -134,65 +132,67 @@ export const itrFormSelection: LearnPageConfig = {
           { value: 'business_real', label: 'Business or professional income - I maintain actual accounts' },
           { value: 'presumptive', label: 'Business or professional income - I want to declare a flat percentage (Section 44AD/44ADA)' },
         ],
-        evaluator: (answer: string, allAnswers: string[]) => {
-          if (answer === 'salary_only') {
-            return {
-              type: 'eligible' as const,
-              headline: 'Use ITR-1.',
-              body: 'Salary, pension, one house property, and interest income with no other complications. The simplest form.',
-              ranking: {
-                type: 'form-assignment' as const,
-                assignment: {
-                  form: 'ITR-1 (Sahaj)',
-                  reason: 'You are a resident individual with income from salary, one house property, and interest - total below Rs. 50 lakh, no capital gains, no directorship, no foreign assets.',
-                  eliminated: [
-                    { form: 'ITR-2', why: 'Only needed if you have capital gains, multiple properties, foreign assets, or income above Rs. 50 lakh' },
-                    { form: 'ITR-3', why: 'For business or professional income - not applicable to salaried individuals' },
-                    { form: 'ITR-4', why: 'For presumptive taxation of business income - not for salaried income' },
-                  ],
-                },
-              },
-            }
-          }
-          if (answer === 'business_real') {
-            return {
-              type: 'eligible' as const,
-              headline: 'Use ITR-3.',
-              body: 'For business or professional income with actual books of accounts.',
-              ranking: {
-                type: 'form-assignment' as const,
-                assignment: {
-                  form: 'ITR-3',
-                  reason: 'You have business or professional income and maintain actual books of accounts. Also required if your turnover exceeds presumptive limits (Rs. 2 crore for business, Rs. 50 lakh for professionals).',
-                  eliminated: [
-                    { form: 'ITR-4', why: 'ITR-4 is for presumptive taxation - you maintain actual books, so ITR-3 is required' },
-                    { form: 'ITR-1', why: 'ITR-1 cannot be used for business income' },
-                    { form: 'ITR-2', why: 'ITR-2 is for individuals with capital gains or other non-business income - not for business income with actual books' },
-                  ],
-                },
-              },
-            }
-          }
-          if (answer === 'presumptive') {
-            return {
-              type: 'eligible' as const,
-              headline: 'Use ITR-4 - but check the limits first.',
-              body: 'ITR-4 applies to presumptive taxation. Critical check: business turnover must be below Rs. 2 crore (44AD) or professional receipts below Rs. 50 lakh (44ADA). If you exceed these, you must use ITR-3.',
-              ranking: {
-                type: 'form-assignment' as const,
-                assignment: {
-                  form: 'ITR-4 (Sugam)',
-                  reason: 'Presumptive taxation: declare 8% of business turnover as income (6% for digital receipts), or 50% of gross receipts for professionals. Much simpler filing.',
-                  eliminated: [
-                    { form: 'ITR-3', why: 'Required only if you exceed presumptive limits or opt out of the scheme. If you opt out of 44AD, you cannot re-enter for 5 years.' },
-                    { form: 'ITR-1', why: 'ITR-1 cannot be used for business income' },
-                    { form: 'ITR-2', why: 'ITR-2 is for capital gains and non-business income - not for presumptive business income' },
-                  ],
-                },
-              },
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [{ q: 2, anyOf: ['salary_only'] }],
+        result: {
+          type: 'eligible' as const,
+          headline: 'Use ITR-1.',
+          body: 'Salary, pension, one house property, and interest income with no other complications. The simplest form.',
+          ranking: {
+            type: 'form-assignment' as const,
+            assignment: {
+              form: 'ITR-1 (Sahaj)',
+              reason: 'You are a resident individual with income from salary, one house property, and interest - total below Rs. 50 lakh, no capital gains, no directorship, no foreign assets.',
+              eliminated: [
+                { form: 'ITR-2', why: 'Only needed if you have capital gains, multiple properties, foreign assets, or income above Rs. 50 lakh' },
+                { form: 'ITR-3', why: 'For business or professional income - not applicable to salaried individuals' },
+                { form: 'ITR-4', why: 'For presumptive taxation of business income - not for salaried income' },
+              ],
+            },
+          },
+        },
+      },
+      {
+        if: [{ q: 2, anyOf: ['business_real'] }],
+        result: {
+          type: 'eligible' as const,
+          headline: 'Use ITR-3.',
+          body: 'For business or professional income with actual books of accounts.',
+          ranking: {
+            type: 'form-assignment' as const,
+            assignment: {
+              form: 'ITR-3',
+              reason: 'You have business or professional income and maintain actual books of accounts. Also required if your turnover exceeds presumptive limits (Rs. 2 crore for business, Rs. 50 lakh for professionals).',
+              eliminated: [
+                { form: 'ITR-4', why: 'ITR-4 is for presumptive taxation - you maintain actual books, so ITR-3 is required' },
+                { form: 'ITR-1', why: 'ITR-1 cannot be used for business income' },
+                { form: 'ITR-2', why: 'ITR-2 is for individuals with capital gains or other non-business income - not for business income with actual books' },
+              ],
+            },
+          },
+        },
+      },
+      {
+        if: [{ q: 2, anyOf: ['presumptive'] }],
+        result: {
+          type: 'eligible' as const,
+          headline: 'Use ITR-4 - but check the limits first.',
+          body: 'ITR-4 applies to presumptive taxation. Critical check: business turnover must be below Rs. 2 crore (44AD) or professional receipts below Rs. 50 lakh (44ADA). If you exceed these, you must use ITR-3.',
+          ranking: {
+            type: 'form-assignment' as const,
+            assignment: {
+              form: 'ITR-4 (Sugam)',
+              reason: 'Presumptive taxation: declare 8% of business turnover as income (6% for digital receipts), or 50% of gross receipts for professionals. Much simpler filing.',
+              eliminated: [
+                { form: 'ITR-3', why: 'Required only if you exceed presumptive limits or opt out of the scheme. If you opt out of 44AD, you cannot re-enter for 5 years.' },
+                { form: 'ITR-1', why: 'ITR-1 cannot be used for business income' },
+                { form: 'ITR-2', why: 'ITR-2 is for capital gains and non-business income - not for presumptive business income' },
+              ],
+            },
+          },
         },
       },
     ],

@@ -11,7 +11,7 @@ export const incomeTax1399DefectiveReturn: LearnPageConfig = {
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['business-itr', 'mca-annual-filing', 'director-kyc'],
-  relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-142-1-notice', 'income-tax-143-2-scrutiny'],
+  relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-142-1-notice', 'income-tax-143-2-scrutiny', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -91,6 +91,10 @@ export const incomeTax1399DefectiveReturn: LearnPageConfig = {
     {
       q: 'The defect code in my notice is unclear. How do I know what to fix?',
       a: 'Log into the income tax portal and check the specific defect code description. The CPC assigns defect codes with explanations. If it is still unclear, contact the CPC helpline (1800-103-4455) for clarification before filing your response.',
+    },
+    {
+      q: "Does the defective-return process change under the Income-tax Act 2025?",
+      a: "The mechanics stay the same; the numbering changes. Return filing moved from Section 139 of the 1961 Act to Section 263 of the 2025 Act, and the defective-return provision sits within Section 263 for returns filed under the new Act (tax year 2026-27 onwards). Returns for AY 2026-27 and earlier keep the Section 139(9) citation, and the cure window and consequences of not fixing the defect work the same either way.",
     },
   ],
 

@@ -16,7 +16,7 @@ export const tdsReturnQ12027: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/tds-return-q1-2027",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["tds-quarterly-return", "advance-tax-payment", "itr-filing"],
+  relatedServiceSlugs: ["tds-monthly-compliance", "business-itr"],
   relatedLearnSlugs: ["tds-on-rent-194i-194ib", "tds-on-property-purchase-194ia", "advance-tax-explained"],
   ctaServiceSlug: "tds-monthly-compliance",
   sections: [

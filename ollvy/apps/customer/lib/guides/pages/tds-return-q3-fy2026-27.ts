@@ -14,8 +14,8 @@ export const tdsReturnQ3Fy202627: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/tds-return-q3-fy2026-27",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["tds-quarterly-return", "itr-filing"],
-  relatedLearnSlugs: ["tds-on-rent-194i-194ib", "tds-on-property-purchase-194ia"],
+  relatedServiceSlugs: ["tds-monthly-compliance", "business-itr"],
+  relatedLearnSlugs: ["tds-on-rent-194i-194ib", "tds-on-property-purchase-194ia", "tds-return-q4-fy2026-27"],
   ctaServiceSlug: "tds-monthly-compliance",
   sections: [
     {

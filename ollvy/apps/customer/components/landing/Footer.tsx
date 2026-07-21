@@ -146,14 +146,15 @@ export function Footer() {
           <FooterColumn
             title="Deadlines"
             links={[
-              { label: 'Salaried ITR 2026 (Jul 31)', href: '/guides/salaried-itr-2026' },
-              { label: 'Business ITR 2026 (Oct 31)', href: '/guides/business-itr-2026' },
+              { label: 'Business ITR 2026 (Aug 31)', href: '/guides/business-itr-2026' },
+              { label: 'MCA Amnesty CCFS (Aug 31)', href: '/guides/ccfs-2026' },
+              { label: 'Advance Tax Q2 (Sep 15)', href: '/guides/advance-tax-q2-2026' },
               { label: 'Tax Audit 2026 (Sep 30)', href: '/tax-audit-2026' },
-              { label: 'Advance Tax Q1 (Jun 15)', href: '/guides/advance-tax-q1-2026' },
-              { label: 'GSTR-9 2026 (Dec 31)', href: '/guides/gst-annual-2026' },
-              { label: 'TDS Return Q4 (May 31)', href: '/guides/tds-return-q4-fy2026-27' },
-              { label: 'MGT-7 2026 (Nov 28)', href: '/guides/mgt-7-2026' },
-              { label: 'Director KYC 2026', href: '/guides/director-kyc-2026' },
+              { label: 'TDS Return Q2 (Oct 31)', href: '/guides/tds-return-q2-fy2026-27' },
+              { label: 'MGT-7 2026 (Nov 29)', href: '/guides/mgt-7-2026' },
+              { label: 'GSTR-9 FY 2025-26 (Dec 31)', href: '/guides/gst-annual-2027' },
+              { label: 'Belated ITR (Dec 31)', href: '/guides/belated-itr-2026' },
+              { label: 'Director KYC (DIR-3)', href: '/guides/director-kyc-2026' },
             ]}
           />
 
@@ -165,20 +166,20 @@ export function Footer() {
               { label: 'Do I Need GST?', href: '/guides/do-i-need-gst-registration' },
               { label: 'Do I Need to File ITR?', href: '/guides/do-i-need-to-file-itr' },
               { label: 'Which ITR Form?', href: '/guides/which-itr-form-should-i-use' },
+              { label: 'New Income Tax Act Sections', href: '/guides/income-tax-act-2025-section-mapping' },
+              { label: 'New TDS Sections & Forms', href: '/guides/new-tds-sections-fy2026-27' },
+              { label: 'ITR-U Updated Return', href: '/guides/itr-u-updated-return' },
               { label: 'Advance Tax Explained', href: '/guides/advance-tax-explained' },
               { label: 'TDS on Rent', href: '/guides/tds-on-rent-194i-194ib' },
               { label: 'TDS on Property Purchase', href: '/guides/tds-on-property-purchase-194ia' },
+              { label: 'GST Invoice System (IMS)', href: '/guides/gst-invoice-management-system-ims' },
               { label: 'LUT for Exports', href: '/guides/lut-for-exports' },
               { label: 'Pvt Ltd vs LLP', href: '/guides/pvt-ltd-vs-llp' },
-              { label: 'Business PAN', href: '/guides/what-is-business-pan' },
               { label: 'IEC (Import Export Code)', href: '/guides/iec-import-export-code' },
               { label: 'Do I Need a Trademark?', href: '/guides/do-i-need-trademark-registration' },
               { label: 'MSME / Udyam Registration', href: '/guides/is-msme-registration-worth-it' },
-              { label: 'DPIIT Startup Recognition', href: '/guides/should-i-get-dpiit-startup-recognition' },
               { label: 'FSSAI Licence', href: '/guides/do-i-need-fssai-license' },
-              { label: 'Shop & Establishment', href: '/guides/do-i-need-shop-establishment-registration' },
-              { label: 'Professional Tax', href: '/guides/do-i-need-professional-tax-registration' },
-              { label: 'When PF Becomes Mandatory', href: '/guides/when-does-pf-registration-become-mandatory' },
+              { label: 'Labour Codes for Employers', href: '/guides/labour-codes-compliance-2026' },
               { label: 'MCA Annual Filing', href: '/guides/mca-annual-filing-aoc-4-mgt-7' },
               { label: 'DIR-3 KYC', href: '/guides/dir-3-kyc-explained' },
               { label: 'All Guides', href: '/guides' },
@@ -192,8 +193,10 @@ export function Footer() {
             links={[
               { label: 'GST DRC-01 Notice', href: '/guides/gst-drc-01-notice' },
               { label: 'GST ASMT-10 Notice', href: '/guides/gst-asmt-10-notice' },
+              { label: 'GSTR-2B ITC Mismatch', href: '/guides/gst-gstr2b-itc-mismatch' },
               { label: 'IT 143(1) Intimation', href: '/guides/income-tax-143-1-intimation' },
               { label: 'IT 148/148A Notice', href: '/guides/income-tax-148-148a-reopening' },
+              { label: 'Foreign Assets SMS (NUDGE)', href: '/guides/schedule-fa-foreign-assets-notice' },
               { label: 'TDS Short Deduction', href: '/guides/tds-short-deduction-notice' },
             ]}
           />

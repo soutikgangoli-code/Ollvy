@@ -12,7 +12,7 @@ export const incomeTax1431Intimation: LearnPageConfig = {
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,
   relatedServiceSlugs: ['business-itr'],
-  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-245-refund-adjustment'],
+  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-245-refund-adjustment', 'income-tax-139-9-defective-return', 'income-tax-270-intimation', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -122,6 +122,10 @@ export const incomeTax1431Intimation: LearnPageConfig = {
     {
       q: 'My 143(1) intimation shows a demand based on interest computation. The CPC calculated higher interest than I did. What happened?',
       a: 'The CPC automatically calculates interest under Section 234A (late filing), 234B (advance tax shortfall), and 234C (deferred advance tax). If your computation differs, check the exact dates and amounts the CPC used versus yours. File a rectification if there is a genuine error in their calculation.',
+    },
+    {
+      q: "Will I still get 143(1) intimations now that the Income-tax Act 2025 is in force?",
+      a: "Yes, for a while. Returns for AY 2026-27 (income of FY 2025-26) and earlier are processed under the 1961 Act, so their intimations still cite Section 143(1) - the savings clause (Section 536(2)(c) of the 2025 Act) keeps old years on the old framework. Returns for tax year 2026-27 onwards are processed under the new Act, and the same intimation arrives citing Section 270(1). The 30-day response window and the response options are identical under both.",
     },
   ],
 

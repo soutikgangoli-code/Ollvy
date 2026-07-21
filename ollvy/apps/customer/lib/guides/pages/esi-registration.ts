@@ -24,17 +24,14 @@ export const esiRegistration: LearnPageConfig = {
           { value: '10_plus', label: '10 or more' },
           { value: 'growing', label: 'Fewer than 10, but growing quickly' },
         ],
-        earlyExit: (answer) => {
-          if (answer === '10_plus') {
-            return {
-              type: 'mandatory',
-              headline: 'ESI registration is mandatory.',
-              body: 'The threshold is 10 employees for factories and most establishments. Register within 15 days of crossing this number.',
-              ctaLabel: 'Get Payroll Help',
-              ctaHref: '/services',
-            }
-          }
-          return null
+        exitOn: {
+          '10_plus': {
+            type: 'mandatory',
+            headline: 'ESI registration is mandatory.',
+            body: 'The threshold is 10 employees for factories and most establishments. Register within 15 days of crossing this number.',
+            ctaLabel: 'Get Payroll Help',
+            ctaHref: '/services',
+          },
         },
       },
       {
@@ -52,15 +49,15 @@ export const esiRegistration: LearnPageConfig = {
           { value: 'some_below_21k', label: 'Some employees earn below Rs. 21,000 per month' },
           { value: 'all_above_21k', label: 'Everyone earns above Rs. 21,000 per month' },
         ],
-        evaluator: (answer, allAnswers) => {
-          if (answer === 'all_above_21k') {
-            return {
-              type: 'conditional',
-              headline: 'Registration may technically apply - but no contributions are due.',
-              body: 'If your establishment meets the 10-employee threshold, ESI registration still applies. But since all employees earn above Rs. 21,000, no contributions are due from you or your employees.',
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [{ q: 2, anyOf: ['all_above_21k'] }],
+        result: {
+          type: 'conditional',
+          headline: 'Registration may technically apply - but no contributions are due.',
+          body: 'If your establishment meets the 10-employee threshold, ESI registration still applies. But since all employees earn above Rs. 21,000, no contributions are due from you or your employees.',
         },
       },
     ],

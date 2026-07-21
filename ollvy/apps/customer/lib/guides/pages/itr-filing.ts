@@ -28,17 +28,14 @@ export const itrFiling: LearnPageConfig = {
           { value: '250k_to_500k', label: 'Rs. 2.5 lakh to Rs. 5 lakh' },
           { value: 'above_500k', label: 'Above Rs. 5 lakh' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'above_500k') {
-            return {
-              type: 'mandatory',
-              headline: 'You must file an Income Tax Return.',
-              body: 'Your income is above the basic exemption limit. Filing is required under Section 139(1) of the Income Tax Act.',
-              ctaLabel: 'File My ITR',
-              ctaHref: '/checkout/business-itr',
-            }
-          }
-          return null
+        exitOn: {
+          above_500k: {
+            type: 'mandatory',
+            headline: 'You must file an Income Tax Return.',
+            body: 'Your income is above the basic exemption limit. Filing is required under Section 139(1) of the Income Tax Act.',
+            ctaLabel: 'File My ITR',
+            ctaHref: '/checkout/business-itr',
+          },
         },
       },
       {
@@ -50,44 +47,35 @@ export const itrFiling: LearnPageConfig = {
           { value: 'director', label: 'I am a director in any Indian company' },
           { value: 'none', label: 'None of these apply' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'tds_deducted') {
-            return {
-              type: 'mandatory',
-              headline: 'File to claim your TDS refund.',
-              body: 'If you do not file, that deducted tax is gone. It takes 20-30 minutes and the money comes back to your account.',
-              ctaLabel: 'File My ITR',
-              ctaHref: '/checkout/business-itr',
-            }
-          }
-          if (answer === 'foreign_assets') {
-            return {
-              type: 'mandatory',
-              headline: 'Mandatory - foreign assets require filing.',
-              body: 'Anyone with foreign assets or accounts must file an ITR regardless of income level.',
-              ctaLabel: 'File My ITR',
-              ctaHref: '/checkout/business-itr',
-            }
-          }
-          if (answer === 'high_value_txn') {
-            return {
-              type: 'mandatory',
-              headline: 'Mandatory due to high-value transactions.',
-              body: 'Rule 12AB requires filing even if income is below the basic exemption limit when you have made high-value transactions.',
-              ctaLabel: 'File My ITR',
-              ctaHref: '/checkout/business-itr',
-            }
-          }
-          if (answer === 'director') {
-            return {
-              type: 'mandatory',
-              headline: 'Mandatory - all company directors must file.',
-              body: 'Every director of an Indian company must file an ITR, regardless of income level or whether the company was active.',
-              ctaLabel: 'File My ITR',
-              ctaHref: '/checkout/business-itr',
-            }
-          }
-          return null
+        exitOn: {
+          tds_deducted: {
+            type: 'mandatory',
+            headline: 'File to claim your TDS refund.',
+            body: 'If you do not file, that deducted tax is gone. It takes 20-30 minutes and the money comes back to your account.',
+            ctaLabel: 'File My ITR',
+            ctaHref: '/checkout/business-itr',
+          },
+          foreign_assets: {
+            type: 'mandatory',
+            headline: 'Mandatory - foreign assets require filing.',
+            body: 'Anyone with foreign assets or accounts must file an ITR regardless of income level.',
+            ctaLabel: 'File My ITR',
+            ctaHref: '/checkout/business-itr',
+          },
+          high_value_txn: {
+            type: 'mandatory',
+            headline: 'Mandatory due to high-value transactions.',
+            body: 'Rule 12AB requires filing even if income is below the basic exemption limit when you have made high-value transactions.',
+            ctaLabel: 'File My ITR',
+            ctaHref: '/checkout/business-itr',
+          },
+          director: {
+            type: 'mandatory',
+            headline: 'Mandatory - all company directors must file.',
+            body: 'Every director of an Indian company must file an ITR, regardless of income level or whether the company was active.',
+            ctaLabel: 'File My ITR',
+            ctaHref: '/checkout/business-itr',
+          },
         },
       },
       {
@@ -97,34 +85,6 @@ export const itrFiling: LearnPageConfig = {
           { value: '60_to_80', label: '60 to 80 (Senior Citizen)' },
           { value: 'above_80', label: 'Above 80 (Super Senior Citizen)' },
         ],
-        evaluator: (answer, allAnswers) => {
-          if (allAnswers[0] === '250k_to_500k') {
-            if (answer === 'under_60') {
-              return {
-                type: 'mandatory',
-                headline: 'You must file an Income Tax Return.',
-                body: 'Your income is above Rs. 2.5 lakh. For individuals under 60, filing is mandatory under Section 139(1). You may owe zero tax after rebate, but filing is still required.',
-                ctaLabel: 'File My ITR',
-                ctaHref: '/checkout/business-itr',
-              }
-            }
-            if (answer === '60_to_80') {
-              return {
-                type: 'conditional',
-                headline: 'Depends on whether your income is above Rs. 3 lakh.',
-                body: 'For senior citizens between 60 and 80, the exemption limit is Rs. 3 lakh. If your income is below Rs. 3 lakh, filing is not mandatory. If it is between Rs. 3 lakh and Rs. 5 lakh, filing is technically required - though you may owe zero tax.',
-              }
-            }
-            if (answer === 'above_80') {
-              return {
-                type: 'not_required',
-                headline: 'Filing is likely not mandatory.',
-                body: 'For super senior citizens above 80, the exemption limit is Rs. 5 lakh. Income below Rs. 5 lakh is below the threshold - filing is not mandatory unless other triggers apply (foreign assets, TDS deducted, director role, etc.).',
-              }
-            }
-          }
-          return null
-        },
       },
       {
         text: 'Are you planning to apply for any of these in the next 12 months?',
@@ -134,17 +94,52 @@ export const itrFiling: LearnPageConfig = {
           { value: 'yes_tender', label: 'A government tender or contract' },
           { value: 'no', label: 'None of these' },
         ],
-        evaluator: (answer) => {
-          if (answer === 'yes_loan' || answer === 'yes_visa' || answer === 'yes_tender') {
-            return {
-              type: 'recommended',
-              headline: 'File - you will need it.',
-              body: 'Lenders require 2-3 years of ITR. Visa embassies ask for it. Government tenders require it as pre-qualification. File now so you have the record when you need it.',
-              ctaLabel: 'File My ITR',
-              ctaHref: '/checkout/business-itr',
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [
+          { q: 0, anyOf: ['250k_to_500k'] },
+          { q: 2, anyOf: ['under_60'] },
+        ],
+        result: {
+          type: 'mandatory',
+          headline: 'You must file an Income Tax Return.',
+          body: 'Your income is above Rs. 2.5 lakh. For individuals under 60, filing is mandatory under Section 139(1). You may owe zero tax after rebate, but filing is still required.',
+          ctaLabel: 'File My ITR',
+          ctaHref: '/checkout/business-itr',
+        },
+      },
+      {
+        if: [
+          { q: 0, anyOf: ['250k_to_500k'] },
+          { q: 2, anyOf: ['60_to_80'] },
+        ],
+        result: {
+          type: 'conditional',
+          headline: 'Depends on whether your income is above Rs. 3 lakh.',
+          body: 'For senior citizens between 60 and 80, the exemption limit is Rs. 3 lakh. If your income is below Rs. 3 lakh, filing is not mandatory. If it is between Rs. 3 lakh and Rs. 5 lakh, filing is technically required - though you may owe zero tax.',
+        },
+      },
+      {
+        if: [
+          { q: 0, anyOf: ['250k_to_500k'] },
+          { q: 2, anyOf: ['above_80'] },
+        ],
+        result: {
+          type: 'not_required',
+          headline: 'Filing is likely not mandatory.',
+          body: 'For super senior citizens above 80, the exemption limit is Rs. 5 lakh. Income below Rs. 5 lakh is below the threshold - filing is not mandatory unless other triggers apply (foreign assets, TDS deducted, director role, etc.).',
+        },
+      },
+      {
+        if: [{ q: 3, anyOf: ['yes_loan', 'yes_visa', 'yes_tender'] }],
+        result: {
+          type: 'recommended',
+          headline: 'File - you will need it.',
+          body: 'Lenders require 2-3 years of ITR. Visa embassies ask for it. Government tenders require it as pre-qualification. File now so you have the record when you need it.',
+          ctaLabel: 'File My ITR',
+          ctaHref: '/checkout/business-itr',
         },
       },
     ],

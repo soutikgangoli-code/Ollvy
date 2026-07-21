@@ -55,6 +55,27 @@ Educational content to help founders understand Indian business compliance:
 - [Trademark Registration Guide](https://www.ollvy.com/guides/do-i-need-trademark-registration) - When and why to register
 - [Shop & Establishment](https://www.ollvy.com/guides/do-i-need-shop-establishment-registration) - State-wise registration guide
 
+### Income-tax Act 2025 Transition (effective 1 April 2026)
+- [Old vs New Section Mapping](https://www.ollvy.com/guides/income-tax-act-2025-section-mapping) - 1961 Act to 2025 Act section finder (143(1) to 270(1), 148 to 280, 156 to 289)
+- [New TDS Sections & Forms FY 2026-27](https://www.ollvy.com/guides/new-tds-sections-fy2026-27) - Sections 392/393/394 replace the 194 series; Forms 138/140/143/144 replace 24Q/26Q/27EQ/27Q
+- [Form 141 for TDS on Property & Rent](https://www.ollvy.com/guides/form-141-tds-property-rent) - Replaces 26QB/26QC/26QD/26QE from FY 2026-27
+- [Form 16 is Now Form 130](https://www.ollvy.com/guides/form-16-is-now-form-130) - New salary TDS certificate, issued by June 15, 2027
+
+### Tax Filing Guides
+- [Missed the ITR Deadline? Belated Return](https://www.ollvy.com/guides/belated-itr-2026) - Belated/revised return for AY 2026-27 by December 31, 2026
+- [ITR-U Updated Return](https://www.ollvy.com/guides/itr-u-updated-return) - File up to 4 years back; AY 2022-23 window closes March 31, 2027
+- [Salaried ITR 2027](https://www.ollvy.com/guides/salaried-itr-2027) - First ITR season under the new Act, due July 31, 2027
+- [Business ITR 2027](https://www.ollvy.com/guides/business-itr-2027) - Non-audit business deadline moved to August 31, 2027
+
+### Employer & Payroll Guides
+- [Labour Codes Compliance](https://www.ollvy.com/guides/labour-codes-compliance-2026) - Four labour codes: 50% wages rule, appointment letters, CTC restructuring
+- [EPF Scheme 2026](https://www.ollvy.com/guides/epf-scheme-2026) - New EPF Scheme effective July 1, 2026, replacing the 1952 scheme
+
+### GST Guides
+- [GST Invoice Management System (IMS)](https://www.ollvy.com/guides/gst-invoice-management-system-ims) - Mandatory accept/reject workflow, GSTR-3B ITC locking
+- [GSTAT Appeal Guide](https://www.ollvy.com/guides/gstat-appeal-guide) - Appeal to the GST Appellate Tribunal, 10% pre-deposit
+- [LUT Renewal FY 2027-28](https://www.ollvy.com/guides/lut-renewal-2027) - File before April 1, 2027 for zero-rated exports
+
 ### GST Notices
 - [GST DRC-01 Notice](https://www.ollvy.com/guides/gst-drc-01-notice) - Tax demand response guide
 - [GST REG-17 Cancellation](https://www.ollvy.com/guides/gst-reg-17-cancellation-notice) - Cancellation notice response
@@ -63,6 +84,24 @@ Educational content to help founders understand Indian business compliance:
 - [Section 143(1) Intimation](https://www.ollvy.com/guides/income-tax-143-1-intimation) - Processing intimation
 - [Section 143(2) Scrutiny](https://www.ollvy.com/guides/income-tax-143-2-scrutiny) - Scrutiny assessment
 - [Section 156 Demand](https://www.ollvy.com/guides/income-tax-156-demand) - Tax demand notice
+- [Section 280/281 Reopening (new Act)](https://www.ollvy.com/guides/income-tax-280-281-reopening) - Reassessment notices under the Income-tax Act 2025, replacing 148/148A
+- [Section 270(1) Intimation (new Act)](https://www.ollvy.com/guides/income-tax-270-intimation) - Replaces 143(1) for returns filed under the 2025 Act
+- [Foreign Assets NUDGE SMS](https://www.ollvy.com/guides/schedule-fa-foreign-assets-notice) - Undisclosed foreign assets campaign; fix via revised return by December 31
+
+## Compliance Deadlines
+
+- [MCA Amnesty CCFS 2026](https://www.ollvy.com/guides/ccfs-2026) - Clear pending AOC-4/MGT-7/ADT-1 at 10% late fees, ends August 31, 2026
+- [Tax Audit 2026](https://www.ollvy.com/tax-audit-2026) - Form 3CA/3CB/3CD due September 30, 2026
+- [TDS Return Q2 FY2026-27](https://www.ollvy.com/guides/tds-return-q2-fy2026-27) - Due October 31, 2026
+- [MGT-7 2026](https://www.ollvy.com/guides/mgt-7-2026) - Annual return due November 29, 2026
+- [PAS-6 Reconciliation](https://www.ollvy.com/guides/pas-6-2026) - Half-year Apr-Sep 2026, due November 29, 2026
+- [GSTR-9 FY 2025-26](https://www.ollvy.com/guides/gst-annual-2027) - GST annual return due December 31, 2026
+- [FSSAI Annual Return D1](https://www.ollvy.com/guides/fssai-annual-return-2027) - FY 2026-27, due May 31, 2027 on FoSCoS
+- [LLP Form 11 2027](https://www.ollvy.com/guides/llp-form-11-2027) - LLP annual return due May 30, 2027
+- [Advance Tax Q1 FY 2027-28](https://www.ollvy.com/guides/advance-tax-q1-2027) - 15% due June 15, 2027
+- [IEC Annual Update 2027](https://www.ollvy.com/guides/iec-annual-update-2027) - DGFT window April-June 2027; missing it deactivates the IEC
+- [DPT-3 2027](https://www.ollvy.com/guides/dpt-3-2027) - Return of deposits due June 30, 2027
+- [FLA Return 2027](https://www.ollvy.com/guides/fla-return-2027) - RBI foreign assets/liabilities return due July 15, 2027
 
 ## Tools
 

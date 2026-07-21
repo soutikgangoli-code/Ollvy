@@ -11,7 +11,7 @@ export const tds194c194jDemand: LearnPageConfig = {
   category: 'TDS Notice',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],
-  relatedLearnSlugs: ['tds-short-deduction-notice', 'tds-26q-27q-mismatch', 'income-tax-143-1-intimation'],
+  relatedLearnSlugs: ['tds-short-deduction-notice', 'tds-26q-27q-mismatch', 'income-tax-143-1-intimation', 'new-tds-sections-fy2026-27'],
   relatedTools: {
     penaltyCalculators: ['tds-late-filing'],
     documentChecklists: ['business-itr'],
@@ -78,6 +78,10 @@ export const tds194c194jDemand: LearnPageConfig = {
     {
       q: 'Does TDS apply to one-time payments below the threshold?',
       a: 'For 194C, if a single payment exceeds Rs. 30,000, TDS applies even if it is a one-time payment. For 194J, the threshold is Rs. 30,000 per year to the same person. Track aggregate payments to each vendor through the year.',
+    },
+    {
+      q: "What happens to 194C and 194J demands under the Income-tax Act 2025?",
+      a: "Payments made up to 31 March 2026 stay under the 1961 Act, so demands for those periods cite 194C or 194J as before. From FY 2026-27, contractor and professional-fee TDS both sit under Section 393 of the 2025 Act, identified by Schedule I payment categories and numeric challan codes rather than section numbers. The classification risk this guide covers survives the renumbering: contractor versus professional is still the line that decides the rate, and a wrong category still produces a short-deduction demand.",
     },
   ],
 

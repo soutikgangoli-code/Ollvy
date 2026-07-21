@@ -10,8 +10,8 @@ export const incomeTax271Penalty: LearnPageConfig = {
   lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
-  relatedServiceSlugs: ['itr-notice-response'],
-  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-142-1-notice', 'income-tax-131-summons'],
+  relatedServiceSlugs: ['business-itr'],
+  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-142-1-notice', 'income-tax-131-summons', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -80,6 +80,10 @@ export const incomeTax271Penalty: LearnPageConfig = {
     {
       q: 'What is the Section 270AA immunity option?',
       a: 'Under Section 270AA, if you accept the assessment order and pay the tax and interest within the specified time, you can apply for immunity from penalty. This is available for non-fraud cases under Section 270A. Apply within one month of paying the tax.',
+    },
+    {
+      q: "How does the Income-tax Act 2025 affect penalty notices?",
+      a: "Penalty proceedings for AY 2026-27 and earlier continue under the 1961 Act sections quoted on your notice (savings clause, Section 536(2)(c) of the 2025 Act). The 2025 Act renumbers the penalty provisions for tax year 2026-27 onwards - for example, the tax-audit failure penalty moved from Section 271B to Section 446. The defences are unchanged: reasonable cause and bona fide belief carry the same weight under the new Act.",
     },
   ],
 

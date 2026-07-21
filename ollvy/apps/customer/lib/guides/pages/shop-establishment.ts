@@ -25,24 +25,19 @@ export const shopEstablishment: LearnPageConfig = {
           { value: 'factory', label: 'A factory or manufacturing unit' },
           { value: 'none', label: 'No fixed premises - field-based or entirely online' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'commercial') {
-            return {
-              type: 'mandatory',
-              headline: 'You need Shop & Establishment registration.',
-              body: 'Any commercial premises requires S&E registration within 30 days of starting business in most states.',
-              ctaLabel: 'Get GST Registration',
-              ctaHref: '/checkout/gst-registration',
-            }
-          }
-          if (answer === 'factory') {
-            return {
-              type: 'conditional',
-              headline: 'Factories are governed by a different law.',
-              body: 'Factories fall under the Factories Act, 1948 - not the Shops and Establishments Act. You need a separate compliance review for factory registration.',
-            }
-          }
-          return null
+        exitOn: {
+          commercial: {
+            type: 'mandatory',
+            headline: 'You need Shop & Establishment registration.',
+            body: 'Any commercial premises requires S&E registration within 30 days of starting business in most states.',
+            ctaLabel: 'Get GST Registration',
+            ctaHref: '/checkout/gst-registration',
+          },
+          factory: {
+            type: 'conditional',
+            headline: 'Factories are governed by a different law.',
+            body: 'Factories fall under the Factories Act, 1948 - not the Shops and Establishments Act. You need a separate compliance review for factory registration.',
+          },
         },
       },
       {
@@ -51,16 +46,6 @@ export const shopEstablishment: LearnPageConfig = {
           { value: 'yes', label: 'Yes, one or more employees work with me' },
           { value: 'no', label: 'No, I am the only person' },
         ],
-        earlyExit: (answer, allAnswers) => {
-          if (answer === 'yes' && allAnswers?.[0] === 'home') {
-            return {
-              type: 'mandatory',
-              headline: 'You likely need registration.',
-              body: 'Most states require S&E registration for home-based businesses with employees. Check your specific state\'s rules.',
-            }
-          }
-          return null
-        },
       },
       {
         text: 'Do you need to open a business bank account or apply for a licence soon?',
@@ -68,15 +53,26 @@ export const shopEstablishment: LearnPageConfig = {
           { value: 'yes', label: 'Yes - setting up a current account or applying for licences' },
           { value: 'no', label: 'No, I already have what I need' },
         ],
-        evaluator: (answer, allAnswers) => {
-          if (answer === 'yes') {
-            return {
-              type: 'recommended',
-              headline: 'Register - you will need the certificate.',
-              body: 'The S&E certificate is widely accepted as proof of business address for bank current accounts, GST registration, FSSAI, and other licences.',
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [
+          { q: 1, anyOf: ['yes'] },
+          { q: 0, anyOf: ['home'] },
+        ],
+        result: {
+          type: 'mandatory',
+          headline: 'You likely need registration.',
+          body: 'Most states require S&E registration for home-based businesses with employees. Check your specific state\'s rules.',
+        },
+      },
+      {
+        if: [{ q: 2, anyOf: ['yes'] }],
+        result: {
+          type: 'recommended',
+          headline: 'Register - you will need the certificate.',
+          body: 'The S&E certificate is widely accepted as proof of business address for bank current accounts, GST registration, FSSAI, and other licences.',
         },
       },
     ],

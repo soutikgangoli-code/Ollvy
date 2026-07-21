@@ -14,11 +14,8 @@ export const lutForExports: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/lut-for-exports",
   lastReviewed: "May 2026",
   category: "GST",
-  relatedServiceSlugs: ["lut-filing", "gst-registration", "iec-registration"],
-  relatedLearnSlugs: [
-    "iec-import-export-code",
-    "gst-cancellation",
-  ],
+  relatedServiceSlugs: ["gst-registration", "iec-code"],
+  relatedLearnSlugs: ["iec-import-export-code", "lut-renewal-2027"],
   ctaServiceSlug: "gst-monthly",
   ctaSecondarySlug: "gst-registration",
   sections: [

@@ -17,7 +17,7 @@ export const gstAnnual2026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/gst-annual-2026",
   lastReviewed: "May 2026",
   category: "GST",
-  relatedServiceSlugs: ["gst-annual-return", "gst-registration", "gst-return-filing"],
+  relatedServiceSlugs: ["gst-monthly", "gst-registration"],
   relatedLearnSlugs: ["lut-for-exports", "iec-import-export-code"],
   ctaServiceSlug: "gst-monthly",
   sections: [

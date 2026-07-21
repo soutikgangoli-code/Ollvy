@@ -25,15 +25,12 @@ export const professionalTax: LearnPageConfig = {
           { value: 'northeast', label: 'Assam, Meghalaya, Manipur, or Tripura' },
           { value: 'other', label: 'Another state or not sure' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'non_pt_state') {
-            return {
-              type: 'not_required',
-              headline: 'Professional Tax does not apply to you.',
-              body: 'Delhi, UP, Rajasthan, Haryana, Himachal Pradesh, and Punjab do not levy Professional Tax. You have no PT obligation.',
-            }
-          }
-          return null
+        exitOn: {
+          non_pt_state: {
+            type: 'not_required',
+            headline: 'Professional Tax does not apply to you.',
+            body: 'Delhi, UP, Rajasthan, Haryana, Himachal Pradesh, and Punjab do not levy Professional Tax. You have no PT obligation.',
+          },
         },
       },
       {
@@ -42,15 +39,14 @@ export const professionalTax: LearnPageConfig = {
           { value: 'below_7500', label: 'Below Rs. 7,500 per month' },
           { value: 'above_7500', label: 'Above Rs. 7,500 per month' },
         ],
-        earlyExit: (answer, allAnswers) => {
-          if (answer === 'below_7500' && allAnswers?.[0] !== 'non_pt_state') {
-            return {
-              type: 'not_required',
-              headline: 'Below the taxable threshold.',
-              body: 'Most PT states set the minimum taxable income at Rs. 7,500 to Rs. 10,000 per month. Below this, no PT is due. Check your specific state\'s slab schedule to confirm.',
-            }
-          }
-          return null
+        // Q0 answer non_pt_state already exits above, so by this point the
+        // original allAnswers[0] !== 'non_pt_state' guard is always true.
+        exitOn: {
+          below_7500: {
+            type: 'not_required',
+            headline: 'Below the taxable threshold.',
+            body: 'Most PT states set the minimum taxable income at Rs. 7,500 to Rs. 10,000 per month. Below this, no PT is due. Check your specific state\'s slab schedule to confirm.',
+          },
         },
       },
       {
@@ -60,31 +56,40 @@ export const professionalTax: LearnPageConfig = {
           { value: 'self_employed', label: 'I am self-employed, a freelancer, or a professional' },
           { value: 'both', label: 'Both - I own the business and also draw a salary' },
         ],
-        evaluator: (answer, allAnswers) => {
-          if (allAnswers?.[0] === 'pt_state' || allAnswers?.[0] === 'northeast' || allAnswers?.[0] === 'other') {
-            if (answer === 'employer') {
-              return {
-                type: 'mandatory',
-                headline: 'You need both PTRC and PTEC.',
-                body: 'As an employer in a PT state, you need PTEC (for yourself) and PTRC (to deduct PT from employees and remit it to the state). These are two separate registrations.',
-              }
-            }
-            if (answer === 'self_employed') {
-              return {
-                type: 'mandatory',
-                headline: 'You need PTEC.',
-                body: 'Self-employed professionals and business owners in PT states need PTEC (Professional Tax Enrollment Certificate) to pay PT on themselves.',
-              }
-            }
-            if (answer === 'both') {
-              return {
-                type: 'mandatory',
-                headline: 'You need both PTRC and PTEC.',
-                body: 'PTEC for yourself and PTRC to handle employee deductions. Both apply when you are both a business owner and an employer.',
-              }
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [
+          { q: 0, anyOf: ['pt_state', 'northeast', 'other'] },
+          { q: 2, anyOf: ['employer'] },
+        ],
+        result: {
+          type: 'mandatory',
+          headline: 'You need both PTRC and PTEC.',
+          body: 'As an employer in a PT state, you need PTEC (for yourself) and PTRC (to deduct PT from employees and remit it to the state). These are two separate registrations.',
+        },
+      },
+      {
+        if: [
+          { q: 0, anyOf: ['pt_state', 'northeast', 'other'] },
+          { q: 2, anyOf: ['self_employed'] },
+        ],
+        result: {
+          type: 'mandatory',
+          headline: 'You need PTEC.',
+          body: 'Self-employed professionals and business owners in PT states need PTEC (Professional Tax Enrollment Certificate) to pay PT on themselves.',
+        },
+      },
+      {
+        if: [
+          { q: 0, anyOf: ['pt_state', 'northeast', 'other'] },
+          { q: 2, anyOf: ['both'] },
+        ],
+        result: {
+          type: 'mandatory',
+          headline: 'You need both PTRC and PTEC.',
+          body: 'PTEC for yourself and PTRC to handle employee deductions. Both apply when you are both a business owner and an employer.',
         },
       },
     ],

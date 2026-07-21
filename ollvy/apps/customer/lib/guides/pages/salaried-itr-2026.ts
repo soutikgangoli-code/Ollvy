@@ -14,7 +14,7 @@ export const salariedItr2026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/salaried-itr-2026",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["itr-filing", "tax-audit"],
+  relatedServiceSlugs: ["business-itr"],
   relatedLearnSlugs: ["advance-tax-explained", "tds-on-rent-194i-194ib"],
   ctaServiceSlug: "business-itr",
   sections: [

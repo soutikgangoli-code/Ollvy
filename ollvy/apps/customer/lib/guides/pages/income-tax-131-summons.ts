@@ -10,8 +10,8 @@ export const incomeTax131Summons: LearnPageConfig = {
   lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
-  relatedServiceSlugs: ['itr-notice-response'],
-  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-271-penalty'],
+  relatedServiceSlugs: ['business-itr'],
+  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-271-penalty', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -77,6 +77,10 @@ export const incomeTax131Summons: LearnPageConfig = {
     {
       q: 'Can I send someone else on my behalf?',
       a: 'Yes, you can authorise a CA or advocate to appear on your behalf under Section 288 of the Income Tax Act. File a written power of attorney or authorisation letter. However, if the officer specifically wants to examine you personally, you must appear.',
+    },
+    {
+      q: "Do Section 131 summons change under the Income-tax Act 2025?",
+      a: "The summons power continues in the 2025 Act with renumbered sections for proceedings under the new Act (tax year 2026-27 onwards). Proceedings for AY 2026-27 and earlier keep the 1961 Act citation (savings clause, Section 536(2)(c)). The obligations are the same either way: personal attendance, examination on oath, and production of documents. Treat a summons citing either Act with equal seriousness.",
     },
   ],
 

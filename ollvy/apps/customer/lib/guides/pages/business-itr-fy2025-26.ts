@@ -12,7 +12,7 @@ export const businessITRFY2526: LearnPageConfig = {
   category: 'Income Tax Filing',
   ctaServiceSlug: 'business-itr',
   relatedServiceSlugs: ['business-itr', 'mca-annual-filing', 'tds-monthly-compliance'],
-  relatedLearnSlugs: ['itr-filing', 'itr-form-selection', 'tds-return-q2-fy2026-27'],
+  relatedLearnSlugs: ['do-i-need-to-file-itr', 'which-itr-form-should-i-use', 'tds-return-q2-fy2026-27'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing', 'mca-annual-filing'],
     documentChecklists: ['business-itr'],

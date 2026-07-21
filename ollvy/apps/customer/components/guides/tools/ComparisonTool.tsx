@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CheckCircle, AlertCircle, Info } from 'lucide-react';
-import { LearnToolConfig, EligibilityQuestion, EligibilityResult } from '@/lib/guides/pages';
+import { LearnToolConfig, EligibilityQuestion, EligibilityResult, EligibilityRule } from '@/lib/guides/pages';
 import Link from 'next/link';
 import { LearnToolRankedResult } from '../LearnToolRankedResult';
 
@@ -54,7 +54,7 @@ export function ComparisonTool({ config }: {
     if (step < questions.length - 1) {
       setStep(prev => prev + 1);
     } else {
-      setResult(evaluateAnswers(questions, newAnswers, config.defaultResult));
+      setResult(evaluateAnswers(questions, newAnswers, config.resultRules, config.defaultResult));
     }
   };
 
@@ -146,11 +146,19 @@ export function ComparisonTool({ config }: {
   );
 }
 
+// Serializable resultRules/exitOn are the forms that actually run in the
+// browser (function evaluators are stripped at the server/client boundary).
 function evaluateAnswers(
   questions: EligibilityQuestion[],
   answers: string[],
+  resultRules?: EligibilityRule[],
   defaultResult?: EligibilityResult
 ): EligibilityResult {
+  for (const rule of resultRules ?? []) {
+    if (rule.if.every(cond => cond.anyOf.includes(answers[cond.q]))) {
+      return rule.result;
+    }
+  }
   for (const [i, q] of questions.entries()) {
     const result = q.evaluator?.(answers[i], answers);
     if (result) return result;
@@ -167,5 +175,7 @@ function getEarlyResult(
   answers: string[],
   currentStep: number
 ): EligibilityResult | null {
-  return questions[currentStep]?.earlyExit?.(answers[currentStep], answers) ?? null;
+  const q = questions[currentStep];
+  if (!q) return null;
+  return q.exitOn?.[answers[currentStep]] ?? q.earlyExit?.(answers[currentStep], answers) ?? null;
 }

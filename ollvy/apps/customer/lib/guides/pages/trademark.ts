@@ -1,4 +1,101 @@
-import { LearnPageConfig, getUrgencyLevel, URGENCY_LEVELS } from '../pages'
+import { LearnPageConfig, EligibilityRule, EligibilityResult, getUrgencyLevel, URGENCY_LEVELS } from '../pages'
+
+// Computes the trademark urgency score for one full set of answers. The rule
+// list below enumerates every answer combination as plain data, so the
+// scoring survives JSON serialization to the client.
+function trademarkUrgencyResult(answers: string[]): EligibilityResult {
+  const factors: { text: string; points: number }[] = []
+  let score = 0
+
+  // Q1: Brand centrality
+  if (answers[0] === 'central') {
+    score += 40
+    factors.push({ text: 'Brand is core to how customers find you', points: 40 })
+  } else if (answers[0] === 'matters') {
+    score += 20
+    factors.push({ text: 'Brand is a meaningful competitive asset', points: 20 })
+  } else {
+    score += 5
+    factors.push({ text: 'Brand plays a minor role in your business model', points: 5 })
+  }
+
+  // Q2: Marketing spend
+  if (answers[1] === 'significant') {
+    score += 30
+    factors.push({ text: 'Significant marketing spend building unprotected brand value', points: 30 })
+  } else if (answers[1] === 'some') {
+    score += 15
+    factors.push({ text: 'Some marketing spend - protection is worthwhile', points: 15 })
+  } else {
+    score += 0
+    factors.push({ text: 'No marketing spend yet - risk is currently low', points: 0 })
+  }
+
+  // Q3: Similar names
+  if (answers[2] === 'yes_similar') {
+    score += 25
+    factors.push({ text: 'Similar names exist - race to register is already on', points: 25 })
+  } else if (answers[2] === 'not_sure') {
+    score += 10
+    factors.push({ text: 'No trademark search done - unknown risk', points: 10 })
+  } else {
+    score += 5
+    factors.push({ text: 'Name appears unique - lower risk of conflict', points: 5 })
+  }
+
+  // Q4: Plans
+  if (answers[3] === 'international') {
+    score += 15
+    factors.push({ text: 'International expansion requires registered IP', points: 15 })
+  } else if (answers[3] === 'funding') {
+    score += 15
+    factors.push({ text: 'Investors check IP in due diligence - unregistered brand is a flag', points: 15 })
+  } else if (answers[3] === 'ecommerce') {
+    score += 15
+    factors.push({ text: 'Amazon and Flipkart Brand Registry requires trademark registration', points: 15 })
+  }
+
+  const level = getUrgencyLevel(score)
+  const levelInfo = URGENCY_LEVELS[level]
+
+  return {
+    type: (score >= 60 ? 'mandatory' : score >= 35 ? 'recommended' : 'optional') as 'mandatory' | 'recommended' | 'optional',
+    headline: levelInfo.label,
+    body: levelInfo.description,
+    ctaLabel: score >= 60 ? 'Register Trademark Now' : 'See What Registration Costs',
+    ctaHref: '/checkout/trademark-registration',
+    ranking: {
+      type: 'urgency' as const,
+      urgency: {
+        score,
+        maxScore: 100,
+        level,
+        label: levelInfo.label,
+        factors: factors.filter(f => f.points > 0),
+      },
+    },
+  }
+}
+
+// One rule per full answer combination (3 x 3 x 3 x 4 = 108).
+const trademarkResultRules: EligibilityRule[] = []
+for (const centrality of ['central', 'matters', 'less_important']) {
+  for (const spend of ['significant', 'some', 'none']) {
+    for (const similar of ['yes_similar', 'not_sure', 'unique']) {
+      for (const plans of ['international', 'funding', 'ecommerce', 'none']) {
+        trademarkResultRules.push({
+          if: [
+            { q: 0, anyOf: [centrality] },
+            { q: 1, anyOf: [spend] },
+            { q: 2, anyOf: [similar] },
+            { q: 3, anyOf: [plans] },
+          ],
+          result: trademarkUrgencyResult([centrality, spend, similar, plans]),
+        })
+      }
+    }
+  }
+}
 
 export const trademarkRegistration: LearnPageConfig = {
   slug: 'do-i-need-trademark-registration',
@@ -52,83 +149,9 @@ export const trademarkRegistration: LearnPageConfig = {
           { value: 'ecommerce', label: 'Selling on Amazon, Flipkart, or Meesho' },
           { value: 'none', label: 'None of these right now' },
         ],
-        evaluator: (answer: string, allAnswers: string[]) => {
-          const answers = [...allAnswers, answer]
-
-          const factors: { text: string; points: number }[] = []
-          let score = 0
-
-          // Q1: Brand centrality
-          if (answers[0] === 'central') {
-            score += 40
-            factors.push({ text: 'Brand is core to how customers find you', points: 40 })
-          } else if (answers[0] === 'matters') {
-            score += 20
-            factors.push({ text: 'Brand is a meaningful competitive asset', points: 20 })
-          } else {
-            score += 5
-            factors.push({ text: 'Brand plays a minor role in your business model', points: 5 })
-          }
-
-          // Q2: Marketing spend
-          if (answers[1] === 'significant') {
-            score += 30
-            factors.push({ text: 'Significant marketing spend building unprotected brand value', points: 30 })
-          } else if (answers[1] === 'some') {
-            score += 15
-            factors.push({ text: 'Some marketing spend - protection is worthwhile', points: 15 })
-          } else {
-            score += 0
-            factors.push({ text: 'No marketing spend yet - risk is currently low', points: 0 })
-          }
-
-          // Q3: Similar names
-          if (answers[2] === 'yes_similar') {
-            score += 25
-            factors.push({ text: 'Similar names exist - race to register is already on', points: 25 })
-          } else if (answers[2] === 'not_sure') {
-            score += 10
-            factors.push({ text: 'No trademark search done - unknown risk', points: 10 })
-          } else {
-            score += 5
-            factors.push({ text: 'Name appears unique - lower risk of conflict', points: 5 })
-          }
-
-          // Q4: Plans
-          if (answers[3] === 'international') {
-            score += 15
-            factors.push({ text: 'International expansion requires registered IP', points: 15 })
-          } else if (answers[3] === 'funding') {
-            score += 15
-            factors.push({ text: 'Investors check IP in due diligence - unregistered brand is a flag', points: 15 })
-          } else if (answers[3] === 'ecommerce') {
-            score += 15
-            factors.push({ text: 'Amazon and Flipkart Brand Registry requires trademark registration', points: 15 })
-          }
-
-          const level = getUrgencyLevel(score)
-          const levelInfo = URGENCY_LEVELS[level]
-
-          return {
-            type: (score >= 60 ? 'mandatory' : score >= 35 ? 'recommended' : 'optional') as 'mandatory' | 'recommended' | 'optional',
-            headline: levelInfo.label,
-            body: levelInfo.description,
-            ctaLabel: score >= 60 ? 'Register Trademark Now' : 'See What Registration Costs',
-            ctaHref: '/checkout/trademark-registration',
-            ranking: {
-              type: 'urgency' as const,
-              urgency: {
-                score,
-                maxScore: 100,
-                level,
-                label: levelInfo.label,
-                factors: factors.filter(f => f.points > 0),
-              },
-            },
-          }
-        },
       },
     ],
+    resultRules: trademarkResultRules,
     defaultResult: {
       type: 'recommended',
       headline: 'Set a timeline.',

@@ -12,7 +12,7 @@ export const gstGstr9AnnualReturnMismatch: LearnPageConfig = {
   ctaServiceSlug: 'gst-monthly',
   ctaSecondarySlug: 'gst-registration',
   relatedServiceSlugs: ['gst-monthly', 'gst-registration', 'business-itr'],
-  relatedLearnSlugs: ['gst-asmt-10-notice', 'gst-drc-01-notice', 'gst-gstr2b-itc-mismatch'],
+  relatedLearnSlugs: ['gst-asmt-10-notice', 'gst-drc-01-notice', 'gst-gstr2b-itc-mismatch', 'gstr-9-fy2025-26'],
   relatedTools: {
     penaltyCalculators: ['gst-late-filing', 'gst-demand-notice'],
     documentChecklists: ['gst-registration'],

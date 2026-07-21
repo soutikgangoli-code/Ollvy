@@ -14,7 +14,7 @@ export const mgt72026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/mgt-7-2026",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["mca-annual-filing", "agm-services"],
+  relatedServiceSlugs: ["mca-annual-filing"],
   relatedLearnSlugs: ["mca-annual-filing-aoc-4-mgt-7", "agm-compliance"],
   ctaServiceSlug: "mca-annual-filing",
   sections: [

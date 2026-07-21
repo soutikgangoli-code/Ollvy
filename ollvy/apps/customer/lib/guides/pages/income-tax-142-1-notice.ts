@@ -10,8 +10,8 @@ export const incomeTax1421Notice: LearnPageConfig = {
   lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
-  relatedServiceSlugs: ['itr-notice-response', 'itr-filing'],
-  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-271-penalty'],
+  relatedServiceSlugs: ['business-itr'],
+  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-148-148a-reopening', 'income-tax-271-penalty', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -80,6 +80,10 @@ export const incomeTax1421Notice: LearnPageConfig = {
     {
       q: 'Can I send the documents by post instead of uploading them?',
       a: 'Under the faceless assessment scheme, all documents must be uploaded digitally through the income tax portal. Physical submission is no longer accepted for faceless cases. If the file size is too large, split the documents into multiple uploads or compress them.',
+    },
+    {
+      q: "What happens to 142(1) notices under the Income-tax Act 2025?",
+      a: "The inquiry power moved to Section 268(1) of the 2025 Act for tax year 2026-27 onwards. Notices for AY 2026-27 and earlier still cite Section 142(1) of the 1961 Act under the savings clause (Section 536(2)(c)). Both versions work the same way: a document-and-information request with a stated deadline, and non-response carries the same consequences.",
     },
   ],
 

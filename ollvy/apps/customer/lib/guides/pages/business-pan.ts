@@ -24,7 +24,7 @@ export const businessPanGuide: LearnPageConfig = {
       number: '01',
       heading: 'WHAT IS A BUSINESS PAN AND WHO NEEDS ONE',
       body: 'PAN stands for Permanent Account Number. It is a 10-character alphanumeric identifier issued by the Income Tax Department of India to every taxpayer in the country.\n\nFor businesses, PAN is the foundational compliance document. Every company, LLP, partnership firm, trust, and society must have one. Without it, you cannot open a current bank account, register for GST, file income tax returns, or have TDS deducted and credited in your name.\n\nFor a company or LLP, PAN is typically the first compliance step after incorporation. MCA issues the Certificate of Incorporation but does not automatically issue a PAN. You must apply separately through the NSDL or UTI ITSL portal.',
-      note: 'Source: Section 139A, Income Tax Act 1961. Mandatory for all companies, LLPs, and firms.',
+      note: 'Source: Section 139A, Income Tax Act 1961; the requirement continues unchanged under the Income-tax Act 2025 from 1 April 2026. Mandatory for all companies, LLPs, and firms.',
     },
     {
       number: '02',

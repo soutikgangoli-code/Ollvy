@@ -14,7 +14,7 @@ export const agmCompliance: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/agm-compliance",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["mca-annual-filing", "private-limited-incorporation"],
+  relatedServiceSlugs: ["mca-annual-filing", "pvt-ltd-incorporation"],
   relatedLearnSlugs: ["mca-annual-filing-aoc-4-mgt-7", "dir-3-kyc-explained"],
   ctaServiceSlug: "mca-annual-filing",
   sections: [

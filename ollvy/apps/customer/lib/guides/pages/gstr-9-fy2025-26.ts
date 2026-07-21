@@ -12,7 +12,7 @@ export const gstr9FY2526: LearnPageConfig = {
   category: 'GST Filing',
   ctaServiceSlug: 'gst-monthly',
   relatedServiceSlugs: ['gst-monthly', 'business-itr'],
-  relatedLearnSlugs: ['gst-registration', 'gst-gstr9-annual-return-mismatch'],
+  relatedLearnSlugs: ['do-i-need-gst-registration', 'gst-gstr9-annual-return-mismatch'],
   relatedTools: {
     penaltyCalculators: ['gst-late-filing'],
     documentChecklists: ['gst-registration', 'business-itr'],

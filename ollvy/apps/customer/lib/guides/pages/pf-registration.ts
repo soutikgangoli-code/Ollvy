@@ -25,17 +25,14 @@ export const pfRegistration: LearnPageConfig = {
           { value: '20_plus', label: '20 or more employees' },
           { value: 'growing', label: 'Below 20 now, but growing fast' },
         ],
-        earlyExit: (answer) => {
-          if (answer === '20_plus') {
-            return {
-              type: 'mandatory',
-              headline: 'PF registration is mandatory.',
-              body: 'You have crossed the 20-employee threshold. Register with EPFO within 30 days if you have not done so.',
-              ctaLabel: 'Get Payroll Help',
-              ctaHref: '/services',
-            }
-          }
-          return null
+        exitOn: {
+          '20_plus': {
+            type: 'mandatory',
+            headline: 'PF registration is mandatory.',
+            body: 'You have crossed the 20-employee threshold. Register with EPFO within 30 days if you have not done so.',
+            ctaLabel: 'Get Payroll Help',
+            ctaHref: '/services',
+          },
         },
       },
       {
@@ -46,18 +43,6 @@ export const pfRegistration: LearnPageConfig = {
           { value: 'services', label: 'Retail, hospitality, food, healthcare, or other services' },
           { value: 'manufacturing', label: 'Other manufacturing or engineering' },
         ],
-        earlyExit: (answer, allAnswers) => {
-          if (answer === 'scheduled' && (allAnswers?.[0] === '10_to_19')) {
-            return {
-              type: 'mandatory',
-              headline: 'PF registration is mandatory.',
-              body: 'Scheduled industries (cinema, beedi, textile mills) have a lower threshold of 10 employees, not 20. You are above this.',
-              ctaLabel: 'Get Payroll Help',
-              ctaHref: '/services',
-            }
-          }
-          return null
-        },
       },
       {
         text: 'What do your employees earn?',
@@ -74,17 +59,33 @@ export const pfRegistration: LearnPageConfig = {
           { value: 'no', label: 'No, not so far' },
           { value: 'not_sure', label: 'Not sure' },
         ],
-        evaluator: (answer, allAnswers) => {
-          if (answer === 'yes' && allAnswers[0] === 'growing') {
-            return {
-              type: 'recommended',
-              headline: 'Register proactively.',
-              body: 'If clients are already asking and you are close to 20 employees, register now. Late registration after crossing the threshold means retroactive contributions from the date you became eligible.',
-              ctaLabel: 'Get Payroll Help',
-              ctaHref: '/services',
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [
+          { q: 1, anyOf: ['scheduled'] },
+          { q: 0, anyOf: ['10_to_19'] },
+        ],
+        result: {
+          type: 'mandatory',
+          headline: 'PF registration is mandatory.',
+          body: 'Scheduled industries (cinema, beedi, textile mills) have a lower threshold of 10 employees, not 20. You are above this.',
+          ctaLabel: 'Get Payroll Help',
+          ctaHref: '/services',
+        },
+      },
+      {
+        if: [
+          { q: 3, anyOf: ['yes'] },
+          { q: 0, anyOf: ['growing'] },
+        ],
+        result: {
+          type: 'recommended',
+          headline: 'Register proactively.',
+          body: 'If clients are already asking and you are close to 20 employees, register now. Late registration after crossing the threshold means retroactive contributions from the date you became eligible.',
+          ctaLabel: 'Get Payroll Help',
+          ctaHref: '/services',
         },
       },
     ],

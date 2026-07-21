@@ -12,7 +12,7 @@ export const incomeTax148148aReopening: LearnPageConfig = {
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,
   relatedServiceSlugs: ['business-itr'],
-  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-142-1-notice', 'income-tax-ais-sft-notice'],
+  relatedLearnSlugs: ['income-tax-143-2-scrutiny', 'income-tax-142-1-notice', 'income-tax-ais-sft-notice', 'income-tax-280-281-reopening', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -115,6 +115,10 @@ export const incomeTax148148aReopening: LearnPageConfig = {
     {
       q: 'My 148A notice mentions income from property sale. I did report this in my ITR. How do I prove it?',
       a: "Point to Schedule CG (capital gains) in your original ITR. Quote the exact figures for sale consideration, cost of acquisition, and capital gain. Attach the computation worksheet and the ITR acknowledgement showing these figures.",
+    },
+    {
+      q: "Can reopening notices still cite Section 148 after the 1961 Act was replaced?",
+      a: "Yes. Reopening for AY 2026-27 and earlier continues under Sections 147/148/148A of the 1961 Act (savings clause, Section 536(2)(c) of the 2025 Act), so a 148 notice received in 2026 or 2027 for an old year is valid. For tax year 2026-27 onwards the same machinery lives in the 2025 Act: Section 279 (income escaping assessment), Section 280 (reassessment notice), and Section 281 (prior show-cause).",
     },
   ],
 

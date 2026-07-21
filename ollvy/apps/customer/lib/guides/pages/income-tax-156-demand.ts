@@ -10,8 +10,8 @@ export const incomeTax156Demand: LearnPageConfig = {
   lastReviewed: 'April 2026',
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
-  relatedServiceSlugs: ['itr-notice-response', 'itr-rectification'],
-  relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-143-2-scrutiny', 'income-tax-245-refund-adjustment'],
+  relatedServiceSlugs: ['business-itr'],
+  relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-143-2-scrutiny', 'income-tax-245-refund-adjustment', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -65,6 +65,10 @@ export const incomeTax156Demand: LearnPageConfig = {
     {
       q: 'I want to pay the demand in instalments. Is that possible?',
       a: 'Yes, under Section 220(3) you can request instalment payment. Write to the assessing officer with a proposed schedule and reasons why you cannot pay in one instalment. This is discretionary and typically granted for large demands with genuine financial constraints.',
+    },
+    {
+      q: "Is a demand notice still Section 156 under the Income-tax Act 2025?",
+      a: "For old years, yes. Demands for AY 2026-27 and earlier cite Section 156 of the 1961 Act (savings clause, Section 536(2)(c) of the 2025 Act). For tax year 2026-27 onwards the notice of demand is Section 289 of the 2025 Act, and an intimation showing an amount payable is deemed to be a demand notice under the same section. The payment window and recovery consequences run the same way under both Acts.",
     },
   ],
 

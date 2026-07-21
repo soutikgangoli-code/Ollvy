@@ -18,7 +18,7 @@ export const dir3KycExplained: LearnPageConfig = {
   lastReviewed: "May 2026",
   category: "Compliance",
   relatedServiceSlugs: ["director-kyc", "mca-annual-filing"],
-  relatedLearnSlugs: ["agm-compliance", "mca-annual-filing-aoc-4-mgt-7"],
+  relatedLearnSlugs: ["agm-compliance", "mca-annual-filing-aoc-4-mgt-7", "director-kyc-2026"],
   ctaServiceSlug: "director-kyc",
   sections: [
     {

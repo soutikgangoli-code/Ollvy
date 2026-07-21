@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CheckCircle, AlertCircle, XCircle, Info } from 'lucide-react';
-import { LearnToolConfig, EligibilityQuestion, EligibilityResult } from '@/lib/guides/pages';
+import { LearnToolConfig, EligibilityQuestion, EligibilityResult, EligibilityRule } from '@/lib/guides/pages';
 import { ServiceConfig } from '@/lib/services';
 import Link from 'next/link';
 import { LearnToolRankedResult } from '../LearnToolRankedResult';
@@ -72,7 +72,7 @@ export function EligibilityTool({ config, ctaService }: {
     if (step < questions.length - 1) {
       setStep(prev => prev + 1);
     } else {
-      setResult(evaluateAnswers(questions, newAnswers, config.defaultResult));
+      setResult(evaluateAnswers(questions, newAnswers, config.resultRules, config.defaultResult));
     }
   };
 
@@ -157,14 +157,22 @@ export function EligibilityTool({ config, ctaService }: {
   );
 }
 
-// Evaluation logic is defined per tool in the LearnPageConfig
-// These are pure functions - no side effects
+// Evaluation logic is defined per tool in the LearnPageConfig.
+// Function-based evaluator/earlyExit are stripped before the config crosses
+// the server/client boundary, so the serializable resultRules/exitOn forms
+// are the ones that run in the browser; the function calls remain as a
+// fallback for any environment where they survive.
 function evaluateAnswers(
   questions: EligibilityQuestion[],
   answers: string[],
+  resultRules?: EligibilityRule[],
   defaultResult?: EligibilityResult
 ): EligibilityResult {
-  // Each question has an `evaluator` function that returns a result or null
+  for (const rule of resultRules ?? []) {
+    if (rule.if.every(cond => cond.anyOf.includes(answers[cond.q]))) {
+      return rule.result;
+    }
+  }
   for (const [i, q] of questions.entries()) {
     const result = q.evaluator?.(answers[i], answers);
     if (result) return result;
@@ -182,5 +190,7 @@ function getEarlyResult(
   answers: string[],
   currentStep: number
 ): EligibilityResult | null {
-  return questions[currentStep]?.earlyExit?.(answers[currentStep], answers) ?? null;
+  const q = questions[currentStep];
+  if (!q) return null;
+  return q.exitOn?.[answers[currentStep]] ?? q.earlyExit?.(answers[currentStep], answers) ?? null;
 }

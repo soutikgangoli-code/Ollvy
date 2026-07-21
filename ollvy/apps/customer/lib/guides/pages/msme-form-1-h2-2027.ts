@@ -14,8 +14,8 @@ export const msmeForm1H22027: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/msme-form-1-h2-2027",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["msme-form-1", "tax-audit", "mca-annual-filing"],
-  relatedLearnSlugs: [],
+  relatedServiceSlugs: ["mca-annual-filing"],
+  relatedLearnSlugs: ["msme-form-1-h1-2026", "is-msme-registration-worth-it"],
   ctaServiceSlug: "mca-annual-filing",
   sections: [
     {

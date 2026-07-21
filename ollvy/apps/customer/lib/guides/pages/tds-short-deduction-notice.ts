@@ -11,7 +11,7 @@ export const tdsShortDeductionNotice: LearnPageConfig = {
   category: 'TDS Notice',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],
-  relatedLearnSlugs: ['tds-26q-27q-mismatch', 'tds-194c-194j-demand', 'income-tax-143-1-intimation'],
+  relatedLearnSlugs: ['tds-26q-27q-mismatch', 'tds-194c-194j-demand', 'income-tax-143-1-intimation', 'new-tds-sections-fy2026-27'],
   relatedTools: {
     penaltyCalculators: ['tds-late-filing'],
     documentChecklists: ['business-itr'],
@@ -90,6 +90,10 @@ export const tdsShortDeductionNotice: LearnPageConfig = {
     {
       q: 'What is the Section 40(a)(ia) disallowance?',
       a: 'If TDS was not deducted on a payment to a resident (contractor, professional, rent), 30 percent of that expense is disallowed in your income tax computation. This increases your taxable income and tax liability for the year.',
+    },
+    {
+      q: "Do short-deduction notices change under the Income-tax Act 2025?",
+      a: "For deduction periods up to 31 March 2026, notices and corrections stay on the 1961 Act sections printed on your notice. From FY 2026-27, TDS operates under the 2025 Act: salary TDS is Section 392, the whole 194-series of non-salary payments becomes Section 393 with Schedule I payment categories, and quarterly statements move to the new forms (Form 140 replaces 26Q). A short-deduction demand for a new-Act quarter cites these numbers, but the fix is the same: deduct the shortfall, pay with interest, file a correction.",
     },
   ],
 

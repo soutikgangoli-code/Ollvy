@@ -14,7 +14,7 @@ export const esopStructuring: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/esop-structuring",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["esop-structuring", "private-limited-incorporation"],
+  relatedServiceSlugs: ["esop-structuring", "pvt-ltd-incorporation"],
   relatedLearnSlugs: ["advance-tax-explained", "mca-annual-filing-aoc-4-mgt-7"],
   ctaServiceSlug: "pvt-ltd-incorporation",
   ctaSecondarySlug: "llp-incorporation",

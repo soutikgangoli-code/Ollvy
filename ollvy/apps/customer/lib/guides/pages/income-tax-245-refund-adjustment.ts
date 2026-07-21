@@ -11,8 +11,8 @@ export const incomeTax245RefundAdjustment: LearnPageConfig = {
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,
-  relatedServiceSlugs: ['itr-notice-response', 'itr-rectification'],
-  relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-156-demand', 'income-tax-143-2-scrutiny'],
+  relatedServiceSlugs: ['business-itr'],
+  relatedLearnSlugs: ['income-tax-143-1-intimation', 'income-tax-156-demand', 'income-tax-143-2-scrutiny', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -97,6 +97,10 @@ export const incomeTax245RefundAdjustment: LearnPageConfig = {
     {
       q: 'The demand being adjusted is from 8 years ago. Is there any time limit?',
       a: 'There is no statutory time limit on adjusting old demands against new refunds. However, if the demand is from very old years and you believe it should have been written off or time-barred for recovery, raise this point in your response.',
+    },
+    {
+      q: "Does Section 245 refund adjustment survive the Income-tax Act 2025?",
+      a: "The power to set off refunds against outstanding demands continues under the 2025 Act with a renumbered section for tax year 2026-27 onwards. Adjustments relating to AY 2026-27 and earlier still cite Section 245 of the 1961 Act (savings clause, Section 536(2)(c)). The safeguard is unchanged either way: you get prior intimation and a window to object before the refund is adjusted, so check whether the demand is paid, under appeal, or genuinely due as soon as the notice lands.",
     },
   ],
 

@@ -11,7 +11,7 @@ export const fssaiLicense: LearnPageConfig = {
   category: 'Licensing',
   ctaServiceSlug: 'fssai-license',
   relatedServiceSlugs: ['fssai-license'],
-  relatedLearnSlugs: ['do-i-need-gst-registration'],
+  relatedLearnSlugs: ['do-i-need-gst-registration', 'fssai-annual-return-2027'],
 
   tool: {
     type: 'eligibility',
@@ -25,17 +25,14 @@ export const fssaiLicense: LearnPageConfig = {
           { value: 'trading', label: 'Trading, retailing, or distributing food (offline or online)' },
           { value: 'import_export', label: 'Importing or exporting food' },
         ],
-        earlyExit: (answer) => {
-          if (answer === 'import_export') {
-            return {
-              type: 'mandatory',
-              headline: 'You need a Central FSSAI Licence.',
-              body: 'Food importers and exporters require a Central FSSAI Licence regardless of turnover. This is issued by the FSSAI central office in New Delhi.',
-              ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/services/cloud-kitchen-setup',
-            }
-          }
-          return null
+        exitOn: {
+          import_export: {
+            type: 'mandatory',
+            headline: 'You need a Central FSSAI Licence.',
+            body: 'Food importers and exporters require a Central FSSAI Licence regardless of turnover. This is issued by the FSSAI central office in New Delhi.',
+            ctaLabel: 'Get FSSAI Licence',
+            ctaHref: '/services/cloud-kitchen-setup',
+          },
         },
       },
       {
@@ -45,35 +42,37 @@ export const fssaiLicense: LearnPageConfig = {
           { value: '12l_to_20cr', label: 'Rs. 12 lakh to Rs. 20 crore per year' },
           { value: 'above_20cr', label: 'Above Rs. 20 crore per year' },
         ],
-        evaluator: (answer) => {
-          if (answer === 'below_12l') {
-            return {
-              type: 'mandatory',
-              headline: 'You need Basic FSSAI Registration.',
-              body: 'Even the smallest food business needs at minimum a Basic Registration (Form A). Issued by your local Food Safety Officer, it is the simplest and cheapest option.',
-              ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/services/cloud-kitchen-setup',
-            }
-          }
-          if (answer === '12l_to_20cr') {
-            return {
-              type: 'mandatory',
-              headline: 'You need a State FSSAI Licence.',
-              body: 'Businesses with turnover between Rs. 12 lakh and Rs. 20 crore operating within one state need a State FSSAI Licence (Form B - State). Issued by the State Food Safety Authority.',
-              ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/services/cloud-kitchen-setup',
-            }
-          }
-          if (answer === 'above_20cr') {
-            return {
-              type: 'mandatory',
-              headline: 'You need a Central FSSAI Licence.',
-              body: 'Businesses above Rs. 20 crore turnover, multi-state operations, importers, and exporters need a Central FSSAI Licence (Form B - Central). Issued by the FSSAI central office.',
-              ctaLabel: 'Get FSSAI Licence',
-              ctaHref: '/services/cloud-kitchen-setup',
-            }
-          }
-          return null
+      },
+    ],
+    resultRules: [
+      {
+        if: [{ q: 1, anyOf: ['below_12l'] }],
+        result: {
+          type: 'mandatory',
+          headline: 'You need Basic FSSAI Registration.',
+          body: 'Even the smallest food business needs at minimum a Basic Registration (Form A). Issued by your local Food Safety Officer, it is the simplest and cheapest option.',
+          ctaLabel: 'Get FSSAI Licence',
+          ctaHref: '/services/cloud-kitchen-setup',
+        },
+      },
+      {
+        if: [{ q: 1, anyOf: ['12l_to_20cr'] }],
+        result: {
+          type: 'mandatory',
+          headline: 'You need a State FSSAI Licence.',
+          body: 'Businesses with turnover between Rs. 12 lakh and Rs. 20 crore operating within one state need a State FSSAI Licence (Form B - State). Issued by the State Food Safety Authority.',
+          ctaLabel: 'Get FSSAI Licence',
+          ctaHref: '/services/cloud-kitchen-setup',
+        },
+      },
+      {
+        if: [{ q: 1, anyOf: ['above_20cr'] }],
+        result: {
+          type: 'mandatory',
+          headline: 'You need a Central FSSAI Licence.',
+          body: 'Businesses above Rs. 20 crore turnover, multi-state operations, importers, and exporters need a Central FSSAI Licence (Form B - Central). Issued by the FSSAI central office.',
+          ctaLabel: 'Get FSSAI Licence',
+          ctaHref: '/services/cloud-kitchen-setup',
         },
       },
     ],

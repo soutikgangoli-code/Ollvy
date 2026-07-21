@@ -14,7 +14,7 @@ export const adt12026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/adt-1-2026",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["auditor-appointment", "mca-annual-filing"],
+  relatedServiceSlugs: ["mca-annual-filing"],
   relatedLearnSlugs: ["agm-compliance", "mca-annual-filing-aoc-4-mgt-7"],
   ctaServiceSlug: "mca-annual-filing",
   sections: [

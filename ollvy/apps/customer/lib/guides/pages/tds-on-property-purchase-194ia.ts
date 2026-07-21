@@ -14,7 +14,7 @@ export const tdsOnPropertyPurchase: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/tds-on-property-purchase-194ia",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["tds-quarterly-return"],
+  relatedServiceSlugs: ["tds-monthly-compliance"],
   relatedLearnSlugs: ["tds-on-rent-194i-194ib"],
   ctaServiceSlug: "tds-monthly-compliance",
   sections: [

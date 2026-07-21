@@ -17,7 +17,7 @@ export const directorKyc2026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/director-kyc-2026",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["dir-3-kyc-filing", "private-limited-incorporation"],
+  relatedServiceSlugs: ["director-kyc", "pvt-ltd-incorporation"],
   relatedLearnSlugs: ["dir-3-kyc-explained", "agm-compliance", "mca-annual-filing-aoc-4-mgt-7"],
   ctaServiceSlug: "director-kyc",
   sections: [

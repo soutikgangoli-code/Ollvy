@@ -11,7 +11,7 @@ export const tds26q27qMismatch: LearnPageConfig = {
   category: 'TDS Notice',
   ctaServiceSlug: 'tds-monthly-compliance',
   relatedServiceSlugs: ['tds-monthly-compliance', 'business-itr'],
-  relatedLearnSlugs: ['tds-short-deduction-notice', 'tds-194c-194j-demand', 'income-tax-143-1-intimation'],
+  relatedLearnSlugs: ['tds-short-deduction-notice', 'tds-194c-194j-demand', 'income-tax-143-1-intimation', 'new-tds-sections-fy2026-27'],
   relatedTools: {
     penaltyCalculators: ['tds-late-filing'],
     documentChecklists: ['business-itr'],
@@ -65,6 +65,10 @@ export const tds26q27qMismatch: LearnPageConfig = {
     {
       q: 'How long does TRACES take to process a correction return?',
       a: 'Correction returns are typically processed within 3-7 working days. Check the processing status on TRACES after this period. If the status shows "processed with defaults," review the Justification Report for remaining issues.',
+    },
+    {
+      q: "We now file Form 140 instead of 26Q. Do these mismatch notices still apply?",
+      a: "Yes - the mismatch mechanics carry over intact. For statement periods from 1 April 2026, 26Q is replaced by Form 140 and 27Q by Form 144 under the Income-tax Act 2025, with payments identified by Schedule I categories instead of 194-series sections. TRACES runs the same challan-to-statement matching on the new forms, so short payment, challan mismatch, and PAN error defaults arise exactly as before. Corrections to FY 2025-26 and earlier quarters continue on the old 26Q/27Q formats.",
     },
   ],
 

@@ -15,7 +15,7 @@ export const mcaAnnualFilingAoc4Mgt7: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/mca-annual-filing-aoc-4-mgt-7",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["mca-annual-filing", "tax-audit", "private-limited-incorporation"],
+  relatedServiceSlugs: ["mca-annual-filing", "pvt-ltd-incorporation"],
   relatedLearnSlugs: [
     "agm-compliance",
     "dir-3-kyc-explained",

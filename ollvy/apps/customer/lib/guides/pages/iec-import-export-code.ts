@@ -14,11 +14,8 @@ export const iecImportExportCode: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/iec-import-export-code",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["iec-registration", "gst-registration", "msme-udyam-registration"],
-  relatedLearnSlugs: [
-    "lut-for-exports",
-    "msme-udyam",
-  ],
+  relatedServiceSlugs: ["iec-code", "gst-registration"],
+  relatedLearnSlugs: ["lut-for-exports", "is-msme-registration-worth-it"],
   ctaServiceSlug: "iec-code",
   ctaSecondarySlug: "gst-registration",
   sections: [

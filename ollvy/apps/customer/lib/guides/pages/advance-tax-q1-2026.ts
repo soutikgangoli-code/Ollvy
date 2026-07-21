@@ -14,7 +14,7 @@ export const advanceTaxQ12026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/advance-tax-q1-2026",
   lastReviewed: "May 2026",
   category: "Tax",
-  relatedServiceSlugs: ["advance-tax-payment", "itr-filing"],
+  relatedServiceSlugs: ["business-itr"],
   relatedLearnSlugs: ["advance-tax-explained"],
   ctaServiceSlug: "business-itr",
   sections: [

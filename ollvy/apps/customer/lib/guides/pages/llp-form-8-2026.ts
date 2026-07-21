@@ -14,7 +14,7 @@ export const llpForm82026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/llp-form-8-2026",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["llp-annual-filing", "llp-incorporation"],
+  relatedServiceSlugs: ["mca-annual-filing", "llp-incorporation"],
   relatedLearnSlugs: ["dir-3-kyc-explained"],
   ctaServiceSlug: "mca-annual-filing",
   sections: [

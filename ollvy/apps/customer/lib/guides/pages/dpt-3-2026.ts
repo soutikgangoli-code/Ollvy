@@ -14,7 +14,7 @@ export const dpt32026: LearnPageConfig = {
   canonicalUrl: "https://www.ollvy.com/guides/dpt-3-2026",
   lastReviewed: "May 2026",
   category: "Compliance",
-  relatedServiceSlugs: ["dpt-3-filing", "mca-annual-filing"],
+  relatedServiceSlugs: ["mca-annual-filing"],
   relatedLearnSlugs: ["mca-annual-filing-aoc-4-mgt-7"],
   ctaServiceSlug: "mca-annual-filing",
   sections: [

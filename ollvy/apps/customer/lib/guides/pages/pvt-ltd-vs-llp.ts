@@ -1,4 +1,137 @@
-import { LearnPageConfig } from '../pages'
+import { LearnPageConfig, EligibilityRule, EligibilityResult } from '../pages'
+
+// Computes the Pvt Ltd vs LLP comparison result for one full set of answers.
+// The rule list below enumerates every answer combination as plain data, so
+// the scoring survives JSON serialization to the client.
+function pvtVsLlpResult(answers: string[]): EligibilityResult {
+  let pvt = 0
+  let llp = 0
+
+  const reasons: { pvt: { text: string; impact: 'high' | 'medium' | 'low' }[]; llp: { text: string; impact: 'high' | 'medium' | 'low' }[] } = {
+    pvt: [], llp: [],
+  }
+  const warnings: { pvt: string[]; llp: string[] } = { pvt: [], llp: [] }
+
+  // Q1: Funding
+  if (answers[0] === 'yes_funding') {
+    pvt += 50
+    reasons.pvt.push({ text: 'You need equity funding - only Pvt Ltd can issue shares to investors', impact: 'high' })
+    warnings.llp.push('LLP cannot issue shares - investors cannot take equity stakes')
+  } else if (answers[0] === 'maybe') {
+    pvt += 30; llp += 5
+    reasons.pvt.push({ text: 'Possible future funding - Pvt Ltd keeps that door open', impact: 'high' })
+    reasons.llp.push({ text: 'No funding plans yet - LLP is simpler and cheaper now', impact: 'medium' })
+  } else {
+    pvt += 8; llp += 30
+    reasons.pvt.push({ text: 'No funding needed, but Pvt Ltd gives more exit flexibility', impact: 'low' })
+    reasons.llp.push({ text: 'No funding needed - LLP avoids the cost and structure overhead', impact: 'high' })
+  }
+
+  // Q2: Solo founder
+  if (answers[1] === 'solo') {
+    pvt += 20
+    llp -= 50
+    reasons.pvt.push({ text: 'Solo founder - only Pvt Ltd works for a single person', impact: 'high' })
+    warnings.llp.push('LLP requires at least two designated partners - not an option for solo founders')
+  } else if (answers[1] === 'small_team') {
+    pvt += 10; llp += 20
+    reasons.llp.push({ text: '2-3 partners - LLP structure maps naturally to your setup', impact: 'medium' })
+  } else {
+    pvt += 12; llp += 15
+    reasons.pvt.push({ text: 'Larger team - Pvt Ltd handles complex ownership and ESOP easily', impact: 'medium' })
+  }
+
+  // Q3: Turnover
+  if (answers[2] === 'below_40l') {
+    pvt += 5; llp += 25
+    reasons.llp.push({ text: 'Below Rs. 40 lakh - LLP has no mandatory audit at this size (saves Rs. 15,000-25,000/year)', impact: 'high' })
+  } else if (answers[2] === '40l_2cr') {
+    pvt += 10; llp += 12
+    reasons.pvt.push({ text: 'Rs. 40L-2Cr turnover - Pvt Ltd credibility helps with clients and banks', impact: 'medium' })
+  } else {
+    pvt += 20; llp += 5
+    reasons.pvt.push({ text: 'Above Rs. 2 crore - at this scale, Pvt Ltd compliance cost is proportionally smaller and the structure handles growth better', impact: 'medium' })
+  }
+
+  // Q4: Compliance
+  if (answers[3] === 'critical') {
+    pvt += 0; llp += 22
+    reasons.llp.push({ text: 'Compliance cost matters - LLP saves Rs. 15,000-30,000/year vs Pvt Ltd', impact: 'high' })
+    warnings.pvt.push('Pvt Ltd has mandatory annual audit, board meetings, and MCA filings regardless of activity')
+  } else if (answers[3] === 'moderate') {
+    pvt += 8; llp += 10
+  } else {
+    pvt += 18; llp += 5
+    reasons.pvt.push({ text: 'Compliance not a constraint - Pvt Ltd gives full optionality for ESOPs, exits, and equity rounds', impact: 'medium' })
+  }
+
+  const llpFinal = Math.max(0, llp)
+  const pvtFinal = pvt
+  const total = pvtFinal + llpFinal
+  const pvtScore = Math.round((pvtFinal / total) * 100)
+  const llpScore = Math.round((llpFinal / total) * 100)
+
+  const pvtWins = pvtScore > llpScore || llp < 0
+
+  return {
+    type: 'eligible' as const,
+    headline: pvtWins
+      ? 'Private Limited Company is the better fit.'
+      : 'LLP is the better fit for your situation.',
+    body: pvtWins
+      ? `Pvt Ltd scores ${pvtScore}/100 vs LLP ${llpScore}/100 based on your answers.`
+      : `LLP scores ${llpScore}/100 vs Pvt Ltd ${pvtScore}/100 based on your answers.`,
+    ctaLabel: pvtWins ? 'Register Pvt Ltd' : 'Register LLP',
+    ctaHref: pvtWins ? '/checkout/pvt-ltd-incorporation' : '/checkout/llp-incorporation',
+    ranking: {
+      type: 'comparison' as const,
+      comparison: [
+        {
+          label: 'Private Limited Company',
+          score: pvtScore,
+          isWinner: pvtWins,
+          verdict: pvtWins
+            ? 'Best fit for your situation'
+            : 'Viable, but not the optimal choice here',
+          reasons: reasons.pvt,
+          warnings: warnings.pvt.length ? warnings.pvt : undefined,
+        },
+        {
+          label: 'LLP',
+          score: llpScore,
+          isWinner: !pvtWins,
+          verdict: !pvtWins
+            ? 'Best fit for your situation'
+            : llp < 0
+              ? 'Not viable - requires at least two partners'
+              : 'Simpler to run, but limited by your situation',
+          reasons: reasons.llp,
+          warnings: warnings.llp.length ? warnings.llp : undefined,
+        },
+      ],
+    },
+  }
+}
+
+// One rule per full answer combination (3 x 3 x 3 x 3 = 81).
+const pvtVsLlpResultRules: EligibilityRule[] = []
+for (const funding of ['yes_funding', 'maybe', 'no_funding']) {
+  for (const team of ['solo', 'small_team', 'large_team']) {
+    for (const turnover of ['below_40l', '40l_2cr', 'above_2cr']) {
+      for (const compliance of ['critical', 'moderate', 'not_priority']) {
+        pvtVsLlpResultRules.push({
+          if: [
+            { q: 0, anyOf: [funding] },
+            { q: 1, anyOf: [team] },
+            { q: 2, anyOf: [turnover] },
+            { q: 3, anyOf: [compliance] },
+          ],
+          result: pvtVsLlpResult([funding, team, turnover, compliance]),
+        })
+      }
+    }
+  }
+}
 
 export const pvtLtdVsLlp: LearnPageConfig = {
   slug: 'pvt-ltd-vs-llp',
@@ -12,11 +145,7 @@ export const pvtLtdVsLlp: LearnPageConfig = {
   ctaServiceSlug: 'pvt-ltd-incorporation',
   ctaSecondarySlug: 'llp-incorporation',
   relatedServiceSlugs: ['pvt-ltd-incorporation', 'llp-incorporation'],
-  relatedLearnSlugs: [
-    'do-i-need-gst-registration',
-    'should-i-get-dpiit-startup-recognition',
-    'is-msme-registration-worth-it',
-  ],
+  relatedLearnSlugs: ['do-i-need-gst-registration', 'should-i-get-dpiit-startup-recognition', 'is-msme-registration-worth-it', 'what-is-business-pan'],
   relatedTools: {
     penaltyCalculators: ['mca-annual-filing'],
     documentChecklists: ['private-limited-company', 'llp'],
@@ -57,119 +186,9 @@ export const pvtLtdVsLlp: LearnPageConfig = {
           { value: 'moderate', label: 'Some compliance is fine' },
           { value: 'not_priority', label: 'Not a concern - growth matters more' },
         ],
-        evaluator: (answer: string, allAnswers: string[]) => {
-          const answers = [...allAnswers, answer]
-
-          let pvt = 0
-          let llp = 0
-
-          const reasons: { pvt: { text: string; impact: 'high' | 'medium' | 'low' }[]; llp: { text: string; impact: 'high' | 'medium' | 'low' }[] } = {
-            pvt: [], llp: [],
-          }
-          const warnings: { pvt: string[]; llp: string[] } = { pvt: [], llp: [] }
-
-          // Q1: Funding
-          if (answers[0] === 'yes_funding') {
-            pvt += 50
-            reasons.pvt.push({ text: 'You need equity funding - only Pvt Ltd can issue shares to investors', impact: 'high' })
-            warnings.llp.push('LLP cannot issue shares - investors cannot take equity stakes')
-          } else if (answers[0] === 'maybe') {
-            pvt += 30; llp += 5
-            reasons.pvt.push({ text: 'Possible future funding - Pvt Ltd keeps that door open', impact: 'high' })
-            reasons.llp.push({ text: 'No funding plans yet - LLP is simpler and cheaper now', impact: 'medium' })
-          } else {
-            pvt += 8; llp += 30
-            reasons.pvt.push({ text: 'No funding needed, but Pvt Ltd gives more exit flexibility', impact: 'low' })
-            reasons.llp.push({ text: 'No funding needed - LLP avoids the cost and structure overhead', impact: 'high' })
-          }
-
-          // Q2: Solo founder
-          if (answers[1] === 'solo') {
-            pvt += 20
-            llp -= 50
-            reasons.pvt.push({ text: 'Solo founder - only Pvt Ltd works for a single person', impact: 'high' })
-            warnings.llp.push('LLP requires at least two designated partners - not an option for solo founders')
-          } else if (answers[1] === 'small_team') {
-            pvt += 10; llp += 20
-            reasons.llp.push({ text: '2-3 partners - LLP structure maps naturally to your setup', impact: 'medium' })
-          } else {
-            pvt += 12; llp += 15
-            reasons.pvt.push({ text: 'Larger team - Pvt Ltd handles complex ownership and ESOP easily', impact: 'medium' })
-          }
-
-          // Q3: Turnover
-          if (answers[2] === 'below_40l') {
-            pvt += 5; llp += 25
-            reasons.llp.push({ text: 'Below Rs. 40 lakh - LLP has no mandatory audit at this size (saves Rs. 15,000-25,000/year)', impact: 'high' })
-          } else if (answers[2] === '40l_2cr') {
-            pvt += 10; llp += 12
-            reasons.pvt.push({ text: 'Rs. 40L-2Cr turnover - Pvt Ltd credibility helps with clients and banks', impact: 'medium' })
-          } else {
-            pvt += 20; llp += 5
-            reasons.pvt.push({ text: 'Above Rs. 2 crore - at this scale, Pvt Ltd compliance cost is proportionally smaller and the structure handles growth better', impact: 'medium' })
-          }
-
-          // Q4: Compliance
-          if (answers[3] === 'critical') {
-            pvt += 0; llp += 22
-            reasons.llp.push({ text: 'Compliance cost matters - LLP saves Rs. 15,000-30,000/year vs Pvt Ltd', impact: 'high' })
-            warnings.pvt.push('Pvt Ltd has mandatory annual audit, board meetings, and MCA filings regardless of activity')
-          } else if (answers[3] === 'moderate') {
-            pvt += 8; llp += 10
-          } else {
-            pvt += 18; llp += 5
-            reasons.pvt.push({ text: 'Compliance not a constraint - Pvt Ltd gives full optionality for ESOPs, exits, and equity rounds', impact: 'medium' })
-          }
-
-          const llpFinal = Math.max(0, llp)
-          const pvtFinal = pvt
-          const total = pvtFinal + llpFinal
-          const pvtScore = Math.round((pvtFinal / total) * 100)
-          const llpScore = Math.round((llpFinal / total) * 100)
-
-          const pvtWins = pvtScore > llpScore || llp < 0
-
-          return {
-            type: 'eligible' as const,
-            headline: pvtWins
-              ? 'Private Limited Company is the better fit.'
-              : 'LLP is the better fit for your situation.',
-            body: pvtWins
-              ? `Pvt Ltd scores ${pvtScore}/100 vs LLP ${llpScore}/100 based on your answers.`
-              : `LLP scores ${llpScore}/100 vs Pvt Ltd ${pvtScore}/100 based on your answers.`,
-            ctaLabel: pvtWins ? 'Register Pvt Ltd' : 'Register LLP',
-            ctaHref: pvtWins ? '/checkout/pvt-ltd-incorporation' : '/checkout/llp-incorporation',
-            ranking: {
-              type: 'comparison' as const,
-              comparison: [
-                {
-                  label: 'Private Limited Company',
-                  score: pvtScore,
-                  isWinner: pvtWins,
-                  verdict: pvtWins
-                    ? 'Best fit for your situation'
-                    : 'Viable, but not the optimal choice here',
-                  reasons: reasons.pvt,
-                  warnings: warnings.pvt.length ? warnings.pvt : undefined,
-                },
-                {
-                  label: 'LLP',
-                  score: llpScore,
-                  isWinner: !pvtWins,
-                  verdict: !pvtWins
-                    ? 'Best fit for your situation'
-                    : llp < 0
-                      ? 'Not viable - requires at least two partners'
-                      : 'Simpler to run, but limited by your situation',
-                  reasons: reasons.llp,
-                  warnings: warnings.llp.length ? warnings.llp : undefined,
-                },
-              ],
-            },
-          }
-        },
       },
     ],
+    resultRules: pvtVsLlpResultRules,
     defaultResult: {
       type: 'optional',
       headline: 'Both structures could work for you.',

@@ -11,8 +11,8 @@ export const incomeTaxAisSftNotice: LearnPageConfig = {
   category: 'Income Tax Notice',
   ctaServiceSlug: 'business-itr',
   ctaSecondarySlug: undefined,
-  relatedServiceSlugs: ['itr-notice-response', 'itr-filing'],
-  relatedLearnSlugs: ['income-tax-148-148a-reopening', 'income-tax-143-2-scrutiny', 'income-tax-142-1-notice'],
+  relatedServiceSlugs: ['business-itr'],
+  relatedLearnSlugs: ['income-tax-148-148a-reopening', 'income-tax-143-2-scrutiny', 'income-tax-142-1-notice', 'income-tax-act-2025-section-mapping'],
   relatedTools: {
     penaltyCalculators: ['itr-late-filing'],
     documentChecklists: ['business-itr', 'individual-itr'],
@@ -74,6 +74,10 @@ export const incomeTaxAisSftNotice: LearnPageConfig = {
     {
       q: 'How do I check my AIS before the department contacts me?',
       a: 'Log into the income tax portal (incometax.gov.in), go to AIS, and review all reported transactions. If you find discrepancies between your AIS and your filed ITR, proactively file a revised return or keep documentation ready to explain the difference.',
+    },
+    {
+      q: "Does AIS reporting change under the Income-tax Act 2025?",
+      a: "AIS and SFT reporting continue unchanged; banks, registrars, and brokers report the same high-value transactions. What changes is the follow-up citation: for tax year 2026-27 onwards, an e-verification query that escalates cites the 2025 Act numbers (Section 280 reassessment instead of 148, Section 281 show-cause instead of 148A). For AY 2026-27 and earlier, the old sections apply. The practical advice is identical under both Acts: reconcile your AIS against your return before filing, not after a notice.",
     },
   ],
 

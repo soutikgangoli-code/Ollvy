@@ -1,4 +1,97 @@
-import { LearnPageConfig } from '../pages'
+import { LearnPageConfig, EligibilityRule, EligibilityResult } from '../pages'
+
+// Builds the benefits-ranking result for every combination of answers to
+// Q1 (age), Q2 (business type) and Q3 (specific context). The rule list is
+// plain data, so it survives JSON serialization to the client.
+function dpiitBenefitsResult(specificContext: string, age: string, businessType: string): EligibilityResult {
+  const benefits: { label: string; relevance: 'high' | 'medium' | 'low'; reason: string; description: string }[] = []
+
+  // Angel tax - most impactful if fundraising
+  const raisingAngels = specificContext === 'raising_angels'
+  benefits.push({
+    label: 'Angel Tax Exemption (Section 56(2)(viib))',
+    description: 'Investment received above fair market value is not taxed as income. At 30%, this is a serious financial risk without recognition.',
+    relevance: raisingAngels ? 'high' : 'medium',
+    reason: raisingAngels
+      ? 'You are raising from angels - this protection is critical before you close a round'
+      : 'Even if not raising now, protection activates the moment you do. Apply before you need it.',
+  })
+
+  // 80-IAC tax holiday
+  const earlyStage = age === 'below_5'
+  benefits.push({
+    label: '3-Year Income Tax Holiday (Section 80-IAC)',
+    description: '100% profit deduction for any 3 consecutive years within your first 10. Requires separate Inter-Ministerial Board certification after DPIIT recognition.',
+    relevance: earlyStage ? 'high' : 'medium',
+    reason: earlyStage
+      ? 'You are in your first 5 years - the most valuable window to claim this'
+      : 'Still available but the window is narrowing. Apply for IMB certification after recognition.',
+  })
+
+  // Patents
+  const hasIP = specificContext === 'has_ip'
+  benefits.push({
+    label: 'Patent Subsidy (80% fee rebate)',
+    description: '80% off government patent filing fees, plus fast-tracked examination through DPIIT\'s startup IP cell.',
+    relevance: hasIP ? 'high' : businessType === 'tech_product' ? 'medium' : 'low',
+    reason: hasIP
+      ? 'You have IP to protect - the 80% fee rebate is directly valuable'
+      : businessType === 'tech_product'
+        ? 'Hardware and biotech typically have patentable components - worth exploring'
+        : 'Less directly relevant for pure software/services businesses',
+  })
+
+  // Labour compliance
+  const hiringFast = specificContext === 'hiring_fast'
+  benefits.push({
+    label: 'Labour Law Self-Certification (5 years)',
+    description: 'Self-certify compliance under 3 central labour laws instead of being subject to inspections for 5 years.',
+    relevance: hiringFast ? 'high' : 'medium',
+    reason: hiringFast
+      ? 'Scaling headcount fast - avoiding labour inspections for 5 years is immediately valuable'
+      : 'Useful as you grow. Removes inspection risk during your most vulnerable scaling phase.',
+  })
+
+  // Fund of funds
+  benefits.push({
+    label: 'Fund of Funds Access (SIDBI)',
+    description: 'Eligible for investment from SIDBI\'s Fund of Funds via registered AIFs.',
+    relevance: raisingAngels ? 'medium' : 'low',
+    reason: raisingAngels
+      ? 'Relevant if you eventually pursue institutional funding via AIFs'
+      : 'More relevant at Series A stage than early angel rounds',
+  })
+
+  return {
+    type: 'eligible' as const,
+    headline: 'Apply now. It is free and takes 2-7 working days.',
+    body: 'Here are the benefits ranked by how relevant they are to your situation.',
+    ctaLabel: 'Apply on Startup India Portal',
+    ctaHref: 'https://startupindia.gov.in',
+    ranking: {
+      type: 'benefits' as const,
+      benefits,
+    },
+  }
+}
+
+// One rule per combination of the answers the benefits ranking depends on.
+// Business type only changes the outcome via tech_product vs the rest.
+const dpiitResultRules: EligibilityRule[] = []
+for (const specificContext of ['raising_angels', 'has_ip', 'hiring_fast', 'none']) {
+  for (const age of ['below_5', '5_to_10']) {
+    for (const businessTypes of [['tech_product'], ['tech_saas', 'services_tech']]) {
+      dpiitResultRules.push({
+        if: [
+          { q: 3, anyOf: [specificContext] },
+          { q: 1, anyOf: [age] },
+          { q: 2, anyOf: businessTypes },
+        ],
+        result: dpiitBenefitsResult(specificContext, age, businessTypes[0]),
+      })
+    }
+  }
+}
 
 export const dpiitStartup: LearnPageConfig = {
   slug: 'should-i-get-dpiit-startup-recognition',
@@ -29,17 +122,14 @@ export const dpiitStartup: LearnPageConfig = {
           { value: 'partnership', label: 'Registered Partnership Firm' },
           { value: 'other', label: 'Sole proprietorship, HUF, or not yet incorporated' },
         ],
-        earlyExit: (answer: string) => {
-          if (answer === 'other') {
-            return {
-              type: 'ineligible' as const,
-              headline: 'Not eligible by entity type.',
-              body: 'DPIIT recognition requires a Pvt Ltd, LLP, or Registered Partnership Firm. Incorporate first.',
-              ctaLabel: 'Register Pvt Ltd',
-              ctaHref: '/checkout/pvt-ltd-incorporation',
-            }
-          }
-          return null
+        exitOn: {
+          other: {
+            type: 'ineligible' as const,
+            headline: 'Not eligible by entity type.',
+            body: 'DPIIT recognition requires a Pvt Ltd, LLP, or Registered Partnership Firm. Incorporate first.',
+            ctaLabel: 'Register Pvt Ltd',
+            ctaHref: '/checkout/pvt-ltd-incorporation',
+          },
         },
       },
       {
@@ -49,15 +139,12 @@ export const dpiitStartup: LearnPageConfig = {
           { value: '5_to_10', label: '5 to 10 years' },
           { value: 'above_10', label: 'More than 10 years' },
         ],
-        earlyExit: (answer: string) => {
-          if (answer === 'above_10') {
-            return {
-              type: 'ineligible' as const,
-              headline: 'Age limit exceeded.',
-              body: 'DPIIT recognition is only available within the first 10 years of incorporation. Look at Udyam registration instead.',
-            }
-          }
-          return null
+        exitOn: {
+          above_10: {
+            type: 'ineligible' as const,
+            headline: 'Age limit exceeded.',
+            body: 'DPIIT recognition is only available within the first 10 years of incorporation. Look at Udyam registration instead.',
+          },
         },
       },
       {
@@ -68,15 +155,12 @@ export const dpiitStartup: LearnPageConfig = {
           { value: 'services_tech', label: 'Tech-enabled services (AI, data, fintech)' },
           { value: 'traditional', label: 'Traditional business - trading, restaurant, real estate, salon' },
         ],
-        earlyExit: (answer: string) => {
-          if (answer === 'traditional') {
-            return {
-              type: 'ineligible' as const,
-              headline: 'Likely not eligible.',
-              body: 'DPIIT recognition requires innovation or technology-driven work. Traditional businesses typically do not meet this criterion.',
-            }
-          }
-          return null
+        exitOn: {
+          traditional: {
+            type: 'ineligible' as const,
+            headline: 'Likely not eligible.',
+            body: 'DPIIT recognition requires innovation or technology-driven work. Traditional businesses typically do not meet this criterion.',
+          },
         },
       },
       {
@@ -87,85 +171,9 @@ export const dpiitStartup: LearnPageConfig = {
           { value: 'hiring_fast', label: 'Scaling headcount rapidly (10+ hires planned this year)' },
           { value: 'none', label: 'None of these specifically' },
         ],
-        evaluator: (answer: string, allAnswers: string[]) => {
-          const answers = [...allAnswers, answer]
-          const entityType = answers[0]
-          const age = answers[1]
-          const businessType = answers[2]
-          const specificContext = answers[3]
-
-          const benefits: { label: string; relevance: 'high' | 'medium' | 'low'; reason: string; description: string }[] = []
-
-          // Angel tax - most impactful if fundraising
-          const raisingAngels = specificContext === 'raising_angels'
-          benefits.push({
-            label: 'Angel Tax Exemption (Section 56(2)(viib))',
-            description: 'Investment received above fair market value is not taxed as income. At 30%, this is a serious financial risk without recognition.',
-            relevance: raisingAngels ? 'high' : 'medium',
-            reason: raisingAngels
-              ? 'You are raising from angels - this protection is critical before you close a round'
-              : 'Even if not raising now, protection activates the moment you do. Apply before you need it.',
-          })
-
-          // 80-IAC tax holiday
-          const earlyStage = age === 'below_5'
-          benefits.push({
-            label: '3-Year Income Tax Holiday (Section 80-IAC)',
-            description: '100% profit deduction for any 3 consecutive years within your first 10. Requires separate Inter-Ministerial Board certification after DPIIT recognition.',
-            relevance: earlyStage ? 'high' : 'medium',
-            reason: earlyStage
-              ? 'You are in your first 5 years - the most valuable window to claim this'
-              : 'Still available but the window is narrowing. Apply for IMB certification after recognition.',
-          })
-
-          // Patents
-          const hasIP = specificContext === 'has_ip'
-          benefits.push({
-            label: 'Patent Subsidy (80% fee rebate)',
-            description: '80% off government patent filing fees, plus fast-tracked examination through DPIIT\'s startup IP cell.',
-            relevance: hasIP ? 'high' : businessType === 'tech_product' ? 'medium' : 'low',
-            reason: hasIP
-              ? 'You have IP to protect - the 80% fee rebate is directly valuable'
-              : businessType === 'tech_product'
-                ? 'Hardware and biotech typically have patentable components - worth exploring'
-                : 'Less directly relevant for pure software/services businesses',
-          })
-
-          // Labour compliance
-          const hiringFast = specificContext === 'hiring_fast'
-          benefits.push({
-            label: 'Labour Law Self-Certification (5 years)',
-            description: 'Self-certify compliance under 3 central labour laws instead of being subject to inspections for 5 years.',
-            relevance: hiringFast ? 'high' : 'medium',
-            reason: hiringFast
-              ? 'Scaling headcount fast - avoiding labour inspections for 5 years is immediately valuable'
-              : 'Useful as you grow. Removes inspection risk during your most vulnerable scaling phase.',
-          })
-
-          // Fund of funds
-          benefits.push({
-            label: 'Fund of Funds Access (SIDBI)',
-            description: 'Eligible for investment from SIDBI\'s Fund of Funds via registered AIFs.',
-            relevance: raisingAngels ? 'medium' : 'low',
-            reason: raisingAngels
-              ? 'Relevant if you eventually pursue institutional funding via AIFs'
-              : 'More relevant at Series A stage than early angel rounds',
-          })
-
-          return {
-            type: 'eligible' as const,
-            headline: 'Apply now. It is free and takes 2-7 working days.',
-            body: 'Here are the benefits ranked by how relevant they are to your situation.',
-            ctaLabel: 'Apply on Startup India Portal',
-            ctaHref: 'https://startupindia.gov.in',
-            ranking: {
-              type: 'benefits' as const,
-              benefits,
-            },
-          }
-        },
       },
     ],
+    resultRules: dpiitResultRules,
     defaultResult: {
       type: 'recommended',
       headline: 'Apply if you meet the criteria.',
