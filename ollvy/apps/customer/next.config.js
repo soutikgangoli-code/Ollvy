@@ -17,6 +17,10 @@ const nextConfig = {
     // does this for lucide-react by default; date-fns is the real add — listing
     // both is explicit and harmless.)
     optimizePackageImports: ['lucide-react', 'date-fns'],
+    // Inline CSS into <head> instead of render-blocking <link> stylesheets.
+    // Total CSS is ~19 KiB transferred, so inlining removes ~2 blocking
+    // requests (~300-500ms of critical path) for a small HTML size increase.
+    inlineCss: true,
   },
   images: {
     // Serve modern formats to browsers that accept them (smaller than JPEG/PNG).

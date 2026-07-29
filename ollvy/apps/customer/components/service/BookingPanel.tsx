@@ -235,6 +235,12 @@ export function BookingPanel({
 
   return (
     <Card className="border border-border bg-card p-6 w-full rounded-xl shadow-sm">
+      {/* Razorpay preconnects, scoped to pages where checkout can start (the
+          CTA pre-creates the order on pointer-down). Resource hints are valid
+          in the body; keeping them out of the root layout stops them competing
+          with critical CSS/font connections on non-checkout pages. */}
+      <link rel="preconnect" href="https://checkout.razorpay.com" crossOrigin="" />
+      <link rel="preconnect" href="https://api.razorpay.com" crossOrigin="" />
       {/* Guaranteed date at top */}
       {guaranteedDate && (
         <div className="pb-5 border-b border-border mb-5">

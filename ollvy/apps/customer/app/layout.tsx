@@ -102,15 +102,11 @@ export default function RootLayout({
   return (
     <html lang="en-IN" suppressHydrationWarning>
       <head>
-        {/* Preconnect to origins that block paint or first interaction.
-            Supabase: used for client-side auth + service fetches on every page.
-            Razorpay checkout.js: SDK loaded on /checkout.
-            Razorpay api: the modal iframe and the create-order edge fn both call
-            api.razorpay.com — preconnect saves ~200–400ms on modal-open TLS handshake.
-            `crossOrigin=""` is required since both Razorpay endpoints are cross-origin. */}
-        <link rel="preconnect" href="https://wsuleaypyjazcmmntcru.supabase.co" />
-        <link rel="preconnect" href="https://checkout.razorpay.com" crossOrigin="" />
-        <link rel="preconnect" href="https://api.razorpay.com" crossOrigin="" />
+        {/* No global preconnects: Supabase auth is lazy (no request for anonymous
+            visitors) and Razorpay only matters where checkout can start, so those
+            preconnects live in BookingPanel/CheckoutClient instead. Global hints
+            here would compete with the critical CSS/font connections on every page
+            and get flagged as unused by Lighthouse. */}
         <StructuredData />
       </head>
       <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>

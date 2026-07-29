@@ -1,67 +1,24 @@
 'use client'
 
-import posthog from 'posthog-js'
-import { PostHogProvider as PHProvider, usePostHog } from 'posthog-js/react'
 import { useEffect, Suspense, useRef } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
+import { posthog, schedulePostHogLoad } from '@/lib/analytics/posthog-lite'
 
-const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN
-const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com'
-
-let posthogInitialized = false
-
-function detectDeviceType(): 'mobile' | 'tablet' | 'desktop' {
-  if (typeof window === 'undefined') return 'desktop'
-  const ua = navigator.userAgent
-  const isTablet = /iPad|Android(?!.*Mobile)/i.test(ua) || (window.innerWidth >= 768 && window.innerWidth <= 1024 && 'ontouchstart' in window)
-  if (isTablet) return 'tablet'
-  const isMobile = /Mobi|Android|iPhone|iPod|BlackBerry|Opera Mini|IEMobile/i.test(ua) || window.innerWidth < 768
-  return isMobile ? 'mobile' : 'desktop'
-}
-
-function initPostHog() {
-  if (posthogInitialized || !POSTHOG_KEY) return
-  posthogInitialized = true
-  posthog.init(POSTHOG_KEY, {
-    api_host: POSTHOG_HOST,
-    person_profiles: 'identified_only',
-    capture_pageview: false,
-    capture_pageleave: true,
-    autocapture: true,
-    session_recording: {
-      maskAllInputs: true,
-      maskInputOptions: { password: true, email: true },
-    },
-    disable_session_recording: false,
-    loaded: (ph) => {
-      // Tag every event with device_type so funnels can split mobile vs desktop
-      ph.register({
-        device_type: detectDeviceType(),
-        viewport_width: window.innerWidth,
-        viewport_height: window.innerHeight,
-      })
-      if (process.env.NODE_ENV === 'development') {
-        ph.debug()
-      }
-    },
-  })
-}
-
-// Component to track page views
+// Component to track page views. Captures go through the lazy facade, which
+// queues them until the posthog-js core loads on idle — nothing is lost.
 function PostHogPageView() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const posthogClient = usePostHog()
 
   useEffect(() => {
-    if (pathname && posthogClient) {
+    if (pathname) {
       let url = window.origin + pathname
       if (searchParams.toString()) {
         url = url + '?' + searchParams.toString()
       }
-      posthogClient.capture('$pageview', { $current_url: url })
+      posthog.capture('$pageview', { $current_url: url })
     }
-  }, [pathname, searchParams, posthogClient])
+  }, [pathname, searchParams])
 
   return null
 }
@@ -81,25 +38,16 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (initialized.current) return
     initialized.current = true
-    // Defer PostHog init until after page is interactive
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(() => initPostHog())
-    } else {
-      setTimeout(() => initPostHog(), 2000)
-    }
+    schedulePostHogLoad()
   }, [])
 
-  if (!POSTHOG_KEY) {
-    return <>{children}</>
-  }
-
   return (
-    <PHProvider client={posthog}>
+    <>
       <SuspendedPageView />
       {children}
-    </PHProvider>
+    </>
   )
 }
 
-// Export posthog instance for direct usage
+// Re-export the lazy facade so existing `import { posthog }` call sites keep working
 export { posthog }

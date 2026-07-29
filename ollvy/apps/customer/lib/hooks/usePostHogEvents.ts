@@ -1,14 +1,15 @@
 'use client'
 
-import { usePostHog } from 'posthog-js/react'
 import { useCallback } from 'react'
+import { posthog } from '@/lib/analytics/posthog-lite'
 
 /**
  * Custom hook for PostHog analytics events
- * Provides typed methods for common tracking scenarios
+ * Provides typed methods for common tracking scenarios.
+ * Backed by the lazy facade: events fired before the posthog-js core loads
+ * are queued and flushed after init, so nothing is dropped.
  */
 export function usePostHogEvents() {
-  const posthog = usePostHog()
 
   // Track a custom event
   const trackEvent = useCallback(

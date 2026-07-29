@@ -1050,6 +1050,10 @@ export default function CheckoutClient({ initialService, serviceId }: CheckoutCl
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Razorpay preconnects: the SDK and modal load from these origins when
+          the user pays. Scoped here instead of the root layout. */}
+      <link rel="preconnect" href="https://checkout.razorpay.com" crossOrigin="" />
+      <link rel="preconnect" href="https://api.razorpay.com" crossOrigin="" />
       <div className="container py-8 max-w-6xl">
         {/* Header */}
         <div className="mb-8">
