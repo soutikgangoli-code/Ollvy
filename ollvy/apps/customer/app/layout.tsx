@@ -63,13 +63,10 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/site.webmanifest',
-  alternates: {
-    canonical: 'https://www.ollvy.com',
-    languages: {
-      'en-IN': 'https://www.ollvy.com',
-      'x-default': 'https://www.ollvy.com',
-    },
-  },
+  // No alternates here on purpose. A root-level canonical is inherited by every
+  // route that doesn't define its own, which made checkout/orders/settings pages
+  // claim canonical = homepage. Each public page declares its own canonical
+  // (homepage in app/page.tsx); private pages emit none and are robots.txt-blocked.
   openGraph: {
     title: 'Ollvy - Company Registration & Compliance, Sorted',
     description: 'Fixed-price compliance services with vetted CAs. LLP, Pvt Ltd, GST, Trademark, FSSAI and more. Track every step in-app.',

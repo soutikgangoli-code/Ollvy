@@ -42,6 +42,10 @@ export const metadata: Metadata = {
   description: 'Register your Pvt Ltd, LLP, get GST, trademark, FSSAI in India with verified CAs. 98% on-time delivery. Track everything in one dashboard.',
   alternates: {
     canonical: 'https://www.ollvy.com',
+    languages: {
+      'en-IN': 'https://www.ollvy.com',
+      'x-default': 'https://www.ollvy.com',
+    },
   },
   openGraph: {
     title: 'Company Registration, GST & Compliance Services | Ollvy',
