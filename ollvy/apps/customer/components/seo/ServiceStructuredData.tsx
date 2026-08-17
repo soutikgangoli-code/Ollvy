@@ -10,13 +10,6 @@ interface ReviewData {
   created_at: string
 }
 
-interface FallbackReview {
-  rating: number
-  comment: string
-  date: string
-  name: string
-}
-
 interface ProcessStep {
   step: number
   title: string
@@ -40,7 +33,6 @@ interface ServiceStructuredDataProps {
   totalRatings?: number
   faqs?: { q: string; a: string }[]
   reviews?: ReviewData[]
-  fallbackReviews?: FallbackReview[]
   // New props for additional rich results
   processSteps?: ProcessStep[]
   whatsIncluded?: WhatsIncludedItem[]
@@ -58,7 +50,6 @@ export function ServiceStructuredData({
   totalRatings,
   faqs,
   reviews = [],
-  fallbackReviews = [],
   processSteps = [],
   whatsIncluded = [],
   slaDays,
@@ -175,46 +166,32 @@ export function ServiceStructuredData({
         hasMerchantReturnPolicy: merchantReturnPolicy,
       }
 
-  // Build review array for schema (real reviews or fallback)
-  const reviewsForSchema = reviews.length > 0
-    ? reviews.slice(0, 5).map(review => ({
-        '@type': 'Review',
-        author: { '@type': 'Person', name: 'Verified Customer' },
-        datePublished: review.created_at.split('T')[0],
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: review.rating.toString(),
-          bestRating: '5',
-        },
-        reviewBody: review.comment || '',
-      }))
-    : fallbackReviews.slice(0, 5).map(review => ({
-        '@type': 'Review',
-        author: { '@type': 'Person', name: review.name },
-        datePublished: review.date.includes('2026') ? '2026-03-01' : '2026-02-01',
-        reviewRating: {
-          '@type': 'Rating',
-          ratingValue: review.rating.toString(),
-          bestRating: '5',
-        },
-        reviewBody: review.comment,
-      }))
+  // Review markup is emitted ONLY from genuine customer reviews (DB-sourced).
+  // Google's review-snippet spam policy requires reviews in structured data to be
+  // user-submitted — never emit editorial/fallback testimonials here, even though
+  // they may still render as visible page copy elsewhere.
+  const reviewsForSchema = reviews.slice(0, 5).map(review => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: 'Verified Customer' },
+    datePublished: review.created_at.split('T')[0],
+    reviewRating: {
+      '@type': 'Rating',
+      ratingValue: review.rating.toString(),
+      bestRating: '5',
+    },
+    reviewBody: review.comment || '',
+  }))
 
-  // Aggregate rating: prefer DB-sourced (real reviews) if present,
-  // otherwise compute from the fallback reviews actually emitted in `review:`.
-  // Google requires aggregateRating whenever multiple Review items are present
-  // on the same Product entity.
-  const ratingSource = reviews.length > 0
-    ? { rated: reviews, useFallback: false }
-    : { rated: fallbackReviews, useFallback: true }
+  // Aggregate rating from real data only: DB-level avg/count if present,
+  // else computed from the real reviews emitted above, else omitted entirely.
   const aggregateRatingValue = (avgRating != null && totalRatings != null && totalRatings > 0)
     ? { value: avgRating, count: totalRatings }
-    : ratingSource.rated.length > 0
+    : reviews.length > 0
       ? {
           value: Number(
-            (ratingSource.rated.reduce((sum, r) => sum + r.rating, 0) / ratingSource.rated.length).toFixed(1)
+            (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
           ),
-          count: ratingSource.rated.length,
+          count: reviews.length,
         }
       : null
 

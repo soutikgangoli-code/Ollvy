@@ -6,10 +6,9 @@ import {
 
 export const metadata: Metadata = buildDeadlineMetadata('tax-audit-2026')
 
-// Render per request. Price comes from DB on every load — no static caching,
-// no stale prices, no build-time Supabase coupling that would block deploys
-// when the project is rate-limited or returning Cloudflare 522s.
-export const dynamic = 'force-dynamic'
+// ISR hourly, same as /services/[slug]. getDeadlineWithLivePrice falls back to
+// the static price if Supabase is unreachable, so revalidation can never hard-fail.
+export const revalidate = 3600
 
 export default async function Page() {
   return <DeadlineRouteRender slug="tax-audit-2026" />

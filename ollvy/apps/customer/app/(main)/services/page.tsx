@@ -4,7 +4,6 @@ import { ServicesClient } from './services-client'
 import { supabaseServer } from '@/lib/supabase-server'
 import { withTimeout, DB_TIMEOUT_MS } from '@/lib/with-timeout'
 import { SERVICES } from '@/lib/services'
-import { getFallbackReviews } from '@/lib/data/fallback-reviews'
 import type { ServicePackage } from '@/lib/types'
 
 // ISR: revalidate every hour to keep content fresh
@@ -113,27 +112,13 @@ function generateServicesSchema(services: ServicePackage[]) {
     url: 'https://www.ollvy.com/services',
     numberOfItems: services.length,
     itemListElement: services.map((service, index) => {
-      // Reviews + aggregateRating per item. Prefer DB ratings when present,
-      // otherwise compute from the static fallback reviews — the same source
-      // the individual /services/[slug] schema uses (ServiceStructuredData.tsx).
-      // Without these, Google flags "Missing field 'review'" and
-      // "Missing field 'aggregateRating'" on every item in this ItemList.
-      const fallback = getFallbackReviews(service.slug)
-      const reviewsForSchema = fallback.slice(0, 5).map((r) => ({
-        '@type': 'Review',
-        author: { '@type': 'Person', name: r.name },
-        datePublished: r.date.includes('2026') ? '2026-03-01' : '2026-02-01',
-        reviewRating: { '@type': 'Rating', ratingValue: r.rating.toString(), bestRating: '5' },
-        reviewBody: r.comment,
-      }))
+      // aggregateRating per item from genuine DB ratings ONLY. Fallback/editorial
+      // testimonials must never appear in structured data (review-snippet spam
+      // policy) — Google's "Missing field 'review'/'aggregateRating'" notices are
+      // non-critical warnings, not errors, and are acceptable.
       const aggregate = service.avg_rating && service.rating_count >= 5
         ? { value: Number(service.avg_rating.toFixed(1)), count: service.rating_count }
-        : fallback.length > 0
-          ? {
-              value: Number((fallback.reduce((sum, r) => sum + r.rating, 0) / fallback.length).toFixed(1)),
-              count: fallback.length,
-            }
-          : null
+        : null
 
       return {
       '@type': 'ListItem',
@@ -183,7 +168,6 @@ function generateServicesSchema(services: ServicePackage[]) {
             worstRating: 1,
           },
         } : {}),
-        ...(reviewsForSchema.length > 0 ? { review: reviewsForSchema } : {}),
       },
       }
     }),
