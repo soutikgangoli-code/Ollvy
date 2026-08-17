@@ -53,6 +53,9 @@ async function loadAndInit() {
     capture_pageview: false,
     capture_pageleave: true,
     autocapture: true,
+    // No surveys exist in the PostHog project; without this flag posthog-js
+    // still downloads + evaluates surveys.js (~33 KiB) on every page.
+    disable_surveys: true,
     session_recording: {
       maskAllInputs: true,
       maskInputOptions: { password: true, email: true },
