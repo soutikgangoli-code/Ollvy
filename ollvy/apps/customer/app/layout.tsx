@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import dynamic from 'next/dynamic'
-import { Inter, Fraunces, JetBrains_Mono } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import { UTMProvider } from '@/components/providers/UTMProvider'
@@ -17,14 +17,13 @@ const AuthModal = dynamic(() => import('@/components/auth/AuthModal').then(m => 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
-  display: 'swap',
-})
-
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  weight: ['700'],
-  variable: '--font-fraunces',
-  display: 'swap',
+  // 'optional' (was 'swap'): the mobile LCP element is the hero H1 in Inter.
+  // With swap, the fallback paints at FCP but the H1 repaints when the ~84 KiB
+  // variable font lands (~4s on slow 4G), and that repaint re-registers LCP.
+  // With optional there is no swap repaint — LCP = FCP. First visits on slow
+  // connections render the metric-adjusted system fallback; cached visits get
+  // Inter. Same tradeoff already made for JetBrains Mono below.
+  display: 'optional',
 })
 
 const jetbrainsMono = JetBrains_Mono({
@@ -106,7 +105,7 @@ export default function RootLayout({
             and get flagged as unused by Lighthouse. */}
         <StructuredData />
       </head>
-      <body className={`${inter.variable} ${fraunces.variable} ${jetbrainsMono.variable} font-sans`}>
+      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <GTMNoScript />
         <GTMProvider />
         <ThemeProvider

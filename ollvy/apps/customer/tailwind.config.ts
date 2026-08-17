@@ -81,7 +81,6 @@ const config: Config = {
   				'sans-serif'
   			],
   			display: [
-  				'var(--font-fraunces)',
   				'Georgia',
   				'serif'
   			],
